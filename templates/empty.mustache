@@ -24,22 +24,17 @@
 <section class="card border-0 shadow-sm p-4 my-4">
     <h2>{{#str}}missingcontent, mcp{{/str}}</h2>
     <p>{{#str}}missingcontenthelp, mcp{{/str}}</p>
-    {{#haslocalmcp}}
-        {{#hasconnection}}
-            <p class="alert alert-success">{{#str}}connectionconfigured, mcp{{/str}}</p>
-            <p>{{#str}}connectionanother, mcp{{/str}}
-                <a href="{{{connectionurl}}}">{{#str}}connectionnew, mcp{{/str}}</a>
-            </p>
-        {{/hasconnection}}
-        {{^hasconnection}}
-            <p class="alert alert-info">{{#str}}connectionrequired, mcp{{/str}}
-                <a href="{{{connectionurl}}}">{{#str}}connectionnew, mcp{{/str}}</a>
-            </p>
-        {{/hasconnection}}
-    {{/haslocalmcp}}
-    {{^haslocalmcp}}
-        <p class="alert alert-warning">{{#str}}connectionpluginmissing, mcp{{/str}}</p>
-    {{/haslocalmcp}}
+    {{#hasconnection}}
+        <p class="alert alert-success">{{#str}}connectionconfigured, mcp{{/str}}</p>
+        <p>{{#str}}connectionanother, mcp{{/str}}
+            <a href="{{{connectionurl}}}">{{#str}}connectionnew, mcp{{/str}}</a>
+        </p>
+    {{/hasconnection}}
+    {{^hasconnection}}
+        <p class="alert alert-info">{{#str}}connectionrequired, mcp{{/str}}
+            <a href="{{{connectionurl}}}">{{#str}}connectionnew, mcp{{/str}}</a>
+        </p>
+    {{/hasconnection}}
     <label class="form-label" for="mcp-prompt">{{#str}}copyinstructions, mcp{{/str}}</label>
     <textarea id="mcp-prompt" class="form-control" rows="8" readonly>{{prompt}}</textarea>
     <p class="mt-3"><a class="btn btn-primary" href="{{{manageurl}}}">{{#str}}manageactivity, mcp{{/str}}</a></p>

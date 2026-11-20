@@ -33,7 +33,6 @@ $string['beginattempt'] = 'Start assessment';
 $string['connectionanother'] = 'Need to connect another ChatGPT or Claude app, or authorize your account again? Follow the instructions to set up another connection:';
 $string['connectionconfigured'] = 'Your Moodle account already has an active MCP connection. Open the ChatGPT or Claude app where you authorized it and paste the prompt below to create a draft.';
 $string['connectionnew'] = 'Set up MCP connection';
-$string['connectionpluginmissing'] = 'To build this activity with ChatGPT or Claude, an administrator must first install and enable the local_mcp plugin on this Moodle site.';
 $string['connectionrequired'] = 'Your Moodle account does not yet have an active MCP connection. First connect ChatGPT or Claude to this Moodle site and authorize access with your account; then return here and use the prompt below.';
 $string['content'] = 'HTML document (including CSS and JavaScript)';
 $string['content_help'] = 'Use one complete HTML document with inline style and script. Scripts run in an isolated iframe.';

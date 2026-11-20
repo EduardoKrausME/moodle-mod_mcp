@@ -52,7 +52,7 @@ final class activity {
     public static function has_active_connection(int $userid): bool {
         global $DB;
 
-        if ($userid <= 0 || !get_config("local_mcp", "version")) {
+        if ($userid <= 0) {
             return false;
         }
 
@@ -73,7 +73,6 @@ final class activity {
         global $USER;
         $revisionid = $preview && $canmanage ? (int)$mcp->draftrevision : (int)$mcp->publishedrevision;
         $revision = \mod_mcp\content\service::get((int)$mcp->id, $revisionid);
-        $haslocalmcp = (bool)get_config("local_mcp", "version");
         $hasconnection = $canmanage && !$revision && self::has_active_connection((int)$USER->id);
         return [
             "name" => format_string($mcp->name),
@@ -81,10 +80,8 @@ final class activity {
             "content" => $revision ? $revision->content : "",
             "canmanage" => $canmanage,
             "prompt" => self::prompt($mcp, $cm),
-            "haslocalmcp" => $haslocalmcp,
             "hasconnection" => $hasconnection,
-            "connectionurl" => $haslocalmcp
-                ? (new moodle_url("/local/mcp/new_connection.php"))->out(false) : "",
+            "connectionurl" => (new moodle_url("/local/mcp/new_connection.php"))->out(false),
             "manageurl" => (new moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]))->out(false),
             "previewurl" => (new moodle_url("/mod/mcp/view.php",
                 ["id" => $cm->id, "preview" => 1]))->out(false),

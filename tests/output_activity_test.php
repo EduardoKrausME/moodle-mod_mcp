@@ -34,7 +34,7 @@ use mod_mcp\output\activity;
  */
 final class output_activity_test extends advanced_testcase {
     /**
-     * The empty activity renders without requiring local_mcp to be installed.
+     * The empty activity has no connection for the current user.
      */
     public function test_empty_activity_without_connection(): void {
         $this->resetAfterTest();
@@ -47,7 +47,11 @@ final class output_activity_test extends advanced_testcase {
         $data = activity::page($module, $cm, true, false);
         $this->assertFalse($data["hascontent"]);
         $this->assertFalse($data["hasconnection"]);
-        $this->assertSame((bool)get_config("local_mcp", "version"), $data["haslocalmcp"]);
+        $this->assertArrayNotHasKey("haslocalmcp", $data);
+        $this->assertSame(
+            (new \moodle_url("/local/mcp/new_connection.php"))->out(false),
+            $data["connectionurl"]
+        );
         $this->assertFalse(activity::has_active_connection(0));
     }
 
@@ -57,9 +61,6 @@ final class output_activity_test extends advanced_testcase {
     public function test_only_enabled_nonrevoked_own_connections_count(): void {
         global $DB;
 
-        if (!get_config("local_mcp", "version")) {
-            $this->markTestSkipped("local_mcp is not installed in this test environment.");
-        }
         $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user();
         $other = $this->getDataGenerator()->create_user();
