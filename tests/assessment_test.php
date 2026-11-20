@@ -28,6 +28,7 @@ use advanced_testcase;
 use mod_mcp\content\service as content_service;
 use mod_mcp\question\attempts;
 use mod_mcp\question\slots;
+use question_engine;
 
 /**
  * Verifies that student grades come from server-graded question attempts.
@@ -64,7 +65,7 @@ final class assessment_test extends advanced_testcase {
         $this->setUser($student);
         $attempt = attempts::start($mcp, $cm, (int)$student->id);
         require_once($CFG->dirroot . "/question/engine/lib.php");
-        $quba = \question_engine::load_questions_usage_by_activity((int)$attempt->qubaid);
+        $quba = question_engine::load_questions_usage_by_activity((int)$attempt->qubaid);
         $qa = $quba->get_question_attempt(1);
         $response = $qa->get_question()->get_correct_response();
         $this->assertNotEmpty($response);

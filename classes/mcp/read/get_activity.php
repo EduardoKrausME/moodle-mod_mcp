@@ -29,6 +29,8 @@ use context_module;
 use local_mcp\read\tool\base_tool;
 use local_mcp\security\authenticated_identity;
 use local_mcp\security\untrusted_content;
+use mod_mcp\content\service;
+use mod_mcp\question\slots;
 
 /**
  * READ access to the editable revision without exposing question answers.
@@ -101,8 +103,8 @@ final class get_activity extends base_tool {
         global $DB;
         $cm = get_coursemodule_from_id("mcp", (int)$arguments["cmid"], 0, false, MUST_EXIST);
         $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
-        $revision = \mod_mcp\content\service::get($mcp->id, (int)$mcp->draftrevision);
-        $published = \mod_mcp\content\service::get($mcp->id, (int)$mcp->publishedrevision);
+        $revision = service::get($mcp->id, (int)$mcp->draftrevision);
+        $published = service::get($mcp->id, (int)$mcp->publishedrevision);
         return [
             "cmid" => (int)$cm->id,
             "courseid" => (int)$mcp->course,
@@ -115,7 +117,7 @@ final class get_activity extends base_tool {
             "questions" => array_map(static fn($slot) => [
                 "slot" => (int)$slot->slot, "questionid" => (int)$slot->questionid,
                 "version" => (int)$slot->questionversion, "maxmark" => (float)$slot->maxmark,
-            ], \mod_mcp\question\slots::active($mcp->id)),
+            ], slots::active($mcp->id)),
         ];
     }
 }

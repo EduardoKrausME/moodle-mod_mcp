@@ -25,6 +25,7 @@ namespace mod_mcp\question;
 use context;
 use context_course;
 use moodle_exception;
+use stdClass;
 
 final class legacy_bank {
     /**
@@ -42,7 +43,7 @@ final class legacy_bank {
     }
 
     public static function validate_question(int $questionid, ?int $courseid = null,
-            ?int $userid = null): \stdClass {
+            ?int $userid = null): stdClass {
         global $DB;
         $q = $DB->get_record('question', ['id' => $questionid], '*', MUST_EXIST);
         if (!empty($q->hidden) || (int)$q->parent !== 0 ||

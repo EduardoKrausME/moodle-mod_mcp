@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_mcp\question\attempts;
+
 require_once(__DIR__ . "/../../config.php");
 
 $id = required_param("id", PARAM_INT);
@@ -30,29 +32,29 @@ $cm = get_coursemodule_from_id("mcp", $id, 0, false, MUST_EXIST);
 $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
 $course = get_course($cm->course);
 require_login($course, true, $cm);
-$context = \context_module::instance($cm->id);
+$context = context_module::instance($cm->id);
 require_capability("mod/mcp:view", $context);
 require_capability("mod/mcp:submit", $context);
 if (empty($mcp->publishedrevision)) {
-    throw new \moodle_exception("activitynotpublished", "mcp");
+    throw new moodle_exception("activitynotpublished", "mcp");
 }
 if (($_SERVER["REQUEST_METHOD"] ?? "") !== "POST") {
-    throw new \moodle_exception("invalidrequest");
+    throw new moodle_exception("invalidrequest");
 }
 require_sesskey();
-$attempt = \mod_mcp\question\attempts::own((int)$mcp->id, (int)$USER->id);
+$attempt = attempts::own((int)$mcp->id, (int)$USER->id);
 if ($action === "start") {
     if ($attempt) {
-        throw new \moodle_exception("invaliddata");
+        throw new moodle_exception("invaliddata");
     }
-    \mod_mcp\question\attempts::start($mcp, $cm, (int)$USER->id);
+    attempts::start($mcp, $cm, (int)$USER->id);
 } else if ($action === "save" || $action === "finish") {
     if (!$attempt) {
-        throw new \moodle_exception("invaliddata");
+        throw new moodle_exception("invaliddata");
     }
     // Only question-engine field names and sequence tokens can alter responses.
-    \mod_mcp\question\attempts::submit($mcp, $attempt, $_POST, $action === "finish");
+    attempts::submit($mcp, $attempt, $_POST, $action === "finish");
 } else {
-    throw new \moodle_exception("invaliddata");
+    throw new moodle_exception("invaliddata");
 }
-redirect(new \moodle_url("/mod/mcp/view.php", ["id" => $id]));
+redirect(new moodle_url("/mod/mcp/view.php", ["id" => $id]));

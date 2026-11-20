@@ -22,11 +22,14 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
 $plugin->version = 2026112003;
 $plugin->release = "1.0.0";
 $plugin->component = "mod_mcp";
 $plugin->requires = 2020110900;
-$plugin->dependencies = ["local_mcp" => 2026112001];
 $plugin->maturity = MATURITY_STABLE;
+
+$plugin->dependencies = [
+    "local_mcp" => 2026112001,
+];

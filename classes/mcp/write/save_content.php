@@ -25,6 +25,7 @@
 namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
+use mod_mcp\content\service;
 
 /**
  * Save a new revision without making it visible to students.
@@ -95,7 +96,7 @@ final class save_content extends activity_tool {
     public function execute(array $arguments, authenticated_identity $identity): array {
         $this->resolve_context($arguments);
         $mcp = $this->activity($arguments);
-        $revision = \mod_mcp\content\service::save(
+        $revision = service::save(
             (int)$mcp->id, $arguments["html"], $identity->userid, (int)$arguments["expectedrevision"]);
         return ["cmid" => (int)$arguments["cmid"], "draftrevision" => $revision,
             "published" => false];

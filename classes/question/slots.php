@@ -28,6 +28,7 @@ use context;
 use context_course;
 use context_module;
 use moodle_exception;
+use stdClass;
 
 /**
  * Stores pointers only, never duplicates questions or alternatives.
@@ -45,7 +46,7 @@ final class slots {
      * Check question visibility and the caller's permissions in the selected bank.
      */
     public static function validate_question(int $questionid, ?int $courseid = null,
-            ?int $userid = null): \stdClass {
+            ?int $userid = null): stdClass {
         $driver = bank_factory::driver();
         return $driver::validate_question($questionid, $courseid, $userid);
     }

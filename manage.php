@@ -22,6 +22,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_mcp\content\service;
+use mod_mcp\output\activity;
+
 require_once(__DIR__ . "/../../config.php");
 
 $id = required_param("id", PARAM_INT);
@@ -29,26 +32,26 @@ $cm = get_coursemodule_from_id("mcp", $id, 0, false, MUST_EXIST);
 $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
 $course = get_course($cm->course);
 require_login($course, true, $cm);
-$context = \context_module::instance($cm->id);
+$context = context_module::instance($cm->id);
 require_capability("mod/mcp:manage", $context);
 $action = optional_param("action", "", PARAM_ALPHA);
 if ($action === "publish") {
     require_sesskey();
     $revision = required_param("revision", PARAM_INT);
-    \mod_mcp\content\service::publish((int)$mcp->id, $revision);
-    redirect(new \moodle_url("/mod/mcp/view.php", ["id" => $cm->id]),
+    service::publish((int)$mcp->id, $revision);
+    redirect(new moodle_url("/mod/mcp/view.php", ["id" => $cm->id]),
         get_string("published", "mcp"));
 }
-$PAGE->set_url(new \moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]));
+$PAGE->set_url(new moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]));
 $PAGE->set_title(get_string("manageactivity", "mcp"));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 $PAGE->set_cm($cm, $course);
 $data = [
-    "prompt" => \mod_mcp\output\activity::prompt($mcp, $cm),
-    "promptpage" => \mod_mcp\output\activity::prompt($mcp, $cm, "page"),
-    "previewurl" => (new \moodle_url("/mod/mcp/view.php", ["id" => $cm->id, "preview" => 1]))->out(false),
-    "actionurl" => (new \moodle_url("/mod/mcp/manage.php"))->out(false),
+    "prompt" => activity::prompt($mcp, $cm),
+    "promptpage" => activity::prompt($mcp, $cm, "page"),
+    "previewurl" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id, "preview" => 1]))->out(false),
+    "actionurl" => (new moodle_url("/mod/mcp/manage.php"))->out(false),
     "canpublish" => !empty($mcp->draftrevision),
     "revision" => (int)$mcp->draftrevision,
     "sesskey" => sesskey(),

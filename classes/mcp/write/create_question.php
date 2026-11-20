@@ -26,6 +26,7 @@ namespace mod_mcp\mcp\write;
 
 use local_mcp\question\bank_service;
 use local_mcp\security\authenticated_identity;
+use mod_mcp\question\slots;
 
 /**
  * Uses the existing local_mcp question-bank authoring service.
@@ -89,7 +90,7 @@ final class create_question extends activity_tool {
      */
     public function preview(array $arguments, authenticated_identity $identity): array {
         $mcp = $this->activity($arguments);
-        \mod_mcp\question\slots::check_bank((int)$mcp->course, (int)$arguments["categoryid"]);
+        slots::check_bank((int)$mcp->course, (int)$arguments["categoryid"]);
         // Never include the answer key or correctness fractions in MCP confirmation previews.
         return ["cmid" => (int)$arguments["cmid"], "categoryid" => (int)$arguments["categoryid"],
             "name" => clean_param($arguments["name"], PARAM_TEXT),
@@ -106,7 +107,7 @@ final class create_question extends activity_tool {
     public function execute(array $arguments, authenticated_identity $identity): array {
         $this->resolve_context($arguments);
         $mcp = $this->activity($arguments);
-        \mod_mcp\question\slots::check_bank((int)$mcp->course, (int)$arguments["categoryid"]);
+        slots::check_bank((int)$mcp->course, (int)$arguments["categoryid"]);
         // Do not permit the caller to override the qtype, status or single-choice contract.
         $args = [
             "categoryid" => (int)$arguments["categoryid"],

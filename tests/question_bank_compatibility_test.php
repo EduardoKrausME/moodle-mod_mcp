@@ -24,14 +24,16 @@ namespace mod_mcp;
 
 use advanced_testcase;
 use mod_mcp\question\bank_factory;
+use mod_mcp\question\legacy_bank;
+use mod_mcp\question\versioned_bank;
 
 final class question_bank_compatibility_test extends advanced_testcase {
     public function test_driver_matches_question_storage_version(): void {
         global $CFG;
         $this->resetAfterTest();
         $expected = (int)$CFG->version < 2022041900
-            ? \mod_mcp\question\legacy_bank::class
-            : \mod_mcp\question\versioned_bank::class;
+            ? legacy_bank::class
+            : versioned_bank::class;
         $this->assertSame($expected, bank_factory::driver());
     }
 }

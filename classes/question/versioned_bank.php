@@ -28,6 +28,7 @@ use context;
 use context_course;
 use context_module;
 use moodle_exception;
+use stdClass;
 
 /**
  * Stores pointers only, never duplicates questions or alternatives.
@@ -59,7 +60,7 @@ final class versioned_bank {
      * Validate an actual ready question VERSION, never the unstable latest alias.
      */
     public static function validate_question(int $questionid, ?int $courseid = null,
-            ?int $userid = null): \stdClass {
+            ?int $userid = null): stdClass {
         global $DB;
         $row = $DB->get_record_sql(
             "SELECT q.id, q.qtype, q.defaultmark, v.version, v.status,

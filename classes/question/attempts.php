@@ -25,7 +25,13 @@
 namespace mod_mcp\question;
 
 use context_module;
+use core\lock\lock_config;
+use mod_mcp\grade\service;
 use moodle_exception;
+use question_bank;
+use question_display_options;
+use question_engine;
+use stdClass;
 
 /**
  * Uses core question usages for response persistence, marking and history.
@@ -42,7 +48,7 @@ final class attempts {
     /**
      * Begin one server-owned attempt after the student explicitly requests it.
      */
-    public static function start(\stdClass $mcp, \stdClass $cm, int $userid): \stdClass {
+    public static function start(stdClass $mcp, stdClass $cm, int $userid): stdClass {
         global $DB;
         self::engine();
         $ctx = context_module::instance((int)$cm->id);
@@ -50,7 +56,7 @@ final class attempts {
             throw new moodle_exception("nopermissions");
         }
         // Serialize starts for one student to prevent parallel duplicate attempts.
-        $factory = \core\lock\lock_config::get_lock_factory("mod_mcp");
+        $factory = lock_config::get_lock_factory("mod_mcp");
         $lock = $factory->get_lock("attempt_" . $mcp->id . "_" . $userid, 10);
         if (!$lock) {
             throw new moodle_exception("invaliddata");
@@ -65,7 +71,7 @@ final class attempts {
     /**
      * Start under a per-user lock so the attempt count remains authoritative.
      */
-    private static function start_locked(\stdClass $mcp, \stdClass $cm, int $userid): \stdClass {
+    private static function start_locked(stdClass $mcp, stdClass $cm, int $userid): stdClass {
         global $DB;
         // One attempt by default: avoid parallel double-starts and grade farming.
         if ($DB->record_exists("mcp_attempts", ["mcpid" => $mcp->id, "userid" => $userid])) {
@@ -77,18 +83,18 @@ final class attempts {
         }
         $transaction = $DB->start_delegated_transaction();
         $ctx = context_module::instance((int)$cm->id);
-        $quba = \question_engine::make_questions_usage_by_activity("mod_mcp", $ctx);
+        $quba = question_engine::make_questions_usage_by_activity("mod_mcp", $ctx);
         $quba->set_preferred_behaviour("deferredfeedback");
         foreach ($slots as $slot) {
             // Question definitions are loaded by ID, never by latest version.
-            $question = \question_bank::load_question((int)$slot->questionid);
+            $question = question_bank::load_question((int)$slot->questionid);
             $nativeslot = $quba->add_question($question, (float)$slot->maxmark);
             if ($nativeslot !== (int)$slot->slot) {
                 throw new moodle_exception("invaliddata");
             }
         }
         $quba->start_all_questions(null, time(), $userid);
-        \question_engine::save_questions_usage_by_activity($quba);
+        question_engine::save_questions_usage_by_activity($quba);
         $now = time();
         $id = $DB->insert_record("mcp_attempts", (object)[
             "mcpid" => $mcp->id, "userid" => $userid, "attemptnum" => 1,
@@ -102,7 +108,7 @@ final class attempts {
     /**
      * Get the student's own attempt, never accept the user ID from a browser request.
      */
-    public static function own(int $mcpid, int $userid): ?\stdClass {
+    public static function own(int $mcpid, int $userid): ?stdClass {
         global $DB;
         return $DB->get_record("mcp_attempts", ["mcpid" => $mcpid, "userid" => $userid]) ?: null;
     }
@@ -110,20 +116,20 @@ final class attempts {
     /**
      * Persist the native form response and optionally finish, calculating the grade on server.
      */
-    public static function submit(\stdClass $mcp, \stdClass $attempt, array $post,
-            bool $finish): void {
+    public static function submit(stdClass $mcp, stdClass $attempt, array $post,
+                                  bool     $finish): void {
         global $DB;
         self::engine();
         if ($attempt->status !== "inprogress") {
             throw new moodle_exception("submissionsclosed", "mcp");
         }
         $transaction = $DB->start_delegated_transaction();
-        $quba = \question_engine::load_questions_usage_by_activity((int)$attempt->qubaid);
+        $quba = question_engine::load_questions_usage_by_activity((int)$attempt->qubaid);
         $quba->process_all_actions(time(), $post);
         if ($finish) {
             $quba->finish_all_questions(time());
         }
-        \question_engine::save_questions_usage_by_activity($quba);
+        question_engine::save_questions_usage_by_activity($quba);
         $now = time();
         $fields = (object)["id" => $attempt->id, "timemodified" => $now];
         if ($finish) {
@@ -140,7 +146,7 @@ final class attempts {
         $DB->update_record("mcp_attempts", $fields);
         $transaction->allow_commit();
         if ($finish) {
-            \mod_mcp\grade\service::update($mcp, (int)$attempt->userid);
+            service::update($mcp, (int)$attempt->userid);
         }
     }
 
@@ -148,14 +154,14 @@ final class attempts {
      * Render question inputs through the native trusted renderer.
      * The untrusted HTML iframe cannot write to the gradebook or inspect correct answers.
      */
-    public static function render(\stdClass $attempt): array {
+    public static function render(stdClass $attempt): array {
         self::engine();
-        $quba = \question_engine::load_questions_usage_by_activity((int)$attempt->qubaid);
-        $options = new \question_display_options();
+        $quba = question_engine::load_questions_usage_by_activity((int)$attempt->qubaid);
+        $options = new question_display_options();
         $options->readonly = $attempt->status !== "inprogress";
-        $options->correctness = \question_display_options::HIDDEN;
-        $options->rightanswer = \question_display_options::HIDDEN;
-        $options->feedback = \question_display_options::HIDDEN;
+        $options->correctness = question_display_options::HIDDEN;
+        $options->rightanswer = question_display_options::HIDDEN;
+        $options->feedback = question_display_options::HIDDEN;
         $questions = [];
         foreach ($quba->get_slots() as $slot) {
             $questions[] = ["html" => $quba->render_question($slot, $options, (string)$slot)];

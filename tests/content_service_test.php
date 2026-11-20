@@ -26,6 +26,7 @@ namespace mod_mcp;
 
 use advanced_testcase;
 use mod_mcp\content\service;
+use moodle_exception;
 
 /**
  * Checks content revisions against direct database persistence.
@@ -49,7 +50,7 @@ final class content_service_test extends advanced_testcase {
         $this->assertSame("<h1>First</h1>", service::get((int)$module->id, $first)->content);
         $this->assertSame("<h1>Second</h1>", service::get((int)$module->id, $second)->content);
         $this->assertSame(0, (int)$DB->get_field("mcp", "publishedrevision", ["id" => $module->id]));
-        $this->expectException(\moodle_exception::class);
+        $this->expectException(moodle_exception::class);
         service::save((int)$module->id, "<p>Conflict</p>", 2, $first);
     }
 }

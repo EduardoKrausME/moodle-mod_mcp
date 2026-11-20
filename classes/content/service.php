@@ -25,7 +25,9 @@
 namespace mod_mcp\content;
 
 use context_module;
+use mod_mcp\question\slots;
 use moodle_exception;
+use stdClass;
 
 /**
  * Isolates untrusted HTML authoring from published Moodle course content.
@@ -71,7 +73,7 @@ final class service {
     /**
      * Retrieve exactly one immutable revision owned by the activity.
      */
-    public static function get(int $mcpid, int $revisionid): ?\stdClass {
+    public static function get(int $mcpid, int $revisionid): ?stdClass {
         global $DB;
         if (!$revisionid) {
             return null;
@@ -97,7 +99,7 @@ final class service {
         }
         // Assessment question IDs must be pinned in the native question bank.
         foreach ($DB->get_records("mcp_slots", ["mcpid" => $mcpid, "active" => 1]) as $slot) {
-            \mod_mcp\question\slots::validate_question((int)$slot->questionid);
+            slots::validate_question((int)$slot->questionid);
         }
         $DB->update_record("mcp", (object)[
             "id" => $mcpid, "publishedrevision" => $expectedrevision, "timemodified" => time(),

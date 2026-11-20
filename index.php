@@ -27,8 +27,8 @@ require_once(__DIR__ . "/../../config.php");
 $id = required_param("id", PARAM_INT);
 $course = get_course($id);
 require_login($course);
-$PAGE->set_url(new \moodle_url("/mod/mcp/index.php", ["id" => $id]));
-$PAGE->set_context(\context_course::instance($id));
+$PAGE->set_url(new moodle_url("/mod/mcp/index.php", ["id" => $id]));
+$PAGE->set_context(context_course::instance($id));
 $PAGE->set_pagelayout("incourse");
 $PAGE->set_title(get_string("modulenameplural", "mcp"));
 $PAGE->set_heading(format_string($course->fullname));
@@ -37,7 +37,7 @@ foreach (get_fast_modinfo($course)->get_instances_of("mcp") as $cm) {
     if ($cm->uservisible) {
         $items[] = [
             "name" => format_string($cm->name),
-            "url" => (new \moodle_url("/mod/mcp/view.php", ["id" => $cm->id]))->out(false),
+            "url" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id]))->out(false),
         ];
     }
 }

@@ -26,6 +26,7 @@ namespace mod_mcp;
 
 use advanced_testcase;
 use mod_mcp\output\activity;
+use moodle_url;
 
 /**
  * Only the current user's active OAuth connections count for the activity guide.
@@ -55,7 +56,7 @@ final class output_activity_test extends advanced_testcase {
         $this->assertStringContainsString((string)$cm->id, $data["promptpage"]);
         $this->assertArrayNotHasKey("haslocalmcp", $data);
         $this->assertSame(
-            (new \moodle_url("/local/mcp/new_connection.php"))->out(false),
+            (new moodle_url("/local/mcp/new_connection.php"))->out(false),
             $data["connectionurl"]
         );
         $this->assertFalse(activity::has_active_connection(0));

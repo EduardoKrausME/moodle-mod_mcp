@@ -24,6 +24,8 @@
 
 namespace mod_mcp\grade;
 
+use stdClass;
+
 /**
  * Never accepts client-supplied grade values.
  */
@@ -31,7 +33,7 @@ final class service {
     /**
      * Push the best finished native attempt into Moodle gradebook.
      */
-    public static function update(\stdClass $mcp, int $userid = 0): void {
+    public static function update(stdClass $mcp, int $userid = 0): void {
         global $DB;
         $params = ["mcpid" => (int)$mcp->id, "status" => "finished"];
         $where = "mcpid = :mcpid AND status = :status";

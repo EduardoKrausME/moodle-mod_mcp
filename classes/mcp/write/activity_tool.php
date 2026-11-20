@@ -28,6 +28,7 @@ use context;
 use context_module;
 use local_mcp\write\tool\base_tool;
 use moodle_exception;
+use stdClass;
 
 /**
  * Base for editor tools that operate on an existing module only.
@@ -51,7 +52,7 @@ abstract class activity_tool extends base_tool {
     /**
      * Fetch the instance associated with a module ID, never trust a separate instance ID.
      */
-    protected function activity(array $arguments): \stdClass {
+    protected function activity(array $arguments): stdClass {
         global $DB;
         $cm = get_coursemodule_from_id("mcp", (int)$arguments["cmid"], 0, false, MUST_EXIST);
         return $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);

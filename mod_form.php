@@ -22,7 +22,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+use mod_mcp\content\service;
+
+defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . "/course/moodleform_mod.php");
 
@@ -61,7 +63,7 @@ class mod_mcp_mod_form extends moodleform_mod {
         if (!empty($this->current->instance)) {
             global $DB;
             $mcp = $DB->get_record("mcp", ["id" => (int)$this->current->instance], "*", MUST_EXIST);
-            $revision = \mod_mcp\content\service::get((int)$mcp->id, (int)$mcp->draftrevision);
+            $revision = service::get((int)$mcp->id, (int)$mcp->draftrevision);
             $defaultvalues["content"] = $revision ? $revision->content : "";
         }
     }

@@ -25,6 +25,7 @@
 namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
+use mod_mcp\assets\service;
 
 /**
  * Explicitly allowlisted media files become Moodle file records.
@@ -93,7 +94,7 @@ final class upload_asset extends activity_tool {
      */
     public function execute(array $arguments, authenticated_identity $identity): array {
         $this->resolve_context($arguments);
-        return \mod_mcp\assets\service::upload((int)$arguments["cmid"],
+        return service::upload((int)$arguments["cmid"],
             $arguments["filename"], $arguments["base64"], (int)$identity->userid);
     }
 }

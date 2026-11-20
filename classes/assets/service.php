@@ -25,6 +25,7 @@
 namespace mod_mcp\assets;
 
 use context_module;
+use finfo;
 use moodle_exception;
 use moodle_url;
 
@@ -55,7 +56,7 @@ final class service {
         if (!isset($types[$extension])) {
             throw new moodle_exception("invaliddata");
         }
-        $detected = (new \finfo(FILEINFO_MIME_TYPE))->buffer($bytes);
+        $detected = (new finfo(FILEINFO_MIME_TYPE))->buffer($bytes);
         if ($detected !== $types[$extension] &&
                 !($extension === "wav" && $detected === "audio/wav")) {
             throw new moodle_exception("invaliddata");

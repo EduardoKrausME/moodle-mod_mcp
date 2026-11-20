@@ -25,6 +25,7 @@
 namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
+use mod_mcp\question\slots;
 
 /**
  * All academic questions must exist in the Moodle bank before attaching them.
@@ -80,7 +81,7 @@ final class attach_question extends activity_tool {
      */
     public function preview(array $arguments, authenticated_identity $identity): array {
         $mcp = $this->activity($arguments);
-        $q = \mod_mcp\question\slots::validate_question(
+        $q = slots::validate_question(
             (int)$arguments["questionid"], (int)$mcp->course, $identity->userid);
         return ["cmid" => (int)$arguments["cmid"], "questionid" => $q->id,
             "version" => $q->version, "replace_slot" => (int)($arguments["replace_slot"] ?? 0),
@@ -97,9 +98,9 @@ final class attach_question extends activity_tool {
     public function execute(array $arguments, authenticated_identity $identity): array {
         $this->resolve_context($arguments);
         $mcp = $this->activity($arguments);
-        $q = \mod_mcp\question\slots::validate_question(
+        $q = slots::validate_question(
             (int)$arguments["questionid"], (int)$mcp->course, $identity->userid);
-        return \mod_mcp\question\slots::attach(
+        return slots::attach(
             (int)$mcp->id, (int)$q->id, (float)($arguments["maxmark"] ?? $q->defaultmark),
             $identity->userid, (int)($arguments["replace_slot"] ?? 0));
     }

@@ -25,6 +25,8 @@
 namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
+use mod_mcp\content\service;
+use mod_mcp\question\slots;
 
 /**
  * Explicit publish operation, separate from editing HTML.
@@ -80,7 +82,7 @@ final class publish extends activity_tool {
         $activity = $this->activity($arguments);
         return ["cmid" => (int)$arguments["cmid"], "revision" => (int)$arguments["revision"],
             "currentdraft" => (int)$activity->draftrevision,
-            "questions" => count(\mod_mcp\question\slots::active((int)$activity->id)),
+            "questions" => count(slots::active((int)$activity->id)),
             "visible_to_students_after_confirmation" => true];
     }
 
@@ -94,7 +96,7 @@ final class publish extends activity_tool {
     public function execute(array $arguments, authenticated_identity $identity): array {
         $this->resolve_context($arguments);
         $mcp = $this->activity($arguments);
-        \mod_mcp\content\service::publish((int)$mcp->id, (int)$arguments["revision"]);
+        service::publish((int)$mcp->id, (int)$arguments["revision"]);
         return ["cmid" => (int)$arguments["cmid"], "publishedrevision" => (int)$arguments["revision"]];
     }
 }

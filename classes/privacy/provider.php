@@ -30,6 +30,8 @@ use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\writer;
+use question_engine;
+use stdClass;
 
 /**
  * Protect authorship and student attempt information under Moodle Privacy API.
@@ -106,7 +108,7 @@ final class provider implements
         }
         require_once($CFG->dirroot . "/question/engine/lib.php");
         foreach ($DB->get_records("mcp_attempts", ["mcpid" => $cm->instance]) as $attempt) {
-            \question_engine::delete_questions_usage_by_activity((int)$attempt->qubaid);
+            question_engine::delete_questions_usage_by_activity((int)$attempt->qubaid);
         }
         $DB->delete_records("mcp_attempts", ["mcpid" => $cm->instance]);
         $DB->set_field("mcp_revisions", "createdby", 0, ["mcpid" => $cm->instance]);
@@ -126,7 +128,7 @@ final class provider implements
             }
             foreach ($DB->get_records("mcp_attempts", [
                     "mcpid" => $cm->instance, "userid" => $userid]) as $attempt) {
-                \question_engine::delete_questions_usage_by_activity((int)$attempt->qubaid);
+                question_engine::delete_questions_usage_by_activity((int)$attempt->qubaid);
             }
             $DB->delete_records("mcp_attempts", ["mcpid" => $cm->instance, "userid" => $userid]);
             $DB->set_field("mcp_revisions", "createdby", 0,
@@ -137,7 +139,7 @@ final class provider implements
     /**
      * Return only module contexts belonging to the MCP activity.
      */
-    private static function module(context $context): ?\stdClass {
+    private static function module(context $context): ?stdClass {
         if ($context->contextlevel !== CONTEXT_MODULE) {
             return null;
         }

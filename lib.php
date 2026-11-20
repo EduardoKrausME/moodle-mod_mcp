@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_mcp\grade\service;
+
 
 /**
  * Feature support required by Moodle.
@@ -77,7 +79,7 @@ function mcp_update_instance($data, $mform = null) {
     $mcp->introformat = $data->introformat ?? FORMAT_HTML;
     if ((float)$mcp->grade !== max(0, (float)($data->grade ?? 10)) &&
             $DB->record_exists("mcp_attempts", ["mcpid" => $mcp->id])) {
-        throw new \moodle_exception("invaliddata");
+        throw new moodle_exception("invaliddata");
     }
     $mcp->grade = max(0, (float)($data->grade ?? 10));
     $mcp->timemodified = time();
@@ -141,7 +143,7 @@ function mcp_grade_item_update($mcp, $grades = null) {
  * Recalculate grades only from finished server-side attempts.
  */
 function mcp_update_grades($mcp, $userid = 0, $nullifnone = true) {
-    \mod_mcp\grade\service::update($mcp, (int)$userid);
+    service::update($mcp, (int)$userid);
 }
 
 /**

@@ -24,7 +24,9 @@
 
 namespace mod_mcp\output;
 
+use mod_mcp\content\service;
 use moodle_url;
+use stdClass;
 
 /**
  * Prepare the page data without a custom renderer.
@@ -33,7 +35,7 @@ final class activity {
     /**
      * Build the introductory prompt for an empty MCP activity.
      */
-    public static function prompt(\stdClass $mcp, \stdClass $cm, string $type = "interactive"): string {
+    public static function prompt(stdClass $mcp, stdClass $cm, string $type = "interactive"): string {
         $args = (object)[
             "courseid" => (int)$mcp->course,
             "cmid" => (int)$cm->id,
@@ -69,10 +71,10 @@ final class activity {
     /**
      * Build view data. HTML content always remains in an isolated sandboxed iframe.
      */
-    public static function page(\stdClass $mcp, \stdClass $cm, bool $canmanage, bool $preview): array {
+    public static function page(stdClass $mcp, stdClass $cm, bool $canmanage, bool $preview): array {
         global $USER;
         $revisionid = $preview && $canmanage ? (int)$mcp->draftrevision : (int)$mcp->publishedrevision;
-        $revision = \mod_mcp\content\service::get((int)$mcp->id, $revisionid);
+        $revision = service::get((int)$mcp->id, $revisionid);
         $hasconnection = $canmanage && !$revision && self::has_active_connection((int)$USER->id);
         return [
             "name" => format_string($mcp->name),
