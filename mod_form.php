@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Moodle module configuration form for MCP activity.
@@ -22,13 +22,17 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined("MOODLE_INTERNAL") || die();
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . "/course/moodleform_mod.php");
 
-/** Edit the module and its draft HTML document. */
+/**
+ * Edit the module and its draft HTML document.
+ */
 class mod_mcp_mod_form extends moodleform_mod {
-    /** Build the editing form with one complete HTML field. */
+    /**
+ * Build the editing form with one complete HTML field.
+ */
     public function definition(): void {
         $mform = $this->_form;
         $mform->addElement("text", "name", get_string("name"), ["size" => 64]);
@@ -46,7 +50,9 @@ class mod_mcp_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
-    /** Load only the latest draft for an existing module. */
+    /**
+ * Load only the latest draft for an existing module.
+ */
     public function data_preprocessing(&$defaultvalues): void {
         if (!empty($this->current->instance)) {
             global $DB;
@@ -56,4 +62,3 @@ class mod_mcp_mod_form extends moodleform_mod {
         }
     }
 }
-

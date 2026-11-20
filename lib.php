@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Required Moodle activity callbacks, delegated to services.
@@ -24,7 +24,9 @@
 
 defined("MOODLE_INTERNAL") || die();
 
-/** Feature support required by Moodle. */
+/**
+ * Feature support required by Moodle.
+ */
 function mcp_supports($feature) {
     switch ($feature) {
         case FEATURE_MOD_INTRO:
@@ -41,7 +43,9 @@ function mcp_supports($feature) {
     }
 }
 
-/** Insert a Moodle activity instance. */
+/**
+ * Insert a Moodle activity instance.
+ */
 function mcp_add_instance($data, $mform = null) {
     global $DB, $USER;
     $now = time();
@@ -63,7 +67,9 @@ function mcp_add_instance($data, $mform = null) {
     return $id;
 }
 
-/** Update activity metadata and draft without publishing. */
+/**
+ * Update activity metadata and draft without publishing.
+ */
 function mcp_update_instance($data, $mform = null) {
     global $DB, $USER;
     $mcp = $DB->get_record("mcp", ["id" => $data->instance], "*", MUST_EXIST);
@@ -84,7 +90,9 @@ function mcp_update_instance($data, $mform = null) {
     return true;
 }
 
-/** Delete activity records, not shared native question bank questions. */
+/**
+ * Delete activity records, not shared native question bank questions.
+ */
 function mcp_delete_instance($id) {
     global $DB;
     $record = $DB->get_record("mcp", ["id" => $id]);
@@ -104,7 +112,9 @@ function mcp_delete_instance($id) {
     return true;
 }
 
-/** Delete the grade item through Moodle gradebook, never directly through SQL. */
+/**
+ * Delete the grade item through Moodle gradebook, never directly through SQL.
+ */
 function mcp_grade_item_delete($mcp) {
     global $CFG;
     require_once($CFG->libdir . "/gradelib.php");
@@ -112,7 +122,9 @@ function mcp_grade_item_delete($mcp) {
         (int)$mcp->id, 0, null, ["deleted" => 1]);
 }
 
-/** Update a gradebook item, not individual grades from the browser. */
+/**
+ * Update a gradebook item, not individual grades from the browser.
+ */
 function mcp_grade_item_update($mcp, $grades = null) {
     global $CFG;
     require_once($CFG->libdir . "/gradelib.php");
@@ -125,12 +137,16 @@ function mcp_grade_item_update($mcp, $grades = null) {
         (int)$mcp->id, 0, $grades, $params);
 }
 
-/** Recalculate grades only from finished server-side attempts. */
+/**
+ * Recalculate grades only from finished server-side attempts.
+ */
 function mcp_update_grades($mcp, $userid = 0, $nullifnone = true) {
     \mod_mcp\grade\service::update($mcp, (int)$userid);
 }
 
-/** File access always requires the activity's native Moodle context. */
+/**
+ * File access always requires the activity's native Moodle context.
+ */
 function mcp_pluginfile($course, $cm, $context, $filearea, $args,
         $forcedownload, array $options = []) {
     if ($context->contextlevel !== CONTEXT_MODULE || $filearea !== "assets") {
@@ -149,7 +165,9 @@ function mcp_pluginfile($course, $cm, $context, $filearea, $args,
     send_stored_file($file, 0, 0, $forcedownload, $options);
 }
 
-/** Moodle course contents support. */
+/**
+ * Moodle course contents support.
+ */
 function mcp_get_coursemodule_info($coursemodule) {
     global $DB;
     $record = $DB->get_record("mcp", ["id" => $coursemodule->instance], "id, name, intro, introformat");
@@ -160,4 +178,3 @@ function mcp_get_coursemodule_info($coursemodule) {
     $info->name = $record->name;
     return $info;
 }
-
