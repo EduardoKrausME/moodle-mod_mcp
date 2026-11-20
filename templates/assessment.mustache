@@ -1,0 +1,29 @@
+{{#hasassessment}}
+<section class="card p-4 my-4 mod-mcp-assessment" aria-label="{{#str}}questions, mcp{{/str}}">
+  <h2>{{#str}}questions, mcp{{/str}}</h2>
+  {{#canstart}}
+    <form action="{{actionurl}}" method="post">
+      <input type="hidden" name="id" value="{{cmid}}">
+      <input type="hidden" name="sesskey" value="{{sesskey}}">
+      <input type="hidden" name="action" value="start">
+      <button class="btn btn-primary" type="submit">{{#str}}beginattempt, mcp{{/str}}</button>
+    </form>
+  {{/canstart}}
+  {{#inprogress}}
+    <p>{{#str}}attemptinprogress, mcp{{/str}}</p>
+    <form action="{{actionurl}}" method="post">
+      <input type="hidden" name="id" value="{{cmid}}">
+      <input type="hidden" name="sesskey" value="{{sesskey}}">
+      {{#questions}}
+        <div class="mod-mcp-question my-4">{{{html}}}</div>
+      {{/questions}}
+      <button type="submit" class="btn btn-outline-primary" name="action" value="save">{{#str}}saveanswers, mcp{{/str}}</button>
+      <button type="submit" class="btn btn-primary" name="action" value="finish">{{#str}}finishattempt, mcp{{/str}}</button>
+    </form>
+  {{/inprogress}}
+  {{#finished}}
+    <p>{{#str}}attemptfinished, mcp{{/str}}</p>
+    {{#hasgrade}}<p>{{gradelabel}}</p>{{/hasgrade}}
+  {{/finished}}
+</section>
+{{/hasassessment}}

@@ -70,6 +70,10 @@ function mcp_update_instance($data, $mform = null) {
     $mcp->name = $data->name;
     $mcp->intro = $data->intro ?? "";
     $mcp->introformat = $data->introformat ?? FORMAT_HTML;
+    if ((float)$mcp->grade !== max(0, (float)($data->grade ?? 10)) &&
+            $DB->record_exists("mcp_attempts", ["mcpid" => $mcp->id])) {
+        throw new \moodle_exception("invaliddata");
+    }
     $mcp->grade = max(0, (float)($data->grade ?? 10));
     $mcp->timemodified = time();
     $DB->update_record("mcp", $mcp);
@@ -96,8 +100,16 @@ function mcp_delete_instance($id) {
     $DB->delete_records("mcp_slots", ["mcpid" => $id]);
     $DB->delete_records("mcp_revisions", ["mcpid" => $id]);
     $DB->delete_records("mcp", ["id" => $id]);
-    $DB->delete_records("grade_items", ["itemmodule" => "mcp", "iteminstance" => $id]);
+    mcp_grade_item_delete($record);
     return true;
+}
+
+/** Delete the grade item through Moodle gradebook, never directly through SQL. */
+function mcp_grade_item_delete($mcp) {
+    global $CFG;
+    require_once($CFG->libdir . "/gradelib.php");
+    return grade_update("mod/mcp", (int)$mcp->course, "mod", "mcp",
+        (int)$mcp->id, 0, null, ["deleted" => 1]);
 }
 
 /** Update a gradebook item, not individual grades from the browser. */

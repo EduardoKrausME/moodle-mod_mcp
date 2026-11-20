@@ -49,8 +49,9 @@ class mod_mcp_mod_form extends moodleform_mod {
     /** Load only the latest draft for an existing module. */
     public function data_preprocessing(&$defaultvalues): void {
         if (!empty($this->current->instance)) {
-            $mcp = $this->current;
-            $revision = \mod_mcp\content\service::get((int)$mcp->instance, (int)$mcp->draftrevision);
+            global $DB;
+            $mcp = $DB->get_record("mcp", ["id" => (int)$this->current->instance], "*", MUST_EXIST);
+            $revision = \mod_mcp\content\service::get((int)$mcp->id, (int)$mcp->draftrevision);
             $defaultvalues["content"] = $revision ? $revision->content : "";
         }
     }

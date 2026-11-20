@@ -38,7 +38,7 @@ final class service {
         $attempts = $DB->get_records_select("mcp_attempts", $where, $params, "userid ASC, score DESC");
         $grades = [];
         foreach ($attempts as $attempt) {
-            if (!array_key_exists($attempt->userid, $grades)) {
+            if ($attempt->score !== null && !array_key_exists($attempt->userid, $grades)) {
                 $grades[$attempt->userid] = (object)[
                     "userid" => (int)$attempt->userid,
                     "rawgrade" => max(0, min((float)$mcp->grade, (float)$attempt->score)),

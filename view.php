@@ -49,11 +49,34 @@ $completion = new \completion_info($course);
 $completion->set_module_viewed($cm);
 
 $data = \mod_mcp\output\activity::page($mcp, $cm, $canmanage, $preview);
+$assessment = ["hasassessment" => false];
+if (!$preview && $mcp->publishedrevision &&
+        has_capability("mod/mcp:submit", $context) &&
+        \mod_mcp\question\slots::active((int)$mcp->id)) {
+    $attempt = \mod_mcp\question\attempts::own((int)$mcp->id, (int)$USER->id);
+    $assessment = [
+        "hasassessment" => true,
+        "canstart" => !$attempt,
+        "inprogress" => $attempt && $attempt->status === "inprogress",
+        "finished" => $attempt && $attempt->status === "finished",
+        "questions" => $attempt && $attempt->status === "inprogress" ?
+            \mod_mcp\question\attempts::render($attempt) : [],
+        "hasgrade" => $attempt && $attempt->score !== null,
+        "gradelabel" => $attempt && $attempt->score !== null ?
+            get_string("yourgrade", "mcp", format_float((float)$attempt->score, 2)) : "",
+        "actionurl" => (new \moodle_url("/mod/mcp/attempt.php"))->out(false),
+        "cmid" => $cm->id,
+        "sesskey" => sesskey(),
+    ];
+}
 echo $OUTPUT->header();
 if (!$data["hascontent"] && $canmanage) {
     echo $OUTPUT->render_from_template("mod_mcp/empty", $data);
 } else {
     echo $OUTPUT->render_from_template("mod_mcp/activity", $data);
+}
+if ($assessment["hasassessment"]) {
+    echo $OUTPUT->render_from_template("mod_mcp/assessment", $assessment);
 }
 echo $OUTPUT->footer();
 
