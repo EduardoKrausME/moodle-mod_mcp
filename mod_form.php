@@ -31,8 +31,8 @@ require_once($CFG->dirroot . "/course/moodleform_mod.php");
  */
 class mod_mcp_mod_form extends moodleform_mod {
     /**
- * Build the editing form with one complete HTML field.
- */
+     * Build the editing form with one complete HTML field.
+     */
     public function definition(): void {
         $mform = $this->_form;
         $mform->addElement("text", "name", get_string("name"), ["size" => 64]);
@@ -51,8 +51,8 @@ class mod_mcp_mod_form extends moodleform_mod {
     }
 
     /**
- * Load only the latest draft for an existing module.
- */
+     * Load only the latest draft for an existing module.
+     */
     public function data_preprocessing(&$defaultvalues): void {
         if (!empty($this->current->instance)) {
             global $DB;
