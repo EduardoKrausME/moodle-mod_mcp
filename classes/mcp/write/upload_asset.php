@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * MCP asset upload using Moodle File API.
@@ -26,20 +26,42 @@ namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
 
-/** Explicitly allowlisted media files become Moodle file records. */
+/**
+ * Explicitly allowlisted media files become Moodle file records.
+ */
 final class upload_asset extends activity_tool {
+    /**
+     * get name.
+     *
+     * @return string Result.
+     */
     public function get_name(): string {
         return "mcp_upload_asset";
     }
 
+    /**
+     * get title.
+     *
+     * @return string Result.
+     */
     public function get_title(): string {
         return "MCP activity: upload media asset";
     }
 
+    /**
+     * get description.
+     *
+     * @return string Result.
+     */
     public function get_description(): string {
         return "Upload PNG, JPG, GIF, WebP, MP3, WAV, OGG, MP4, WebM or PDF (max 8 MiB).";
     }
 
+    /**
+     * get input schema.
+     *
+     * @return array Result.
+     */
     public function get_input_schema(): array {
         return $this->object_schema([
             "cmid" => ["type" => "integer", "minimum" => 1],
@@ -48,6 +70,13 @@ final class upload_asset extends activity_tool {
         ], ["cmid", "filename", "base64"]);
     }
 
+    /**
+     * preview.
+     *
+     * @param mixed $arguments Input arguments.
+     * @param mixed $identity Input identity.
+     * @return array Result.
+     */
     public function preview(array $arguments, authenticated_identity $identity): array {
         $this->activity($arguments);
         return ["cmid" => (int)$arguments["cmid"],
@@ -55,10 +84,16 @@ final class upload_asset extends activity_tool {
             "encodedbytes" => strlen($arguments["base64"])];
     }
 
+    /**
+     * execute.
+     *
+     * @param mixed $arguments Input arguments.
+     * @param mixed $identity Input identity.
+     * @return array Result.
+     */
     public function execute(array $arguments, authenticated_identity $identity): array {
         $this->resolve_context($arguments);
         return \mod_mcp\assets\service::upload((int)$arguments["cmid"],
             $arguments["filename"], $arguments["base64"], (int)$identity->userid);
     }
 }
-

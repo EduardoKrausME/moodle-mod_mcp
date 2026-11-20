@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Save an immutable HTML draft through the existing MCP confirmation flow.
@@ -26,20 +26,42 @@ namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
 
-/** Save a new revision without making it visible to students. */
+/**
+ * Save a new revision without making it visible to students.
+ */
 final class save_content extends activity_tool {
+    /**
+     * get name.
+     *
+     * @return string Result.
+     */
     public function get_name(): string {
         return "mcp_save_content";
     }
 
+    /**
+     * get title.
+     *
+     * @return string Result.
+     */
     public function get_title(): string {
         return "MCP activity: save HTML draft";
     }
 
+    /**
+     * get description.
+     *
+     * @return string Result.
+     */
     public function get_description(): string {
         return "Save one complete HTML document with inline CSS and JavaScript, without publishing.";
     }
 
+    /**
+     * get input schema.
+     *
+     * @return array Result.
+     */
     public function get_input_schema(): array {
         return $this->object_schema([
             "cmid" => ["type" => "integer", "minimum" => 1],
@@ -48,6 +70,13 @@ final class save_content extends activity_tool {
         ], ["cmid", "html", "expectedrevision"]);
     }
 
+    /**
+     * preview.
+     *
+     * @param mixed $arguments Input arguments.
+     * @param mixed $identity Input identity.
+     * @return array Result.
+     */
     public function preview(array $arguments, authenticated_identity $identity): array {
         $activity = $this->activity($arguments);
         return ["cmid" => $arguments["cmid"], "draftrevision" => (int)$activity->draftrevision,
@@ -56,6 +85,13 @@ final class save_content extends activity_tool {
             "students_affected" => false];
     }
 
+    /**
+     * execute.
+     *
+     * @param mixed $arguments Input arguments.
+     * @param mixed $identity Input identity.
+     * @return array Result.
+     */
     public function execute(array $arguments, authenticated_identity $identity): array {
         $this->resolve_context($arguments);
         $mcp = $this->activity($arguments);
@@ -65,4 +101,3 @@ final class save_content extends activity_tool {
             "published" => false];
     }
 }
-
