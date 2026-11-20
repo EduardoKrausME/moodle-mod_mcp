@@ -109,7 +109,7 @@ final class slots {
         $question = self::validate_question($questionid, (int)$activity->course, $userid);
         $transaction = $DB->start_delegated_transaction();
         $active = self::active($mcpid);
-        $slot = $replace ?: count($active) + 1;
+        $slot = $replace ?: (count($active) ? max(array_map(static fn($item) => (int)$item->slot, $active)) + 1 : 1);
         if ($replace) {
             $previous = $DB->get_record("mcp_slots",
                 ["mcpid" => $mcpid, "slot" => $replace, "active" => 1], "*", MUST_EXIST);

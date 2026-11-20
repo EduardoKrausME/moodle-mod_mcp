@@ -44,4 +44,24 @@ final class slots_test extends advanced_testcase {
         ]);
         $this->assertSame([], slots::active((int)$module->id));
     }
+
+    /**
+     * Replacement keeps the same native slot number; the previous bank question stays historical.
+     */
+    public function test_replaced_question_preserves_next_slot_number(): void {
+        global $DB, $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $generator = $this->getDataGenerator()->get_plugin_generator("core_question");
+        [$category, $course, $questioncategory, $questions] = $generator->setup_course_and_questions();
+        $activity = $this->getDataGenerator()->create_module("mcp", [
+            "course" => $course->id, "name" => "Question replacements",
+        ]);
+        $first = slots::attach((int)$activity->id, (int)$questions[0]->id, 1.0, (int)$USER->id);
+        $replacement = slots::attach((int)$activity->id, (int)$questions[1]->id, 1.0,
+            (int)$USER->id, (int)$first["slot"]);
+        $this->assertSame(1, (int)$replacement["slot"]);
+        $this->assertCount(1, slots::active((int)$activity->id));
+        $this->assertSame(0, (int)$DB->get_field("mcp_slots", "active", ["id" => $first["slotid"]]));
+    }
 }

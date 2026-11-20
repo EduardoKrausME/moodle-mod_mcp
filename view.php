@@ -46,7 +46,9 @@ $PAGE->set_context($context);
 $PAGE->set_cm($cm, $course);
 $PAGE->set_pagelayout("incourse");
 $completion = new \completion_info($course);
-$completion->set_module_viewed($cm);
+if (!$preview && !empty($mcp->publishedrevision)) {
+    $completion->set_module_viewed($cm);
+}
 
 $data = \mod_mcp\output\activity::page($mcp, $cm, $canmanage, $preview);
 $assessment = ["hasassessment" => false];

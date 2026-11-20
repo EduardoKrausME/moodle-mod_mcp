@@ -49,6 +49,24 @@ final class attempts {
         if (!$mcp->publishedrevision || !has_capability("mod/mcp:submit", $ctx, $userid)) {
             throw new moodle_exception("nopermissions");
         }
+        // Serialize starts for one student to prevent parallel duplicate attempts.
+        $factory = \core\lock\lock_config::get_lock_factory("mod_mcp");
+        $lock = $factory->get_lock("attempt_" . $mcp->id . "_" . $userid, 10);
+        if (!$lock) {
+            throw new moodle_exception("invaliddata");
+        }
+        try {
+            return self::start_locked($mcp, $cm, $userid);
+        } finally {
+            $lock->release();
+        }
+    }
+
+    /**
+     * Start under a per-user lock so the attempt count remains authoritative.
+     */
+    private static function start_locked(\stdClass $mcp, \stdClass $cm, int $userid): \stdClass {
+        global $DB;
         // One attempt by default: avoid parallel double-starts and grade farming.
         if ($DB->record_exists("mcp_attempts", ["mcpid" => $mcp->id, "userid" => $userid])) {
             throw new moodle_exception("invaliddata");

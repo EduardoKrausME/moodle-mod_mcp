@@ -47,6 +47,10 @@ class mod_mcp_mod_form extends moodleform_mod {
         $mform->setDefault("grade", 10);
         $this->standard_intro_elements();
         $this->standard_coursemodule_elements();
+        // Newly created activities must remain hidden until explicit publication.
+        if (empty($this->current->instance)) {
+            $mform->setDefault("visible", 0);
+        }
         $this->add_action_buttons();
     }
 
