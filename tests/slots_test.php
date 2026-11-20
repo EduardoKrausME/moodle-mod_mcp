@@ -34,8 +34,8 @@ use mod_mcp\question\slots;
  */
 final class slots_test extends advanced_testcase {
     /**
- * No question is fabricated or implicitly attached to an empty activity.
- */
+     * No question is fabricated or implicitly attached to an empty activity.
+     */
     public function test_empty_activity_has_no_native_questions(): void {
         $this->resetAfterTest();
         $course = $this->getDataGenerator()->create_course();

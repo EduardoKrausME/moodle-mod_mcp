@@ -34,8 +34,8 @@ use mod_mcp\content\service;
  */
 final class content_service_test extends advanced_testcase {
     /**
- * Saving a newer draft must not change the published HTML.
- */
+     * Saving a newer draft must not change the published HTML.
+     */
     public function test_immutable_revisions_and_optimistic_locking(): void {
         global $DB;
         $this->resetAfterTest();
