@@ -23,10 +23,18 @@
  */
 namespace mod_mcp\question;
 
+/**
+ * Selects the question-bank implementation for the installed Moodle version.
+ */
 final class bank_factory {
     /** @var string|null */
     private static $driver = null;
 
+    /**
+     * Return the adapter class for the installed question storage schema.
+     *
+     * @return string Fully qualified adapter class name.
+     */
     public static function driver(): string {
         global $CFG;
         if (self::$driver === null) {

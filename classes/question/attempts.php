@@ -117,7 +117,7 @@ final class attempts {
      * Persist the native form response and optionally finish, calculating the grade on server.
      */
     public static function submit(stdClass $mcp, stdClass $attempt, array $post,
-                                  bool     $finish): void {
+                                  bool $finish): void {
         global $DB;
         self::engine();
         if ($attempt->status !== "inprogress") {

@@ -28,6 +28,9 @@ use context_course;
 use moodle_exception;
 use stdClass;
 
+/**
+ * Validates questions stored using the Moodle 3.10/3.11 question-bank schema.
+ */
 final class legacy_bank {
     /**
      * Prior to Moodle 4.0, questions live directly in question.category.
@@ -43,6 +46,14 @@ final class legacy_bank {
         return $ctx;
     }
 
+    /**
+     * Validate a legacy question and the requesting user's access to it.
+     *
+     * @param int $questionid Question ID.
+     * @param int|null $courseid Course containing the question bank.
+     * @param int|null $userid User whose permissions are checked.
+     * @return stdClass Validated question metadata.
+     */
     public static function validate_question(int $questionid, ?int $courseid = null,
             ?int $userid = null): stdClass {
         global $DB;
