@@ -32,15 +32,19 @@ use local_mcp\extension\write_provider_interface;
  */
 final class provider implements read_provider_interface, write_provider_interface {
     /**
- * @return array READ tools.
- */
+     * Return the MCP tools or operation result.
+     *
+     * @return array READ tools.
+     */
     public function get_read_tools(): array {
         return [new read\get_activity()];
     }
 
     /**
- * @return array WRITE tools.
- */
+     * Return the MCP tools or operation result.
+     *
+     * @return array WRITE tools.
+     */
     public function get_write_tools(): array {
         return [
             new write\create_activity(),

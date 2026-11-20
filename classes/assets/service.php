@@ -33,8 +33,8 @@ use moodle_url;
  */
 final class service {
     /**
- * Upload a small encoded asset. Large videos should use Moodle's native file uploader.
- */
+     * Upload a small encoded asset. Large videos should use Moodle's native file uploader.
+     */
     public static function upload(int $cmid, string $filename, string $base64, int $userid): array {
         global $DB;
         $cm = get_coursemodule_from_id("mcp", $cmid, 0, false, MUST_EXIST);

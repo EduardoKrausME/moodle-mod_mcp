@@ -31,8 +31,8 @@ use moodle_url;
  */
 final class activity {
     /**
- * Build the introductory prompt for an empty MCP activity.
- */
+     * Build the introductory prompt for an empty MCP activity.
+     */
     public static function prompt(\stdClass $mcp, \stdClass $cm): string {
         $args = (object)[
             "courseid" => (int)$mcp->course,
@@ -44,8 +44,8 @@ final class activity {
     }
 
     /**
- * Build view data. HTML content always remains in an isolated sandboxed iframe.
- */
+     * Build view data. HTML content always remains in an isolated sandboxed iframe.
+     */
     public static function page(\stdClass $mcp, \stdClass $cm, bool $canmanage, bool $preview): array {
         $revisionid = $preview && $canmanage ? (int)$mcp->draftrevision : (int)$mcp->publishedrevision;
         $revision = \mod_mcp\content\service::get((int)$mcp->id, $revisionid);

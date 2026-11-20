@@ -69,8 +69,8 @@ final class service {
     }
 
     /**
- * Retrieve exactly one immutable revision owned by the activity.
- */
+     * Retrieve exactly one immutable revision owned by the activity.
+     */
     public static function get(int $mcpid, int $revisionid): ?\stdClass {
         global $DB;
         if (!$revisionid) {

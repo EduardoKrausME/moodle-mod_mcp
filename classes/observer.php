@@ -31,8 +31,8 @@ use core\event\course_module_created;
  */
 final class observer {
     /**
- * Hide an empty MCP module after core has completed module creation.
- */
+     * Hide an empty MCP module after core has completed module creation.
+     */
     public static function created(course_module_created $event): void {
         global $CFG, $DB;
         $cmid = (int)$event->contextinstanceid;

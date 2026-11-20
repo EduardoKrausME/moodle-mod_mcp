@@ -29,8 +29,8 @@ namespace mod_mcp\grade;
  */
 final class service {
     /**
- * Push the best finished native attempt into Moodle gradebook.
- */
+     * Push the best finished native attempt into Moodle gradebook.
+     */
     public static function update(\stdClass $mcp, int $userid = 0): void {
         global $DB;
         $params = ["mcpid" => (int)$mcp->id, "status" => "finished"];
