@@ -27,6 +27,8 @@ use mod_mcp\grade\service;
 
 /**
  * Feature support required by Moodle.
+ * @param $feature
+ * @return int|true|null
  */
 function mcp_supports($feature) {
     switch ($feature) {
@@ -46,6 +48,11 @@ function mcp_supports($feature) {
 
 /**
  * Insert a Moodle activity instance.
+ * @param $data
+ * @param null $mform
+ * @return bool|int
+ * @throws dml_exception
+ * @throws moodle_exception
  */
 function mcp_add_instance($data, $mform = null) {
     global $DB, $USER;
@@ -70,6 +77,11 @@ function mcp_add_instance($data, $mform = null) {
 
 /**
  * Update activity metadata and draft without publishing.
+ * @param $data
+ * @param null $mform
+ * @return true
+ * @throws dml_exception
+ * @throws moodle_exception
  */
 function mcp_update_instance($data, $mform = null) {
     global $DB, $USER;
@@ -93,6 +105,9 @@ function mcp_update_instance($data, $mform = null) {
 
 /**
  * Delete activity records, not shared native question bank questions.
+ * @param $id
+ * @return bool
+ * @throws dml_exception
  */
 function mcp_delete_instance($id) {
     global $CFG, $DB;
@@ -116,6 +131,8 @@ function mcp_delete_instance($id) {
 
 /**
  * Delete the grade item through Moodle gradebook, never directly through SQL.
+ * @param $mcp
+ * @return int
  */
 function mcp_grade_item_delete($mcp) {
     global $CFG;
@@ -141,6 +158,9 @@ function mcp_grade_item_update($mcp, $grades = null) {
 
 /**
  * Recalculate grades only from finished server-side attempts.
+ * @param $mcp
+ * @param int $userid
+ * @param bool $nullifnone
  */
 function mcp_update_grades($mcp, $userid = 0, $nullifnone = true) {
     service::update($mcp, (int)$userid);
@@ -148,6 +168,18 @@ function mcp_update_grades($mcp, $userid = 0, $nullifnone = true) {
 
 /**
  * File access always requires the activity's native Moodle context.
+ * @param $course
+ * @param $cm
+ * @param $context
+ * @param $filearea
+ * @param $args
+ * @param $forcedownload
+ * @param array $options
+ * @return false|void
+ * @throws coding_exception
+ * @throws moodle_exception
+ * @throws require_login_exception
+ * @throws required_capability_exception
  */
 function mcp_pluginfile($course, $cm, $context, $filearea, $args,
         $forcedownload, array $options = []) {
@@ -169,6 +201,9 @@ function mcp_pluginfile($course, $cm, $context, $filearea, $args,
 
 /**
  * Moodle course contents support.
+ * @param $coursemodule
+ * @return cached_cm_info|false
+ * @throws dml_exception
  */
 function mcp_get_coursemodule_info($coursemodule) {
     global $DB;
