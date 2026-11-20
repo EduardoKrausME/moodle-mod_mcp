@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Privacy metadata and user data handling.
@@ -37,7 +37,9 @@ use core_privacy\local\request\writer;
 final class provider implements
         \core_privacy\local\metadata\provider,
         \core_privacy\local\request\plugin\provider {
-    /** Describe stored user-linked records. */
+    /**
+ * Describe stored user-linked records.
+ */
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table("mcp_revisions", [
             "createdby" => "privacy:metadata:mcp_revisions:createdby",
@@ -48,7 +50,9 @@ final class provider implements
         return $collection;
     }
 
-    /** Find all MCP module contexts where the user authored or submitted data. */
+    /**
+ * Find all MCP module contexts where the user authored or submitted data.
+ */
     public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
         $sql = "SELECT DISTINCT ctx.id
@@ -67,7 +71,9 @@ final class provider implements
         return $contextlist;
     }
 
-    /** Export only records belonging to the approved user and context. */
+    /**
+ * Export only records belonging to the approved user and context.
+ */
     public static function export_user_data(approved_contextlist $contextlist): void {
         global $DB;
         $userid = (int)$contextlist->get_user()->id;
@@ -89,7 +95,9 @@ final class provider implements
         }
     }
 
-    /** Anonymize shared authorship and delete user-owned native question usages. */
+    /**
+ * Anonymize shared authorship and delete user-owned native question usages.
+ */
     public static function delete_data_for_all_users_in_context(context $context): void {
         global $DB, $CFG;
         $cm = self::module($context);
@@ -104,7 +112,9 @@ final class provider implements
         $DB->set_field("mcp_revisions", "createdby", 0, ["mcpid" => $cm->instance]);
     }
 
-    /** Delete one user's attempts, leaving pedagogical content intact. */
+    /**
+ * Delete one user's attempts, leaving pedagogical content intact.
+ */
     public static function delete_data_for_user(approved_contextlist $contextlist): void {
         global $DB, $CFG;
         require_once($CFG->dirroot . "/question/engine/lib.php");
@@ -124,7 +134,9 @@ final class provider implements
         }
     }
 
-    /** Return only module contexts belonging to the MCP activity. */
+    /**
+ * Return only module contexts belonging to the MCP activity.
+ */
     private static function module(context $context): ?\stdClass {
         if ($context->contextlevel !== CONTEXT_MODULE) {
             return null;
@@ -133,4 +145,3 @@ final class provider implements
             0, false, IGNORE_MISSING) ?: null;
     }
 }
-

@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Server-only question engine and assessment attempts.
@@ -31,13 +31,17 @@ use moodle_exception;
  * Uses core question usages for response persistence, marking and history.
  */
 final class attempts {
-    /** Ensure the Question Engine is initialized in both Moodle 4.5 and 5.x. */
+    /**
+ * Ensure the Question Engine is initialized in both Moodle 4.5 and 5.x.
+ */
     private static function engine(): void {
         global $CFG;
         require_once($CFG->dirroot . "/question/engine/lib.php");
     }
 
-    /** Begin one server-owned attempt after the student explicitly requests it. */
+    /**
+ * Begin one server-owned attempt after the student explicitly requests it.
+ */
     public static function start(\stdClass $mcp, \stdClass $cm, int $userid): \stdClass {
         global $DB;
         self::engine();
@@ -76,7 +80,9 @@ final class attempts {
         return $DB->get_record("mcp_attempts", ["id" => $id], "*", MUST_EXIST);
     }
 
-    /** Get the student's own attempt, never accept the user ID from a browser request. */
+    /**
+ * Get the student's own attempt, never accept the user ID from a browser request.
+ */
     public static function own(int $mcpid, int $userid): ?\stdClass {
         global $DB;
         return $DB->get_record("mcp_attempts", ["mcpid" => $mcpid, "userid" => $userid]) ?: null;
@@ -138,4 +144,3 @@ final class attempts {
         return $questions;
     }
 }
-
