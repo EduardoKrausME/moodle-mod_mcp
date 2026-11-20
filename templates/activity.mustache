@@ -1,0 +1,11 @@
+{{#canmanage}}
+  <nav class="my-3 d-flex gap-2">
+    <a class="btn btn-outline-secondary" href="{{manageurl}}">{{#str}}manageactivity, mcp{{/str}}</a>
+    <a class="btn btn-outline-secondary" href="{{previewurl}}">{{#str}}preview, mcp{{/str}}</a>
+  </nav>
+{{/canmanage}}
+{{#hascontent}}
+  <iframe class="w-100 border-0 mod-mcp-document" title="{{name}}" style="min-height:650px"
+          sandbox="allow-scripts" referrerpolicy="no-referrer" loading="eager"
+          srcdoc="{{content}}"></iframe>
+{{/hascontent}}
