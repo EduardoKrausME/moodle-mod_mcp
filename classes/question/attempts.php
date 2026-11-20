@@ -76,6 +76,7 @@ final class attempts {
             throw new moodle_exception("questionnotconfigured", "mcp");
         }
         $transaction = $DB->start_delegated_transaction();
+        $ctx = context_module::instance((int)$cm->id);
         $quba = \question_engine::make_questions_usage_by_activity("mod_mcp", $ctx);
         $quba->set_preferred_behaviour("deferredfeedback");
         foreach ($slots as $slot) {

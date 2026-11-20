@@ -34,55 +34,20 @@ use moodle_exception;
  */
 final class slots {
     /**
-     * Resolve the Moodle category context to an allowed bank in this course.
+     * Resolve the appropriate native question bank without branching in the assessment logic.
      */
     public static function check_bank(int $courseid, int $categoryid): context {
-        global $DB;
-        $contextid = (int)$DB->get_field("question_categories", "contextid",
-            ["id" => $categoryid], MUST_EXIST);
-        $ctx = context::instance_by_id($contextid, MUST_EXIST);
-        $coursectx = context_course::instance($courseid);
-        if ($ctx->id === $coursectx->id) {
-            return $ctx;
-        }
-        // Moodle 5.x may use question bank modules for the same course.
-        if ($ctx->contextlevel === CONTEXT_MODULE) {
-            $bankcm = get_coursemodule_from_id("", (int)$ctx->instanceid, 0, false, IGNORE_MISSING);
-            if ($bankcm && (int)$bankcm->course === $courseid) {
-                return $ctx;
-            }
-        }
-        throw new moodle_exception("nopermissions", "error", "", "question bank context");
+        $driver = bank_factory::driver();
+        return $driver::check_bank($courseid, $categoryid);
     }
 
     /**
-     * Validate an actual ready question VERSION, never the unstable latest alias.
+     * Check question visibility and the caller's permissions in the selected bank.
      */
     public static function validate_question(int $questionid, ?int $courseid = null,
             ?int $userid = null): \stdClass {
-        global $DB;
-        $row = $DB->get_record_sql(
-            "SELECT q.id, q.qtype, q.defaultmark, v.version, v.status,
-                    e.questioncategoryid, e.ownerid
-               FROM {question} q
-               JOIN {question_versions} v ON v.questionid = q.id
-               JOIN {question_bank_entries} e ON e.id = v.questionbankentryid
-              WHERE q.id = :questionid",
-            ["questionid" => $questionid], MUST_EXIST);
-        if ($row->status !== "ready" || !in_array($row->qtype,
-                ["multichoice", "truefalse", "shortanswer"], true)) {
-            throw new moodle_exception("invaliddata");
-        }
-        if ($courseid !== null) {
-            $ctx = self::check_bank($courseid, (int)$row->questioncategoryid);
-            if ($userid !== null &&
-                    !has_capability("moodle/question:useall", $ctx, $userid) &&
-                    ((int)$row->ownerid !== $userid ||
-                        !has_capability("moodle/question:usemine", $ctx, $userid))) {
-                throw new moodle_exception("nopermissions");
-            }
-        }
-        return $row;
+        $driver = bank_factory::driver();
+        return $driver::validate_question($questionid, $courseid, $userid);
     }
 
     /**
