@@ -44,17 +44,47 @@ final class activity {
     }
 
     /**
+     * Whether this Moodle user has an active MCP OAuth connection.
+     *
+     * @param int $userid Moodle user ID.
+     * @return bool True when a non-revoked connection and its client are enabled.
+     */
+    public static function has_active_connection(int $userid): bool {
+        global $DB;
+
+        if ($userid <= 0 || !get_config("local_mcp", "version")) {
+            return false;
+        }
+
+        $sql = "SELECT 1
+                  FROM {local_mcp_connection} c
+                  JOIN {local_mcp_oauth_client} client ON client.id = c.clientid
+                 WHERE c.userid = :userid
+                   AND c.enabled = 1
+                   AND c.revokedat IS NULL
+                   AND client.enabled = 1";
+        return $DB->record_exists_sql($sql, ["userid" => $userid]);
+    }
+
+    /**
      * Build view data. HTML content always remains in an isolated sandboxed iframe.
      */
     public static function page(\stdClass $mcp, \stdClass $cm, bool $canmanage, bool $preview): array {
+        global $USER;
         $revisionid = $preview && $canmanage ? (int)$mcp->draftrevision : (int)$mcp->publishedrevision;
         $revision = \mod_mcp\content\service::get((int)$mcp->id, $revisionid);
+        $haslocalmcp = (bool)get_config("local_mcp", "version");
+        $hasconnection = $canmanage && !$revision && self::has_active_connection((int)$USER->id);
         return [
             "name" => format_string($mcp->name),
             "hascontent" => $revision !== null,
             "content" => $revision ? $revision->content : "",
             "canmanage" => $canmanage,
             "prompt" => self::prompt($mcp, $cm),
+            "haslocalmcp" => $haslocalmcp,
+            "hasconnection" => $hasconnection,
+            "connectionurl" => $haslocalmcp
+                ? (new moodle_url("/local/mcp/new_connection.php"))->out(false) : "",
             "manageurl" => (new moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]))->out(false),
             "previewurl" => (new moodle_url("/mod/mcp/view.php",
                 ["id" => $cm->id, "preview" => 1]))->out(false),
