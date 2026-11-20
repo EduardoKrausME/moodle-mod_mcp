@@ -22,15 +22,15 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined("MOODLE_INTERNAL") || die();
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Backup the authored document and question bank links without duplicating answers.
  */
 class backup_mcp_activity_structure_step extends backup_activity_structure_step {
     /**
- * Describe the backup XML tree and its database sources.
- */
+     * Describe the backup XML tree and its database sources.
+     */
     protected function define_structure() {
         $mcp = new backup_nested_element("mcp", ["id"],
             ["name", "intro", "introformat", "grade", "draftrevision",

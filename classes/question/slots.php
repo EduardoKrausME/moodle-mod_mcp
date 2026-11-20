@@ -34,8 +34,8 @@ use moodle_exception;
  */
 final class slots {
     /**
- * Resolve the Moodle category context to an allowed bank in this course.
- */
+     * Resolve the Moodle category context to an allowed bank in this course.
+     */
     public static function check_bank(int $courseid, int $categoryid): context {
         global $DB;
         $contextid = (int)$DB->get_field("question_categories", "contextid",
@@ -56,8 +56,8 @@ final class slots {
     }
 
     /**
- * Validate an actual ready question VERSION, never the unstable latest alias.
- */
+     * Validate an actual ready question VERSION, never the unstable latest alias.
+     */
     public static function validate_question(int $questionid, ?int $courseid = null,
             ?int $userid = null): \stdClass {
         global $DB;
@@ -86,8 +86,8 @@ final class slots {
     }
 
     /**
- * List only active positions in stable sequential ordering.
- */
+     * List only active positions in stable sequential ordering.
+     */
     public static function active(int $mcpid): array {
         global $DB;
         return array_values($DB->get_records("mcp_slots", ["mcpid" => $mcpid, "active" => 1],

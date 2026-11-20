@@ -22,28 +22,28 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined("MOODLE_INTERNAL") || die();
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Never import another user's attempts or native question usages from a content-only backup.
  */
 class restore_mcp_activity_structure_step extends restore_activity_structure_step {
     /**
- * @var int Old draft revision ID.
- */
+     * @var int Old draft revision ID.
+     */
     private int $olddraft = 0;
     /**
- * @var int Old published revision ID.
- */
+     * @var int Old published revision ID.
+     */
     private int $oldpublished = 0;
     /**
- * @var int Newly created MCP instance ID.
- */
+     * @var int Newly created MCP instance ID.
+     */
     private int $newmcpid = 0;
 
     /**
- * Map child data through Moodle's normal restore framework.
- */
+     * Map child data through Moodle's normal restore framework.
+     */
     protected function define_structure() {
         $paths = [
             new restore_path_element("mcp", "/activity/mcp"),
@@ -54,8 +54,8 @@ class restore_mcp_activity_structure_step extends restore_activity_structure_ste
     }
 
     /**
- * Insert only the course-owned instance.
- */
+     * Insert only the course-owned instance.
+     */
     protected function process_mcp($data) {
         global $DB;
         $data = (object)$data;
@@ -69,8 +69,8 @@ class restore_mcp_activity_structure_step extends restore_activity_structure_ste
     }
 
     /**
- * Restore immutable revision content and remap historical author IDs.
- */
+     * Restore immutable revision content and remap historical author IDs.
+     */
     protected function process_revision($data) {
         global $DB;
         $data = (object)$data;
@@ -82,8 +82,8 @@ class restore_mcp_activity_structure_step extends restore_activity_structure_ste
     }
 
     /**
- * Never attach a question ID from the original site without a valid remapping.
- */
+     * Never attach a question ID from the original site without a valid remapping.
+     */
     protected function process_slot($data) {
         global $DB;
         $data = (object)$data;
@@ -97,8 +97,8 @@ class restore_mcp_activity_structure_step extends restore_activity_structure_ste
     }
 
     /**
- * Connect the new revision pointers and restore Moodle-managed files.
- */
+     * Connect the new revision pointers and restore Moodle-managed files.
+     */
     protected function after_execute() {
         global $DB;
         $DB->update_record("mcp", (object)[

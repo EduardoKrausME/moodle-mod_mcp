@@ -32,16 +32,16 @@ use moodle_exception;
  */
 final class attempts {
     /**
- * Ensure the Question Engine is initialized in both Moodle 4.5 and 5.x.
- */
+     * Ensure the Question Engine is initialized in both Moodle 4.5 and 5.x.
+     */
     private static function engine(): void {
         global $CFG;
         require_once($CFG->dirroot . "/question/engine/lib.php");
     }
 
     /**
- * Begin one server-owned attempt after the student explicitly requests it.
- */
+     * Begin one server-owned attempt after the student explicitly requests it.
+     */
     public static function start(\stdClass $mcp, \stdClass $cm, int $userid): \stdClass {
         global $DB;
         self::engine();
@@ -81,8 +81,8 @@ final class attempts {
     }
 
     /**
- * Get the student's own attempt, never accept the user ID from a browser request.
- */
+     * Get the student's own attempt, never accept the user ID from a browser request.
+     */
     public static function own(int $mcpid, int $userid): ?\stdClass {
         global $DB;
         return $DB->get_record("mcp_attempts", ["mcpid" => $mcpid, "userid" => $userid]) ?: null;
