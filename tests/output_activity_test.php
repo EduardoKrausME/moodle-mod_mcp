@@ -47,6 +47,12 @@ final class output_activity_test extends advanced_testcase {
         $data = activity::page($module, $cm, true, false);
         $this->assertFalse($data["hascontent"]);
         $this->assertFalse($data["hasconnection"]);
+        $this->assertSame((int)$cm->id, $data["cmid"]);
+        $this->assertSame(activity::prompt($module, $cm), $data["prompt"]);
+        $this->assertSame(activity::prompt($module, $cm, "page"), $data["promptpage"]);
+        $this->assertNotSame($data["prompt"], $data["promptpage"]);
+        $this->assertStringContainsString((string)$cm->id, $data["prompt"]);
+        $this->assertStringContainsString((string)$cm->id, $data["promptpage"]);
         $this->assertArrayNotHasKey("haslocalmcp", $data);
         $this->assertSame(
             (new \moodle_url("/local/mcp/new_connection.php"))->out(false),

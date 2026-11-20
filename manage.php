@@ -46,6 +46,7 @@ $PAGE->set_context($context);
 $PAGE->set_cm($cm, $course);
 $data = [
     "prompt" => \mod_mcp\output\activity::prompt($mcp, $cm),
+    "promptpage" => \mod_mcp\output\activity::prompt($mcp, $cm, "page"),
     "previewurl" => (new \moodle_url("/mod/mcp/view.php", ["id" => $cm->id, "preview" => 1]))->out(false),
     "actionurl" => (new \moodle_url("/mod/mcp/manage.php"))->out(false),
     "canpublish" => !empty($mcp->draftrevision),

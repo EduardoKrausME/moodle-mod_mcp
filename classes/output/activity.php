@@ -33,14 +33,14 @@ final class activity {
     /**
      * Build the introductory prompt for an empty MCP activity.
      */
-    public static function prompt(\stdClass $mcp, \stdClass $cm): string {
+    public static function prompt(\stdClass $mcp, \stdClass $cm, string $type = "interactive"): string {
         $args = (object)[
             "courseid" => (int)$mcp->course,
             "cmid" => (int)$cm->id,
             "name" => $mcp->name,
             "url" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id]))->out(false),
         ];
-        return get_string("prompt", "mcp", $args);
+        return get_string($type === "page" ? "promptpage" : "prompt", "mcp", $args);
     }
 
     /**
@@ -80,6 +80,8 @@ final class activity {
             "content" => $revision ? $revision->content : "",
             "canmanage" => $canmanage,
             "prompt" => self::prompt($mcp, $cm),
+            "promptpage" => self::prompt($mcp, $cm, "page"),
+            "cmid" => (int)$cm->id,
             "hasconnection" => $hasconnection,
             "connectionurl" => (new moodle_url("/local/mcp/new_connection.php"))->out(false),
             "manageurl" => (new moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]))->out(false),

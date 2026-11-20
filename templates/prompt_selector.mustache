@@ -1,0 +1,79 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_mcp/prompt_selector
+
+    Example context (json):
+    {
+        "cmid": 27,
+        "prompt": "Build an interactive activity...",
+        "promptpage": "Build a content page..."
+    }
+}}
+<div id="mcp-prompt-selector-{{cmid}}" class="mod-mcp-prompt-selector mb-3">
+    <p class="mb-2 font-weight-bold">{{#str}}promptselecttitle, mcp{{/str}}</p>
+    <div class="d-flex flex-wrap mb-2" role="group" aria-label="{{#str}}promptselecttitle, mcp{{/str}}">
+        <button type="button" class="btn btn-outline-primary m-1" data-prompt-choice="interactive"
+                aria-pressed="false" aria-controls="mcp-prompt-interactive-{{cmid}}">
+            {{#str}}promptselectinteractive, mcp{{/str}}
+        </button>
+        <button type="button" class="btn btn-outline-primary m-1" data-prompt-choice="page"
+                aria-pressed="false" aria-controls="mcp-prompt-page-{{cmid}}">
+            {{#str}}promptselectpage, mcp{{/str}}
+        </button>
+    </div>
+    <p class="text-muted small">{{#str}}promptselecthelp, mcp{{/str}}</p>
+    <div id="mcp-prompt-interactive-{{cmid}}" data-prompt-panel="interactive" hidden>
+        <label class="form-label" for="mcp-prompt-interactive-text-{{cmid}}">
+            {{#str}}copyinstructions, mcp{{/str}}
+        </label>
+        <textarea id="mcp-prompt-interactive-text-{{cmid}}" class="form-control mb-3"
+                  rows="8" readonly>{{prompt}}</textarea>
+    </div>
+    <div id="mcp-prompt-page-{{cmid}}" data-prompt-panel="page" hidden>
+        <label class="form-label" for="mcp-prompt-page-text-{{cmid}}">
+            {{#str}}copyinstructions, mcp{{/str}}
+        </label>
+        <textarea id="mcp-prompt-page-text-{{cmid}}" class="form-control mb-3"
+                  rows="8" readonly>{{promptpage}}</textarea>
+    </div>
+</div>
+{{#js}}
+require([], function() {
+    var root = document.getElementById('mcp-prompt-selector-{{cmid}}');
+    if (!root) {
+        return;
+    }
+
+    var choices = root.querySelectorAll('[data-prompt-choice]');
+    var panels = root.querySelectorAll('[data-prompt-panel]');
+    Array.prototype.forEach.call(choices, function(button) {
+        button.addEventListener('click', function() {
+            var selected = button.getAttribute('data-prompt-choice');
+            Array.prototype.forEach.call(choices, function(choice) {
+                var active = choice.getAttribute('data-prompt-choice') === selected;
+                choice.setAttribute('aria-pressed', active ? 'true' : 'false');
+                choice.classList.toggle('btn-primary', active);
+                choice.classList.toggle('btn-outline-primary', !active);
+            });
+            Array.prototype.forEach.call(panels, function(panel) {
+                panel.hidden = panel.getAttribute('data-prompt-panel') !== selected;
+            });
+        });
+    });
+});
+{{/js}}
