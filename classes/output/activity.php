@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Mustache data for MCP activity page.
@@ -26,9 +26,13 @@ namespace mod_mcp\output;
 
 use moodle_url;
 
-/** Prepare the page data without a custom renderer. */
+/**
+ * Prepare the page data without a custom renderer.
+ */
 final class activity {
-    /** Build the introductory prompt for an empty MCP activity. */
+    /**
+     * Build the introductory prompt for an empty MCP activity.
+     */
     public static function prompt(\stdClass $mcp, \stdClass $cm): string {
         $args = (object)[
             "courseid" => (int)$mcp->course,
@@ -39,7 +43,9 @@ final class activity {
         return get_string("prompt", "mcp", $args);
     }
 
-    /** Build view data. HTML content always remains in an isolated sandboxed iframe. */
+    /**
+     * Build view data. HTML content always remains in an isolated sandboxed iframe.
+     */
     public static function page(\stdClass $mcp, \stdClass $cm, bool $canmanage, bool $preview): array {
         $revisionid = $preview && $canmanage ? (int)$mcp->draftrevision : (int)$mcp->publishedrevision;
         $revision = \mod_mcp\content\service::get((int)$mcp->id, $revisionid);
@@ -56,4 +62,3 @@ final class activity {
         ];
     }
 }
-

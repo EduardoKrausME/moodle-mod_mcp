@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Unit tests for native assessment slot references.
@@ -33,7 +33,9 @@ use mod_mcp\question\slots;
  * @covers \mod_mcp\question\slots
  */
 final class slots_test extends advanced_testcase {
-    /** No question is fabricated or implicitly attached to an empty activity. */
+    /**
+     * No question is fabricated or implicitly attached to an empty activity.
+     */
     public function test_empty_activity_has_no_native_questions(): void {
         $this->resetAfterTest();
         $course = $this->getDataGenerator()->create_course();
@@ -43,4 +45,3 @@ final class slots_test extends advanced_testcase {
         $this->assertSame([], slots::active((int)$module->id));
     }
 }
-

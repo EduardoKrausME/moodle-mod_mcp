@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Version-pinned native question references.
@@ -33,7 +33,9 @@ use moodle_exception;
  * Stores pointers only, never duplicates questions or alternatives.
  */
 final class slots {
-    /** Resolve the Moodle category context to an allowed bank in this course. */
+    /**
+     * Resolve the Moodle category context to an allowed bank in this course.
+     */
     public static function check_bank(int $courseid, int $categoryid): context {
         global $DB;
         $contextid = (int)$DB->get_field("question_categories", "contextid",
@@ -53,7 +55,9 @@ final class slots {
         throw new moodle_exception("nopermissions", "error", "", "question bank context");
     }
 
-    /** Validate an actual ready question VERSION, never the unstable latest alias. */
+    /**
+     * Validate an actual ready question VERSION, never the unstable latest alias.
+     */
     public static function validate_question(int $questionid, ?int $courseid = null,
             ?int $userid = null): \stdClass {
         global $DB;
@@ -81,7 +85,9 @@ final class slots {
         return $row;
     }
 
-    /** List only active positions in stable sequential ordering. */
+    /**
+     * List only active positions in stable sequential ordering.
+     */
     public static function active(int $mcpid): array {
         global $DB;
         return array_values($DB->get_records("mcp_slots", ["mcpid" => $mcpid, "active" => 1],
@@ -122,4 +128,3 @@ final class slots {
             "questionversion" => (int)$question->version];
     }
 }
-

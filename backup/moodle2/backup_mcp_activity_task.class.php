@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Activity backup task for MCP.
@@ -22,24 +22,31 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined("MOODLE_INTERNAL") || die();
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . "/mod/mcp/backup/moodle2/backup_mcp_stepslib.php");
 
-/** Register backup and content link encoding. */
+/**
+ * Register backup and content link encoding.
+ */
 class backup_mcp_activity_task extends backup_activity_task {
-    /** No activity-specific settings. */
+    /**
+     * No activity-specific settings.
+     */
     protected function define_my_settings() {
     }
 
-    /** Persist HTML revisions and question references. */
+    /**
+     * Persist HTML revisions and question references.
+     */
     protected function define_my_steps() {
         $this->add_step(new backup_mcp_activity_structure_step("mcp_structure", "mcp.xml"));
     }
 
-    /** Leave external links unchanged; no Moodle auth tokens are embedded. */
+    /**
+     * Leave external links unchanged; no Moodle auth tokens are embedded.
+     */
     public static function encode_content_links($content) {
         return $content;
     }
 }
-

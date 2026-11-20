@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Hide newly created MCP modules before first publication.
@@ -30,7 +30,9 @@ use core\event\course_module_created;
  * Enforces a hidden-first workflow even when course editing creates a visible module.
  */
 final class observer {
-    /** Hide an empty MCP module after core has completed module creation. */
+    /**
+     * Hide an empty MCP module after core has completed module creation.
+     */
     public static function created(course_module_created $event): void {
         global $CFG, $DB;
         $cmid = (int)$event->contextinstanceid;
@@ -47,4 +49,3 @@ final class observer {
         rebuild_course_cache($cm->course, true);
     }
 }
-

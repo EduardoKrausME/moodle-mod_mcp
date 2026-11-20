@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Create a hidden MCP activity in a Moodle course.
@@ -30,24 +30,51 @@ use local_mcp\security\authenticated_identity;
 use local_mcp\write\tool\base_tool;
 use moodle_url;
 
-/** Create real Moodle modules using core course APIs, not direct SQL. */
+/**
+ * Create real Moodle modules using core course APIs, not direct SQL.
+ */
 final class create_activity extends base_tool {
+    /**
+     * get name.
+     *
+     * @return string Result.
+     */
     public function get_name(): string {
         return "mcp_create_activity";
     }
 
+    /**
+     * get title.
+     *
+     * @return string Result.
+     */
     public function get_title(): string {
         return "MCP activity: create";
     }
 
+    /**
+     * get description.
+     *
+     * @return string Result.
+     */
     public function get_description(): string {
         return "Create an unpublished, hidden mod_mcp activity and return the real cmid.";
     }
 
+    /**
+     * get required capability.
+     *
+     * @return string Result.
+     */
     public function get_required_capability(): string {
         return "moodle/course:manageactivities";
     }
 
+    /**
+     * get input schema.
+     *
+     * @return array Result.
+     */
     public function get_input_schema(): array {
         return $this->object_schema([
             "courseid" => ["type" => "integer", "minimum" => 1],
@@ -56,10 +83,23 @@ final class create_activity extends base_tool {
         ], ["courseid", "sectionnum", "name"]);
     }
 
+    /**
+     * resolve context.
+     *
+     * @param mixed $arguments Input arguments.
+     * @return context Result.
+     */
     public function resolve_context(array $arguments): context {
         return context_course::instance((int)$arguments["courseid"], MUST_EXIST);
     }
 
+    /**
+     * execute.
+     *
+     * @param mixed $arguments Input arguments.
+     * @param mixed $identity Input identity.
+     * @return array Result.
+     */
     public function execute(array $arguments, authenticated_identity $identity): array {
         global $CFG;
         require_once($CFG->dirroot . "/course/modlib.php");
@@ -80,4 +120,3 @@ final class create_activity extends base_tool {
                 ["id" => $created->coursemodule]))->out(false)];
     }
 }
-

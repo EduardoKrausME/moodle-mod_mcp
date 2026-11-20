@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Shared MCP edit context and capability checks.
@@ -29,24 +29,31 @@ use context_module;
 use local_mcp\write\tool\base_tool;
 use moodle_exception;
 
-/** Base for editor tools that operate on an existing module only. */
+/**
+ * Base for editor tools that operate on an existing module only.
+ */
 abstract class activity_tool extends base_tool {
-    /** Restrict edits to authorized activity managers. */
+    /**
+     * Restrict edits to authorized activity managers.
+     */
     public function get_required_capability(): string {
         return "mod/mcp:manage";
     }
 
-    /** Resolve the real module and reject arbitrary course-module IDs. */
+    /**
+     * Resolve the real module and reject arbitrary course-module IDs.
+     */
     public function resolve_context(array $arguments): context {
         $cm = get_coursemodule_from_id("mcp", (int)$arguments["cmid"], 0, false, MUST_EXIST);
         return context_module::instance((int)$cm->id);
     }
 
-    /** Fetch the instance associated with a module ID, never trust a separate instance ID. */
+    /**
+     * Fetch the instance associated with a module ID, never trust a separate instance ID.
+     */
     protected function activity(array $arguments): \stdClass {
         global $DB;
         $cm = get_coursemodule_from_id("mcp", (int)$arguments["cmid"], 0, false, MUST_EXIST);
         return $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
     }
 }
-

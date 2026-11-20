@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Immutable HTML drafts and controlled publication.
@@ -68,7 +68,9 @@ final class service {
         return $revisionid;
     }
 
-    /** Retrieve exactly one immutable revision owned by the activity. */
+    /**
+     * Retrieve exactly one immutable revision owned by the activity.
+     */
     public static function get(int $mcpid, int $revisionid): ?\stdClass {
         global $DB;
         if (!$revisionid) {
@@ -104,4 +106,3 @@ final class service {
         rebuild_course_cache($activity->course, true);
     }
 }
-

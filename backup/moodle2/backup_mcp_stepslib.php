@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Backup structure of MCP HTML and question slots.
@@ -22,11 +22,14 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined("MOODLE_INTERNAL") || die();
 
-/** Backup the authored document and question bank links without duplicating answers. */
+/**
+ * Backup the authored document and question bank links without duplicating answers.
+ */
 class backup_mcp_activity_structure_step extends backup_activity_structure_step {
-    /** Describe the backup XML tree and its database sources. */
+    /**
+     * Describe the backup XML tree and its database sources.
+     */
     protected function define_structure() {
         $mcp = new backup_nested_element("mcp", ["id"],
             ["name", "intro", "introformat", "grade", "draftrevision",
@@ -50,4 +53,3 @@ class backup_mcp_activity_structure_step extends backup_activity_structure_step 
         return $this->prepare_activity_structure($mcp);
     }
 }
-

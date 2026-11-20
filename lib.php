@@ -22,7 +22,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined("MOODLE_INTERNAL") || die();
 
 /**
  * Feature support required by Moodle.
@@ -94,11 +93,12 @@ function mcp_update_instance($data, $mform = null) {
  * Delete activity records, not shared native question bank questions.
  */
 function mcp_delete_instance($id) {
-    global $DB;
+    global $CFG, $DB;
     $record = $DB->get_record("mcp", ["id" => $id]);
     if (!$record) {
         return false;
     }
+    require_once($CFG->dirroot . "/question/engine/lib.php");
     foreach ($DB->get_records("mcp_attempts", ["mcpid" => $id]) as $attempt) {
         if ($attempt->qubaid) {
             question_engine::delete_questions_usage_by_activity((int)$attempt->qubaid);

@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Create a Moodle question before generating any HTML.
@@ -32,18 +32,38 @@ use local_mcp\security\authenticated_identity;
  * No second store for answer options, correct answers or fractions.
  */
 final class create_question extends activity_tool {
+    /**
+     * get name.
+     *
+     * @return string Result.
+     */
     public function get_name(): string {
         return "mcp_create_question";
     }
 
+    /**
+     * get title.
+     *
+     * @return string Result.
+     */
     public function get_title(): string {
         return "MCP activity: create bank question";
     }
 
+    /**
+     * get description.
+     *
+     * @return string Result.
+     */
     public function get_description(): string {
         return "Create a native Moodle multichoice question first; returns real question and version IDs for attaching.";
     }
 
+    /**
+     * get input schema.
+     *
+     * @return array Result.
+     */
     public function get_input_schema(): array {
         return $this->object_schema([
             "cmid" => ["type" => "integer", "minimum" => 1],
@@ -60,6 +80,13 @@ final class create_question extends activity_tool {
         ], ["cmid", "categoryid", "name", "questiontext", "answers"]);
     }
 
+    /**
+     * preview.
+     *
+     * @param mixed $arguments Input arguments.
+     * @param mixed $identity Input identity.
+     * @return array Result.
+     */
     public function preview(array $arguments, authenticated_identity $identity): array {
         $mcp = $this->activity($arguments);
         \mod_mcp\question\slots::check_bank((int)$mcp->course, (int)$arguments["categoryid"]);
@@ -69,6 +96,13 @@ final class create_question extends activity_tool {
             "type" => "multichoice", "answercount" => count($arguments["answers"])];
     }
 
+    /**
+     * execute.
+     *
+     * @param mixed $arguments Input arguments.
+     * @param mixed $identity Input identity.
+     * @return array Result.
+     */
     public function execute(array $arguments, authenticated_identity $identity): array {
         $this->resolve_context($arguments);
         $mcp = $this->activity($arguments);
@@ -84,4 +118,3 @@ final class create_question extends activity_tool {
         return bank_service::save($args, $identity);
     }
 }
-
