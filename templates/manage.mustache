@@ -2,7 +2,7 @@
   <h2>{{#str}}manageactivity, mcp{{/str}}</h2>
   <p>{{#str}}copyinstructions, mcp{{/str}}</p>
   <textarea class="form-control mb-3" rows="7" readonly>{{prompt}}</textarea>
-  <a class="btn btn-outline-secondary mb-3" href="{{previewurl}}">{{#str}}preview, mcp{{/str}}</a>
+  <a class="btn btn-outline-secondary mb-3" href="{{{previewurl}}}">{{#str}}preview, mcp{{/str}}</a>
   {{#canpublish}}
     <form action="{{actionurl}}" method="post">
       <input type="hidden" name="sesskey" value="{{sesskey}}">

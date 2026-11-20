@@ -33,9 +33,9 @@ function mcp_supports($feature) {
         case FEATURE_COMPLETION_TRACKS_VIEWS:
             return true;
         case FEATURE_BACKUP_MOODLE2:
-            return false;
+            return true;
         case FEATURE_MOD_ARCHETYPE:
-            return MOD_ARCHETYPE_RESOURCE;
+            return MOD_ARCHETYPE_OTHER;
         default:
             return null;
     }
