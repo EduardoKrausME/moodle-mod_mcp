@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Read MCP activity, revision and pinned questions.
@@ -30,33 +30,73 @@ use local_mcp\read\tool\base_tool;
 use local_mcp\security\authenticated_identity;
 use local_mcp\security\untrusted_content;
 
-/** READ access to the editable revision without exposing question answers. */
+/**
+ * READ access to the editable revision without exposing question answers.
+ */
 final class get_activity extends base_tool {
+    /**
+     * get name.
+     *
+     * @return string Result.
+     */
     public function get_name(): string {
         return "mcp_get_activity";
     }
 
+    /**
+     * get title.
+     *
+     * @return string Result.
+     */
     public function get_title(): string {
         return "MCP activity: get content and question IDs";
     }
 
+    /**
+     * get description.
+     *
+     * @return string Result.
+     */
     public function get_description(): string {
         return "Read an existing mod_mcp activity draft, published revision and question slots.";
     }
 
+    /**
+     * get required capability.
+     *
+     * @return string Result.
+     */
     public function get_required_capability(): string {
         return "mod/mcp:manage";
     }
 
+    /**
+     * get input schema.
+     *
+     * @return array Result.
+     */
     public function get_input_schema(): array {
         return $this->object_schema(["cmid" => ["type" => "integer", "minimum" => 1]], ["cmid"]);
     }
 
+    /**
+     * resolve context.
+     *
+     * @param mixed $arguments Input arguments.
+     * @return context Result.
+     */
     public function resolve_context(array $arguments): context {
         $cm = get_coursemodule_from_id("mcp", (int)$arguments["cmid"], 0, false, MUST_EXIST);
         return context_module::instance($cm->id);
     }
 
+    /**
+     * execute.
+     *
+     * @param mixed $arguments Input arguments.
+     * @param mixed $identity Input identity.
+     * @return array Result.
+     */
     public function execute(array $arguments, authenticated_identity $identity): array {
         global $DB;
         $cm = get_coursemodule_from_id("mcp", (int)$arguments["cmid"], 0, false, MUST_EXIST);
@@ -79,4 +119,3 @@ final class get_activity extends base_tool {
         ];
     }
 }
-

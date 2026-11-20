@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Native gradebook integration for finished attempts.
@@ -24,9 +24,13 @@
 
 namespace mod_mcp\grade;
 
-/** Never accepts client-supplied grade values. */
+/**
+ * Never accepts client-supplied grade values.
+ */
 final class service {
-    /** Push the best finished native attempt into Moodle gradebook. */
+    /**
+ * Push the best finished native attempt into Moodle gradebook.
+ */
     public static function update(\stdClass $mcp, int $userid = 0): void {
         global $DB;
         $params = ["mcpid" => (int)$mcp->id, "status" => "finished"];
@@ -48,4 +52,3 @@ final class service {
         mcp_grade_item_update($mcp, $grades ?: null);
     }
 }
-

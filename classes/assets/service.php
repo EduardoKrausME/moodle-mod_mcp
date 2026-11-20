@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Safe activity asset storage in Moodle File API.
@@ -28,9 +28,13 @@ use context_module;
 use moodle_exception;
 use moodle_url;
 
-/** Store only allowlisted non-executable assets, never HTML or SVG. */
+/**
+ * Store only allowlisted non-executable assets, never HTML or SVG.
+ */
 final class service {
-    /** Upload a small encoded asset. Large videos should use Moodle's native file uploader. */
+    /**
+ * Upload a small encoded asset. Large videos should use Moodle's native file uploader.
+ */
     public static function upload(int $cmid, string $filename, string $base64, int $userid): array {
         global $DB;
         $cm = get_coursemodule_from_id("mcp", $cmid, 0, false, MUST_EXIST);
@@ -73,4 +77,3 @@ final class service {
             "size" => $file->get_filesize(), "mimetype" => $file->get_mimetype()];
     }
 }
-

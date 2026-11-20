@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Auto-discovered Moodle MCP provider.
@@ -27,14 +27,20 @@ namespace mod_mcp\mcp;
 use local_mcp\extension\read_provider_interface;
 use local_mcp\extension\write_provider_interface;
 
-/** Separate permissions and confirmations come from the existing local_mcp server. */
+/**
+ * Separate permissions and confirmations come from the existing local_mcp server.
+ */
 final class provider implements read_provider_interface, write_provider_interface {
-    /** @return array READ tools. */
+    /**
+ * @return array READ tools.
+ */
     public function get_read_tools(): array {
         return [new read\get_activity()];
     }
 
-    /** @return array WRITE tools. */
+    /**
+ * @return array WRITE tools.
+ */
     public function get_write_tools(): array {
         return [
             new write\create_activity(),
@@ -46,4 +52,3 @@ final class provider implements read_provider_interface, write_provider_interfac
         ];
     }
 }
-
