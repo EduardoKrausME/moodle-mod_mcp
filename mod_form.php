@@ -57,6 +57,37 @@ class mod_mcp_mod_form extends moodleform_mod {
     }
 
     /**
+     * Enable the custom rule only when configured by the teacher.
+     */
+    public function add_completion_rules() {
+        $name = "completioninteractive" . $this->get_suffix();
+        $this->_form->addElement("checkbox", $name, "",
+            get_string("completioninteractive", "mcp"));
+        return [$name];
+    }
+
+    /**
+     * Check the completed custom-rule form input.
+     */
+    public function completion_rule_enabled($data) {
+        return !empty($data["completioninteractive" . $this->get_suffix()]);
+    }
+
+    /**
+     * An unchecked rule must be explicitly cleared on update.
+     */
+    public function data_postprocessing($data) {
+        parent::data_postprocessing($data);
+        if (!empty($data->completionunlocked)) {
+            $name = "completioninteractive" . $this->get_suffix();
+            if (empty($data->{$name}) ||
+                    (int)($data->{"completion" . $this->get_suffix()} ?? 0) !== COMPLETION_TRACKING_AUTOMATIC) {
+                $data->{$name} = 0;
+            }
+        }
+    }
+
+    /**
      * Load only the latest draft for an existing module.
      */
     public function data_preprocessing(&$defaultvalues): void {

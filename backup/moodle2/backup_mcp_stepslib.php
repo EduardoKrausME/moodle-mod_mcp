@@ -33,7 +33,7 @@ class backup_mcp_activity_structure_step extends backup_activity_structure_step 
     protected function define_structure() {
         $mcp = new backup_nested_element("mcp", ["id"],
             ["name", "intro", "introformat", "grade", "draftrevision",
-                "publishedrevision", "timecreated", "timemodified"]);
+                "publishedrevision", "completioninteractive", "timecreated", "timemodified"]);
         $revisions = new backup_nested_element("revisions");
         $revision = new backup_nested_element("revision", ["id"],
             ["content", "sha256", "createdby", "timecreated"]);

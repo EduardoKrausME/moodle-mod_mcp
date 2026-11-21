@@ -79,3 +79,15 @@ $string['securecontent'] = 'O código personalizado é executado sem acesso à s
 $string['studentview'] = 'Visualização do estudante';
 $string['submissionsclosed'] = 'Esta tentativa já foi finalizada.';
 $string['yourgrade'] = 'Sua nota: {$a}';
+
+$string['completioninteractive'] = 'Quando o documento interativo solicitar a conclusão';
+$string['completionnotallowed'] = 'As regras de conclusão desta atividade não permitem concluí-la por meio do documento.';
+$string['progressconflict'] = 'O progresso foi atualizado em outra janela. Recarregue antes de salvar.';
+$string['trackinglimit'] = 'O limite de eventos de interação desta atividade foi atingido.';
+$string['privacy:metadata:mcp_state'] = 'Armazena dados de retomada por usuário e o indicador de conclusão personalizada.';
+$string['privacy:metadata:mcp_state:userid'] = 'Usuário proprietário do progresso.';
+$string['privacy:metadata:mcp_state:statejson'] = 'Dados de progresso informados pelo aluno no documento interativo.';
+$string['privacy:metadata:mcp_tracking'] = 'Armazena eventos de interação limitados enviados pelo documento.';
+$string['privacy:metadata:mcp_tracking:userid'] = 'Usuário que interagiu com a atividade.';
+$string['privacy:metadata:mcp_tracking:datajson'] = 'Dados dos eventos gerados durante as interações do aluno.';
+$string['promptapis'] = 'O documento interativo possui o SDK assíncrono window.MoodleMCP dentro do iframe isolado. Use MoodleMCP.course.getActivities() e getNavigation() para navegação autorizada no curso; MoodleMCP.completion.get() e complete() para respeitar as regras nativas de conclusão configuradas; MoodleMCP.progress.load() e save({version, location, data}) para retomar o progresso; MoodleMCP.attempt.get()/start()/finish() e MoodleMCP.questions.get()/submit(responses, finish) para interações compatíveis com questões nativas; MoodleMCP.tracking.record({type, action, object, result}) para registrar eventos limitados. Essas operações são assíncronas e dependem das permissões do Moodle. Nunca inclua tokens de sessão, gabaritos ou correção de notas no HTML. Não presuma que a conclusão foi habilitada nem que os tipos de questão funcionam sem o JavaScript nativo do Moodle. A avaliação nativa permanece disponível como alternativa.';

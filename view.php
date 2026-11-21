@@ -55,6 +55,11 @@ if (!$preview && !empty($mcp->publishedrevision)) {
 }
 
 $data = activity::page($mcp, $cm, $canmanage, $preview);
+if ($data["hascontent"]) {
+    $PAGE->requires->js_call_amd("mod_mcp/bridge", "init", [[
+        "cmid" => (int)$cm->id, "preview" => (bool)$preview,
+    ]]);
+}
 $assessment = ["hasassessment" => false];
 if (!$preview && $mcp->publishedrevision &&
         has_capability("mod/mcp:submit", $context) &&

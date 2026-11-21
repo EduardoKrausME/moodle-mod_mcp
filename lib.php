@@ -36,6 +36,7 @@ function mcp_supports($feature) {
         case FEATURE_SHOW_DESCRIPTION:
         case FEATURE_GRADE_HAS_GRADE:
         case FEATURE_COMPLETION_TRACKS_VIEWS:
+        case FEATURE_COMPLETION_HAS_RULES:
             return true;
         case FEATURE_BACKUP_MOODLE2:
             return true;
@@ -63,6 +64,7 @@ function mcp_add_instance($data, $mform = null) {
         "intro" => $data->intro ?? "",
         "introformat" => $data->introformat ?? FORMAT_HTML,
         "grade" => max(0, (float)($data->grade ?? 10)),
+        "completioninteractive" => empty($data->completioninteractive) ? 0 : 1,
         "draftrevision" => 0, "publishedrevision" => 0,
         "timecreated" => $now, "timemodified" => $now,
     ];
@@ -94,6 +96,7 @@ function mcp_update_instance($data, $mform = null) {
         throw new moodle_exception("invaliddata");
     }
     $mcp->grade = max(0, (float)($data->grade ?? 10));
+    $mcp->completioninteractive = empty($data->completioninteractive) ? 0 : 1;
     $mcp->timemodified = time();
     $DB->update_record("mcp", $mcp);
     if (isset($data->content) && trim((string)$data->content) !== "") {
@@ -122,6 +125,8 @@ function mcp_delete_instance($id) {
         }
     }
     $DB->delete_records("mcp_attempts", ["mcpid" => $id]);
+    $DB->delete_records("mcp_state", ["mcpid" => $id]);
+    $DB->delete_records("mcp_tracking", ["mcpid" => $id]);
     $DB->delete_records("mcp_slots", ["mcpid" => $id]);
     $DB->delete_records("mcp_revisions", ["mcpid" => $id]);
     $DB->delete_records("mcp", ["id" => $id]);
@@ -207,11 +212,16 @@ function mcp_pluginfile($course, $cm, $context, $filearea, $args,
  */
 function mcp_get_coursemodule_info($coursemodule) {
     global $DB;
-    $record = $DB->get_record("mcp", ["id" => $coursemodule->instance], "id, name, intro, introformat");
+    $record = $DB->get_record("mcp", ["id" => $coursemodule->instance], "id, name, intro, introformat, completioninteractive");
     if (!$record) {
         return false;
     }
     $info = new cached_cm_info();
     $info->name = $record->name;
+    $info->customdata = [
+        "customcompletionrules" => [
+            "completioninteractive" => (int)$record->completioninteractive,
+        ],
+    ];
     return $info;
 }

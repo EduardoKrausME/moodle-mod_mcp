@@ -48,6 +48,7 @@ final class activity {
         $prompt = get_string($type === "page" ? "promptpage" : "promptquiz", "mcp", $args);
         return get_string("promptbriefing", "mcp") . " " .
             get_string("promptembedded", "mcp") . " " .
+            get_string("promptapis", "mcp") . " " .
             $prompt . " " . self::css_instructions($PAGE->theme->name);
     }
 
@@ -104,11 +105,21 @@ final class activity {
         global $USER;
         $revisionid = $preview && $canmanage ? (int)$mcp->draftrevision : (int)$mcp->publishedrevision;
         $revision = service::get((int)$mcp->id, $revisionid);
+        // Initialise the iframe SDK before any authored JavaScript.
+        $content = $revision ? $revision->content : "";
+        if ($revision) {
+            $src = (new moodle_url("/mod/mcp/sdk.js"))->out(false);
+            $bootstrap = '<script src="' . s($src) . '"></script>';
+            $content = preg_replace('/(<head\b[^>]*>)/i', '$1' . $bootstrap, $content, 1, $count);
+            if (!$count) {
+                $content = $bootstrap . $content;
+            }
+        }
         $hasconnection = $canmanage && !$revision && self::has_active_connection((int)$USER->id);
         return [
             "name" => format_string($mcp->name),
             "hascontent" => $revision !== null,
-            "content" => $revision ? $revision->content : "",
+            "content" => $content,
             "canmanage" => $canmanage,
             "prompt" => self::prompt($mcp, $cm),
             "promptpage" => self::prompt($mcp, $cm, "page"),

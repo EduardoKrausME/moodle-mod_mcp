@@ -49,6 +49,14 @@ final class provider implements
         $collection->add_database_table("mcp_attempts", [
             "userid" => "privacy:metadata:mcp_attempts:userid",
         ], "privacy:metadata:mcp_attempts");
+        $collection->add_database_table("mcp_state", [
+            "userid" => "privacy:metadata:mcp_state:userid",
+            "statejson" => "privacy:metadata:mcp_state:statejson",
+        ], "privacy:metadata:mcp_state");
+        $collection->add_database_table("mcp_tracking", [
+            "userid" => "privacy:metadata:mcp_tracking:userid",
+            "datajson" => "privacy:metadata:mcp_tracking:datajson",
+        ], "privacy:metadata:mcp_tracking");
         return $collection;
     }
 
@@ -64,10 +72,13 @@ final class provider implements
                   JOIN {mcp} a ON a.id = cm.instance
              LEFT JOIN {mcp_attempts} att ON att.mcpid = a.id AND att.userid = :userid
              LEFT JOIN {mcp_revisions} rev ON rev.mcpid = a.id AND rev.createdby = :createdby
+             LEFT JOIN {mcp_state} st ON st.mcpid = a.id AND st.userid = :stateuser
+             LEFT JOIN {mcp_tracking} tr ON tr.mcpid = a.id AND tr.userid = :trackuser
                  WHERE m.name = :modulename AND ctx.contextlevel = :contextlevel
-                   AND (att.id IS NOT NULL OR rev.id IS NOT NULL)";
+                   AND (att.id IS NOT NULL OR rev.id IS NOT NULL OR st.id IS NOT NULL OR tr.id IS NOT NULL)";
         $contextlist->add_from_sql($sql, [
             "userid" => $userid, "createdby" => $userid,
+            "stateuser" => $userid, "trackuser" => $userid,
             "modulename" => "mcp", "contextlevel" => CONTEXT_MODULE,
         ]);
         return $contextlist;
@@ -91,9 +102,16 @@ final class provider implements
             $revisions = $DB->get_records("mcp_revisions", [
                 "mcpid" => $cm->instance, "createdby" => $userid,
             ]);
+            $state = $DB->get_record("mcp_state", [
+                "mcpid" => $cm->instance, "userid" => $userid,
+            ]);
+            $tracking = $DB->get_records("mcp_tracking", [
+                "mcpid" => $cm->instance, "userid" => $userid,
+            ]);
             writer::with_context($context)->export_data([get_string("modulename", "mcp")],
                 (object)["attempts" => array_values($attempts),
-                    "revisions" => array_values($revisions)]);
+                    "revisions" => array_values($revisions), "progress" => $state,
+                    "tracking" => array_values($tracking)]);
         }
     }
 
@@ -111,6 +129,8 @@ final class provider implements
             question_engine::delete_questions_usage_by_activity((int)$attempt->qubaid);
         }
         $DB->delete_records("mcp_attempts", ["mcpid" => $cm->instance]);
+        $DB->delete_records("mcp_state", ["mcpid" => $cm->instance]);
+        $DB->delete_records("mcp_tracking", ["mcpid" => $cm->instance]);
         $DB->set_field("mcp_revisions", "createdby", 0, ["mcpid" => $cm->instance]);
     }
 
@@ -131,6 +151,8 @@ final class provider implements
                 question_engine::delete_questions_usage_by_activity((int)$attempt->qubaid);
             }
             $DB->delete_records("mcp_attempts", ["mcpid" => $cm->instance, "userid" => $userid]);
+            $DB->delete_records("mcp_state", ["mcpid" => $cm->instance, "userid" => $userid]);
+            $DB->delete_records("mcp_tracking", ["mcpid" => $cm->instance, "userid" => $userid]);
             $DB->set_field("mcp_revisions", "createdby", 0,
                 ["mcpid" => $cm->instance, "createdby" => $userid]);
         }

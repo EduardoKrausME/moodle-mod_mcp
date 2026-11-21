@@ -30,5 +30,52 @@
  * @return bool Upgrade result.
  */
 function xmldb_mcp_upgrade($oldversion) {
+    global $DB;
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < 2026112100) {
+        $table = new xmldb_table("mcp");
+        $field = new xmldb_field("completioninteractive", XMLDB_TYPE_INTEGER, "1",
+            null, XMLDB_NOTNULL, null, "0", "grade");
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $state = new xmldb_table("mcp_state");
+        if (!$dbman->table_exists($state)) {
+            $state->add_field("id", XMLDB_TYPE_INTEGER, "10", null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+            $state->add_field("mcpid", XMLDB_TYPE_INTEGER, "10", null, XMLDB_NOTNULL, null, null);
+            $state->add_field("userid", XMLDB_TYPE_INTEGER, "10", null, XMLDB_NOTNULL, null, null);
+            $state->add_field("revisionid", XMLDB_TYPE_INTEGER, "10", null, XMLDB_NOTNULL, null, "0");
+            $state->add_field("location", XMLDB_TYPE_CHAR, "255", null, XMLDB_NOTNULL, null, "");
+            $state->add_field("statejson", XMLDB_TYPE_TEXT, null, null, null, null, null);
+            $state->add_field("completed", XMLDB_TYPE_INTEGER, "1", null, XMLDB_NOTNULL, null, "0");
+            $state->add_field("version", XMLDB_TYPE_INTEGER, "10", null, XMLDB_NOTNULL, null, "0");
+            $state->add_field("timemodified", XMLDB_TYPE_INTEGER, "10", null, XMLDB_NOTNULL, null, "0");
+            $state->add_key("primary", XMLDB_KEY_PRIMARY, ["id"]);
+            $state->add_key("mcp", XMLDB_KEY_FOREIGN, ["mcpid"], "mcp", ["id"]);
+            $state->add_index("mcp_user", XMLDB_INDEX_UNIQUE, ["mcpid", "userid"]);
+            $dbman->create_table($state);
+        }
+
+        $tracking = new xmldb_table("mcp_tracking");
+        if (!$dbman->table_exists($tracking)) {
+            $tracking->add_field("id", XMLDB_TYPE_INTEGER, "10", null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+            $tracking->add_field("mcpid", XMLDB_TYPE_INTEGER, "10", null, XMLDB_NOTNULL, null, null);
+            $tracking->add_field("userid", XMLDB_TYPE_INTEGER, "10", null, XMLDB_NOTNULL, null, null);
+            $tracking->add_field("revisionid", XMLDB_TYPE_INTEGER, "10", null, XMLDB_NOTNULL, null, "0");
+            $tracking->add_field("eventtype", XMLDB_TYPE_CHAR, "30", null, XMLDB_NOTNULL, null, null);
+            $tracking->add_field("action", XMLDB_TYPE_CHAR, "64", null, XMLDB_NOTNULL, null, null);
+            $tracking->add_field("objectid", XMLDB_TYPE_CHAR, "255", null, XMLDB_NOTNULL, null, "");
+            $tracking->add_field("datajson", XMLDB_TYPE_TEXT, null, null, null, null, null);
+            $tracking->add_field("timecreated", XMLDB_TYPE_INTEGER, "10", null, XMLDB_NOTNULL, null, null);
+            $tracking->add_key("primary", XMLDB_KEY_PRIMARY, ["id"]);
+            $tracking->add_key("mcp", XMLDB_KEY_FOREIGN, ["mcpid"], "mcp", ["id"]);
+            $tracking->add_index("mcp_user", XMLDB_INDEX_NOTUNIQUE, ["mcpid", "userid"]);
+            $tracking->add_index("mcp_action", XMLDB_INDEX_NOTUNIQUE, ["mcpid", "eventtype", "action"]);
+            $dbman->create_table($tracking);
+        }
+        upgrade_mod_savepoint(true, 2026112100, "mcp");
+    }
     return true;
 }

@@ -27,3 +27,59 @@ mcp_create_activity, mcp_get_activity, mcp_save_content, mcp_create_question, mc
 Backup/restore includes authored HTML revisions, files and slots; student attempts are intentionally not restored by this initial version. Question references are restored only when the destination backup provides native question ID mappings. Moodle Privacy API exports and removes attempt data and anonymizes HTML revision authorship.
 
 Run the existing GitHub Actions Moodle 4.5/5.x matrix, PHP lint, PHPCS, PHPUnit and Behat before deploying. Review the current CI status; this initial implementation is not production-certified.
+
+## Student runtime API (1.1)
+
+Published HTML documents receive a small \`window.MoodleMCP\` SDK before their own scripts.
+The HTML stays inside \`sandbox="allow-scripts"\` (no \`allow-same-origin\`).
+A trusted host AMD module accepts messages **only from the matching iframe WindowProxy**,
+calls \`mod_mcp_dispatch\` using the Moodle AJAX/session context, and returns the result.
+No token, \`sesskey\`, gradebook access or arbitrary external function name enters the iframe.
+
+Example, within the authored document:
+
+\`\`\`javascript
+const nav = await MoodleMCP.course.getNavigation();
+const snapshot = await MoodleMCP.progress.load();
+const saved = await MoodleMCP.progress.save({
+    version: snapshot.version,
+    location: "unit-2/step-3",
+    data: {step: 3}
+});
+await MoodleMCP.tracking.record({
+    type: "interaction", action: "answered",
+    object: "example-2", result: {completed: true}
+});
+const completion = await MoodleMCP.completion.get();
+if (completion.canrequest) {
+    await MoodleMCP.completion.complete();
+}
+\`\`\`
+
+Available APIs:
+- \`activity.getContext()\`, \`course.getActivities()\`, \`course.getNavigation()\`;
+- \`completion.get()\`, \`completion.complete()\`;
+- \`progress.load()\`, \`progress.save({version, location, data})\` with optimistic locking;
+- \`attempt.get()\`, \`attempt.start()\`, \`attempt.finish()\`;
+- \`questions.get()\`, \`questions.submit(responses, finish)\` for simple native question
+  types. Returned question markup comes from the Moodle Question Engine, never from authored HTML.
+  Complex question types may require the original trusted Moodle assessment form;
+- \`tracking.record({type, action, object, result})\` with a limit of 2,000 events per
+  student/activity, and \`tracking.summary()\` restricted to teachers who can manage the activity.
+
+Automatic interactive completion requires the teacher to enable the custom rule in
+activity completion settings. Manual completion uses Moodle's own manual completion mode;
+native view/grade completion conditions are never bypassed. A graded attempt must be
+finished before interactive completion is accepted.
+
+Progress is revision-aware, belongs exclusively to the logged-in user, and is capped
+at 12 KiB of JSON. The optional xAPI-inspired telemetry is *not* a grading or evidence
+system. Author-supplied JSON is untrusted and never updates the Moodle gradebook.
+
+Neither student progress nor tracking events are copied by course backup/restore.
+The Moodle Privacy API exports and deletes these records. Course editing and publishing
+remain the responsibility of \`local_mcp\` with explicit teacher confirmation.
+
+The CI matrix targets Moodle 4.5 and Moodle 5.3, PHP lint/PHPCS, PHPUnit and JavaScript
+bridge tests. The repository must not be deployed without reviewing CI and completing
+integration tests in a real Moodle instance.
