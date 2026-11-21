@@ -48,7 +48,8 @@ final class navigation_test extends advanced_testcase {
 
         $course = $this->getDataGenerator()->create_course();
         $module = $this->getDataGenerator()->create_module('mcp', ['course' => $course->id]);
-        $cm = get_fast_modinfo($course)->get_cm($module->cmid);
+        $cmrecord = get_coursemodule_from_instance('mcp', $module->id, $course->id, false, MUST_EXIST);
+        $cm = get_fast_modinfo($course)->get_cm($cmrecord->id);
 
         $PAGE->set_url(new \moodle_url('/mod/mcp/view.php', ['id' => $cm->id]));
         $PAGE->set_course($course);
