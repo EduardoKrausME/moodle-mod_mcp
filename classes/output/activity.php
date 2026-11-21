@@ -49,6 +49,7 @@ final class activity {
         return get_string("promptbriefing", "mcp") . " " .
             get_string("promptembedded", "mcp") . " " .
             get_string("promptapis", "mcp") . " " .
+            "As instruções deste prompt são destinadas exclusivamente à geração da página. NÃO devem ser transformadas em textos, avisos, etiquetas, legendas ou elementos visíveis no HTML ".
             $prompt . " " . self::css_instructions($PAGE->theme->name);
     }
 
