@@ -63,7 +63,7 @@ final class grade_form_test extends advanced_testcase {
         rebuild_course_cache($course->id, true);
         $COURSE = get_course($course->id);
         $this->assertNotNull(get_fast_modinfo($COURSE)->get_section_info((int)$section->section));
-        $form = new \mod_mcp_mod_form($data, $section->section, $cm, $course);
+        $form = new \mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
         $form->set_data($data);
         $html = $form->render();
 
