@@ -49,7 +49,8 @@ class backup_mcp_activity_structure_step extends backup_activity_structure_step 
         $slot->set_source_table("mcp_slots", ["mcpid" => backup::VAR_PARENTID]);
         $slot->annotate_ids("question", "questionid");
         $revision->annotate_ids("user", "createdby");
-        $mcp->annotate_files("mod_mcp", "assets", 0);
+        // Assets use itemid 0 in Moodle File API, not an element named "0" in the backup XML.
+        $mcp->annotate_files("mod_mcp", "assets", null);
         return $this->prepare_activity_structure($mcp);
     }
 }
