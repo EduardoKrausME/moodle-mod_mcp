@@ -100,7 +100,7 @@ function mcp_update_instance($data, $mform = null) {
             $DB->record_exists("mcp_attempts", ["mcpid" => $mcp->id])) {
         throw new moodle_exception("invaliddata");
     }
-    $mcp->grade = max(0, (float)($data->grade ?? 10));
+    $mcp->grade = max(0, (float)($data->grade ?? $mcp->grade));
     $mcp->completioninteractive = empty($data->completioninteractive) ? 0 : 1;
     $mcp->timemodified = time();
     $DB->update_record("mcp", $mcp);
