@@ -28,6 +28,22 @@ Backup/restore includes authored HTML revisions, files and slots; student attemp
 
 Run the existing GitHub Actions Moodle 4.5/5.x matrix, PHP lint, PHPCS, PHPUnit and Behat before deploying. Review the current CI status; this initial implementation is not production-certified.
 
+## Languages
+
+The activity ships the same 22 locale directories as `local_mcp`:
+`ar`, `de`, `de_ch`, `de_comm`, `de_du`, `en`, `en_ca`, `en_us`,
+`es`, `es_ar`, `es_co`, `es_mx`, `es_ve`, `fr`, `fr_ca`, `fr_incl`,
+`it`, `nl`, `nl_ho`, `pt_br`, `ru`, and `zh_cn`.
+
+Each directory provides `mcp.php` for **mod_mcp** strings; the plugin does not
+copy unrelated `local_mcp` keys. Primary languages translate the activity
+interface, completion, progress, privacy notices and theme guidance. Regional
+variants override only wording that differs from their parent language.
+The extensive AI authoring prompts (`promptinstructions`, `promptpage`
+and `promptquiz`) use Moodle's English fallback in languages without a
+reviewed translation, preserving their exact publishing, permission and
+assessment instructions. The Portuguese and English prompts remain unchanged.
+
 ## Student runtime API (1.1)
 
 Published HTML documents receive a small `window.MoodleMCP` SDK before their own scripts.
