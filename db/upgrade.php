@@ -33,7 +33,9 @@ function xmldb_mcp_upgrade($oldversion) {
     global $DB;
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2026112100) {
+    // Repeat this idempotent schema step for installations already marked as 2026112100.
+    // That release could be installed without all the interactive completion fields/tables.
+    if ($oldversion < 2026112101) {
         $table = new xmldb_table("mcp");
         $field = new xmldb_field("completioninteractive", XMLDB_TYPE_INTEGER, "1",
             null, XMLDB_NOTNULL, null, "0", "grade");
@@ -75,7 +77,7 @@ function xmldb_mcp_upgrade($oldversion) {
             $tracking->add_index("mcp_action", XMLDB_INDEX_NOTUNIQUE, ["mcpid", "eventtype", "action"]);
             $dbman->create_table($tracking);
         }
-        upgrade_mod_savepoint(true, 2026112100, "mcp");
+        upgrade_mod_savepoint(true, 2026112101, "mcp");
     }
     return true;
 }
