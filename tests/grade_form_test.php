@@ -34,6 +34,31 @@ require_once($CFG->dirroot . '/mod/mcp/mod_form.php');
 require_once($CFG->dirroot . '/mod/mcp/lib.php');
 
 /**
+ * Diagnose the native section context while constructing the grading form.
+ */
+class inspected_mcp_mod_form extends \mod_mcp_mod_form {
+    /** @var string Explicit module name for test subclass. */
+    protected $_modname = "mcp";
+
+    /**
+     * Verify the course section available to the core visibility controls.
+     */
+    public function standard_coursemodule_elements() {
+        global $COURSE;
+        $modinfo = get_fast_modinfo($COURSE);
+        $section = $modinfo->get_section_info($this->_section);
+        if ($section === null) {
+            throw new \coding_exception(
+                "Test form context: section=" . var_export($this->_section, true) .
+                ", course=" . $COURSE->id .
+                ", available=" . implode(",", array_keys($modinfo->get_section_info_all()))
+            );
+        }
+        parent::standard_coursemodule_elements();
+    }
+}
+
+/**
  * Grade configuration must use the Moodle grade picker rather than a second text field.
  *
  * @covers \\mod_mcp_mod_form
@@ -63,7 +88,7 @@ final class grade_form_test extends advanced_testcase {
         rebuild_course_cache($course->id, true);
         $COURSE = get_course($course->id);
         $this->assertNotNull(get_fast_modinfo($COURSE)->get_section_info((int)$section->section));
-        $form = new \mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
+        $form = new inspected_mcp_mod_form($data, (int)$section->section, $cm, $course);
         $form->set_data($data);
         $html = $form->render();
 
