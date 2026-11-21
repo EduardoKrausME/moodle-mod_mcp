@@ -31,7 +31,6 @@ $string['attemptfinished'] = 'Sua tentativa foi enviada.';
 $string['attemptinprogress'] = 'Sua tentativa está em andamento.';
 $string['beginattempt'] = 'Iniciar avaliação';
 $string['connectionanother'] = 'Precisa conectar outro ChatGPT ou Claude, ou autorizar sua conta novamente? Consulte as instruções para configurar uma nova conexão:';
-$string['connectionconfigured'] = 'Sua conta Moodle já possui uma conexão MCP ativa. Abra o ChatGPT ou Claude em que a conexão foi autorizada e cole o prompt abaixo para criar o rascunho.';
 $string['connectionnew'] = 'Configurar conexão MCP';
 $string['connectionrequired'] = 'Sua conta Moodle ainda não possui uma conexão MCP ativa. Primeiro conecte o ChatGPT ou Claude a este Moodle e autorize o acesso com a sua conta; depois volte a esta atividade e use o prompt abaixo.';
 $string['content'] = 'Documento HTML (incluindo CSS e JavaScript)';
