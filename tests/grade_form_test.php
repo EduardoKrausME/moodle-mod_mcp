@@ -36,7 +36,7 @@ require_once($CFG->dirroot . '/mod/mcp/lib.php');
 /**
  * Grade configuration must use the Moodle grade picker rather than a second text field.
  *
- * @covers \\mod_mcp_mod_form
+ * @covers \mod_mcp_mod_form
  */
 final class grade_form_test extends advanced_testcase {
     /**
@@ -85,13 +85,13 @@ final class grade_form_test extends advanced_testcase {
         $form->set_data($data);
         $html = $form->render();
 
-        $dom = new \\DOMDocument();
+        $dom = new \DOMDocument();
         $previous = libxml_use_internal_errors(true);
         $dom->loadHTML($html);
         libxml_clear_errors();
         libxml_use_internal_errors($previous);
 
-        $xpath = new \\DOMXPath($dom);
+        $xpath = new \DOMXPath($dom);
         $this->assertSame(1, $xpath->query(
             '//select[@name="grade[modgrade_type]"]/option[@value="none" and @selected]'
         )->length);
@@ -112,7 +112,7 @@ final class grade_form_test extends advanced_testcase {
         ]);
 
         $this->assertEquals(0, $DB->get_field('mcp', 'grade', ['id' => $id]));
-        $gradeitem = \\grade_item::fetch([
+        $gradeitem = \grade_item::fetch([
             'itemtype' => 'mod',
             'itemmodule' => 'mcp',
             'iteminstance' => $id,
