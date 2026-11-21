@@ -84,3 +84,9 @@ Moodle 4.5 and 5.x are the intended targets. Run `node --test tests/js/sdk.test.
 for the bridge tests. The existing workflow still includes older Moodle versions; updating
 that protected workflow requires separate authorization. Review CI and complete
 integration tests on a real Moodle instance before production deployment.
+
+Incoming HTML is normalized before a draft is saved: typographic double quotes (`“”`)
+become ASCII double quotes (`"`), typographic single quotes (`‘’`) become ASCII single
+quotes (`'`), and em/en dashes (`—–`) become plain hyphens (`-`). This applies to
+all HTML, including inline JavaScript; authors must escape quotes inside JavaScript
+strings appropriately. MCP confirmation previews show the hash of normalized content.

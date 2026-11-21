@@ -34,13 +34,32 @@ use stdClass;
  */
 final class service {
     /**
+     * Convert typographic quotes and dashes to plain ASCII before storing HTML.
+     *
+     * This replacement applies to the entire document, including inline scripts.
+     *
+     * @param string $html Incoming document.
+     * @return string Normalized document.
+     */
+    public static function normalize_html(string $html): string {
+        return strtr($html, [
+            "“" => "\"",
+            "”" => "\"",
+            "‘" => "'",
+            "’" => "'",
+            "—" => "-",
+            "–" => "-",
+        ]);
+    }
+
+    /**
      * Save a new immutable revision with optimistic concurrency control.
      *
      * @return int Revision ID.
      */
     public static function save(int $mcpid, string $html, int $author, ?int $expectedrevision = null): int {
         global $DB;
-        $html = trim($html);
+        $html = trim(self::normalize_html($html));
         if ($html === "" || strlen($html) > 2097152) {
             throw new moodle_exception("invaliddata");
         }
