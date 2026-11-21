@@ -57,6 +57,32 @@ final class locales_test extends advanced_testcase {
     }
 
     /**
+     * The activity has a consistent display name in each primary language.
+     */
+    public function test_interactive_experience_display_name(): void {
+        $expected = [
+            "ar" => "تجربة تفاعلية",
+            "de" => "Interaktives Lernerlebnis",
+            "en" => "Interactive Experience",
+            "es" => "Experiencia interactiva",
+            "es_mx" => "Experiencia interactiva",
+            "fr" => "Expérience interactive",
+            "it" => "Esperienza interattiva",
+            "nl" => "Interactieve ervaring",
+            "pt_br" => "Experiência Interativa",
+            "ru" => "Интерактивный учебный опыт",
+            "zh_cn" => "互动体验",
+        ];
+        foreach ($expected as $locale => $name) {
+            $content = file_get_contents(dirname(__DIR__) . "/lang/" . $locale . "/mcp.php");
+            foreach (["modulename", "pluginname"] as $key) {
+                $definition = "$" . "string['" . $key . "'] = '" . $name . "';";
+                $this->assertStringContainsString($definition, $content);
+            }
+        }
+    }
+
+    /**
      * Main translations expose the component name and common prompt instructions.
      */
     public function test_primary_language_files_contain_translated_interface(): void {

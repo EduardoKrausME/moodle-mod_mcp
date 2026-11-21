@@ -28,5 +28,5 @@ defined('MOODLE_INTERNAL') || die;
 $string['connectionrequired'] = 'Ihr Moodle-Konto hat noch keine aktive MCP-Verbindung. Verbinden Sie ChatGPT oder Claude mit dieser Moodle-Website, autorisieren Sie den Zugriff mit Ihrem Konto und verwenden Sie anschliessend die folgenden Anweisungen.';
 $string['content_help'] = 'Verwenden Sie ein vollständiges HTML-Dokument mit eingebetteten Stilen und Skripten. Skripte werden in einem isolierten iframe ausgeführt.';
 $string['draftsaved'] = 'Entwurf gespeichert; Lernende sehen weiterhin die veröffentlichte Version.';
-$string['modulename'] = 'MCP-Aktivität';
-$string['pluginname'] = 'MCP-Aktivität';
+$string['modulename'] = 'Interaktives Lernerlebnis';
+$string['pluginname'] = 'Interaktives Lernerlebnis';

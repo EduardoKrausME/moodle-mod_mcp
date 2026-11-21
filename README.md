@@ -1,12 +1,12 @@
-# Moodle MCP Activity (mod_mcp)
+# Interactive Experience for Moodle (mod_mcp)
 
-Interactive Moodle activity supporting HTML, CSS and JavaScript in a single document, with native question-bank grading and ChatGPT/Claude authoring through local_mcp.
+Interactive Experience (Experiência Interativa) is a Moodle activity for creating pages, exercises and simulations with HTML, CSS and JavaScript, native question-bank grading and ChatGPT/Claude authoring through local_mcp.
 
 Compatible with Moodle 4.5 LTS and 5.x. Install this repository at mod/mcp and upgrade Moodle. local_mcp is required for authoring over MCP, but students do not need ChatGPT, Claude or an MCP connection.
 
 ## Activity lifecycle
 
-Create an MCP activity using Moodle or `mcp_create_activity`. It starts hidden and has an automatically generated ChatGPT/Claude prompt containing the course ID, cmid and URL. Save a complete HTML document using `mcp_save_content`, preview with the normal view URL, then publish explicitly through `mcp_publish` or the Moodle management page.
+Create an Interactive Experience using Moodle or `mcp_create_activity`. It starts hidden and has an automatically generated ChatGPT/Claude prompt containing the course ID, cmid and URL. Save a complete HTML document using `mcp_save_content`, preview with the normal view URL, then publish explicitly through `mcp_publish` or the Moodle management page.
 
 All HTML revisions are immutable and checked with an expected revision ID. Published students continue to see the previous published revision while a new draft is in progress.
 

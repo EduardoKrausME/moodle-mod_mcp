@@ -26,6 +26,6 @@ defined('MOODLE_INTERNAL') || die;
 
 // Only strings differing from the parent language are defined here.
 $string['draftsaved'] = 'Brouillon enregistré ; les personnes apprenantes voient toujours la version publiée.';
-$string['modulename_help'] = 'Créez des activités interactives pour les personnes apprenantes avec un document HTML géré par ChatGPT ou Claude via Moodle MCP.';
+$string['modulename_help'] = 'Créez des expériences interactives pour les personnes apprenantes avec un document HTML géré par ChatGPT ou Claude via Moodle MCP.';
 $string['publish'] = 'Publier pour les personnes apprenantes';
 $string['studentview'] = 'Vue de la personne apprenante';

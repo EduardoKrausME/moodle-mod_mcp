@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die;
 
 // Only strings differing from the parent language are defined here.
 $string['grade'] = 'Maximum grade';
-$string['modulename'] = 'MCP activity';
-$string['pluginname'] = 'MCP activity';
+$string['modulename'] = 'Interactive Experience';
+$string['pluginname'] = 'Interactive Experience';
 $string['promptcolours'] = 'For the {$a->theme} theme colors, use CSS variables {$a->variables} with fallbacks in var(), because this HTML runs in an isolated iframe.';
 $string['promptselecttitle'] = 'What do you want to build?';

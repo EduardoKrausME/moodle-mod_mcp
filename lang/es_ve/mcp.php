@@ -25,6 +25,6 @@
 defined('MOODLE_INTERNAL') || die;
 
 // Only strings differing from the parent language are defined here.
-$string['manageactivity'] = 'Administrar actividad MCP';
+$string['manageactivity'] = 'Administrar experiencia interactiva';
 $string['promptselecttitle'] = '¿Qué quieres crear?';
 $string['published'] = 'La actividad se publicó.';
