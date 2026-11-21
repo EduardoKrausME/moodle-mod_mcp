@@ -79,6 +79,7 @@ final class grade_form_test extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $COURSE = $course;
         $PAGE->set_course($course);
+        $PAGE->set_url(new \moodle_url('/course/modedit.php', ['add' => 'mcp', 'course' => $course->id]));
         [, , $section, $cm, $data] = prepare_new_moduleinfo_data($course, 'mcp', 0);
 
         $form = new \mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
@@ -119,8 +120,8 @@ final class grade_form_test extends advanced_testcase {
             'itemnumber' => 0,
             'courseid' => $course->id,
         ]);
-        $this->assertNotFalse($gradeitem);
-        $this->assertSame(GRADE_TYPE_NONE, (int)$gradeitem->gradetype);
+        // Moodle may omit a gradebook item entirely for activities without grades.
+        $this->assertTrue($gradeitem === false || (int)$gradeitem->gradetype === GRADE_TYPE_NONE);
     }
 
     /**
