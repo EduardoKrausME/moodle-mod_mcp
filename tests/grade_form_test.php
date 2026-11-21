@@ -35,22 +35,27 @@ require_once($CFG->dirroot . '/mod/mcp/lib.php');
 
 /**
  * Grade configuration must use the Moodle grade picker rather than a second text field.
+ *
+ * @covers \\mod_mcp_mod_form
  */
 final class grade_form_test extends advanced_testcase {
     /**
      * Only one maximum points field is rendered, within the native grade component.
      */
     public function test_form_uses_native_modgrade_without_separate_grade_field(): void {
+        global $COURSE;
+
         $this->resetAfterTest();
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
+        $COURSE = $course;
         $module = $this->getDataGenerator()->create_module('mcp', [
             'course' => $course->id,
             'grade' => 25,
         ]);
 
         $cm = get_coursemodule_from_instance('mcp', $module->id, $course->id, false, MUST_EXIST);
-        [$cm, $context, $plugin, $data, $section] = get_moduleinfo_data($cm, $course);
+        [$cm, , , $data, $section] = get_moduleinfo_data($cm, $course);
         $form = new \mod_mcp_mod_form($data, $section->section, $cm, $course);
         $form->set_data($data);
         $html = $form->render();
