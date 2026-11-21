@@ -96,7 +96,7 @@ function mcp_update_instance($data, $mform = null) {
     $mcp->name = $data->name;
     $mcp->intro = $data->intro ?? "";
     $mcp->introformat = $data->introformat ?? FORMAT_HTML;
-    if ((float)$mcp->grade !== max(0, (float)($data->grade ?? 10)) &&
+    if ((float)$mcp->grade !== max(0, (float)($data->grade ?? $mcp->grade)) &&
             $DB->record_exists("mcp_attempts", ["mcpid" => $mcp->id])) {
         throw new moodle_exception("invaliddata");
     }
