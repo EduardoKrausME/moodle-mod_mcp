@@ -38,9 +38,6 @@ class mod_mcp_mod_form extends moodleform_mod {
         $mform->addElement("text", "name", get_string("name"), ["size" => 64]);
         $mform->setType("name", PARAM_TEXT);
         $mform->addRule("name", null, "required", null, "client");
-        $mform->addElement("text", "grade", get_string("grade", "mcp"), ["size" => 8]);
-        $mform->setType("grade", PARAM_FLOAT);
-        $mform->setDefault("grade", 10);
         // The HTML editor belongs to manage.php, not the Moodle settings form.
         if (!empty($this->current->instance) && $this->_cm && !empty($this->_cm->id) &&
                 has_capability("mod/mcp:manage", $this->context)) {
@@ -50,12 +47,26 @@ class mod_mcp_mod_form extends moodleform_mod {
             $mform->addElement("static", "managecontent", "", $link);
         }
         $this->standard_intro_elements();
+        // Use Moodle's native grade group for type, maximum points, category and grade to pass.
+        $this->standard_grading_coursemodule_elements();
+        $mform->setDefault("grade", 10);
         $this->standard_coursemodule_elements();
         // Newly created activities must remain hidden until explicit publication.
         if (empty($this->current->instance)) {
             $mform->setDefault("visible", 0);
         }
         $this->add_action_buttons();
+    }
+
+    /**
+     * The assessment engine uses numeric points, not Moodle grade scales.
+     */
+    public function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+        if (isset($data["grade"]) && (float)$data["grade"] < 0) {
+            $errors["grade"] = get_string("gradescalenotsupported", "mcp");
+        }
+        return $errors;
     }
 
     /**
