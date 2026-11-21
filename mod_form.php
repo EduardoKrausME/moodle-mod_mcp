@@ -22,31 +22,32 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_mcp\content\service;
-
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . "/course/moodleform_mod.php");
 
 /**
- * Edit the module and its draft HTML document.
+ * Edit module settings; HTML drafts are managed on the dedicated page.
  */
 class mod_mcp_mod_form extends moodleform_mod {
     /**
-     * Build the editing form with one complete HTML field.
+     * Build the activity settings and provide the content management link when editing.
      */
     public function definition(): void {
         $mform = $this->_form;
         $mform->addElement("text", "name", get_string("name"), ["size" => 64]);
         $mform->setType("name", PARAM_TEXT);
         $mform->addRule("name", null, "required", null, "client");
-        $mform->addElement("textarea", "content", get_string("content", "mcp"),
-            ["rows" => 22, "cols" => 90, "spellcheck" => "false"]);
-        $mform->setType("content", PARAM_RAW);
-        $mform->addHelpButton("content", "content", "mcp");
         $mform->addElement("text", "grade", get_string("grade", "mcp"), ["size" => 8]);
         $mform->setType("grade", PARAM_FLOAT);
         $mform->setDefault("grade", 10);
+        // The HTML editor belongs to manage.php, not the Moodle settings form.
+        if (!empty($this->current->instance) && $this->_cm && !empty($this->_cm->id)) {
+            $url = new moodle_url("/mod/mcp/manage.php", ["id" => $this->_cm->id]);
+            $link = html_writer::link($url, get_string("editcontent", "mcp"),
+                ["class" => "btn btn-secondary"]);
+            $mform->addElement("static", "managecontent", "", $link);
+        }
         $this->standard_intro_elements();
         $this->standard_coursemodule_elements();
         // Newly created activities must remain hidden until explicit publication.
@@ -87,15 +88,4 @@ class mod_mcp_mod_form extends moodleform_mod {
         }
     }
 
-    /**
-     * Load only the latest draft for an existing module.
-     */
-    public function data_preprocessing(&$defaultvalues): void {
-        if (!empty($this->current->instance)) {
-            global $DB;
-            $mcp = $DB->get_record("mcp", ["id" => (int)$this->current->instance], "*", MUST_EXIST);
-            $revision = service::get((int)$mcp->id, (int)$mcp->draftrevision);
-            $defaultvalues["content"] = $revision ? $revision->content : "";
-        }
-    }
 }
