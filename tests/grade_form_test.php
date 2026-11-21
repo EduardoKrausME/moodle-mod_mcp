@@ -56,6 +56,13 @@ final class grade_form_test extends advanced_testcase {
 
         $cm = get_coursemodule_from_instance('mcp', $module->id, $course->id, false, MUST_EXIST);
         [$cm, , , $data, $section] = get_moduleinfo_data($cm, $course);
+
+        // The native module form reads section visibility from the course modinfo cache.
+        // Test-generated courses may not have that section populated until the cache is rebuilt.
+        course_create_sections_if_missing($course, (int)$section->section);
+        rebuild_course_cache($course->id, true);
+        $COURSE = get_course($course->id);
+        $this->assertNotNull(get_fast_modinfo($COURSE)->get_section_info((int)$section->section));
         $form = new \mod_mcp_mod_form($data, $section->section, $cm, $course);
         $form->set_data($data);
         $html = $form->render();
