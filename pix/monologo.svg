@@ -27,15 +27,15 @@
             stroke-width="4.08273"
             stroke-linecap="round"
     />
-    <ellipse
-            cx="45.36903"
-            cy="50.097618"
-            fill="#000000"
-            rx="14.615933"
-            ry="13.757092"
-            style="stroke-width:1.18166"/>
+    <!-- A seta e vazada no circulo: continua visivel com qualquer cor monocromatica. -->
     <path
-            d="m 39.715049,42.072648 13.397938,8.024971 -13.397938,8.024968 z"
-            fill="#ffffff"
-            style="stroke-width:1.18166"/>
+            d="M 59.984963,50.097618
+               A 14.615933,13.757092 0 1 1 30.753097,50.097618
+               A 14.615933,13.757092 0 1 1 59.984963,50.097618 Z
+               M 39.715049,42.072648
+               L 53.112987,50.097619
+               L 39.715049,58.122587 Z"
+            fill="#000000"
+            fill-rule="evenodd"
+    />
 </svg>
