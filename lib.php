@@ -68,7 +68,7 @@ function mcp_add_instance($data, $mform = null) {
         "name" => $data->name,
         "intro" => $data->intro ?? "",
         "introformat" => $data->introformat ?? FORMAT_HTML,
-        "grade" => max(0, (float)($data->grade ?? 10)),
+        "grade" => max(0, (float)($data->grade ?? 0)),
         "completioninteractive" => empty($data->completioninteractive) ? 0 : 1,
         "draftrevision" => 0, "publishedrevision" => 0,
         "timecreated" => $now, "timemodified" => $now,
