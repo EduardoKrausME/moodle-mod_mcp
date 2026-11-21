@@ -53,9 +53,13 @@ final class output_activity_test extends advanced_testcase {
         $this->assertSame(activity::prompt($module, $cm, "page"), $data["promptpage"]);
         $this->assertNotSame($data["prompt"], $data["promptpage"]);
         $briefing = get_string("promptbriefing", "mcp");
+        $embedded = get_string("promptembedded", "mcp");
         foreach (["prompt", "promptpage"] as $key) {
             $this->assertSame(0, strpos($data[$key], $briefing));
             $this->assertStringContainsString("PDF", $data[$key]);
+            $this->assertStringContainsString($embedded, $data[$key]);
+            $this->assertSame(1, substr_count($data[$key], $embedded));
+            $this->assertTrue(strpos($data[$key], $embedded) < strpos($data[$key], "MCP"));
         }
         foreach (["prompt", "promptpage"] as $key) {
             $this->assertSame(1, preg_match("/(Approve|Aprovar)/", $data[$key]));
