@@ -49,7 +49,8 @@ class mod_mcp_mod_form extends moodleform_mod {
         $this->standard_intro_elements();
         // Use Moodle's native grade group for type, maximum points, category and grade to pass.
         $this->standard_grading_coursemodule_elements();
-        $mform->setDefault("grade", 10);
+        // New activities are ungraded unless the teacher explicitly enables points.
+        $mform->setDefault("grade", 0);
         $this->standard_coursemodule_elements();
         // Newly created activities must remain hidden until explicit publication.
         if (empty($this->current->instance)) {
