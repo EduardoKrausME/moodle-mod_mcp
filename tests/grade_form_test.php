@@ -34,31 +34,6 @@ require_once($CFG->dirroot . '/mod/mcp/mod_form.php');
 require_once($CFG->dirroot . '/mod/mcp/lib.php');
 
 /**
- * Diagnose the native section context while constructing the grading form.
- */
-class inspected_mcp_mod_form extends \mod_mcp_mod_form {
-    /** @var string Explicit module name for test subclass. */
-    protected $_modname = "mcp";
-
-    /**
-     * Verify the course section available to the core visibility controls.
-     */
-    public function standard_coursemodule_elements() {
-        global $COURSE;
-        $modinfo = get_fast_modinfo($COURSE);
-        $section = $modinfo->get_section_info($this->_section);
-        if ($section === null) {
-            throw new \coding_exception(
-                "Test form context: section=" . var_export($this->_section, true) .
-                ", course=" . $COURSE->id .
-                ", available=" . implode(",", array_keys($modinfo->get_section_info_all()))
-            );
-        }
-        parent::standard_coursemodule_elements();
-    }
-}
-
-/**
  * Grade configuration must use the Moodle grade picker rather than a second text field.
  *
  * @covers \\mod_mcp_mod_form
@@ -68,12 +43,13 @@ final class grade_form_test extends advanced_testcase {
      * Only one maximum points field is rendered, within the native grade component.
      */
     public function test_form_uses_native_modgrade_without_separate_grade_field(): void {
-        global $COURSE;
+        global $COURSE, $PAGE;
 
         $this->resetAfterTest();
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
         $COURSE = $course;
+        $PAGE->set_course($course);
         $module = $this->getDataGenerator()->create_module('mcp', [
             'course' => $course->id,
             'grade' => 25,
@@ -82,13 +58,7 @@ final class grade_form_test extends advanced_testcase {
         $cm = get_coursemodule_from_instance('mcp', $module->id, $course->id, false, MUST_EXIST);
         [$cm, , , $data, $section] = get_moduleinfo_data($cm, $course);
 
-        // The native module form reads section visibility from the course modinfo cache.
-        // Test-generated courses may not have that section populated until the cache is rebuilt.
-        course_create_sections_if_missing($course, (int)$section->section);
-        rebuild_course_cache($course->id, true);
-        $COURSE = get_course($course->id);
-        $this->assertNotNull(get_fast_modinfo($COURSE)->get_section_info((int)$section->section));
-        $form = new inspected_mcp_mod_form($data, (int)$section->section, $cm, $course);
+        $form = new \mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
         $form->set_data($data);
         $html = $form->render();
 

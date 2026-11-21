@@ -42,22 +42,17 @@ final class manage_content_test extends advanced_testcase {
      * Existing modules link to manage.php by course-module ID rather than instance ID.
      */
     public function test_edit_settings_links_to_manager_without_html_field(): void {
-        global $COURSE;
+        global $COURSE, $PAGE;
 
         $this->resetAfterTest();
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
         $COURSE = $course;
+        $PAGE->set_course($course);
         $module = $this->getDataGenerator()->create_module('mcp', ['course' => $course->id]);
         $cm = get_coursemodule_from_id('mcp', $module->cmid, 0, false, MUST_EXIST);
         [$cm, , , $data, $section] = get_moduleinfo_data($cm, $course);
 
-        // The native module form reads section visibility from the course modinfo cache.
-        // Test-generated courses may not have that section populated until the cache is rebuilt.
-        course_create_sections_if_missing($course, (int)$section->section);
-        rebuild_course_cache($course->id, true);
-        $COURSE = get_course($course->id);
-        $this->assertNotNull(get_fast_modinfo($COURSE)->get_section_info((int)$section->section));
 
         $form = new \mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
         $form->set_data($data);
