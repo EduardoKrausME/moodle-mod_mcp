@@ -26,6 +26,6 @@ defined('MOODLE_INTERNAL') || die;
 
 // Only strings differing from the parent language are defined here.
 $string['copyinstructions'] = 'Kopieren Sie diesen Auftrag in ChatGPT oder Claude, um die Aktivität zu gestalten:';
-$string['modulename'] = 'MCP-Aktivität';
+$string['modulename'] = 'Interaktives Lernerlebnis';
 $string['modulename_help'] = 'Mit ChatGPT oder Claude und Moodle MCP lässt sich eine interaktive Aktivität als einzelnes HTML-Dokument gestalten.';
-$string['pluginname'] = 'MCP-Aktivität';
+$string['pluginname'] = 'Interaktives Lernerlebnis';

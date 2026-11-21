@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die;
 // Only strings differing from the parent language are defined here.
 $string['connectionrequired'] = 'Tu cuenta de Moodle todavía no tiene una conexión MCP activa. Conectá ChatGPT o Claude a este sitio Moodle, autorizá el acceso con tu cuenta y volvé para usar las instrucciones.';
 $string['copyinstructions'] = 'Copiá estas instrucciones en ChatGPT o Claude para crear la actividad:';
-$string['manageactivity'] = 'Administrar actividad MCP';
+$string['manageactivity'] = 'Administrar experiencia interactiva';
 $string['missingcontent'] = 'Creá la actividad';
 $string['promptselecthelp'] = 'Elegí el tipo de actividad para generar las instrucciones adecuadas para ChatGPT o Claude.';
 $string['promptselecttitle'] = '¿Qué querés crear?';
