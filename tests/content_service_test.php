@@ -53,4 +53,36 @@ final class content_service_test extends advanced_testcase {
         $this->expectException(moodle_exception::class);
         service::save((int)$module->id, "<p>Conflict</p>", 2, $first);
     }
+
+    /**
+     * Curly double/single quotes and both dash variants are replaced on ingestion.
+     */
+    public function test_normalizes_typographic_punctuation_before_saving_and_hashing(): void {
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        $module = $this->getDataGenerator()->create_module("mcp", [
+            "course" => $course->id, "name" => "Typography normalization",
+        ]);
+        $input = "<!doctype html><html><body><p>“Welcome” — it’s ‘ready’ – now.</p></body></html>";
+        $expected = "<!doctype html><html><body><p>\"Welcome\" - it's 'ready' - now.</p></body></html>";
+
+        $this->assertSame($expected, service::normalize_html($input));
+        $this->assertSame($expected, service::normalize_html($expected));
+        $revision = service::save((int)$module->id, $input, 2, 0);
+        $stored = service::get((int)$module->id, $revision);
+        $this->assertSame($expected, $stored->content);
+        $this->assertSame(hash("sha256", $expected), $stored->sha256);
+
+        // The same content with straight punctuation cannot create a duplicate revision.
+        $this->assertSame($revision, service::save((int)$module->id, $expected, 2, $revision));
+    }
+
+    /**
+     * Conversion is literal for inline JavaScript and preserves ordinary ASCII.
+     */
+    public function test_normalizes_quotes_in_inline_script(): void {
+        $input = "<script>const title = “Lesson”; const index = 2;</script><p>‘Example’ — next.</p>";
+        $expected = "<script>const title = \"Lesson\"; const index = 2;</script><p>'Example' - next.</p>";
+        $this->assertSame($expected, service::normalize_html($input));
+    }
 }
