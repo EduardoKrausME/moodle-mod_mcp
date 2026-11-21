@@ -41,7 +41,10 @@ test("parent bridge rejects messages from another window and never trusts reques
     const requests = [];
     const responses = [];
     const child = {postMessage: (data) => responses.push(data)};
-    const frame = {contentWindow: child, isConnected: true};
+    const frame = {
+        contentWindow: child, isConnected: true, style: {height: "650px"},
+        addEventListener: () => {}
+    };
     const window = {addEventListener: (name, fn) => {events[name] = fn;}};
     const document = {querySelector: () => frame};
     let exposed;
@@ -64,7 +67,93 @@ test("parent bridge rejects messages from another window and never trusts reques
     assert.equal(requests.length, 1);
     assert.equal(requests[0].args.cmid, 27);
     assert.equal(requests[0].args.preview, false);
-    assert.equal(responses[0].ok, true);
+    assert.equal(responses.find((message) => message.type === "response").ok, true);
     events.message({source: child, data: {...message, action: "grade.update"}});
     assert.equal(requests.length, 1);
+});
+
+
+test("sandbox SDK tracks the real height, including later growth and shrinkage", () => {
+    const events = {};
+    const messages = [];
+    let resizeObserver;
+    let mutationObserver;
+    const parent = {postMessage: (message) => messages.push(message)};
+    const doc = {
+        readyState: "complete",
+        documentElement: {scrollHeight: 857, offsetHeight: 857},
+        body: {scrollHeight: 857, offsetHeight: 857},
+        addEventListener: () => {}
+    };
+    const window = {
+        parent,
+        document: doc,
+        addEventListener: (name, fn) => {events[name] = fn;},
+        requestAnimationFrame: (callback) => callback(),
+        ResizeObserver: class {
+            constructor(callback) {
+                resizeObserver = callback;
+            }
+            observe() {}
+        },
+        MutationObserver: class {
+            constructor(callback) {
+                mutationObserver = callback;
+            }
+            observe() {}
+        }
+    };
+    vm.runInNewContext(sdk, {window, setTimeout, clearTimeout, Map, Math, Object, Error, String, Number});
+    assert.equal(messages[0].type, "resize");
+    assert.equal(messages[0].height, 857);
+
+    doc.body.scrollHeight = 912;
+    doc.body.offsetHeight = 912;
+    doc.documentElement.scrollHeight = 912;
+    doc.documentElement.offsetHeight = 912;
+    resizeObserver();
+    assert.equal(messages.at(-1).height, 912);
+
+    doc.body.scrollHeight = 720;
+    doc.body.offsetHeight = 720;
+    doc.documentElement.scrollHeight = 720;
+    doc.documentElement.offsetHeight = 720;
+    mutationObserver();
+    assert.equal(messages.at(-1).height, 720);
+
+    const count = messages.length;
+    events.message({source: parent, data: {channel: "mod_mcp", type: "measure"}});
+    assert.equal(messages.length, count);
+});
+
+test("parent bridge resizes only its own iframe on valid measurements", () => {
+    const events = {};
+    const outgoing = [];
+    const child = {postMessage: (message) => outgoing.push(message)};
+    const frame = {
+        contentWindow: child, isConnected: true, style: {height: "650px"},
+        addEventListener: (name, fn) => {events[name] = fn;}
+    };
+    const window = {addEventListener: (name, fn) => {events[name] = fn;}};
+    const document = {querySelector: () => frame};
+    let exposed;
+    const define = (dependencies, loader) => {
+        exposed = loader({call: () => {throw new Error("Height changes must not use AJAX");}});
+    };
+    vm.runInNewContext(bridge, {define, window, document, Set, JSON, Object, Number, Boolean, String});
+    exposed.init({cmid: 27, preview: false});
+    assert.equal(outgoing[0].type, "measure");
+    const data = {channel: "mod_mcp", type: "resize", height: 857};
+    events.message({source: {}, data});
+    assert.equal(frame.style.height, "650px");
+    events.message({source: child, data: {...data, height: "857"}});
+    events.message({source: child, data: {...data, height: -50}});
+    events.message({source: child, data: {...data, height: 100001}});
+    assert.equal(frame.style.height, "650px");
+    events.message({source: child, data});
+    assert.equal(frame.style.height, "857px");
+    events.message({source: child, data: {...data, height: 720}});
+    assert.equal(frame.style.height, "720px");
+    events.load();
+    assert.equal(outgoing.at(-1).type, "measure");
 });

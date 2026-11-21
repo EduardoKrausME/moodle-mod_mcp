@@ -27,6 +27,16 @@ define(["core/ajax"], function(Ajax) {
         if (!frame) {
             return;
         }
+
+        // Request a fresh measurement after the isolated srcdoc finishes loading.
+        // A direct contentDocument read would violate the allow-scripts sandbox.
+        const requestMeasurement = () => {
+            if (frame.isConnected && frame.contentWindow) {
+                frame.contentWindow.postMessage({channel: "mod_mcp", type: "measure"}, "*");
+            }
+        };
+        frame.addEventListener("load", requestMeasurement);
+        requestMeasurement();
         window.addEventListener("message", (event) => {
             // The sandboxed srcdoc has an opaque origin. Verify the WindowProxy,
             // not event.origin, which is "null" for this iframe.
@@ -34,7 +44,23 @@ define(["core/ajax"], function(Ajax) {
                 return;
             }
             const msg = event.data;
-            if (!msg || msg.channel !== "mod_mcp" || msg.type !== "request" ||
+
+            if (!msg || msg.channel !== "mod_mcp") {
+                return;
+            }
+            if (msg.type === "resize") {
+                // An authored script can also post messages, so bound the layout impact.
+                if (typeof msg.height !== "number" || !Number.isFinite(msg.height) ||
+                        msg.height <= 0 || msg.height > 100000) {
+                    return;
+                }
+                const height = Math.ceil(msg.height) + "px";
+                if (frame.style.height !== height) {
+                    frame.style.height = height;
+                }
+                return;
+            }
+            if (msg.type !== "request" ||
                     typeof msg.id !== "string" || !/^mcp-[a-zA-Z0-9-]{1,48}$/.test(msg.id) ||
                     !allowed.has(msg.action) || !msg.payload ||
                     typeof msg.payload !== "object" || Array.isArray(msg.payload)) {
