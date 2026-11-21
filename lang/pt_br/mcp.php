@@ -81,6 +81,7 @@ $string['questionnotconfigured'] = 'Nenhuma questão avaliativa foi associada à
 $string['questions'] = 'Avaliação';
 $string['response'] = 'Resposta';
 $string['revisionconflict'] = 'Outro autor modificou esta atividade. Consulte a versão atual antes de salvar.';
+$string['savedraft'] = 'Salvar rascunho';
 $string['saveanswers'] = 'Salvar respostas';
 $string['securecontent'] = 'O código personalizado é executado sem acesso à sessão do Moodle.';
 $string['studentview'] = 'Visualização do estudante';
