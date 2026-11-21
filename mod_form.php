@@ -42,7 +42,8 @@ class mod_mcp_mod_form extends moodleform_mod {
         $mform->setType("grade", PARAM_FLOAT);
         $mform->setDefault("grade", 10);
         // The HTML editor belongs to manage.php, not the Moodle settings form.
-        if (!empty($this->current->instance) && $this->_cm && !empty($this->_cm->id)) {
+        if (!empty($this->current->instance) && $this->_cm && !empty($this->_cm->id) &&
+                has_capability("mod/mcp:manage", $this->context)) {
             $url = new moodle_url("/mod/mcp/manage.php", ["id" => $this->_cm->id]);
             $link = html_writer::link($url, get_string("editcontent", "mcp"),
                 ["class" => "btn btn-secondary"]);
