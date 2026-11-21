@@ -28,9 +28,14 @@ use mod_mcp\grade\service;
 /**
  * Feature support required by Moodle.
  * @param $feature
- * @return int|true|null
+ * @return int|string|true|null
  */
 function mcp_supports($feature) {
+    // Feature purpose is unavailable in older Moodle versions.
+    if (defined("FEATURE_MOD_PURPOSE") && $feature === FEATURE_MOD_PURPOSE) {
+        return MOD_PURPOSE_INTERACTIVECONTENT;
+    }
+
     switch ($feature) {
         case FEATURE_MOD_INTRO:
         case FEATURE_SHOW_DESCRIPTION:
