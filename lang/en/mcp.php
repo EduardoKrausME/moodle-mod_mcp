@@ -81,6 +81,7 @@ $string['questionnotconfigured'] = 'No graded questions have been attached to th
 $string['questions'] = 'Assessment';
 $string['response'] = 'Answer';
 $string['revisionconflict'] = 'This activity was modified by another author. Read it again before saving.';
+$string['savedraft'] = 'Save draft';
 $string['saveanswers'] = 'Save answers';
 $string['securecontent'] = 'Custom code runs without access to the Moodle session.';
 $string['studentview'] = 'Student view';
