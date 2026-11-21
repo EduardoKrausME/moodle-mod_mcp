@@ -138,7 +138,7 @@ final class state {
         $object = $payload["object"] ?? "";
         $data = $payload["result"] ?? [];
         if (!in_array($type, ["interaction", "progress", "navigation"], true) ||
-                !is_string($action) || !preg_match('/^[a-z][a-z0-9_]{0,63}$/', $action) ||
+                !is_string($action) || !preg_match("/^[a-z][a-z0-9_]{0,63}$/", $action) ||
                 !is_string($object) || strlen($object) > 255 || !is_array($data)) {
             throw new moodle_exception("invaliddata");
         }

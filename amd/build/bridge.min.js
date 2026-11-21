@@ -6,14 +6,14 @@
  *
  * @module mod_mcp/bridge
  */
-define(['core/ajax'], function(Ajax) {
-    'use strict';
+define(["core/ajax"], function(Ajax) {
+    "use strict";
 
     const allowed = new Set([
-        'activity.getContext', 'course.getActivities', 'course.getNavigation',
-        'completion.get', 'completion.complete', 'progress.load', 'progress.save',
-        'tracking.record', 'tracking.summary', 'attempt.get', 'attempt.start',
-        'attempt.finish', 'questions.get', 'questions.submit'
+        "activity.getContext", "course.getActivities", "course.getNavigation",
+        "completion.get", "completion.complete", "progress.load", "progress.save",
+        "tracking.record", "tracking.summary", "attempt.get", "attempt.start",
+        "attempt.finish", "questions.get", "questions.submit"
     ]);
 
     /**
@@ -22,22 +22,22 @@ define(['core/ajax'], function(Ajax) {
      * @param {Object} config The trusted PHP-side page configuration.
      */
     const init = (config) => {
-        const frame = document.querySelector('.mod-mcp-document[data-cmid="' +
-            String(config.cmid) + '"]');
+        const frame = document.querySelector(".mod-mcp-document[data-cmid=\"" +
+            String(config.cmid) + "\"]");
         if (!frame) {
             return;
         }
-        window.addEventListener('message', (event) => {
+        window.addEventListener("message", (event) => {
             // The sandboxed srcdoc has an opaque origin. Verify the WindowProxy,
             // not event.origin, which is "null" for this iframe.
             if (event.source !== frame.contentWindow) {
                 return;
             }
             const msg = event.data;
-            if (!msg || msg.channel !== 'mod_mcp' || msg.type !== 'request' ||
-                    typeof msg.id !== 'string' || !/^mcp-[a-zA-Z0-9-]{1,48}$/.test(msg.id) ||
+            if (!msg || msg.channel !== "mod_mcp" || msg.type !== "request" ||
+                    typeof msg.id !== "string" || !/^mcp-[a-zA-Z0-9-]{1,48}$/.test(msg.id) ||
                     !allowed.has(msg.action) || !msg.payload ||
-                    typeof msg.payload !== 'object' || Array.isArray(msg.payload)) {
+                    typeof msg.payload !== "object" || Array.isArray(msg.payload)) {
                 return;
             }
             let payload;
@@ -54,12 +54,12 @@ define(['core/ajax'], function(Ajax) {
             const send = (message) => {
                 if (frame.isConnected && event.source === frame.contentWindow) {
                     frame.contentWindow.postMessage(Object.assign({
-                        channel: 'mod_mcp', type: 'response', id: msg.id
-                    }, message), '*');
+                        channel: "mod_mcp", type: "response", id: msg.id
+                    }, message), "*");
                 }
             };
             Ajax.call([{
-                methodname: 'mod_mcp_dispatch',
+                methodname: "mod_mcp_dispatch",
                 args: {
                     cmid: Number(config.cmid),
                     action: msg.action,
@@ -72,7 +72,7 @@ define(['core/ajax'], function(Ajax) {
             }).catch((error) => {
                 send({
                     ok: false,
-                    error: error.errorcode || 'requestfailed'
+                    error: error.errorcode || "requestfailed"
                 });
             });
         });

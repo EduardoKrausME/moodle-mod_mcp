@@ -6,7 +6,7 @@ Compatible with Moodle 4.5 LTS and 5.x. Install this repository at mod/mcp and u
 
 ## Activity lifecycle
 
-Create an MCP activity using Moodle or \`mcp_create_activity\`. It starts hidden and has an automatically generated ChatGPT/Claude prompt containing the course ID, cmid and URL. Save a complete HTML document using \`mcp_save_content\`, preview with the normal view URL, then publish explicitly through \`mcp_publish\` or the Moodle management page.
+Create an MCP activity using Moodle or `mcp_create_activity`. It starts hidden and has an automatically generated ChatGPT/Claude prompt containing the course ID, cmid and URL. Save a complete HTML document using `mcp_save_content`, preview with the normal view URL, then publish explicitly through `mcp_publish` or the Moodle management page.
 
 All HTML revisions are immutable and checked with an expected revision ID. Published students continue to see the previous published revision while a new draft is in progress.
 
@@ -30,15 +30,15 @@ Run the existing GitHub Actions Moodle 4.5/5.x matrix, PHP lint, PHPCS, PHPUnit 
 
 ## Student runtime API (1.1)
 
-Published HTML documents receive a small \`window.MoodleMCP\` SDK before their own scripts.
-The HTML stays inside \`sandbox="allow-scripts"\` (no \`allow-same-origin\`).
+Published HTML documents receive a small `window.MoodleMCP` SDK before their own scripts.
+The HTML stays inside `sandbox="allow-scripts"` (no `allow-same-origin`).
 A trusted host AMD module accepts messages **only from the matching iframe WindowProxy**,
-calls \`mod_mcp_dispatch\` using the Moodle AJAX/session context, and returns the result.
-No token, \`sesskey\`, gradebook access or arbitrary external function name enters the iframe.
+calls `mod_mcp_dispatch` using the Moodle AJAX/session context, and returns the result.
+No token, `sesskey`, gradebook access or arbitrary external function name enters the iframe.
 
 Example, within the authored document:
 
-\`\`\`javascript
+```javascript
 const nav = await MoodleMCP.course.getNavigation();
 const snapshot = await MoodleMCP.progress.load();
 const saved = await MoodleMCP.progress.save({
@@ -54,18 +54,18 @@ const completion = await MoodleMCP.completion.get();
 if (completion.canrequest) {
     await MoodleMCP.completion.complete();
 }
-\`\`\`
+```
 
 Available APIs:
-- \`activity.getContext()\`, \`course.getActivities()\`, \`course.getNavigation()\`;
-- \`completion.get()\`, \`completion.complete()\`;
-- \`progress.load()\`, \`progress.save({version, location, data})\` with optimistic locking;
-- \`attempt.get()\`, \`attempt.start()\`, \`attempt.finish()\`;
-- \`questions.get()\`, \`questions.submit(responses, finish)\` for simple native question
+- `activity.getContext()`, `course.getActivities()`, `course.getNavigation()`;
+- `completion.get()`, `completion.complete()`;
+- `progress.load()`, `progress.save({version, location, data})` with optimistic locking;
+- `attempt.get()`, `attempt.start()`, `attempt.finish()`;
+- `questions.get()`, `questions.submit(responses, finish)` for simple native question
   types. Returned question markup comes from the Moodle Question Engine, never from authored HTML.
   Complex question types may require the original trusted Moodle assessment form;
-- \`tracking.record({type, action, object, result})\` with a limit of 2,000 events per
-  student/activity, and \`tracking.summary()\` restricted to teachers who can manage the activity.
+- `tracking.record({type, action, object, result})` with a limit of 2,000 events per
+  student/activity, and `tracking.summary()` restricted to teachers who can manage the activity.
 
 Automatic interactive completion requires the teacher to enable the custom rule in
 activity completion settings. Manual completion uses Moodle's own manual completion mode;
@@ -78,8 +78,9 @@ system. Author-supplied JSON is untrusted and never updates the Moodle gradebook
 
 Neither student progress nor tracking events are copied by course backup/restore.
 The Moodle Privacy API exports and deletes these records. Course editing and publishing
-remain the responsibility of \`local_mcp\` with explicit teacher confirmation.
+remain the responsibility of `local_mcp` with explicit teacher confirmation.
 
-The CI matrix targets Moodle 4.5 and Moodle 5.3, PHP lint/PHPCS, PHPUnit and JavaScript
-bridge tests. The repository must not be deployed without reviewing CI and completing
-integration tests in a real Moodle instance.
+Moodle 4.5 and 5.x are the intended targets. Run `node --test tests/js/sdk.test.js`
+for the bridge tests. The existing workflow still includes older Moodle versions; updating
+that protected workflow requires separate authorization. Review CI and complete
+integration tests on a real Moodle instance before production deployment.

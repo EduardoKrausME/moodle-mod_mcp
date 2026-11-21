@@ -158,7 +158,7 @@ final class api {
         }
         foreach ($responses as $field => $value) {
             if (!is_string($field) || strlen($field) > 120 ||
-                    !preg_match('/^q[0-9]+:[0-9]+_[a-zA-Z0-9_:-]+$/', $field) ||
+                    !preg_match("/^q[0-9]+:[0-9]+_[a-zA-Z0-9_:-]+$/", $field) ||
                     !is_string($value) || strlen($value) > 4096) {
                 throw new moodle_exception("invaliddata");
             }
