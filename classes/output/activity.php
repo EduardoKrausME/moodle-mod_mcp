@@ -46,10 +46,7 @@ final class activity {
             "url" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id]))->out(false),
         ];
         $prompt = get_string($type === "page" ? "promptpage" : "promptquiz", "mcp", $args);
-        return get_string("promptbriefing", "mcp") . " " .
-            get_string("promptembedded", "mcp") . " " .
-            get_string("promptapis", "mcp") . " " .
-            "As instruções deste prompt são destinadas exclusivamente à geração da página. NÃO devem ser transformadas em textos, avisos, etiquetas, legendas ou elementos visíveis no HTML ".
+        return get_string("promptinstructions", "mcp") . " " .
             $prompt . " " . self::css_instructions($PAGE->theme->name);
     }
 
@@ -65,11 +62,20 @@ final class activity {
             $themename = substr($themename, 6);
         }
 
-        $instructions = [];
+        $cssvariables = [];
         if (strpos($themename, "learnlingo") !== false) {
-            $instructions[] = get_string("promptcolourslearnlingo", "mcp");
+            $cssvariables = ["--bs-primary", "--bs-accent"];
         } else if (in_array($themename, ["degrade", "eadflix", "eadtraining", "boost_magnific"], true)) {
-            $instructions[] = get_string("promptcoloursbootstrap", "mcp");
+            $cssvariables = ["--bs-primary", "--bs-secondary"];
+        }
+
+        $instructions = [];
+        if ($cssvariables) {
+            $args = (object)[
+                "theme" => $themename,
+                "variables" => implode(", ", $cssvariables),
+            ];
+            $instructions[] = get_string("promptcolours", "mcp", $args);
         }
         $instructions[] = get_string("promptdarkmode", "mcp");
 

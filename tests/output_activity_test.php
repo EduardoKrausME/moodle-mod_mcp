@@ -52,16 +52,14 @@ final class output_activity_test extends advanced_testcase {
         $this->assertSame(activity::prompt($module, $cm), $data["prompt"]);
         $this->assertSame(activity::prompt($module, $cm, "page"), $data["promptpage"]);
         $this->assertNotSame($data["prompt"], $data["promptpage"]);
-        $briefing = get_string("promptbriefing", "mcp");
-        $embedded = get_string("promptembedded", "mcp");
-        $this->assertStringContainsString("<footer>", $embedded);
-        $this->assertSame(1, preg_match("/(NENHUM RODAPÉ|ANY FOOTER)/", $embedded));
+        $instructions = get_string("promptinstructions", "mcp");
+        $this->assertStringContainsString("<footer>", $instructions);
+        $this->assertSame(1, preg_match("/(NENHUM RODAPÉ|ANY FOOTER)/", $instructions));
+        $this->assertSame(1, preg_match("/(NÃO devem ser transformadas|DO NOT turn them)/", $instructions));
         foreach (["prompt", "promptpage"] as $key) {
-            $this->assertSame(0, strpos($data[$key], $briefing));
+            $this->assertSame(0, strpos($data[$key], $instructions));
+            $this->assertSame(1, substr_count($data[$key], $instructions));
             $this->assertStringContainsString("PDF", $data[$key]);
-            $this->assertStringContainsString($embedded, $data[$key]);
-            $this->assertSame(1, substr_count($data[$key], $embedded));
-            $this->assertTrue(strpos($data[$key], $embedded) < strpos($data[$key], "MCP"));
         }
         foreach (["prompt", "promptpage"] as $key) {
             $this->assertSame(1, preg_match("/(Approve|Aprovar)/", $data[$key]));
@@ -86,6 +84,8 @@ final class output_activity_test extends advanced_testcase {
         foreach (["degrade", "eadflix", "eadtraining", "boost_magnific",
                   "theme_degrade", "theme_eadflix", "theme_eadtraining", "theme_boost_magnific"] as $theme) {
             $guidance = activity::css_instructions($theme);
+            $this->assertStringContainsString(
+                preg_replace("/^theme_/", "", $theme), $guidance);
             $this->assertStringContainsString("--bs-primary", $guidance);
             $this->assertStringContainsString("--bs-secondary", $guidance);
             $this->assertStringNotContainsString("--bs-accent", $guidance);
@@ -94,6 +94,8 @@ final class output_activity_test extends advanced_testcase {
 
         foreach (["learnlingo", "theme_learnlingo", "custom_learnlingo_dark"] as $theme) {
             $guidance = activity::css_instructions($theme);
+            $this->assertStringContainsString(
+                preg_replace("/^theme_/", "", $theme), $guidance);
             $this->assertStringContainsString("--bs-primary", $guidance);
             $this->assertStringContainsString("--bs-accent", $guidance);
             $this->assertStringNotContainsString("--bs-secondary", $guidance);
