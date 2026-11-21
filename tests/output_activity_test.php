@@ -54,12 +54,12 @@ final class output_activity_test extends advanced_testcase {
         $this->assertNotSame($data["prompt"], $data["promptpage"]);
         $briefing = get_string("promptbriefing", "mcp");
         foreach (["prompt", "promptpage"] as $key) {
-            $this->assertStringStartsWith($briefing, $data[$key]);
+            $this->assertSame(0, strpos($data[$key], $briefing));
             $this->assertStringContainsString("PDF", $data[$key]);
         }
         foreach (["prompt", "promptpage"] as $key) {
-            $this->assertMatchesRegularExpression("/(Approve|Aprovar)/", $data[$key]);
-            $this->assertMatchesRegularExpression("/(Reject|Rejeitar)/", $data[$key]);
+            $this->assertSame(1, preg_match("/(Approve|Aprovar)/", $data[$key]));
+            $this->assertSame(1, preg_match("/(Reject|Rejeitar)/", $data[$key]));
         }
         $this->assertStringContainsString("prefers-color-scheme", $data["prompt"]);
         $this->assertStringContainsString("prefers-color-scheme", $data["promptpage"]);
