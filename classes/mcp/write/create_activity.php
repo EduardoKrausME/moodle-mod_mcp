@@ -111,7 +111,7 @@ final class create_activity extends base_tool {
         $info->name = clean_param($arguments["name"], PARAM_TEXT);
         $info->intro = "";
         $info->introformat = FORMAT_HTML;
-        $info->grade = 10;
+        $info->grade = 0;
         $info->visible = 0;
         $created = add_moduleinfo($info, $course);
         return ["cmid" => (int)$created->coursemodule, "instanceid" => (int)$created->instance,
