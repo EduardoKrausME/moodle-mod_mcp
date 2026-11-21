@@ -41,6 +41,7 @@ $string['copyinstructions'] = 'Copie este prompt para construir a atividade no C
 $string['draftsaved'] = 'Rascunho salvo; os estudantes continuam vendo a versão publicada.';
 $string['editcontent'] = 'Editar conteúdo da atividade';
 $string['finishattempt'] = 'Enviar respostas e concluir';
+$string['gradescalenotsupported'] = 'As atividades MCP aceitam notas em pontos ou sem nota, mas não escalas de avaliação.';
 $string['grade'] = 'Nota máxima';
 $string['manageactivity'] = 'Gerenciar atividade MCP';
 $string['mcp:addinstance'] = 'Adicionar atividades MCP';
