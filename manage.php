@@ -35,7 +35,14 @@ require_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 require_capability("mod/mcp:manage", $context);
 $action = optional_param("action", "", PARAM_ALPHA);
-if ($action === "publish") {
+if (data_submitted() && $action === "save") {
+    require_sesskey();
+    $expectedrevision = required_param("revision", PARAM_INT);
+    $content = required_param("content", PARAM_RAW);
+    service::save((int)$mcp->id, $content, (int)$USER->id, $expectedrevision);
+    redirect(new moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]),
+        get_string("draftsaved", "mcp"));
+} else if (data_submitted() && $action === "publish") {
     require_sesskey();
     $revision = required_param("revision", PARAM_INT);
     service::publish((int)$mcp->id, $revision);
@@ -47,7 +54,9 @@ $PAGE->set_title(get_string("manageactivity", "mcp"));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 $PAGE->set_cm($cm, $course);
+$draft = service::get((int)$mcp->id, (int)$mcp->draftrevision);
 $data = [
+    "draftcontent" => $draft ? $draft->content : "",
     "prompt" => activity::prompt($mcp, $cm),
     "promptpage" => activity::prompt($mcp, $cm, "page"),
     "previewurl" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id, "preview" => 1]))->out(false),
