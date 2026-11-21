@@ -55,10 +55,13 @@ final class navigation_test extends advanced_testcase {
         $PAGE->set_course($course);
         $PAGE->set_cm($cm, $course);
 
-        $settingsnav = $this->getMockBuilder(\settings_navigation::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get_page'])
-            ->getMock();
+        $builder = $this->getMockBuilder(\settings_navigation::class)->disableOriginalConstructor();
+        if (method_exists(\settings_navigation::class, 'get_page')) {
+            $settingsnav = $builder->onlyMethods(['get_page'])->getMock();
+        } else {
+            // Moodle 3.10 exposes the page without a get_page() method.
+            $settingsnav = $builder->addMethods(['get_page'])->getMock();
+        }
         $settingsnav->method('get_page')->willReturn($PAGE);
 
         $managernode = \navigation_node::create('Activity', null, \navigation_node::TYPE_SETTING);
