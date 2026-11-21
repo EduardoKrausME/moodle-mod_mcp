@@ -53,7 +53,6 @@ final class manage_content_test extends advanced_testcase {
         $cm = get_coursemodule_from_id('mcp', $module->cmid, 0, false, MUST_EXIST);
         [$cm, , , $data, $section] = get_moduleinfo_data($cm, $course);
 
-
         $form = new \mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
         $form->set_data($data);
         $html = $form->render();

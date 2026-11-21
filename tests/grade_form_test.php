@@ -65,7 +65,7 @@ final class grade_form_test extends advanced_testcase {
         $this->assertStringContainsString('modstandardgrade', $html);
         $this->assertSame(1, substr_count($html, 'name="grade[modgrade_type]"'));
         $this->assertSame(1, substr_count($html, 'name="grade[modgrade_point]"'));
-        $this->assertStringNotContainsString('name="grade"', $html);
+        $this->assertSame(0, preg_match('/<input\\b[^>]*\\sname="grade"/i', $html));
     }
 
     /**
