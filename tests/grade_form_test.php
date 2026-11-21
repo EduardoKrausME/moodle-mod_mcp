@@ -81,7 +81,7 @@ final class grade_form_test extends advanced_testcase {
         $PAGE->set_course($course);
         [, , $section, $cm, $data] = prepare_new_moduleinfo_data($course, 'mcp', 0);
 
-        $form = new \\mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
+        $form = new \mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
         $form->set_data($data);
         $html = $form->render();
 
