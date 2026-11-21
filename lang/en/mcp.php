@@ -41,6 +41,7 @@ $string['copyinstructions'] = 'Copy this prompt to build the activity in ChatGPT
 $string['draftsaved'] = 'Draft saved; students still see the published revision.';
 $string['editcontent'] = 'Edit activity content';
 $string['finishattempt'] = 'Submit answers and finish';
+$string['gradescalenotsupported'] = 'MCP activities support points or no grade, not grading scales.';
 $string['grade'] = 'Maximum grade';
 $string['manageactivity'] = 'Manage MCP activity';
 $string['mcp:addinstance'] = 'Add MCP activities';
