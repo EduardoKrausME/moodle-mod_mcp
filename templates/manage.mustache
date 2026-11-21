@@ -22,6 +22,20 @@
     }
 }}
 <section class="card p-4 my-3">
+    <h2>{{#str}}manageactivity, mcp{{/str}}</h2>
+    {{> mod_mcp/prompt_selector}}
+    <a class="btn btn-outline-secondary mb-3" href="{{{previewurl}}}">{{#str}}preview, mcp{{/str}}</a>
+    {{#canpublish}}
+        <form action="{{actionurl}}" method="post">
+            <input type="hidden" name="sesskey" value="{{sesskey}}">
+            <input type="hidden" name="id" value="{{cmid}}">
+            <input type="hidden" name="revision" value="{{revision}}">
+            <input type="hidden" name="action" value="publish">
+            <button class="btn btn-primary" type="submit">{{#str}}publish, mcp{{/str}}</button>
+        </form>
+    {{/canpublish}}
+</section>
+<section class="card p-4 my-3">
     <h2>{{#str}}editcontent, mcp{{/str}}</h2>
     <form action="{{actionurl}}" method="post">
         <input type="hidden" name="sesskey" value="{{sesskey}}">
@@ -36,18 +50,4 @@
         </div>
         <button class="btn btn-primary" type="submit">{{#str}}savedraft, mcp{{/str}}</button>
     </form>
-</section>
-<section class="card p-4 my-3">
-    <h2>{{#str}}manageactivity, mcp{{/str}}</h2>
-    {{> mod_mcp/prompt_selector}}
-    <a class="btn btn-outline-secondary mb-3" href="{{{previewurl}}}">{{#str}}preview, mcp{{/str}}</a>
-    {{#canpublish}}
-        <form action="{{actionurl}}" method="post">
-            <input type="hidden" name="sesskey" value="{{sesskey}}">
-            <input type="hidden" name="id" value="{{cmid}}">
-            <input type="hidden" name="revision" value="{{revision}}">
-            <input type="hidden" name="action" value="publish">
-            <button class="btn btn-primary" type="submit">{{#str}}publish, mcp{{/str}}</button>
-        </form>
-    {{/canpublish}}
 </section>
