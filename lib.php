@@ -225,3 +225,30 @@ function mcp_get_coursemodule_info($coursemodule) {
     ];
     return $info;
 }
+
+/**
+ * Add the management page to Moodle's activity navigation.
+ *
+ * @param settings_navigation $settingsnav Settings navigation for this page.
+ * @param navigation_node $mcpnode Navigation node for this activity.
+ */
+function mcp_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $mcpnode) {
+    $cm = $settingsnav->get_page()->cm;
+    if (!$cm || $cm->modname !== "mcp" || !has_capability("mod/mcp:manage", $cm->context)) {
+        return;
+    }
+
+    // Keep the management tab next to the native activity settings tab.
+    $keys = $mcpnode->get_children_key_list();
+    $editindex = array_search("modedit", $keys, true);
+    $beforekey = $editindex === false ? ($keys[0] ?? null) : ($keys[$editindex + 1] ?? null);
+
+    $node = navigation_node::create(
+        get_string("manageactivity", "mcp"),
+        new moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]),
+        navigation_node::TYPE_SETTING,
+        null,
+        "mod_mcp_manage"
+    );
+    $mcpnode->add_node($node, $beforekey);
+}
