@@ -52,6 +52,8 @@ final class output_activity_test extends advanced_testcase {
         $this->assertSame(activity::prompt($module, $cm), $data["prompt"]);
         $this->assertSame(activity::prompt($module, $cm, "page"), $data["promptpage"]);
         $this->assertNotSame($data["prompt"], $data["promptpage"]);
+        $this->assertStringContainsString("prefers-color-scheme", $data["prompt"]);
+        $this->assertStringContainsString("prefers-color-scheme", $data["promptpage"]);
         $this->assertStringContainsString((string)$cm->id, $data["prompt"]);
         $this->assertStringContainsString((string)$cm->id, $data["promptpage"]);
         $this->assertArrayNotHasKey("haslocalmcp", $data);
@@ -60,6 +62,34 @@ final class output_activity_test extends advanced_testcase {
             $data["connectionurl"]
         );
         $this->assertFalse(activity::has_active_connection(0));
+    }
+
+    /**
+     * Colour variables follow the active theme, while dark mode is always required.
+     */
+    public function test_css_guidance_uses_theme_variables_and_dark_mode(): void {
+        foreach (["degrade", "eadflix", "eadtraining", "boost_magnific",
+                  "theme_degrade", "theme_eadflix", "theme_eadtraining", "theme_boost_magnific"] as $theme) {
+            $guidance = activity::css_instructions($theme);
+            $this->assertStringContainsString("--bs-primary", $guidance);
+            $this->assertStringContainsString("--bs-secondary", $guidance);
+            $this->assertStringNotContainsString("--bs-accent", $guidance);
+            $this->assertStringContainsString("prefers-color-scheme", $guidance);
+        }
+
+        foreach (["learnlingo", "theme_learnlingo", "custom_learnlingo_dark"] as $theme) {
+            $guidance = activity::css_instructions($theme);
+            $this->assertStringContainsString("--bs-primary", $guidance);
+            $this->assertStringContainsString("--bs-accent", $guidance);
+            $this->assertStringNotContainsString("--bs-secondary", $guidance);
+            $this->assertStringContainsString("prefers-color-scheme", $guidance);
+        }
+
+        $guidance = activity::css_instructions("boost");
+        $this->assertStringNotContainsString("--bs-primary", $guidance);
+        $this->assertStringNotContainsString("--bs-secondary", $guidance);
+        $this->assertStringNotContainsString("--bs-accent", $guidance);
+        $this->assertStringContainsString("prefers-color-scheme", $guidance);
     }
 
     /**

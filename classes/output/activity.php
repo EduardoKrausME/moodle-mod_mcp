@@ -36,13 +36,39 @@ final class activity {
      * Build the introductory prompt for an empty MCP activity.
      */
     public static function prompt(stdClass $mcp, stdClass $cm, string $type = "interactive"): string {
+        global $PAGE;
+
         $args = (object)[
             "courseid" => (int)$mcp->course,
             "cmid" => (int)$cm->id,
             "name" => $mcp->name,
             "url" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id]))->out(false),
         ];
-        return get_string($type === "page" ? "promptpage" : "prompt", "mcp", $args);
+        $prompt = get_string($type === "page" ? "promptpage" : "prompt", "mcp", $args);
+        return $prompt . " " . self::css_instructions($PAGE->theme->name);
+    }
+
+    /**
+     * Generate CSS guidance for the active Moodle theme.
+     *
+     * @param string $themename Effective theme name, optionally prefixed with theme_.
+     * @return string CSS variable and dark mode instructions.
+     */
+    public static function css_instructions(string $themename): string {
+        $themename = strtolower($themename);
+        if (strpos($themename, "theme_") === 0) {
+            $themename = substr($themename, 6);
+        }
+
+        $instructions = [];
+        if (strpos($themename, "learnlingo") !== false) {
+            $instructions[] = get_string("promptcolourslearnlingo", "mcp");
+        } else if (in_array($themename, ["degrade", "eadflix", "eadtraining", "boost_magnific"], true)) {
+            $instructions[] = get_string("promptcoloursbootstrap", "mcp");
+        }
+        $instructions[] = get_string("promptdarkmode", "mcp");
+
+        return implode(" ", $instructions);
     }
 
     /**
