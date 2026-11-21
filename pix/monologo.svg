@@ -1,8 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <title>Atividade MCP</title>
-  <path d="M17 6h22l13 13v34a5 5 0 0 1-5 5H17a5 5 0 0 1-5-5V11a5 5 0 0 1 5-5Z" fill="none" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
-  <path d="M39 7v12h12" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M21 28h18M21 35h11" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="42" cy="45" r="12" fill="#000"/>
-  <path d="m39 38 11 7-11 7Z" fill="#fff"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+        width="64"
+        height="64"
+        viewBox="0 0 64 64"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg">
+    <path
+            d="M 12.541957,2.1930783 H 41.069259 L 57.926301,17.096595 v 38.978427 a 6.4834776,5.7321216 0 0 1 -6.483478,5.732121 H 12.541957 A 6.4834776,5.7321216 0 0 1 6.0584797,56.075022 V 7.9252 A 6.4834776,5.7321216 0 0 1 12.541957,2.1930783 Z"
+            fill="none"
+            stroke="#000000"
+            stroke-width="4.08273"
+            stroke-linejoin="round"
+    />
+    <path
+            d="M 41.069259,3.3395028 V 17.096595 h 15.560347"
+            fill="none"
+            stroke="#000000"
+            stroke-width="4.08273"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+    />
+    <path
+            d="M 17.72874,27.414413 H 41.069259 M 17.72874,35.439384 h 14.26365"
+            fill="none"
+            stroke="#000000"
+            stroke-width="4.08273"
+            stroke-linecap="round"
+    />
+    <ellipse
+            cx="45.36903"
+            cy="50.097618"
+            fill="#000000"
+            rx="14.615933"
+            ry="13.757092"
+            style="stroke-width:1.18166"/>
+    <path
+            d="m 39.715049,42.072648 13.397938,8.024971 -13.397938,8.024968 z"
+            fill="#ffffff"
+            style="stroke-width:1.18166"/>
 </svg>
