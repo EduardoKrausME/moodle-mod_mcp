@@ -34,18 +34,23 @@ require_once($CFG->dirroot . '/mod/mcp/mod_form.php');
 
 /**
  * HTML authoring must not be embedded in the activity settings form.
+ *
+ * @covers \\mod_mcp_mod_form
  */
 final class manage_content_test extends advanced_testcase {
     /**
      * Existing modules link to manage.php by course-module ID rather than instance ID.
      */
     public function test_edit_settings_links_to_manager_without_html_field(): void {
+        global $COURSE;
+
         $this->resetAfterTest();
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
+        $COURSE = $course;
         $module = $this->getDataGenerator()->create_module('mcp', ['course' => $course->id]);
         $cm = get_coursemodule_from_id('mcp', $module->cmid, 0, false, MUST_EXIST);
-        [$cm, $context, $mod, $data, $section] = get_moduleinfo_data($cm, $course);
+        [$cm, , , $data, $section] = get_moduleinfo_data($cm, $course);
 
         $form = new \mod_mcp_mod_form($data, $section->section, $cm, $course);
         $form->set_data($data);
