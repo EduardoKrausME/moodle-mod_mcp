@@ -44,7 +44,7 @@ final class activity {
             "name" => $mcp->name,
             "url" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id]))->out(false),
         ];
-        $prompt = get_string($type === "page" ? "promptpage" : "prompt", "mcp", $args);
+        $prompt = get_string($type === "page" ? "promptpage" : "promptquiz", "mcp", $args);
         return $prompt . " " . self::css_instructions($PAGE->theme->name);
     }
 
