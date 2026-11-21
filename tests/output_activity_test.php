@@ -54,6 +54,8 @@ final class output_activity_test extends advanced_testcase {
         $this->assertNotSame($data["prompt"], $data["promptpage"]);
         $briefing = get_string("promptbriefing", "mcp");
         $embedded = get_string("promptembedded", "mcp");
+        $this->assertStringContainsString("<footer>", $embedded);
+        $this->assertSame(1, preg_match("/(NENHUM RODAPÉ|ANY FOOTER)/", $embedded));
         foreach (["prompt", "promptpage"] as $key) {
             $this->assertSame(0, strpos($data[$key], $briefing));
             $this->assertStringContainsString("PDF", $data[$key]);
