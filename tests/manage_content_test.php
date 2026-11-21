@@ -40,8 +40,6 @@ final class manage_content_test extends advanced_testcase {
      * Existing modules link to manage.php by course-module ID rather than instance ID.
      */
     public function test_edit_settings_links_to_manager_without_html_field(): void {
-        global $CFG;
-
         $this->resetAfterTest();
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
