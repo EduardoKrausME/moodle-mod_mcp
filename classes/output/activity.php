@@ -36,9 +36,10 @@ final class activity {
      * Build the introductory prompt for an empty MCP activity.
      */
     public static function prompt(stdClass $mcp, stdClass $cm, string $type = "interactive"): string {
-        global $PAGE;
+        global $CFG, $PAGE;
 
         $args = (object)[
+            "wwwroot" => $CFG->wwwroot,
             "courseid" => (int)$mcp->course,
             "cmid" => (int)$cm->id,
             "name" => $mcp->name,
