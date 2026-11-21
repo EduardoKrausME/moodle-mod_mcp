@@ -53,6 +53,7 @@ final class content_service_test extends advanced_testcase {
         $this->expectException(moodle_exception::class);
         service::save((int)$module->id, "<p>Conflict</p>", 2, $first);
     }
+
     /**
      * Curly double/single quotes and both dash variants are replaced on ingestion.
      */
@@ -84,5 +85,4 @@ final class content_service_test extends advanced_testcase {
         $expected = "<script>const title = \"Lesson\"; const index = 2;</script><p>'Example' - next.</p>";
         $this->assertSame($expected, service::normalize_html($input));
     }
-
 }
