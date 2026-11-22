@@ -116,10 +116,10 @@ final class provider implements
     }
 
     /**
-     * Anonymize shared authorship and delete user-owned native question usages.
+     * Anonymize authorship and remove per-user JSON attempts and responses.
      */
     public static function delete_data_for_all_users_in_context(context $context): void {
-        global $DB, $CFG;
+        global $DB;
         $cm = self::module($context);
         if (!$cm) {
             return;
@@ -134,7 +134,7 @@ final class provider implements
      * Delete one user's attempts, leaving pedagogical content intact.
      */
     public static function delete_data_for_user(approved_contextlist $contextlist): void {
-        global $DB, $CFG;
+        global $DB;
         $userid = (int)$contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
             $cm = self::module($context);

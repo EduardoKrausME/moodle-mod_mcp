@@ -32,7 +32,7 @@ use local_mcp\security\untrusted_content;
 use mod_mcp\content\service;
 
 /**
- * READ access to the editable revision without exposing question answers.
+ * Manager-only read access to HTML and authored JSON, including answer keys.
  */
 final class get_activity extends base_tool {
     /**
@@ -50,7 +50,7 @@ final class get_activity extends base_tool {
      * @return string Result.
      */
     public function get_title(): string {
-        return "MCP activity: get content and question IDs";
+        return "MCP activity: read HTML and JSON information";
     }
 
     /**
@@ -59,7 +59,7 @@ final class get_activity extends base_tool {
      * @return string Result.
      */
     public function get_description(): string {
-        return "Read an existing mod_mcp activity draft, published revision and question slots.";
+        return "Read activity type, editable JSON information, selection settings and HTML revisions.";
     }
 
     /**
