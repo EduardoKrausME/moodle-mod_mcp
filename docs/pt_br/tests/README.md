@@ -141,3 +141,11 @@ node --test docs/pt_br/tests/sentence-order.test.mjs
 ```
 
 O teste cobre palavras repetidas com IDs próprios, equivalência entre ocorrências iguais, pontuação, duas ordens gramaticais válidas, gabaritos incompletos ou desconhecidos, embaralhamento determinístico, seleção e movimento dos tokens, remoção, desfazer, limpar, correção, tentativa parcial, estado restaurado, acessibilidade e igualdade dos manifestos.
+
+Para o jogo 22 (Batalha de perguntas - Escudo Digital), execute:
+
+```bash
+node --test docs/pt_br/tests/quiz-battle.test.mjs
+```
+
+A suíte verifica configuração solo/robô e relógio opcional, seleção única, clique duplo, embaralhamento, pontuação por combo, tempo expirado, teto de bônus, recomeço com confirmação, corrida entre clique e expiração, aba oculta, empate, placar após retomada, sessão sem áudio, acessibilidade e sincronização dos manifestos.

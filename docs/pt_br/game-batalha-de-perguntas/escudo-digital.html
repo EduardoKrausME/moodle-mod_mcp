@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Batalha de perguntas - Escudo Digital</title><style>
+:root{font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;--bg:#eff4fb;--paper:#fff;--ink:#263a53;--muted:#657992;--line:#d9e4ef;--blue:#265f9d;--blue-strong:#174878;--blue-soft:#eaf2ff;--green:#167254;--green-soft:#e2f7ed;--amber:#936024;--amber-soft:#fff3e1;--steel:#eef3f7;color-scheme:light;color:var(--ink);background:var(--bg)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #f0a33e;outline-offset:3px}
+main{width:min(1160px,100%);padding:30px 20px 44px;margin:auto}.eyebrow{color:var(--blue);font-size:11px;letter-spacing:1.45px;text-transform:uppercase;font-weight:850;margin:0 0 7px}
+h1{font-size:clamp(28px,4.3vw,44px);letter-spacing:-.9px;line-height:1.16;margin:0 0 11px}.intro{font-size:14px;color:var(--muted);max-width:950px;margin:0 0 19px}
+.stats{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:0 0 13px}.stat{border-radius:11px;border:1px solid var(--line);background:var(--paper);min-width:105px;padding:8px 14px}.stat small{display:block;font-size:11px;color:var(--muted)}.stat strong{font-size:19px;font-variant-numeric:tabular-nums}.stats-note{font-size:11px;color:var(--muted);margin-left:auto}
+.progress{height:9px;border-radius:20px;background:#dce7ef;overflow:hidden;margin-bottom:18px}.progress span{height:100%;width:0;display:block;background:linear-gradient(90deg,#4b84d7,#36b39a);transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.47fr) minmax(265px,.72fr);align-items:start;gap:16px}
+.panel{border-radius:18px;padding:22px;background:var(--paper);border:1px solid var(--line);box-shadow:0 8px 30px #1c3c5709;min-width:0}
+.panel h2{font-size:19px;margin:0 0 12px}.topline{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap}.topline small{font-size:12px;font-weight:850;color:var(--muted)}.tag{border-radius:80px;padding:7px 11px;background:var(--blue-soft);color:var(--blue);font-size:11px;font-weight:850}
+.prep h2{font-size:clamp(23px,3vw,31px);letter-spacing:-.6px;margin:5px 0 10px}.prep p{font-size:14px;color:var(--muted);line-height:1.65}
+.prep-label{display:block;font-size:13px;font-weight:850;margin:19px 0 9px}.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.setup-choice{min-height:93px;text-align:left;border:2px solid #ccd9e8;border-radius:12px;background:#fafcff;color:var(--ink);padding:13px 14px;cursor:pointer}
+.setup-choice[aria-pressed=true]{background:var(--blue-soft);border-color:#5d88c1;box-shadow:0 0 0 1px #5d88c166}
+.setup-choice strong{display:block;font-size:14px;margin-bottom:5px}.setup-choice small{display:block;font-size:11px;color:var(--muted);line-height:1.45}
+.start-action{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:22px}
+.btn{border:1px solid var(--blue);border-radius:10px;padding:11px 16px;background:var(--blue);color:#fff;font-size:13px;font-weight:850;cursor:pointer}.btn.secondary{background:var(--paper);color:var(--blue)}.btn:hover:not(:disabled){filter:brightness(.92)}.btn:disabled{opacity:.44;cursor:not-allowed}
+.question{font-size:clamp(22px,2.9vw,30px);line-height:1.33;letter-spacing:-.5px;margin:18px 0 19px}
+.options{display:grid;gap:10px}.option{width:100%;display:flex;align-items:center;gap:13px;text-align:left;padding:14px;border:2px solid #d0ddea;background:#fbfdff;border-radius:12px;color:var(--ink);font-size:14px;font-weight:790;cursor:pointer;min-height:66px}
+.option:hover:not(:disabled){background:var(--blue-soft);border-color:#789fc8}.option:disabled{cursor:default;opacity:1}
+.option .letter{flex:0 0 30px;height:30px;display:grid;place-items:center;background:#e7f0fe;color:var(--blue);border-radius:9px;font-size:12px;font-weight:850}
+.option.selected.correct,.option.answer{border-color:#59ab86;background:var(--green-soft);color:var(--green)}
+.option.selected.incorrect{border-color:#dbaa72;background:var(--amber-soft);color:var(--amber)}
+.option.selected.incorrect .letter{background:#fbe3c6;color:#8e5924}
+.round-meter{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 16px}.meter-label{font-size:12px;font-weight:800;color:var(--muted)}.meter{height:7px;flex:1;min-width:70px;border-radius:20px;overflow:hidden;background:#e1e8f1}.meter span{display:block;height:100%;width:100%;background:#67a3dc;transition:width .2s}
+.timer-value{font-size:13px;color:var(--blue);font-weight:850;font-variant-numeric:tabular-nums;min-width:40px;text-align:right}
+.feedback{border-radius:11px;border:1px solid #d6e4f0;background:#edf4fc;color:#416385;font-size:13px;line-height:1.6;padding:14px 16px;margin:17px 0 0;min-height:69px}
+.feedback strong{display:block;font-size:14px;margin-bottom:3px}.feedback.good{color:var(--green);background:var(--green-soft);border-color:#a9d5bc}.feedback.warn{color:var(--amber);background:var(--amber-soft);border-color:#e6c7a1}
+.round-bottom{display:flex;align-items:center;gap:10px;justify-content:flex-end;margin-top:15px}.round-bottom .note{flex:1;color:var(--muted);font-size:11px}
+.side-intro{font-size:13px;line-height:1.65;color:var(--muted);margin:0 0 12px}.scoreboard{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.scorecard{border:1px solid var(--line);background:#f7faff;border-radius:11px;padding:12px}.scorecard small{display:block;color:var(--muted);font-size:11px}.scorecard strong{font-size:23px;font-variant-numeric:tabular-nums}.scorecard.player{background:var(--blue-soft);border-color:#a8c5e5}
+.combo{margin-top:13px;border-radius:10px;background:#f4f1fc;padding:13px;color:#59478d}.combo strong{font-size:21px;display:block}.combo span{font-size:11px}
+.journey{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:13px 0}.step{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;border:1px solid var(--line);background:#f8fafc;border-radius:9px;min-height:53px}
+.step strong{font-size:16px}.step small{font-size:10px;color:var(--muted)}.step.current{border:2px solid #7fa7d1;background:var(--blue-soft)}.step.good{background:var(--green-soft);color:var(--green);border-color:#a4d5ba}.step.bad{background:var(--amber-soft);color:var(--amber);border-color:#e6c29e}
+.rules{padding-left:19px;color:var(--muted);font-size:12px}.rules li{margin:7px 0}.side-note{font-size:11px;color:var(--muted);line-height:1.6;margin:13px 0 0}
+.summary h2{font-size:clamp(25px,3vw,33px);letter-spacing:-.5px}.summary p{font-size:13px;color:var(--muted)}
+.result-line{padding:12px;border-radius:11px;background:var(--blue-soft);color:var(--blue);font-weight:840;margin:12px 0;font-size:14px}
+.review{display:grid;gap:9px;margin:15px 0}.review-card{padding:13px;border:1px solid var(--line);background:#f8faff;border-radius:10px}
+.review-card.good{background:var(--green-soft);border-color:#a7d4bd}.review-card.bad{background:var(--amber-soft);border-color:#e5c7a5}
+.review-card strong{font-size:13px;display:block}.review-card p{font-size:12px;margin:6px 0;line-height:1.58}.review-card small{font-size:11px;color:var(--muted)}
+.footnote{font-size:11px;color:var(--muted);margin:16px 0 0;line-height:1.6}
+[hidden]{display:none!important}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.panel{padding:16px}.journey{grid-template-columns:repeat(8,minmax(0,1fr))}}
+@media(max-width:550px){main{padding:22px 12px 35px}.panel{padding:13px}.choice-grid{grid-template-columns:1fr}.option{min-height:61px;font-size:12px;padding:10px;gap:9px}.option .letter{flex-basis:26px;height:26px}.stats-note{margin-left:0}.journey{grid-template-columns:repeat(4,minmax(0,1fr))}.scorecard strong{font-size:20px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#172438;--paper:#26374e;--ink:#ecf2fc;--muted:#b8c8de;--line:#425874;--blue:#bbd7ff;--blue-strong:#91c0ff;--blue-soft:#364867;--green:#b1f1d1;--green-soft:#294c3d;--amber:#f6cda1;--amber-soft:#4f3a30;--steel:#30475d}
+.setup-choice{background:#2e4059;color:var(--ink);border-color:#5a6d8c}.setup-choice[aria-pressed=true]{background:var(--blue-soft);border-color:#8eb6f0}.option{background:#2d3f58;border-color:#536a84}.option:hover:not(:disabled){background:#3d5074}.option .letter{background:#405679;color:#deebff}.option.selected.correct,.option.answer{background:var(--green-soft);color:var(--green)}.option.selected.incorrect{background:var(--amber-soft);color:var(--amber)}
+.feedback{background:#304966;color:#dbeafb;border-color:#59758f}.feedback.good{background:var(--green-soft);color:var(--green)}.feedback.warn{background:var(--amber-soft);color:var(--amber)}
+.scorecard{background:#30435d}.scorecard.player{background:var(--blue-soft);border-color:#6788b2}.combo{background:#443d64;color:#dfd5ff}.step{background:#30435b}.step.current{background:var(--blue-soft)}.step.good{background:var(--green-soft);color:var(--green)}.step.bad{background:var(--amber-soft);color:var(--amber)}
+.review-card{background:#30425b}.review-card.good{background:var(--green-soft)}.review-card.bad{background:var(--amber-soft)}}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 22 · Revisão gamificada</p>
+<h1>Batalha de perguntas: Escudo Digital</h1>
+<p class="intro">Oito perguntas de cidadania e segurança digital, com pontos por acerto e bônus por sequência. Jogue sozinho ou compare seu placar com um robô inteiramente simulado, sem competir com alunos reais. O cronômetro é opcional e a correção é apenas formativa.</p>
+<div class="stats"><div class="stat"><small>Rodadas respondidas</small><strong id="round-count">0 / 8</strong></div><div class="stat"><small>Pontuação</small><strong id="points">0 pts</strong></div><div class="stat"><small>Combo atual</small><strong id="streak">0</strong></div><span class="stats-note">Sem áudio, ranking ou notas acadêmicas.</span></div>
+<div id="progress" class="progress" role="progressbar" aria-label="Rodadas respondidas" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0"><span id="progress-fill"></span></div>
+<div class="layout">
+<section class="panel prep" id="prep" aria-labelledby="prep-title">
+ <p class="eyebrow">Preparação</p>
+ <h2 id="prep-title" tabindex="-1">Prepare sua batalha</h2>
+ <p>Você receberá uma pergunta por rodada e ganhará 10 pontos pelo primeiro acerto. Acertos consecutivos aumentam o bônus em 5 pontos por rodada, até o máximo adicional de 15. Respostas erradas e tempo expirado zeram a sequência, mas não removem os pontos já conquistados.</p>
+ <strong class="prep-label">Com quem deseja jogar?</strong>
+ <div class="choice-grid" role="group" aria-label="Modo da batalha">
+  <button id="mode-solo" class="setup-choice" data-mode="solo" type="button" aria-pressed="true" disabled><strong>Solo</strong><small>Faça seu próprio placar sem adversário.</small></button>
+  <button id="mode-simulated" class="setup-choice" data-mode="simulated" type="button" aria-pressed="false" disabled><strong>Robô simulado</strong><small>Compare o placar com resultados pré-definidos. Não há aluno real.</small></button>
+ </div>
+ <strong class="prep-label">Como prefere responder?</strong>
+ <div class="choice-grid" role="group" aria-label="Tempo da batalha">
+  <button id="time-no" class="setup-choice" data-timed="no" type="button" aria-pressed="true" disabled><strong>Sem tempo</strong><small>Responda no seu ritmo, sem relógio.</small></button>
+  <button id="time-yes" class="setup-choice" data-timed="yes" type="button" aria-pressed="false" disabled><strong>Relâmpago · 20 segundos</strong><small>Tempo lúdico por rodada, renovado ao recarregar a página.</small></button>
+ </div>
+ <div class="start-action"><button id="start" type="button" class="btn" disabled>Começar batalha</button><span class="stats-note">Você poderá mudar o modo após recomeçar.</span></div>
+</section>
+<section class="panel" id="arena" aria-labelledby="question" hidden>
+ <div class="topline"><small id="position">Rodada 1 de 8</small><span class="tag" id="topic">Segurança digital</span></div>
+ <h2 id="question" class="question" tabindex="-1">Carregando pergunta...</h2>
+ <div id="timer-section" class="round-meter" aria-label="Tempo restante nesta rodada" hidden><span class="meter-label">Tempo lúdico</span><div id="timer-meter" class="meter" role="progressbar" aria-label="Segundos restantes" aria-valuemin="0" aria-valuemax="20" aria-valuenow="20"><span id="timer-fill"></span></div><strong class="timer-value" id="timer-value">20 s</strong></div>
+ <div id="options" class="options" role="group" aria-label="Alternativas da pergunta"></div>
+ <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"><strong id="feedback-heading">Orientação</strong><span id="feedback-message">Selecione uma alternativa.</span></div>
+ <div class="round-bottom"><span id="round-note" class="note">Cada pergunta aceita uma resposta.</span><button id="next" class="btn" type="button" hidden disabled>Próxima rodada</button></div>
+</section>
+<section class="panel summary" id="summary" aria-labelledby="summary-title" hidden>
+ <p class="eyebrow">Resultado da batalha</p><h2 id="summary-title" tabindex="-1">Batalha concluída!</h2><p id="summary-score"></p>
+ <div id="summary-result" class="result-line" hidden></div><div id="review" class="review" aria-label="Revisão das oito perguntas"></div>
+ <button id="summary-reset" type="button" class="btn">Jogar novamente</button>
+</section>
+<aside class="panel" aria-labelledby="side-title">
+ <h2 id="side-title">Placar da batalha</h2>
+ <p class="side-intro">As pontuações são calculadas a partir de acertos e combos. No modo com robô, o adversário recebe uma pontuação fixa por rodada, apenas para simular a disputa.</p>
+ <div class="scoreboard"><div class="scorecard player"><small>Você</small><strong id="player-score">0</strong></div><div class="scorecard" id="bot-card" hidden><small>Robô simulado</small><strong id="bot-score">0</strong></div></div>
+ <div class="combo"><strong id="combo">Sem combo</strong><span id="best-streak">Melhor sequência: 0</span></div>
+ <h2 style="margin-top:19px">Seu percurso</h2><div class="journey" id="journey" role="list" aria-label="Oito rodadas do jogo"></div>
+ <ol class="rules"><li>Leia cada pergunta e escolha uma única alternativa.</li><li>O acerto soma 10 pontos mais bônus por combo.</li><li>A resposta é bloqueada após o primeiro clique, com explicação antes de avançar.</li><li>No modo relâmpago, 20 segundos sem resposta encerram a rodada sem pontuar.</li><li>No final, revise as respostas e veja seu placar.</li></ol>
+ <p id="bot-status" class="side-note" hidden>O robô é uma simulação local: não representa um participante real nem utiliza dados de outros alunos.</p>
+ <div class="start-action"><button id="reset" type="button" class="btn secondary" disabled>Recomeçar batalha</button></div>
+ <div id="reset-confirm" role="group" aria-label="Confirmação de reinício" hidden><p class="side-note">Reiniciar apaga as respostas e o placar desta partida. Deseja continuar?</p><div class="start-action"><button id="confirm-reset" type="button" class="btn">Confirmar reinício</button><button id="cancel-reset" type="button" class="btn secondary">Cancelar</button></div></div>
+ <p class="side-note">O cronômetro continua correndo com a aba oculta e o tempo expirado é aplicado no retorno; ele recomeça a rodada após uma recarga. Não serve para fiscalização, antifraude ou avaliação acadêmica. A atividade funciona sem áudio ou serviços externos.</p>
+</aside>
+</div>
+<p class="footnote">Não há imagens, áudio ou fontes remotas. Os resultados são exclusivamente lúdicos: não atribuem nota, ranqueamento oficial ou conclusão acadêmica do Moodle.</p>
+</main><script>(function quizBattle(){
+"use strict";
+const DATA={"type":"quiz_battle","title":"Batalha de perguntas - Escudo Digital","settings":{"mode":"solo","timeLimitSeconds":20,"pointsCorrect":10,"comboBonus":5,"maxComboBonus":15,"seed":"escudo-digital-2026","simulatedOpponent":true},"rounds":[{"id":"phishing","topic":"Mensagens suspeitas","prompt":"Você recebe um e-mail dizendo que sua conta será bloqueada, com um link pedindo sua senha. Qual atitude é mais segura?","options":[{"id":"abrir","label":"Clicar no link e preencher a senha imediatamente."},{"id":"verificar","label":"Abrir o serviço pelo endereço oficial digitado por você e verificar a notificação."},{"id":"responder","label":"Responder ao remetente enviando seus dados."},{"id":"encaminhar","label":"Encaminhar a mensagem para todos os colegas."}],"correctId":"verificar","explanation":"Mensagens urgentes podem tentar induzir ao phishing. Entre diretamente pelo site ou aplicativo oficial, sem usar o link recebido.","opponentPoints":10},{"id":"mfa","topic":"Proteção de contas","prompt":"Qual prática acrescenta uma camada de proteção quando uma senha vaza?","options":[{"id":"compartilhar","label":"Compartilhar a senha com uma pessoa de confiança."},{"id":"replicar","label":"Usar a mesma senha em todos os serviços."},{"id":"mfa","label":"Ativar autenticação multifator (MFA) na conta."},{"id":"anotar","label":"Colocar a senha em um post-it na tela."}],"correctId":"mfa","explanation":"A MFA pede um segundo fator além da senha. Não elimina todos os riscos, mas dificulta invasões baseadas apenas em senhas roubadas.","opponentPoints":10},{"id":"backup","topic":"Cópias de segurança","prompt":"Qual estratégia reduz o risco de perder todos os arquivos caso o computador falhe?","options":[{"id":"unico","label":"Guardar somente no disco do próprio computador."},{"id":"copias","label":"Manter cópias de segurança em local separado e testar periodicamente a recuperação."},{"id":"renomear","label":"Renomear os arquivos importantes."},{"id":"desligar","label":"Desligar o monitor ao terminar o trabalho."}],"correctId":"copias","explanation":"Backups separados do dispositivo principal e testes de restauração ajudam a recuperar dados após falha, erro humano ou incidente.","opponentPoints":0},{"id":"permissao","topic":"Permissões de aplicativos","prompt":"Um aplicativo de lanterna solicita acesso aos contatos. Qual decisão é mais prudente?","options":[{"id":"aceitar","label":"Conceder todas as permissões para evitar mensagens."},{"id":"revisar","label":"Revisar e negar permissões sem relação com a função do aplicativo."},{"id":"ignorar","label":"Ignorar a solicitação e compartilhar sua conta."},{"id":"desinstalar-sistema","label":"Remover as atualizações do sistema operacional."}],"correctId":"revisar","explanation":"O princípio do menor privilégio recomenda autorizar apenas os acessos necessários à função pretendida.","opponentPoints":15},{"id":"https","topic":"Navegação na web","prompt":"O endereço de um site começa com HTTPS. O que essa informação indica?","options":[{"id":"legitimo","label":"Que a empresa é necessariamente confiável."},{"id":"livre","label":"Que o site não pode conter golpes ou conteúdo malicioso."},{"id":"criptografia","label":"Que a conexão entre navegador e site usa criptografia de transporte."},{"id":"sem-risco","label":"Que não é preciso verificar o domínio."}],"correctId":"criptografia","explanation":"HTTPS protege a comunicação em trânsito, mas não garante que o conteúdo do site seja legítimo. Confira também o domínio e o contexto.","opponentPoints":10},{"id":"senhas","topic":"Senhas únicas","prompt":"Qual opção tende a oferecer maior proteção às suas contas?","options":[{"id":"curtas","label":"Senhas curtas e iguais para todos os serviços."},{"id":"previsiveis","label":"A data de nascimento com o nome do serviço."},{"id":"unicas","label":"Senhas longas e exclusivas, armazenadas em um gerenciador confiável."},{"id":"publicas","label":"Senhas enviadas em um grupo de mensagens."}],"correctId":"unicas","explanation":"Senhas únicas reduzem o impacto de vazamentos entre serviços; um gerenciador confiável ajuda a criar e armazenar credenciais fortes.","opponentPoints":0},{"id":"atualizacao","topic":"Software atualizado","prompt":"Por que é importante instalar atualizações de segurança de sistemas e aplicativos?","options":[{"id":"visual","label":"Porque todas as atualizações mudam apenas as cores."},{"id":"corrigir","label":"Porque podem corrigir vulnerabilidades exploráveis por atacantes."},{"id":"senha","label":"Porque substituem a necessidade de senhas."},{"id":"backup","label":"Porque dispensam qualquer backup."}],"correctId":"corrigir","explanation":"Atualizações de segurança podem corrigir falhas conhecidas. Mantê-las em dia reduz exposição, embora não substitua outras proteções.","opponentPoints":10},{"id":"dados","topic":"Compartilhamento responsável","prompt":"Antes de publicar uma foto de um documento pessoal, o que você deve considerar?","options":[{"id":"todos","label":"Que qualquer dado pessoal publicado é sempre inofensivo."},{"id":"ocultar","label":"Evitar a publicação e ocultar informações sensíveis quando for realmente necessário compartilhar."},{"id":"legenda","label":"Adicionar a legenda com CPF para ajudar na identificação."},{"id":"enviar","label":"Enviar a foto a todos os contatos."}],"correctId":"ocultar","explanation":"Dados pessoais em documentos podem facilitar fraudes e exposição indevida. Compartilhe apenas o necessário com destinatários autorizados.","opponentPoints":10}]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id);
+const controller=new AbortController(),sdk=window.MoodleMCP?.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const storageKey="quizBattleDigitalSafetyV1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,saveQueue=Promise.resolve(),saveStamp=0;
+let timerId=null,timerKey=null,deadline=0,resetArmed=false;
+
+// Pure game logic without DOM or clock.
+function hashSeed(source){let h=2166136261;for(let i=0;i<source.length;i++){h^=source.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function shuffled(ids,seed){const a=[...ids];let x=hashSeed(seed)||1;function random(){x^=x<<13;x^=x>>>17;x^=x<<5;return(x>>>0)/4294967296;}for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function optionOrder(data,q){return shuffled(q.options.map(o=>o.id),data.settings.seed+"/"+q.id);}
+function validate(data){
+ if(!data||data.type!=="quiz_battle"||typeof data.title!=="string"||!data.title.trim()||!data.settings||data.settings.mode!=="solo"||!Number.isInteger(data.settings.timeLimitSeconds)||data.settings.timeLimitSeconds<0||data.settings.timeLimitSeconds>300||!Number.isInteger(data.settings.pointsCorrect)||data.settings.pointsCorrect<1||data.settings.pointsCorrect>100||!Number.isInteger(data.settings.comboBonus)||data.settings.comboBonus<0||data.settings.comboBonus>100||!Number.isInteger(data.settings.maxComboBonus)||data.settings.maxComboBonus<0||data.settings.maxComboBonus>100||typeof data.settings.seed!=="string"||!data.settings.seed.trim()||typeof data.settings.simulatedOpponent!=="boolean"||!Array.isArray(data.rounds)||data.rounds.length<3||data.rounds.length>20)return false;
+ const ids=new Set();
+ for(const q of data.rounds){
+  if(!q||typeof q.id!=="string"||!/^[a-z0-9-]+$/.test(q.id)||ids.has(q.id)||typeof q.topic!=="string"||!q.topic.trim()||typeof q.prompt!=="string"||!q.prompt.trim()||typeof q.explanation!=="string"||!q.explanation.trim()||!Array.isArray(q.options)||q.options.length<2||q.options.length>6||typeof q.correctId!=="string"||!Number.isInteger(q.opponentPoints)||q.opponentPoints<0||q.opponentPoints>data.settings.pointsCorrect+data.settings.maxComboBonus)return false;
+  ids.add(q.id);const optIds=new Set(),labels=new Set();let right=0;
+  for(const opt of q.options){
+   if(!opt||typeof opt.id!=="string"||!/^[a-z0-9-]+$/.test(opt.id)||optIds.has(opt.id)||typeof opt.label!=="string"||!opt.label.trim()||labels.has(opt.label.trim().toLowerCase()))return false;
+   optIds.add(opt.id);labels.add(opt.label.trim().toLowerCase());if(opt.id===q.correctId)right++;
+  }
+  if(right!==1)return false;
+ }
+ return true;
+}
+function initialState(data){return {index:0,answers:data.rounds.map(()=>null),started:false,mode:"solo",timed:false,streak:0,bestStreak:0,points:0,completed:false};}
+function gainFor(streak,settings){return settings.pointsCorrect+Math.min(settings.maxComboBonus,Math.max(0,streak-1)*settings.comboBonus);}
+function scoreState(state,data){
+ let points=0,streak=0,bestStreak=0,correct=0,wrong=0,timeouts=0,opponent=0;
+ for(let i=0;i<state.answers.length;i++){
+  const a=state.answers[i];if(a===null)continue;
+  opponent+=data.rounds[i].opponentPoints;
+  if(a.outcome==="correct"){streak++;bestStreak=Math.max(streak,bestStreak);points+=gainFor(streak,data.settings);correct++;}
+  else{streak=0;if(a.outcome==="timeout")timeouts++;else wrong++;}
+ }
+ return {points,streak,bestStreak,correct,wrong,timeouts,opponent};
+}
+function compareScores(player,opponent){return player>opponent?"victory":player<opponent?"defeat":"tie";}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Number.isInteger(s.index)||s.index<0||s.index>data.rounds.length||!Array.isArray(s.answers)||s.answers.length!==data.rounds.length||typeof s.started!=="boolean"||!["solo","simulated"].includes(s.mode)||s.mode==="simulated"&&!data.settings.simulatedOpponent||typeof s.timed!=="boolean"||s.timed&&data.settings.timeLimitSeconds===0||!Number.isInteger(s.streak)||!Number.isInteger(s.bestStreak)||!Number.isInteger(s.points)||typeof s.completed!=="boolean"||s.completed!==(s.index===data.rounds.length))return false;
+ if(!s.started&&(s.index!==0||s.answers.some(x=>x!==null)||s.completed))return false;
+ for(let i=0;i<s.answers.length;i++){
+  const a=s.answers[i],q=data.rounds[i];
+  if(i<s.index&&a===null||i>s.index&&a!==null)return false;
+  if(a===null)continue;
+  if(!a||typeof a!=="object"||!["correct","wrong","timeout"].includes(a.outcome))return false;
+  if(a.outcome==="timeout"){
+   if(!s.timed||a.selectedId!==null)return false;
+  }else if(typeof a.selectedId!=="string"||!q.options.some(o=>o.id===a.selectedId)||((a.selectedId===q.correctId)!==(a.outcome==="correct")))return false;
+ }
+ const score=scoreState(s,data);
+ if(score.points!==s.points||score.streak!==s.streak||score.bestStreak!==s.bestStreak)return false;
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(data),changed:true,kind:"neutral",message:"Batalha reiniciada. Escolha o modo para jogar novamente."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"O progresso não é válido."};
+ if(action?.type==="configure"){
+  if(s.started)return {state:s,changed:false,kind:"warn",message:"A configuração só pode ser alterada antes da primeira rodada. Reinicie para mudar."};
+  const mode=action.mode===undefined?s.mode:action.mode,timed=action.timed===undefined?s.timed:action.timed;
+  if(!["solo","simulated"].includes(mode)||mode==="simulated"&&!data.settings.simulatedOpponent||typeof timed!=="boolean"||timed&&data.settings.timeLimitSeconds===0)return {state:s,changed:false,kind:"warn",message:"Modo de batalha inválido."};
+  if(mode===s.mode&&timed===s.timed)return {state:s,changed:false,kind:"neutral",message:"Este modo já está selecionado."};
+  return {state:{...s,mode,timed},changed:true,kind:"neutral",message:"Modo escolhido: "+(mode==="simulated"?"adversário simulado":"solo")+", "+(timed?"20 segundos por rodada":"sem cronômetro")+".",};
+ }
+ if(action?.type==="start"){
+  if(s.started)return {state:s,changed:false,kind:"neutral",message:"A batalha já começou."};
+  return {state:{...s,started:true},changed:true,kind:"neutral",message:"Batalha iniciada! Leia a pergunta e escolha uma alternativa."};
+ }
+ if(!s.started)return {state:s,changed:false,kind:"warn",message:"Comece a batalha antes de responder."};
+ if(s.completed)return {state:s,changed:false,kind:"neutral",message:"A batalha terminou. Use Recomeçar para jogar novamente."};
+ const q=data.rounds[s.index],answered=s.answers[s.index];
+ if(action?.type==="next"){
+  if(!answered)return {state:s,changed:false,kind:"warn",message:"Responda à questão antes de avançar."};
+  const index=s.index+1;
+  return {state:{...s,index,completed:index===data.rounds.length},changed:true,kind:"neutral",message:index===data.rounds.length?"Batalha concluída. Confira o placar e a revisão.":"Nova rodada! Leia a próxima pergunta."};
+ }
+ if(answered)return {state:s,changed:false,kind:"neutral",message:"Esta rodada já foi encerrada. Avance para continuar."};
+ if(action?.type==="answer"){
+  const selected=q.options.find(o=>o.id===action.id);
+  if(!selected)return {state:s,changed:false,kind:"warn",message:"Alternativa inválida."};
+  const correct=selected.id===q.correctId,streak=correct?s.streak+1:0,gained=correct?gainFor(streak,data.settings):0;
+  const answers=[...s.answers];answers[s.index]={selectedId:selected.id,outcome:correct?"correct":"wrong"};
+  const state={...s,answers,streak,bestStreak:Math.max(s.bestStreak,streak),points:s.points+gained};
+  return {state,changed:true,kind:correct?"good":"warn",message:correct?"Resposta correta! +"+gained+" pontos. "+q.explanation:"Resposta incorreta. A alternativa correta é "+q.options.find(o=>o.id===q.correctId).label+". "+q.explanation};
+ }
+ if(action?.type==="timeout"){
+  if(!s.timed)return {state:s,changed:false,kind:"warn",message:"O cronômetro está desativado."};
+  const answers=[...s.answers];answers[s.index]={selectedId:null,outcome:"timeout"};
+  const state={...s,answers,streak:0};
+  return {state,changed:true,kind:"warn",message:"Tempo esgotado nesta rodada. Resposta correta: "+q.options.find(o=>o.id===q.correctId).label+". "+q.explanation};
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Escolha uma alternativa."};
+}
+// End pure rules.
+
+function el(tag,cls,value){const n=document.createElement(tag);if(cls)n.className=cls;if(value!==undefined)n.textContent=value;return n;}
+function getState(){return {index:state.index,answers:state.answers.map(x=>x===null?null:{selectedId:x.selectedId,outcome:x.outcome}),started:state.started,mode:state.mode,timed:state.timed,streak:state.streak,bestStreak:state.bestStreak,points:state.points,completed:state.completed};}
+function restoreState(v){
+ if(!validState(v,DATA))return false;
+ stopTimer();state={index:v.index,answers:v.answers.map(x=>x===null?null:{selectedId:x.selectedId,outcome:x.outcome}),started:v.started,mode:v.mode,timed:v.timed,streak:v.streak,bestStreak:v.bestStreak,points:v.points,completed:v.completed};
+ render();return true;
+}
+function announce(message,kind="neutral"){
+ $("feedback").className="feedback"+(kind==="good"?" good":kind==="warn"?" warn":"");
+ $("feedback-heading").textContent=kind==="good"?"Acertou!":kind==="warn"?"Revise a resposta":"Orientação";
+ $("feedback-message").textContent=message;
+}
+function setTimerDisplay(left){
+ $("timer-value").textContent=left+" s";$("timer-fill").style.width=100*Math.max(0,left)/DATA.settings.timeLimitSeconds+"%";$("timer-meter").setAttribute("aria-valuenow",String(Math.max(0,left)));
+}
+function stopTimer(){
+ if(timerId!==null){clearInterval(timerId);timerId=null;}
+ timerKey=null;
+}
+function syncTimer(){
+ const running=ready&&!disposed&&state.started&&!state.completed&&state.timed&&state.answers[state.index]===null;
+ $("timer-section").hidden=!state.started||!state.timed||state.completed;
+ if(!running){stopTimer();return;}
+ if(timerKey===state.index&&timerId!==null)return;
+ stopTimer();timerKey=state.index;deadline=performance.now()+DATA.settings.timeLimitSeconds*1000;
+ setTimerDisplay(DATA.settings.timeLimitSeconds);
+ timerId=setInterval(()=>{
+  if(disposed||!ready||!state||timerKey!==state.index){stopTimer();return;}
+  const remaining=Math.max(0,Math.ceil((deadline-performance.now())/1000));setTimerDisplay(remaining);
+  if(remaining===0){stopTimer();handleAction({type:"timeout"});}
+ },200);
+}
+function renderSteps(){
+ const area=$("journey");area.replaceChildren();
+ DATA.rounds.forEach((q,i)=>{
+  const a=state.answers[i],status=a===null?"Pendente":a.outcome==="correct"?"Acerto":a.outcome==="timeout"?"Tempo":"Revisar";
+  const node=el("div","step"+(a===null&&!state.completed&&state.index===i&&state.started?" current":a?.outcome==="correct"?" good":a?" bad":""));
+  node.setAttribute("role","listitem");node.setAttribute("aria-label","Rodada "+(i+1)+": "+status);
+  node.append(el("strong","",String(i+1)),el("small","",status));area.append(node);
+ });
+}
+function renderReview(){
+ const area=$("review");area.replaceChildren();
+ DATA.rounds.forEach((q,i)=>{
+  const a=state.answers[i],correct=q.options.find(o=>o.id===q.correctId),picked=q.options.find(o=>o.id===a?.selectedId);
+  const card=el("article","review-card "+(a?.outcome==="correct"?"good":"bad"));
+  card.append(el("strong","",(i+1)+". "+q.topic+" · "+(a?.outcome==="correct"?"Acerto":a?.outcome==="timeout"?"Tempo esgotado":"Revisar")));
+  card.append(el("p","","Sua resposta: "+(picked?.label||"Nenhuma (tempo esgotado)")+". Resposta correta: "+correct.label+"."));
+  card.append(el("p","",q.explanation));area.append(card);
+ });
+}
+function render(){
+ if(disposed||!state)return;
+ const total=DATA.rounds.length,done=state.answers.filter(a=>a!==null).length,score=scoreState(state,DATA);
+ $("round-count").textContent=done+" / "+total;$("points").textContent=state.points+" pts";$("streak").textContent=String(state.streak);
+ $("progress").setAttribute("aria-valuenow",String(done));$("progress-fill").style.width=100*done/total+"%";
+ $("player-score").textContent=String(state.points);$("bot-score").textContent=String(score.opponent);
+ $("bot-card").hidden=state.mode!=="simulated";$("bot-status").hidden=state.mode!=="simulated";
+ $("combo").textContent=state.streak===0?"Sem combo":state.streak+" acerto(s) seguidos";
+ $("best-streak").textContent="Melhor sequência: "+state.bestStreak;
+ $("prep").hidden=state.started;$("arena").hidden=!state.started||state.completed;$("summary").hidden=!state.completed;
+ $("reset").disabled=!ready;renderSteps();
+ $("mode-solo").setAttribute("aria-pressed",String(state.mode==="solo"));
+ $("mode-simulated").setAttribute("aria-pressed",String(state.mode==="simulated"));
+ $("time-no").setAttribute("aria-pressed",String(!state.timed));
+ $("time-yes").setAttribute("aria-pressed",String(state.timed));
+ for(const id of ["mode-solo","mode-simulated","time-no","time-yes"])$(id).disabled=!ready||state.started;
+ $("start").disabled=!ready||state.started;
+ if(state.completed){
+  const outcome=compareScores(state.points,score.opponent);
+  $("summary-score").textContent="Você fez "+state.points+" pontos e acertou "+score.correct+" de "+total+" perguntas. Melhor combo: "+state.bestStreak+".";
+  $("summary-result").hidden=state.mode!=="simulated";
+  $("summary-result").textContent=outcome==="tie"?"Empate lúdico com o robô simulado: "+state.points+" a "+score.opponent+".":outcome==="victory"?"Você superou o robô simulado: "+state.points+" a "+score.opponent+".":"O robô simulado ficou à frente: "+score.opponent+" a "+state.points+".";
+  renderReview();stopTimer();return;
+ }
+ if(!state.started){stopTimer();return;}
+ const q=DATA.rounds[state.index],selected=state.answers[state.index],answered=selected!==null;
+ $("position").textContent="Rodada "+(state.index+1)+" de "+total;
+ $("topic").textContent=q.topic;$("question").textContent=q.prompt;
+ const options=$("options");options.replaceChildren();
+ optionOrder(DATA,q).forEach((id,i)=>{
+  const o=q.options.find(x=>x.id===id),b=el("button","option");
+  b.type="button";b.dataset.answer=id;b.disabled=!ready||answered;
+  b.setAttribute("aria-label","Alternativa "+String.fromCharCode(65+i)+": "+o.label);
+  b.setAttribute("aria-pressed",String(selected?.selectedId===id));
+  b.append(el("span","letter",String.fromCharCode(65+i)),el("span","",o.label));
+  if(answered){if(id===q.correctId)b.classList.add("answer");if(selected.selectedId===id)b.classList.add("selected",id===q.correctId?"correct":"incorrect");}
+  options.append(b);
+ });
+ $("next").disabled=!ready||!answered;$("next").hidden=!answered;
+ $("next").textContent=state.index===total-1?"Ver placar final":"Próxima rodada";
+ $("round-note").textContent=answered?"A resposta foi registrada; avance após ler a explicação.":"Cada pergunta aceita uma resposta; clique duplo não vale duas vezes.";
+ if(answered){
+  const correct=q.options.find(o=>o.id===q.correctId),gained=selected.outcome==="correct"?gainFor(state.streak,DATA.settings):0;
+  const message=selected.outcome==="correct"?"Resposta correta! +"+gained+" pontos. "+q.explanation:selected.outcome==="timeout"?"Tempo esgotado. Resposta correta: "+correct.label+". "+q.explanation:"Resposta incorreta. A alternativa correta é "+correct.label+". "+q.explanation;
+  announce(message,selected.outcome==="correct"?"good":"warn");
+ }else announce("Escolha uma alternativa e leia o feedback antes de avançar.","neutral");
+ syncTimer();
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++saveStamp;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||stamp!==saveStamp)return;
+  const other=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const updated={...other,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(updated)).length>12288){announce("O progresso excedeu 12 KiB. A batalha continua nesta página.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/quiz-battle-digital-safety",data:updated});
+ }).catch(async()=>{
+  if(disposed)return;saveStamp++;
+  try{remote=await progress.load();if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))announce("Outra sessão modificou o progresso; recuperei a última versão salva.","warn");else announce("Não foi possível conciliar o progresso; continue nesta página.","warn");}
+  catch(_){remote=null;announce("Salvamento Moodle indisponível. A batalha funciona normalmente.","warn");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ if(action.type==="restart"){resetArmed=false;$("reset-confirm").hidden=true;}
+ if(action.type==="answer"&&state.started&&state.timed&&!state.completed&&state.answers[state.index]===null&&timerId!==null&&performance.now()>=deadline){stopTimer();action={type:"timeout"};}
+ const result=transition(state,action,DATA);
+ if(!result.changed){if(state.started&&state.answers[state.index]===null)announce(result.message,result.kind);return;}
+ state=result.state;modified=true;render();save();
+ if(action.type==="start"||action.type==="next"||action.type==="restart"){
+  if(state.completed)$("summary-title").focus({preventScroll:true});
+  else if(state.started)$("question").focus({preventScroll:true});
+  else $("prep-title").focus({preventScroll:true});
+ }else if(["answer","timeout"].includes(action.type))$("feedback").focus({preventScroll:true});
+}
+function destroy(){disposed=true;stopTimer();controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){announce("Configuração inválida. Revise as perguntas, opções e pontuação.","warn");return;}
+ state=initialState(data);render();
+ if(progress)try{
+  const saved=await progress.load();if(disposed)return;remote=saved;
+  if(!modified&&saved.data?.[storageKey]&&restoreState(saved.data[storageKey]))announce("Progresso recuperado. Continue a batalha.");
+  else announce("Escolha o modo e comece a batalha.");
+ }catch(_){announce("Sem sincronização Moodle. A atividade funciona normalmente.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",event=>{
+ const b=event.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.answer){handleAction({type:"answer",id:b.dataset.answer});return;}
+ if(b.dataset.mode){handleAction({type:"configure",mode:b.dataset.mode});return;}
+ if(b.dataset.timed){handleAction({type:"configure",timed:b.dataset.timed==="yes"});return;}
+ if(b.id==="start"){handleAction({type:"start"});return;}
+ if(b.id==="next"){handleAction({type:"next"});return;}
+ if(b.id==="reset"){
+  if(state?.started&&state.answers.some(a=>a!==null)){resetArmed=true;$("reset-confirm").hidden=false;announce("Confirme o reinício para apagar as respostas e a pontuação desta partida.","warn");}
+  else handleAction({type:"restart"});
+  return;
+ }
+ if(b.id==="confirm-reset"){resetArmed=false;$("reset-confirm").hidden=true;handleAction({type:"restart"});return;}
+ if(b.id==="cancel-reset"){resetArmed=false;$("reset-confirm").hidden=true;announce("Reinício cancelado. O progresso foi preservado.");return;}
+ if(b.id==="summary-reset")handleAction({type:"restart"});
+},{signal:controller.signal});
+document.addEventListener("visibilitychange",()=>{
+ if(document.hidden||disposed||!ready||!state?.started||!state.timed||state.completed||state.answers[state.index]!==null||timerId===null)return;
+ const remaining=Math.max(0,Math.ceil((deadline-performance.now())/1000));setTimerDisplay(remaining);
+ if(remaining===0){stopTimer();handleAction({type:"timeout"});}
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>
