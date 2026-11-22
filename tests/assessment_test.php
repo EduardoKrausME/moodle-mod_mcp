@@ -1,160 +1,67 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-/**
- * Native Question Engine and gradebook integration tests.
- *
- * @package   mod_mcp
- * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
+// Copyright 2026 Eduardo Kraus. GNU GPL v3 or later.
 namespace mod_mcp;
 
 use advanced_testcase;
+use mod_mcp\content\metadata;
 use mod_mcp\content\service as content_service;
 use mod_mcp\question\attempts;
-use mod_mcp\question\slots;
-use question_engine;
 
-/**
- * Verifies that student grades come from server-graded question attempts.
- *
+/** JSON assessment never uses Question Engine.
  * @covers \mod_mcp\question\attempts
- * @covers \mod_mcp\question\slots
  */
 final class assessment_test extends advanced_testcase {
-    /**
-     * Publish a question and grade one student's native response.
-     */
-    public function test_native_question_answer_is_persisted_and_graded(): void {
-        global $CFG, $DB, $USER;
-        $this->resetAfterTest();
-        $this->setAdminUser();
-
-        $qgenerator = $this->getDataGenerator()->get_plugin_generator("core_question");
-        [$category, $course, $questioncategory, $questions] = $qgenerator->setup_course_and_questions();
-        $activity = $this->getDataGenerator()->create_module("mcp",
-            ["course" => $course->id, "name" => "Graded MCP activity"]);
-        $cm = get_coursemodule_from_id("mcp", (int)$activity->cmid, 0, false, MUST_EXIST);
-        $student = $this->getDataGenerator()->create_user();
-        $this->getDataGenerator()->enrol_user($student->id, $course->id, "student");
-
-        $attached = slots::attach((int)$activity->id, (int)$questions[0]->id, 1.0, (int)$USER->id);
-        $this->assertSame((int)$questions[0]->id, $attached["questionid"]);
-        $revision = content_service::save((int)$activity->id,
-            "<!doctype html><html><body><p>Answer below.</p></body></html>", (int)$USER->id, 0);
-        content_service::publish((int)$activity->id, $revision);
-
-        $mcp = $DB->get_record("mcp", ["id" => $activity->id], "*", MUST_EXIST);
-        $this->assertSame($revision, (int)$mcp->publishedrevision);
-
-        $this->setUser($student);
-        $attempt = attempts::start($mcp, $cm, (int)$student->id);
-        require_once($CFG->dirroot . "/question/engine/lib.php");
-        $quba = question_engine::load_questions_usage_by_activity((int)$attempt->qubaid);
-        $qa = $quba->get_question_attempt(1);
-        $response = $qa->get_question()->get_correct_response();
-        $this->assertNotEmpty($response);
-
-        $post = [$qa->get_control_field_name("sequencecheck") => $qa->get_sequence_check_count()];
-        foreach ($response as $name => $answer) {
-            $post[$qa->get_qt_field_name($name)] = $answer;
-        }
-        attempts::submit($mcp, $attempt, $post, true);
-        $stored = $DB->get_record("mcp_attempts", ["id" => $attempt->id], "*", MUST_EXIST);
-        $this->assertSame("finished", $stored->status);
-        $this->assertEqualsWithDelta(10.0, (float)$stored->score, 0.001);
-        $this->assertNotEmpty($stored->qubaid);
-        $this->assertTrue($DB->record_exists("question_usages", ["id" => $stored->qubaid]));
-    }
-
-    /**
-     * A random selection requiring more questions than available cannot be published.
-     */
-    public function test_cannot_publish_incomplete_random_question_pool(): void {
-        global $USER;
+    public function test_json_grading_and_private_answers(): void {
+        global $DB, $USER;
         $this->resetAfterTest();
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
-        $activity = $this->getDataGenerator()->create_module("mcp", [
-            "course" => $course->id, "name" => "Incomplete selection",
-            "questionselection" => "random", "questionsperattempt" => 5,
-        ]);
-        $revision = content_service::save((int)$activity->id,
-            "<!doctype html><html><body>Test</body></html>", (int)$USER->id, 0);
-        $this->expectException(\moodle_exception::class);
-        content_service::publish((int)$activity->id, $revision);
-    }
-
-    /**
-     * A random subset is frozen in the Question Engine, even after settings change.
-     */
-    public function test_random_subset_is_persisted_and_grades_only_selected_question(): void {
-        global $CFG, $DB, $USER;
-        $this->resetAfterTest();
-        $this->setAdminUser();
-
-        $qgenerator = $this->getDataGenerator()->get_plugin_generator("core_question");
-        [$category, $course, $questioncategory, $questions] = $qgenerator->setup_course_and_questions();
-        $activity = $this->getDataGenerator()->create_module("mcp", [
-            "course" => $course->id, "name" => "Random MCP assessment",
-            "grade" => 10, "questionselection" => "random",
-            "questionsperattempt" => 1, "shufflequestions" => 1,
-        ]);
-        $cm = get_coursemodule_from_id("mcp", (int)$activity->cmid, 0, false, MUST_EXIST);
+        $mcp = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id, "grade" => 10]);
+        $cm = get_coursemodule_from_instance("mcp", $mcp->id);
         $student = $this->getDataGenerator()->create_user();
-        $this->getDataGenerator()->enrol_user($student->id, $course->id, "student");
-        $first = (int)$questions[0]->id;
-        $second = (int)$questions[1]->id;
-        slots::attach((int)$activity->id, $first, 1, (int)$USER->id);
-        slots::attach((int)$activity->id, $second, 1, (int)$USER->id);
-
-        $revision = content_service::save((int)$activity->id,
-            "<!doctype html><html><body><p>Practice.</p></body></html>", (int)$USER->id, 0);
-        content_service::publish((int)$activity->id, $revision);
-
-        $mcp = $DB->get_record("mcp", ["id" => $activity->id], "*", MUST_EXIST);
+        $this->getDataGenerator()->enrol_user((int)$student->id, (int)$course->id, "student");
+        $json = ["selection" => "random", "count" => 1, "shuffle" => true,
+            "questions" => [
+                ["id" => "q1", "text" => "2+2?", "type" => "single", "points" => 1,
+                    "options" => [["id" => "a", "text" => "3"], ["id" => "b", "text" => "4"]],
+                    "answer" => "b"],
+                ["id" => "q2", "text" => "2+3?", "type" => "single", "points" => 1,
+                    "options" => [["id" => "a", "text" => "5"], ["id" => "b", "text" => "8"]],
+                    "answer" => "a"],
+            ]];
+        metadata::save((int)$mcp->id, "quiz", $json);
+        $revision = content_service::save((int)$mcp->id, "<p>Quiz</p>", (int)$USER->id, 0);
+        content_service::publish((int)$mcp->id, $revision);
+        $activity = $DB->get_record("mcp", ["id" => $mcp->id], "*", MUST_EXIST);
+        $this->assertArrayNotHasKey("answer", metadata::public_information($activity)["questions"][0]);
         $this->setUser($student);
-        $attempt = attempts::start($mcp, $cm, (int)$student->id);
-        require_once($CFG->dirroot . "/question/engine/lib.php");
-        $usage = question_engine::load_questions_usage_by_activity((int)$attempt->qubaid);
-        $this->assertCount(1, $usage->get_slots());
-        $selectedid = (int)$usage->get_question_attempt(1)->get_question()->id;
-        $this->assertContains($selectedid, [$first, $second]);
-
-        // Only future attempts should use later changes to the pool or selection mode.
-        $DB->set_field("mcp", "questionselection", "all", ["id" => $activity->id]);
-        $reloaded = question_engine::load_questions_usage_by_activity((int)$attempt->qubaid);
-        $this->assertSame($selectedid, (int)$reloaded->get_question_attempt(1)->get_question()->id);
-        $this->assertCount(1, $reloaded->get_slots());
-        $this->assertSame((int)$attempt->id, (int)attempts::own((int)$activity->id, (int)$student->id)->id);
-
-        $qa = $reloaded->get_question_attempt(1);
-        $response = $qa->get_question()->get_correct_response();
-        $post = [$qa->get_control_field_name("sequencecheck") => $qa->get_sequence_check_count()];
-        foreach ($response as $name => $answer) {
-            $post[$qa->get_qt_field_name($name)] = $answer;
-        }
-        attempts::submit($mcp, $attempt, $post, true);
+        $attempt = attempts::start($activity, $cm, (int)$student->id);
+        $selected = json_decode($attempt->selectedjson, true);
+        $this->assertCount(1, $selected);
+        $this->assertArrayNotHasKey("answer", attempts::questions($attempt)[0]);
+        $qid = $selected[0]["id"];
+        attempts::submit($activity, $attempt, [$qid => $selected[0]["answer"]], true);
         $stored = $DB->get_record("mcp_attempts", ["id" => $attempt->id], "*", MUST_EXIST);
         $this->assertSame("finished", $stored->status);
         $this->assertEqualsWithDelta(10.0, (float)$stored->score, 0.001);
-        $this->expectException(\moodle_exception::class);
-        attempts::start($mcp, $cm, (int)$student->id);
+        $state = $DB->get_record("mcp_state", ["mcpid" => $mcp->id,
+            "userid" => $student->id], "*", MUST_EXIST);
+        $this->assertSame($selected[0]["answer"],
+            json_decode($state->userdatajson, true)["quiz"]["answers"][$qid]);
     }
 
+    public function test_nullable_activity_information(): void {
+        $this->assertNull(metadata::validate(null, null));
+        $this->assertNotNull(metadata::validate("survey", ["questions" => [
+            ["id" => "s1", "text" => "Satisfied?"]]]));
+    }
+
+    public function test_invalid_random_configuration_is_rejected(): void {
+        $this->expectException(\moodle_exception::class);
+        metadata::validate("quiz", ["selection" => "random", "count" => 2,
+            "questions" => [["id" => "q1", "text" => "test", "answer" => "x",
+                "options" => [["id" => "x", "text" => "Yes"],
+                    ["id" => "y", "text" => "No"]]]]]);
+    }
 }

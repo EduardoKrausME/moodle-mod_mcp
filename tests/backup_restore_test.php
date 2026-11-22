@@ -29,6 +29,7 @@ use backup;
 use backup_controller;
 use context_module;
 use mod_mcp\content\service;
+use mod_mcp\content\metadata;
 use restore_controller;
 
 defined('MOODLE_INTERNAL') || die();
@@ -56,11 +57,15 @@ final class backup_restore_test extends advanced_testcase {
         $module = $this->getDataGenerator()->create_module('mcp', [
             'course' => $course->id,
             'name' => 'Original interactive document',
-            'questionselection' => 'random',
-            'questionsperattempt' => 5,
-            'shufflequestions' => 1,
+
         ]);
         $sourcecontext = context_module::instance($module->cmid);
+        metadata::save((int)$module->id, "quiz", [
+            "selection" => "random", "count" => 1, "shuffle" => true,
+            "questions" => [["id" => "q1", "text" => "2+2?", "type" => "single",
+                "options" => [["id" => "a", "text" => "3"], ["id" => "b", "text" => "4"]],
+                "answer" => "b", "points" => 1]],
+        ]);
 
         $html = '<h2>Content for backup</h2>';
         $revisionid = service::save((int)$module->id, $html, (int)$USER->id, 0);
@@ -96,9 +101,8 @@ final class backup_restore_test extends advanced_testcase {
         $copy = end($instances);
         $this->assertNotEquals($module->id, $copy->id);
         $this->assertNotEquals($revisionid, $copy->publishedrevision);
-        $this->assertSame('random', $copy->questionselection);
-        $this->assertSame(5, (int)$copy->questionsperattempt);
-        $this->assertSame(1, (int)$copy->shufflequestions);
+        $this->assertSame("quiz", $copy->activitytype);
+        $this->assertSame("random", json_decode($copy->informationjson, true)["selection"]);
         $this->assertSame((int)$copy->draftrevision, (int)$copy->publishedrevision);
         $this->assertSame($html, service::get((int)$copy->id, (int)$copy->publishedrevision)->content);
 
