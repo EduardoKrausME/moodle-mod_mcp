@@ -7,16 +7,17 @@
     {
       "id": "jogo-da-forca",
       "title": "Jogo da forca",
-      "description": "Descubra a palavra PLANETA com tentativas limitadas.",
-      "howItWorks": "Escolha letras; cada erro acrescenta uma parte do desenho e a partida termina ao descobrir a palavra ou esgotar tentativas.",
+      "description": "Descubra qual planeta do Sistema Solar foi sorteado, antes que as tentativas acabem.",
+      "howItWorks": "Um dos oito planetas é sorteado a cada partida. Escolha letras com até seis erros; o desenho evolui a cada falha e o jogo mostra a resposta apenas ao terminar.",
       "subtype": "Forca",
       "features": [
-        "Vocabulário",
-        "Tentativas"
+        "8 planetas",
+        "Sorteio aleatório",
+        "6 tentativas"
       ],
       "minutes": 5,
-      "path": "game-jogo-da-forca/planeta.html",
-      "prompt": "Crie uma atividade do formato \"Forca\" para mod_mcp, mantendo a experiência do exemplo \"Jogo da forca\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: descobrir palavras: letras selecionáveis, dicas pedagógicas, limite de erros, desenho de evolução do desafio e repetição.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
+      "path": "game-jogo-da-forca/planetas.html",
+      "prompt": "Crie uma atividade do formato \"Forca\" para mod_mcp, mantendo a experiência do exemplo \"Jogo da forca\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: descobrir palavras: letras selecionáveis, dicas pedagógicas, limite de erros, desenho de evolução do desafio e repetição. Sorteie aleatoriamente uma das palavras do conjunto definido para a atividade a cada nova partida, evitando repetir imediatamente a anterior. Nunca revele a resposta no título, enunciado, instruções ou pista antes do fim da partida. Para palavras acentuadas, use comparação normalizada e apresente a grafia correta no resultado.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     }
   ]
 }
