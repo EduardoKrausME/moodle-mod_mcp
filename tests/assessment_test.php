@@ -83,6 +83,24 @@ final class assessment_test extends advanced_testcase {
     }
 
     /**
+     * A random selection requiring more questions than available cannot be published.
+     */
+    public function test_cannot_publish_incomplete_random_question_pool(): void {
+        global $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $activity = $this->getDataGenerator()->create_module("mcp", [
+            "course" => $course->id, "name" => "Incomplete selection",
+            "questionselection" => "random", "questionsperattempt" => 5,
+        ]);
+        $revision = content_service::save((int)$activity->id,
+            "<!doctype html><html><body>Test</body></html>", (int)$USER->id, 0);
+        $this->expectException(\moodle_exception::class);
+        content_service::publish((int)$activity->id, $revision);
+    }
+
+    /**
      * A random subset is frozen in the Question Engine, even after settings change.
      */
     public function test_random_subset_is_persisted_and_grades_only_selected_question(): void {

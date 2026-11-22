@@ -46,6 +46,23 @@ final class slots_test extends advanced_testcase {
     }
 
     /**
+     * The same Moodle question must not be associated twice in one active pool.
+     */
+    public function test_duplicate_active_question_is_rejected(): void {
+        global $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $generator = $this->getDataGenerator()->get_plugin_generator("core_question");
+        [$category, $course, $questioncategory, $questions] = $generator->setup_course_and_questions();
+        $activity = $this->getDataGenerator()->create_module("mcp", [
+            "course" => $course->id, "name" => "Distinct questions",
+        ]);
+        slots::attach((int)$activity->id, (int)$questions[0]->id, 1.0, (int)$USER->id);
+        $this->expectException(\moodle_exception::class);
+        slots::attach((int)$activity->id, (int)$questions[0]->id, 1.0, (int)$USER->id);
+    }
+
+    /**
      * Replacement keeps the same native slot number; the previous bank question stays historical.
      */
     public function test_replaced_question_preserves_next_slot_number(): void {

@@ -26,6 +26,7 @@ namespace mod_mcp\content;
 
 use context_module;
 use mod_mcp\question\slots;
+use mod_mcp\question\configuration;
 use moodle_exception;
 use stdClass;
 
@@ -116,9 +117,24 @@ final class service {
         if (!$draft || trim($draft->content) === "") {
             throw new moodle_exception("invaliddata");
         }
-        // Assessment question IDs must be pinned in the native question bank.
-        foreach ($DB->get_records("mcp_slots", ["mcpid" => $mcpid, "active" => 1]) as $slot) {
-            slots::validate_question((int)$slot->questionid);
+        // The published configuration must be startable without an incomplete pool.
+        configuration::validate((string)$activity->questionselection,
+            (int)$activity->questionsperattempt, (int)$activity->shufflequestions);
+        $active = slots::active($mcpid);
+        if ($activity->questionselection === "random" &&
+                count($active) < (int)$activity->questionsperattempt) {
+            throw new moodle_exception("invalidquestioncount", "mcp");
+        }
+        $seen = [];
+        foreach ($active as $slot) {
+            if (isset($seen[$slot->questionid])) {
+                throw new moodle_exception("duplicatequestion", "mcp");
+            }
+            $seen[$slot->questionid] = true;
+            $question = slots::validate_question((int)$slot->questionid);
+            if ((int)$question->version !== (int)$slot->questionversion) {
+                throw new moodle_exception("invalidquestionconfiguration", "mcp");
+            }
         }
         $DB->update_record("mcp", (object)[
             "id" => $mcpid, "publishedrevision" => $expectedrevision, "timemodified" => time(),
