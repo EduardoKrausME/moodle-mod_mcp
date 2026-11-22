@@ -8,6 +8,8 @@ Compatible with Moodle 4.5 LTS and 5.x. Install this repository at mod/mcp and u
 
 Create an Interactive Experience using Moodle or `mcp_create_activity`. It starts hidden and has an automatically generated ChatGPT/Claude prompt containing the course ID, cmid and URL. Save a complete HTML document using `mcp_save_content`, preview with the normal view URL, then publish explicitly through `mcp_publish` or the Moodle management page.
 
+For a content page, the generated prompt asks the teacher to select a page format and supply a free-text description of the topic and objectives before authoring begins. It requests selection and text-entry controls when the chat interface supports them, with numbered options and an open-ended reply as fallback. Chat interface controls are provided by ChatGPT or Claude, not by the Moodle activity itself.
+
 All HTML revisions are immutable and checked with an expected revision ID. Published students continue to see the previous published revision while a new draft is in progress.
 
 Custom scripts execute in a sandboxed iframe with allow-scripts but not allow-same-origin; there is no access to the authenticated Moodle DOM, cookies or gradebook from that code. Assets are stored using Moodle File API and fetched with normal permission checks. The upload tool allows safe files up to 8 MiB; use Moodle's normal upload workflow for large videos.

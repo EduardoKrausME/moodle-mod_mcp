@@ -95,6 +95,11 @@ final class output_activity_test extends advanced_testcase {
             $this->assertSame(1, preg_match("/(Approve|Aprovar)/", $data[$key]));
             $this->assertSame(1, preg_match("/(Reject|Rejeitar)/", $data[$key]));
         }
+        // A page prompt must request both structured options and a freely typed description.
+        $this->assertSame(1, preg_match("/(opções selecionáveis|selectable choices)/i", $data["promptpage"]));
+        $this->assertSame(1, preg_match("/(texto livre|free-text)/i", $data["promptpage"]));
+        $this->assertSame(1, preg_match("/(opções numeradas|numbered options)/i", $data["promptpage"]));
+        $this->assertSame(1, preg_match("/(Aguarde as respostas|Wait for the teacher)/i", $data["promptpage"]));
         $this->assertStringContainsString("prefers-color-scheme", $data["prompt"]);
         $this->assertStringContainsString("prefers-color-scheme", $data["promptpage"]);
         $this->assertStringContainsString((string)$cm->id, $data["prompt"]);
