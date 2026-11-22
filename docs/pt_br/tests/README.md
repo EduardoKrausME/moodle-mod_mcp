@@ -77,3 +77,11 @@ node --test docs/pt_br/tests/fill-blanks.test.mjs
 ```
 
 O teste abrange estrutura dos segmentos, lacunas com respostas repetidas e IDs exclusivos, sinônimos, textos com pontuação, termos compostos, opções ausentes do banco, proteção contra HTML inseguro, seleção e digitação, conferência, dicas, restauração de estado e sincronização dos catálogos.
+
+Para o jogo 14 (Quem sou eu? - Fundamentos da Computação), execute:
+
+```bash
+node --test docs/pt_br/tests/who-am-i.test.mjs
+```
+
+Este teste cobre aliases, acentuação, pontuação, repetição de palpites, pontuação lúdica, dicas vazias, tentativas esgotadas, encerramento após a última dica, desistência, retorno de sessão, funcionamento sem SDK, acessibilidade e sincronização dos manifestos.

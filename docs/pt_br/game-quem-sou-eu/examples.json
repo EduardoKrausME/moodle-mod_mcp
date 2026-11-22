@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Quem sou eu?",
+  "description": "Atividades de inferência com dicas progressivas, aliases, tentativas limitadas e explicações ao concluir.",
+  "examples": [
+    {
+      "id": "quem-sou-eu-fundamentos-computacao",
+      "title": "Quem sou eu? - Fundamentos da Computação",
+      "description": "Descubra seis conceitos de informática por inferência progressiva, usando aliases, até três tentativas e dicas cada vez mais específicas.",
+      "howItWorks": "Leia uma pista, digite seu palpite e, se necessário, revele outra dica; ao acertar, esgotar tentativas, desistir ou abrir a última pista, receba a explicação. A pontuação lúdica recompensa descobertas com menos erros e pistas, e um resumo apresenta os resultados.",
+      "subtype": "Dicas progressivas",
+      "features": [
+        "6 conceitos e 4 dicas por rodada",
+        "Até 3 tentativas",
+        "Aliases e acentos normalizados",
+        "Pontuação, histórico e resumo"
+      ],
+      "minutes": 8,
+      "path": "game-quem-sou-eu/fundamentos-da-computacao.html",
+      "prompt": "Crie uma atividade \"Quem sou eu?\" para o mod_mcp, seguindo `.chatgpt/games/14-quem-sou-eu.md` e a mecânica do exemplo de Fundamentos da Computação. O assunto deste exemplo é apenas demonstrativo e não deve ser reutilizado automaticamente.\n\nNa sua PRIMEIRA resposta, antes de gerar enunciados, dicas, respostas, imagens, JSON, HTML, CSS, JavaScript ou usar ferramentas de gravação, pergunte exatamente ao professor: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta do professor e não construa nem publique a atividade antes de ele responder.\n\nDepois de receber o assunto escolhido, ajuste os conceitos, objetos, fenômenos ou personagens a serem descobertos. Caso seja indispensável, pergunte o nível de aprendizagem, o número de rodadas e a quantidade de tentativas permitidas. Crie para cada rodada dicas em sequência do mais amplo ao mais específico, sem informações contraditórias e com solução única; verifique os fatos e forneça uma explicação após a rodada. A última dica pode revelar explicitamente a resposta, mas nesse caso deve encerrar a rodada como previsto no jogo, sem conceder acerto automático.\n\nOrganize os metadados no contrato proposto `who_am_i`, conforme `.chatgpt/games/14-quem-sou-eu.md`: `title`, `rounds` com `id`, `answer`, `aliases`, `clues` e explicação, além de `settings.maxGuesses`. Valide identificadores únicos, respostas e dicas não vazias, aliases sem duplicidade após normalizar acentos, caixa, espaços e pontuação. Não ofereça como alias uma grafia que a normalização já torna idêntica à resposta original. O JSON é uma proposta de autoria; não afirme que o Moodle já interpreta esse tipo automaticamente.\n\nCrie um HTML autossuficiente, responsivo e acessível, contendo somente a atividade, sem menus, cabeçalho institucional, rodapé, CDN ou dependências externas. Use CSS e JavaScript incorporados, APIs DOM seguras e um campo de texto com label, botão Tentar resposta, botão Revelar próxima dica, opção Desistir, Próxima rodada, Reiniciar, painel de tentativas, progresso e resumo final com soluções explicadas. Mostre uma dica inicial e revele as demais sob demanda, sem tempo limite. Evite comparar respostas por substring; normalize a resposta inteira e aceite somente aliases previamente definidos. Não conte duas vezes o mesmo palpite nem permita ultrapassar o limite de tentativas. Mostre a resposta e comentário quando acertar, esgotar tentativas, desistir ou revelar a última dica, deixando essa consequência explícita no botão.\n\nImplemente uma pontuação exclusivamente lúdica que valorize respostas com menos dicas e menos erros, com limites consistentes, e explique a fórmula ao aluno. Use `aria-live`, foco visível, fluxo por teclado/Enter, botões para toque e `prefers-reduced-motion`. Teste aliases, acentos, pontuação, dicas vazias, clique duplo, erros até o limite, conclusão ao revelar a última pista, desistência, resumo e recuperação de sessão. Não inclua nota oficial nem conclusão acadêmica baseada no gabarito disponível no cliente.\n\nQuando o SDK `MoodleMCP.progress` estiver disponível, utilize somente `progress.load/save` com a versão retornada, estado mínimo, limite de 12 KiB e tratamento de conflito; mantenha a atividade funcional também offline e sem SDK. Sem conexão ChatGPT ou Claude via MCP, entregue o HTML completo para copiar e colar no gerenciador; quando conectado, respeite as APIs documentadas e nunca publique sem aprovação explícita do professor. Imagens não são necessárias para este exemplo; se forem utilizadas no tema escolhido, informe quais, as fontes e os textos alternativos."
+    }
+  ]
+}

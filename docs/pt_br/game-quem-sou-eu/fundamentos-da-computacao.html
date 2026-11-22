@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Quem sou eu? Fundamentos da Computação</title><style>:root{font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--bg:#f2f3fa;--ink:#283249;--muted:#65758b;--line:#dfe3ed;--panel:#fff;--accent:#574ab1;--accent2:#45389d;--soft:#efedfc;--green:#167959;--green-bg:#e2f6ea;--orange:#925524;--orange-bg:#fff0df;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button,input{font:inherit}button:focus-visible,input:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #efa942;outline-offset:3px}main{max-width:1110px;margin:auto;padding:33px 20px 43px}
+.eyebrow{margin:0 0 8px;font-size:11px;font-weight:850;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(27px,4vw,41px);line-height:1.16;letter-spacing:-.8px;margin:0 0 11px}.intro{max-width:880px;font-size:14px;color:var(--muted);margin:0 0 19px}
+.stats{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:13px}.stat{min-width:105px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:8px 14px}.stat small{font-size:11px;color:var(--muted);display:block}.stat strong{font-size:19px;font-variant-numeric:tabular-nums}.stats .note{font-size:11px;margin-left:auto;color:var(--muted)}
+.progress{height:9px;background:#e0e5f0;border-radius:20px;overflow:hidden;margin-bottom:17px}.progress span{height:100%;width:0;display:block;background:linear-gradient(90deg,#8676d8,#44b993);transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.36fr) minmax(270px,.74fr);gap:15px;align-items:start}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:22px;min-width:0;box-shadow:0 9px 24px #2834520b}
+.panel h2{margin:0 0 10px;font-size:17px}.round-head{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap}.round-head small{font-size:12px;font-weight:800;color:var(--muted)}.tag{background:var(--soft);color:var(--accent);padding:6px 12px;border-radius:99px;font-size:11px;font-weight:800}
+.round-title{font-size:clamp(23px,3vw,30px);letter-spacing:-.6px;line-height:1.18;margin:15px 0 6px}.subtitle{font-size:13px;color:var(--muted);margin:0 0 16px}
+.clues{list-style:none;margin:0;padding:0;display:grid;gap:9px}.clues li{display:flex;align-items:flex-start;gap:11px;background:#fafbff;border:1px solid #d9dfed;border-radius:11px;padding:13px 14px;font-size:14px}
+.clues .num{display:grid;place-items:center;flex:0 0 29px;height:29px;background:#e9e7fc;color:var(--accent);border-radius:8px;font-size:12px;font-weight:850}.clues li p{margin:1px 0 0}.clues li.latest{background:#f3f0ff;border-color:#a69adb}
+.answer-form{margin-top:19px}.answer-form label{display:block;font-size:13px;font-weight:820;margin-bottom:8px}.form-controls{display:flex;gap:8px;flex-wrap:wrap}.form-controls input{flex:1 1 210px;min-width:0;width:100%;border:2px solid #bec7db;border-radius:10px;background:var(--panel);color:var(--ink);padding:11px 12px;font-size:14px}.form-controls input:disabled{opacity:.6}
+.btn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:10px;padding:11px 15px;font-size:12px;font-weight:820;cursor:pointer}.btn.secondary{background:var(--panel);color:var(--accent)}.btn.danger{background:var(--panel);border-color:#e0bfa4;color:var(--orange)}.btn:hover:not(:disabled){filter:brightness(.93)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.feedback{margin-top:15px;background:#edf0fa;color:#455777;padding:14px 16px;border:1px solid #d7def0;border-radius:11px;min-height:58px;font-size:13px}.feedback.good{background:var(--green-bg);color:var(--green);border-color:#9ed4b6}.feedback.warn{background:var(--orange-bg);color:var(--orange);border-color:#e5c5a4}
+.reveal{margin-top:16px;background:var(--green-bg);color:#1a654c;border:1px solid #a7d8bc;border-radius:11px;padding:15px 16px}.reveal.lost{background:var(--orange-bg);color:#845027;border-color:#e4c59f}.reveal strong{display:block;font-size:17px;margin-bottom:5px}.reveal p{font-size:13px;margin:0 0 6px}.reveal small{font-size:11px}
+.tracker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:13px 0}.marker{border:1px solid #dae0ed;border-radius:9px;background:#f7f7fd;text-align:center;padding:8px 3px;min-height:55px;display:flex;justify-content:center;align-items:center;flex-direction:column;color:#65758b}.marker b{font-size:16px}.marker small{font-size:10px}.marker.current{background:var(--soft);border:2px solid #8172d4;color:var(--accent)}.marker.correct{background:#e6f7ed;color:var(--green);border-color:#a3d0b6}.marker.lost{background:#fff1e3;color:var(--orange);border-color:#e7bf96}
+.sidebar .instructions{font-size:12px;color:var(--muted);padding-left:20px;margin:12px 0}.sidebar .instructions li{padding:4px 0}.side-note{font-size:12px;color:var(--muted);margin:4px 0 12px}.scoring{background:var(--soft);border-radius:11px;padding:13px;font-size:12px;color:#514987}.scoring strong{display:block;margin-bottom:5px}.scoring p{margin:0}
+.history{margin-top:15px;padding-top:12px;border-top:1px solid var(--line)}.history h3{font-size:13px;margin:0 0 8px}.history ul{list-style:none;padding:0;margin:0;display:grid;gap:6px}.history li{border:1px solid var(--line);background:#fafbff;border-radius:9px;padding:9px 11px;font-size:12px}.history li small{color:var(--muted);display:block}
+.summary h2{font-size:26px;margin:0 0 8px}.summary>p{color:var(--muted);font-size:13px}.review{display:grid;gap:9px;margin:14px 0}.review-item{padding:13px;background:#fafaff;border:1px solid var(--line);border-radius:10px}.review-item.win{background:#effaf4;border-color:#afdac2}.review-item.miss{background:#fff7ee;border-color:#e8c7a9}.review-item strong{display:block;font-size:14px}.review-item p{font-size:12px;color:var(--muted);margin:4px 0}
+.small{font-size:11px;color:var(--muted);margin:16px 0 0}[hidden]{display:none!important}
+@media(max-width:820px){.layout{grid-template-columns:minmax(0,1fr)}.panel{padding:17px}.tracker{grid-template-columns:repeat(6,minmax(0,1fr))}}@media(max-width:515px){main{padding:24px 12px 32px}.panel{padding:13px}.tracker{grid-template-columns:repeat(3,minmax(0,1fr))}.stats .note{margin-left:0}.form-controls{display:grid}.form-controls input,.form-controls .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#171c2e;--ink:#e8edfb;--muted:#b5c5d8;--line:#3e4962;--panel:#262f46;--accent:#bbadff;--soft:#3b3759;--green:#a4ebc9;--green-bg:#254b39;--orange:#f5c99f;--orange-bg:#503a2e}.clues li{background:#2c3751;border-color:#53607d}.clues .num{background:#46416a;color:#e6e2ff}.clues li.latest{background:#413c66;border-color:#8c82cd}.form-controls input{border-color:#6e80a0}.feedback{background:#303d57;color:#dbe6f6;border-color:#566783}.feedback.good{background:var(--green-bg);color:var(--green)}.feedback.warn{background:var(--orange-bg);color:var(--orange)}.reveal{background:var(--green-bg);color:#d0f7e1;border-color:#5b886e}.reveal.lost{background:var(--orange-bg);color:#fbd7b9;border-color:#8b6d52}.marker{background:#2f3851;border-color:#505d77;color:#c0cbdd}.marker.current{background:#413d64;border-color:#9487df;color:#e7e3ff}.marker.correct{background:#29523f;border-color:#5c8a71;color:#c8f2d8}.marker.lost{background:#563e31;border-color:#9a7254;color:#ffdab8}.scoring{color:#e1dbff}.history li{background:#2d3752}.review-item{background:#2d3851}.review-item.win{background:#2b4c3b;border-color:#62876f}.review-item.miss{background:#4b392f;border-color:#86664f}}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 14 · Dedução por dicas</p>
+<h1>Quem sou eu? Fundamentos da Computação</h1>
+<p class="intro">Descubra seis conceitos da tecnologia por dicas cada vez mais específicas. Cada rodada começa com uma pista e oferece até três tentativas. Você pode pedir novas pistas, mas revelar a última encerra a rodada e mostra a resposta.</p>
+<div class="stats">
+ <div class="stat"><small>Rodadas concluídas</small><strong id="rounds-done">0 / 6</strong></div>
+ <div class="stat"><small>Acertos</small><strong id="solved">0 / 6</strong></div>
+ <div class="stat"><small>Pontos de jogo</small><strong id="points">0</strong></div>
+ <span class="note">Até 100 pontos por rodada, sem cronômetro.</span>
+</div>
+<div class="progress" id="progress" role="progressbar" aria-label="Rodadas concluídas" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><span id="progress-fill"></span></div>
+<div class="layout">
+ <section id="game-panel" class="panel" aria-labelledby="round-title">
+  <div class="round-head"><small id="round-number">Rodada 1 de 6</small><span class="tag" id="round-tag">1 de 4 dicas</span></div>
+  <h2 id="round-title" class="round-title" tabindex="-1">Quem sou eu?</h2>
+  <p class="subtitle" id="round-subtitle">Use as pistas para identificar o conceito.</p>
+  <ol id="clues" class="clues" aria-label="Dicas reveladas em sequência"></ol>
+  <form id="answer-form" class="answer-form" autocomplete="off">
+   <label for="answer">Qual conceito as pistas descrevem?</label>
+   <div class="form-controls"><input type="text" id="answer" name="answer" maxlength="80" autocomplete="off" enterkeyhint="done" placeholder="Digite seu palpite" aria-describedby="guess-help" required/><button id="submit" class="btn" type="submit" disabled>Tentar resposta</button></div>
+   <p id="guess-help" class="small">Maiúsculas, acentos e hífens não mudam a correção. Apelidos cadastrados são aceitos, e repetir um palpite não gasta outra tentativa.</p>
+  </form>
+  <div class="actions"><button type="button" id="reveal" class="btn secondary" disabled>Revelar próxima dica</button><button type="button" id="giveup" class="btn danger" disabled>Desistir da rodada</button><button type="button" id="next" class="btn" hidden disabled>Próxima rodada</button></div>
+  <div id="reveal-answer" class="reveal" hidden><strong id="answer-heading"></strong><p id="answer-explanation"></p><small id="answer-score"></small></div>
+  <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">Preparando as dicas...</div>
+ </section>
+ <section id="summary-panel" class="panel summary" aria-labelledby="summary-title" hidden>
+  <p class="eyebrow">Revisão final</p><h2 id="summary-title" tabindex="-1">Desafio concluído!</h2><p id="summary-line"></p>
+  <div id="review" class="review" aria-label="Explicações das seis rodadas"></div>
+  <button type="button" id="summary-restart" class="btn">Jogar novamente</button>
+ </section>
+ <aside class="panel sidebar" aria-label="Regras e acompanhamento">
+  <h2>Seu percurso</h2><p class="side-note">Cada número representa uma rodada e informa se houve acerto.</p>
+  <div id="tracker" class="tracker" role="list" aria-label="Acompanhamento das seis rodadas"></div>
+  <ol class="instructions">
+   <li>Leia a primeira dica e tente responder.</li>
+   <li>Se necessário, revele uma dica adicional.</li>
+   <li>Você tem até três tentativas por conceito.</li>
+   <li>A última dica encerra a rodada.</li>
+   <li>Também é possível desistir e avançar.</li>
+  </ol>
+  <div class="scoring"><strong>Como funcionam os pontos?</strong><p>Um acerto vale até 100 pontos. Cada dica extra reduz 20 e cada erro anterior reduz 15; a pontuação mínima por acerto é 20. Rodadas sem acerto valem zero.</p></div>
+  <div class="history"><h3>Tentativas desta rodada</h3><ul id="history-list" aria-label="Palpites realizados"></ul></div>
+  <div class="actions"><button type="button" id="restart" class="btn secondary" disabled>Recomeçar desafio</button></div>
+ </aside>
+</div>
+<p class="small">A pontuação é apenas lúdica e não modifica notas ou conclusão acadêmica do Moodle. O jogo funciona sem o SDK.</p>
+</main><script>(function whoAmIGame(){
+"use strict";
+const DATA={"type":"who_am_i","title":"Quem sou eu? Fundamentos da Computação","settings":{"maxGuesses":3,"revealCost":20,"missCost":15},"rounds":[{"id":"algoritmo","answer":"Algoritmo","aliases":["um algoritmo","algorithm"],"clues":["Posso orientar uma tarefa mesmo sem um computador.","Organizo ações em uma sequência finita de etapas.","Minha lógica pode ser descrita em pseudocódigo ou fluxogramas.","Sou uma sequência de passos para resolver um problema: um algoritmo."],"explanation":"Algoritmo é um conjunto organizado de instruções para atingir um objetivo, independentemente da linguagem de programação utilizada."},{"id":"banco-dados","answer":"Banco de dados","aliases":["base de dados","database"],"clues":["Organizo informações que precisam ser recuperadas mais tarde.","Permito armazenar, consultar e atualizar registros.","PostgreSQL e MariaDB são sistemas que podem me gerenciar.","Sou uma coleção organizada de informações: um banco de dados."],"explanation":"Um banco de dados organiza informações para armazenamento, consulta e atualização; um SGBD gerencia seus recursos."},{"id":"sistema-operacional","answer":"Sistema operacional","aliases":["sistema operativo","SO","operating system"],"clues":["Atuo entre aplicativos, usuários e recursos físicos de um dispositivo.","Gerencio processos, memória, arquivos e periféricos.","Linux, Windows e Android são exemplos de minha categoria.","Sou o software-base conhecido como sistema operacional."],"explanation":"O sistema operacional administra recursos do equipamento e oferece serviços fundamentais aos programas."},{"id":"criptografia","answer":"Criptografia","aliases":["cifragem","cifração","cryptography"],"clues":["Protejo informações contra leituras indevidas.","Posso transformar dados por meio de algoritmos e chaves.","Sou fundamental para confidencialidade de comunicações HTTPS.","Meu nome é criptografia, uma técnica de proteção de informações."],"explanation":"A criptografia protege dados com transformações matemáticas; seu uso adequado exige chaves e protocolos seguros."},{"id":"rede-computadores","answer":"Rede de computadores","aliases":["rede informática","computer network"],"clues":["Permito que dispositivos compartilhem informações e recursos.","Posso existir em casas, escolas, empresas ou entre cidades.","Wi-Fi e Ethernet são tecnologias usadas em minhas conexões.","Sou o conjunto de dispositivos interligados chamado rede de computadores."],"explanation":"Uma rede de computadores conecta dispositivos para troca de dados e compartilhamento de recursos."},{"id":"codigo-fonte","answer":"Código-fonte","aliases":["source code","código de origem"],"clues":["Sou criado, lido e mantido por quem desenvolve programas.","Posso ter mudanças registradas em um repositório Git.","Contenho instruções escritas em JavaScript, Python ou PHP.","Sou o texto das instruções de um programa: o código-fonte."],"explanation":"Código-fonte é a representação textual de um programa em uma linguagem de programação, que pode ser interpretado ou compilado."}]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id);
+const abort=new AbortController(),sdk=window.MoodleMCP?.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const storageKey="whoAmIComputingV1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,queue=Promise.resolve(),generation=0;
+
+// Pure game rules.
+function normalize(value){return String(value??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("pt-BR").replace(/[^\p{L}\p{N}]+/gu," ").replace(/\s+/g," ").trim();}
+function validate(data){
+ if(!data||data.type!=="who_am_i"||typeof data.title!=="string"||!data.title.trim()||!data.settings||!Number.isInteger(data.settings.maxGuesses)||data.settings.maxGuesses<1||data.settings.maxGuesses>8||!Number.isInteger(data.settings.revealCost)||data.settings.revealCost<0||!Number.isInteger(data.settings.missCost)||data.settings.missCost<0||!Array.isArray(data.rounds)||data.rounds.length<3||data.rounds.length>12)return false;
+ const ids=new Set(),names=new Set();
+ for(const round of data.rounds){
+  if(!round||typeof round.id!=="string"||!/^[a-z0-9-]+$/.test(round.id)||ids.has(round.id)||typeof round.answer!=="string"||!round.answer.trim()||round.answer.length>80||!Array.isArray(round.aliases)||round.aliases.length>8||!Array.isArray(round.clues)||round.clues.length<3||round.clues.length>7||typeof round.explanation!=="string"||!round.explanation.trim())return false;
+  ids.add(round.id);
+  const aliases=new Set();
+  for(const candidate of [round.answer,...round.aliases]){
+   if(typeof candidate!=="string"||!candidate.trim()||candidate.length>80)return false;
+   const norm=normalize(candidate);
+   if(!norm||aliases.has(norm)||names.has(norm))return false;
+   aliases.add(norm);names.add(norm);
+  }
+  const clues=new Set();
+  for(const clue of round.clues){
+   if(typeof clue!=="string"||!clue.trim()||clue.length>380)return false;
+   const norm=normalize(clue);if(clues.has(norm))return false;
+   clues.add(norm);
+  }
+ }
+ return true;
+}
+function initialState(data){return {index:0,rounds:data.rounds.map(()=>({shown:1,guesses:[],result:null,points:0})),completed:false};}
+function isAnswer(round,value){const norm=normalize(value);return !!norm&&[round.answer,...round.aliases].some(a=>normalize(a)===norm);}
+function pointsFor(data,entry){return Math.max(20,100-(entry.shown-1)*data.settings.revealCost-(entry.guesses.length-1)*data.settings.missCost);}
+function totalPoints(s){return s.rounds.reduce((acc,r)=>acc+r.points,0);}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Number.isInteger(s.index)||s.index<0||s.index>data.rounds.length||!Array.isArray(s.rounds)||s.rounds.length!==data.rounds.length||typeof s.completed!=="boolean"||s.completed!==(s.index===data.rounds.length))return false;
+ for(let i=0;i<data.rounds.length;i++){
+  const entry=s.rounds[i],round=data.rounds[i];
+  if(!entry||!Number.isInteger(entry.shown)||entry.shown<1||entry.shown>round.clues.length||!Array.isArray(entry.guesses)||entry.guesses.length>data.settings.maxGuesses||!Number.isInteger(entry.points)||entry.points<0||entry.points>100||![null,"correct","attempts","clues","gaveup"].includes(entry.result))return false;
+  const used=new Set();
+  for(let j=0;j<entry.guesses.length;j++){
+   const guess=entry.guesses[j],key=normalize(guess);
+   if(typeof guess!=="string"||!guess.trim()||guess.length>80||!key||used.has(key))return false;
+   used.add(key);
+   if(isAnswer(round,guess)!==(entry.result==="correct"&&j===entry.guesses.length-1))return false;
+  }
+  if(entry.result==="correct"){
+   if(!entry.guesses.length||entry.shown===round.clues.length||entry.points!==pointsFor(data,entry))return false;
+  }else if(entry.points!==0)return false;
+  if(entry.result==="attempts"&&(entry.guesses.length!==data.settings.maxGuesses||entry.shown===round.clues.length))return false;
+  if(entry.result==="clues"&&entry.shown!==round.clues.length)return false;
+  if(entry.result==="gaveup"&&entry.shown===round.clues.length)return false;
+  if(entry.result===null&&(entry.guesses.length>=data.settings.maxGuesses||entry.shown===round.clues.length))return false;
+  if(i<s.index&&entry.result===null)return false;
+  if(i>s.index&&(entry.result!==null||entry.shown!==1||entry.guesses.length||entry.points))return false;
+ }
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(data),changed:true,kind:"neutral",message:"Desafio reiniciado. Leia a primeira dica."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"O estado atual é inválido."};
+ if(s.completed)return {state:s,changed:false,kind:"neutral",message:"O resumo já está disponível."};
+ const round=data.rounds[s.index],entry=s.rounds[s.index];
+ if(action?.type==="next"){
+  if(entry.result===null)return {state:s,changed:false,kind:"warn",message:"Conclua a rodada antes de avançar."};
+  const index=s.index+1,done=index===data.rounds.length;
+  return {state:{...s,index,completed:done},changed:true,kind:"neutral",message:done?"Desafio concluído. Confira o resumo.":"Nova rodada. Leia a primeira dica."};
+ }
+ if(entry.result!==null)return {state:s,changed:false,kind:"neutral",message:"Rodada encerrada. Avance para a próxima."};
+ if(action?.type==="guess"){
+  if(typeof action.value!=="string"||!action.value.trim()||action.value.length>80||!normalize(action.value))return {state:s,changed:false,kind:"warn",message:"Digite uma resposta válida com até 80 caracteres."};
+  const key=normalize(action.value);
+  if(entry.guesses.some(g=>normalize(g)===key))return {state:s,changed:false,kind:"warn",message:"Esse palpite já foi tentado. Digite outro ou revele outra dica."};
+  const guesses=[...entry.guesses,action.value.trim()],won=isAnswer(round,action.value);
+  const result=won?"correct":guesses.length>=data.settings.maxGuesses?"attempts":null;
+  const updated={...entry,guesses,result,points:0};
+  if(won)updated.points=pointsFor(data,updated);
+  const next={...s,rounds:s.rounds.map((r,i)=>i===s.index?updated:r)};
+  return {state:next,changed:true,kind:won?"good":"warn",message:won?
+   "Acertou: "+round.answer+". "+round.explanation+" Você ganhou "+updated.points+" pontos de jogo.":
+   result==="attempts"?"As três tentativas terminaram. A resposta era "+round.answer+". "+round.explanation:
+   "Ainda não corresponde ao conceito. Restam "+(data.settings.maxGuesses-guesses.length)+" tentativas."};
+ }
+ if(action?.type==="clue"){
+  const shown=entry.shown+1,finished=shown===round.clues.length;
+  const updated={...entry,shown,result:finished?"clues":null};
+  return {state:{...s,rounds:s.rounds.map((r,i)=>i===s.index?updated:r)},changed:true,kind:finished?"warn":"neutral",message:finished?
+   "A última dica encerrou a rodada. A resposta era "+round.answer+". "+round.explanation:
+   "Dica "+shown+" revelada. Leia as pistas e tente identificar o conceito."};
+ }
+ if(action?.type==="giveup"){
+  const updated={...entry,result:"gaveup"};
+  return {state:{...s,rounds:s.rounds.map((r,i)=>i===s.index?updated:r)},changed:true,kind:"warn",message:"Você desistiu. A resposta era "+round.answer+". "+round.explanation};
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Leia as pistas e digite sua resposta."};
+}
+// End pure rules.
+function el(tag,cls,value){const n=document.createElement(tag);if(cls)n.className=cls;if(value!==undefined)n.textContent=value;return n;}
+function getState(){return {index:state.index,completed:state.completed,rounds:state.rounds.map(r=>({...r,guesses:[...r.guesses]}))};}
+function restoreState(s){if(!validState(s,DATA))return false;state={index:s.index,completed:s.completed,rounds:s.rounds.map(r=>({...r,guesses:[...r.guesses]}))};render();return true;}
+function announce(message,kind="neutral"){const n=$("feedback");n.className="feedback"+(kind==="good"?" good":kind==="warn"?" warn":"");n.textContent=message;}
+function renderTracker(){
+ const area=$("tracker");area.replaceChildren();
+ state.rounds.forEach((r,i)=>{
+  const card=el("div","marker"),name=r.result==="correct"?"Acerto":r.result?"Encerrada":i===state.index?"Atual":"Pendente";
+  card.setAttribute("role","listitem");card.classList.toggle("current",!state.completed&&state.index===i);
+  if(r.result)card.classList.add(r.result==="correct"?"correct":"lost");
+  card.setAttribute("aria-label","Rodada "+(i+1)+": "+name);
+  card.append(el("b","",String(i+1)),el("small","",name));area.append(card);
+ });
+}
+function renderHistory(entry){
+ const area=$("history-list");area.replaceChildren();
+ if(!entry.guesses.length){area.append(el("li","","Nenhum palpite enviado."));return;}
+ entry.guesses.forEach((g,i)=>{
+  const card=el("li");card.append(el("strong","", "Tentativa "+(i+1)+": "+g),el("small","",isAnswer(DATA.rounds[state.index],g)?"Resposta reconhecida":"Não corresponde ao conceito"));area.append(card);
+ });
+}
+function renderReview(){
+ const area=$("review");area.replaceChildren();
+ DATA.rounds.forEach((round,i)=>{
+  const item=state.rounds[i],won=item.result==="correct";
+  const reason={correct:"Acerto",attempts:"Tentativas esgotadas",clues:"Última dica revelada",gaveup:"Desistiu"}[item.result]||"Não concluída";
+  const card=el("div","review-item "+(won?"win":"miss"));
+  card.append(el("strong","",(i+1)+". "+round.answer+" · "+reason),el("p","",item.guesses.length+" tentativas, "+item.shown+" dicas e "+item.points+" pontos."),el("p","",round.explanation));
+  area.append(card);
+ });
+}
+function render(){
+ if(disposed||!state)return;
+ const total=DATA.rounds.length,done=state.rounds.filter(r=>r.result!==null).length,won=state.rounds.filter(r=>r.result==="correct").length;
+ $("rounds-done").textContent=done+" / "+total;$("solved").textContent=won+" / "+total;$("points").textContent=String(totalPoints(state));
+ $("progress").setAttribute("aria-valuenow",String(done));$("progress-fill").style.width=(100*done/total)+"%";
+ $("game-panel").hidden=state.completed;$("summary-panel").hidden=!state.completed;$("restart").disabled=!ready;
+ renderTracker();
+ if(state.completed){$("summary-line").textContent="Você identificou "+won+" de "+total+" conceitos e somou "+totalPoints(state)+" pontos lúdicos de "+(100*total)+" possíveis.";renderReview();return;}
+ const round=DATA.rounds[state.index],entry=state.rounds[state.index],finished=entry.result!==null;
+ $("round-number").textContent="Rodada "+(state.index+1)+" de "+total;
+ $("round-tag").textContent=finished?"Rodada encerrada":entry.shown+" de "+round.clues.length+" dicas";
+ $("attempts").textContent=entry.guesses.length+" / "+DATA.settings.maxGuesses;
+ $("round-subtitle").textContent=finished?"Confira a resposta e sua explicação.":"Use as pistas para identificar o conceito.";
+ const list=$("clues");list.replaceChildren();
+ for(let i=0;i<entry.shown;i++){const li=el("li",i===entry.shown-1?"latest":"");li.append(el("span","num",String(i+1)),el("p","",round.clues[i]));list.append(li);}
+ $("answer-form").hidden=finished;$("answer").disabled=!ready||finished;$("submit").disabled=!ready||finished;
+ $("reveal").disabled=!ready||finished;$("giveup").disabled=!ready||finished;
+ $("reveal").textContent=entry.shown===round.clues.length-1?"Revelar última dica (encerra rodada)":"Revelar próxima dica";
+ $("next").hidden=!finished;$("next").disabled=!ready||!finished;$("next").textContent=state.index===total-1?"Ver resumo final":"Próxima rodada";
+ $("reveal-answer").hidden=!finished;
+ if(finished){const correct=entry.result==="correct";$("reveal-answer").className="reveal"+(correct?"":" lost");$("answer-heading").textContent=(correct?"Você acertou: ":"Resposta revelada: ")+round.answer;$("answer-explanation").textContent=round.explanation;$("answer-score").textContent=entry.points+" pontos nesta rodada; "+entry.shown+" dicas; "+entry.guesses.length+" tentativas.";}
+ renderHistory(entry);
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++generation;
+ queue=queue.then(async()=>{
+  if(disposed||!remote||stamp!==generation)return;
+  const other=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const content={...other,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(content)).length>12288){announce("O progresso ultrapassa o limite de 12 KiB e não pôde ser salvo.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/who-am-i-computing",data:content});
+ }).catch(async()=>{
+  if(disposed)return;generation++;
+  try{remote=await progress.load();if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))announce("Outra sessão alterou o progresso. Recuperei o estado salvo mais recente.","warn");else announce("Não foi possível conciliar o progresso; continue nesta página.","warn");}
+  catch(_){remote=null;announce("Não foi possível salvar no Moodle. Continue normalmente nesta página.","warn");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const outcome=transition(state,action,DATA);
+ if(!outcome.changed){announce(outcome.message,outcome.kind);return;}
+ state=outcome.state;modified=true;render();save();announce(outcome.message,outcome.kind);
+ if(action.type==="guess")$("answer").value="";
+ if(action.type==="next"||action.type==="restart"){
+  if(state.completed)$("summary-title").focus({preventScroll:true});
+  else $("round-title").focus({preventScroll:true});
+ }else $("feedback").focus({preventScroll:true});
+}
+function destroy(){disposed=true;abort.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){announce("Configuração inválida: confira respostas, aliases e dicas.","warn");return;}
+ state=initialState(data);render();
+ if(progress)try{
+  const loaded=await progress.load();if(disposed)return;remote=loaded;
+  if(!modified&&loaded.data?.[storageKey]&&restoreState(loaded.data[storageKey]))announce("Progresso recuperado. Continue de onde parou.");
+  else announce("Primeira dica pronta. Digite o conceito ou revele outra.");
+ }catch(_){announce("Sem sincronização de progresso. A atividade funciona normalmente.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("submit",event=>{if(event.target.id!=="answer-form")return;event.preventDefault();handleAction({type:"guess",value:$("answer").value});},{signal:abort.signal});
+root.addEventListener("click",event=>{
+ const button=event.target.closest("button");if(!button||!root.contains(button))return;
+ if(button.id==="reveal")handleAction({type:"clue"});
+ if(button.id==="giveup")handleAction({type:"giveup"});
+ if(button.id==="next")handleAction({type:"next"});
+ if(button.id==="restart"||button.id==="summary-restart")handleAction({type:"restart"});
+},{signal:abort.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:abort.signal});
+init(root,DATA);
+})();</script></body></html>
