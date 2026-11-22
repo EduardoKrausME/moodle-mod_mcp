@@ -1,6 +1,6 @@
 # Galeria de exemplos do Mod MCP (pt-BR)
 
-Esta pasta é um site estático. Em GitHub Pages, configure a origem para a branch `master`, diretório `/docs`. O ponto de entrada é `docs/index.html`, que abre `docs/pt-BR/index.html`.
+Esta pasta é um site estático. Em GitHub Pages, configure a origem para a branch `master`, diretório `/docs`. O ponto de entrada é `docs/index.html`, que abre `docs/pt_br/index.html`.
 
 ## Organização
 
@@ -23,6 +23,6 @@ Os exemplos são demonstrações independentes do Moodle. O resultado de um quiz
 
 ## Teste local
 
-Na raiz do repositório, execute `python3 -m http.server 8000 -d docs` e abra `http://localhost:8000/pt-BR/`. Não abra `index.html` usando `file://`, pois os navegadores restringem `fetch()` de JSON local.
+Na raiz do repositório, execute `python3 -m http.server 8000 -d docs` e abra `http://localhost:8000/pt_br/`. Não abra `index.html` usando `file://`, pois os navegadores restringem `fetch()` de JSON local.
 
 Não repita cabeçalho, rodapé institucional, nome do curso ou dados técnicos do Moodle dentro dos exemplos: o plugin já fornece essas informações no contêiner que hospeda a atividade.

@@ -174,8 +174,8 @@ strings appropriately. MCP confirmation previews show the hash of normalized con
 
 ## Galeria de exemplos (pt-BR)
 
-Conheça a [galeria de exemplos do Mod MCP](docs/pt-BR/), com sete modos de autoria, jogos educativos, catálogos JSON por categoria e 54 exemplos autossuficientes de HTML, CSS e JavaScript. O site permite navegar pelos tipos, buscar por conteúdo, experimentar prévias isoladas, visualizar e copiar o código HTML.
+Conheça a [galeria de exemplos do Mod MCP](docs/pt_br/), com sete modos de autoria, jogos educativos, catálogos JSON por categoria e 54 exemplos autossuficientes de HTML, CSS e JavaScript. O site permite navegar pelos tipos, buscar por conteúdo, experimentar prévias isoladas, visualizar e copiar o código HTML.
 
-Para publicar como site, habilite GitHub Pages com origem na branch `master`, diretório `/docs`. Localmente, use `python3 -m http.server 8000 -d docs` e abra `http://localhost:8000/pt-BR/`.
+Para publicar como site, habilite GitHub Pages com origem na branch `master`, diretório `/docs`. Localmente, use `python3 -m http.server 8000 -d docs` e abra `http://localhost:8000/pt_br/`.
 
 Os resultados dos exemplos na galeria são simulações locais; notas reais, respostas dos estudantes, conclusão e publicação são responsabilidade dos serviços e fluxos oficiais do Mod MCP. Veja [API.md](API.md) e as [especificações de jogos](.chatgpt/games/README.md).

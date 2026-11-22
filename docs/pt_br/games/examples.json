@@ -44,6 +44,20 @@
       "path": "games/quebra-cabeca-deslizante.html"
     },
     {
+      "id": "quebra-cabeca-de-imagens",
+      "title": "Quebra-cabeça de imagens",
+      "description": "Reconstrua uma paisagem ilustrada trocando peças de uma imagem recortada em grades de 4, 9, 16 ou 25 partes.",
+      "howItWorks": "O aluno troca duas peças por toque, teclado ou arraste, acompanha os movimentos e as peças corretas e pode consultar a figura original e refazer o desafio.",
+      "subtype": "Quebra-cabeça de imagens",
+      "features": [
+        "Ilustração SVG embutida",
+        "4 a 25 peças",
+        "Arrastar ou selecionar"
+      ],
+      "minutes": 7,
+      "path": "games/quebra-cabeca-de-imagens.html"
+    },
+    {
       "id": "arrastar-e-associar",
       "title": "Arrastar e associar",
       "description": "Associe componentes de hardware às suas funções por arraste, toque ou teclado.",

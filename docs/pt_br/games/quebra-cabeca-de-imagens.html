@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quebra-cabeça de imagens: reconstrua a paisagem</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#29354f;background:#f4f6fb;--primary:#6656d7;--ink:#29354f;--muted:#65728b;--line:#dfe5f0;--panel:#fff;--soft:#f1eeff;--success:#196e56;--success-bg:#e9f8f1}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;line-height:1.55}
+button,select{font:inherit}
+.activity{max-width:1100px;margin:auto;padding:32px 24px 48px}
+.eyebrow{text-transform:uppercase;letter-spacing:1.65px;font-size:11px;font-weight:850;color:var(--primary);margin:0 0 8px}
+h1{font-size:clamp(26px,3.6vw,38px);line-height:1.15;letter-spacing:-1px;margin:0 0 12px}
+.intro{font-size:14px;color:var(--muted);max-width:780px;margin:0 0 23px}
+.toolbar{display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:14px;margin:0 0 18px}
+.level{font-size:12px;font-weight:800;display:flex;flex-direction:column;gap:5px}
+.level select{min-width:165px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--ink);font-size:14px}
+.metrics{display:flex;gap:10px;flex-wrap:wrap}
+.metric{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 15px;display:flex;flex-direction:column;gap:2px;min-width:110px}
+.metric small{font-size:11px;color:var(--muted)}
+.metric strong{font-size:19px;font-weight:850;font-variant-numeric:tabular-nums}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(225px,.54fr);align-items:start;gap:18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:19px;box-shadow:0 8px 26px #202a540b}
+.panel h2{font-size:16px;line-height:1.3;margin:0 0 13px}
+.board{width:100%;max-width:630px;margin:auto;display:grid;gap:3px;aspect-ratio:601/599;border-radius:11px;overflow:hidden;background:#dce2f0;border:3px solid #dce2f0;touch-action:none}
+.piece{position:relative;min-width:0;min-height:0;border:0;border-radius:2px;padding:0;background-color:#d5dce9;background-repeat:no-repeat;cursor:grab;aspect-ratio:601/599}
+.piece:hover{box-shadow:inset 0 0 0 4px #ffffffcb;z-index:1}
+.piece[aria-pressed="true"]{box-shadow:inset 0 0 0 5px var(--primary),inset 0 0 0 7px white;z-index:2}
+.piece.drop-target{box-shadow:inset 0 0 0 5px #15ab82,inset 0 0 0 7px #fff;z-index:2}
+.piece:focus-visible{outline:4px solid #fcad39;outline-offset:-5px;z-index:3}
+.piece-num{position:absolute;top:6px;left:6px;background:#172848b9;color:white;font-size:11px;font-weight:830;padding:3px 7px;border-radius:6px;line-height:1.2}
+.drag-ghost{position:fixed;z-index:50;border:3px solid white;border-radius:9px;box-shadow:0 18px 42px #13254c66;pointer-events:none;transform:translate(-50%,-50%);background-repeat:no-repeat;background-color:#ccd7e6}
+.reference{max-width:390px;margin:auto}
+.reference img{display:block;width:100%;height:auto;aspect-ratio:601/599;background:#dce3ef;border-radius:10px;border:1px solid var(--line)}
+.reference h2{font-size:15px}
+.reference p{font-size:12px;line-height:1.6;color:var(--muted);margin:13px 0}
+.reference details{margin:0}
+.reference summary{cursor:pointer;border:1px solid var(--line);border-radius:9px;padding:11px 14px;font-size:13px;font-weight:760;list-style-position:inside}
+.reference details[open] summary{margin-bottom:12px}
+.progress-label{display:flex;justify-content:space-between;gap:12px;font-size:12px;font-weight:760;margin-top:17px}
+.progress-bar{height:9px;border-radius:12px;overflow:hidden;background:#e6e8f3;margin:8px 0 15px}
+.progress-bar span{display:block;height:100%;width:0;background:var(--primary);border-radius:12px;transition:width .2s ease}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.action{background:var(--primary);color:white;font-size:12px;font-weight:760;padding:11px 15px;border:1px solid var(--primary);border-radius:10px;cursor:pointer}
+.action.secondary{color:var(--primary);background:var(--panel)}
+.action:disabled{opacity:.45;cursor:not-allowed}
+.feedback{background:#eef0fb;color:#45516c;margin-top:16px;padding:14px 16px;border-radius:11px;min-height:51px;font-size:13px}
+.feedback.success{background:var(--success-bg);color:var(--success)}
+.feedback.warn{background:#fff3e5;color:#875527}
+.completed{background:var(--success-bg);border:1px solid #a6ddc8;color:var(--success);border-radius:12px;padding:17px;margin-top:15px}
+.completed strong{display:block;font-size:17px;margin-bottom:5px}
+.completed p{font-size:12px;margin:0}
+.details{font-size:12px;color:var(--muted);margin:11px 0 0}
+button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #b6a7ff;outline-offset:3px}
+@media(max-width:790px){.layout{grid-template-columns:1fr}.reference{max-width:630px}.activity{padding:24px 15px 36px}.panel{padding:14px}.board{gap:2px;border-width:2px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--ink:#e6e9f6;--muted:#abb6d0;--line:#39435b;--panel:#242c3d;--primary:#b1a2ff;--soft:#332e4b;--success:#9cdbc0;--success-bg:#204337}body{background:#151c2b}.metric,.level select{background:var(--panel)}.feedback{background:#2a3450;color:#c9d1e5}.feedback.warn{background:#4a3825;color:#efd09e}.completed{border-color:#3f7963}.board{border-color:#38445b;background:#38445b}.action.secondary{background:#222b3e}.progress-bar{background:#3a4158}}
+</style>
+</head>
+<body>
+<template id="picture-source"><svg xmlns="http://www.w3.org/2000/svg" width="601" height="599" viewBox="0 0 601 599" role="img" aria-label="Paisagem colorida com sol, montanhas, cachoeira, rio, floresta e flores">
+<defs>
+  <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#69baf8"/><stop offset="100%" stop-color="#d5efff"/></linearGradient>
+  <linearGradient id="water" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#65d6e9"/><stop offset="100%" stop-color="#287fc5"/></linearGradient>
+  <linearGradient id="grass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9bd97c"/><stop offset="100%" stop-color="#4eaa6d"/></linearGradient>
+  <linearGradient id="mountain" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#a8b0cc"/><stop offset="100%" stop-color="#526c91"/></linearGradient>
+</defs>
+<rect width="601" height="599" fill="url(#sky)"/>
+<circle cx="485" cy="105" r="59" fill="#ffe48a"/>
+<circle cx="485" cy="105" r="44" fill="#ffc94d"/>
+<g fill="#fff" opacity=".96">
+ <ellipse cx="112" cy="89" rx="69" ry="25"/><ellipse cx="75" cy="78" rx="34" ry="29"/><ellipse cx="148" cy="75" rx="43" ry="31"/>
+ <ellipse cx="340" cy="63" rx="45" ry="15"/><ellipse cx="319" cy="56" rx="23" ry="19"/><ellipse cx="364" cy="54" rx="24" ry="23"/>
+</g>
+<path d="M-20 326 116 140 238 315 334 159 465 338 550 236 634 330V410H-20Z" fill="url(#mountain)"/>
+<path d="m69 206 47-66 54 76-42-18-14 16-13-16Z" fill="#f5f9ff"/>
+<path d="m295 217 39-58 47 63-30-14-20 16-11-20Z" fill="#f7faff"/>
+<path d="m516 283 34-47 29 41-20-10-16 11-12-8Z" fill="#eaf3ff"/>
+<path d="M0 344q111-84 213 3 111-68 201-9 82-39 187 5v256H0Z" fill="#8dcda7"/>
+<path d="M0 412q140-50 274-2 150-77 327-15v204H0Z" fill="url(#grass)"/>
+<path d="M290 302q-29 58-9 105t-55 77q-51 34-63 115h281q-54-82-94-119-34-37-27-80 11-65 21-98Z" fill="url(#water)"/>
+<path d="M305 305q-33 59-8 102t-54 81q-27 24-52 72" fill="none" stroke="#b9f4f3" stroke-width="13" stroke-linecap="round" opacity=".8"/>
+<path d="M323 310q-15 58-10 96 2 40 29 71" fill="none" stroke="#f3fbff" stroke-width="6" opacity=".8"/>
+<path d="M91 460V319" stroke="#76523e" stroke-width="21" stroke-linecap="round"/>
+<path d="M91 344q-19-49-69-69M90 359q27-43 70-54" fill="none" stroke="#76523e" stroke-width="12" stroke-linecap="round"/>
+<g fill="#298b59">
+  <circle cx="91" cy="253" r="83"/><circle cx="42" cy="278" r="55"/><circle cx="146" cy="285" r="57"/>
+</g>
+<g fill="#43ad67"><circle cx="71" cy="234" r="46"/><circle cx="121" cy="218" r="44"/><circle cx="160" cy="271" r="38"/></g>
+<g fill="#f27769"><circle cx="50" cy="266" r="10"/><circle cx="132" cy="265" r="10"/><circle cx="106" cy="304" r="9"/></g>
+<path d="M514 455V314" stroke="#6e5140" stroke-width="17" stroke-linecap="round"/>
+<path d="M463 362 514 236 565 362Z" fill="#287c60"/>
+<path d="M454 334 514 205 577 334Z" fill="#34986e"/>
+<path d="M470 290 514 194 557 290Z" fill="#3cab78"/>
+<path d="M445 497v-70" stroke="#725742" stroke-width="12"/>
+<g fill="#368b5c"><circle cx="444" cy="420" r="42"/><circle cx="416" cy="438" r="30"/><circle cx="473" cy="442" r="29"/></g>
+<g fill="#e37a58"><path d="m386 525 18-26 18 26z"/><path d="m382 540 23-36 23 36z"/></g>
+<g fill="#fff4ad">
+ <circle cx="37" cy="510" r="9"/><circle cx="62" cy="524" r="7"/><circle cx="145" cy="499" r="10"/>
+ <circle cx="532" cy="516" r="10"/><circle cx="558" cy="533" r="7"/><circle cx="473" cy="551" r="9"/>
+</g>
+<g fill="#e973a0">
+ <circle cx="37" cy="510" r="4"/><circle cx="62" cy="524" r="3"/><circle cx="145" cy="499" r="4"/>
+ <circle cx="532" cy="516" r="4"/><circle cx="558" cy="533" r="3"/><circle cx="473" cy="551" r="4"/>
+</g>
+<path d="m181 149 12-8 11 8m-11-8 12-6 10 6M390 164l10-7 10 7" fill="none" stroke="#33546a" stroke-width="4" stroke-linecap="round"/>
+<g fill="#ffffff" opacity=".72"><ellipse cx="213" cy="555" rx="17" ry="3"/><ellipse cx="336" cy="524" rx="22" ry="4"/></g>
+</svg></template>
+<main id="activity" class="activity">
+ <p class="eyebrow">Desafio de percepção visual</p>
+ <h1>Observe a paisagem e monte as peças</h1>
+ <p class="intro">A figura foi dividida em peças embaralhadas. Selecione duas para trocar de posição ou arraste uma sobre outra. Use a imagem de referência sempre que precisar.</p>
+ <div class="toolbar">
+  <label class="level" for="level">Quantidade de peças
+   <select id="level">
+    <option value="2">4 peças (2 × 2)</option>
+    <option value="3" selected>9 peças (3 × 3)</option>
+    <option value="4">16 peças (4 × 4)</option>
+    <option value="5">25 peças (5 × 5)</option>
+   </select>
+  </label>
+  <div class="metrics">
+   <div class="metric"><small>Movimentos</small><strong id="moves">0</strong></div>
+   <div class="metric"><small>Peças no lugar</small><strong id="correct">0 de 9</strong></div>
+  </div>
+ </div>
+ <div class="layout">
+  <section class="panel" aria-labelledby="board-title">
+   <h2 id="board-title">Monte a figura</h2>
+   <div id="board" class="board" role="group" aria-label="Peças do quebra-cabeça"></div>
+   <div class="progress-label"><span>Reconstrução da imagem</span><span id="progress-percent-label">Cada peça correta conta</span></div>
+   <div id="progress" class="progress-bar" role="progressbar" aria-label="Peças na posição correta" aria-valuemin="0" aria-valuemax="9" aria-valuenow="0"><span id="progress-fill"></span></div>
+   <div class="actions">
+    <button id="undo" type="button" class="action secondary" disabled>Desfazer</button>
+    <button id="restart" type="button" class="action">Embaralhar novamente</button>
+   </div>
+   <div id="feedback" class="feedback" aria-live="polite" role="status">Preparando a ilustração…</div>
+   <div id="complete" class="completed" hidden role="status"><strong>Quebra-cabeça concluído!</strong><p>A paisagem foi reconstruída. Você pode aumentar a dificuldade e tentar novamente. A conclusão visual do jogo não representa uma nota do Moodle.</p></div>
+  </section>
+  <aside class="panel reference" aria-label="Imagem de referência e dicas">
+   <h2>Imagem de referência</h2>
+   <img id="reference-image" alt="Paisagem com sol amarelo à direita, nuvens no céu azul, três montanhas, rio azul ao centro, árvore com frutos à esquerda, pinheiro à direita e pequenas flores em primeiro plano." width="601" height="599">
+   <p>Compare os contornos das montanhas, o curso do rio e as cores das árvores para identificar onde cada parte se encaixa.</p>
+   <details><summary>Dicas para montar</summary><p>Comece pelos cantos e pelas bordas. Depois observe as linhas que continuam entre as peças, como o rio e o horizonte das montanhas.</p></details>
+   <label class="details"><input type="checkbox" id="show-numbers"> Exibir números das peças para facilitar a identificação</label>
+  </aside>
+ </div>
+</main>
+<script>(function jigsaw(){
+"use strict";
+const config={type:"jigsaw",image:{alt:"Ilustração de uma paisagem com sol, montanhas, rio, árvores e flores",width:601,height:599},settings:{rows:3,cols:3,mode:"swap",preview:true,availableSizes:[2,3,4,5]}};
+const $=id=>document.getElementById(id);
+const root=$("activity"),board=$("board"),levelControl=$("level"),reference=$("reference-image"),feedback=$("feedback"),correctLabel=$("correct"),movesLabel=$("moves"),bar=$("progress"),fill=$("progress-fill"),undoButton=$("undo"),resetButton=$("restart"),complete=$("complete");
+let imageURL="",game=null,selected=null,history=[],pointer=null,ghost=null,skipClick=false,revision=null,writeQueue=Promise.resolve(),disposed=false;
+const service=window.MoodleMCP&&window.MoodleMCP.progress?window.MoodleMCP.progress:null;
+function validate(data){
+ return data&&data.type==="jigsaw"&&Number.isInteger(data.image.width)&&Number.isInteger(data.image.height)&&data.image.width>0&&data.image.height>0&&
+ data.settings.mode==="swap"&&data.settings.rows===data.settings.cols&&Array.isArray(data.settings.availableSizes)&&data.settings.availableSizes.every(n=>Number.isInteger(n)&&n>=2&&n<=5)&&
+ data.settings.availableSizes.includes(data.settings.rows);
+}
+function isPermutation(values,size){return Array.isArray(values)&&values.length===size&&new Set(values).size===size&&values.every(x=>Number.isInteger(x)&&x>=0&&x<size);}
+function isSolved(){return game.positions.every((value,index)=>value===index);}
+function correctCount(){return game.positions.reduce((sum,value,index)=>sum+(value===index?1:0),0);}
+function announce(message,kind=""){feedback.className="feedback"+(kind?" "+kind:"");feedback.textContent=message;}
+function shuffleIndexes(count){
+ const values=Array.from({length:count},(_,i)=>i);
+ do{for(let i=values.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[values[i],values[j]]=[values[j],values[i]];}}while(values.every((x,i)=>x===i));
+ return values;
+}
+function background(element,pieceId,size){
+ const row=Math.floor(pieceId/size),col=pieceId%size;
+ element.style.backgroundImage=`url("${imageURL}")`;
+ element.style.backgroundSize=`${size*100}% ${size*100}%`;
+ element.style.backgroundPosition=`${col/(size-1)*100}% ${row/(size-1)*100}%`;
+}
+function getState(){return {level:game.level,positions:[...game.positions],moves:game.moves,completed:isSolved()};}
+function restoreState(incoming){
+ if(!incoming||!config.settings.availableSizes.includes(incoming.level)||!Number.isInteger(incoming.moves)||incoming.moves<0||incoming.moves>1000000||!isPermutation(incoming.positions,incoming.level*incoming.level)){return false;}
+ game={level:incoming.level,positions:[...incoming.positions],moves:incoming.moves};
+ levelControl.value=String(game.level);
+ selected=null;history=[];render();
+ return true;
+}
+function render(){
+ if(!game||disposed)return;
+ const size=game.level,count=size*size;
+ board.style.gridTemplateColumns=`repeat(${size},minmax(0,1fr))`;
+ board.style.gridTemplateRows=`repeat(${size},minmax(0,1fr))`;
+ board.replaceChildren();
+ game.positions.forEach((pieceId,slot)=>{
+  const button=document.createElement("button");
+  button.type="button";button.className="piece";button.dataset.slot=String(slot);button.setAttribute("aria-pressed",String(selected===slot));
+  button.setAttribute("aria-label",`Peça ${pieceId+1} de ${count} na posição ${slot+1}. Selecione para trocar.`);
+  background(button,pieceId,size);
+  const number=document.createElement("span");number.className="piece-num";number.textContent=String(pieceId+1);number.setAttribute("aria-hidden","true");
+  number.hidden=!$("show-numbers").checked;
+  button.append(number);board.append(button);
+ });
+ movesLabel.textContent=String(game.moves);
+ correctLabel.textContent=correctCount()+" de "+count;
+ bar.setAttribute("aria-valuemax",String(count));bar.setAttribute("aria-valuenow",String(correctCount()));
+ fill.style.width=correctCount()/count*100+"%";
+ undoButton.disabled=history.length===0;
+ complete.hidden=!isSolved();
+ if(isSolved()){
+   board.setAttribute("aria-label","Quebra-cabeça concluído com "+count+" peças.");
+ }else{
+   board.setAttribute("aria-label","Quebra-cabeça com "+count+" peças. Selecione duas peças para trocar.");
+ }
+}
+function swap(first,second){
+ if(!game||isSolved()||first===second||first<0||second<0||first>=game.positions.length||second>=game.positions.length)return;
+ history.push({positions:[...game.positions],moves:game.moves});
+ [game.positions[first],game.positions[second]]=[game.positions[second],game.positions[first]];
+ game.moves++;selected=null;render();persist();
+ if(isSolved())announce("Muito bem! Você reconstruiu a paisagem em "+game.moves+" movimentos. Essa pontuação é somente do jogo.","success");
+ else announce("Peças trocadas. Continue observando os detalhes da paisagem.");
+}
+function handleAction(type,slot){
+ if(type!=="select"||!game||isSolved())return;
+ if(selected===null){selected=slot;render();announce("Peça selecionada. Escolha outra peça para trocar de lugar.");}
+ else if(selected===slot){selected=null;render();announce("Seleção cancelada.");}
+ else swap(selected,slot);
+}
+function reset(level){
+ cancelPointer();selected=null;history=[];
+ game={level,positions:shuffleIndexes(level*level),moves:0};
+ levelControl.value=String(level);complete.hidden=true;
+ render();announce("Peças embaralhadas. Selecione duas peças ou arraste uma peça até a outra.");persist();
+}
+function destroy(){disposed=true;cancelPointer();board.replaceChildren();game=null;}
+function cancelPointer(){
+ if(ghost)ghost.remove();ghost=null;pointer=null;
+ for(const button of board.querySelectorAll(".drop-target"))button.classList.remove("drop-target");
+}
+function startPointer(event){
+ const tile=event.target.closest(".piece");
+ if(!tile||!board.contains(tile)||event.isPrimary===false||event.button!==0||!game||isSolved())return;
+ pointer={id:event.pointerId,slot:Number(tile.dataset.slot),x:event.clientX,y:event.clientY,moved:false};
+ // Native taps keep their click target; document-level listeners track drag and release.
+}
+function movePointer(event){
+ if(!pointer||event.pointerId!==pointer.id)return;
+ if(!pointer.moved&&Math.hypot(event.clientX-pointer.x,event.clientY-pointer.y)<9)return;
+ pointer.moved=true;
+ if(!ghost){
+  ghost=document.createElement("div");ghost.className="drag-ghost";
+  background(ghost,game.positions[pointer.slot],game.level);
+  const width=Math.min(130,Math.max(65,board.clientWidth/game.level*.9));
+  ghost.style.width=width+"px";ghost.style.height=width*config.image.height/config.image.width+"px";
+  document.body.append(ghost);
+ }
+ ghost.style.left=event.clientX+"px";ghost.style.top=event.clientY+"px";
+ board.querySelectorAll(".drop-target").forEach(t=>t.classList.remove("drop-target"));
+ const target=document.elementFromPoint(event.clientX,event.clientY)?.closest(".piece");
+ if(target&&board.contains(target)&&Number(target.dataset.slot)!==pointer.slot)target.classList.add("drop-target");
+}
+function endPointer(event){
+ if(!pointer||event.pointerId!==pointer.id)return;
+ const from=pointer.slot,moved=pointer.moved;
+ const target=moved?document.elementFromPoint(event.clientX,event.clientY)?.closest(".piece"):null;
+ cancelPointer();
+ if(!moved)return;
+ skipClick=true;setTimeout(()=>skipClick=false,0);
+ if(target&&board.contains(target)){
+  const to=Number(target.dataset.slot);
+  if(to!==from)swap(from,to);else announce("Escolha outra posição para trocar a peça.");
+ }else announce("Arraste e solte sobre outra peça ou selecione duas peças por toque.","warn");
+}
+function persist(){
+ if(!service||!revision||disposed)return;
+ const value=getState();
+ writeQueue=writeQueue.then(async()=>{
+  if(!revision)return;
+  const current=revision.data&&typeof revision.data==="object"&&!Array.isArray(revision.data)?revision.data:{};
+  revision=await service.save({version:revision.version,location:"games/jigsaw",data:{...current,jigsawImageExample:value}});
+ }).catch(async()=>{
+  try{
+   const newest=await service.load();
+   revision=newest;
+   const remote=newest.data?.jigsawImageExample;
+   if(remote&&restoreState(remote)){
+    announce("O progresso foi modificado em outra janela. Recuperei a versão salva mais recente.","warn");
+   }else{
+    announce("Não foi possível sincronizar o progresso com o Moodle. A atividade permanece disponível nesta página.","warn");
+   }
+  }catch(_){revision=null;announce("Não foi possível salvar o progresso no Moodle; esta tentativa continua funcionando aqui.","warn");}
+ });
+}
+async function init(){
+ if(!validate(config)){announce("Configuração de quebra-cabeça inválida.","warn");return;}
+ const template=$("picture-source");
+ if(!template?.content.firstElementChild){announce("A ilustração não está disponível.","warn");return;}
+ const source=new XMLSerializer().serializeToString(template.content.firstElementChild);
+ imageURL="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+ const check=new Image();
+ check.onload=()=>{
+  if(disposed)return;
+  if(check.naturalWidth!==config.image.width||check.naturalHeight!==config.image.height){
+   announce("A ilustração foi carregada com dimensões inesperadas.","warn");return;
+  }
+  reference.src=imageURL;
+  reset(config.settings.rows);
+  if(service){service.load().then(saved=>{
+    if(disposed)return;revision=saved;
+    const restored=saved.data?.jigsawImageExample;
+    if(restored&&game.moves===0&&restoreState(restored))announce("Seu quebra-cabeça anterior foi recuperado. Continue de onde parou.");
+   }).catch(()=>announce("O progresso não pôde ser carregado do Moodle; você pode continuar a atividade.","warn"));}
+ };
+ check.onerror=()=>announce("Não foi possível carregar a ilustração. Reabra a atividade para tentar novamente.","warn");
+ check.src=imageURL;
+}
+board.addEventListener("click",event=>{
+ if(skipClick)return;
+ const tile=event.target.closest(".piece");
+ if(tile&&board.contains(tile))handleAction("select",Number(tile.dataset.slot));
+});
+board.addEventListener("pointerdown",startPointer);
+document.addEventListener("pointermove",movePointer);
+document.addEventListener("pointerup",endPointer);
+document.addEventListener("pointercancel",cancelPointer);
+levelControl.addEventListener("change",()=>reset(Number(levelControl.value)));
+$("show-numbers").addEventListener("change",render);
+resetButton.addEventListener("click",()=>reset(game.level));
+undoButton.addEventListener("click",()=>{
+ if(!history.length)return;
+ const previous=history.pop();
+ game.positions=previous.positions;game.moves=previous.moves;selected=null;
+ render();persist();announce("Última troca desfeita. Você pode tentar outra combinação.");
+});
+window.addEventListener("pagehide",cancelPointer);
+init();
+})();</script>
+</body>
+</html>
