@@ -13,7 +13,6 @@ const bridge = fs.readFileSync(path.join(__dirname, "../../amd/src/bridge.js"), 
 test("sandbox SDK keeps credentials outside the iframe and matches parent messages", async() => {
     const events = {};
     const calls = [];
-    const logs = [];
     const parent = {
         postMessage: (message) => calls.push(message)
     };
@@ -22,11 +21,8 @@ test("sandbox SDK keeps credentials outside the iframe and matches parent messag
         addEventListener: (type, callback) => { events[type] = callback; }
     };
     vm.runInNewContext(sdk, {
-        window, setTimeout, clearTimeout, Map, Math, Object, Error, String,
-        console: {log: (...parts) => logs.push(parts.join(" "))}
+        window, setTimeout, clearTimeout, Map, Math, Object, Error, String
     });
-    assert.ok(logs.some((line) => line.includes("[mod_mcp/sdk] Início:")));
-    assert.ok(logs.some((line) => line.includes("API window.MoodleMCP registrada")));
     assert.equal(window.MoodleMCP.sesskey, undefined);
     assert.equal(typeof window.MoodleMCP.course.getNavigation, "function");
     const result = window.MoodleMCP.progress.load();
@@ -82,7 +78,6 @@ test("parent bridge rejects messages from another window and never trusts reques
 test("sandbox SDK tracks the real height, including later growth and shrinkage", () => {
     const events = {};
     const messages = [];
-    const logs = [];
     let resizeObserver;
     let mutationObserver;
     const parent = {postMessage: (message) => messages.push(message)};
@@ -111,13 +106,8 @@ test("sandbox SDK tracks the real height, including later growth and shrinkage",
         }
     };
     vm.runInNewContext(sdk, {
-        window, setTimeout, clearTimeout, Map, Math, Object, Error, String, Number,
-        console: {log: (...parts) => logs.push(parts.join(" "))}
+        window, setTimeout, clearTimeout, Map, Math, Object, Error, String, Number
     });
-    assert.ok(logs.some((line) => line.includes("Inicializando medição automática")));
-    assert.ok(logs.some((line) => line.includes("ResizeObserver registrado")));
-    assert.ok(logs.some((line) => line.includes("MutationObserver registrado")));
-    assert.ok(logs.some((line) => line.includes("Enviando nova altura ao parent")));
     assert.equal(messages[0].type, "resize");
     assert.equal(messages[0].height, 857);
 
@@ -171,8 +161,7 @@ test("sandbox SDK shrinks even when html.scrollHeight reflects the old iframe vi
         }
     };
     vm.runInNewContext(sdk, {
-        window, setTimeout, clearTimeout, Map, Math, Object, Error, String, Number,
-        console: {log: () => {}}
+        window, setTimeout, clearTimeout, Map, Math, Object, Error, String, Number
     });
     assert.equal(messages[0].height, 8408);
 
