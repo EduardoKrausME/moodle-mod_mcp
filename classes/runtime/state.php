@@ -55,13 +55,14 @@ final class state {
         global $DB;
         $record = $DB->get_record("mcp_state", ["mcpid" => $mcpid, "userid" => $userid]);
         if (!$record) {
-            return ["version" => 0, "location" => "", "data" => [], "completed" => false];
+            return ["version" => 0, "location" => "", "data" => [], "userdata" => [], "completed" => false];
         }
         $same = (int)$record->revisionid === $revision;
         return [
             "version" => (int)$record->version,
             "location" => $same ? $record->location : "",
             "data" => $same ? (json_decode($record->statejson, true) ?: []) : [],
+            "userdata" => $same ? (json_decode($record->userdatajson ?? "{}", true) ?: []) : [],
             "completed" => (bool)$record->completed,
         ];
     }
@@ -74,6 +75,11 @@ final class state {
         $location = $payload["location"] ?? "";
         $data = $payload["data"] ?? [];
         $expected = $payload["version"] ?? null;
+        $userdata = $payload["userdata"] ?? null;
+        if ($userdata !== null && (!is_array($userdata) || strlen(json_encode(
+                $userdata, JSON_INVALID_UTF8_SUBSTITUTE)) > 131072)) {
+            throw new moodle_exception("invaliddata");
+        }
         if (!is_string($location) || strlen($location) > 255 ||
                 !is_array($data) || !is_int($expected) || $expected < 0) {
             throw new moodle_exception("invaliddata");
@@ -83,22 +89,28 @@ final class state {
             throw new moodle_exception("invaliddata");
         }
         return self::locked($mcpid, $userid, function () use (
-                $DB, $mcpid, $userid, $revision, $location, $json, $expected) {
+                $DB, $mcpid, $userid, $revision, $location, $json, $expected, $userdata) {
             $record = $DB->get_record("mcp_state", ["mcpid" => $mcpid, "userid" => $userid]);
             $version = $record ? (int)$record->version : 0;
             if ($version !== $expected) {
                 throw new moodle_exception("progressconflict", "mcp");
             }
             if ($record) {
+                $newuserdata = $userdata === null ?
+                    ($record->revisionid == $revision ? $record->userdatajson : null) :
+                    json_encode($userdata, JSON_INVALID_UTF8_SUBSTITUTE);
                 $DB->update_record("mcp_state", (object)[
                     "id" => $record->id, "revisionid" => $revision,
                     "location" => $location, "statejson" => $json,
+                    "userdatajson" => $newuserdata,
                     "version" => $version + 1, "timemodified" => time(),
                 ]);
             } else {
                 $DB->insert_record("mcp_state", (object)[
                     "mcpid" => $mcpid, "userid" => $userid, "revisionid" => $revision,
                     "location" => $location, "statejson" => $json,
+                    "userdatajson" => $userdata === null ? null :
+                        json_encode($userdata, JSON_INVALID_UTF8_SUBSTITUTE),
                     "completed" => 0, "version" => 1, "timemodified" => time(),
                 ]);
             }
@@ -197,8 +209,39 @@ final class state {
             } else {
                 $DB->insert_record("mcp_state", (object)[
                     "mcpid" => $mcpid, "userid" => $userid, "revisionid" => $revision,
-                    "location" => "", "statejson" => "{}", "completed" => 1,
+                    "location" => "", "statejson" => "{}", "userdatajson" => null,
+                    "completed" => 1,
                     "version" => 1, "timemodified" => time(),
+                ]);
+            }
+        });
+    }
+
+    /**
+     * Mirror server-validated quiz answers into the separate per-user JSON column.
+     * Grades remain in mcp_attempts and are never calculated from client values.
+     */
+    public static function save_answers(int $mcpid, int $userid, int $revision, array $answers): void {
+        global $DB;
+        self::locked($mcpid, $userid, function () use ($DB, $mcpid, $userid, $revision, $answers) {
+            $record = $DB->get_record("mcp_state", ["mcpid" => $mcpid, "userid" => $userid]);
+            $userdata = $record && (int)$record->revisionid === $revision ?
+                (json_decode($record->userdatajson ?? "{}", true) ?: []) : [];
+            $userdata["quiz"] = ["answers" => $answers];
+            $json = json_encode($userdata, JSON_INVALID_UTF8_SUBSTITUTE);
+            if ($json === false || strlen($json) > 131072) {
+                throw new \moodle_exception("invaliddata");
+            }
+            if ($record) {
+                $DB->update_record("mcp_state", (object)[
+                    "id" => $record->id, "revisionid" => $revision, "userdatajson" => $json,
+                    "version" => (int)$record->version + 1, "timemodified" => time(),
+                ]);
+            } else {
+                $DB->insert_record("mcp_state", (object)[
+                    "mcpid" => $mcpid, "userid" => $userid, "revisionid" => $revision,
+                    "location" => "", "statejson" => "{}", "userdatajson" => $json,
+                    "completed" => 0, "version" => 1, "timemodified" => time(),
                 ]);
             }
         });

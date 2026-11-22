@@ -56,7 +56,7 @@ final class dispatch extends external_api {
         $params = self::validate_parameters(self::execute_parameters(), [
             "cmid" => $cmid, "action" => $action, "payload" => $payload, "preview" => $preview,
         ]);
-        if (strlen($payload) > 16384 || strlen($action) > 64 ||
+        if (strlen($payload) > 262144 || strlen($action) > 64 ||
                 !preg_match("/^[a-z][a-zA-Z.]+$/", $action)) {
             throw new moodle_exception("invalidparameter");
         }
