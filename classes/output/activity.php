@@ -158,8 +158,8 @@ final class activity {
      * @return string HTML with a trusted SDK script reference.
      */
     public static function inject_sdk(string $content): string {
-        $sdkurl = (new moodle_url("/mod/mcp/sdk.js"))->out(false);
-        $bootstrap = '<script src="' . s($sdkurl) . '"></script>';
+        $sdkurl = new moodle_url("/mod/mcp/sdk.js");
+        $bootstrap = '<script src="' . $sdkurl->out(false) . '"></script>';
         $bootstrap .= "<style>:root{background:transparent!important;}html,body{background:transparent!important;}</style>";
 
         // Preserve the doctype even if the document has no head element.
