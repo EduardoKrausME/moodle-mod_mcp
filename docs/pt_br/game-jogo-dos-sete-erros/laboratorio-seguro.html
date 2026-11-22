@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jogo dos sete erros - Inspeção no laboratório</title><style>
+:root{color-scheme:light;--bg:#edf5f8;--paper:#fff;--ink:#203b52;--muted:#60768b;--line:#d7e3ed;--blue:#155e91;--blue-soft:#e8f4ff;--mint:#126d54;--mint-bg:#e4f7ee;--amber:#885827;--amber-bg:#fff3e4;--red:#a84434;--shadow:0 10px 30px #2344650c;font:16px/1.53 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit;cursor:pointer}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #d88724;outline-offset:3px}button:disabled{opacity:.46;cursor:not-allowed}
+main{max-width:1230px;margin:auto;padding:28px 18px 43px}.eyebrow{color:var(--blue);font-size:11px;font-weight:850;letter-spacing:1.4px;text-transform:uppercase;margin:0 0 8px}
+h1{font-size:clamp(29px,4vw,43px);letter-spacing:-.8px;line-height:1.15;margin:0 0 11px}.intro{font-size:14px;color:var(--muted);max-width:1060px;margin:0 0 18px}
+.metrics{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:13px}.metric{min-width:110px;border:1px solid var(--line);background:var(--paper);border-radius:11px;padding:8px 14px}.metric small{font-size:11px;display:block;color:var(--muted)}.metric strong{font-variant-numeric:tabular-nums;font-size:20px}.metrics .note{margin-left:auto}
+.progress{height:9px;border-radius:22px;overflow:hidden;background:#d8e6ee;margin-bottom:18px}.progress span{height:100%;width:0;background:linear-gradient(90deg,#4e9bd7,#30ae89);display:block;transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.48fr) minmax(290px,.8fr);gap:16px;align-items:start}.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:19px;min-width:0}.panel h2{font-size:18px;margin:0 0 10px}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.topline h2{margin:0}.tag{font-size:11px;color:var(--blue);background:var(--blue-soft);border-radius:40px;font-weight:820;padding:6px 10px}
+.scene-viewport{width:100%;max-height:72vh;overflow:auto;border:1px solid #b8cfdd;border-radius:13px;background:#e4eff4;overscroll-behavior:contain;touch-action:pan-x pan-y;scrollbar-gutter:stable;margin:13px 0 8px}
+.artwork{width:100%;position:relative;min-width:100%;cursor:crosshair;user-select:none}.artwork svg{width:100%;height:auto;display:block;aspect-ratio:1000/620;pointer-events:none}
+.dot{position:absolute;left:var(--x);top:var(--y);width:34px;height:34px;display:grid;place-items:center;transform:translate(-50%,-50%);border-radius:50%;background:#147b63e8;border:3px solid #e7fff5;box-shadow:0 0 0 4px #09573e88;font-size:17px;font-weight:900;color:white;pointer-events:none}
+.hint-area{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);border:3px dashed #eab04c;background:#f0bc4140;outline:1px solid #6e561c;pointer-events:none;border-radius:13px}
+.zoom-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 12px}.zoom-row span{font-size:12px;color:var(--muted);margin-right:auto}
+.btn{border-radius:10px;padding:10px 14px;font-size:12px;font-weight:840;color:#fff;background:var(--blue);border:1px solid var(--blue)}.btn.secondary{color:var(--blue);background:var(--paper)}.btn.quiet{color:var(--blue);background:#f0f7fc;border-color:#bdd7e8}.btn:hover:not(:disabled){filter:brightness(.92)}
+.feedback{padding:14px 15px;border-radius:11px;background:#eaf3fa;border:1px solid #bad6e6;color:#345e7c;font-size:13px;line-height:1.6;min-height:75px;margin:14px 0 0}
+.feedback strong{font-size:14px;display:block;margin-bottom:3px}.feedback.good{background:var(--mint-bg);border-color:#a3d3bb;color:var(--mint)}.feedback.warn{background:var(--amber-bg);border-color:#e6c39e;color:var(--amber)}
+.found-list{display:grid;gap:8px;margin:13px 0 0}.found-item{border-radius:10px;background:#f5f9fc;border:1px solid var(--line);padding:11px 12px}
+.found-item strong{display:block;font-size:13px}.found-item p{font-size:12px;line-height:1.57;color:var(--muted);margin:5px 0 0}
+.inspection{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.inspect-btn{min-width:0;min-height:64px;border:2px solid #c9dbe8;border-radius:11px;background:#f8fbff;text-align:left;padding:10px 12px;color:var(--ink);font-size:12px;font-weight:780;line-height:1.38}
+.inspect-btn:hover{background:var(--blue-soft);border-color:#85b2d3}.inspect-btn[aria-pressed=true]{border-color:#4eae8d;background:var(--mint-bg);color:var(--mint)}
+.inspect-btn .where{display:block;font-size:10px;color:var(--muted);font-weight:720;margin-top:4px}.inspect-btn .status{display:block;font-size:10px;font-weight:870;margin-top:4px}
+.info{background:var(--blue-soft);border-radius:11px;padding:12px 13px;font-size:12px;color:#295c81;line-height:1.6;margin-top:14px}.info strong{display:block;margin-bottom:4px}
+.rules{padding-left:19px;color:var(--muted);font-size:12px}.rules li{margin:8px 0}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:13px}.controls .grow{flex:1}
+.end{border-radius:12px;border:1px solid #9dceae;background:var(--mint-bg);color:var(--mint);padding:15px;margin:14px 0}.end strong{display:block;font-size:20px}.end p{font-size:13px;line-height:1.65;margin:6px 0 0}
+.review{display:grid;gap:9px;margin-top:15px}.review-card{border-radius:11px;border:1px solid #b2d8c0;background:#effaf3;padding:12px}.review-card strong{display:block;color:#1d664b;font-size:13px}.review-card p{font-size:12px;color:#37604c;margin:6px 0 0;line-height:1.6}
+.confirm{border:1px solid #dcb384;background:var(--amber-bg);color:var(--amber);border-radius:11px;padding:12px;margin-top:13px;font-size:12px}.confirm p{margin:0 0 9px}
+.note{font-size:11px;line-height:1.65;color:var(--muted);margin:13px 0 0}
+[hidden]{display:none!important}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.panel{padding:15px}.scene-viewport{max-height:75vh}}
+@media(max-width:550px){main{padding:19px 10px 29px}.panel{padding:11px}.inspection{gap:7px}.inspect-btn{padding:8px;min-height:66px;font-size:11px}.dot{width:27px;height:27px;font-size:14px}.metric{min-width:98px;padding:7px 11px}.metrics .note{margin-left:0}.controls .btn{flex-grow:1}}
+@media(max-width:380px){.inspection{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-contrast:more){.inspect-btn{border-color:var(--blue)}.dot{border:4px solid #fff;box-shadow:0 0 0 4px #114a3a}.hint-area{border-width:5px}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#182b3b;--paper:#283c51;--ink:#eaf5ff;--muted:#b9cada;--line:#4c6278;--blue:#b9deff;--blue-soft:#344c6a;--mint:#b0f4d4;--mint-bg:#294f41;--amber:#f5d1a6;--amber-bg:#4b3c2d;--shadow:0 8px 25px #0a152550}
+.scene-viewport{background:#2f4b60;border-color:#65859a}.inspect-btn{background:#31495e;border-color:#58728c}.inspect-btn:hover{background:#3b5c79}.inspect-btn[aria-pressed=true]{background:var(--mint-bg);color:var(--mint)}.btn.quiet{background:#344f68;color:#d4edff;border-color:#5b839d}
+.feedback{background:#34526b;color:#dbecff;border-color:#60819a}.feedback.good{background:var(--mint-bg);color:var(--mint)}.feedback.warn{background:var(--amber-bg);color:var(--amber)}
+.found-item{background:#30465c}.info{color:#dbecff}.review-card{background:#30513f;border-color:#58866c}.review-card strong{color:#c7ffe0}.review-card p{color:#c4edda}.end{color:var(--mint)}
+}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 25 · Segurança e observação</p>
+<h1>Jogo dos sete erros: Inspeção no laboratório</h1>
+<p class="intro">Nesta ilustração de um laboratório escolar há exatamente sete práticas inseguras. Inspecione a cena e toque nas regiões suspeitas, ou use a lista textual de setores e objetos para investigar sem depender da visão ou de apontamentos precisos. Cada erro identificado recebe uma explicação; objetos corretos também podem ser inspecionados.</p>
+<div class="metrics"><div class="metric"><small>Problemas encontrados</small><strong id="found-count">0 / 7</strong></div><div class="metric"><small>Dicas usadas</small><strong id="hints-count">0</strong></div><div class="metric"><small>Objetos sem erro inspecionados</small><strong id="checked-count">0</strong></div><span class="note">Sem cronômetro ou nota.</span></div>
+<div class="progress" id="progress" role="progressbar" aria-label="Problemas encontrados" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0"><span id="progress-bar"></span></div>
+<div class="layout">
+<section class="panel" aria-labelledby="scene-heading">
+ <div class="topline"><h2 id="scene-heading">Cena para inspecionar</h2><span class="tag" id="inspection-status">Procure sete situações</span></div>
+ <p class="note">Ilustração vetorial original, incorporada ao HTML. Use o zoom para explorar a cena; ao ampliar, a imagem e os indicadores são redimensionados juntos.</p>
+ <div id="scene-viewport" class="scene-viewport" role="region" aria-label="Cena ilustrada; rolagem disponível ao ampliar" tabindex="0">
+  <div id="artwork" class="artwork"><svg id="lab-scene" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" role="img" aria-labelledby="scene-title scene-description">
+<title id="scene-title">Laboratório escolar em atividade</title>
+<desc id="scene-description">Ilustração de ambiente escolar com bancada, duas pessoas trabalhando, queimador, recipientes, pia, janela e porta de saída. As situações devem ser inspecionadas por imagem ou pela lista de objetos.</desc>
+<defs>
+ <linearGradient id="wall" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#f2fafc"/><stop offset="1" stop-color="#d9eaf0"/></linearGradient>
+ <linearGradient id="floor" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#e4ebeb"/><stop offset="1" stop-color="#bacfd0"/></linearGradient>
+ <linearGradient id="bench" x1="0" x2="1"><stop stop-color="#d6b28b"/><stop offset="1" stop-color="#b78968"/></linearGradient>
+ <linearGradient id="window" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#a7d9ed"/><stop offset="1" stop-color="#eef9fc"/></linearGradient>
+</defs>
+<rect width="1000" height="620" fill="#eaf4f7"/>
+<rect width="1000" height="476" fill="url(#wall)"/>
+<path d="M0 468H1000V620H0Z" fill="url(#floor)"/>
+<path d="M0 476H1000" stroke="#8da9ad" stroke-width="7"/>
+<path d="M0 545L1000 512M0 601L1000 567" stroke="#b4cacc" stroke-width="2" opacity=".7"/>
+<path d="M160 476L80 620M405 476L360 620M660 476L690 620M900 476L982 620" stroke="#c7d7d8" stroke-width="2"/>
+<!-- Window with ventilation opening -->
+<rect x="62" y="68" width="235" height="134" rx="9" fill="#819aa7"/>
+<rect x="70" y="76" width="219" height="118" rx="4" fill="url(#window)"/>
+<path d="M180 77V192M71 141H288" stroke="#eaf4fb" stroke-width="8"/>
+<path d="M83 181L154 107M202 177L268 108" stroke="#fff" stroke-width="6" opacity=".5"/>
+<path d="M67 68H292" stroke="#4f8697" stroke-width="8" stroke-linecap="round"/>
+<!-- Instructions -->
+<rect x="351" y="70" width="205" height="117" rx="8" fill="#6e95a5"/>
+<rect x="358" y="77" width="191" height="103" rx="5" fill="#fbf7dc"/>
+<text x="453" y="101" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" font-weight="800" fill="#325d6a">ORIENTAÇÕES</text>
+<path d="M378 120H519M378 140H514M378 160H484" stroke="#99b6b4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="374" cy="120" r="4" fill="#258879"/><circle cx="374" cy="140" r="4" fill="#258879"/><circle cx="374" cy="160" r="4" fill="#258879"/>
+<!-- First aid safe box -->
+<rect x="663" y="95" width="83" height="91" rx="9" fill="#e8f7ed" stroke="#6a9f85" stroke-width="6"/>
+<rect x="695" y="113" width="19" height="55" rx="4" fill="#33966c"/>
+<rect x="677" y="131" width="55" height="19" rx="4" fill="#33966c"/>
+<!-- Exit door -->
+<rect x="850" y="131" width="114" height="321" rx="8" fill="#577d89"/>
+<rect x="860" y="142" width="95" height="300" rx="4" fill="#d4e3e0"/>
+<path d="M863 151H951V437H863" fill="none" stroke="#a7c2c5" stroke-width="4"/>
+<rect x="871" y="89" width="89" height="34" rx="4" fill="#2e9971"/>
+<text x="916" y="112" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="900" fill="#fff">SAÍDA</text>
+<circle cx="871" cy="307" r="7" fill="#d7b767" stroke="#9d8b50" stroke-width="2"/>
+<!-- Closet -->
+<rect x="39" y="243" width="102" height="225" rx="8" fill="#a3bdc6" stroke="#6f9eaa" stroke-width="6"/>
+<path d="M89 246V463" stroke="#6d98a4" stroke-width="5"/>
+<rect x="76" y="350" width="6" height="41" rx="3" fill="#eff8f8"/>
+<rect x="97" y="350" width="6" height="41" rx="3" fill="#eff8f8"/>
+<!-- People -->
+<!-- Left learner wearing lab coat but NO safety goggles -->
+<path d="M244 305Q255 260 295 258Q336 256 355 305L358 365H235Z" fill="#f9fbff" stroke="#83a9ba" stroke-width="5"/>
+<path d="M294 260L280 310L298 332L320 310L309 261" fill="#bdd8e4" stroke="#80a5b4" stroke-width="2"/>
+<path d="M298 330V364" stroke="#6d9aad" stroke-width="4"/>
+<path d="M267 296L248 341L227 348" stroke="#f9fbff" stroke-width="22" stroke-linecap="round"/>
+<path d="M326 295L350 345L380 353" stroke="#f9fbff" stroke-width="22" stroke-linecap="round"/>
+<ellipse cx="300" cy="209" rx="43" ry="54" fill="#e5b28f"/>
+<path d="M257 203Q250 152 302 154Q338 157 342 204Q326 189 317 171Q279 193 258 190Z" fill="#533c34"/>
+<ellipse cx="287" cy="210" rx="5" ry="4" fill="#4e3931"/><ellipse cx="311" cy="210" rx="5" ry="4" fill="#4e3931"/>
+<path d="M296 219L301 220M288 233Q301 241 315 230" fill="none" stroke="#ae6c57" stroke-width="3" stroke-linecap="round"/>
+<!-- Right learner with long loose hair close to burner -->
+<path d="M397 305Q413 259 449 261Q490 263 508 304L502 368H388Z" fill="#f7fbff" stroke="#82a9b8" stroke-width="5"/>
+<path d="M449 266V365" stroke="#7c9fad" stroke-width="4"/>
+<ellipse cx="448" cy="207" rx="38" ry="48" fill="#e4b291"/>
+<path d="M410 205Q405 150 446 153Q497 151 492 210L475 275Q455 266 461 240Q472 201 466 181Q447 199 415 192L416 274Q397 271 403 242Z" fill="#503a30"/>
+<ellipse cx="434" cy="211" rx="4" ry="4" fill="#51352c"/><ellipse cx="457" cy="211" rx="4" ry="4" fill="#51352c"/>
+<path d="M440 231Q447 237 454 231" stroke="#a8715a" stroke-width="3" fill="none"/>
+<path d="M407 302L390 348M489 302L511 350" stroke="#f7fbff" stroke-width="21" stroke-linecap="round"/>
+<!-- Bench -->
+<rect x="117" y="358" width="635" height="42" rx="9" fill="url(#bench)" stroke="#946c51" stroke-width="5"/>
+<rect x="140" y="400" width="32" height="94" rx="5" fill="#987457"/>
+<rect x="693" y="400" width="32" height="94" rx="5" fill="#987457"/>
+<rect x="166" y="418" width="529" height="19" rx="4" fill="#aa8b71"/>
+<!-- Drink: wrong -->
+<path d="M129 356L138 410Q153 423 170 410L177 356Z" fill="#ffb06c" stroke="#a95f41" stroke-width="4"/>
+<path d="M132 362H173M141 382H164" stroke="#fff0cf" stroke-width="5"/>
+<path d="M165 354L187 322" stroke="#d9f1ed" stroke-width="7" stroke-linecap="round"/>
+<ellipse cx="153" cy="355" rx="26" ry="6" fill="#d87b56"/>
+<!-- burner on bench -->
+<ellipse cx="448" cy="362" rx="47" ry="9" fill="#6a929b"/>
+<rect x="435" y="319" width="25" height="47" rx="4" fill="#597785"/>
+<path d="M448 319Q426 302 443 283Q449 272 448 261Q473 295 455 318Z" fill="#ff993b" stroke="#f0b44f" stroke-width="2"/>
+<path d="M448 309Q441 300 451 285Q459 302 448 309" fill="#ffe2a0"/>
+<!-- proper bottles and gloves -->
+<path d="M550 326V355Q550 369 570 369Q590 369 590 352V326L580 315V296H560V315Z" fill="#bce9e3" stroke="#5b9ba2" stroke-width="4"/>
+<rect x="553" y="334" width="34" height="21" rx="3" fill="#f3f7ee" stroke="#8da4a5"/>
+<text x="570" y="349" font-size="11" text-anchor="middle" font-family="Arial,sans-serif" fill="#416a76">H₂O</text>
+<rect x="546" y="291" width="48" height="7" rx="2" fill="#548c9c"/>
+<rect x="584" y="358" width="42" height="6" rx="3" fill="#617e86"/>
+<path d="M595 344Q587 335 583 342L589 357L608 364L617 355L620 341L614 339L610 350L606 334L599 335Z" fill="#7ecbc4" stroke="#429088" stroke-width="2"/>
+<!-- OPEN UNLABELED reagent -->
+<path d="M633 312H664V337Q676 350 671 367H627Q622 351 633 336Z" fill="#87caeb" stroke="#397f9f" stroke-width="5"/>
+<ellipse cx="648" cy="318" rx="17" ry="5" fill="#47799b"/>
+<path d="M635 340Q648 343 660 340" stroke="#dfebf3" stroke-width="3"/>
+<rect x="670" y="301" width="29" height="10" rx="4" fill="#466478" transform="rotate(22 684 306)"/>
+<path d="M626 362H671" stroke="#367da8" stroke-width="3"/>
+<!-- Sink with faucet and electric lead close to water -->
+<rect x="751" y="350" width="111" height="62" rx="12" fill="#8cb7c6" stroke="#538495" stroke-width="6"/>
+<rect x="766" y="364" width="82" height="34" rx="9" fill="#d3ecf1"/>
+<path d="M817 364V329Q816 314 832 314Q848 314 848 330" fill="none" stroke="#5c8b98" stroke-width="11" stroke-linecap="round"/>
+<path d="M846 331V348" stroke="#74bfe0" stroke-width="6" stroke-linecap="round"/>
+<ellipse cx="817" cy="389" rx="11" ry="4" fill="#91c7dc"/>
+<rect x="751" y="412" width="108" height="22" rx="3" fill="#98b0b8"/>
+<path d="M781 434L781 484M845 434V488" stroke="#879ba7" stroke-width="13"/>
+<!-- electrical lead -->
+<rect x="839" y="442" width="28" height="31" rx="4" fill="#e6e8db" stroke="#657c85" stroke-width="3"/>
+<circle cx="847" cy="455" r="3" fill="#47636d"/><circle cx="859" cy="455" r="3" fill="#47636d"/>
+<path d="M853 471Q819 489 793 437Q776 418 766 399" fill="none" stroke="#354c5d" stroke-width="7" stroke-linecap="round"/>
+<rect x="756" y="385" width="19" height="14" rx="3" fill="#405b69"/>
+<!-- Safe lidded trash bin -->
+<rect x="53" y="507" width="74" height="91" rx="8" fill="#568a87"/>
+<rect x="45" y="495" width="91" height="18" rx="7" fill="#346f70"/>
+<path d="M80 528V576M99 528V576" stroke="#8ec1bd" stroke-width="6" stroke-linecap="round"/>
+<!-- Unattended spill -->
+<path d="M450 552Q467 533 492 541Q512 529 532 548Q566 539 572 558Q562 575 532 569Q507 582 479 566Q459 569 450 552Z" fill="#4bb0d3" opacity=".78" stroke="#2586ab" stroke-width="4"/>
+<path d="M478 547L494 543M523 555L540 554" stroke="#e5f8fe" stroke-width="5" stroke-linecap="round"/>
+<!-- Blocked exit boxes -->
+<rect x="883" y="277" width="67" height="67" rx="3" fill="#c58e62" stroke="#95613d" stroke-width="4"/>
+<path d="M912 277V343M882 295H950" stroke="#987055" stroke-width="4"/>
+<rect x="864" y="334" width="97" height="71" rx="4" fill="#d6ae76" stroke="#97704a" stroke-width="5"/>
+<path d="M911 336V405M868 357H958" stroke="#a47b55" stroke-width="4"/>
+<path d="M874 379L888 387M928 374L942 383" stroke="#e3c198" stroke-width="4"/>
+<!-- Foreground safety-colored stripe as scenery, not a clue -->
+<path d="M0 610H1000" stroke="#94babc" stroke-width="4"/>
+</svg><div id="markers" aria-hidden="true"></div></div>
+ </div>
+ <div class="zoom-row"><span id="zoom-label">100%</span>
+  <button id="zoom-out" class="btn secondary" type="button" disabled>Reduzir zoom</button>
+  <button id="zoom-in" class="btn secondary" type="button">Ampliar zoom</button>
+ </div>
+ <div class="controls">
+  <button id="hint" type="button" class="btn quiet" disabled>Mostrar dica de setor</button><span class="grow"></span>
+  <button id="reset" type="button" class="btn secondary" disabled>Recomeçar inspeção</button>
+ </div>
+ <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">
+  <strong id="feedback-heading">Orientação</strong><span id="feedback-message">Preparando a inspeção...</span>
+ </div>
+ <div id="completion" class="end" role="status" tabindex="-1" hidden>
+  <strong>Os sete erros foram identificados!</strong>
+  <p>Você reconheceu todos os sete pontos de atenção. Revise as explicações e compare os cuidados necessários com o procedimento correto. A conclusão é somente formativa, sem nota oficial do Moodle.</p>
+  <div id="review" class="review" aria-label="Resumo dos sete problemas e suas explicações"></div>
+ </div>
+ <div id="reset-confirm" class="confirm" role="group" aria-label="Confirmar reinício da atividade" hidden>
+  <p>Recomeçar remove os sete erros marcados, os objetos inspecionados e as dicas consultadas. Deseja continuar?</p>
+  <div class="controls"><button id="confirm-reset" type="button" class="btn">Confirmar reinício</button><button id="cancel-reset" type="button" class="btn secondary">Cancelar</button></div>
+ </div>
+</section>
+<aside class="panel" aria-labelledby="guide-heading">
+ <h2 id="guide-heading">Inspeção alternativa por objetos</h2>
+ <p class="note">A lista inclui objetos seguros e os objetos que contêm os sete problemas. Use Tab e Enter/Espaço para inspecionar. A mesma validação é usada na imagem e aqui; uma região correta só conta uma vez.</p>
+ <div id="inspection" class="inspection" role="group" aria-label="Lista acessível de objetos e setores para inspecionar"></div>
+ <div class="info"><strong>Como funciona?</strong>Escolha um objeto para verificar seu estado, ou toque na cena. Acertos ficam marcados; repetir um acerto permite reler a explicação sem ganhar outro ponto. A dica indica um setor mais amplo, sem identificar automaticamente o erro.</div>
+ <h2 style="margin-top:18px">Problemas já identificados</h2>
+ <div id="found-list" class="found-list" aria-label="Lista de problemas encontrados"><p class="note">Nenhum problema identificado até agora.</p></div>
+ <h2 style="margin-top:18px">Critérios de inspeção</h2>
+ <ol class="rules">
+  <li>Procure riscos ligados a equipamentos, substâncias, organização do espaço e conduta no laboratório.</li>
+  <li>Marque a região suspeita na imagem ou selecione seu objeto na lista.</li>
+  <li>Leia a explicação de cada problema e continue até encontrar todos os sete.</li>
+  <li>Se precisar, use a dica de setor. Ela não registra erros automaticamente.</li>
+  <li>É possível ampliar e rolar a cena sem alterar os pontos já identificados.</li>
+ </ol>
+ <p class="note">Esta é uma cena fictícia para aprendizagem, não um laudo de segurança de um laboratório real. As instruções escolares e os procedimentos institucionais prevalecem.</p>
+</aside></div>
+<p class="note">Imagem utilizada: uma ilustração SVG original de laboratório escolar, incorporada neste arquivo e sem dependências externas. Não são usados áudio, fontes remotas, CDN ou serviços de terceiros. O gabarito no navegador não equivale a avaliação acadêmica oficial.</p>
+</main><script>(function sevenErrorsGame(){
+"use strict";
+const DATA={"type":"seven_errors","title":"Jogo dos sete erros - Inspeção no laboratório","image":{"src":"#lab-scene","alt":"Ilustração panorâmica de um laboratório escolar com duas pessoas, equipamentos de bancada, pia e saída. Observe procedimentos e objetos para encontrar sete situações inseguras."},"settings":{"expectedCount":7,"maxHints":7,"zoomLevels":[1,1.5,2]},"errors":[{"id":"e-oculos","x":0.304,"y":0.349,"radius":0.048,"object":"Rosto da estudante à esquerda","sector":"Setor esquerdo, próximo ao rosto","hintRegion":{"x":0.21,"y":0.23,"w":0.2,"h":0.26},"label":"Ausência de óculos de proteção","explanation":"Em atividades com risco de respingos ou projeções, os olhos precisam de óculos de proteção adequados. A estudante está junto à bancada sem essa proteção."},{"id":"e-cabelo","x":0.448,"y":0.375,"radius":0.048,"object":"Cabelos próximos ao queimador","sector":"Parte central, junto ao queimador","hintRegion":{"x":0.37,"y":0.24,"w":0.18,"h":0.3},"label":"Cabelo solto perto da chama","explanation":"Cabelos compridos devem estar presos e afastados de chamas, fontes de calor e equipamentos móveis, reduzindo o risco de queimaduras ou acidentes."},{"id":"e-bebida","x":0.154,"y":0.622,"radius":0.051,"object":"Copo colorido na bancada esquerda","sector":"Canto esquerdo da bancada","hintRegion":{"x":0.07,"y":0.52,"w":0.18,"h":0.2},"label":"Bebida sobre a bancada de experimentos","explanation":"Não se deve comer ou beber na área de experimentos: copos e recipientes de consumo podem ser contaminados por substâncias químicas ou biológicas."},{"id":"e-frasco","x":0.647,"y":0.566,"radius":0.054,"object":"Frasco azul no centro da bancada","sector":"Centro-direita da bancada","hintRegion":{"x":0.55,"y":0.45,"w":0.2,"h":0.25},"label":"Frasco de reagente aberto e sem identificação","explanation":"Reagentes precisam de identificação adequada e armazenamento conforme suas características; deixar um frasco aberto e sem rótulo aumenta risco de exposição e troca de substâncias."},{"id":"e-cabo","x":0.832,"y":0.718,"radius":0.052,"object":"Cabo e tomada junto à pia","sector":"Área direita, junto à pia","hintRegion":{"x":0.77,"y":0.62,"w":0.16,"h":0.23},"label":"Conexão elétrica próxima à água","explanation":"Cabos, extensões e conexões elétricas devem ficar protegidos de respingos e superfícies molhadas, evitando curto-circuito e choque elétrico."},{"id":"e-piso","x":0.504,"y":0.879,"radius":0.066,"object":"Área azul no piso diante da bancada","sector":"Piso na área central","hintRegion":{"x":0.4,"y":0.78,"w":0.22,"h":0.19},"label":"Derramamento no piso sem isolamento ou limpeza","explanation":"Um derramamento precisa ser sinalizado e tratado conforme o procedimento de segurança e o material envolvido, pois pode provocar escorregões ou exposição."},{"id":"e-saida","x":0.908,"y":0.53,"radius":0.065,"object":"Caixas diante da porta de saída","sector":"Passagem de saída à direita","hintRegion":{"x":0.83,"y":0.4,"w":0.16,"h":0.25},"label":"Saída de emergência obstruída","explanation":"Rotas de fuga e portas de emergência devem permanecer desobstruídas para permitir evacuação segura, inclusive quando a sala está ocupada."}],"decoys":[{"id":"s-armario","object":"Armário de materiais com portas fechadas","sector":"Parede esquerda","explanation":"O armário está fechado, evitando que os materiais fiquem soltos na circulação."},{"id":"s-aviso","object":"Quadro de regras fixado na parede","sector":"Parede superior","explanation":"O quadro de regras está visível e funciona como lembrete das orientações de segurança."},{"id":"s-kit","object":"Estojo identificado de primeiros socorros","sector":"Parede direita","explanation":"O estojo está identificado e pode ser localizado rapidamente; a disponibilidade deve seguir os procedimentos da escola."},{"id":"s-luvas","object":"Par de luvas sobre a bandeja","sector":"Bancada central","explanation":"As luvas estão armazenadas na bandeja de materiais, sem contato com a área do derramamento."},{"id":"s-janela","object":"Janela de ventilação acima da bancada","sector":"Parede superior esquerda","explanation":"A janela permite ventilação do ambiente, embora certos experimentos também exijam exaustão específica."},{"id":"s-lixeira","object":"Lixeira tampada ao lado do armário","sector":"Piso esquerdo","explanation":"A lixeira permanece tampada e fora da passagem, mas resíduos perigosos exigem recipientes específicos."}]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id);
+const controller=new AbortController(),bridge=window.MoodleMCP?.progress;
+const progress=bridge&&typeof bridge.load==="function"&&typeof bridge.save==="function"?bridge:null;
+const storageKey="sevenErrorsLabSafetyV1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,saveQueue=Promise.resolve(),saveStamp=0,zoom=1;
+
+// Pure rules. All hit tests use normalized coordinates, never CSS display pixels.
+function errorById(data,id){return data.errors.find(e=>e.id===id)||null;}
+function decoyById(data,id){return data.decoys.find(e=>e.id===id)||null;}
+function distance(a,b){return Math.hypot(a.x-b.x,a.y-b.y);}
+function validRegion(r,e){
+ return r&&["x","y","w","h"].every(k=>typeof r[k]==="number"&&Number.isFinite(r[k]))&&r.x>=0&&r.y>=0&&r.w>0&&r.h>0&&r.x+r.w<=1&&r.y+r.h<=1&&e.x>=r.x&&e.x<=r.x+r.w&&e.y>=r.y&&e.y<=r.y+r.h;
+}
+function validate(data){
+ if(!data||data.type!=="seven_errors"||typeof data.title!=="string"||!data.title.trim()||!data.image||data.image.src!=="#lab-scene"||typeof data.image.alt!=="string"||!data.image.alt.trim()||!data.settings||data.settings.expectedCount!==7||!Number.isInteger(data.settings.maxHints)||data.settings.maxHints<1||data.settings.maxHints>30||!Array.isArray(data.settings.zoomLevels)||data.settings.zoomLevels.length<2||data.settings.zoomLevels.length>5||data.settings.zoomLevels[0]!==1||data.settings.zoomLevels.some((x,i)=>!Number.isFinite(x)||x<1||x>4||(i&&x<=data.settings.zoomLevels[i-1]))||!Array.isArray(data.errors)||data.errors.length!==7||data.errors.length!==data.settings.expectedCount||!Array.isArray(data.decoys)||data.decoys.length<2||data.decoys.length>15)return false;
+ const ids=new Set(),positions=[];
+ for(const e of data.errors){
+  if(!e||typeof e.id!=="string"||!/^[a-z0-9-]+$/.test(e.id)||ids.has(e.id)||!["object","sector","label","explanation"].every(k=>typeof e[k]==="string"&&e[k].trim().length>=4)||!Number.isFinite(e.x)||!Number.isFinite(e.y)||!Number.isFinite(e.radius)||e.x<0||e.x>1||e.y<0||e.y>1||e.radius<.018||e.radius>.12||e.x-e.radius<0||e.x+e.radius>1||e.y-e.radius<0||e.y+e.radius>1||!validRegion(e.hintRegion,e)||positions.some(x=>distance(x,e)<.018))return false;
+  ids.add(e.id);positions.push(e);
+ }
+ for(const d of data.decoys){
+  if(!d||typeof d.id!=="string"||!/^[a-z0-9-]+$/.test(d.id)||ids.has(d.id)||!["object","sector","explanation"].every(k=>typeof d[k]==="string"&&d[k].trim().length>=4))return false;
+  ids.add(d.id);
+ }
+ return true;
+}
+function toNormalized(clientX,clientY,rect){
+ if(!rect||!Number.isFinite(clientX)||!Number.isFinite(clientY)||!Number.isFinite(rect.left)||!Number.isFinite(rect.top)||!Number.isFinite(rect.width)||!Number.isFinite(rect.height)||rect.width<=0||rect.height<=0)return null;
+ const x=(clientX-rect.left)/rect.width,y=(clientY-rect.top)/rect.height;
+ if(x<0||x>1||y<0||y>1)return null;
+ return {x,y};
+}
+function findRegion(data,state,p){
+ if(!p||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>1||p.y<0||p.y>1)return {kind:"none"};
+ const options=data.errors.map(e=>({id:e.id,d:distance(e,p),r:e.radius})).filter(x=>x.d<=x.r).sort((a,b)=>a.d-b.d);
+ if(!options.length)return {kind:"none"};
+ const nearest=options[0];
+ // A repeat at the discovered center is idempotent even when circles overlap.
+ if(state.found.includes(nearest.id)&&nearest.d<=nearest.r*.3)return {kind:"already",id:nearest.id};
+ const available=options.find(x=>!state.found.includes(x.id));
+ return available?{kind:"error",id:available.id}:{kind:"already",id:nearest.id};
+}
+function initialState(){return {found:[],tried:[],hints:0,highlight:null,complete:false};}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Array.isArray(s.found)||s.found.length>7||new Set(s.found).size!==s.found.length||s.found.some(id=>!errorById(data,id))||!Array.isArray(s.tried)||s.tried.length>data.decoys.length||new Set(s.tried).size!==s.tried.length||s.tried.some(id=>!decoyById(data,id))||!Number.isInteger(s.hints)||s.hints<0||s.hints>data.settings.maxHints||!(s.highlight===null||typeof s.highlight==="string"&&!!errorById(data,s.highlight)&&!s.found.includes(s.highlight))||typeof s.complete!=="boolean"||s.complete!==(s.found.length===7))return false;
+ if(s.complete&&s.highlight!==null)return false;
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(),changed:true,persist:true,kind:"neutral",message:"Inspeção reiniciada. Todos os sete problemas estão novamente disponíveis."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"Estado inválido. Nenhum resultado foi alterado."};
+ if(action?.type==="hint"){
+  if(s.complete)return {state:s,changed:false,kind:"good",message:"Todos os sete erros já foram encontrados."};
+  if(s.hints>=data.settings.maxHints)return {state:s,changed:false,kind:"neutral",message:"Você já consultou todas as dicas disponíveis."};
+  const pending=data.errors.filter(e=>!s.found.includes(e.id)),next=pending[s.hints%pending.length];
+  const result={...s,hints:s.hints+1,highlight:next.id};
+  return {state:result,changed:true,persist:true,kind:"neutral",message:"Dica "+result.hints+": inspecione "+next.sector+". O local foi realçado, mas nenhum erro foi registrado automaticamente."};
+ }
+ if(action?.type==="inspect"){
+  const id=action.id,e=errorById(data,id),d=decoyById(data,id);
+  if(e){
+   if(s.found.includes(id))return {state:s,changed:false,kind:"good",message:"Já identificado: "+e.label+". "+e.explanation};
+   if(s.complete)return {state:s,changed:false,kind:"neutral",message:"Inspeção concluída. Consulte o resumo."};
+   const found=[...s.found,id],complete=found.length===7;
+   const next={...s,found,highlight:s.highlight===id||complete?null:s.highlight,complete};
+   return {state:next,changed:true,persist:true,kind:"good",message:"Problema "+found.length+" de 7 identificado: "+e.label+". "+e.explanation+(complete?" Você concluiu a inspeção.":"")};
+  }
+  if(d){
+   if(s.complete)return {state:s,changed:false,kind:"neutral",message:"Todos os problemas já foram encontrados."};
+   if(s.tried.includes(id))return {state:s,changed:false,kind:"neutral",message:"Objeto já inspecionado: "+d.explanation};
+   return {state:{...s,tried:[...s.tried,id]},changed:true,persist:true,kind:"neutral",message:"Este objeto não corresponde a um dos sete erros: "+d.explanation};
+  }
+  return {state:s,changed:false,kind:"warn",message:"Objeto não encontrado na cena."};
+ }
+ if(action?.type==="tap"){
+  const region=findRegion(data,s,action.point);
+  if(region.kind==="none")return {state:s,changed:false,kind:"neutral",message:"Nenhuma das sete situações está nesta área. Observe outros objetos ou use a lista de inspeção."};
+  if(region.kind==="already")return transition(s,{type:"inspect",id:region.id},data);
+  return transition(s,{type:"inspect",id:region.id},data);
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Inspecione os objetos da cena ou peça uma dica."};
+}
+// End pure rules.
+
+function node(tag,cls,text){const el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el;}
+function getState(){return {found:[...state.found],tried:[...state.tried],hints:state.hints,highlight:state.highlight,complete:state.complete};}
+function restoreState(saved){
+ if(!validState(saved,DATA))return false;
+ state={found:[...saved.found],tried:[...saved.tried],hints:saved.hints,highlight:saved.highlight,complete:saved.complete};
+ render();return true;
+}
+function announce(message,kind="neutral"){
+ $("feedback").className="feedback"+(kind==="good"?" good":kind==="warn"?" warn":"");
+ $("feedback-heading").textContent=kind==="good"?"Problema identificado":kind==="warn"?"Revise a seleção":"Orientação";
+ $("feedback-message").textContent=message;
+}
+function buildOptions(){
+ const group=$("inspection"),objects=[...DATA.errors,...DATA.decoys].sort((a,b)=>a.object.localeCompare(b.object,"pt-BR"));
+ group.replaceChildren();
+ for(const x of objects){
+  const b=node("button","inspect-btn");b.type="button";b.dataset.inspect=x.id;
+  b.setAttribute("aria-pressed","false");
+  b.setAttribute("aria-label","Inspecionar "+x.object+", "+x.sector);
+  const name=node("span","",x.object),place=node("span","where",x.sector),status=node("span","status","");
+  b.append(name,place,status);group.append(b);
+ }
+}
+function renderOptions(){
+ for(const b of $("inspection").querySelectorAll("button[data-inspect]")){
+  const id=b.dataset.inspect,discovered=state.found.includes(id),safe=state.tried.includes(id);
+  b.setAttribute("aria-pressed",String(discovered));
+  b.querySelector(".status").textContent=discovered?"Erro identificado · tocar para reler":safe?"Objeto inspecionado · não é um erro":"Inspecionar objeto";
+  b.setAttribute("aria-label","Inspecionar "+(errorById(DATA,id)||decoyById(DATA,id)).object+": "+(discovered?"problema encontrado, descrição disponível":safe?"objeto já inspecionado":"ainda não inspecionado"));
+ }
+}
+function renderMarkers(){
+ const layer=$("markers");layer.replaceChildren();
+ for(let i=0;i<state.found.length;i++){
+  const e=errorById(DATA,state.found[i]),dot=node("span","dot","✓");
+  dot.style.setProperty("--x",(100*e.x)+"%");dot.style.setProperty("--y",(100*e.y)+"%");
+  dot.setAttribute("aria-hidden","true");layer.append(dot);
+ }
+ if(state.highlight){
+  const e=errorById(DATA,state.highlight),r=e.hintRegion,h=node("div","hint-area");
+  h.style.setProperty("--x",(r.x*100)+"%");h.style.setProperty("--y",(r.y*100)+"%");
+  h.style.setProperty("--w",(r.w*100)+"%");h.style.setProperty("--h",(r.h*100)+"%");
+  h.setAttribute("aria-hidden","true");layer.append(h);
+ }
+}
+function renderFound(){
+ const list=$("found-list");list.replaceChildren();
+ if(!state.found.length){list.append(node("p","note","Nenhum problema identificado até agora."));return;}
+ for(let i=0;i<state.found.length;i++){
+  const e=errorById(DATA,state.found[i]),item=node("article","found-item");
+  item.append(node("strong","",(i+1)+". "+e.label),node("p","",e.explanation));
+  list.append(item);
+ }
+}
+function renderReview(){
+ const list=$("review");list.replaceChildren();
+ if(!state.complete)return;
+ DATA.errors.forEach((e,i)=>{
+  const item=node("article","review-card");
+  item.append(node("strong","",(i+1)+". "+e.label),node("p","",e.explanation));
+  list.append(item);
+ });
+}
+function render(){
+ if(disposed||!state)return;
+ $("found-count").textContent=state.found.length+" / 7";
+ $("hints-count").textContent=String(state.hints);
+ $("checked-count").textContent=String(state.tried.length);
+ $("progress").setAttribute("aria-valuenow",String(state.found.length));
+ $("progress-bar").style.width=(100*state.found.length/7)+"%";
+ $("hint").disabled=!ready||state.complete||state.hints>=DATA.settings.maxHints;
+ $("reset").disabled=!ready;
+ $("completion").hidden=!state.complete;
+ $("inspection-status").textContent=state.complete?"Inspeção concluída":"Procure sete situações";
+ $("zoom-label").textContent=Math.round(zoom*100)+"%";
+ $("artwork").style.width=(zoom*100)+"%";
+ renderOptions();renderMarkers();renderFound();renderReview();
+}
+function changeZoom(delta){
+ const levels=DATA.settings.zoomLevels,at=levels.indexOf(zoom),next=Math.max(0,Math.min(levels.length-1,at+delta));
+ if(next===at)return;
+ zoom=levels[next];render();
+ $("zoom-in").disabled=next===levels.length-1;$("zoom-out").disabled=next===0;
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++saveStamp;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||stamp!==saveStamp)return;
+  const other=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const data={...other,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(data)).length>12288){announce("O progresso supera 12 KiB e não foi sincronizado.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/seven-errors-lab-safety",data});
+ }).catch(async()=>{
+  if(disposed)return;saveStamp++;
+  try{remote=await progress.load();
+   if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))announce("Outra sessão atualizou o progresso. Recuperei a versão salva mais recente.","warn");
+   else announce("Não foi possível reconciliar o progresso. Continue sem sobrescrever outra sessão.","warn");
+  }catch(_){remote=null;announce("A ponte Moodle está indisponível. O jogo funciona sem sincronização.","warn");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const result=transition(state,action,DATA);
+ if(!result.changed){announce(result.message,result.kind);return;}
+ state=result.state;modified=true;render();if(result.persist)save();
+ announce(result.message,result.kind);
+ if(state.complete&&action.type!=="restart")$("completion").focus({preventScroll:true});
+}
+function askRestart(){
+ if(state.found.length||state.tried.length||state.hints){
+  $("reset-confirm").hidden=false;$("confirm-reset").focus({preventScroll:true});
+  announce("Recomeçar removerá as identificações e dicas. Confirme ou cancele.","warn");
+ }else handleAction({type:"restart"});
+}
+function destroy(){disposed=true;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)||!document.getElementById(data.image.src.slice(1))){
+  announce("Cena ou configuração inválida. A atividade exige exatamente sete regiões identificáveis e uma ilustração disponível.","warn");return;
+ }
+ state=initialState();buildOptions();render();
+ if(progress)try{
+  const saved=await progress.load();if(disposed)return;remote=saved;
+  if(!modified&&saved.data?.[storageKey]&&restoreState(saved.data[storageKey]))announce("Progresso restaurado. Continue a inspeção no ponto em que parou.");
+  else announce("Comece a inspeção visual ou escolha um objeto na lista textual.");
+ }catch(_){announce("Não foi possível sincronizar com Moodle. A atividade continua funcional.");}
+ else announce("Jogo independente ativo; sem conexão Moodle para salvar o progresso automaticamente.");
+ if(disposed)return;ready=true;render();
+}
+$("scene-viewport").addEventListener("click",event=>{
+ if(!ready||disposed)return;
+ const svg=$("lab-scene"),rect=svg.getBoundingClientRect();
+ const point=toNormalized(event.clientX,event.clientY,rect);
+ if(!point){announce("Toque fora da área ilustrada: nenhuma tentativa foi contabilizada.");return;}
+ handleAction({type:"tap",point});
+},{signal:controller.signal});
+root.addEventListener("click",event=>{
+ const b=event.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.inspect){handleAction({type:"inspect",id:b.dataset.inspect});return;}
+ if(b.id==="hint"){handleAction({type:"hint"});return;}
+ if(b.id==="zoom-in"){changeZoom(1);return;}
+ if(b.id==="zoom-out"){changeZoom(-1);return;}
+ if(b.id==="reset"){askRestart();return;}
+ if(b.id==="confirm-reset"){$("reset-confirm").hidden=true;handleAction({type:"restart"});$("reset").focus({preventScroll:true});return;}
+ if(b.id==="cancel-reset"){$("reset-confirm").hidden=true;announce("Reinício cancelado. As identificações foram preservadas.");$("reset").focus({preventScroll:true});}
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>

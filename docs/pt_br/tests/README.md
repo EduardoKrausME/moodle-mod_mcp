@@ -165,3 +165,11 @@ node --test docs/pt_br/tests/domino.test.mjs
 ```
 
 A suíte valida ciclos, grafo insolúvel, IDs semânticos distintos dos rótulos, embaralhamento, encaixe explícito nas duas pontas, orientação invertida, duplo clique, tentativa incompatível, cancelamento, retirada apenas do último encaixe, correspondências repetidas e sequências alternativas, restauração de estado, reinício, controles acessíveis, HTML isolado e sincronização dos JSONs.
+
+Para o jogo 25 (Jogo dos sete erros - Inspeção no laboratório), execute:
+
+```bash
+node --test docs/pt_br/tests/seven-errors.test.mjs
+```
+
+A suíte cobre SVG original inline, sete erros obrigatórios, 6/8 erros inválidos, coordenadas normalizadas, zoom e scroll, hotspots sobrepostos, clique duplicado, alternativa textual, objetos seguros, dica progressiva, resultado no sétimo ID, restauração de estado, confirmação de reinício e sincronização dos catálogos.
