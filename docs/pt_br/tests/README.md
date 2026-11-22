@@ -101,3 +101,11 @@ node --test docs/pt_br/tests/connect-dots.test.mjs
 ```
 
 O teste cobre coordenadas inválidas, IDs e pontos repetidos, seleção fora da ordem, clique fora de ponto, zoom, backtrack, teclado, dicas, conclusão, persistência opcional e igualdade dos manifestos.
+
+Para o jogo 17 (Quiz de imagens - Instrumentos científicos), execute:
+
+```bash
+node --test docs/pt_br/tests/image-quiz.test.mjs
+```
+
+Os testes verificam as seis ilustrações SVG locais, textos alternativos, imagens ausentes ou duplicadas, instrumentos visualmente semelhantes, gabaritos e IDs, embaralhamento determinístico, modo inverso, falha de carregamento, responsividade, respostas repetidas, estado restaurado, sincronização dos manifestos e salvamento opcional via SDK.

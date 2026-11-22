@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Quiz de imagens - Instrumentos científicos</title><style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.52;--bg:#f3f5f9;--ink:#23364f;--muted:#65788e;--line:#dce4ef;--surface:#fff;--blue:#4458a6;--blue-strong:#2d428f;--pale:#ecf0ff;--good:#167a5c;--good-bg:#e3f7ee;--warn:#935d2e;--warn-bg:#fff2e6;color:var(--ink);background:var(--bg)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #edaa3e;outline-offset:3px}
+main{max-width:1140px;margin:auto;padding:31px 20px 44px}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;font-weight:850;color:var(--blue);margin:0 0 8px}
+h1{font-size:clamp(28px,4vw,42px);line-height:1.13;letter-spacing:-.95px;margin:0 0 11px}.intro{font-size:14px;color:var(--muted);margin:0 0 19px;max-width:965px}
+.stats{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:13px}.stat{min-width:109px;border:1px solid var(--line);border-radius:11px;background:var(--surface);padding:8px 14px}.stat small{display:block;font-size:11px;color:var(--muted)}.stat strong{font-size:20px;font-variant-numeric:tabular-nums}.stats .note{font-size:11px;color:var(--muted);margin-left:auto}
+.progress{height:9px;border-radius:30px;background:#dfe6f0;overflow:hidden;margin-bottom:18px}.progress span{height:100%;display:block;width:0;background:linear-gradient(90deg,#6d79d2,#36ac94);transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.36fr) minmax(260px,.73fr);gap:16px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;min-width:0;box-shadow:0 8px 28px #203b520a}
+.panel h2{font-size:17px;margin:0 0 12px}.topline{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px}
+.topline small{font-weight:800;color:var(--muted);font-size:12px}.tag{background:var(--pale);color:var(--blue);border-radius:100px;padding:7px 11px;font-size:11px;font-weight:800}
+.question{font-size:clamp(20px,2.6vw,29px);line-height:1.39;letter-spacing:-.5px;margin:16px 0 17px;font-weight:820}
+.picture{margin:0 0 15px;border-radius:14px;border:2px solid #d5dfed;background:#f5f8fd;overflow:hidden}
+.picture.right{border-color:#5dae89}.picture.wrong{border-color:#d9a377}
+.image-box{position:relative;display:grid;place-items:center;aspect-ratio:16/9;overflow:hidden}
+.image-box img{display:block;width:100%;height:100%;object-fit:contain;aspect-ratio:16/9;max-height:400px}
+.image-box .missing{background:#edf2fb;color:#405a79;display:flex;align-items:center;justify-content:center;text-align:center;padding:19px;min-height:100%;width:100%;font-size:13px}
+.picture figcaption{border-top:1px solid #dce5ef;background:var(--surface);font-size:11px;color:var(--muted);padding:9px 14px}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.choice{border:2px solid #cbd6e7;border-radius:12px;background:#fcfdff;color:var(--ink);min-height:68px;padding:12px;display:flex;align-items:center;gap:11px;text-align:left;font-size:14px;font-weight:810;cursor:pointer;overflow-wrap:anywhere}
+.choice:hover:not(:disabled){border-color:#8998cf;background:#f2f4ff}.choice .letter{flex:0 0 28px;width:28px;height:28px;display:grid;place-items:center;border-radius:8px;color:var(--blue);background:#e9eeff;font-size:12px;font-weight:850}
+.choice:disabled{opacity:1;cursor:default}
+.choice.selected.right,.choice.answer:not(.selected){border-color:#69b591;background:var(--good-bg);color:var(--good)}
+.choice.selected.wrong{border-color:#dca875;background:var(--warn-bg);color:var(--warn)}
+.choice.image-choice{display:block;min-height:0;padding:8px;text-align:center}
+.choice.image-choice .choice-top{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 5px 6px}
+.choice.image-choice .image-box{border-radius:8px;background:#e9f0fb}
+.choice.image-choice img{max-height:none}
+.choice.image-choice .image-caption{display:block;margin-top:6px;font-size:11px;color:var(--muted);font-weight:700}
+.choice.image-choice .name{display:block;margin-top:4px;font-size:12px;font-weight:800}
+.feedback{margin-top:17px;min-height:67px;padding:14px 16px;background:#eef2fb;border:1px solid #d7e2f0;border-radius:11px;color:#435c7b;font-size:13px;line-height:1.58}
+.feedback strong{display:block;font-size:14px;margin-bottom:4px}.feedback.right{background:var(--good-bg);color:var(--good);border-color:#a5d6bd}
+.feedback.wrong{background:var(--warn-bg);color:var(--warn);border-color:#e7c3a1}
+.controls{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:17px}.controls .stretch{flex:1}
+.btn{border:1px solid var(--blue);border-radius:10px;background:var(--blue);color:#fff;padding:11px 15px;font-size:13px;font-weight:820;cursor:pointer}
+.btn.secondary{background:var(--surface);color:var(--blue)}.btn:hover:not(:disabled){filter:brightness(.92)}.btn:disabled{opacity:.44;cursor:not-allowed}
+.switch{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:4px;margin:0 0 15px;background:var(--pale);border-radius:11px}
+.switch button{border:0;border-radius:8px;padding:10px 8px;font-size:12px;font-weight:820;background:transparent;color:#526ba9;cursor:pointer}
+.switch button[aria-pressed=true]{background:var(--surface);color:var(--blue);box-shadow:0 1px 8px #27385b1e}
+.side-text{font-size:13px;color:var(--muted);margin:0 0 13px}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:13px 0}
+.step{min-height:60px;border:1px solid var(--line);background:#f6f8fc;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.step strong{font-size:17px}.step small{font-size:11px;color:var(--muted)}
+.step.current{border:2px solid #8996ce;background:var(--pale);color:var(--blue)}
+.step.right{background:var(--good-bg);color:var(--good);border-color:#9fd0b6}.step.wrong{background:var(--warn-bg);color:var(--warn);border-color:#e4ba94}
+.guide{color:var(--muted);font-size:12px;padding-left:19px}.guide li{padding:4px 0}
+.side-note{font-size:11px;color:var(--muted);margin:15px 0 0}
+.summary h2{font-size:27px;letter-spacing:-.65px;margin:5px 0 8px}.summary>p{font-size:14px;color:var(--muted)}
+.review{display:grid;gap:8px;margin:14px 0}
+.review-item{background:#fafbff;border:1px solid var(--line);border-radius:10px;padding:13px}.review-item.right{background:#f0faf5;border-color:#afd9c1}.review-item.wrong{background:#fff7ee;border-color:#e8c8a8}
+.review-item strong{display:block;font-size:13px}.review-item p{margin:5px 0 0;font-size:12px;line-height:1.55;color:var(--muted)}
+.small{font-size:11px;color:var(--muted);margin:16px 0 0}[hidden]{display:none!important}
+@media(max-width:840px){.layout{grid-template-columns:1fr}.panel{padding:17px}.steps{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(max-width:555px){main{padding:23px 12px 34px}.panel{padding:13px}.options{gap:8px}.choice{min-height:62px;padding:9px;font-size:12px;gap:7px}.choice .letter{width:24px;height:24px;flex-basis:24px}.steps{grid-template-columns:repeat(3,minmax(0,1fr))}.stats .note{margin-left:0}.choice.image-choice{padding:5px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#161e2c;--ink:#e8eef8;--muted:#b6c6da;--line:#3d4e67;--surface:#243247;--blue:#b8c8ff;--pale:#363e61;--good:#a7e9c8;--good-bg:#274939;--warn:#f3caa3;--warn-bg:#4e3a2e}
+.picture{background:#2c3c53;border-color:#4c607a}.picture figcaption{background:var(--surface);border-color:#43546d}.image-box .missing{background:#394962;color:#dce9f9}
+.choice{background:#293950;border-color:#576680}.choice:hover:not(:disabled){background:#414360}.choice .letter{background:#40496b;color:#e2e7ff}.choice.selected.right,.choice.answer:not(.selected){background:var(--good-bg);color:var(--good)}.choice.selected.wrong{background:var(--warn-bg);color:var(--warn)}
+.feedback{background:#33415a;color:#d9e5f4;border-color:#54617c}.feedback.right{background:var(--good-bg);color:var(--good)}.feedback.wrong{background:var(--warn-bg);color:var(--warn)}
+.switch button{color:#c9d6ff}.switch button[aria-pressed=true]{background:#536080;color:#f1f4ff}
+.step{background:#2c3a50}.step.current{background:#41436b;color:#e3e7ff}.step.right{background:var(--good-bg);color:var(--good)}.step.wrong{background:var(--warn-bg);color:var(--warn)}
+.review-item{background:#2d3a50}.review-item.right{background:#294b3a}.review-item.wrong{background:#4d3a2f}}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 17 · Reconhecimento visual</p>
+<h1>Quiz de imagens: instrumentos científicos</h1>
+<p class="intro">Observe seis ilustrações originais e identifique os instrumentos usados em atividades científicas. Responda por texto ou inverta o desafio para escolher a imagem correta. Depois de responder, leia a explicação; cada questão aceita uma única resposta.</p>
+<div class="stats"><div class="stat"><small>Questões respondidas</small><strong id="answered">0 / 6</strong></div><div class="stat"><small>Acertos</small><strong id="score">0 / 6</strong></div><span class="note">Sem cronômetro. Correção formativa após cada resposta.</span></div>
+<div id="progress" class="progress" role="progressbar" aria-label="Questões respondidas" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><span id="progress-bar"></span></div>
+<div class="layout">
+ <section class="panel" id="game-panel" aria-labelledby="question">
+  <div class="topline"><small id="position">Questão 1 de 6</small><span class="tag" id="tag">Nomeie o instrumento</span></div>
+  <h2 class="question" id="question" tabindex="-1">Preparando as imagens...</h2>
+  <figure id="picture" class="picture"><div id="hero"></div><figcaption id="picture-caption">Ilustração original incluída no HTML.</figcaption></figure>
+  <div id="options" class="options" role="group" aria-label="Alternativas"></div>
+  <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"><strong id="feedback-title">Orientação</strong><span id="feedback-text">Carregando as perguntas...</span></div>
+  <div class="controls"><button id="reset" type="button" class="btn secondary" disabled>Recomeçar</button><span class="stretch" aria-hidden="true"></span><button id="next" type="button" class="btn" disabled>Próxima questão</button></div>
+ </section>
+ <section class="panel summary" id="summary-panel" aria-labelledby="summary-title" hidden>
+  <p class="eyebrow">Revisão e aprendizagem</p><h2 id="summary-title" tabindex="-1">Quiz concluído!</h2><p id="summary-score"></p>
+  <div id="review" class="review" aria-label="Revisão das seis imagens"></div>
+  <button id="summary-reset" type="button" class="btn">Jogar novamente</button>
+ </section>
+ <aside class="panel" aria-labelledby="guide-title">
+  <h2 id="guide-title">Como quer responder?</h2>
+  <div class="switch" role="group" aria-label="Modo de identificação">
+   <button id="mode-identify" data-mode="identify" type="button" aria-pressed="true" disabled>Imagem e nomes</button>
+   <button id="mode-reverse" data-mode="reverse" type="button" aria-pressed="false" disabled>Pergunta e imagens</button>
+  </div>
+  <p class="side-text">No modo padrão, observe uma imagem e escolha o nome. No modo inverso, leia o nome do instrumento e selecione a ilustração correspondente. Trocar de modo não altera suas respostas.</p>
+  <h2>Seu percurso</h2><div id="tracker" class="steps" role="list" aria-label="Progresso das seis questões"></div>
+  <ol class="guide">
+   <li>Observe os detalhes da ilustração ou sua descrição alternativa.</li>
+   <li>Escolha uma das quatro opções.</li>
+   <li>Leia para que serve o instrumento.</li>
+   <li>Avance e confira o resultado final.</li>
+  </ol>
+  <p class="side-note">Ilustrações vetoriais originais, sem arquivos externos. Se alguma imagem falhar, sua descrição ficará visível e o quiz permanecerá utilizável.</p>
+ </aside>
+</div>
+<p class="small">A pontuação é apenas lúdica e não atribui nota nem conclusão acadêmica do Moodle. Todo o quiz funciona sem SDK ou conexão externa.</p>
+</main><script>(function imageQuiz(){
+"use strict";
+const DATA={"type":"image_quiz","title":"Quiz de imagens - Instrumentos científicos","settings":{"shuffleOptions":true,"seed":"instrumentos-cientificos-2026","allowReverse":true},"questions":[{"id":"instrument-microscope","image":{"src":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22640%22%20height%3D%22360%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20rx%3D%2228%22%20fill%3D%22%23e2eafa%22%2F%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%2260%22%20r%3D%22140%22%20fill%3D%22%23d1defa%22%20opacity%3D%22.7%22%2F%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22320%22%20r%3D%22130%22%20fill%3D%22%23d1defa%22%20opacity%3D%22.6%22%2F%3E%3Cpath%20d%3D%22M0%20320Q320%20295%20640%20323V360H0Z%22%20fill%3D%22%235e7dd1%22%20opacity%3D%22.16%22%2F%3E%3Cg%20transform%3D%22translate(130%207)%22%3E%3Cpath%20d%3D%22M216%2034L284%2097L263%20119L200%2059Z%22%20fill%3D%22%234967b9%22%2F%3E%3Cpath%20d%3D%22M215%2028L237%2012L307%2087L284%20107Z%22%20fill%3D%22%23253d83%22%2F%3E%3Crect%20x%3D%22265%22%20y%3D%22102%22%20width%3D%2224%22%20height%3D%2268%22%20rx%3D%228%22%20transform%3D%22rotate(-41%20265%20102)%22%20fill%3D%22%236d86d8%22%2F%3E%3Cpath%20d%3D%22M220%2090Q300%20150%20285%20235Q274%20286%20189%20282%22%20stroke%3D%22%232b487c%22%20stroke-width%3D%2224%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M214%2099Q266%20139%20260%20202%22%20fill%3D%22none%22%20stroke%3D%22%2391a8ec%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%2F%3E%3Crect%20x%3D%22129%22%20y%3D%22191%22%20width%3D%22159%22%20height%3D%2218%22%20rx%3D%228%22%20fill%3D%22%2326426f%22%2F%3E%3Crect%20x%3D%22166%22%20y%3D%22184%22%20width%3D%2288%22%20height%3D%227%22%20rx%3D%223%22%20fill%3D%22%237f9bde%22%2F%3E%3Cpath%20d%3D%22M189%20210L181%20281%22%20stroke%3D%22%2345609c%22%20stroke-width%3D%2218%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M111%20294H297Q313%20294%20319%20310L326%20325H93L102%20302Q105%20294%20111%20294Z%22%20fill%3D%22%2327426e%22%2F%3E%3Ccircle%20cx%3D%22278%22%20cy%3D%22224%22%20r%3D%2218%22%20fill%3D%22%23daeaff%22%20stroke%3D%22%2329477a%22%20stroke-width%3D%228%22%2F%3E%3Ccircle%20cx%3D%22280%22%20cy%3D%22224%22%20r%3D%227%22%20fill%3D%22%237ba8dd%22%2F%3E%3Ccircle%20cx%3D%22191%22%20cy%3D%22274%22%20r%3D%2217%22%20fill%3D%22%23ffd185%22%2F%3E%3Crect%20x%3D%22103%22%20y%3D%22314%22%20width%3D%22227%22%20height%3D%2215%22%20rx%3D%226%22%20fill%3D%22%235b7bc5%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E","alt":"Instrumento de bancada com ocular, tubo inclinado, braço curvo, plataforma para lâmina e base de apoio.","credit":"Ilustração vetorial original, incorporada ao HTML."},"prompt":"Qual instrumento permite ampliar a observação de células em uma lâmina?","options":[{"id":"microscope","label":"Microscópio"},{"id":"magnifier","label":"Lupa"},{"id":"telescope","label":"Telescópio"},{"id":"thermometer","label":"Termômetro"}],"correctId":"microscope","explanation":"Usado para observar estruturas muito pequenas, como células, por meio de lentes."},{"id":"instrument-telescope","image":{"src":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22640%22%20height%3D%22360%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20rx%3D%2228%22%20fill%3D%22%23e8e7ff%22%2F%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%2260%22%20r%3D%22140%22%20fill%3D%22%23ccd7ff%22%20opacity%3D%22.7%22%2F%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22320%22%20r%3D%22130%22%20fill%3D%22%23ccd7ff%22%20opacity%3D%22.6%22%2F%3E%3Cpath%20d%3D%22M0%20320Q320%20295%20640%20323V360H0Z%22%20fill%3D%22%236d89d9%22%20opacity%3D%22.16%22%2F%3E%3Cg%20transform%3D%22translate(95%2020)%22%3E%3Cpath%20d%3D%22M315%20142L192%20208%22%20stroke%3D%22%2331466b%22%20stroke-width%3D%2224%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M278%2083L91%20154L113%20196L295%20123Z%22%20fill%3D%22%234d78d6%22%20stroke%3D%22%23273e77%22%20stroke-width%3D%228%22%2F%3E%3Cpath%20d%3D%22M277%2083L334%2062L350%20103L296%20126Z%22%20fill%3D%22%232d4a96%22%2F%3E%3Cpath%20d%3D%22M91%20155L76%20162L93%20204L113%20196Z%22%20fill%3D%22%23243a6c%22%2F%3E%3Cpath%20d%3D%22M333%2062L352%2056L369%20101L351%20105Z%22%20fill%3D%22%23d7e6ff%22%20stroke%3D%22%232f4780%22%20stroke-width%3D%226%22%2F%3E%3Cpath%20d%3D%22M156%20130L167%20157L287%20112L278%2087Z%22%20fill%3D%22%2389b0ff%22%20opacity%3D%22.7%22%2F%3E%3Crect%20x%3D%22184%22%20y%3D%22187%22%20width%3D%2228%22%20height%3D%2242%22%20rx%3D%228%22%20fill%3D%22%2343568a%22%2F%3E%3Ccircle%20cx%3D%22198%22%20cy%3D%22190%22%20r%3D%2217%22%20fill%3D%22%23f5b95a%22%20stroke%3D%22%23334b77%22%20stroke-width%3D%227%22%2F%3E%3Cpath%20d%3D%22M198%20223L114%20327M198%20223L288%20327M198%20223L198%20331%22%20stroke%3D%22%23344b79%22%20stroke-width%3D%2214%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M115%20327h-26M288%20327h27M198%20331h27%22%20stroke%3D%22%237e93bb%22%20stroke-width%3D%229%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23fff7cf%22%3E%3Ccircle%20cx%3D%22116%22%20cy%3D%2278%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%22488%22%20cy%3D%2270%22%20r%3D%227%22%2F%3E%3Ccircle%20cx%3D%22510%22%20cy%3D%22155%22%20r%3D%223%22%2F%3E%3Cpath%20d%3D%22M442%2090v18M433%2099h18%22%20stroke%3D%22%23fff7cf%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E","alt":"Instrumento de observação com tubo longo inclinado e montado sobre um tripé.","credit":"Ilustração vetorial original, incorporada ao HTML."},"prompt":"Qual instrumento representa a observação de objetos astronômicos distantes?","options":[{"id":"telescope","label":"Telescópio"},{"id":"microscope","label":"Microscópio"},{"id":"compass","label":"Bússola"},{"id":"magnifier","label":"Lupa"}],"correctId":"telescope","explanation":"Permite captar luz de objetos distantes, como estrelas e planetas."},{"id":"instrument-thermometer","image":{"src":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22640%22%20height%3D%22360%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20rx%3D%2228%22%20fill%3D%22%23e0f2f4%22%2F%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%2260%22%20r%3D%22140%22%20fill%3D%22%23bee8e9%22%20opacity%3D%22.7%22%2F%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22320%22%20r%3D%22130%22%20fill%3D%22%23bee8e9%22%20opacity%3D%22.6%22%2F%3E%3Cpath%20d%3D%22M0%20320Q320%20295%20640%20323V360H0Z%22%20fill%3D%22%235ba6a8%22%20opacity%3D%22.16%22%2F%3E%3Cg%20transform%3D%22translate(186%209)%22%3E%3Crect%20x%3D%22107%22%20y%3D%2225%22%20width%3D%2279%22%20height%3D%22246%22%20rx%3D%2238%22%20fill%3D%22%23f4fcff%22%20stroke%3D%22%233a6a92%22%20stroke-width%3D%2212%22%2F%3E%3Crect%20x%3D%22126%22%20y%3D%2251%22%20width%3D%2240%22%20height%3D%22202%22%20rx%3D%2218%22%20fill%3D%22%23d3ebf4%22%2F%3E%3Cpath%20d%3D%22M146%20249V132%22%20stroke%3D%22%23e45e56%22%20stroke-width%3D%2225%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%22146%22%20cy%3D%22279%22%20r%3D%2260%22%20fill%3D%22%23ec6c5d%22%20stroke%3D%22%23375f84%22%20stroke-width%3D%2212%22%2F%3E%3Ccircle%20cx%3D%22146%22%20cy%3D%22279%22%20r%3D%2238%22%20fill%3D%22%23f28670%22%2F%3E%3Cg%20stroke%3D%22%23456b88%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M200%2073h32M200%20110h20M200%20146h32M200%20183h20M200%20219h32%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%234c6780%22%20font-size%3D%2221%22%20font-family%3D%22sans-serif%22%3E%3Ctext%20x%3D%22240%22%20y%3D%2279%22%3E40%3C%2Ftext%3E%3Ctext%20x%3D%22240%22%20y%3D%22152%22%3E20%3C%2Ftext%3E%3Ctext%20x%3D%22240%22%20y%3D%22226%22%3E0%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E","alt":"Tubo vertical transparente, escala de graduação e uma coluna vermelha ligada a um reservatório circular.","credit":"Ilustração vetorial original, incorporada ao HTML."},"prompt":"Qual instrumento mede a temperatura?","options":[{"id":"thermometer","label":"Termômetro"},{"id":"balance","label":"Balança de pratos"},{"id":"compass","label":"Bússola"},{"id":"magnifier","label":"Lupa"}],"correctId":"thermometer","explanation":"Mede temperatura; o desenho mostra um modelo de coluna de líquido."},{"id":"instrument-compass","image":{"src":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22640%22%20height%3D%22360%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20rx%3D%2228%22%20fill%3D%22%23e5f1fb%22%2F%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%2260%22%20r%3D%22140%22%20fill%3D%22%23c9e3f5%22%20opacity%3D%22.7%22%2F%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22320%22%20r%3D%22130%22%20fill%3D%22%23c9e3f5%22%20opacity%3D%22.6%22%2F%3E%3Cpath%20d%3D%22M0%20320Q320%20295%20640%20323V360H0Z%22%20fill%3D%22%23518cc0%22%20opacity%3D%22.16%22%2F%3E%3Cg%20transform%3D%22translate(135%202)%22%3E%3Ccircle%20cx%3D%22185%22%20cy%3D%22173%22%20r%3D%22151%22%20fill%3D%22%232c4b79%22%2F%3E%3Ccircle%20cx%3D%22185%22%20cy%3D%22173%22%20r%3D%22134%22%20fill%3D%22%23f2f7ff%22%20stroke%3D%22%2398b4ce%22%20stroke-width%3D%229%22%2F%3E%3Ccircle%20cx%3D%22185%22%20cy%3D%22173%22%20r%3D%22112%22%20fill%3D%22%23d7edfa%22%20stroke%3D%22%23a9d2e8%22%20stroke-width%3D%223%22%2F%3E%3Cg%20stroke%3D%22%23537391%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M185%2053v20M185%20273v20M65%20173h20M285%20173h20%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23365471%22%20font-family%3D%22sans-serif%22%20font-size%3D%2227%22%20font-weight%3D%22bold%22%20text-anchor%3D%22middle%22%3E%3Ctext%20x%3D%22185%22%20y%3D%22104%22%3EN%3C%2Ftext%3E%3Ctext%20x%3D%22185%22%20y%3D%22262%22%3ES%3C%2Ftext%3E%3Ctext%20x%3D%22102%22%20y%3D%22182%22%3EO%3C%2Ftext%3E%3Ctext%20x%3D%22270%22%20y%3D%22182%22%3EL%3C%2Ftext%3E%3C%2Fg%3E%3Cpath%20d%3D%22M191%20161L240%20104L210%20193Z%22%20fill%3D%22%23e25e5c%22%2F%3E%3Cpath%20d%3D%22M191%20161L130%20235L171%20151Z%22%20fill%3D%22%23456ab4%22%2F%3E%3Ccircle%20cx%3D%22185%22%20cy%3D%22173%22%20r%3D%2213%22%20fill%3D%22%23ffdf8d%22%20stroke%3D%22%23324b74%22%20stroke-width%3D%226%22%2F%3E%3Cpath%20d%3D%22M185%2021v-15M185%20340v-15%22%20stroke%3D%22%23e2ad63%22%20stroke-width%3D%229%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E","alt":"Mostrador circular com as letras N, S, L e O e uma agulha de duas cores.","credit":"Ilustração vetorial original, incorporada ao HTML."},"prompt":"Qual instrumento indica direções por meio de uma agulha magnetizada?","options":[{"id":"compass","label":"Bússola"},{"id":"balance","label":"Balança de pratos"},{"id":"thermometer","label":"Termômetro"},{"id":"telescope","label":"Telescópio"}],"correctId":"compass","explanation":"Indica direções usando uma agulha magnetizada que se alinha aproximadamente ao campo magnético terrestre."},{"id":"instrument-balance","image":{"src":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22640%22%20height%3D%22360%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20rx%3D%2228%22%20fill%3D%22%23f4ebdd%22%2F%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%2260%22%20r%3D%22140%22%20fill%3D%22%23eed7b6%22%20opacity%3D%22.7%22%2F%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22320%22%20r%3D%22130%22%20fill%3D%22%23eed7b6%22%20opacity%3D%22.6%22%2F%3E%3Cpath%20d%3D%22M0%20320Q320%20295%20640%20323V360H0Z%22%20fill%3D%22%23c5a06d%22%20opacity%3D%22.16%22%2F%3E%3Cg%20transform%3D%22translate(105%2017)%22%3E%3Crect%20x%3D%22188%22%20y%3D%2240%22%20width%3D%2232%22%20height%3D%22246%22%20rx%3D%2213%22%20fill%3D%22%2338639e%22%2F%3E%3Cpath%20d%3D%22M202%2053L47%20104L355%20104Z%22%20fill%3D%22%236589c8%22%2F%3E%3Crect%20x%3D%2250%22%20y%3D%2291%22%20width%3D%22305%22%20height%3D%2220%22%20rx%3D%2210%22%20fill%3D%22%23304e7b%22%2F%3E%3Cpath%20d%3D%22M89%20106V221M317%20106V221%22%20stroke%3D%22%238aaccf%22%20stroke-width%3D%227%22%2F%3E%3Cpath%20d%3D%22M61%20208Q86%20255%20119%20208Z%22%20fill%3D%22%23f1b55e%22%20stroke%3D%22%239b734c%22%20stroke-width%3D%225%22%2F%3E%3Cpath%20d%3D%22M288%20208Q317%20254%20348%20208Z%22%20fill%3D%22%23f1b55e%22%20stroke%3D%22%239b734c%22%20stroke-width%3D%225%22%2F%3E%3Cpath%20d%3D%22M61%20211H119M288%20211H348%22%20stroke%3D%22%2398764b%22%20stroke-width%3D%227%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%22202%22%20cy%3D%2293%22%20r%3D%2217%22%20fill%3D%22%23ffe29f%22%20stroke%3D%22%23284878%22%20stroke-width%3D%226%22%2F%3E%3Cpath%20d%3D%22M200%20287L162%20316H241L213%20287Z%22%20fill%3D%22%23456a9f%22%2F%3E%3Crect%20x%3D%22128%22%20y%3D%22311%22%20width%3D%22150%22%20height%3D%2216%22%20rx%3D%228%22%20fill%3D%22%232e4d7b%22%2F%3E%3Ccircle%20cx%3D%2286%22%20cy%3D%22202%22%20r%3D%227%22%20fill%3D%22%239e7f4f%22%2F%3E%3Ccircle%20cx%3D%22317%22%20cy%3D%22202%22%20r%3D%227%22%20fill%3D%22%239e7f4f%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E","alt":"Haste central com barra horizontal e dois pratos suspensos por suportes.","credit":"Ilustração vetorial original, incorporada ao HTML."},"prompt":"Qual instrumento compara massas usando dois pratos suspensos?","options":[{"id":"balance","label":"Balança de pratos"},{"id":"thermometer","label":"Termômetro"},{"id":"microscope","label":"Microscópio"},{"id":"compass","label":"Bússola"}],"correctId":"balance","explanation":"Compara massas com o auxílio de dois pratos e, em seu uso tradicional, massas-padrão."},{"id":"instrument-magnifier","image":{"src":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22640%22%20height%3D%22360%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20rx%3D%2228%22%20fill%3D%22%23e2f2f5%22%2F%3E%3Ccircle%20cx%3D%22500%22%20cy%3D%2260%22%20r%3D%22140%22%20fill%3D%22%23c7ebed%22%20opacity%3D%22.7%22%2F%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22320%22%20r%3D%22130%22%20fill%3D%22%23c7ebed%22%20opacity%3D%22.6%22%2F%3E%3Cpath%20d%3D%22M0%20320Q320%20295%20640%20323V360H0Z%22%20fill%3D%22%235db0bd%22%20opacity%3D%22.16%22%2F%3E%3Cg%20transform%3D%22translate(105%20-5)%22%3E%3Crect%20x%3D%22282%22%20y%3D%22217%22%20width%3D%2264%22%20height%3D%22157%22%20rx%3D%2224%22%20fill%3D%22%232c5388%22%20transform%3D%22rotate(-41%20314%20295)%22%2F%3E%3Crect%20x%3D%22291%22%20y%3D%22237%22%20width%3D%2223%22%20height%3D%2293%22%20rx%3D%2210%22%20fill%3D%22%235e85be%22%20transform%3D%22rotate(-41%20300%20283)%22%2F%3E%3Ccircle%20cx%3D%22211%22%20cy%3D%22158%22%20r%3D%22120%22%20fill%3D%22%2380c5ea%22%20opacity%3D%22.34%22%20stroke%3D%22%232c5889%22%20stroke-width%3D%2225%22%2F%3E%3Ccircle%20cx%3D%22211%22%20cy%3D%22158%22%20r%3D%2295%22%20fill%3D%22%23e5f8ff%22%20opacity%3D%22.78%22%2F%3E%3Cpath%20d%3D%22M167%2089Q202%2070%20232%2089%22%20stroke%3D%22%23fff%22%20stroke-width%3D%2213%22%20stroke-linecap%3D%22round%22%20fill%3D%22none%22%20opacity%3D%22.8%22%2F%3E%3Cpath%20d%3D%22M163%20154h95M212%20107v95%22%20stroke%3D%22%236398bb%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.6%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E","alt":"Uma lente circular grande com aro e cabo inclinado; há linhas ampliadas visíveis dentro da lente.","credit":"Ilustração vetorial original, incorporada ao HTML."},"prompt":"Qual instrumento permite ampliar a aparência de letras ou objetos próximos?","options":[{"id":"magnifier","label":"Lupa"},{"id":"microscope","label":"Microscópio"},{"id":"telescope","label":"Telescópio"},{"id":"compass","label":"Bússola"}],"correctId":"magnifier","explanation":"É uma lente convergente utilizada para ampliar a aparência de objetos próximos."}]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id),controller=new AbortController();
+const sdk=window.MoodleMCP?.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const storageKey="imageQuizScientificToolsV1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,saveQueue=Promise.resolve(),generation=0;
+
+// Pure, independently testable game rules.
+function normalized(v){return String(v??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("pt-BR").trim();}
+function validate(data){
+ if(!data||data.type!=="image_quiz"||typeof data.title!=="string"||!data.title.trim()||!data.settings||typeof data.settings.shuffleOptions!=="boolean"||typeof data.settings.seed!=="string"||!data.settings.seed.trim()||typeof data.settings.allowReverse!=="boolean"||!Array.isArray(data.questions)||data.questions.length<3||data.questions.length>12)return false;
+ const ids=new Set(),images=new Set(),alts=new Set(),correctIds=new Set(),correctLabels=new Map();
+ for(const q of data.questions){
+  if(!q||typeof q.id!=="string"||!/^[a-z0-9-]+$/.test(q.id)||ids.has(q.id)||!q.image||typeof q.image.src!=="string"||!(/^data:image\/svg\+xml;charset=utf-8,/.test(q.image.src)||/^assets\/[a-z0-9/_-]+\.(png|jpe?g|webp|svg)$/.test(q.image.src))||typeof q.image.alt!=="string"||!q.image.alt.trim()||typeof q.prompt!=="string"||!q.prompt.trim()||typeof q.explanation!=="string"||!q.explanation.trim()||typeof q.correctId!=="string"||!Array.isArray(q.options)||q.options.length<3||q.options.length>6||images.has(q.image.src)||alts.has(normalized(q.image.alt))||correctIds.has(q.correctId))return false;
+  ids.add(q.id);images.add(q.image.src);alts.add(normalized(q.image.alt));correctIds.add(q.correctId);
+  const optIds=new Set(),names=new Set();let count=0;
+  for(const option of q.options){
+   if(!option||typeof option.id!=="string"||!/^[a-z0-9-]+$/.test(option.id)||optIds.has(option.id)||typeof option.label!=="string"||!option.label.trim()||names.has(normalized(option.label)))return false;
+   optIds.add(option.id);names.add(normalized(option.label));
+   if(option.id===q.correctId){count++;correctLabels.set(option.id,option.label);}
+  }
+  if(count!==1)return false;
+ }
+ if(data.settings.allowReverse){
+  for(const q of data.questions)for(const opt of q.options){
+   if(!correctIds.has(opt.id)||normalized(correctLabels.get(opt.id))!==normalized(opt.label))return false;
+  }
+ }
+ return true;
+}
+function hashSeed(value){let h=2166136261;for(let i=0;i<value.length;i++){h^=value.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function shuffled(ids,seed){
+ const a=[...ids];let x=hashSeed(seed)||1;
+ function random(){x^=x<<13;x^=x>>>17;x^=x<<5;return (x>>>0)/4294967296;}
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+function optionOrder(data,q){const ids=q.options.map(o=>o.id);return data.settings.shuffleOptions?shuffled(ids,data.settings.seed+"/"+q.id):ids;}
+function initialState(data){return {index:0,answers:data.questions.map(()=>null),order:data.questions.map(q=>optionOrder(data,q)),mode:"identify",completed:false};}
+function score(s,data){return data.questions.filter((q,i)=>s.answers[i]===q.correctId).length;}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Number.isInteger(s.index)||s.index<0||s.index>data.questions.length||!Array.isArray(s.answers)||s.answers.length!==data.questions.length||!Array.isArray(s.order)||s.order.length!==data.questions.length||!["identify","reverse"].includes(s.mode)||s.mode==="reverse"&&!data.settings.allowReverse||typeof s.completed!=="boolean"||s.completed!==(s.index===data.questions.length))return false;
+ for(let i=0;i<data.questions.length;i++){
+  const expected=optionOrder(data,data.questions[i]),order=s.order[i],answer=s.answers[i];
+  if(!Array.isArray(order)||order.length!==expected.length||order.some((id,j)=>id!==expected[j]))return false;
+  if(answer!==null&&!expected.includes(answer))return false;
+  if(i<s.index&&answer===null)return false;
+  if(i>s.index&&answer!==null)return false;
+ }
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(data),changed:true,kind:"neutral",message:"Quiz reiniciado. Observe a primeira ilustração."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"O progresso não é válido."};
+ if(action?.type==="mode"){
+  if(!["identify","reverse"].includes(action.value)||action.value==="reverse"&&!data.settings.allowReverse)return {state:s,changed:false,kind:"warn",message:"Este modo não está disponível."};
+  if(s.mode===action.value)return {state:s,changed:false,kind:"neutral",message:"Esse modo já está selecionado."};
+  return {state:{...s,mode:action.value},changed:true,kind:"neutral",message:action.value==="identify"?"Observe a ilustração e escolha o nome.":"Leia a pergunta e escolha a ilustração correspondente."};
+ }
+ if(s.completed)return {state:s,changed:false,kind:"neutral",message:"Você já concluiu o quiz. É possível recomeçar."};
+ const q=data.questions[s.index],answer=s.answers[s.index];
+ if(action?.type==="choose"){
+  if(answer!==null)return {state:s,changed:false,kind:"neutral",message:"Esta questão já foi respondida. Avance para continuar."};
+  const option=q.options.find(o=>o.id===action.id);
+  if(!option)return {state:s,changed:false,kind:"warn",message:"Opção desconhecida."};
+  const answers=[...s.answers];answers[s.index]=option.id;
+  const correct=option.id===q.correctId,right=q.options.find(o=>o.id===q.correctId);
+  return {state:{...s,answers},changed:true,kind:correct?"right":"wrong",message:correct?
+   "Correto! "+right.label+". "+q.explanation:
+   "Sua escolha foi "+option.label+". A resposta correta é "+right.label+". "+q.explanation};
+ }
+ if(action?.type==="next"){
+  if(answer===null)return {state:s,changed:false,kind:"warn",message:"Escolha uma alternativa antes de avançar."};
+  const index=s.index+1;
+  return {state:{...s,index,completed:index===data.questions.length},changed:true,kind:"neutral",message:index===data.questions.length?"Quiz concluído. Confira as explicações.":"Próxima ilustração."};
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Observe a figura e escolha uma resposta."};
+}
+// End pure rules.
+
+function el(tag,cls,value){const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=value;return e;}
+function getState(){return {index:state.index,answers:[...state.answers],order:state.order.map(o=>[...o]),mode:state.mode,completed:state.completed};}
+function restoreState(v){if(!validState(v,DATA))return false;state={index:v.index,answers:[...v.answers],order:v.order.map(o=>[...o]),mode:v.mode,completed:v.completed};render();return true;}
+function notice(message,kind="neutral"){
+ const box=$("feedback");box.className="feedback"+(kind==="right"?" right":kind==="wrong"?" wrong":"");
+ $("feedback-title").textContent=kind==="right"?"Resposta correta":kind==="wrong"?"Resposta para revisar":"Orientação";
+ $("feedback-text").textContent=message;
+}
+function buildPicture(image,kind){
+ const frame=el("div","image-box"),img=el("img"),fallback=el("div","missing", "Imagem indisponível. Descrição: "+image.alt);
+ fallback.hidden=true;img.alt=image.alt;img.width=640;img.height=360;img.decoding="async";img.loading=kind==="option"?"lazy":"eager";
+ img.addEventListener("error",()=>{img.hidden=true;fallback.hidden=false;},{signal:controller.signal});
+ img.src=image.src;
+ frame.append(img,fallback);return frame;
+}
+function imageForOption(id){return DATA.questions.find(q=>q.correctId===id)?.image||null;}
+function renderTracker(){
+ const area=$("tracker");area.replaceChildren();
+ DATA.questions.forEach((q,i)=>{
+  const selected=state.answers[i],status=selected===null?"Pendente":selected===q.correctId?"Acerto":"Revisar";
+  const n=el("div","step"+(!state.completed&&i===state.index?" current":"")+(selected===null?"":selected===q.correctId?" right":" wrong"));
+  n.setAttribute("role","listitem");n.setAttribute("aria-label","Questão "+(i+1)+": "+status);
+  n.append(el("strong","",String(i+1)),el("small","",status));area.append(n);
+ });
+}
+function renderReview(){
+ const area=$("review");area.replaceChildren();
+ DATA.questions.forEach((q,i)=>{
+  const selected=q.options.find(o=>o.id===state.answers[i]),correct=q.options.find(o=>o.id===q.correctId),right=selected.id===correct.id;
+  const row=el("article","review-item"+(right?" right":" wrong"));
+  row.append(el("strong","",(i+1)+". "+correct.label+" · "+(right?"Acertou":"Revisar")));
+  row.append(el("p","", "Sua resposta: "+selected.label+". Resposta correta: "+correct.label+". "+q.explanation));
+  area.append(row);
+ });
+}
+function render(){
+ if(disposed||!state)return;
+ const total=DATA.questions.length,count=state.answers.filter(a=>a!==null).length;
+ $("answered").textContent=count+" / "+total;$("score").textContent=score(state,DATA)+" / "+total;
+ $("progress").setAttribute("aria-valuenow",String(count));$("progress-bar").style.width=100*count/total+"%";
+ $("game-panel").hidden=state.completed;$("summary-panel").hidden=!state.completed;
+ $("reset").disabled=!ready;$("mode-identify").setAttribute("aria-pressed",String(state.mode==="identify"));
+ $("mode-reverse").setAttribute("aria-pressed",String(state.mode==="reverse"));
+ $("mode-identify").disabled=!ready;$("mode-reverse").disabled=!ready||!DATA.settings.allowReverse;
+ renderTracker();
+ if(state.completed){
+  $("summary-score").textContent="Você acertou "+score(state,DATA)+" de "+total+" identificações. Reveja as funções de cada instrumento.";
+  renderReview();return;
+ }
+ const q=DATA.questions[state.index],selected=state.answers[state.index],answered=selected!==null;
+ const right=q.options.find(o=>o.id===q.correctId);
+ $("position").textContent="Questão "+(state.index+1)+" de "+total;
+ $("tag").textContent=answered?"Resposta registrada":state.mode==="identify"?"Nomeie o instrumento":"Encontre a ilustração";
+ $("question").textContent=state.mode==="identify"?q.prompt:"Qual destas imagens representa "+right.label+"?";
+ const picture=$("picture");
+ picture.hidden=state.mode!=="identify";picture.className="picture"+(answered?(selected===q.correctId?" right":" wrong"):"");
+ const hero=$("hero");hero.replaceChildren();
+ if(state.mode==="identify")hero.append(buildPicture(q.image,"hero"));
+ $("picture-caption").textContent=answered?"Instrumento identificado: "+right.label+". "+q.image.credit:q.image.credit;
+ const options=$("options");options.replaceChildren();
+ state.order[state.index].forEach((id,i)=>{
+  const opt=q.options.find(o=>o.id===id),choice=el("button","choice"+(state.mode==="reverse"?" image-choice":""));
+  choice.type="button";choice.dataset.choice=id;choice.disabled=!ready||answered;
+  const letter=el("span","letter",String.fromCharCode(65+i));
+  if(state.mode==="identify"){
+   choice.append(letter,el("span","",opt.label));choice.setAttribute("aria-label","Alternativa "+String.fromCharCode(65+i)+": "+opt.label);
+  }else{
+   const visual=imageForOption(id),head=el("span","choice-top");
+   head.append(letter,el("span","image-caption","Imagem "+String.fromCharCode(65+i)));
+   choice.append(head);
+   if(visual)choice.append(buildPicture(visual,"option"));
+   else choice.append(el("span","missing","Ilustração indisponível para esta alternativa."));
+   if(answered)choice.append(el("span","name",opt.label));
+   choice.setAttribute("aria-label","Imagem "+String.fromCharCode(65+i)+". "+(visual?visual.alt:"Sem imagem.")+(answered?" "+opt.label:""));
+  }
+  choice.setAttribute("aria-pressed",String(selected===id));
+  if(answered){if(selected===id)choice.classList.add("selected",id===q.correctId?"right":"wrong");if(id===q.correctId)choice.classList.add("answer");}
+  options.append(choice);
+ });
+ $("next").disabled=!ready||!answered;
+ $("next").textContent=state.index===total-1?"Ver resultado final":"Próxima questão";
+ if(answered)notice((selected===q.correctId?"Correto! ":"Ainda não. ")+"O instrumento é "+right.label+". "+q.explanation,selected===q.correctId?"right":"wrong");
+ else notice(state.mode==="identify"?"Observe a ilustração e escolha o nome correspondente.":"Observe as imagens e escolha a que corresponde ao instrumento solicitado.");
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++generation;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||stamp!==generation)return;
+  const old=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const value={...old,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(value)).length>12288){notice("O progresso excedeu o limite de 12 KiB.","wrong");return;}
+  remote=await progress.save({version:remote.version,location:"games/image-quiz-instruments",data:value});
+ }).catch(async()=>{
+  if(disposed)return;generation++;
+  try{remote=await progress.load();if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))notice("Outra sessão alterou o progresso. Recuperei a última versão salva.","wrong");else notice("Não foi possível conciliar o progresso. Continue nesta página.","wrong");}
+  catch(_){remote=null;notice("Não foi possível salvar no Moodle. O quiz funciona normalmente.","wrong");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const result=transition(state,action,DATA);
+ if(!result.changed){notice(result.message,result.kind);return;}
+ state=result.state;modified=true;render();save();
+ if(action.type==="choose")$("feedback").focus({preventScroll:true});
+ else if(state.completed)$("summary-title").focus({preventScroll:true});
+ else $("question").focus({preventScroll:true});
+}
+function destroy(){disposed=true;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){notice("Configuração inválida: verifique ilustrações, opções e IDs.","wrong");return;}
+ state=initialState(data);render();
+ if(progress)try{
+  const response=await progress.load();if(disposed)return;remote=response;
+  if(!modified&&response.data?.[storageKey]&&restoreState(response.data[storageKey]))notice("Progresso recuperado. Continue a partir da questão salva.");
+  else notice("Observe a primeira ilustração e escolha uma alternativa.");
+ }catch(_){notice("Sem sincronização com o Moodle. O quiz funciona normalmente.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",event=>{
+ const btn=event.target.closest("button");if(!btn||!root.contains(btn))return;
+ if(btn.dataset.choice){handleAction({type:"choose",id:btn.dataset.choice});return;}
+ if(btn.dataset.mode){handleAction({type:"mode",value:btn.dataset.mode});return;}
+ if(btn.id==="next")handleAction({type:"next"});
+ if(btn.id==="reset"||btn.id==="summary-reset")handleAction({type:"restart"});
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>
