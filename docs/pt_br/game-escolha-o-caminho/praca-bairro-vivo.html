@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Escolha o caminho - A Praça do Bairro Vivo</title><style>:root{color-scheme:light;--bg:#eef4e9;--paper:#fffdf7;--ink:#254038;--muted:#536f62;--line:#d0decc;--green:#24664b;--pale:#e4f3e6;--amber:#946424;--sand:#fff1d8;--red:#a34c3d;--redpale:#fff0ea;--shadow:0 10px 30px #2a4e3614;font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0}main{max-width:1170px;margin:auto;padding:24px 17px 45px}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(29px,4vw,43px);line-height:1.13;margin-bottom:12px}h2{font-size:21px;line-height:1.3}h3{font-size:16px}p{line-height:1.65}.kicker{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);font-weight:850;margin-bottom:7px}.intro{font-size:14px;color:var(--muted);max-width:830px}.fine{font-size:11px;color:var(--muted)}.hero,.panel{border:1px solid var(--line);border-radius:17px;background:var(--paper);box-shadow:var(--shadow)}.hero{background:linear-gradient(110deg,var(--paper),#e7f0dc);padding:23px}.metrics{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0}.metric{min-width:127px;padding:9px 13px;background:var(--paper);border:1px solid var(--line);border-radius:11px}.metric small{display:block;color:var(--muted);font-size:11px}.metric strong{font-size:19px;font-variant-numeric:tabular-nums}.meter{background:#c7dccb;height:9px;border-radius:20px;overflow:hidden;margin-bottom:16px}.meter span{display:block;width:0;height:100%;background:linear-gradient(90deg,#398965,#c5a068);transition:width .2s}.layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(295px,.82fr);gap:16px;align-items:start}.column{display:grid;gap:16px;min-width:0}.panel{padding:19px;min-width:0}.chapter{font-size:12px;font-weight:850;letter-spacing:.5px;color:var(--green)}.picture{border:1px solid #b1cbb7;border-radius:12px;overflow:hidden;background:#dce9d8;margin:14px 0 9px}.picture svg{display:block;width:100%;height:auto;aspect-ratio:900/340}.alt{font-size:12px;color:var(--muted)}.story{font-size:15px;line-height:1.73}.arrival{background:var(--pale);border:1px solid #abd0b4;border-radius:11px;padding:13px;margin:13px 0}.arrival strong{display:block;font-size:13px}.arrival p{font-size:12px;margin:7px 0}.choices{display:grid;gap:9px;margin:12px 0}.choice{width:100%;min-height:58px;display:flex;justify-content:space-between;align-items:center;gap:12px;border:2px solid #a5c4aa;background:#fff;border-radius:12px;padding:13px;text-align:left;color:var(--ink);font-size:13px;line-height:1.5;font-weight:770;cursor:pointer}.choice:hover:not(:disabled){background:var(--pale);border-color:var(--green)}.arrow{font-size:22px}.button{background:var(--green);color:#fff;border:1px solid var(--green);border-radius:10px;font-size:12px;font-weight:780;min-height:44px;padding:9px 14px;cursor:pointer}.button.secondary{background:var(--paper);color:var(--green)}.button.warn{background:var(--sand);color:var(--amber);border-color:#d5b57c}.button.danger{background:var(--paper);color:var(--red);border-color:#d09f96}.button:hover:not(:disabled){filter:brightness(.93)}button:disabled{opacity:.57;cursor:not-allowed}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #d99b36;outline-offset:3px}.controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:13px}.rule{border-top:1px solid var(--line);padding-top:15px;margin-top:15px}.reflection{background:var(--sand);border:1px solid #d8c18c;border-radius:11px;padding:12px;margin-top:12px;font-size:13px}.feedback{background:var(--pale);border:1px solid #b2d2b7;border-radius:11px;padding:13px;min-height:75px;margin-top:13px;font-size:13px;line-height:1.65}.feedback strong{display:block;margin-bottom:4px}.feedback.warn{background:var(--sand);border-color:#d6bb85}.feedback.bad{background:var(--redpale);border-color:#dab1a4}.ending{background:linear-gradient(110deg,var(--pale),var(--sand));border:1px solid #b0cfae;border-radius:12px;padding:15px;margin-top:13px}.ending h3{font-size:19px}.ending p,.ending li{font-size:12px}.ending li{margin-bottom:7px}.history,.archives{padding:0;margin:10px 0;list-style:none;display:grid;gap:9px}.history li,.archives li{border:1px solid var(--line);background:#f5f9f0;border-radius:11px;padding:12px}.history strong,.archives strong{display:block;font-size:13px}.history p,.archives p{font-size:12px;color:var(--muted);margin:6px 0}.smallbutton{background:var(--paper);color:var(--green);border:1px solid var(--green);border-radius:8px;font-size:11px;font-weight:770;min-height:38px;padding:7px 10px;cursor:pointer}.review{background:var(--pale);border:1px solid #abd0b3;border-radius:11px;padding:13px;margin-top:12px;font-size:12px}.review strong{display:block}.review p{margin:8px 0}.confirm{background:var(--sand);border:1px solid #d6b98c;border-radius:11px;padding:12px;margin-top:13px;font-size:12px}.confirm p{font-size:12px}.empty{font-size:12px;color:var(--muted)}.error{border:2px solid var(--red);background:var(--redpale);color:var(--red);padding:16px;border-radius:12px}[hidden]{display:none!important}
+@media(max-width:940px){.layout{grid-template-columns:1fr}}@media(max-width:550px){main{padding:11px 9px 28px}.panel,.hero{padding:14px}.picture svg{min-height:155px}.metric{min-width:105px;padding:8px 10px}.controls .button{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-contrast:more){.choice,.button,.history li,.smallbutton{border-width:3px}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#162a22;--paper:#253e31;--ink:#edf8ef;--muted:#c6d9c8;--line:#587763;--green:#b7edc6;--pale:#365a43;--amber:#fbd99d;--sand:#54452f;--red:#ffb3a9;--redpale:#553b36;--shadow:0 12px 28px #0004}.hero{background:linear-gradient(110deg,#253e31,#334c37)}.choice{background:#2d4b39;color:var(--ink);border-color:#6e937b}.choice:hover:not(:disabled){background:var(--pale)}.button{color:#183c28}.button.secondary,.button.danger{background:var(--paper);color:var(--green)}.button.danger{color:var(--red)}.button.warn{background:var(--sand);color:var(--amber)}.history li,.archives li{background:#2c4b38}.smallbutton{background:var(--paper);color:var(--green)}.feedback,.review{background:var(--pale)}.feedback.warn,.confirm,.reflection{background:var(--sand)}.feedback.bad{background:var(--redpale)}.ending{background:linear-gradient(110deg,#34573e,#58472d)}}</style></head><body><main id="game"><section class="hero"><p class="kicker">Jogo 29 · História com decisões</p><h1>Escolha o caminho: A Praça do Bairro Vivo</h1>
+<p class="intro">Você participa do planejamento de uma praça urbana. Cada decisão leva a outra situação e mostra consequências para usuários, acessibilidade, conforto e manutenção. Existem três finais pedagógicos, sem classificação automática de certo ou errado.</p><p class="fine">Releia escolhas em modo somente leitura ou volte com confirmação para alterar apenas parte da tentativa atual. Percursos finalizados permanecem em um histórico separado. Sem cronômetro nem nota oficial.</p></section>
+<div class="metrics"><div class="metric"><small>Decisões atuais</small><strong id="count-decisions">0 / até 6</strong></div><div class="metric"><small>Percursos completos</small><strong id="count-archives">0</strong></div><div class="metric"><small>Finais diferentes</small><strong id="count-endings">0 / 3</strong></div><div class="metric"><small>Reflexões lidas</small><strong id="count-reflections">0</strong></div></div>
+<div id="meter" class="meter" role="progressbar" aria-label="Avanço aproximado no percurso atual" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><span id="meter-fill"></span></div>
+<div class="layout"><section class="panel" aria-labelledby="scene-title"><p id="scene-kicker" class="chapter"></p><h2 id="scene-title" tabindex="-1"></h2><div class="picture"><svg id="scene-art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" role="img" aria-labelledby="art-title art-desc"><title id="art-title">Praça urbana</title><desc id="art-desc">Ilustração original da praça.</desc><defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#badde3"/><stop offset="1" stop-color="#eef3db"/></linearGradient></defs>
+<g data-visual="before"><rect width="900" height="340" fill="url(#sk)"/><circle cx="731" cy="60" r="33" fill="#f5c875"/><path d="M0 219Q200 192 420 220T900 214V340H0Z" fill="#a8c5a5"/><path d="M0 259H900V340H0Z" fill="#c9c6b7"/><path d="M141 340L360 231H510L751 340Z" fill="#e6dac8" stroke="#b6aea0" stroke-width="5"/><path d="M167 258V113" stroke="#8b7152" stroke-width="15"/><circle cx="166" cy="117" r="69" fill="#428663"/><circle cx="119" cy="112" r="39" fill="#5ca579"/><circle cx="200" cy="94" r="43" fill="#64ab7f"/><rect x="593" y="225" width="135" height="17" rx="5" fill="#9e7954"/><path d="M611 244v41M710 244v41" stroke="#82694e" stroke-width="8"/></g>
+<g data-visual="people" display="none"><rect width="900" height="340" fill="#e6f0e3"/><path d="M0 266Q220 220 450 263T900 244V340H0Z" fill="#89b49b"/><rect x="174" y="171" width="554" height="110" rx="21" fill="#e7cfa3" stroke="#a98c67" stroke-width="8"/><rect x="225" y="195" width="449" height="65" rx="6" fill="#fffbe8"/><path d="M251 218h181M251 237h286M566 220h74" stroke="#92b7b3" stroke-width="8" stroke-linecap="round"/><g stroke="#5e7768" stroke-width="13"><path d="M156 193v90M747 194v90M320 137v57M596 137v57"/></g><g><circle cx="157" cy="139" r="41" fill="#b58664"/><circle cx="748" cy="140" r="41" fill="#926d55"/><circle cx="320" cy="90" r="37" fill="#b78c6b"/><circle cx="597" cy="89" r="37" fill="#a77f65"/></g><g fill="#518c77"><path d="M113 192q42-34 86 0v60h-86Z"/><path d="M704 192q42-34 86 0v60h-86Z"/><path d="M284 137q36-29 72 0v38h-72Z"/><path d="M561 138q36-29 72 0v38h-72Z"/></g></g>
+<g data-visual="plan" display="none"><rect width="900" height="340" fill="#d7e8e5"/><rect x="114" y="20" width="668" height="297" rx="15" fill="#fffdf2" stroke="#7d9c9d" stroke-width="9"/><rect x="143" y="47" width="611" height="244" rx="6" fill="#d9ead4"/><path d="M143 134H754V197H143Z" fill="#e8dcc4"/><path d="M420 47V291" stroke="#faf8e9" stroke-width="43"/><path d="M153 164H744" stroke="#9bb5a3" stroke-width="5" stroke-dasharray="11 7"/><g fill="#4b966c" stroke="#367a59" stroke-width="4"><circle cx="246" cy="86" r="36"/><circle cx="312" cy="239" r="36"/><circle cx="553" cy="86" r="37"/><circle cx="661" cy="240" r="36"/></g><g fill="#93c5c8"><rect x="183" y="219" width="64" height="44" rx="5"/><rect x="495" y="221" width="68" height="45" rx="5"/></g></g>
+<g data-visual="final" display="none"><rect width="900" height="340" fill="url(#sk)"/><circle cx="729" cy="61" r="34" fill="#f6d08a"/><path d="M0 226Q225 189 453 222T900 211V340H0Z" fill="#87b797"/><path d="M246 340L361 207H523L660 340Z" fill="#e6dac4"/><path d="M306 340l82-129M605 340L490 211" stroke="#fff7e5" stroke-width="8"/><g stroke="#8c7051" stroke-width="14"><path d="M139 262V120M760 260V113M575 246V148"/></g><g fill="#418960"><circle cx="137" cy="113" r="68"/><circle cx="760" cy="110" r="69"/><circle cx="575" cy="147" r="48"/></g><g fill="#6bae7e"><circle cx="100" cy="105" r="37"/><circle cx="177" cy="91" r="39"/><circle cx="718" cy="106" r="37"/><circle cx="797" cy="92" r="39"/></g><rect x="254" y="248" width="120" height="15" rx="5" fill="#a47c57"/><path d="M274 264v37M353 264v37" stroke="#896b50" stroke-width="8"/></g>
+</svg></div><p id="scene-alt" class="alt"></p><p id="scene-text" class="story"></p>
+<div id="arrival" class="arrival" hidden><strong>Consequência da decisão anterior</strong><p id="arrival-consequence"></p><p id="arrival-choice" class="alt"></p></div>
+<div id="decision-area"><h3 class="rule">O que você decide?</h3><div id="options" class="choices" aria-label="Escolhas disponíveis na cena atual"></div></div>
+<div id="ending-area" class="ending" hidden><h3 id="ending-title"></h3><p id="ending-summary"></p><ul id="ending-criteria"></ul><p id="ending-question"></p></div>
+<div class="controls"><button id="hint" class="button warn" type="button">Ver contexto para refletir</button><button id="back" class="button secondary" type="button" hidden>Voltar à decisão anterior</button><button id="restart" class="button danger" type="button">Iniciar novo percurso</button></div>
+<div id="reflection" class="reflection" hidden><strong>Para pensar</strong><p id="reflection-text"></p></div>
+<div id="back-confirm" class="confirm" role="group" aria-label="Confirmação de retorno" hidden><p id="back-text"></p><div class="controls"><button id="back-yes" class="button warn" type="button">Confirmar retorno</button><button id="back-no" class="button secondary" type="button">Cancelar</button></div></div>
+<div id="restart-confirm" class="confirm" role="group" aria-label="Confirmação de novo percurso" hidden><p>Iniciar um novo percurso apaga apenas as decisões e reflexões atuais. Até oito percursos completos permanecem registrados. Confirma?</p><div class="controls"><button id="restart-yes" class="button danger" type="button">Iniciar novo percurso</button><button id="restart-no" class="button secondary" type="button">Cancelar</button></div></div>
+<div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"><strong id="feedback-title">Orientação</strong><span id="feedback-text">Leia a situação e escolha como iniciar.</span></div></section>
+<div class="column"><section class="panel"><h2>Histórico da tentativa</h2><p class="alt">Rever é somente leitura. Refazer a partir de uma decisão exige confirmação e remove apenas as escolhas posteriores do percurso atual.</p><ol id="history" class="history" aria-label="Decisões e consequências atuais"></ol>
+<div id="review" class="review" hidden><strong id="review-title"></strong><p id="review-context"></p><p id="review-choice"></p><p id="review-consequence"></p><button id="review-close" type="button" class="button secondary">Fechar revisão</button></div></section>
+<section class="panel"><h2>Percursos concluídos</h2><p class="alt">Cada final alcançado fica registrado como uma tentativa independente. O histórico guarda os oito percursos completos mais recentes.</p><ol id="archives" class="archives" aria-label="Percursos completos e finais anteriores"></ol><p class="fine">O jogo funciona sem ponte MoodleMCP, mas nesse caso o progresso não está sincronizado com o Moodle. O resultado no navegador não equivale a nota acadêmica.</p></section></div></div></main><script>(function branchingStory(){
+"use strict";
+const DATA={"type":"branching_story","title":"Escolha o caminho - A Praça do Bairro Vivo","start":"briefing","settings":{"maxDecisions":6,"maxArchives":8},"scenes":[{"id":"briefing","title":"Uma praça, muitas necessidades","kicker":"Capítulo 1 · A missão","text":"O Bairro Vivo recebeu recursos para renovar sua praça. Há poucos bancos, pouca sombra e grandes superfícies pavimentadas. Você participa do conselho de planejamento e deve decidir por onde começar.","visual":"before","reflection":"Um bom diagnóstico costuma combinar as condições do espaço com as necessidades de quem o utiliza.","options":[{"id":"listen-first","label":"Escutar moradores e usuários da praça","next":"community","consequence":"A escuta traz experiências variadas, embora exija tempo para incluir pessoas que não frequentam reuniões."},{"id":"measure-first","label":"Começar com medidas e observações físicas","next":"survey","consequence":"A equipe registra sombra, pavimentos e circulação, mas ainda precisa entender as diferentes experiências de uso."}]},{"id":"community","title":"Quem utiliza a praça?","kicker":"Capítulo 2 · Comunidade","text":"Pessoas idosas pedem sombra, crianças querem brincar e uma pessoa com mobilidade reduzida relata desníveis nos caminhos. Nem todos os grupos conseguiram participar presencialmente.","visual":"people","reflection":"Uma votação simples pode invisibilizar dificuldades de grupos com menos participantes.","options":[{"id":"broaden-consultation","label":"Registrar demandas e consultar também quem não pôde participar","next":"priorities","consequence":"A equipe enriquece o diagnóstico com pessoas e horários que não estavam representados."},{"id":"vote-only","label":"Aproveitar somente as sugestões mais votadas","next":"shortcuts","consequence":"O desenho avança rápido, mas necessidades pouco representadas podem ficar fora do projeto."}]},{"id":"survey","title":"O levantamento da praça","kicker":"Capítulo 2 · Observação","text":"A equipe identificou trechos com pouca sombra, escoamento superficial depois de chuvas fortes e barreiras em alguns caminhos. Os dados não explicam quem usa cada lugar nem em quais horários.","visual":"plan","reflection":"Mapas físicos e relatos de usuários oferecem evidências complementares.","options":[{"id":"combine-evidence","label":"Cruzar medições com relatos e observação de uso","next":"priorities","consequence":"O planejamento passa a considerar tanto as condições técnicas quanto as experiências das pessoas."},{"id":"borrow-design","label":"Adotar um desenho de outra praça semelhante","next":"shortcuts","consequence":"Um modelo pronto reduz o tempo de elaboração, mas pode não refletir as necessidades locais."}]},{"id":"shortcuts","title":"Uma barreira inesperada","kicker":"Capítulo 3 · Revisão","text":"A proposta preliminar deixa um caminho importante com desníveis para algumas pessoas. Corrigir agora exige revisar prazos. Ignorar o problema pode trazer custos maiores depois.","visual":"people","reflection":"Quando uma barreira conhecida aparece, revisar decisões é uma opção legítima.","options":[{"id":"reopen-planning","label":"Rever as prioridades com usuários afetados","next":"priorities","consequence":"Você corrige o diagnóstico e volta ao planejamento, mesmo alterando o cronograma."},{"id":"postpone-revision","label":"Manter a proposta e avaliar limitações depois da obra","next":"multi-plan","consequence":"A entrega segue no prazo inicial, mas as barreiras ainda precisam de acompanhamento."}]},{"id":"priorities","title":"Que praça queremos?","kicker":"Capítulo 3 · Alternativas","text":"O projeto precisa combinar áreas de sombra, caminhos acessíveis, descanso, convivência e eventos. Existem alternativas com diferentes custos e exigências de manutenção.","visual":"plan","reflection":"Áreas verdes e espaços multiuso podem ser combinados. A melhor decisão exige pensar no uso e no contexto local.","options":[{"id":"choose-green","label":"Priorizar árvores, superfícies permeáveis e caminhos contínuos","next":"green-plan","consequence":"A proposta favorece conforto e vegetação, mas exigirá manutenção e condições adequadas ao local."},{"id":"choose-multi","label":"Priorizar uma praça multiuso com sombra distribuída","next":"multi-plan","consequence":"A proposta abre possibilidades para feiras e encontros, mas demanda atenção ao conforto e aos percursos."}]},{"id":"green-plan","title":"Uma proposta mais verde","kicker":"Capítulo 4 · Desenho","text":"A nova planta prevê árvores adequadas, caminhos contínuos e áreas vegetadas. Ainda falta decidir como será financiada a manutenção e a avaliação após a inauguração.","visual":"plan","reflection":"Instalar um equipamento ou plantar uma árvore não é garantia de resultado permanente.","options":[{"id":"green-maintain","label":"Reservar orçamento para manutenção e avaliação","next":"monitor","consequence":"A continuidade fica planejada, embora seja necessário negociar responsabilidades e recursos."},{"id":"green-deliver","label":"Usar a maior parte dos recursos na instalação imediata","next":"delivery","consequence":"A transformação inicial aparece mais rápido, mas o cuidado futuro depende de decisões posteriores."}]},{"id":"multi-plan","title":"Uma praça multiuso","kicker":"Capítulo 4 · Desenho","text":"O projeto oferece espaço para feiras e eventos e alguns trechos de sombra. A equipe precisa decidir como tratar a permeabilidade, o conforto e a manutenção.","visual":"plan","reflection":"Um espaço flexível continua precisando de condições adequadas para pessoas diferentes.","options":[{"id":"multi-adjust","label":"Ajustar sombreamento e acessibilidade e planejar manutenção","next":"monitor","consequence":"O projeto mantém flexibilidade e passa a prever ajustes e acompanhamento."},{"id":"multi-fast","label":"Entregar a primeira versão e revisar adaptações depois","next":"delivery","consequence":"A inauguração é antecipada, porém problemas reconhecidos podem persistir."}]},{"id":"monitor","title":"Como avaliar depois da obra?","kicker":"Capítulo 5 · Continuidade","text":"O planejamento prevê observar o uso em horários distintos, verificar caminhos e vegetação e acolher relatos dos frequentadores. O desafio agora é organizar esse acompanhamento.","visual":"final","reflection":"Indicadores e responsabilidades explícitos ajudam a perceber necessidades que surgem depois da entrega.","options":[{"id":"share-governance","label":"Criar acompanhamento com usuários e equipe técnica","next":"shared","consequence":"O acompanhamento compartilhado amplia perspectivas e permite discutir ajustes, mas exige reuniões e recursos contínuos."},{"id":"monitor-phases","label":"Definir revisões periódicas, responsáveis e entregas por fases","next":"phased","consequence":"O projeto ganha metas de verificação e etapas de melhoria, embora algumas mudanças sejam graduais."}]},{"id":"delivery","title":"O dia da inauguração","kicker":"Capítulo 5 · Consequências","text":"A praça está quase pronta e já oferece melhorias. Alguns pontos de conforto, acessibilidade e manutenção, porém, ainda precisam de avaliação. Como encerrar esta etapa?","visual":"final","reflection":"O desempenho da praça não depende apenas da data de inauguração.","options":[{"id":"commit-review","label":"Assumir uma segunda fase de avaliação e correção","next":"phased","consequence":"A inauguração se torna uma etapa de um plano mais amplo, com pendências verificáveis."},{"id":"close-with-risks","label":"Encerrar a obra, registrar pendências e deixar futuras decisões em aberto","next":"pending","consequence":"A praça abre, mas alguns problemas não têm responsáveis nem calendário definidos para revisão."}]},{"id":"shared","title":"Uma praça acompanhada por todos","kicker":"Final do percurso","text":"A praça recebe acompanhamento de usuários e técnicos, que observam caminhos, conforto, vegetação e manutenção ao longo do tempo.","visual":"final","ending":"valid","summary":"Gestão compartilhada: participação e acompanhamento trazem benefícios, mas demandam continuidade.","criteria":["A avaliação inclui critérios de conforto e acesso.","A representatividade dos grupos precisa ser cuidada.","Reuniões e recursos devem ter continuidade."],"question":"Como envolver grupos que costumam participar menos?","options":[]},{"id":"phased","title":"Uma praça em evolução","kicker":"Final do percurso","text":"O bairro recebe melhorias e um plano de revisão por fases. Algumas mudanças são implantadas mais tarde e exigem responsabilidades, recursos e comunicação pública.","visual":"final","ending":"valid","summary":"Melhorias graduais: um caminho válido quando compromissos futuros podem ser verificados.","criteria":["Cada fase deve ter objetivos claros.","Pendências exigem responsáveis e critérios de acompanhamento.","A comunicação evita confundir inauguração com encerramento."],"question":"Como verificar se uma segunda fase realmente aconteceu?","options":[]},{"id":"pending","title":"Uma praça entregue, desafios pendentes","kicker":"Final do percurso","text":"A praça foi inaugurada e pode ser usada, mas ainda há questões sem um plano claro de correção. O final não é uma punição: é uma oportunidade para analisar as consequências de priorizar a entrega imediata.","visual":"final","ending":"valid","summary":"Entrega com pendências: a inauguração é um marco, não um indicador suficiente de sucesso.","criteria":["A obra pode gerar benefícios mesmo com pendências.","Problemas identificados precisam de ações e responsáveis.","O acompanhamento é necessário para avaliar efeitos duradouros."],"question":"Qual escolha anterior você refaria para tornar as pendências verificáveis?","options":[]}]},root=document.getElementById("game"),$=id=>root.querySelector("#"+id);
+const controller=new AbortController(),bridge=window.MoodleMCP&&window.MoodleMCP.progress,progress=bridge&&typeof bridge.load==="function"&&typeof bridge.save==="function"?bridge:null;
+const storageKey="branchingStoryBairroVivoV1",location="games/branching-story-bairro-vivo";
+let state=initialState(DATA),ready=false,disposed=false,remote=null,modified=false,saveQueue=Promise.resolve(),serial=0,reviewIndex=null,rewindIndex=null;
+// PURE_START
+function sceneMap(d){return new Map(d.scenes.map(s=>[s.id,s]));}
+function validate(d){
+ if(!d||d.type!=="branching_story"||typeof d.title!=="string"||!d.title.trim()||typeof d.start!=="string"||
+ !d.settings||!Number.isInteger(d.settings.maxDecisions)||d.settings.maxDecisions<3||d.settings.maxDecisions>12||
+ !Number.isInteger(d.settings.maxArchives)||d.settings.maxArchives<1||d.settings.maxArchives>10||
+ !Array.isArray(d.scenes)||d.scenes.length<8||d.scenes.length>30)return false;
+ const ids=new Set(),optionIds=new Set(),map=new Map();let endings=0;
+ for(const s of d.scenes){
+  if(!s||typeof s.id!=="string"||!/^[a-z][a-z0-9-]*$/.test(s.id)||ids.has(s.id)||
+   !["title","kicker","text","visual"].every(k=>typeof s[k]==="string"&&s[k].trim())||
+   !["before","people","plan","final"].includes(s.visual)||!Array.isArray(s.options))return false;
+  ids.add(s.id);map.set(s.id,s);
+  if(s.ending!==undefined){
+   endings++;
+   if(s.ending!=="valid"||s.options.length||
+    !["summary","question"].every(k=>typeof s[k]==="string"&&s[k].trim())||
+    !Array.isArray(s.criteria)||s.criteria.length<2||s.criteria.some(x=>typeof x!=="string"||!x.trim()))return false;
+  }else{
+   if(typeof s.reflection!=="string"||!s.reflection.trim()||s.options.length<2||s.options.length>3)return false;
+   for(const o of s.options){
+    if(!o||typeof o.id!=="string"||!/^[a-z][a-z0-9-]*$/.test(o.id)||optionIds.has(o.id)||
+     typeof o.label!=="string"||!o.label.trim()||typeof o.next!=="string"||
+     typeof o.consequence!=="string"||!o.consequence.trim())return false;
+    optionIds.add(o.id);
+   }
+  }
+ }
+ if(!map.has(d.start)||map.get(d.start).ending||endings<3)return false;
+ for(const s of d.scenes)for(const o of s.options)if(!map.has(o.next))return false;
+ const visited=new Set(),gray=new Set();
+ function check(id,depth){
+  if(gray.has(id)||depth>d.settings.maxDecisions)return false;
+  visited.add(id);const s=map.get(id);
+  if(s.ending)return true;
+  gray.add(id);for(const o of s.options)if(!check(o.next,depth+1))return false;gray.delete(id);return true;
+ }
+ return check(d.start,0)&&visited.size===d.scenes.length;
+}
+function initialState(d){return {v:1,scene:d.start,path:[],hints:[],archives:[],complete:false};}
+function trace(path,d){
+ if(!Array.isArray(path)||path.length>d.settings.maxDecisions)return null;
+ const map=sceneMap(d),visited=new Set([d.start]);let current=d.start;
+ for(const step of path){
+  const s=map.get(current);
+  if(!step||!s||s.ending||step.scene!==current||typeof step.choice!=="string"||typeof step.next!=="string")return null;
+  const choice=s.options.find(x=>x.id===step.choice);
+  if(!choice||choice.next!==step.next||visited.has(choice.next))return null;
+  current=choice.next;visited.add(current);
+ }
+ return {scene:current,visited,complete:!!map.get(current).ending};
+}
+function validState(s,d){
+ if(!s||typeof s!=="object"||Array.isArray(s)||s.v!==1||typeof s.scene!=="string"||
+ !Array.isArray(s.path)||!Array.isArray(s.hints)||new Set(s.hints).size!==s.hints.length||
+ !Array.isArray(s.archives)||s.archives.length>d.settings.maxArchives||typeof s.complete!=="boolean")return false;
+ const route=trace(s.path,d);if(!route||route.scene!==s.scene||route.complete!==s.complete||
+ s.hints.some(id=>!route.visited.has(id)||!!sceneMap(d).get(id).ending))return false;
+ for(const saved of s.archives){
+  if(!saved||typeof saved.ending!=="string"||!Array.isArray(saved.path))return false;
+  const old=trace(saved.path,d);
+  if(!old||!old.complete||old.scene!==saved.ending)return false;
+ }
+ if(s.complete){
+  const last=s.archives.at(-1);
+  if(!last||last.ending!==s.scene||JSON.stringify(last.path)!==JSON.stringify(s.path))return false;
+ }
+ return true;
+}
+function transition(s,a,d){
+ if(!validState(s,d))return {state:s,changed:false,kind:"bad",message:"Estado inválido: nenhuma alteração foi aplicada."};
+ if(!a||typeof a.type!=="string")return {state:s,changed:false,kind:"info",message:"Escolha uma ação válida."};
+ if(a.type==="restart"){
+  if(!s.path.length&&!s.hints.length)return {state:s,changed:false,kind:"info",message:"O percurso já está no início."};
+  const next=initialState(d);next.archives=s.archives.map(x=>({ending:x.ending,path:x.path.map(y=>({...y}))}));
+  return {state:next,changed:true,kind:"info",message:"Novo percurso iniciado. Os resultados anteriores foram preservados."};
+ }
+ if(a.type==="rewind"){
+  if(!Number.isInteger(a.index)||a.index<0||a.index>=s.path.length)return {state:s,changed:false,kind:"bad",message:"Decisão inválida para voltar."};
+  const current=s.path[a.index].scene,path=s.path.slice(0,a.index),allowed=new Set([current,...path.map(x=>x.scene)]);
+  return {state:{...s,scene:current,path,hints:s.hints.filter(id=>allowed.has(id)),complete:false},changed:true,kind:"info",
+   message:"Você voltou à decisão "+(a.index+1)+". As "+(s.path.length-a.index)+" escolhas descendentes foram descartadas somente deste percurso."};
+ }
+ if(a.type==="hint"){
+  const node=sceneMap(d).get(s.scene);
+  if(node.ending||s.hints.includes(s.scene))return {state:s,changed:false,kind:"info",message:"Reflexão já consultada ou percurso concluído."};
+  return {state:{...s,hints:[...s.hints,s.scene]},changed:true,kind:"info",message:"Para pensar: "+node.reflection};
+ }
+ if(a.type==="choose"){
+  if(s.complete)return {state:s,changed:false,kind:"info",message:"O percurso foi concluído. Você pode revisá-lo ou iniciar outro."};
+  if(a.scene!==s.scene)return {state:s,changed:false,kind:"info",message:"A escolha não pertence à cena atual. Nada mudou."};
+  const node=sceneMap(d).get(s.scene),choice=node.options.find(o=>o.id===a.choice);
+  if(!choice)return {state:s,changed:false,kind:"bad",message:"Esta opção não existe na cena atual."};
+  if(s.path.length>=d.settings.maxDecisions)return {state:s,changed:false,kind:"bad",message:"Limite de decisões atingido."};
+  const path=[...s.path,{scene:s.scene,choice:choice.id,next:choice.next}],target=sceneMap(d).get(choice.next),complete=!!target.ending;
+  const archives=complete?[...s.archives,{ending:target.id,path:path.map(x=>({...x}))}].slice(-d.settings.maxArchives):s.archives;
+  return {state:{...s,scene:target.id,path,archives,complete},changed:true,kind:complete?"good":"info",
+   message:choice.consequence+(complete?" Desfecho alcançado. Leia seus critérios e oportunidades de reflexão.":" Leia a próxima situação para continuar.")};
+ }
+ return {state:s,changed:false,kind:"info",message:"Ação não reconhecida."};
+}
+// PURE_END
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+function getState(){return {v:1,scene:state.scene,path:state.path.map(x=>({...x})),hints:[...state.hints],archives:state.archives.map(x=>({ending:x.ending,path:x.path.map(y=>({...y}))})),complete:state.complete};}
+function restoreState(saved){
+ if(!validState(saved,DATA))return false;
+ state={v:1,scene:saved.scene,path:saved.path.map(x=>({...x})),hints:[...saved.hints],archives:saved.archives.map(x=>({ending:x.ending,path:x.path.map(y=>({...y}))})),complete:saved.complete};
+ reviewIndex=null;rewindIndex=null;render();return true;
+}
+function tell(message,kind="info"){
+ $("feedback").className="feedback "+kind;$("feedback-title").textContent=kind==="good"?"Desfecho registrado":kind==="bad"?"Ação não aplicada":kind==="warn"?"Confirmação necessária":"Orientação";
+ $("feedback-text").textContent=message;
+}
+function showReview(i){
+ const step=state.path[i];if(!step){reviewIndex=null;$("review").hidden=true;return;}
+ const node=sceneMap(DATA).get(step.scene),choice=node.options.find(o=>o.id===step.choice);
+ $("review").hidden=false;$("review-title").textContent="Decisão "+(i+1)+": "+node.title;
+ $("review-context").textContent=node.text;$("review-choice").textContent="Você escolheu: "+choice.label;
+ $("review-consequence").textContent="Consequência: "+choice.consequence;
+}
+function renderHistory(){
+ const list=$("history");list.replaceChildren();
+ if(!state.path.length)list.append(el("li","empty","Nenhuma decisão registrada até agora."));
+ for(const [i,step] of state.path.entries()){
+  const scene=sceneMap(DATA).get(step.scene),choice=scene.options.find(o=>o.id===step.choice),li=el("li");
+  li.append(el("strong","","Decisão "+(i+1)+": "+scene.title),el("p","",choice.label),el("p","",choice.consequence));
+  const controls=el("div","controls"),review=el("button","smallbutton","Rever"),rewind=el("button","smallbutton","Refazer a partir daqui");
+  review.type=rewind.type="button";review.dataset.review=String(i);rewind.dataset.rewind=String(i);review.disabled=rewind.disabled=!ready;
+  controls.append(review,rewind);li.append(controls);list.append(li);
+ }
+ if(reviewIndex!==null&&state.path[reviewIndex])showReview(reviewIndex);else $("review").hidden=true;
+}
+function renderArchives(){
+ const list=$("archives");list.replaceChildren();
+ if(!state.archives.length){list.append(el("li","empty","Nenhum percurso finalizado ainda."));return;}
+ for(const [i,attempt] of state.archives.entries()){
+  const ending=sceneMap(DATA).get(attempt.ending),li=el("li");
+  li.append(el("strong","","Percurso "+(i+1)+" · "+ending.title),
+   el("p","",attempt.path.length+" decisões. "+ending.summary));
+  list.append(li);
+ }
+}
+function render(){
+ if(disposed||!validate(DATA)||!validState(state,DATA))return;
+ const s=sceneMap(DATA).get(state.scene),last=state.path.at(-1),unique=new Set(state.archives.map(x=>x.ending));
+ $("count-decisions").textContent=state.path.length+" / até "+DATA.settings.maxDecisions;
+ $("count-archives").textContent=String(state.archives.length);
+ $("count-endings").textContent=unique.size+" / "+DATA.scenes.filter(x=>x.ending).length;
+ $("count-reflections").textContent=String(state.hints.length);
+ $("meter").setAttribute("aria-valuenow",String(state.complete?DATA.settings.maxDecisions:state.path.length));
+ $("meter-fill").style.width=(state.complete?100:100*state.path.length/DATA.settings.maxDecisions)+"%";
+ $("scene-kicker").textContent=s.kicker;$("scene-title").textContent=s.title;$("scene-text").textContent=s.text;
+ $("art-title").textContent=s.title;
+ const descriptions={before:"Praça inicial, predominantemente pavimentada, com uma árvore e um banco.",people:"Moradores reunidos em volta de uma mesa e um mapa de necessidades da praça.",plan:"Planta ilustrada da praça com árvores, caminhos e áreas permeáveis.",final:"Conceito visual de praça com árvores, caminhos e banco; não é uma medição de resultados."};
+ $("art-desc").textContent=descriptions[s.visual];$("scene-alt").textContent=descriptions[s.visual]+" A história e todas as escolhas estão disponíveis em texto.";
+ for(const g of root.querySelectorAll("[data-visual]"))g.setAttribute("display",g.dataset.visual===s.visual?"inline":"none");
+ $("arrival").hidden=!last;
+ if(last){const prev=sceneMap(DATA).get(last.scene),choice=prev.options.find(o=>o.id===last.choice);
+  $("arrival-consequence").textContent=choice.consequence;$("arrival-choice").textContent="Decisão anterior: "+choice.label;
+ }
+ $("decision-area").hidden=state.complete;
+ const options=$("options");options.replaceChildren();
+ if(!state.complete)for(const o of s.options){
+  const b=el("button","choice");b.type="button";b.dataset.choose=o.id;b.dataset.scene=s.id;
+  b.disabled=!ready;b.setAttribute("aria-label","Escolher: "+o.label);
+  b.append(el("span","",o.label),el("span","arrow","›"));options.append(b);
+ }
+ $("ending-area").hidden=!state.complete;
+ if(state.complete){
+  $("ending-title").textContent="Seu desfecho: "+s.title;$("ending-summary").textContent=s.summary;
+  const list=$("ending-criteria");list.replaceChildren();for(const criterion of s.criteria)list.append(el("li","",criterion));
+  $("ending-question").textContent="Para refletir: "+s.question;
+ }
+ $("hint").hidden=state.complete;$("hint").disabled=!ready||state.hints.includes(s.id);
+ $("reflection").hidden=state.complete||!state.hints.includes(s.id);
+ if(!s.ending)$("reflection-text").textContent=s.reflection;
+ $("back").hidden=!state.path.length;$("back").disabled=!ready;$("restart").disabled=!ready;
+ renderHistory();renderArchives();$("back-confirm").hidden=rewindIndex===null;
+ if(rewindIndex!==null&&state.path[rewindIndex])$("back-text").textContent="Voltar à decisão "+(rewindIndex+1)+": "+sceneMap(DATA).get(state.path[rewindIndex].scene).title+"? Isso remove "+(state.path.length-rewindIndex)+" decisão(ões) posteriores só desta tentativa. Os percursos concluídos serão preservados.";
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),number=++serial;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||number!==serial)return;
+  const base=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const data={...base,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(data)).length>12288){tell("Progresso excederia 12 KiB e não foi enviado.","bad");return;}
+  const response=await progress.save({version:remote.version,location,data});if(!disposed)remote={...response,data};
+ }).catch(async()=>{
+  if(disposed)return;serial++;
+  try{
+   const fresh=await progress.load();if(disposed)return;
+   if(fresh?.data?.[storageKey]&&restoreState(fresh.data[storageKey])){remote=fresh;tell("Progresso remoto mudou ou a escrita falhou. Restaurei a versão do servidor, sem sobrescrevê-la.","bad");}
+   else{remote=null;tell("Não foi possível reconciliar o progresso remoto. A história continua localmente.","bad");}
+  }catch(_){remote=null;tell("Falha de conexão. Não há sincronização de progresso confirmada.","bad");}
+ });
+}
+function handleAction(a){
+ if(!ready||disposed)return;
+ const r=transition(state,a,DATA);
+ if(!r.changed){tell(r.message,r.kind);return;}
+ state=r.state;modified=true;rewindIndex=null;reviewIndex=null;render();save();tell(r.message,r.kind);
+ if(["choose","rewind","restart"].includes(a.type))$("scene-title").focus({preventScroll:true});
+ if(a.type==="hint")$("hint").focus({preventScroll:true});
+}
+function askRewind(index){
+ if(!Number.isInteger(index)||!state.path[index])return;
+ rewindIndex=index;render();$("back-yes").focus({preventScroll:true});
+ tell("Confirme o retorno; apenas as decisões posteriores serão apagadas desta tentativa.","warn");
+}
+function askRestart(){
+ if(!state.path.length&&!state.hints.length){tell("Você já está no começo deste percurso.");return;}
+ $("restart-confirm").hidden=false;$("restart-yes").focus({preventScroll:true});
+ tell("Confirme o início de uma nova tentativa. Percursos anteriores continuam no histórico.","warn");
+}
+function destroy(){disposed=true;serial++;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){if(container)container.replaceChildren(el("div","error","A história contém cenas, escolhas, destinos ou finais inválidos."));return;}
+ render();
+ if(progress)try{
+  const loaded=await progress.load();if(disposed)return;remote=loaded;
+  if(!modified&&loaded?.data?.[storageKey]){
+   if(restoreState(loaded.data[storageKey]))tell("História retomada. Você pode continuar ou reler as escolhas.");
+   else tell("Estado remoto inválido ou incompatível. Não sobrescrevi o registro.","bad");
+  }
+ }catch(_){remote=null;tell("Não foi possível carregar o progresso remoto; a história funciona localmente.","bad");}
+ else tell("Modo independente: a história funciona sem sincronização confirmada com o Moodle.");
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",e=>{
+ const b=e.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.choose){handleAction({type:"choose",scene:b.dataset.scene,choice:b.dataset.choose});return;}
+ if(b.dataset.review!==undefined){
+  const i=Number(b.dataset.review);if(!state.path[i])return;
+  reviewIndex=i;showReview(i);tell("Revisão somente leitura da decisão "+(i+1)+". Nada foi alterado.");return;
+ }
+ if(b.dataset.rewind!==undefined){askRewind(Number(b.dataset.rewind));return;}
+ if(b.id==="hint"){handleAction({type:"hint"});return;}
+ if(b.id==="back"){askRewind(state.path.length-1);return;}
+ if(b.id==="restart"){askRestart();return;}
+ if(b.id==="review-close"){reviewIndex=null;$("review").hidden=true;tell("Revisão fechada; nenhuma decisão foi alterada.");return;}
+ if(b.id==="back-yes"){const i=rewindIndex;$("back-confirm").hidden=true;if(i!==null)handleAction({type:"rewind",index:i});return;}
+ if(b.id==="back-no"){rewindIndex=null;$("back-confirm").hidden=true;tell("Retorno cancelado; o caminho foi preservado.");return;}
+ if(b.id==="restart-yes"){$("restart-confirm").hidden=true;handleAction({type:"restart"});return;}
+ if(b.id==="restart-no"){$("restart-confirm").hidden=true;tell("Novo percurso cancelado; a tentativa atual foi preservada.");}
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>
