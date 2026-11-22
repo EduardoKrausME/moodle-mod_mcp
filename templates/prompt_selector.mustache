@@ -39,8 +39,15 @@
             <label class="form-label" for="mcp-prompt-{{type}}-text-{{cmid}}">
                 {{#str}}copyinstructions, mcp{{/str}}
             </label>
-            <textarea id="mcp-prompt-{{type}}-text-{{cmid}}" class="form-control mb-3"
+            <textarea id="mcp-prompt-{{type}}-text-{{cmid}}" class="form-control mb-2"
                       rows="8" readonly>{{prompt}}</textarea>
+            <div class="d-flex flex-wrap align-items-center mb-3">
+                <button type="button" class="btn btn-primary mr-2 mb-2" data-copy-prompt
+                        data-target="mcp-prompt-{{type}}-text-{{cmid}}">
+                    {{#str}}copyprompt, mcp{{/str}}
+                </button>
+                <span class="small mb-2" data-copy-status aria-live="polite" role="status"></span>
+            </div>
         </div>
     {{/promptoptions}}
 </div>
@@ -64,6 +71,59 @@ require([], function() {
             });
             Array.prototype.forEach.call(panels, function(panel) {
                 panel.hidden = panel.getAttribute('data-prompt-panel') !== selected;
+                var status = panel.querySelector('[data-copy-status]');
+                if (status) {
+                    status.textContent = '';
+                }
+            });
+        });
+    });
+
+    // Copy only the selected mode's complete prompt, never the label or other panels.
+    function copyFallback(field) {
+        field.focus();
+        field.select();
+        try {
+            return document.execCommand('copy');
+        } catch (error) {
+            return false;
+        }
+    }
+
+    var copyButtons = root.querySelectorAll('[data-copy-prompt]');
+    Array.prototype.forEach.call(copyButtons, function(button) {
+        button.addEventListener('click', function() {
+            var panel = button.closest('[data-prompt-panel]');
+            if (!panel || panel.hidden || button.disabled) {
+                return;
+            }
+            var field = panel.querySelector('textarea');
+            var status = panel.querySelector('[data-copy-status]');
+            if (!field || !status) {
+                return;
+            }
+            button.disabled = true;
+            status.textContent = '';
+            var value = field.value;
+            var result;
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                result = navigator.clipboard.writeText(value).catch(function() {
+                    return copyFallback(field);
+                });
+            } else {
+                result = Promise.resolve(copyFallback(field));
+            }
+            Promise.resolve(result).then(function(copied) {
+                // Clipboard.writeText resolves with undefined on success.
+                status.textContent = copied === false ?
+                    '{{#str}}copypromptfailed, mcp{{/str}}' :
+                    '{{#str}}copypromptsucceeded, mcp{{/str}}';
+            }).catch(function() {
+                field.focus();
+                field.select();
+                status.textContent = '{{#str}}copypromptfailed, mcp{{/str}}';
+            }).then(function() {
+                button.disabled = false;
             });
         });
     });
