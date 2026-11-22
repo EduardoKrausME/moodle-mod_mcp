@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Um atlas científico interativo sobre a jornada da água entre oceanos, atmosfera, vegetação, rios, gelo, solo e aquíferos, com experimentos e escolhas de rotas.">
+<meta name="color-scheme" content="light">
+<title>A incrível jornada de uma gota de água | Atlas das águas</title>
+<style>
+:root{--paper:#f5f2e5;--shell:#fbf9f0;--ink:#203f43;--ocean:#124d68;--teal:#277e7e;--deep:#163d52;--leaf:#4c8461;--gold:#f6c66b;--coral:#de835e;--mist:#b5d9dc;--line:#c5d4c8;--muted:#48676a;--display:Georgia,"Times New Roman",serif;--body:system-ui,-apple-system,"Segoe UI",sans-serif;--code:ui-monospace,SFMono-Regular,Consolas,monospace;font-family:var(--body);color:var(--ink);background:var(--paper)}
+*,*:before,*:after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:286px;line-height:1.75;background:var(--paper)}
+h1,h2,h3,p,figure{margin-top:0}
+h1,h2,h3{line-height:1.15}
+h2{font:700 clamp(2rem,4.2vw,4.1rem)/1.1 var(--display);letter-spacing:-.044em}
+h3{font:700 clamp(1.35rem,2vw,1.85rem)/1.25 var(--display)}
+p{margin-bottom:1.18em}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.52;cursor:default}
+a{color:#145d76;text-underline-offset:3px}
+a:hover{color:#0c414d}
+:focus-visible{outline:3px solid #bc663e;outline-offset:4px}
+[hidden]{display:none!important}
+.wrapper{width:min(1230px,calc(100% - 50px));margin-inline:auto}
+.eyebrow{font:800 .76rem/1.3 var(--code);letter-spacing:.15em;text-transform:uppercase;color:#377f78}
+.skip{position:absolute;top:-105px;left:12px;background:#fff;color:#194252;padding:12px 15px;z-index:30}
+.skip:focus{top:12px}
+.info-label{display:inline-block;padding:7px 12px;border:1px solid #86ada3;font:750 .77rem var(--code);color:#276f64}
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#9cd6d2 0%,#d6ebe1 55%,#f5f2e5 100%);isolation:isolate}
+.hero:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.23;background:radial-gradient(ellipse at 20% 15%,#fff 0,transparent 35%),repeating-linear-gradient(110deg,transparent 0 37px,#d3eee6 38px 40px)}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:23px 0;border-bottom:1px solid #1a6b6e4a;font:.77rem var(--code);letter-spacing:.13em;color:#28595d}
+.hero-top strong{font-weight:850}
+.hero-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:12px;align-items:center;min-height:670px;padding:58px 0 65px}
+.hero h1{font:700 clamp(3.65rem,6.9vw,7.25rem)/.96 var(--display);letter-spacing:-.075em;max-width:700px;margin:21px 0 30px}
+.hero h1 em{font-weight:400;font-style:italic;color:#176b7d}
+.hero .intro-line{max-width:570px;font-size:1.13rem;color:#345d60;line-height:1.85}
+.hero-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.hero-badges span{background:#eefaf2b0;border:1px solid #83b6aa;color:#295f5c;padding:8px 13px;font:.76rem var(--code)}
+.hero-figure{margin:0;min-width:0;position:relative}
+.hero-figure svg{width:100%;height:auto;display:block;filter:drop-shadow(9px 16px 18px #29546826)}
+.hero-figure figcaption{font-size:.81rem;line-height:1.6;color:#366968;max-width:590px;padding:10px 16px;background:#f5fbf2b3}
+.hero-cloud{animation:cloudglide 14s ease-in-out infinite alternate}
+.hero-sun{animation:sunbreath 6s ease-in-out infinite alternate;transform-origin:555px 119px}
+.hero-waves{animation:wavepulse 5s ease-in-out infinite alternate}
+@keyframes cloudglide{from{transform:translateX(-12px)}to{transform:translateX(11px)}}
+@keyframes sunbreath{from{opacity:.85;transform:scale(.97)}to{opacity:1;transform:scale(1.04)}}
+@keyframes wavepulse{from{transform:translateY(2px)}to{transform:translateY(-4px)}}
+.hero-figure.is-paused .hero-cloud,.hero-figure.is-paused .hero-sun,.hero-figure.is-paused .hero-waves{animation-play-state:paused}
+.quiet-button{padding:10px 15px;border:1px solid #367c79;background:#effaf1;color:#235e61;font-weight:750;font-size:.86rem}
+.quiet-button:hover{background:#d8ede5}
+.hero-footer{border-top:1px solid #559b9690;padding:18px 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#2b6968;font:.78rem var(--code)}
+.section{padding:88px 0;border-bottom:1px solid var(--line)}
+.section-header{display:grid;grid-template-columns:195px 1fr;gap:49px;margin-bottom:39px}
+.section-header .eyebrow{padding-top:10px}
+.section-header h2{margin:0 0 18px}
+.section-header p{font-size:1.09rem;line-height:1.85;color:var(--muted);max-width:795px;margin:0}
+.intro-note{display:grid;grid-template-columns:230px 1fr;gap:53px;padding:93px 0}
+.intro-note .chapter-no{font:8rem/.9 var(--display);letter-spacing:-.1em;color:#bed6d0;display:block}
+.intro-note .lead{font:1.65rem/1.5 var(--display);color:#1d5361}
+.intro-note p{font-size:1.05rem;max-width:830px;line-height:1.94;color:#405d5c}
+.paper-note{border-left:5px solid #388b86;padding:17px 22px;background:#e6ede6;color:#375d58}
+.paper-note strong{color:#1d5757}
+.atlas{background:#e0ede3;border-block:1px solid #c0d5ca;padding:88px 0}
+.atlas .section-header p{color:#3d6862}
+.atlas-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:22px;align-items:start}
+.world{border:9px solid #f7faec;background:#c5e4da;box-shadow:8px 12px 0 #9cbab075;min-width:0}
+.world-view{position:relative;overflow:hidden}
+.world-view svg{width:100%;height:auto;display:block}
+.world-view .flow{fill:none;stroke:#f9fff4;stroke-width:5;stroke-dasharray:7 14;opacity:.7;animation:waterflow 9s linear infinite}
+.world-view .flow.dark{stroke:#386a7b;opacity:.55}
+@keyframes waterflow{to{stroke-dashoffset:-130}}
+.world-view.is-paused .flow{animation-play-state:paused}
+.world-view .drop{position:absolute;z-index:5;left:15.85%;top:67.6%;width:39px;height:46px;transform:translate(-50%,-50%);transition:left .9s ease,top .9s ease;filter:drop-shadow(0 3px 4px #16495d4d);pointer-events:none}
+.world-view .drop svg{display:block;width:100%;height:100%}
+.world-view.is-paused .drop{transition:none}
+.world-view .point{position:absolute;transform:translate(-50%,-50%);border-radius:100px;border:2px solid #effbf3;background:#225767;color:#fff;min-width:33px;height:33px;font:850 .86rem var(--code);box-shadow:0 2px 0 #1f4949,0 0 0 3px #ecf9eb50;z-index:3}
+.world-view .point[aria-pressed="true"]{background:#f1b353;color:#203c3d;box-shadow:0 0 0 5px #fff7df}
+.world-view .point:hover{background:#427f78}
+.world-view .point[data-node="ocean"]{left:15.85%;top:67.6%}
+.world-view .point[data-node="vapor"]{left:29.88%;top:20.4%}
+.world-view .point[data-node="cloud"]{left:54.88%;top:18.5%}
+.world-view .point[data-node="ice"]{left:85.37%;top:37%}
+.world-view .point[data-node="land"]{left:59.76%;top:57.4%}
+.world-view .point[data-node="soil"]{left:57.32%;top:82.4%}
+.world-view .point[data-node="plant"]{left:40.49%;top:50.9%}
+.world-view .point[data-node="aquifer"]{left:79.27%;top:86.1%}
+.world-view .point[data-node="river"]{left:83.54%;top:63.9%}
+.world figcaption{padding:15px 17px;font-size:.8rem;line-height:1.62;color:#41645c;background:#f7faf1}
+.journey-panel{background:#fcfff5;border:1px solid #95b7aa;padding:25px;box-shadow:0 8px 0 #b8cebd63}
+.journey-panel .capsule{display:inline-block;padding:6px 10px;background:#d5ede4;color:#266b65;font:750 .7rem var(--code)}
+.journey-panel h3{font-size:2.08rem;margin:14px 0}
+.journey-panel p{color:#42635f;font-size:.96rem;line-height:1.77}
+.journey-panel .phase{font:750 .82rem var(--code);border-top:1px solid #b9cbbd;padding-top:13px;color:#32685d}
+.journey-panel .phase strong{color:#174a4a}
+.journey-panel .tiny-title{font:800 .7rem var(--code);text-transform:uppercase;letter-spacing:.08em;color:#446966;margin:20px 0 11px}
+.journey-panel .routes{display:grid;gap:10px}
+.journey-panel .routes button{border:1px solid #6b9d92;background:#e9f5ea;color:#254b45;text-align:left;padding:12px 13px;line-height:1.5;font-size:.92rem}
+.journey-panel .routes button:hover{background:#cfece0}
+.journey-panel .routes button:disabled{display:none}
+.journey-panel .routes small{display:block;color:#507c72;margin-top:4px;font-size:.79rem}
+.journey-panel .travel-detail{margin-top:18px;padding:14px 16px;background:#e5f0e6;border-left:4px solid #4a9383;color:#2e5952;line-height:1.68;min-height:82px;font-size:.9rem}
+.travel-controls{display:flex;flex-wrap:wrap;gap:9px;margin-top:21px}
+.travel-controls button{padding:9px 13px;border:1px solid #699c8d;background:#285e59;color:#fff;font-size:.83rem;font-weight:760}
+.travel-controls button.alt{color:#235b51;background:transparent}
+.journey-list{margin:26px 0 0;padding:15px 18px 14px;border:1px dashed #84b2a1;background:#f4faee}
+.journey-list h3{font:750 .87rem var(--code);margin:0 0 8px}
+.journey-list ol{margin:0;padding-left:23px;font-size:.85rem;color:#3e655c;max-height:164px;overflow:auto}
+.journey-list li{margin:4px 0}
+.starts{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:19px}
+.starts span{font:750 .8rem var(--code);color:#2a5d55;margin-right:4px}
+.starts button{padding:8px 12px;border:1px solid #72a597;background:#f2faf2;color:#2b645d;font-size:.84rem}
+.starts button:hover{background:#d9eadd}
+.atlas-hint{font-size:.87rem;max-width:920px;margin-top:23px;color:#406258;line-height:1.8}
+.process-pair{display:grid;grid-template-columns:1fr 1fr;gap:38px;align-items:center}
+.pair-text p{color:#44605e;font-size:1.04rem;line-height:1.94}
+.pair-text h3{margin:23px 0 14px}
+.science-figure{margin:0;background:#e5f3e9;padding:22px;border:1px solid #aacabd}
+.science-figure svg{width:100%;height:auto;display:block}
+.science-figure figcaption{margin-top:14px;font-size:.81rem;color:#446c60;line-height:1.62}
+.lab-energy{margin-top:42px;background:#163d52;color:#eaf8ee;padding:28px 32px;border-radius:0 75px 0 0}
+.lab-energy h3{color:#fff6dc;margin-bottom:9px}
+.lab-energy p{font-size:.92rem;color:#d9eae2}
+.energy-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+.lab-sliders{display:grid;gap:18px}
+.slider-label{display:flex;justify-content:space-between;gap:15px;align-items:center;font-size:.85rem;font-weight:740}
+.slider-label output{font-family:var(--code);color:#fbd08c;font-variant-numeric:tabular-nums}
+.lab-sliders input[type=range]{width:100%;accent-color:#81d1bd;cursor:pointer}
+.lab-sliders small{font-size:.79rem;color:#d2e2dd;display:block}
+.energy-output{padding:26px;background:#e8f5e8;color:#184552}
+.energy-output .eyebrow{color:#3f8179}
+.energy-output .level{font:700 3.25rem var(--display);margin:17px 0 10px;color:#1d6e78}
+.energy-output .meter{height:15px;background:#acc9bc;border:1px solid #639e90}
+.energy-output .meter span{height:100%;display:block;width:0;background:linear-gradient(90deg,#7ac6a1,#f9c76d);transition:width .2s}
+.energy-output p{color:#335a52;font-size:.86rem;line-height:1.73}
+.energy-output .action{padding:9px 13px;border:1px solid #397e76;background:#2e7975;color:#fff;font-weight:750}
+.glacier{background:#e8f0ec}
+.glacier .pair-text p{color:#405e62}
+.glacier-figure{background:#f2f8f3}
+.band{background:#1c5269;padding:78px 0;color:#eaf7ed}
+.band h2{color:#f6fbf1}
+.band p{color:#d9e8e4}
+.band .eyebrow{color:#9ad7c7}
+.band-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:38px}
+.band-card{border-top:5px solid #d9bb80;padding:23px 22px;background:#245d74}
+.band-card:nth-child(2){border-color:#9ed6c4}
+.band-card:nth-child(3){border-color:#d4ac92}
+.band-card h3{color:#f7efd8;font-size:1.54rem}
+.band-card p{font-size:.94rem;line-height:1.8}
+.ground{background:#f4f2e5}
+.ground-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:28px;align-items:start}
+.ground-figure{background:#faf9ef;border:1px solid #b8c8b7;padding:16px;margin:0}
+.ground-figure svg{display:block;width:100%;height:auto}
+.ground-figure .soil-runoff{opacity:.15;transition:opacity .2s}
+.ground-figure .soil-down{opacity:.85;transition:opacity .2s}
+.ground-figure[data-land="compact"] .soil-runoff{opacity:.75}
+.ground-figure[data-land="compact"] .soil-down{opacity:.48}
+.ground-figure[data-land="paved"] .soil-runoff{opacity:1}
+.ground-figure[data-land="paved"] .soil-down{opacity:.2}
+.ground-figure figcaption{font-size:.8rem;line-height:1.55;color:#537365;margin-top:10px}
+.ground-lab{padding:27px;background:#e3eddd;border:1px solid #a7bdab}
+.ground-lab h3{margin:8px 0 14px}
+.ground-lab p{font-size:.94rem;color:#456459;line-height:1.8}
+.ground-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:18px 0 24px}
+.ground-choices button{padding:10px 7px;border:1px solid #6d9786;background:#f6faf1;font-size:.82rem;color:#2d665c}
+.ground-choices button[aria-pressed="true"]{background:#315f55;color:#fff}
+.ground-lab label{display:flex;justify-content:space-between;gap:14px;font-weight:760;font-size:.88rem}
+.ground-lab label output{font-family:var(--code);color:#19515b}
+.ground-lab input{accent-color:#3a827b;width:100%;margin:13px 0}
+.balance{margin-top:20px;display:flex;overflow:hidden;height:24px;border:1px solid #789f91;background:#b4c7c4}
+.balance .infiltration{background:#4f9d8b;transition:width .2s}
+.balance .runoff{background:#d68b65;transition:width .2s}
+.balance-legend{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
+.balance-legend div{font-size:.82rem}
+.balance-legend strong{display:block;font:1.6rem var(--display);color:#235d58;margin:5px 0}
+.balance-result{padding:15px 17px;background:#f6f8ed;border-left:4px solid #477f6a;margin-top:19px;min-height:102px;font-size:.88rem;color:#385d52}
+.ground-note{margin-top:30px;padding:17px 20px;border-left:5px solid #4f9a87;background:#e2ece0;color:#3d6559;font-size:.93rem}
+.ground-explainer{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:39px}
+.ground-explainer p{color:#42665b;line-height:1.93}
+.ground-explainer h3{margin-bottom:12px}
+.city{padding:85px 0;background:#e6efde}
+.city-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:35px;align-items:center}
+.city-figure{margin:0;background:#f9f9e9;padding:17px;border:1px solid #bac9b2}
+.city-figure svg{width:100%;height:auto;display:block}
+.city-figure figcaption{font-size:.81rem;color:#516f60;margin-top:12px}
+.city-grid p{font-size:1.02rem;color:#405f54;line-height:1.86}
+.climate{padding:85px 0;background:#263e43;color:#f2f9eb}
+.climate .eyebrow{color:#b1dfbd}
+.climate h2{color:#f5f8ea}
+.climate .section-header p{color:#d2e4d7}
+.climate-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.climate-grid article{padding:28px;background:#365358;border-top:5px solid #d8a875}
+.climate-grid article:nth-child(2){border-color:#7cb9b2}
+.climate-grid h3{font-size:1.55rem;color:#fff5d5}
+.climate-grid p{color:#e1ece5;font-size:.98rem;line-height:1.84}
+.residence{padding:85px 0}
+.residence-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.residence-card{padding:23px 25px;border:1px solid #bfd1c3;background:#eff6e9}
+.residence-card .name{font:700 1.5rem var(--display);display:block;margin-bottom:7px}
+.residence-card .tempo{font:750 .79rem var(--code);color:#277c76}
+.residence-card p{margin:12px 0 0;font-size:.94rem;color:#45695d}
+.quiz{padding:85px 0;background:#e5ede4}
+.quiz-grid{display:grid;grid-template-columns:.75fr 1.25fr;gap:47px}
+.quiz-aside p{color:#456158;font-size:1.04rem;line-height:1.86}
+.question{padding:0 0 23px;border:0;border-bottom:1px solid #b7cbbd;margin:0 0 22px}
+.question legend{width:100%;padding:0;font-weight:820;line-height:1.55;margin-bottom:13px}
+.question label{display:flex;gap:12px;align-items:flex-start;margin:8px 0;padding:12px 13px;background:#f8fbf3;border:1px solid #b2c9bb;cursor:pointer}
+.question label:has(input:checked){background:#deeee1;border-color:#4a8470}
+.question input{flex:none;margin-top:6px;accent-color:#347b69}
+.question-feedback{font-size:.9rem;color:#286458;margin:12px 0 0;min-height:1.4em}
+.quiz-actions{display:flex;gap:10px;flex-wrap:wrap}
+.quiz-actions button{padding:12px 17px;border:1px solid #40776b;background:#2d6f6e;color:white;font-weight:800}
+.quiz-actions button.alt{background:transparent;color:#35665d}
+.quiz-result{font:1.4rem/1.6 var(--display);margin-top:17px}
+.end{background:#195b66;padding:68px 0;color:#f4f9e9}
+.end h2{color:#f5fcea;max-width:950px}
+.end p{color:#dcf2e9;font-size:1.1rem;max-width:900px;line-height:1.9}
+.sources{padding:45px 0 73px;font-size:.91rem;color:#426259}
+.sources h2{font-size:1.53rem}
+.sources p{line-height:1.8}
+.sources a{overflow-wrap:anywhere}
+@media(max-width:995px){.hero-grid,.section-header,.intro-note,.atlas-grid,.process-pair,.energy-grid,.ground-grid,.ground-explainer,.city-grid,.quiz-grid{grid-template-columns:1fr}.hero-grid{padding:48px 0}.hero-figure{max-width:800px}.section-header{gap:12px}.intro-note{gap:10px}.intro-note .chapter-no{font-size:4.9rem}.world{max-width:960px}.ground-figure{max-width:870px}}
+@media(max-width:660px){.wrapper{width:calc(100% - 28px)}.hero-top{font-size:.66rem;letter-spacing:0;flex-wrap:wrap}.hero-grid{padding:40px 0 45px}.hero h1{font-size:clamp(3.3rem,11.5vw,5.2rem)}.section,.atlas,.city,.climate,.residence,.quiz{padding:59px 0}.intro-note{padding:65px 0}.band{padding:54px 0}.band-grid,.climate-grid,.residence-grid{grid-template-columns:1fr}.world{border-width:5px;box-shadow:none}.world-view .point{min-width:25px;height:25px;font-size:.69rem;border-width:1px}.world-view .drop{width:25px;height:32px}.journey-panel{padding:19px}.lab-energy{border-radius:0 35px 0 0;padding:20px}.ground-choices{grid-template-columns:1fr 1fr 1fr}.ground-choices button{font-size:.72rem;padding:9px 4px}.science-figure{padding:13px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.world-view .flow{stroke-dasharray:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<main id="conteudo">
+<section class="hero" aria-labelledby="titulo">
+ <div class="wrapper">
+  <div class="hero-top"><span><strong>ATLAS DAS ÁGUAS</strong> · CADERNO 07/10</span><span>Expedição científica ilustrada · ciclo hidrológico</span></div>
+  <div class="hero-grid">
+   <div>
+    <span class="eyebrow">Uma história com vários caminhos</span>
+    <h1 id="titulo">A incrível jornada de <em>uma gota de água.</em></h1>
+    <p class="intro-line">Ela pode subir como vapor, cair como chuva, alimentar uma árvore, correr por um rio ou permanecer escondida entre os grãos de areia. A mesma água percorre caminhos diferentes, sem uma ordem obrigatória e sem relógio universal.</p>
+    <div class="hero-badges"><span>9 reservatórios para explorar</span><span>Rotas alternativas</span><span>Ciência + experimentos</span></div>
+   </div>
+   <figure class="hero-figure" id="heroFigure">
+    <svg viewBox="0 0 730 620" role="img" aria-labelledby="heroSvgTitle heroSvgDesc">
+     <title id="heroSvgTitle">Paisagem ilustrada do ciclo da água entre oceano, nuvens, montanhas, rios e plantas</title>
+     <desc id="heroSvgDesc">Cena vetorial original em estilo de livro naturalista com sol amarelo, nuvens claras, geleira sobre montanha, árvores, rio sinuoso e oceano. Pequenos traços representam água em diferentes percursos sem fechá-los em um círculo único.</desc>
+     <defs>
+      <linearGradient id="mountGrad" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#9ebeb2"/><stop offset="1" stop-color="#578888"/></linearGradient>
+      <linearGradient id="seaGrad" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4cabb0"/><stop offset="1" stop-color="#146b8b"/></linearGradient>
+     </defs>
+     <circle class="hero-sun" cx="555" cy="119" r="64" fill="#f6c56e"/><circle cx="555" cy="119" r="82" fill="none" stroke="#f1c978" stroke-width="6" stroke-dasharray="6 19"/>
+     <g class="hero-cloud" fill="#f9fff2"><ellipse cx="180" cy="118" rx="116" ry="40"/><ellipse cx="155" cy="89" rx="66" ry="51"/><ellipse cx="228" cy="92" rx="69" ry="55"/><ellipse cx="379" cy="71" rx="94" ry="32"/><ellipse cx="355" cy="51" rx="53" ry="39"/><ellipse cx="410" cy="43" rx="54" ry="42"/></g>
+     <path d="M210 331 L390 96 L570 338Z" fill="url(#mountGrad)" stroke="#538d89" stroke-width="4"/>
+     <path d="M383 100 L328 178 L364 169 L386 198 L417 163 L453 180Z" fill="#f1f7ed"/>
+     <path d="M380 110 L404 156 L391 154 L380 168 L365 155Z" fill="#c8e5e3"/>
+     <path d="M470 331 L602 182 L706 338Z" fill="#86b19d"/>
+     <path d="M596 192 L567 229 L600 228 L619 247 L637 225Z" fill="#eef7ec"/>
+     <path d="M20 348 Q169 280 296 359 T730 325 V620 H20Z" fill="#94bd8d"/>
+     <path d="M0 429 Q164 361 277 436 T571 418 T730 430 V620 H0Z" fill="#629b79"/>
+     <path d="M530 273 Q495 353 468 402 Q432 431 399 451 T359 517 H530 Q570 473 595 435 T623 393 Q590 340 593 309" fill="#91d0d1" stroke="#5ba7b0" stroke-width="6"/>
+     <path d="M0 501 Q182 464 311 526 T730 523 V620 H0Z" fill="url(#seaGrad)"/>
+     <g class="hero-waves" fill="none" stroke="#b6e7df" stroke-width="5" stroke-linecap="round"><path d="M38 539 q41 -19 86 0 t90 0 M275 571 q52 -19 102 0 t100 0 M530 556 q48 -17 94 0 t82 0"/></g>
+     <g fill="#306d53" stroke="#285a46" stroke-width="4"><path d="M88 451 L131 291 L169 453Z"/><path d="M119 453 L166 326 L202 453Z"/><path d="M621 427 L651 322 L683 431Z"/><path d="M654 432 L690 345 L717 438Z"/></g>
+     <path d="M136 462 V386 M672 438 V399" stroke="#725747" stroke-width="14"/>
+     <g fill="none" stroke="#d9f6ef" stroke-width="6" stroke-linecap="round" stroke-dasharray="5 14"><path d="M180 465 Q105 354 155 213"/><path d="M405 126 Q442 225 460 318"/><path d="M467 238 Q507 191 531 168"/></g>
+     <g fill="#87cddb" stroke="#2b7898" stroke-width="3"><path d="M208 303 Q178 341 205 350 Q236 342 208 303Z"/><path d="M256 250 Q234 280 257 289 Q281 281 256 250Z"/><path d="M456 292 Q432 328 457 333 Q478 327 456 292Z"/></g>
+     <g fill="#f5f8e8" font-family="Georgia,serif" font-size="25"><text x="43" y="591">OCEANO</text><text x="495" y="483">RIO</text></g>
+    </svg>
+    <figcaption>Figura 1. Paisagem SVG autoral; setas e formas representam processos e reservatórios, sem pretensão de escala ou de proporção científica.</figcaption>
+    <button type="button" class="quiet-button" id="pauseHero" aria-pressed="false">Pausar movimento ilustrativo</button>
+   </figure>
+  </div>
+  <div class="hero-footer"><span>LEITURA EXPLORATÓRIA · 25 A 30 MINUTOS</span><span>Os controles são didáticos, não instrumentos de previsão.</span></div>
+ </div>
+</section>
+
+<section class="intro-note wrapper" aria-labelledby="prologo">
+ <div><span class="chapter-no" aria-hidden="true">01</span><span class="eyebrow">A ideia fundamental</span></div>
+ <div>
+  <h2 id="prologo">Não existe uma primeira gota, nem um único caminho.</h2>
+  <p class="lead">O ciclo hidrológico é a circulação contínua da água entre reservatórios conectados por diferentes fluxos.</p>
+  <p>A maior parte da água da Terra está nos oceanos, mas ela também existe como gelo, umidade no solo, água subterrânea, água em rios e lagos, vapor na atmosfera e água dentro dos seres vivos. Evaporação, transpiração, precipitação, escoamento, infiltração e descargas subterrâneas movimentam quantidades diferentes de água. Uma molécula pode permanecer em um reservatório por pouco tempo ou por períodos muito longos.</p>
+  <p>A radiação solar fornece energia para a evaporação e para a dinâmica atmosférica; a gravidade participa da precipitação e dos fluxos em terrenos, rios e aquíferos. Vegetação, relevo, propriedades do solo e atividades humanas influenciam o percurso. Portanto, o conhecido desenho escolar em formato de círculo é útil como introdução, mas <strong>não descreve a variedade de caminhos possíveis</strong>.</p>
+  <div class="paper-note"><strong>Como usar a aula:</strong> escolha por onde começar, experimente rotas alternativas e anote a diferença entre o que o modelo representa e os fenômenos que ele simplifica. A trajetória é conceitual: não estamos acompanhando uma molécula real nem medindo velocidade ou duração de deslocamento.</div>
+ </div>
+</section>
+
+<section class="atlas" aria-labelledby="mapaTitulo">
+ <div class="wrapper">
+  <div class="section-header"><span class="eyebrow">02 / Atlas vivo</span><div><h2 id="mapaTitulo">Decida por onde a gota vai passar.</h2><p>O mapa liga nove reservatórios e estados. Cada botão propõe uma transformação fisicamente possível, mas não obrigatória. Toque nos pontos para inspecionar um reservatório ou use os botões de rota para continuar a história.</p></div></div>
+  <div class="atlas-grid">
+   <figure class="world">
+    <div class="world-view" id="worldView">
+     <svg viewBox="0 0 820 540" role="img" aria-labelledby="worldTitle worldDesc">
+      <title id="worldTitle">Mapa científico-artístico de reservatórios de água</title>
+      <desc id="worldDesc">Oceano à esquerda, ar e nuvens acima, vegetação, planície e montanhas ao centro, rio à direita e um corte de solo com aquífero na parte inferior. Botões identificam oceanos, vapor, nuvem, neve, superfície, solo, planta, aquífero e rio. Uma gota se move de um ponto ao outro quando o aluno escolhe uma rota.</desc>
+      <defs><linearGradient id="wsky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#92d2cb"/><stop offset="1" stop-color="#dfefe0"/></linearGradient><linearGradient id="wsea" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#55b6b3"/><stop offset="1" stop-color="#20698b"/></linearGradient></defs>
+      <rect width="820" height="540" fill="url(#wsky)"/>
+      <circle cx="147" cy="99" r="51" fill="#f4cf79" opacity=".9"/>
+      <g fill="#f6fff0"><ellipse cx="440" cy="87" rx="114" ry="29"/><ellipse cx="397" cy="65" rx="62" ry="43"/><ellipse cx="494" cy="59" rx="66" ry="45"/></g>
+      <path d="M532 300 L693 88 L815 298Z" fill="#77a6a3" stroke="#53878e" stroke-width="4"/>
+      <path d="M690 90 L643 163 L672 152 L700 190 L733 145 L759 178Z" fill="#f2fcf2"/>
+      <path d="M266 319 Q375 235 480 302 T820 294 V540 H266Z" fill="#8cbb8f"/>
+      <path d="M0 344 Q144 324 283 355 T529 347 T820 348 V540 H0Z" fill="#78b78a"/>
+      <path d="M626 299 Q605 331 672 343 Q732 362 674 383 T780 415" fill="none" stroke="#79c6c5" stroke-width="31"/>
+      <path d="M0 355 Q112 341 245 378 T307 411 V540 H0Z" fill="url(#wsea)"/>
+      <path d="M265 387 Q399 370 563 396 T820 402 V540 H265Z" fill="#9c7859"/>
+      <path d="M266 422 Q406 409 555 435 T820 428 V540 H266Z" fill="#be986f"/>
+      <path d="M266 468 Q447 451 551 472 T820 471 V540 H266Z" fill="#86baba"/>
+      <path d="M265 472 Q455 451 555 476 T820 475" fill="none" stroke="#216f82" stroke-width="5" stroke-dasharray="9 8"/>
+      <g fill="#d5b188" stroke="#a1815d" stroke-width="2"><circle cx="312" cy="432" r="7"/><circle cx="370" cy="445" r="9"/><circle cx="456" cy="423" r="7"/><circle cx="506" cy="455" r="10"/><circle cx="609" cy="435" r="8"/><circle cx="697" cy="448" r="7"/><circle cx="762" cy="422" r="8"/></g>
+      <g fill="#719985" stroke="#477c66" stroke-width="3"><circle cx="356" cy="478" r="7"/><circle cx="413" cy="498" r="10"/><circle cx="521" cy="479" r="8"/><circle cx="619" cy="507" r="10"/><circle cx="714" cy="486" r="9"/><circle cx="771" cy="513" r="7"/></g>
+      <g fill="#3d8062" stroke="#34694f" stroke-width="3"><path d="M279 339 L325 231 L354 341Z"/><path d="M301 340 L342 259 L382 343Z"/><path d="M475 331 L510 272 L541 334Z"/></g>
+      <path d="M332 340 V310 M505 336 V311" stroke="#6f6948" stroke-width="10"/>
+      <g class="flow" stroke-linecap="round"><path d="M133 338 Q171 211 240 143"/><path d="M247 113 Q337 78 416 94"/><path d="M479 114 Q510 205 490 289"/><path d="M499 319 Q508 380 480 445"/><path d="M486 450 Q551 460 648 466"/><path d="M670 335 Q571 387 321 384"/></g>
+      <g class="flow dark"><path d="M631 182 Q622 267 682 346"/><path d="M670 460 Q733 442 694 351"/></g>
+      <g fill="#1f5a62" font:700 18px Georgia,serif"><text x="20" y="504" fill="#eafaf1">OCEANO</text><text x="55" y="66">SOL</text><text x="303" y="526" fill="#f7f2dc">SUBSOLO</text><text x="610" y="525" fill="#e9f8ef">ÁGUA NOS POROS</text></g>
+     </svg>
+     <div class="drop" id="traveler" aria-hidden="true"><svg viewBox="0 0 42 52"><path d="M21 2 C12 19 2 27 3 37 A18 18 0 0 0 39 37 C40 27 30 14 21 2Z" fill="#f6df9d" stroke="#125d81" stroke-width="3"/><ellipse cx="16" cy="34" rx="5" ry="8" fill="#fff9e8" opacity=".9"/></svg></div>
+     <button class="point" type="button" data-node="ocean" aria-label="Inspecionar oceano" aria-pressed="true">1</button>
+     <button class="point" type="button" data-node="vapor" aria-label="Inspecionar vapor na atmosfera" aria-pressed="false">2</button>
+     <button class="point" type="button" data-node="cloud" aria-label="Inspecionar nuvem" aria-pressed="false">3</button>
+     <button class="point" type="button" data-node="ice" aria-label="Inspecionar neve e gelo" aria-pressed="false">4</button>
+     <button class="point" type="button" data-node="land" aria-label="Inspecionar água na superfície" aria-pressed="false">5</button>
+     <button class="point" type="button" data-node="soil" aria-label="Inspecionar água no solo" aria-pressed="false">6</button>
+     <button class="point" type="button" data-node="plant" aria-label="Inspecionar água em uma planta" aria-pressed="false">7</button>
+     <button class="point" type="button" data-node="aquifer" aria-label="Inspecionar aquífero" aria-pressed="false">8</button>
+     <button class="point" type="button" data-node="river" aria-label="Inspecionar rio" aria-pressed="false">9</button>
+    </div>
+    <figcaption>Figura 2. Mapa SVG original e esquemático. As posições, setas, profundidades e percursos não são geográficos nem estão em escala; a animação representa uma hipótese entre muitas trajetórias possíveis.</figcaption>
+   </figure>
+   <div>
+    <div class="journey-panel">
+     <span class="capsule" id="travelCounter">PONTO DE PARTIDA / 01</span>
+     <h3 id="placeTitle">Oceano</h3>
+     <p id="placeDescription" aria-live="polite" aria-atomic="true">Uma enorme reserva de água líquida. A radiação solar fornece energia para que moléculas escapem da superfície por evaporação. Nem toda gota evapora rapidamente: o movimento e a permanência variam.</p>
+     <div class="phase">Estado nesta etapa: <strong id="placePhase">Líquido</strong></div>
+     <div class="tiny-title">Escolha uma transformação plausível</div>
+     <div class="routes" role="group" aria-label="Escolha para qual reservatório a gota seguirá">
+      <button type="button" data-route="0"><strong>Evaporar para a atmosfera</strong><small>Energia solar e trocas com o ar.</small></button>
+      <button type="button" data-route="1" hidden disabled></button>
+      <button type="button" data-route="2" hidden disabled></button>
+      <button type="button" data-route="3" hidden disabled></button>
+     </div>
+     <div class="travel-detail" id="travelDetail" role="status" aria-live="polite" aria-atomic="true">Escolha uma rota para começar. O mesmo reservatório pode ter saídas diferentes, e o tempo de permanência não foi medido neste modelo.</div>
+     <div class="travel-controls">
+      <button type="button" id="resetTravel">Recomeçar pelo oceano</button>
+      <button type="button" class="alt" id="pauseTravel" aria-pressed="false">Pausar animações</button>
+     </div>
+    </div>
+    <div class="journey-list">
+     <h3>CADERNO DA EXPEDIÇÃO</h3>
+     <ol id="travelHistory" aria-label="Etapas percorridas nesta jornada"><li>Início: oceano (água líquida).</li></ol>
+    </div>
+   </div>
+  </div>
+  <div class="starts" role="group" aria-label="Escolher outro ponto de partida para reiniciar a narrativa"><span>Experimente começar em outro lugar:</span><button data-start="cloud" type="button">Nuvem</button><button data-start="ice" type="button">Geleira</button><button data-start="soil" type="button">Solo</button><button data-start="aquifer" type="button">Aquífero</button><button data-start="plant" type="button">Planta</button></div>
+  <p class="atlas-hint">As escolhas são caminhos didáticos possíveis, não uma previsão de onde uma molécula específica irá. Selecionar um ponto numerado é uma inspeção que reinicia o trajeto no local escolhido; escolher uma transformação registra uma etapa da jornada. Há muitas rotas e múltiplas escalas temporais omitidas do modelo.</p>
+ </div>
+</section>
+
+<section class="section wrapper" aria-labelledby="energia">
+ <div class="section-header"><span class="eyebrow">03 / Energia e atmosfera</span><div><h2 id="energia">Subir não significa que a água ficou mais leve.</h2><p>Na evaporação, moléculas de água passam da fase líquida para a gasosa; o vapor se mistura ao ar. A circulação atmosférica transporta esse vapor, e o resfriamento de parcelas de ar pode levar à formação de gotículas e cristais.</p></div></div>
+ <div class="process-pair">
+  <figure class="science-figure">
+   <svg viewBox="0 0 680 520" role="img" aria-labelledby="evapSvgTitle evapSvgDesc">
+    <title id="evapSvgTitle">Representação conceitual de evaporação, transporte de vapor e condensação</title>
+    <desc id="evapSvgDesc">O sol aquece a superfície de um lago; linhas sinuosas representam vapor subindo, setas indicam transporte pelo vento e gotículas se formam em uma nuvem após resfriamento.</desc>
+    <rect width="680" height="520" fill="#d5ebe6"/>
+    <circle cx="109" cy="106" r="64" fill="#f7ce75"/>
+    <g stroke="#e7b85e" stroke-width="6" stroke-linecap="round"><path d="M109 14 V30 M109 183 V201 M17 108 H34 M184 106 H205 M48 42 L62 57 M158 159 L171 173"/></g>
+    <path d="M0 346 Q145 326 272 355 T680 347 V520 H0Z" fill="#5eadae"/>
+    <g fill="none" stroke="#d3eff0" stroke-width="6"><path d="M38 397 Q102 386 170 398 T293 398 M360 428 Q424 416 500 429 T661 427"/></g>
+    <g fill="none" stroke="#418eaa" stroke-width="5" stroke-dasharray="8 10" stroke-linecap="round"><path d="M195 346 Q146 272 210 216 T277 102 M269 355 Q241 262 317 194 T396 126"/></g>
+    <g fill="#f8fff3"><ellipse cx="476" cy="110" rx="153" ry="53"/><ellipse cx="407" cy="72" rx="79" ry="65"/><ellipse cx="505" cy="64" rx="83" ry="58"/></g>
+    <g fill="#6eb7cb" stroke="#3e8998" stroke-width="3"><circle cx="394" cy="135" r="9"/><circle cx="431" cy="151" r="13"/><circle cx="477" cy="140" r="11"/><circle cx="516" cy="150" r="10"/><circle cx="544" cy="134" r="8"/></g>
+    <g fill="none" stroke="#517d78" stroke-width="4" stroke-linecap="round"><path d="M314 196 Q382 175 428 191 M418 179 l16 12-17 12"/></g>
+    <g font-family="Georgia,serif" font-size="26" fill="#315e64"><text x="17" y="460" fill="#fff7df">Água líquida</text><text x="123" y="286">Vapor</text><text x="455" y="246">Gotículas</text></g>
+   </svg>
+   <figcaption>Figura 3. Esquema SVG original: evaporação na superfície, transporte de vapor e condensação. Setas são simbólicas; gotículas de nuvem não têm essa escala.</figcaption>
+  </figure>
+  <div class="pair-text">
+   <h3>Evaporação não é ebulição.</h3>
+   <p>A água pode evaporar a temperaturas bem abaixo do ponto de ebulição. Moléculas escapam de uma superfície líquida e o vapor é transportado e misturado pela atmosfera. Energia disponível, umidade do ar, circulação e temperatura influenciam as trocas; água disponível e características da superfície também importam.</p>
+   <h3>Plantas entram na história.</h3>
+   <p>Vegetais absorvem água pelas raízes, transportam-na em seus tecidos e liberam vapor, especialmente por estômatos das folhas. A <strong>transpiração</strong>, somada à evaporação da água do solo e de superfícies, integra a <strong>evapotranspiração</strong>. A transpiração varia com espécie, disponibilidade hídrica, clima e regulação estomática.</p>
+   <h3>Como nasce uma nuvem?</h3>
+   <p>Quando uma parcela de ar úmido sobe, ela geralmente se expande e pode resfriar por processos adiabáticos. Ao atingir condições favoráveis, parte do vapor condensa sobre pequenas partículas, formando gotículas, ou contribui para cristais de gelo. Nuvens não são feitas de vapor de água invisível apenas: suas gotículas e cristais dispersam a luz.</p>
+  </div>
+ </div>
+ <div class="lab-energy" aria-labelledby="labEvapTitle">
+  <div class="energy-grid">
+   <div>
+    <span class="eyebrow" style="color:#c3efd9">Experimento conceitual A</span>
+    <h3 id="labEvapTitle">Que condições favorecem a evaporação?</h3>
+    <p>Mude os controles e observe um índice inventado de tendência, sem unidade física. O modelo considera superfície molhada e não prevê massa, tempo, transpiração vegetal ou evaporação real.</p>
+    <div class="lab-sliders">
+     <div><label class="slider-label" for="solar">Energia solar disponível <output id="solarOut" for="solar">70%</output></label><input type="range" id="solar" min="0" max="100" step="5" value="70"><small>Uma condição ilustrativa de energia, não radiação medida.</small></div>
+     <div><label class="slider-label" for="wind">Movimento do ar <output id="windOut" for="wind">35%</output></label><input type="range" id="wind" min="0" max="100" step="5" value="35"><small>Vento pode renovar o ar próximo à superfície.</small></div>
+     <div><label class="slider-label" for="humidity">Umidade relativa do ar <output id="humidityOut" for="humidity">55%</output></label><input type="range" id="humidity" min="0" max="100" step="5" value="55"><small>Ar mais próximo da saturação tende a reduzir o gradiente de vapor, nas demais condições iguais.</small></div>
+    </div>
+   </div>
+   <div class="energy-output" role="status" aria-live="polite" aria-atomic="true">
+    <span class="eyebrow">Índice didático / 0 a 100</span><div class="level" id="energyIndex">55</div>
+    <div class="meter" role="progressbar" aria-label="Índice didático de tendência à evaporação" aria-valuemin="0" aria-valuemax="100" aria-valuenow="55" id="energyMeter"><span id="energyBar"></span></div>
+    <p id="energyText">As condições ilustram uma tendência intermediária. O resultado não é uma previsão nem mede um fluxo de água.</p>
+    <p>Equação pedagógica arbitrária: 50% energia + 20% vento + 30% ar menos úmido. Pesos escolhidos apenas para comparar tendências, sem validade para estimar evaporação.</p>
+    <button class="action" type="button" id="resetEnergy">Restaurar controles</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="section glacier" aria-labelledby="geloTitulo">
+ <div class="wrapper">
+  <div class="section-header"><span class="eyebrow">04 / Nuvens, gelo e precipitação</span><div><h2 id="geloTitulo">A mesma nuvem pode produzir chuva ou neve.</h2><p>Para chegar ao chão, gotículas e cristais precisam crescer e superar as correntes ascendentes. A fase que alcança a superfície depende das condições térmicas do caminho, não apenas da aparência da nuvem.</p></div></div>
+  <div class="process-pair">
+   <div class="pair-text">
+    <h3>Da gotícula à precipitação</h3>
+    <p>Em nuvens quentes, colisões e coalescência podem formar gotas maiores. Em nuvens frias ou de fase mista, o crescimento de cristais de gelo também participa. A precipitação pode atingir o terreno como chuva, neve ou outras formas, dependendo dos perfis de temperatura e umidade. Parte dela pode evaporar antes de chegar à superfície.</p>
+    <h3>Geleiras são reservatórios, não só paisagens.</h3>
+    <p>Neve acumulada pode se compactar e, ao longo do tempo, formar gelo glacial. O gelo pode fluir lentamente, derreter e alimentar cursos d'água ou perder massa por sublimação. Uma gota congelada pode ficar armazenada por muito mais tempo do que uma gota numa nuvem, mas os intervalos variam enormemente entre lugares.</p>
+    <div class="paper-note"><strong>Três mudanças de fase:</strong> condensação é gás → líquido; congelamento é líquido → sólido; sublimação é sólido → gás. O retorno do gelo à água líquida é fusão (derretimento). Nem todos os percursos precisam passar por todas essas etapas.</div>
+   </div>
+   <figure class="science-figure glacier-figure">
+    <svg viewBox="0 0 700 520" role="img" aria-labelledby="iceSvgTitle iceSvgDesc">
+     <title id="iceSvgTitle">Neve, chuva, geleira e derretimento em paisagem de montanha</title>
+     <desc id="iceSvgDesc">Nuvem na parte superior precipita cristais de neve sobre uma geleira e gotas de chuva em uma encosta mais baixa. Na base, um riacho recebe água do derretimento.</desc>
+     <rect width="700" height="520" fill="#c8e3e7"/>
+     <g fill="#f8fff8"><ellipse cx="340" cy="94" rx="173" ry="43"/><ellipse cx="291" cy="60" rx="93" ry="59"/><ellipse cx="422" cy="60" rx="100" ry="53"/></g>
+     <path d="M25 420 L297 119 L536 414Z" fill="#81aeb0" stroke="#538f9f" stroke-width="5"/>
+     <path d="M300 119 L239 190 L281 191 L309 226 L339 180 L368 197Z" fill="#f8fcf5"/>
+     <path d="M416 427 L570 215 L691 420Z" fill="#9dbdb4"/>
+     <path d="M571 218 L535 270 L557 260 L583 288 L608 259Z" fill="#eef7ed"/>
+     <path d="M255 228 Q311 248 365 356 T437 459" fill="none" stroke="#e8f9f5" stroke-width="30" stroke-linecap="round"/>
+     <path d="M439 458 Q490 464 510 488 T685 501" fill="none" stroke="#68b8c8" stroke-width="20" stroke-linecap="round"/>
+     <g stroke="#f4fcf4" stroke-width="5" stroke-linecap="round"><path d="M235 150 l-8 16 M235 150 l8 16 M226 158 h18 M285 167 l-9 16 M285 167 l10 16 M276 175 h19 M366 164 l-8 16 M366 164 l8 16 M358 173 h17"/></g>
+     <g fill="#6db1cd" stroke="#488da5" stroke-width="3"><path d="M476 170 Q457 193 478 202 Q495 196 476 170Z"/><path d="M517 192 Q499 212 520 221 Q534 216 517 192Z"/><path d="M557 161 Q537 186 560 192 Q578 184 557 161Z"/></g>
+     <g fill="#2b6372" font-family="Georgia,serif" font-size="23"><text x="91" y="472">Geleira</text><text x="477" y="449">Degelo</text></g>
+    </svg>
+    <figcaption>Figura 4. Corte naturalista SVG original. A temperatura do ar em diferentes altitudes e a forma da precipitação são simplificadas; o desenho não prevê clima.</figcaption>
+   </figure>
+  </div>
+ </div>
+</section>
+
+<section class="band" aria-labelledby="retornos">
+ <div class="wrapper">
+  <span class="eyebrow">05 / Depois que a chuva chega</span><h2 id="retornos">Nem toda água escorre até um rio.</h2>
+  <p style="max-width:860px;font-size:1.08rem;line-height:1.84">A precipitação pode ser interceptada por folhas, infiltrada no solo, armazenada, evaporada ou convertida em escoamento. A proporção muda com intensidade de chuva, estrutura do solo, umidade inicial, cobertura vegetal, relevo e ocupação humana.</p>
+  <div class="band-grid">
+   <article class="band-card"><h3>Escoamento superficial</h3><p>Quando a intensidade de chuva excede a capacidade de infiltração ou o solo já está saturado, parte da água pode circular pela superfície. Relevo e canais definem direções; não é necessário que toda a água siga diretamente ao oceano.</p></article>
+   <article class="band-card"><h3>Infiltração e solo</h3><p>Água atravessa a superfície e entra nos poros do solo. Ali pode ser armazenada, absorvida por raízes, evaporar, escoar lateralmente ou percolar em direção a zonas mais profundas. Infiltração não significa recarga automática de aquífero.</p></article>
+   <article class="band-card"><h3>Rios e lagos</h3><p>Rios recebem escoamento de chuva, contribuições subterrâneas e fluxos de encostas, transportando água e sedimentos. Parte da água também evapora, infiltra pelas margens ou é utilizada por seres humanos antes de alcançar outro reservatório.</p></article>
+  </div>
+ </div>
+</section>
+
+<section class="section ground" aria-labelledby="soloTitulo">
+ <div class="wrapper">
+  <div class="section-header"><span class="eyebrow">06 / Oficina do subsolo</span><div><h2 id="soloTitulo">O aquífero não é uma caverna cheia de água.</h2><p>Em muitos aquíferos, a água preenche poros de sedimentos ou fraturas em rochas. Acima do nível freático, a zona não saturada pode conter água e ar; abaixo dele, a zona saturada tem seus espaços disponíveis preenchidos por água.</p></div></div>
+  <div class="ground-grid">
+   <figure class="ground-figure" id="groundFigure" data-land="vegetated">
+    <svg viewBox="0 0 760 590" role="img" aria-labelledby="soilSvgTitle soilSvgDesc">
+     <title id="soilSvgTitle">Corte esquemático de solo, água subterrânea e nível freático</title>
+     <desc id="soilSvgDesc">Na superfície há uma árvore, chuva e uma área de solo; abaixo aparecem solo não saturado, nível freático, aquífero poroso saturado e camada menos permeável. Setas mostram possibilidades de infiltração, escoamento e descarga subterrânea para um rio.</desc>
+     <rect width="760" height="590" fill="#dbede2"/>
+     <g fill="#91b49a"><path d="M0 176 Q198 141 352 166 T760 154 V590 H0Z"/></g>
+     <path d="M0 195 Q198 160 350 179 T760 171 V590 H0Z" fill="#b89a74"/>
+     <path d="M0 282 Q191 257 342 281 T760 267 V590 H0Z" fill="#d6bd92"/>
+     <path d="M0 387 Q182 358 366 391 T760 372 V590 H0Z" fill="#84b8b1"/>
+     <path d="M0 493 Q195 481 360 501 T760 490 V590 H0Z" fill="#777b73"/>
+     <path d="M0 388 Q200 361 367 390 T760 371" fill="none" stroke="#1d748d" stroke-width="6" stroke-dasharray="12 11"/>
+     <path d="M661 190 Q700 210 742 195 V373 Q691 359 657 376Z" fill="#91cfc8"/>
+     <path d="M662 373 Q692 364 737 373" stroke="#2c8698" stroke-width="9"/>
+     <g fill="#356a4e"><path d="M108 167 L145 56 L180 169Z"/><path d="M138 167 L173 83 L215 170Z"/></g>
+     <path d="M160 182 V130" stroke="#6d6b4d" stroke-width="13"/>
+     <g fill="#668877" stroke="#866e52" stroke-width="2"><circle cx="54" cy="246" r="10"/><circle cx="116" cy="225" r="7"/><circle cx="228" cy="254" r="11"/><circle cx="312" cy="220" r="8"/><circle cx="401" cy="255" r="13"/><circle cx="491" cy="226" r="8"/><circle cx="582" cy="256" r="12"/><circle cx="72" cy="338" r="12"/><circle cx="192" cy="311" r="10"/><circle cx="287" cy="355" r="7"/><circle cx="458" cy="309" r="10"/><circle cx="550" cy="340" r="10"/><circle cx="615" cy="310" r="9"/></g>
+     <g fill="#d3c6a1" stroke="#5795a1" stroke-width="2"><circle cx="49" cy="412" r="10"/><circle cx="124" cy="435" r="8"/><circle cx="196" cy="414" r="13"/><circle cx="300" cy="443" r="9"/><circle cx="391" cy="419" r="12"/><circle cx="478" cy="458" r="9"/><circle cx="569" cy="422" r="12"/><circle cx="622" cy="463" r="9"/></g>
+     <g fill="#a9d0c8" stroke="#5d988f" stroke-width="2"><circle cx="80" cy="460" r="8"/><circle cx="249" cy="468" r="9"/><circle cx="354" cy="471" r="8"/><circle cx="514" cy="485" r="8"/></g>
+     <g fill="#73b8c6" stroke="#3d8996" stroke-width="2"><path d="M294 66 Q285 88 294 95 Q306 87 294 66Z"/><path d="M342 51 Q329 76 343 85 Q356 76 342 51Z"/><path d="M384 64 Q371 88 387 94 Q400 86 384 64Z"/></g>
+     <g class="soil-down" fill="none" stroke="#368caa" stroke-width="7" stroke-linecap="round" stroke-dasharray="10 11"><path d="M349 177 V365 M345 367 l-13-18 m13 18 13-18"/></g>
+     <g class="soil-runoff" fill="none" stroke="#c76845" stroke-width="8" stroke-linecap="round" stroke-dasharray="10 13"><path d="M320 187 Q461 156 653 195 m-17-12 19 12-18 10"/></g>
+     <g fill="none" stroke="#d6f0e8" stroke-width="6" stroke-linecap="round" stroke-dasharray="13 12"><path d="M401 450 Q525 442 658 389"/></g>
+     <rect x="11" y="205" width="225" height="37" fill="#fbf7e6d9"/><text x="20" y="230" font-family="Georgia,serif" font-size="22" fill="#456859">Solo e zona não saturada</text>
+     <rect x="12" y="398" width="265" height="35" fill="#f5faeedb"/><text x="21" y="424" font-family="Georgia,serif" font-size="22" fill="#286a7a">Aquífero poroso saturado</text>
+     <rect x="12" y="516" width="270" height="33" fill="#e8e9dccc"/><text x="23" y="538" font-family="Georgia,serif" font-size="21" fill="#3f514c">Camada menos permeável</text>
+     <text x="469" y="382" font-family="Georgia,serif" font-size="19" fill="#1e7184">Nível freático</text>
+     <text x="682" y="331" font-family="Georgia,serif" font-size="20" fill="#2b6b77">Rio</text>
+    </svg>
+    <figcaption>Figura 5. Corte original, esquemático e fora de escala. A profundidade do nível freático e as taxas de movimento variam; poros e fraturas são fundamentais. Azul tracejado marca o nível freático; setas ilustram possibilidades, não volumes medidos.</figcaption>
+   </figure>
+   <div class="ground-lab">
+    <span class="eyebrow">Experimento conceitual B</span>
+    <h3>Chuva sobre diferentes superfícies</h3>
+    <p>Selecione um tipo de cobertura e uma intensidade de chuva. Compare um <strong>potencial de infiltração</strong> com o excesso de água que poderia produzir escoamento superficial se não houvesse outros mecanismos.</p>
+    <div class="ground-choices" role="group" aria-label="Condição simplificada da superfície">
+     <button type="button" data-land="vegetated" aria-pressed="true">Solo vegetado</button>
+     <button type="button" data-land="compact" aria-pressed="false">Compactado</button>
+     <button type="button" data-land="paved" aria-pressed="false">Pavimentado</button>
+    </div>
+    <label for="rain">Intensidade ilustrativa da chuva <output for="rain" id="rainOut">35 mm/h</output></label>
+    <input id="rain" type="range" min="0" max="80" step="5" value="35">
+    <p style="font-size:.82rem;margin:6px 0 0">Valores de capacidade didáticos: 30, 10 ou 2 mm/h. Não representam medição, classe universal de solo nem estimativa para um endereço.</p>
+    <div class="balance" aria-label="Balanço simplificado da água recebida" role="img" id="balanceGraph"><span class="infiltration" id="infilBar"></span><span class="runoff" id="runoffBar"></span></div>
+    <div class="balance-legend"><div><span>Potencial infiltrado</span><strong id="infilValue">30 mm</strong></div><div><span>Excedente potencial</span><strong id="runoffValue">5 mm</strong></div></div>
+    <div class="balance-result" id="rainFeedback" role="status" aria-live="polite" aria-atomic="true">Com 35 mm/h neste modelo de uma hora, até 30 mm poderiam infiltrar. Os 5 mm restantes são um excedente potencial; não equivalem automaticamente a escoamento observado.</div>
+    <button type="button" class="quiet-button" style="margin-top:15px" id="resetRain">Restaurar experimento</button>
+   </div>
+  </div>
+  <div class="ground-note"><strong>Limites fundamentais:</strong> a capacidade de infiltração não permanece constante numa tempestade; depende de propriedades do solo, umidade antecedente, relevo, vegetação e processos hidráulicos. O cálculo representa uma janela imaginária de uma hora, não considera interceptação, armazenamento superficial, evaporação, fluxo lateral ou saturação progressiva. <strong>Infiltrar não significa recarregar imediatamente um aquífero.</strong></div>
+  <div class="ground-explainer">
+   <div><h3>Do solo ao nível freático</h3><p>Uma parte da água infiltrada permanece perto das raízes e pode retornar à atmosfera por evaporação ou transpiração. Outra parte percola através da zona não saturada até alcançar a água subterrânea e contribuir para a recarga, quando as condições permitem. O nível freático separa, em aquíferos livres, a zona não saturada da zona saturada.</p></div>
+   <div><h3>A água subterrânea também flui</h3><p>Ela se desloca em poros e fraturas sob gradientes hidráulicos e pode alimentar nascentes, rios e até o oceano. A extração por poços altera pressões, fluxos e níveis; bombeamento excessivo pode reduzir a descarga para rios. Nem toda água subterrânea é doce, jovem, facilmente renovável ou naturalmente potável.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="city" aria-labelledby="cidadeTitulo">
+ <div class="wrapper">
+  <div class="section-header"><span class="eyebrow">07 / Água e território</span><div><h2 id="cidadeTitulo">Uma cidade também modifica o caminho da chuva.</h2><p>Impermeabilização, desmatamento, drenagem, reservatórios, captação e tratamento mudam fluxos locais. As decisões sobre uso do solo podem reduzir riscos ou ampliá-los, dependendo do projeto e da manutenção.</p></div></div>
+  <div class="city-grid">
+   <figure class="city-figure">
+    <svg viewBox="0 0 720 440" role="img" aria-labelledby="urbanSvgTitle urbanSvgDesc">
+     <title id="urbanSvgTitle">Comparação de paisagem arborizada e área urbana impermeável</title>
+     <desc id="urbanSvgDesc">Metade esquerda ilustra solo vegetado, árvores, poros e infiltração; metade direita ilustra edifícios, asfalto e água correndo na superfície em direção a uma boca de lobo. As setas comparam possibilidades, sem medir volumes.</desc>
+     <rect width="720" height="440" fill="#d8e9df"/>
+     <path d="M0 172 H360 V440 H0Z" fill="#a3bd91"/>
+     <path d="M360 172 H720 V440 H360Z" fill="#aaaead"/>
+     <path d="M0 267 H360 V440 H0Z" fill="#b6a17c"/>
+     <path d="M0 357 H360 V440 H0Z" fill="#8fbdad"/>
+     <path d="M360 278 H720 V440 H360Z" fill="#9c907f"/>
+     <g fill="#4c8962"><circle cx="89" cy="156" r="60"/><circle cx="188" cy="133" r="66"/><circle cx="291" cy="155" r="52"/></g>
+     <g stroke="#755c3d" stroke-width="11"><path d="M91 194 V260 M185 190 V261 M289 194 V261"/></g>
+     <g fill="#617b83" stroke="#47606b" stroke-width="4"><rect x="399" y="78" width="94" height="180"/><rect x="512" y="119" width="72" height="138"/><rect x="599" y="60" width="94" height="198"/></g>
+     <g fill="#d3e4db"><rect x="415" y="98" width="21" height="23"/><rect x="452" y="98" width="21" height="23"/><rect x="415" y="140" width="21" height="23"/><rect x="452" y="140" width="21" height="23"/><rect x="531" y="143" width="21" height="25"/><rect x="531" y="187" width="21" height="25"/><rect x="618" y="88" width="25" height="28"/><rect x="658" y="88" width="25" height="28"/><rect x="618" y="136" width="25" height="28"/><rect x="658" y="136" width="25" height="28"/></g>
+     <rect x="360" y="258" width="360" height="31" fill="#636d70"/>
+     <g fill="#78b8ce"><path d="M62 48 Q49 69 62 77 Q76 70 62 48Z"/><path d="M170 38 Q156 60 170 67 Q184 60 170 38Z"/><path d="M277 45 Q264 70 278 76 Q290 66 277 45Z"/><path d="M445 38 Q430 60 445 69 Q459 61 445 38Z"/><path d="M558 50 Q542 72 558 82 Q573 70 558 50Z"/><path d="M668 37 Q652 59 667 68 Q682 60 668 37Z"/></g>
+     <g fill="none" stroke="#51a5b6" stroke-width="8" stroke-dasharray="12 13" stroke-linecap="round"><path d="M126 262 V363 M242 260 V370 M385 255 Q515 262 665 271"/></g>
+     <rect x="659" y="252" width="38" height="23" fill="#2d525e"/>
+     <path d="M360 0 V440" stroke="#f7f9ec" stroke-width="6" stroke-dasharray="11 10"/>
+     <g font-family="Georgia,serif" font-size="24" fill="#285d4e"><text x="26" y="410">Área permeável</text><text x="404" y="405" fill="#3e4f54">Superfície impermeável</text></g>
+    </svg>
+    <figcaption>Figura 6. Comparação esquemática SVG autoral. É possível haver escoamento intenso também em áreas naturais saturadas, e áreas urbanas podem incorporar medidas de drenagem sustentável.</figcaption>
+   </figure>
+   <div>
+    <h3>O que muda com a ocupação humana?</h3>
+    <p>Pavimentação e compactação podem reduzir oportunidades de infiltração e acelerar o escoamento superficial durante chuvas. A resposta real depende da intensidade da chuva, topografia, drenagem e características da bacia. Parques, cobertura vegetal, solo protegido, áreas permeáveis e estruturas de retenção podem ajudar a gerenciar água no território.</p>
+    <p>Captação e irrigação movem água para usos agrícolas e urbanos. A retirada de água de aquíferos mais rápida do que sua reposição pode rebaixar níveis e afetar rios e ecossistemas. Contaminantes de esgoto, mineração, agricultura e indústria podem circular com a água, exigindo prevenção e tratamento.</p>
+    <p><strong>Planejar bacias hidrográficas</strong> é lidar com fluxos conectados: uma intervenção numa área pode alterar disponibilidade, qualidade e risco de inundação em outra.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="climate" aria-labelledby="climaTitulo">
+ <div class="wrapper">
+  <div class="section-header"><span class="eyebrow">08 / Clima em transformação</span><div><h2 id="climaTitulo">Mais calor não significa “mais chuva em todo lugar”.</h2><p>O aquecimento global modifica evaporação, umidade atmosférica, derretimento de gelo, circulação e padrões de precipitação. Os efeitos são desiguais regionalmente; médias globais não substituem análise local.</p></div></div>
+  <div class="climate-grid">
+   <article><h3>Atmosfera mais quente e extremos</h3><p>Em termos termodinâmicos, o ar mais quente pode conter mais vapor quando saturado: uma aproximação de cerca de 7% por 1 °C de aquecimento é frequentemente usada para descrever essa capacidade, não para prever chuva local. Com disponibilidade de umidade e condições dinâmicas adequadas, isso pode favorecer precipitações extremas mais intensas. Não significa 7% a mais de chuva em todas as regiões.</p></article>
+   <article><h3>Neve, rios, seca e armazenamento</h3><p>Mudanças na acumulação de neve e no degelo alteram a sazonalidade de fluxos de rios; perdas de geleiras podem afetar reservas e disponibilidade no longo prazo. Em outros lugares, secas, demandas humanas e mudanças na evapotranspiração afetam solos, vegetação e aquíferos. Um aquecimento global não implica trajetórias idênticas para cada gota nem para cada bacia.</p></article>
+  </div>
+  <p style="margin-top:30px;max-width:940px;font-size:.93rem;line-height:1.87;color:#e1f1e6">As projeções climáticas precisam de cenários, modelos, observações e avaliações de incerteza. Consulte o capítulo 8 do Sexto Relatório de Avaliação do IPCC, referido nas fontes, para as bases científicas da intensificação e redistribuição de fluxos hídricos.</p>
+ </div>
+</section>
+
+<section class="residence wrapper" aria-labelledby="tempoTitulo">
+ <div class="section-header"><span class="eyebrow">09 / Escalas de tempo</span><div><h2 id="tempoTitulo">Uma jornada pode durar dias, décadas ou muito mais.</h2><p>O “tempo de residência” descreve quanto tempo a água permanece num reservatório sob determinadas condições. É um conceito estatístico, não um cronômetro de cada molécula.</p></div></div>
+ <div class="residence-grid">
+  <div class="residence-card"><span class="name">Atmosfera</span><span class="tempo">TROCAS FREQUENTEMENTE RÁPIDAS</span><p>O vapor atmosférico pode ser transportado e precipitar em intervalos curtos, frequentemente da ordem de dias, mas trajetórias individuais variam.</p></div>
+  <div class="residence-card"><span class="name">Rios</span><span class="tempo">FLUXO VARIÁVEL</span><p>A água pode avançar em horas, dias ou mais, dependendo de extensão, vazão, armazenamento e conexões com outras reservas.</p></div>
+  <div class="residence-card"><span class="name">Aquíferos</span><span class="tempo">DE ANOS A ESCALAS MUITO LONGAS</span><p>A recarga e a circulação dependem da geologia e de gradientes hidráulicos; algumas águas subterrâneas podem ter permanência de séculos ou mais.</p></div>
+  <div class="residence-card"><span class="name">Gelo e geleiras</span><span class="tempo">ARMAZENAMENTO POR LONGOS PERÍODOS</span><p>Neve sazonal pode derreter rapidamente, enquanto parte da água em gelo glacial permanece por períodos muito maiores, chegando a milhares de anos em determinados contextos.</p></div>
+ </div>
+ <div class="paper-note" style="margin-top:26px"><strong>Comparações sem falsa precisão:</strong> esses intervalos são apenas ordens de grandeza e exemplos de variação. O gráfico de “setas em círculo” não informa por quanto tempo a água permaneceu em cada ambiente.</div>
+</section>
+
+<section class="quiz" aria-labelledby="quizTitulo">
+ <div class="wrapper">
+  <div class="section-header"><span class="eyebrow">10 / Caderno de campo</span><div><h2 id="quizTitulo">Agora teste seu modelo mental.</h2><p>Quatro situações exigem conectar processos, não decorar uma ordem fixa. O resultado é formativo e não representa uma nota registrada no Moodle.</p></div></div>
+  <div class="quiz-grid">
+   <div class="quiz-aside">
+    <h3>O caminho de uma gota não é uma receita.</h3>
+    <p>Uma molécula pode evaporar do oceano, condensar numa nuvem, cair como neve, permanecer em gelo, derreter, infiltrar e voltar à atmosfera após ser absorvida por uma planta. Outra pode tomar uma rota completamente diferente.</p>
+    <p>Use os experimentos para comparar condições, mas nunca confunda os números de nossos modelos com vazões, tempos ou medições observadas.</p>
+   </div>
+   <form id="quizForm" novalidate>
+    <fieldset class="question" data-answer="b" data-explain="O ciclo hidrológico não tem sequência única. Uma molécula pode circular várias vezes entre alguns reservatórios ou permanecer por longos períodos em outro.">
+     <legend>1. Qual afirmação descreve melhor o ciclo da água?</legend>
+     <label><input type="radio" name="q1" value="a"> Toda gota passa uma vez por evaporação, nuvem, rio e oceano, nessa ordem.</label>
+     <label><input type="radio" name="q1" value="b"> A água circula por caminhos diversos e pode permanecer tempos muito diferentes em cada reservatório.</label>
+     <label><input type="radio" name="q1" value="c"> Apenas os oceanos participam, porque rios e aquíferos não trocam água.</label><p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="c" data-explain="Parte da água infiltrada fica na zona não saturada, retorna por evapotranspiração ou segue lateralmente. Recarga é a fração que efetivamente chega à zona saturada sob condições adequadas.">
+     <legend>2. Chove sobre um solo permeável e parte da água infiltra. O que é correto concluir?</legend>
+     <label><input type="radio" name="q2" value="a"> Toda a água infiltrada recarrega instantaneamente o aquífero.</label>
+     <label><input type="radio" name="q2" value="b"> A água subterrânea só existe em cavernas e rios escondidos.</label>
+     <label><input type="radio" name="q2" value="c"> A água infiltrada pode permanecer no solo, alimentar plantas, circular lateralmente ou contribuir para recarga.</label><p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="a" data-explain="A transpiração libera vapor a partir de plantas. Condensação forma gotículas ou cristais em condições favoráveis, e não equivale a chuva imediata.">
+     <legend>3. Uma árvore absorve água e libera parte dela para a atmosfera através das folhas. Qual processo foi descrito?</legend>
+     <label><input type="radio" name="q3" value="a"> Transpiração vegetal.</label>
+     <label><input type="radio" name="q3" value="b"> Sublimação de gelo.</label>
+     <label><input type="radio" name="q3" value="c"> Escoamento superficial.</label><p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="b" data-explain="O aquecimento intensifica ou altera vários componentes do ciclo global, mas as mudanças de precipitação, disponibilidade de água e extremos dependem da região e de outros fatores.">
+     <legend>4. O aquecimento do clima garante aumento uniforme da chuva em todas as cidades?</legend>
+     <label><input type="radio" name="q4" value="a"> Sim, todos os lugares recebem exatamente 7% mais chuva por grau.</label>
+     <label><input type="radio" name="q4" value="b"> Não. A resposta regional depende de circulação, disponibilidade de umidade, relevo e outros fatores.</label>
+     <label><input type="radio" name="q4" value="c"> O aquecimento só altera a cor das nuvens, sem afetar fluxos de água.</label><p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <div class="quiz-actions"><button type="button" id="gradeQuiz">Corrigir com explicações</button><button type="reset" class="alt">Refazer a revisão</button></div>
+    <p class="quiz-result" id="quizResult" role="status" aria-live="polite"></p>
+   </form>
+  </div>
+ </div>
+</section>
+
+<section class="end">
+ <div class="wrapper"><span class="eyebrow" style="color:#c1e8cb">Fim do caderno, não da viagem</span><h2>A água não termina seu percurso quando termina nossa história.</h2>
+  <p>Oceanos, atmosfera, vegetação, solos, rios, geleiras e aquíferos são partes de um sistema conectado por energia, gravidade e interações ecológicas. Compreender essa rede ajuda a estudar enchentes, secas, abastecimento, agricultura, conservação e mudanças climáticas — sem reduzir o planeta a uma única seta circular.</p>
+ </div>
+</section>
+
+<section class="sources wrapper" aria-labelledby="sourcesTitulo">
+ <h2 id="sourcesTitulo">Referências científicas e imagens utilizadas</h2>
+ <p>As seis ilustrações SVG foram desenhadas para esta página: paisagem naturalista, mapa de reservatórios, evaporação e condensação, precipitação e gelo, corte de solo e aquífero, e comparação entre área permeável e área impermeabilizada. Não foram utilizadas fotografias externas. Diagramas, posições e setas são esquemáticos, não representações em escala.</p>
+ <p>Fontes técnicas: <a href="https://www.usgs.gov/water-science-school/water-cycle" target="_blank" rel="noopener noreferrer">USGS Water Science School — The Water Cycle</a>; <a href="https://www.usgs.gov/water-science-school/science/infiltration-and-water-cycle" target="_blank" rel="noopener noreferrer">USGS — Infiltration and the Water Cycle</a>; <a href="https://www.usgs.gov/water-science-school/science/aquifers-and-groundwater" target="_blank" rel="noopener noreferrer">USGS — Aquifers and Groundwater</a>; <a href="https://www.noaa.gov/education/resource-collections/freshwater/water-cycle" target="_blank" rel="noopener noreferrer">NOAA — The Water Cycle</a>; <a href="https://science.nasa.gov/earth/earth-observatory/the-water-cycle/" target="_blank" rel="noopener noreferrer">NASA — The Water Cycle</a>; <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-8/" target="_blank" rel="noopener noreferrer">IPCC AR6 WG1, Capítulo 8: Water Cycle Changes</a>.</p>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+var d=document,byId=function(id){return d.getElementById(id);};
+function setPressed(buttons,key,value){buttons.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset[key]===value));});}
+var places={
+ ocean:{title:"Oceano",phase:"Líquido",x:130,y:365,description:"Uma enorme reserva de água líquida. A radiação solar fornece energia para que moléculas escapem da superfície por evaporação. Nem toda gota evapora rapidamente: o movimento e a permanência variam.",options:[["vapor","Evaporar para a atmosfera","Água líquida passa ao estado gasoso.","Evaporação: energia disponível e trocas com o ar favorecem a passagem da água líquida para vapor; nenhuma gota específica tem destino garantido."]]},
+ vapor:{title:"Vapor na atmosfera",phase:"Gasoso",x:245,y:110,description:"Como gás invisível, o vapor de água se mistura ao ar e pode viajar com os ventos. Quando condições favorecem condensação ou deposição, contribui para gotículas ou cristais de nuvem.",options:[["cloud","Condensar em uma nuvem","Ar úmido resfria e parte do vapor condensa.","Condensação: vapor vira pequenas gotículas após condições favoráveis de temperatura, saturação e partículas disponíveis."]]},
+ cloud:{title:"Nuvem",phase:"Gotículas líquidas ou cristais de gelo",x:450,y:100,description:"Nuvens podem conter gotículas líquidas, cristais ou ambos. Nem toda nuvem precipita: as partículas precisam crescer e as condições de movimentação do ar importam.",options:[["land","Precipitar sobre terra","Chuva chega à superfície ou à vegetação.","Precipitação líquida pode atingir o solo; parte evapora antes ou é interceptada pela vegetação."] ,["ocean","Precipitar sobre o oceano","Água volta diretamente ao mar.","Precipitação sobre o oceano: o reservatório oceânico pode receber chuva sem passar por rios ou solos."] ,["ice","Cair como neve na montanha","Cristais se acumulam e podem formar gelo.","Neve: se as condições térmicas favorecem, cristais de gelo alcançam a montanha. O acúmulo prolongado pode integrar gelo glacial."]]},
+ ice:{title:"Neve e geleira",phase:"Sólido",x:700,y:200,description:"Gelo pode armazenar água por períodos muito longos. Neve acumulada pode se transformar em gelo glacial; parte derrete e pode alimentar rios, e parte pode sublimar diretamente para vapor.",options:[["river","Derreter e alimentar o rio","Gelo passa de sólido a líquido.","Fusão e escoamento: o degelo fornece água líquida a canais, riachos e rios, com respostas sazonais variáveis."] ,["vapor","Sublimar para a atmosfera","Gelo passa diretamente a gás.","Sublimação: uma parte da água sólida pode passar diretamente a vapor, sem derreter primeiro."]]},
+ land:{title:"Precipitação na superfície",phase:"Líquido",x:490,y:310,description:"Água que alcança a terra pode infiltrar, escoar pela superfície, ser interceptada por plantas ou voltar à atmosfera. A partição depende de chuva, relevo, solo e cobertura.",options:[["soil","Infiltrar no solo","Água atravessa a superfície e entra em poros.","Infiltração: água entra no solo; isso não equivale a recarga imediata do aquífero."] ,["river","Escoar para um rio","Água segue caminhos superficiais.","Escoamento: a água pode correr sobre o terreno, juntar-se em canais e chegar a cursos d'água."] ,["plant","Ser interceptada pela vegetação","Água chega às folhas antes de atingir o chão.","Intercepção: gotas podem ficar temporariamente retidas sobre folhas e galhos, de onde podem evaporar ou escorrer. Para simplificar, este reservatório representa água associada à vegetação."] ,["vapor","Evaporar de uma superfície molhada","Parte retorna à atmosfera como vapor.","Evaporação de uma superfície terrestre molhada: um caminho possível, sem passagem obrigatória por rios."]]},
+ soil:{title:"Umidade no solo",phase:"Líquido",x:470,y:445,description:"A água nos poros da zona não saturada pode abastecer raízes, evaporar, circular lateralmente ou percolar até a água subterrânea. O solo não é um funil que envia tudo diretamente a aquíferos.",options:[["aquifer","Percolar até o aquífero","Parte atravessa a zona não saturada.","Recarga possível: após percorrer a zona não saturada, parte da água pode alcançar a zona saturada. O processo pode ser lento e condicionado pela geologia."] ,["plant","Ser absorvida por raízes","Água entra nos tecidos de uma planta.","Absorção radicular: água do solo pode ser transportada pelos vasos da planta e eventualmente liberada por transpiração."] ,["vapor","Evaporar da superfície do solo","Água do solo retorna como vapor.","Evaporação do solo: água próxima da superfície pode passar ao estado gasoso quando as condições permitem."] ,["river","Mover-se lateralmente até um curso d'água","Fluxos subsuperficiais também alimentam rios.","Fluxo lateral: água no solo pode percorrer camadas próximas da superfície e contribuir para córregos, sem chegar necessariamente a um aquífero profundo."]]},
+ plant:{title:"Água na vegetação",phase:"Líquido nos tecidos; pode estar na superfície das folhas",x:332,y:275,description:"Água pode estar temporariamente sobre folhas por intercepção ou dentro de uma planta após absorção pelas raízes. Os dois casos têm origens diferentes; ambos podem devolver água à atmosfera.",options:[["vapor","Voltar ao ar como vapor","Transpiração ou evaporação de superfícies foliares.","Quando a água estava nos tecidos, a liberação pelas folhas é transpiração. Quando estava retida por fora, trata-se de evaporação da água interceptada."] ,["soil","Retornar ao solo a partir das folhas","Água interceptada escorre ou pinga.","A água que ficou na superfície foliar pode escorrer ou pingar até o solo; este caminho não representa a saída normal de água pelos vasos da planta."]]},
+ aquifer:{title:"Água subterrânea",phase:"Líquido em poros e fraturas",x:650,y:465,description:"A água da zona saturada pode mover-se em poros e fraturas conforme diferenças de carga hidráulica. Não precisa formar lagos subterrâneos: em muitos aquíferos, os poros são pequenos.",options:[["river","Descarregar em um rio ou nascente","Fluxo subterrâneo sustenta vazões de base.","Descarga subterrânea: a água de um aquífero pode emergir numa nascente ou alimentar um rio, inclusive durante períodos sem chuva."] ,["ocean","Descarregar diretamente no oceano","Alguns sistemas têm descarga submarina.","Descarga subterrânea para o mar: em certas regiões, a água pode atingir o oceano sem se tornar primeiro um rio superficial."]]},
+ river:{title:"Rio ou curso d'água",phase:"Líquido",x:685,y:345,description:"Rios transportam água, sedimentos e substâncias dissolvidas. Recebem chuva e água subterrânea e podem trocar água com aquíferos. Seu percurso não é necessariamente direto ao oceano.",options:[["ocean","Seguir em direção ao mar","Escoamento fluvial conecta bacias e mares.","Vazão fluvial: água pode percorrer vários cursos e reservatórios antes de atingir o oceano."] ,["vapor","Evaporar da superfície do rio","Água líquida retorna à atmosfera.","Evaporação em água doce: a superfície de rios e lagos também troca vapor com a atmosfera."] ,["soil","Infiltrar pelas margens ou leito","Um rio também pode perder água para o subsolo.","Perda de rio para o subsolo: dependendo dos gradientes hidráulicos, água do rio pode infiltrar no leito ou nas margens."]]}
+};
+var labels={ocean:"oceano",vapor:"vapor atmosférico",cloud:"nuvem",ice:"gelo",land:"superfície terrestre",soil:"solo",plant:"vegetação",aquifer:"aquífero",river:"rio"};
+var current="ocean",hops=0,trail=["Início: oceano (água líquida)."],movingPaused=false;
+var traveler=byId("traveler"),world=byId("worldView");
+var locationButtons=Array.prototype.slice.call(d.querySelectorAll("[data-node]"));
+var routeButtons=Array.prototype.slice.call(d.querySelectorAll("[data-route]"));
+var startButtons=Array.prototype.slice.call(d.querySelectorAll("[data-start]"));
+function plot(){
+ var place=places[current],options=place.options;
+ byId("placeTitle").textContent=place.title;
+ byId("placeDescription").textContent=place.description;
+ byId("placePhase").textContent=place.phase;
+ byId("travelCounter").textContent="ETAPA "+(hops+1)+" · "+(hops===0?"PONTO DE PARTIDA":"ROTA ESCOLHIDA");
+ traveler.style.left=(place.x/820*100)+"%";traveler.style.top=(place.y/540*100)+"%";
+ setPressed(locationButtons,"node",current);
+ routeButtons.forEach(function(b,i){
+  if(i>=options.length){b.hidden=true;b.disabled=true;return;}
+  var o=options[i];b.hidden=false;b.disabled=false;
+  b.replaceChildren();
+  var strong=d.createElement("strong");strong.textContent=o[1];
+  var small=d.createElement("small");small.textContent=o[2];
+  b.appendChild(strong);b.appendChild(small);
+ });
+ var history=byId("travelHistory");history.replaceChildren();
+ trail.slice(-14).forEach(function(item){var li=d.createElement("li");li.textContent=item;history.appendChild(li);});
+}
+function startAt(key){
+ if(!Object.prototype.hasOwnProperty.call(places,key))return;
+ current=key;hops=0;trail=["Início: "+labels[key]+" ("+places[key].phase.toLowerCase()+")."];
+ byId("travelDetail").textContent="Novo ponto de partida: "+places[key].title+". Escolha uma transformação para explorar uma rota possível; não há sequência obrigatória.";
+ plot();
+}
+function chooseRoute(i){
+ var o=places[current].options[i];
+ if(!o)return;
+ var before=current;
+ current=o[0];hops++;
+ trail.push((hops)+". "+labels[before]+" → "+labels[current]+": "+o[1]+".");
+ byId("travelDetail").textContent=o[3];
+ plot();
+}
+routeButtons.forEach(function(b){b.addEventListener("click",function(){chooseRoute(Number(b.dataset.route));});});
+locationButtons.forEach(function(b){b.addEventListener("click",function(){startAt(b.dataset.node);});});
+startButtons.forEach(function(b){b.addEventListener("click",function(){startAt(b.dataset.start);});});
+byId("resetTravel").addEventListener("click",function(){startAt("ocean");});
+function pauseVisual(){
+ movingPaused=!movingPaused;
+ world.classList.toggle("is-paused",movingPaused);
+ byId("heroFigure").classList.toggle("is-paused",movingPaused);
+ byId("pauseTravel").setAttribute("aria-pressed",String(movingPaused));
+ byId("pauseHero").setAttribute("aria-pressed",String(movingPaused));
+ byId("pauseTravel").textContent=movingPaused?"Retomar animações":"Pausar animações";
+ byId("pauseHero").textContent=movingPaused?"Retomar movimento ilustrativo":"Pausar movimento ilustrativo";
+}
+byId("pauseTravel").addEventListener("click",pauseVisual);
+byId("pauseHero").addEventListener("click",pauseVisual);
+plot();
+var sids=["solar","wind","humidity"];
+function refreshEnergy(){
+ var sun=Number(byId("solar").value),wind=Number(byId("wind").value),humidity=Number(byId("humidity").value);
+ byId("solarOut").textContent=sun+"%";byId("windOut").textContent=wind+"%";byId("humidityOut").textContent=humidity+"%";
+ var score=Math.round(.5*sun+.2*wind+.3*(100-humidity));
+ byId("energyIndex").textContent=String(score);
+ byId("energyBar").style.width=score+"%";
+ byId("energyMeter").setAttribute("aria-valuenow",String(score));
+ byId("energyText").textContent=score<35?"Tendência baixa no modelo. A limitação de energia e/ou o ar úmido reduzem o índice; isso não significa evaporação nula na natureza.":score<70?"Tendência intermediária: algumas condições favorecem a troca de vapor, mas não há estimativa física de massa ou tempo.":"Tendência alta neste índice criado para a aula. A evaporação real ainda depende da água disponível, da temperatura e de outros processos.";
+}
+sids.forEach(function(id){byId(id).addEventListener("input",refreshEnergy);});
+byId("resetEnergy").addEventListener("click",function(){byId("solar").value="70";byId("wind").value="35";byId("humidity").value="55";refreshEnergy();});
+refreshEnergy();
+var landTypes={
+ vegetated:{cap:30,label:"solo vegetado",description:"Neste solo didático, a infiltração tem maior capacidade potencial. Raízes e estrutura podem favorecer entrada de água, mas chuva intensa ainda pode gerar excedente."},
+ compact:{cap:10,label:"solo compactado",description:"A estrutura compactada tende a oferecer menor capacidade potencial de infiltração em muitos contextos. O excedente pode aumentar, dependendo da condição real e do relevo."},
+ paved:{cap:2,label:"superfície pavimentada",description:"O modelo usa capacidade muito baixa para uma superfície impermeabilizada típica. Juntas, fissuras, sistemas de drenagem e materiais permeáveis podem mudar o comportamento real."}
+};
+var land="vegetated";
+var landButtons=Array.prototype.slice.call(d.querySelectorAll("[data-land]"));
+function refreshRain(){
+ var rain=Number(byId("rain").value),info=landTypes[land],infil=Math.min(rain,info.cap),excess=Math.max(0,rain-infil);
+ byId("rainOut").textContent=rain+" mm/h";
+ byId("infilValue").textContent=infil+" mm";
+ byId("runoffValue").textContent=excess+" mm";
+ byId("infilBar").style.width=(rain===0?0:100*infil/rain)+"%";
+ byId("runoffBar").style.width=(rain===0?0:100*excess/rain)+"%";
+ byId("balanceGraph").setAttribute("aria-label","Chuva didática de "+rain+" milímetros numa hora: "+infil+" milímetros de potencial infiltrado e "+excess+" milímetros de excedente potencial.");
+ byId("rainFeedback").textContent=rain===0?"Sem chuva neste intervalo ilustrativo, o balanço modelado é zero. Isso não significa ausência de água no solo ou de fluxos preexistentes.":"Com "+rain+" mm/h neste modelo de uma hora e condição '"+info.label+"', até "+infil+" mm poderiam infiltrar e "+excess+" mm formariam excedente potencial. "+info.description+" Infiltração não equivale automaticamente a recarga subterrânea.";
+}
+landButtons.forEach(function(b){b.addEventListener("click",function(){land=b.dataset.land;setPressed(landButtons,"land",land);byId("groundFigure").dataset.land=land;refreshRain();});});
+byId("rain").addEventListener("input",refreshRain);
+byId("resetRain").addEventListener("click",function(){land="vegetated";byId("rain").value="35";byId("groundFigure").dataset.land=land;setPressed(landButtons,"land",land);refreshRain();});
+refreshRain();
+var quiz=byId("quizForm");
+byId("gradeQuiz").addEventListener("click",function(){
+ var score=0,answered=0,qs=Array.prototype.slice.call(quiz.querySelectorAll(".question"));
+ qs.forEach(function(q){
+  var chosen=q.querySelector("input:checked"),fb=q.querySelector(".question-feedback");
+  if(!chosen){fb.textContent="Selecione uma alternativa para conferir.";return;}
+  answered++;
+  var ok=chosen.value===q.dataset.answer;if(ok)score++;
+  fb.textContent=(ok?"Correto. ":"Reveja o processo. ")+q.dataset.explain;
+ });
+ byId("quizResult").textContent=answered<qs.length
+  ?"Você respondeu "+answered+" de "+qs.length+" questões. Acertos até agora: "+score+"."
+  :score+" de "+qs.length+" respostas corretas. "+(score===qs.length?"Você reconheceu as rotas e os limites dos modelos.":"Use o feedback para compreender os caminhos que faltaram.");
+});
+quiz.addEventListener("reset",function(){quiz.querySelectorAll(".question-feedback").forEach(function(n){n.textContent="";});byId("quizResult").textContent="";});
+}());
+</script>
+</body>
+</html>
