@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Quiz formativo meteorológico sobre convecção, cumulonimbus, chuva, granizo, raios, trovão, ventos e segurança.">
+<title>Como nasce uma tempestade? | Quiz ilustrado</title>
+<style>
+:root{--paper:#f5f0e7;--sheet:#fffbf3;--ink:#332a31;--wine:#84364a;--wine-dark:#63263a;--rose:#ad6673;--deep:#3e293d;--blue:#3d7884;--teal:#1c6371;--sand:#e6d8c7;--rule:#d4c5b9;--muted:#625860;--gold:#b18555;--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,Consolas,"Liberation Mono",monospace;color:var(--ink);font-family:var(--sans);background:var(--paper)}
+*,*:before,*:after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:290px;background:radial-gradient(ellipse at 10% 3%,#fff5e7 0%,transparent 34%),var(--paper);line-height:1.65}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.5}
+a{color:#703b59;text-underline-offset:3px}
+a:hover{color:var(--teal)}
+:focus-visible{outline:3px solid #247c95;outline-offset:4px}
+[hidden]{display:none!important}
+.wrap{width:min(1170px,calc(100% - 44px));margin-inline:auto}
+.skip{position:absolute;top:-140px;left:14px;padding:12px;background:white;z-index:20}
+.skip:focus{top:12px}
+.kicker{font:800 .73rem/1.6 var(--mono);text-transform:uppercase;letter-spacing:.13em;color:#844154}
+.mono{font-family:var(--mono)}
+.masthead{background:#f1e8da;position:relative;overflow:hidden}
+.masthead:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 80% 13%,#e5bfc078,transparent 52%);pointer-events:none}
+.masthead .wrap{position:relative}
+.folio{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:19px 0;border-bottom:2px solid #b6998f;font:.73rem var(--mono);color:#795461;letter-spacing:.07em;text-transform:uppercase}
+.folio strong{color:#63374a}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center;min-height:360px;padding:40px 0 31px}
+.hero-title{font:normal clamp(2.7rem,5.7vw,5.8rem)/1.07 var(--serif);letter-spacing:-.052em;margin:13px 0 19px}
+.hero-title em{color:var(--wine);font-weight:400}
+.hero-lead{font-size:1.07rem;color:#62515b;max-width:625px;line-height:1.86;margin:0}
+.hero-plate{position:relative;max-width:400px;justify-self:center;width:100%}
+.hero-plate svg{display:block;width:100%;height:auto}
+.hero-plate .caption{position:absolute;right:0;bottom:0;border-top:1px solid #bd9f95;padding:6px 4px;font:.71rem var(--mono);color:#674e59;background:#f1e8daaa}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.hero-tags span{border:1px solid #bca9a0;background:#fff9eea6;padding:6px 10px;font:.77rem var(--mono);color:#704953}
+.color-band{height:10px;background:linear-gradient(90deg,#3e8493 0 23%,#b4c9bb 23% 40%,#faf4e7 40% 53%,#d8999b 53% 74%,#9b435a 74% 100%)}
+.progress-section{padding:26px 0 19px}
+.progress-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#6a5260;font:.79rem/1.7 var(--mono);margin-bottom:9px}
+.progress-track{height:10px;background:#e4d6cf;border:1px solid #cbb7ad;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#327888,#8b455b);transition:width .3s ease}
+.progress-caption{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;font:.77rem var(--mono);color:#6b5860}
+.notice{border-left:4px solid #3b7a8a;padding:12px 17px;background:#e7eeee;font-size:.88rem;color:#3e5861;line-height:1.8}
+.main-shell{padding:26px 0 62px}
+.question-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.03fr);gap:24px;align-items:start}
+.plate{margin:0;border:1px solid #d1bdb4;background:#fbf4e9;padding:18px}
+.plate-number{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #d5c1b7;padding:0 0 12px;margin-bottom:12px;font:.73rem/1.6 var(--mono);color:#885166;letter-spacing:.07em}
+.plate-picture{min-height:365px;display:grid;place-items:center}
+.plate-picture svg{width:100%;max-height:440px;height:auto;display:block}
+.plate figcaption{border-top:1px solid #d5c1b7;padding-top:12px;font-size:.81rem;color:#675e61;line-height:1.75}
+.plate-note{margin-top:10px;font:.76rem/1.65 var(--mono);color:#725e67}
+.question-card{background:var(--sheet);border:1px solid #cebdb7;padding:clamp(19px,3.2vw,35px);min-height:570px;display:flex;flex-direction:column}
+.question-index{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid #d7c5bd;font:.75rem var(--mono);color:#98556a}
+.question-card h2{font:normal clamp(1.7rem,3vw,2.55rem)/1.2 var(--serif);letter-spacing:-.028em;margin:20px 0 15px}
+.question-instruction{font:.91rem/1.77 var(--sans);color:#645a60;margin:0 0 18px}
+.answers{border:0;padding:0;margin:0;min-width:0}
+.answers legend{font:.76rem/1.65 var(--mono);color:#7d5662;letter-spacing:.045em;margin-bottom:9px}
+.options{display:grid;gap:9px}
+.option{display:flex;align-items:center;gap:12px;border:1px solid #d6c5bc;background:#fbf5ed;padding:12px 14px;cursor:pointer;min-height:59px;transition:border-color .16s,background .16s}
+.option:hover{border-color:#44798a;background:#f0f5f2}
+.option.selected{border:2px solid #356d7d;padding:11px 13px;background:#e8f1ee}
+.option input{flex:none;width:19px;height:19px;accent-color:#7c3e55}
+.option-copy{min-width:0;font-size:.91rem;line-height:1.55}
+.option-art{flex:none;width:52px;height:42px;display:grid;place-items:center}
+.option-art svg{width:50px;height:40px}
+.sequence{display:grid;gap:8px;list-style:none;padding:0;margin:0}
+.sequence-item{display:grid;grid-template-columns:29px minmax(0,1fr) auto;gap:9px;align-items:center;background:#fbf5ee;border:1px solid #d3c1b9;padding:9px 10px}
+.sequence-item .num{font:.85rem var(--mono);color:#8f4a5d}
+.sequence-item .label{font-size:.89rem;line-height:1.4}
+.order-buttons{display:flex;gap:5px}
+.order-buttons button{border:1px solid #b49a9f;color:#744259;background:white;width:33px;height:34px;display:grid;place-items:center;font-size:1.04rem}
+.order-buttons button:not(:disabled):hover{background:#e7edf0}
+.answer-help{color:#74646c;font-size:.81rem;line-height:1.75;margin:13px 0 0}
+.feedback{padding:16px 18px;margin:23px 0 0;border-left:5px solid #9f6d7d;background:#f0e6e4;color:#563c49;line-height:1.78}
+.feedback.correct{border-color:#2d727a;background:#e4f0ea;color:#2b555b}
+.feedback strong{display:block;font:700 1.05rem var(--serif);margin-bottom:7px}
+.feedback p{margin:0}
+.feedback .feedback-extra{font-size:.84rem;margin-top:8px}
+.actions{margin-top:auto;padding-top:25px;display:flex;gap:9px;flex-wrap:wrap}
+.btn{border:1px solid #71354b;padding:11px 17px;background:#7e3e55;color:#fff;font-size:.89rem;font-weight:740;min-height:46px}
+.btn:hover:not(:disabled){background:#62273d}
+.btn.secondary{background:#fff8ee;color:#74435a}
+.btn.secondary:hover:not(:disabled){background:#f1e2e1}
+.btn.teal{border-color:#2c6574;background:#2b7181}
+.btn.teal:hover:not(:disabled){background:#225869}
+.btn.next{margin-left:auto}
+.tips{margin-top:21px;background:#eae1dd;border-left:4px solid #98708a;padding:15px 20px;color:#5c505a;font-size:.88rem}
+.tips b{color:#784b60}
+.summary{max-width:1000px;margin:0 auto;background:#fffbf3;border:1px solid #cdbbb3;padding:clamp(23px,5vw,51px)}
+.summary h2{font:normal clamp(2.2rem,4.8vw,4rem)/1.13 var(--serif);letter-spacing:-.04em;margin:14px 0 20px}
+.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:22px 0}
+.stat{background:#f0e5de;border-top:4px solid #9f6277;padding:15px 18px}
+.stat:nth-child(2){border-color:#3e8290}
+.stat:nth-child(3){border-color:#9c926e}
+.stat b{font:normal 2.6rem/1.2 var(--serif);display:block;color:#6b394e}
+.stat span{display:block;font:.75rem/1.55 var(--mono);color:#625761;margin-top:7px}
+.review-list{padding:0;list-style:none;display:grid;gap:11px}
+.review-item{display:grid;grid-template-columns:1fr auto;gap:13px;align-items:center;background:#faf1e9;border:1px solid #dac6bb;padding:13px 15px}
+.review-item strong{font-size:.94rem}
+.review-item p{margin:3px 0 0;color:#665b60;font-size:.83rem}
+.review-item button{border:1px solid #bca3a3;background:#fff;padding:9px 10px;color:#79445b;font-size:.8rem}
+.references{border-top:1px solid var(--rule);padding:30px 0 44px;color:#60575e;font-size:.82rem;line-height:1.85}
+.references h2{font:normal 1.65rem var(--serif);margin:0 0 10px}
+.references p{margin:8px 0}
+.references a{overflow-wrap:anywhere}
+.motion-reduce *,.motion-reduce *:before,.motion-reduce *:after{animation:none!important;transition:none!important}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr .65fr}.question-grid{grid-template-columns:1fr}.plate-picture{min-height:230px}.plate-picture svg{max-height:360px}.question-card{min-height:0}.main-shell{padding-top:18px}}
+@media(max-width:620px){.wrap{width:min(100% - 28px,1170px)}.folio{font-size:.66rem}.hero-grid{grid-template-columns:1fr;padding:26px 0 23px;gap:15px;min-height:auto}.hero-plate{max-width:250px}.hero-title{font-size:clamp(2.5rem,11vw,4rem)}.hero-lead{font-size:.98rem}.question-grid{gap:13px}.plate{padding:12px}.plate-picture{min-height:0}.question-card{padding:19px}.btn{flex:1 1 42%;padding:11px}.btn.next{margin-left:0}.summary-stats{grid-template-columns:1fr}.review-item{grid-template-columns:1fr}.sequence-item{grid-template-columns:20px minmax(0,1fr) 76px}.order-buttons button{width:33px}.progress-section{padding-top:18px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+@media print{.actions,.progress-track,.skip{display:none!important}.question-grid{display:block}.plate,.question-card{break-inside:avoid}.hero-grid{min-height:0}}
+
+:root{--paper:#f6f5ee;--sheet:#fffefa;--ink:#1b2940;--wine:#006e79;--wine-dark:#005a66;--rose:#3b79ac;--deep:#091e30;--blue:#3b79ac;--teal:#006e79;--sand:#e6eeee;--rule:#d6dcd7;--muted:#435166;--gold:#d7a453}
+body{background:#f6f5ee;color:#1b2940}.masthead{color:#f8f8f3;background:linear-gradient(115deg,#0c1d30,#193953)}.masthead:before{background:radial-gradient(circle at 72% 25%,#58728a55,transparent 55%)}.masthead .kicker{color:#ffcf8e}
+.folio{color:#c5d7df;border-color:#65869a}.folio strong{color:#ffc36e}
+.hero-grid{grid-template-columns:.9fr 1.1fr;min-height:440px}.hero-title{color:#f9f8f2}.hero-title em{color:#ffc36e;font-style:normal}.hero-lead{color:#d9e7ec}.hero-tags span{color:#e9f3f3;border-color:#7595a9;background:#ffffff12}
+.hero-plate{margin:0;max-width:550px}.hero-plate svg{display:block;width:100%;height:auto;border:1px solid #658ca1;border-radius:40% 40% 14px 14px / 16% 16% 14px 14px;box-shadow:0 20px 55px #071725aa}
+.hero-plate figcaption{position:static;border:0;background:none;margin:12px 0 0;color:#c7d9e0;padding:0;font-size:.8rem}
+.storm-flash{animation:stormF 5.6s steps(1,end) infinite}@keyframes stormF{0%,80%,84%,88%,100%{opacity:.15}81%,85%{opacity:1}}
+.color-band{height:13px;background:linear-gradient(90deg,#c9856b 0 24%,#e0b77c 24% 50%,#8cabb1 50% 74%,#28475b 74%)}
+.progress-meta,.progress-caption{color:#486476}.progress-track{border-color:#bdcdd3;background:#dce9eb}.progress-fill{background:linear-gradient(90deg,#006e79,#3b79ac)}.notice{background:#e7f1f0;border-color:#006e79;color:#345768}
+.plate{background:#e4edf0;border-color:#c2d5dc}.plate-picture{background:#dbe8eb}.plate-number,.plate figcaption{border-color:#bacfd7;color:#246879}.plate-note{color:#486575}
+.question-card,.summary{background:#fff;border-color:#c8dadd}.question-index,.answers legend{color:#006e79;border-color:#d3e0e3}.question-instruction,.answer-help{color:#435a6a}
+.option,.sequence-item{background:#f0f6f5;border-color:#cedede}.option:hover{background:#e5f0ef;border-color:#006e79}.option.selected{border-color:#006e79;background:#e1f2ef}.option input{accent-color:#006e79}.sequence-item .num{color:#006e79}
+.option-art{width:76px;height:55px;background:#e5eff0;border:1px solid #bdd6dc;border-radius:4px}.option-art svg{width:74px;height:53px}
+.order-buttons button{border-color:#a2bfc6;color:#006e79}.feedback{background:#fff0d4;border-color:#c99546;color:#594b34}.feedback.correct{background:#e4f3eb;border-color:#006e79;color:#24565b}
+.btn{background:#006e79;border-color:#006e79}.btn:hover:not(:disabled){background:#004e59}.btn.secondary{background:#fff;color:#006e79;border-color:#a0bdc6}.btn.secondary:hover:not(:disabled){background:#e6f1ef}.btn.teal{background:#1b374a;border-color:#1b374a}
+.tips{background:#e7f0ef;border-color:#006e79;color:#445a69}.tips b{color:#006e79}.stat{background:#ebf4f1;border-color:#006e79}.stat b{color:#006e79}.stat:nth-child(2){border-color:#3b79ac}.stat:nth-child(3){border-color:#d6a253}
+.review-item{background:#edf4f3;border-color:#d0dfe0}.review-item button{color:#006e79;border-color:#9babb7}.references{color:#435166}.references a{color:#006e79}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr .9fr;min-height:0}}
+@media(max-width:620px){.hero-grid{grid-template-columns:1fr;gap:22px;min-height:0}.hero-plate{max-width:350px}.hero-title{font-size:clamp(2.6rem,10vw,4.1rem)}.option-art{width:60px;height:45px}.option-art svg{width:58px;height:43px}}
+@media(prefers-reduced-motion:reduce){.storm-flash{animation:none!important;opacity:1}}.motion-reduce .storm-flash{animation:none!important;opacity:1}
+</style>
+</head>
+<body>
+<a class="skip" href="#atividade">Ir para a questão</a>
+<header class="masthead"><div class="wrap">
+<div class="folio"><strong>ATLAS DO CÉU / EXPEDIÇÃO 02</strong><span>Laboratório de Meteorologia · Quiz</span></div>
+<div class="hero-grid"><div><div class="kicker">Caderno de campo · Formação de tempestades</div>
+<h1 class="hero-title">Como nasce uma <em>tempestade?</em></h1>
+<p class="hero-lead">Da subida de uma parcela de ar às descargas elétricas: investigue uma nuvem por dentro, interprete doze diagramas e tome decisões quando o trovão chega. Uma pergunta por vez, com explicações.</p>
+<div class="hero-tags"><span>12 desafios</span><span>Ilustrações SVG originais</span><span>Segurança com raios</span></div></div>
+<figure class="hero-plate">
+<svg viewBox="0 0 500 340" role="img" aria-labelledby="stormHT stormHD" xmlns="http://www.w3.org/2000/svg"><title id="stormHT">Uma cumulonimbus sobre o vale</title><desc id="stormHD">Nuvem alta de tempestade sobre montanhas, com chuva e um raio. Ilustração sem escala e sem base observacional.</desc>
+<defs><linearGradient id="gHero" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#17314b"/><stop offset=".7" stop-color="#658aa3"/><stop offset="1" stop-color="#b6816c"/></linearGradient></defs>
+<rect width="500" height="340" rx="16" fill="url(#gHero)"/><circle cx="415" cy="75" r="30" fill="#f9c780"/>
+<path d="M0 290L100 246L181 290L295 235L379 288L445 251L500 279V340H0" fill="#283e4e"/><path d="M0 313L104 288L199 320L321 280L420 299L500 292V340H0" fill="#122b3b"/>
+<path d="M85 203Q49 182 73 153Q82 134 107 137Q115 93 162 95Q191 43 243 75Q277 50 312 92Q366 66 387 123Q426 126 414 175Q420 201 392 208Z" fill="#91a9b7"/>
+<path d="M79 169Q80 131 115 134Q112 87 158 91Q189 41 242 80Q273 56 306 95Q362 73 383 134Q403 135 397 172Z" fill="#d5e0e3"/>
+<g stroke="#a8d9e7" stroke-width="4"><path d="M175 211l-18 50M212 215l-20 57M249 218l-19 54M288 217l-19 53M320 218l-18 51"/></g>
+<path class="storm-flash" d="M282 191l-31 52 29-8-45 74 17-55-24 9 27-68Z" fill="#ffd17e" stroke="#fff2c4" stroke-width="2"/>
+<text x="24" y="30" font-family="monospace" font-size="12" fill="#e7f0ec">ATMOSFERA / CÉLULA CONVECTIVA</text></svg>
+<figcaption>Cena conceitual: não é previsão, radar nem medição real.</figcaption></figure>
+</div></div></header>
+<div class="color-band" aria-hidden="true"></div>
+<div class="wrap">
+ <section class="progress-section" aria-label="Acompanhamento do quiz">
+  <div class="progress-meta"><span id="progressStep">QUESTÃO 01 / 12</span><span id="progressDone">0 de 12 conferidas</span></div>
+  <div class="progress-track" id="progressBar" role="progressbar" aria-label="Questões conferidas" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-caption"><span id="progressTopic">Ingredientes de uma célula convectiva</span><button class="btn secondary" type="button" id="motionToggle" aria-pressed="false">Reduzir movimentos</button></div>
+  <p class="notice">Este quiz tem correção formativa local: as respostas não vão ao Moodle e nenhuma nota oficial é lançada. Os desenhos são modelos didáticos, não previsões meteorológicas.</p>
+ </section>
+ <main id="atividade" class="main-shell">
+  <section id="questionScreen" class="question-grid" aria-label="Questão atual">
+   <figure class="plate">
+    <div class="plate-number"><span id="plateNum">PRANCHA 01</span><span id="plateLabel">ESTRUTURA</span></div>
+    <div id="platePicture" class="plate-picture"></div>
+    <figcaption id="plateCaption">Prancha meteorológica ilustrativa.</figcaption>
+    <div class="plate-note">Ilustração original · Não representa previsão ou observação real</div>
+   </figure>
+   <div class="question-card">
+    <div class="question-index"><span id="questionSection">01 / ESTRUTURA</span><span id="questionType">ESCOLHA ÚNICA</span></div>
+    <h2 id="questionTitle" tabindex="-1">Carregando a primeira questão…</h2>
+    <p id="questionInstruction" class="question-instruction"></p>
+    <div id="answerMount"></div>
+    <p class="answer-help" id="answerHelp"></p>
+    <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+    <div class="actions">
+     <button type="button" id="previousButton" class="btn secondary">Anterior</button>
+     <button type="button" id="checkButton" class="btn">Conferir resposta</button>
+     <button type="button" id="nextButton" class="btn teal next">Próxima questão →</button>
+    </div>
+   </div>
+  </section>
+  <section id="summaryScreen" class="summary" hidden aria-labelledby="summaryTitle">
+   <div class="kicker">Conclusão / revisão comentada</div>
+   <h2 id="summaryTitle" tabindex="-1">O que você descobriu sobre as tempestades?</h2>
+   <p>Os indicadores mostram somente esta tentativa local, sem registro acadêmico. Reveja os desenhos e as explicações antes de tentar novamente.</p>
+   <div class="summary-stats">
+    <div class="stat"><b id="totalReviewed">0</b><span>QUESTÕES CONFERIDAS</span></div>
+    <div class="stat"><b id="totalMastered">0</b><span>RESPOSTAS CORRETAS AO FINAL</span></div>
+    <div class="stat"><b id="totalFirst">0</b><span>ACERTOS NA PRIMEIRA TENTATIVA</span></div>
+   </div>
+   <h3 style="font:normal 1.65rem Georgia,serif;margin:22px 0 14px">Revisitar pranchas</h3>
+   <ol id="reviewList" class="review-list"></ol>
+   <div class="actions"><button class="btn secondary" type="button" id="restartButton">Recomeçar do zero</button><button class="btn teal" type="button" id="reviewFirstButton">Rever a primeira questão</button></div>
+  </section>
+ </main>
+ <aside class="tips" aria-label="Instruções"><b>Como responder:</b> escolha uma alternativa, várias quando solicitado ou ordene as etapas pelas setas. Confira para receber explicações, use Anterior / Próxima, revise e recomece quantas vezes quiser.</aside>
+ <section class="references" aria-labelledby="sourcesTitle"><h2 id="sourcesTitle">Fontes e limites das ilustrações</h2><p>As cenas SVG e os pictogramas das opções são desenhos originais e conceituais, sem dados de radar, imagens de satélite, fotografias, medições ou previsões reais. Os três estágios apresentam um modelo didático de célula convectiva simples; tempestades multicelulares podem ter fases simultâneas.</p><p>Fontes: <a href="https://www.nssl.noaa.gov/education/svrwx101/thunderstorms/" target="_blank" rel="noopener noreferrer">NOAA/NSSL - Thunderstorm Basics</a>, <a href="https://www.noaa.gov/jetstream/thunderstorms/life-cycle-of-thunderstorm" target="_blank" rel="noopener noreferrer">NOAA JetStream - Life Cycle</a>, <a href="https://scied.ucar.edu/learning-zone/storms/how-thunderstorms-form" target="_blank" rel="noopener noreferrer">UCAR - How Thunderstorms Form</a>, <a href="https://www.weather.gov/safety/lightning-tips" target="_blank" rel="noopener noreferrer">NWS - Lightning Safety</a>. Para risco real, siga avisos oficiais e procure abrigo quando ouvir trovão.</p></section>
+</div>
+<script>
+(function(){
+'use strict';
+var root=document, total=12;
+var $=function(id){return root.getElementById(id);};
+var questions=[{"section":"Ingredientes da tempestade","type":"multiple","figure":"ingredients","figureTitle":"Os três ingredientes da convecção","caption":"Três painéis representam umidade, instabilidade e levantamento; não são registros meteorológicos reais.","title":"Quais condições favorecem a formação de uma tempestade convectiva?","instruction":"Selecione todos os ingredientes necessários ao modelo conceitual.","options":[["a","Umidade disponível"],["b","Instabilidade atmosférica"],["c","Mecanismo inicial de levantamento"],["d","Ausência de qualquer movimento de ar"],["e","Neve obrigatória ao nível do solo"]],"correct":["a","b","c"],"hint":"Pense em vapor de água, flutuabilidade e elevação inicial.","explain":"Convecção profunda geralmente depende de umidade, instabilidade e um mecanismo de elevação; mesmo combinados, esses ingredientes não garantem uma tempestade."},{"section":"Subida do ar","type":"single","figure":"parcel","figureTitle":"Uma parcela se expande durante a subida","caption":"Círculos mostram a expansão e setas mostram ascensão; não representam pressão ou temperatura medidas.","title":"Quando uma parcela de ar não saturada sobe em uma atmosfera de menor pressão, o que tende a acontecer?","instruction":"Considere uma subida aproximadamente adiabática.","options":[["a","Ela se expande e esfria"],["b","Ela se comprime e sempre aquece"],["c","A pressão do ar não varia com altitude"],["d","O vapor vira granizo de imediato"]],"correct":"a","hint":"Uma parcela que se expande realiza trabalho e tende a esfriar.","explain":"Ao subir para níveis de pressão menor, a parcela não saturada se expande e esfria adiabaticamente; isso pode aproximá-la da saturação."},{"section":"Condensação","type":"single","figure":"condensation","figureTitle":"Saturação e formação de gotículas","caption":"A faixa pontilhada representa um nível didático de condensação e não uma altitude calculada.","title":"Por que a ascensão de ar úmido pode levar à formação de nuvens?","instruction":"Relacione resfriamento do ar e saturação do vapor.","options":[["a","O trovão produz gotículas de água"],["b","A pressão atmosférica se torna nula"],["c","O resfriamento favorece saturação e condensação do vapor"],["d","A chuva sempre antecede a existência da nuvem"]],"correct":"c","hint":"Condensação torna o vapor parte de gotículas de nuvem.","explain":"O ar que sobe tende a esfriar; próximo da saturação, vapor pode condensar sobre partículas adequadas, formando as gotículas da nuvem."},{"section":"Fases do cumulonimbus","type":"single","figure":"stages","figureTitle":"Silhuetas A, B e C de células convectivas","caption":"As fases são um modelo de célula isolada; em tempestades organizadas podem coexistir.","title":"Qual ilustração representa a fase madura da célula?","instruction":"Compare os desenhos das alternativas e os movimentos verticais.","options":[["a","A: crescimento com ar ascendente dominante","growth"],["b","B: precipitação com correntes ascendentes e descendentes","mature"],["c","C: célula enfraquecendo com ar descendente dominante","decay"]],"correct":"b","hint":"Na maturidade a chuva se desenvolve enquanto a subida do ar ainda ocorre.","explain":"A fase madura costuma apresentar simultaneamente corrente ascendente, corrente descendente e precipitação; a fase de crescimento é principalmente ascendente."},{"section":"Dentro da nuvem","type":"single","figure":"currents","figureTitle":"Ascendência, descendência e chuva","caption":"Setas âmbar sobem e setas azuis descem; a geometria não representa dados observados.","title":"Por que uma corrente descendente pode se formar junto da chuva?","instruction":"Observe o arraste do ar e a evaporação da precipitação.","options":[["a","Chuva anula a gravidade e faz todo o ar subir"],["b","A queda da precipitação e o resfriamento evaporativo podem favorecer descidas de ar"],["c","Não há movimentos verticais durante uma tempestade"],["d","A chuva sempre impede a corrente ascendente"]],"correct":"b","hint":"A queda de gotas e o resfriamento por evaporação contribuem para ar descendente.","explain":"Precipitação pode arrastar ar para baixo e o resfriamento por evaporação pode torná-lo relativamente mais denso. Ascendência e descendência podem coexistir."},{"section":"Granizo e gelo","type":"multiple","figure":"hail","figureTitle":"Partícula de granizo em corte conceitual","caption":"As camadas são ilustrativas; nenhum tamanho, duração ou trajetória real é indicado.","title":"Quais afirmações sobre granizo são coerentes?","instruction":"Marque todas as opções corretas.","options":[["a","Correntes fortes podem manter partículas de gelo suspensas"],["b","Água super-resfriada pode congelar sobre partículas de gelo"],["c","Toda tempestade produz granizo que alcança o solo"],["d","Chuva líquida no solo pode coexistir com regiões geladas na nuvem"]],"correct":["a","b","d"],"hint":"Granizo envolve correntes e microfísica, mas nem toda tempestade o produz.","explain":"Granizo pode crescer pela acreção de água super-resfriada em partículas de gelo, sustentadas em parte por correntes fortes. Nem toda tempestade gera granizo no solo."},{"section":"Separação de cargas","type":"single","figure":"charge","figureTitle":"Distribuição conceitual de cargas","caption":"Sinais positivos e negativos ilustram regiões de carga sem afirmar a estrutura real de uma nuvem particular.","title":"Que processo participa da eletrificação de nuvens de tempestade?","instruction":"Pense nas interações de partículas dentro de correntes intensas.","options":[["a","Somente a luz da Lua"],["b","Colisões entre hidrometeoros e separação de cargas por movimentos internos"],["c","Ausência de partículas de gelo"],["d","Obrigatoriedade de todo raio alcançar o solo"]],"correct":"b","hint":"Gelo e granizo mole podem transferir carga durante colisões.","explain":"Interações entre partículas de gelo e graupel ajudam a separar cargas; descargas podem ocorrer na nuvem, entre nuvens ou entre nuvem e solo."},{"section":"Relâmpago e trovão","type":"single","figure":"lightSound","figureTitle":"Luz e som saem do mesmo evento","caption":"Ondas representam conceitualmente velocidade de propagação, sem escala para estimar a distância da descarga.","title":"Por que normalmente vemos o clarão antes de ouvir o trovão?","instruction":"Compare a propagação da luz com a do som.","options":[["a","A luz se propaga muito mais rápido do que o som no ar"],["b","O trovão é produzido minutos depois do raio"],["c","O som não se propaga pelo ar"],["d","O clarão sempre acontece em outra nuvem"]],"correct":"a","hint":"As velocidades de propagação são muito diferentes.","explain":"A luz chega praticamente de imediato a distâncias usuais, enquanto o som demora mais. Ouvir trovão já exige procurar abrigo: não espere calcular distâncias."},{"section":"Frente de rajada","type":"single","figure":"gust","figureTitle":"Saída de ar frio junto ao solo","caption":"A corrente descendente e sua divergência horizontal são modelos sem valores de vento reais.","title":"Quando uma corrente descendente chega ao solo, o que pode acontecer?","instruction":"Acompanhe o espalhamento lateral do ar.","options":[["a","Todo o risco de raio acaba imediatamente"],["b","O ar pode se espalhar e provocar rajadas fortes"],["c","Toda a chuva vira neve"],["d","Cessa qualquer movimento atmosférico"]],"correct":"b","hint":"O ar que desce tende a se espalhar horizontalmente perto do solo.","explain":"Uma corrente descendente pode divergir na superfície, formando escoamento de saída e uma frente de rajada, que pode causar ventos fortes e promover novos levantamentos de ar."},{"section":"Proteção contra raios","type":"single","figure":"shelter","figureTitle":"Abrigo fechado e veículo rígido","caption":"Ícones nas alternativas representam edifício, árvore, quiosque e lago, como cenários conceituais.","title":"Você ouve um trovão enquanto está no parque. O que deve fazer?","instruction":"Escolha a medida de segurança reconhecida pelo National Weather Service.","options":[["a","Entrar em edifício substancial fechado ou veículo de teto rígido com janelas fechadas","building"],["b","Esperar embaixo de uma árvore isolada","tree"],["c","Permanecer em um quiosque aberto","gazebo"],["d","Continuar nadando até enxergar um raio perto","lake"]],"correct":"a","hint":"O primeiro trovão é motivo suficiente para buscar abrigo adequado.","explain":"Procure imediatamente um edifício fechado substancial ou veículo com teto rígido e janelas fechadas. Árvores, quiosques e áreas abertas não são abrigos seguros. Aguarde pelo menos 30 minutos após o último trovão para voltar ao exterior."},{"section":"Dissipação","type":"single","figure":"decay","figureTitle":"A célula perde alimentação ascendente","caption":"Desenho de uma célula isolada em declínio; sistemas multicelulares podem gerar células novas.","title":"Por que uma célula de tempestade comum pode começar a se dissipar?","instruction":"Considere a entrada de ar quente e úmido na corrente ascendente.","options":[["a","Ar descendente pode enfraquecer a alimentação ascendente"],["b","Toda a umidade da atmosfera desaparece"],["c","O relâmpago consome todo o oxigênio"],["d","Não existe movimento de ar em nuvens"]],"correct":"a","hint":"Sem ar quente e úmido entrando, a célula perde sustentação.","explain":"O ar descendente e a saída de ar frio podem cortar a alimentação da corrente ascendente, enfraquecendo uma célula simples. Tempestades organizadas podem continuar com outras células."},{"section":"Sequência conceitual","type":"sequence","figure":"timeline","figureTitle":"Da atmosfera favorável ao enfraquecimento da célula","caption":"A ordem é pedagógica e simplificada; processos podem se sobrepor e coexistir em sistemas maiores.","title":"Coloque em ordem o ciclo de uma célula convectiva típica.","instruction":"Mova as etapas com os botões ↑ e ↓ para começar pelas condições iniciais.","items":[["m","Chuva e correntes ascendentes e descendentes coexistem"],["d","Ar descendente predomina e a célula perde força"],["i","Umidade, instabilidade e elevação tornam o ambiente favorável"],["g","Cúmulos crescem verticalmente com corrente ascendente dominante"]],"correct":["i","g","m","d"],"hint":"Condições favoráveis, crescimento, maturidade e dissipação.","explain":"O modelo de célula isolada começa com condições favoráveis, segue o crescimento ascendente, passa pela maturidade com precipitação e termina quando a descendência interrompe a alimentação. Sistemas organizados podem comportar fases simultâneas."}];
+var answer=Object.create(null),checked=Object.create(null),firstTry=Object.create(null),index=0,reduceMotion=false;
+function icon(kind){
+ var v='',blue='#006e79',gold='#e7ae64';
+ if(kind==='growth')v='<path d="M15 39Q0 25 26 24Q30 2 47 21Q63 15 66 35Z" fill="#9ab7bd"/><path d="M36 51V30" stroke="'+gold+'" stroke-width="5"/>';
+ if(kind==='mature')v='<path d="M7 33Q2 17 25 18Q34 0 49 15Q67 14 69 33Z" fill="#779eab"/><path d="M21 34l-7 15m30-15-7 15m27-15-7 15" stroke="'+blue+'" stroke-width="4"/>';
+ if(kind==='decay')v='<path d="M10 34Q1 22 25 24Q37 9 52 24Q68 21 67 38Z" fill="#92acb2"/><path d="M47 36V51" stroke="'+blue+'" stroke-width="4"/>';
+ if(kind==='building')v='<path d="M5 22L35 4L70 22Z" fill="'+gold+'"/><rect x="13" y="22" width="48" height="31" fill="'+blue+'"/><rect x="30" y="32" width="14" height="21" fill="#e7f3f4"/>';
+ if(kind==='tree')v='<path d="M37 22V54" stroke="#946d54" stroke-width="8"/><circle cx="37" cy="19" r="19" fill="#648e70"/>';
+ if(kind==='gazebo')v='<path d="M5 23L35 5L69 23Z" fill="'+blue+'"/><path d="M15 24V53m45-29v29" stroke="#8b9c9f" stroke-width="5"/>';
+ if(kind==='lake')v='<path d="M5 38Q15 28 25 38T45 38T65 38M5 48Q15 38 25 48T45 48T65 48" stroke="'+blue+'" stroke-width="4" fill="none"/>';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75 55" aria-hidden="true" focusable="false">'+v+'</svg>';
+}
+function sky(title,desc,body){
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 370" role="img" aria-labelledby="skyTitle skyDesc"><title id="skyTitle">'+title+'</title><desc id="skyDesc">'+desc+'</desc>'+
+ '<defs><linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1b3652"/><stop offset=".7" stop-color="#678ba2"/><stop offset="1" stop-color="#c8aa91"/></linearGradient><marker id="upAr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#ffd18d"/></marker><marker id="dnAr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#a2dbe8"/></marker></defs>'+
+ '<rect width="540" height="370" fill="#ecf2f0"/><rect x="15" y="15" width="510" height="308" rx="8" fill="url(#skyG)"/><path d="M15 299Q130 287 250 299T525 293V323H15Z" fill="#243b4e"/>'+
+ '<text x="31" y="39" fill="#eaf1ec" font-size="11" font-family="monospace">ATMOSFERA · PRANCHA CONCEITUAL</text>'+body+
+ '<text x="31" y="350" fill="#486877" font-size="11" font-family="monospace">ILUSTRAÇÃO SVG AUTORAL · SEM DADOS REAIS</text></svg>';
+}
+function l(x,y,t,c,s){return '<text x="'+x+'" y="'+y+'" fill="'+(c||'#fbf4df')+'" font-size="'+(s||16)+'" font-family="system-ui,sans-serif">'+t+'</text>';}
+function c(x,y,z,col){return '<path d="M6 98Q-20 84 10 57Q22 41 36 51Q30 11 70 18Q97 7 114 30Q141 -4 166 27Q203 21 226 61Q243 96 210 102Z" transform="translate('+x+' '+y+') scale('+z+')" fill="'+(col||'#cddce2')+'"/>';}
+function ar(d,color,mark){return '<path d="'+d+'" stroke="'+color+'" stroke-width="8" fill="none" stroke-linecap="round" marker-end="url(#'+mark+')"/>';}
+function rain(){return '<g stroke="#a2dbe8" stroke-width="4"><path d="M270 202l-14 32m44-30-13 36m45-37-15 33"/></g>';}
+function art(kind){
+ var b='',a='#ffd18d',u='#a2dbe8',w='#f8f3df';
+ if(kind==='ingredients')b='<g fill="#e7f1f0" stroke="#a9c6ca" stroke-width="3"><rect x="32" y="102" width="145" height="154" rx="10"/><rect x="202" y="102" width="135" height="154" rx="10"/><rect x="361" y="102" width="146" height="154" rx="10"/></g>'+l(58,148,'01','#286a78',25)+l(227,148,'02','#286a78',25)+l(387,148,'03','#286a78',25)+l(51,202,'UMIDADE','#286a78',14)+l(212,202,'INSTABILIDADE','#286a78',12)+l(387,202,'ELEVAÇÃO','#286a78',13);
+ else if(kind==='parcel')b=ar('M107 268Q140 173 225 83',a,'upAr')+'<g fill="'+a+'" stroke="#fff5d6" stroke-width="2"><circle cx="119" cy="244" r="12"/><circle cx="173" cy="167" r="19"/><circle cx="230" cy="90" r="30"/></g>'+l(293,106,'Pressão menor',w)+l(293,149,'Expansão',w)+l(293,192,'Resfriamento',w);
+ else if(kind==='condensation')b=c(230,82,.99,'#e1e9ea')+ar('M105 280Q156 220 241 157',a,'upAr')+'<path d="M35 171H500" stroke="'+a+'" stroke-width="3" stroke-dasharray="7 8"/>'+l(44,154,'Saturação ilustrativa',w,15)+l(338,226,'Gotículas',w);
+ else if(kind==='stages'||kind==='timeline')b='<path d="M188 64V291M362 64V291" stroke="#bed6db" stroke-dasharray="6 7"/>'+c(36,171,.59,'#d8e4e7')+c(194,106,.85,'#bbced9')+c(393,175,.48,'#9eb8c3')+ar('M102 270V208',a,'upAr')+ar('M242 270V177',a,'upAr')+ar('M314 178V271',u,'dnAr')+ar('M438 191V274',u,'dnAr')+l(76,86,'A',w,28)+l(251,86,'B',w,28)+l(432,86,'C',w,28)+rain();
+ else if(kind==='currents')b=c(120,81,1.29,'#c4d4dd')+ar('M160 270Q143 206 201 164',a,'upAr')+ar('M381 164Q410 222 385 276',u,'dnAr')+rain()+l(33,94,'Ascendente',w)+l(352,94,'Descendente',w);
+ else if(kind==='hail')b=c(104,62,1.38,'#c5d5df')+ar('M113 271Q67 210 159 124',a,'upAr')+'<circle cx="333" cy="209" r="63" fill="#edf8f8" stroke="#a9d4e1" stroke-width="5"/><circle cx="333" cy="209" r="43" fill="#a0cadb" stroke="#f5ffff" stroke-width="8"/><circle cx="333" cy="209" r="20" fill="#e6f7f7" stroke="#79acbf" stroke-width="6"/>'+l(36,92,'Região fria',w);
+ else if(kind==='charge')b=c(86,81,1.61,'#b4cbd6')+'<g font-family="system-ui" font-size="29"><text x="177" y="148" fill="#fff3b8">+</text><text x="252" y="125" fill="#fff3b8">+</text><text x="328" y="148" fill="#fff3b8">+</text><text x="186" y="219" fill="#8fd4ea">−</text><text x="258" y="220" fill="#8fd4ea">−</text><text x="325" y="220" fill="#8fd4ea">−</text></g>'+'<path d="M281 223L254 265L281 259L248 310" stroke="'+a+'" stroke-width="8" fill="none"/>';
+ else if(kind==='lightSound')b=c(108,75,1.2,'#c5d7df')+'<path d="M304 172l-32 53 27-7-42 76 14-54-25 8 28-71Z" fill="'+a+'" stroke="#fff0c7" stroke-width="2"/>'+'<g stroke="#f0d4ad" stroke-width="3" fill="none"><circle cx="296" cy="225" r="45"/><circle cx="296" cy="225" r="75"/></g>'+l(375,123,'LUZ',w,19)+l(397,264,'SOM',w,19);
+ else if(kind==='gust')b=c(106,77,1.29,'#bfced8')+ar('M316 171Q366 228 326 272',u,'dnAr')+ar('M321 278Q220 269 121 284',u,'dnAr')+ar('M331 281Q433 257 477 278',u,'dnAr')+ar('M459 270Q410 214 443 179',a,'upAr')+rain()+l(43,96,'Descida do ar',w);
+ else if(kind==='shelter')b='<g fill="#eaf2f2" stroke="#acc2cd" stroke-width="2"><rect x="42" y="92" width="200" height="171" rx="12"/><rect x="293" y="92" width="203" height="171" rx="12"/></g>'+'<path d="M58 167L143 118L224 167Z" fill="#e5ad72"/><rect x="87" y="167" width="113" height="76" fill="#30748a"/><rect x="133" y="205" width="25" height="38" fill="#e7f1ef"/>'+'<path d="M329 224h122l-13-37h-96Z" fill="#2d748a"/><circle cx="356" cy="235" r="12" fill="#243849"/><circle cx="426" cy="235" r="12" fill="#243849"/>'+l(69,117,'Edifício fechado','#245569',14)+l(309,117,'Veículo fechado','#245569',14)+l(74,306,'Trovão: buscar abrigo imediatamente',w,15);
+ else if(kind==='decay')b=c(124,140,1.13,'#a0b6c0')+ar('M333 174Q380 235 338 276',u,'dnAr')+ar('M338 278Q246 271 148 285',u,'dnAr')+'<path d="M134 267Q158 220 187 204" stroke="'+a+'" stroke-width="5" stroke-dasharray="9 12" fill="none"/>'+l(34,90,'Alimentação reduzida',w,17);
+ return sky(questions[index].figureTitle,questions[index].caption,b);
+}
+function chosen(q){
+ if(q.type==='sequence'){return (answer[index]||q.items.map(function(x){return x[0];})).slice();}
+ return q.type==='multiple'?(answer[index]||[]).slice():(answer[index]||'');
+}
+function equal(a,b){
+ if(Array.isArray(a)&&Array.isArray(b)){
+  if(a.length!==b.length)return false;
+  return a.slice().sort().join('|')===b.slice().sort().join('|');
+ }
+ return a===b;
+}
+function correctCount(){return questions.filter(function(q,i){return checked[i]&&checked[i].ok;}).length;}
+function reviewedCount(){return Object.keys(checked).length;}
+function updateProgress(){
+ var done=reviewedCount();
+ $('progressStep').textContent='QUESTÃO '+String(index+1).padStart(2,'0')+' / '+total;
+ $('progressDone').textContent=done+' de '+total+' conferidas';
+ $('progressFill').style.width=(done*100/total)+'%';
+ $('progressBar').setAttribute('aria-valuenow',String(done));
+ $('progressTopic').textContent=questions[index].section;
+}
+function updateSelections(){
+ Array.prototype.forEach.call($('answerMount').querySelectorAll('.option'),function(el){el.classList.toggle('selected',!!el.querySelector('input').checked);});
+}
+function render(focus){
+ var q=questions[index],isSequence=q.type==='sequence';
+ $('summaryScreen').hidden=true;$('questionScreen').hidden=false;
+ $('plateNum').textContent='PRANCHA '+String(index+1).padStart(2,'0');
+ $('plateLabel').textContent=q.section.toUpperCase();
+ $('platePicture').innerHTML=art(q.figure);
+ $('plateCaption').textContent=q.caption;
+ $('questionSection').textContent=String(index+1).padStart(2,'0')+' / '+q.section.toUpperCase();
+ $('questionType').textContent=isSequence?'ORDENAÇÃO':q.type==='multiple'?'MÚLTIPLA SELEÇÃO':'ESCOLHA ÚNICA';
+ $('questionTitle').textContent=q.title;
+ $('questionInstruction').textContent=q.instruction;
+ $('answerHelp').textContent=isSequence?'Use ↑ e ↓ para mover cada etapa.':q.type==='multiple'?'Marque uma ou mais alternativas antes de conferir.':'Escolha uma única alternativa e confira.';
+ var mount=$('answerMount');mount.replaceChildren();
+ if(isSequence){
+  var ul=document.createElement('ol');ul.className='sequence';ul.setAttribute('aria-label','Etapas em ordem editável');
+  var current=chosen(q);
+  current.forEach(function(id,j){
+   var li=document.createElement('li');li.className='sequence-item';
+   var n=document.createElement('span');n.className='num';n.textContent=String(j+1).padStart(2,'0');
+   var lab=document.createElement('span');lab.className='label';lab.textContent=q.items.find(function(it){return it[0]===id;})[1];
+   var group=document.createElement('span');group.className='order-buttons';
+   [-1,1].forEach(function(delta){
+    var b=document.createElement('button');b.type='button';b.textContent=delta<0?'↑':'↓';b.disabled=delta<0?j===0:j===current.length-1;
+    b.dataset.position=String(j);b.dataset.delta=String(delta);
+    b.setAttribute('aria-label',(delta<0?'Subir: ':'Descer: ')+lab.textContent);
+    group.appendChild(b);
+   });
+   li.appendChild(n);li.appendChild(lab);li.appendChild(group);ul.appendChild(li);
+  });mount.appendChild(ul);
+ }else{
+  var field=document.createElement('fieldset');field.className='answers';
+  var legend=document.createElement('legend');legend.textContent=q.type==='multiple'?'Selecione todas as respostas corretas':'Escolha a resposta';field.appendChild(legend);
+  var opts=document.createElement('div');opts.className='options';
+  q.options.forEach(function(opt){
+   var lab=document.createElement('label');lab.className='option';
+   var inp=document.createElement('input');inp.type=q.type==='multiple'?'checkbox':'radio';inp.name='q'+index;inp.value=opt[0];
+   inp.checked=q.type==='multiple'?chosen(q).indexOf(opt[0])!==-1:chosen(q)===opt[0];
+   var label=document.createElement('span');label.className='option-copy';label.textContent=opt[1];
+   lab.appendChild(inp);if(opt[2]){var image=document.createElement('span');image.className='option-art';image.innerHTML=icon(opt[2]);lab.appendChild(image);}lab.appendChild(label);opts.appendChild(lab);
+  });field.appendChild(opts);mount.appendChild(field);updateSelections();
+ }
+ var state=checked[index];var fb=$('feedback');
+ fb.hidden=!state;fb.className='feedback'+(state&&state.ok?' correct':'');
+ if(state){
+  fb.replaceChildren();
+  var strong=document.createElement('strong');strong.textContent=state.ok?'Correto: você identificou a relação essencial.':'Ainda não. Examine novamente a prancha.';
+  var detail=document.createElement('p');detail.textContent=state.ok?q.explain:q.hint+' '+q.explain;
+  fb.appendChild(strong);fb.appendChild(detail);
+  var small=document.createElement('p');small.className='feedback-extra';small.textContent=state.ok?'Resposta conferida. Você pode avançar ou voltar para revisar.':'Você pode alterar a resposta e conferir novamente, ou avançar e revisar depois.';
+  fb.appendChild(small);
+ }
+ $('previousButton').disabled=index===0;
+ $('checkButton').textContent=state?'Tentar novamente':'Conferir resposta';
+ $('nextButton').disabled=!state;
+ $('nextButton').textContent=index===total-1?'Ver resultado →':'Próxima questão →';
+ updateProgress();
+ if(focus){$('questionTitle').focus();$('questionScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});}
+}
+function invalidate(){if(checked[index])delete checked[index];$('feedback').hidden=true;$('checkButton').textContent='Conferir resposta';$('nextButton').disabled=true;updateProgress();}
+$('answerMount').addEventListener('change',function(e){
+ var input=e.target;
+ if(!input.matches('input'))return;
+ var q=questions[index];
+ if(q.type==='multiple'){answer[index]=Array.prototype.map.call($('answerMount').querySelectorAll('input:checked'),function(it){return it.value;});}
+ else{answer[index]=input.value;}
+ invalidate();updateSelections();
+});
+$('answerMount').addEventListener('click',function(e){
+ var b=e.target.closest('button[data-position]');if(!b)return;
+ var q=questions[index],current=chosen(q);
+ var pos=Number(b.dataset.position),next=pos+Number(b.dataset.delta);
+ if(next<0||next>=current.length)return;
+ var temp=current[pos];current[pos]=current[next];current[next]=temp;answer[index]=current;
+ invalidate();render(false);
+ var selector='button[data-position="'+next+'"][data-delta="'+b.dataset.delta+'"]';
+ var focusButton=$('answerMount').querySelector(selector);if(focusButton&&!focusButton.disabled)focusButton.focus();
+});
+$('checkButton').addEventListener('click',function(){
+ if(checked[index]){invalidate();$('questionTitle').focus();return;}
+ var q=questions[index],value=chosen(q),missing=q.type==='sequence'?false:q.type==='multiple'?value.length===0:!value;
+ if(missing){$('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Selecione uma resposta antes de conferir.';return;}
+ var ok=equal(value,q.correct);
+ if(firstTry[index]===undefined)firstTry[index]=ok;
+ checked[index]={ok:ok};
+ render(false);
+});
+$('previousButton').addEventListener('click',function(){if(index>0){index--;render(true);}});
+$('nextButton').addEventListener('click',function(){
+ if(!checked[index])return;
+ if(index===total-1){showSummary();return;}
+ index++;render(true);
+});
+function showSummary(){
+ $('questionScreen').hidden=true;$('summaryScreen').hidden=false;
+ $('progressStep').textContent='REVISÃO CONCLUÍDA';
+ $('progressTopic').textContent='Síntese da expedição meteorológica';
+ $('totalReviewed').textContent=String(reviewedCount())+' / '+total;
+ $('totalMastered').textContent=String(correctCount())+' / '+total;
+ $('totalFirst').textContent=String(Object.keys(firstTry).filter(function(k){return firstTry[k]===true;}).length)+' / '+total;
+ var list=$('reviewList');list.replaceChildren();
+ questions.forEach(function(q,i){
+  var li=document.createElement('li');li.className='review-item';
+  var block=document.createElement('div');
+  var strong=document.createElement('strong');strong.textContent=String(i+1).padStart(2,'0')+'. '+q.section;
+  var p=document.createElement('p');p.textContent=checked[i]?(checked[i].ok?'Correta. ':'A revisar. ')+q.explain:'Ainda não conferida. '+q.explain;
+  block.appendChild(strong);block.appendChild(p);
+  var b=document.createElement('button');b.type='button';b.textContent='Rever prancha';b.dataset.review=String(i);
+  li.appendChild(block);li.appendChild(b);list.appendChild(li);
+ });
+ $('summaryTitle').focus();$('summaryScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});
+}
+$('reviewList').addEventListener('click',function(e){var b=e.target.closest('button[data-review]');if(!b)return;index=Number(b.dataset.review);render(true);});
+$('restartButton').addEventListener('click',function(){answer=Object.create(null);checked=Object.create(null);firstTry=Object.create(null);index=0;render(true);});
+$('reviewFirstButton').addEventListener('click',function(){index=0;render(true);});
+$('motionToggle').addEventListener('click',function(){reduceMotion=!reduceMotion;document.body.classList.toggle('motion-reduce',reduceMotion);this.setAttribute('aria-pressed',String(reduceMotion));this.textContent=reduceMotion?'Restaurar movimentos':'Reduzir movimentos';});
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){reduceMotion=true;document.body.classList.add('motion-reduce');$('motionToggle').setAttribute('aria-pressed','true');$('motionToggle').textContent='Restaurar movimentos';}
+if(questions.length!==total){throw new Error('Total de questões inconsistente');}
+render(false);
+})();
+</script>
+</body>
+</html>
