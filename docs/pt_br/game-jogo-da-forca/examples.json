@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Jogo da forca",
+  "description": "Exemplos de Forca. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "jogo-da-forca",
+      "title": "Jogo da forca",
+      "description": "Descubra a palavra PLANETA com tentativas limitadas.",
+      "howItWorks": "Escolha letras; cada erro acrescenta uma parte do desenho e a partida termina ao descobrir a palavra ou esgotar tentativas.",
+      "subtype": "Forca",
+      "features": [
+        "Vocabulário",
+        "Tentativas"
+      ],
+      "minutes": 5,
+      "path": "game-jogo-da-forca/planeta.html"
+    }
+  ]
+}

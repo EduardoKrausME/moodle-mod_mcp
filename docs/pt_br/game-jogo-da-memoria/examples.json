@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Jogo da memória",
+  "description": "Exemplos de Memória. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "jogo-da-memoria",
+      "title": "Jogo da memória",
+      "description": "Combine conceitos de tecnologia com suas definições.",
+      "howItWorks": "Os cartões são embaralhados e o aluno vira dois por vez; combinações corretas permanecem abertas.",
+      "subtype": "Memória",
+      "features": [
+        "Cartões",
+        "Pares"
+      ],
+      "minutes": 5,
+      "path": "game-jogo-da-memoria/conceitos-de-tecnologia.html"
+    }
+  ]
+}

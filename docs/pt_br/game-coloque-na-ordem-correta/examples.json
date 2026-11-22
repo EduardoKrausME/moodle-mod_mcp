@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Coloque na ordem correta",
+  "description": "Exemplos de ordenação de etapas. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "ordenar-a-sequencia",
+      "title": "Ordenar a sequência",
+      "description": "Organize os passos de uma atividade de resolução de problemas.",
+      "howItWorks": "Use controles de mover para cima ou baixo e compare a sequência com a ordem-alvo.",
+      "subtype": "Ordenação",
+      "features": [
+        "Etapas",
+        "Reordenação"
+      ],
+      "minutes": 5,
+      "path": "game-coloque-na-ordem-correta/resolucao-de-problemas.html"
+    },
+    {
+      "id": "coloque-na-ordem-correta",
+      "title": "Coloque na ordem correta",
+      "description": "Organize as sete etapas de um projeto digital, com troca por setas, arraste ou toque e conferência sob demanda.",
+      "howItWorks": "O estudante reorganiza cartões embaralhados, confere quantas etapas estão na posição esperada, recebe dicas e pode desfazer ou recomeçar. Duas sequências equivalentes são aceitas.",
+      "subtype": "Ordenação de etapas",
+      "features": [
+        "Arraste e teclado",
+        "Duas ordens válidas",
+        "Feedback sob demanda"
+      ],
+      "minutes": 6,
+      "path": "game-coloque-na-ordem-correta/desenvolvimento-de-software.html"
+    }
+  ]
+}

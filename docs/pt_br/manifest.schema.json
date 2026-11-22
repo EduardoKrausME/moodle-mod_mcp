@@ -68,7 +68,7 @@
           },
           "path": {
             "type": "string",
-            "pattern": "^(page|quiz|survey|timeline|case|simulation|custom|games)/[a-z0-9-]+\\.html$"
+            "pattern": "^(?:(page|quiz|survey|timeline|case|simulation|custom)/[a-z0-9-]+|game-[a-z0-9-]+/[a-z0-9-]+)\\.html$"
           },
           "minutes": {
             "type": "integer",

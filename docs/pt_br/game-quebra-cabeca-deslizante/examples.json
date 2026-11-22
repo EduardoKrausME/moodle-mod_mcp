@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Quebra-cabeça deslizante",
+  "description": "Exemplos de Quebra-cabeça. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "quebra-cabeca-deslizante",
+      "title": "Quebra-cabeça deslizante",
+      "description": "Organize peças numeradas até formar a sequência correta.",
+      "howItWorks": "O algoritmo embaralha peças usando movimentos legais, e o jogador move blocos adjacentes ao espaço vazio.",
+      "subtype": "Quebra-cabeça",
+      "features": [
+        "Grade 3×3",
+        "Movimentos"
+      ],
+      "minutes": 5,
+      "path": "game-quebra-cabeca-deslizante/pecas-numeradas.html"
+    }
+  ]
+}

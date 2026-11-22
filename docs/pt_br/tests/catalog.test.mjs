@@ -4,14 +4,14 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
+import {readFile,readdir} from 'node:fs/promises';
 import {join,dirname,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {Script} from 'node:vm';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const read=async path=>readFile(join(root,path),'utf8');
 const json=async path=>JSON.parse(await read(path));
-const allowPath=/^(page|quiz|survey|timeline|case|simulation|custom|games)\/[a-z0-9-]+\.html$/;
+const allowPath=/^(?:(?:page|quiz|survey|timeline|case|simulation|custom)\/[a-z0-9-]+|game-[a-z0-9-]+\/[a-z0-9-]+)\.html$/;
 
 test('o catálogo tem exatamente os sete modos do Mod MCP e Games',async()=>{
  const c=await json('catalog.json');
@@ -33,7 +33,11 @@ test('cada manifesto tem HTML próprio, identificadores únicos e descrição',a
    assert.match(e.id,/^[a-z0-9-]+$/);
    assert.ok(!local.has(e.id),'ID repetido '+e.id);
    local.add(e.id);
-   assert.equal(e.path,category.id+'/'+e.id+'.html');
+   if(category.id==='games'){
+    assert.match(e.path,/^game-[a-z0-9-]+\/[a-z0-9-]+\.html$/);
+   }else{
+    assert.equal(e.path,category.id+'/'+e.id+'.html');
+   }
    assert.match(e.path,allowPath);
    assert.ok(e.title&&e.description&&e.howItWorks);
    assert.ok(Number.isInteger(e.minutes)&&e.minutes>0);
@@ -70,4 +74,24 @@ test('o site oferece navegação por JSON, isolamento dos iframes e versão redu
  assert.match(js,/preview-scale/);
  assert.match(js,/new Option/);
  assert.doesNotThrow(()=>new Script(js,{filename:'app.js'}));
+});
+
+test('cada modalidade de jogo tem pasta própria e manifesto sincronizado',async()=>{
+ const games=await json('games/examples.json');
+ const files=await readdir(join(root,'games'));
+ assert.equal(files.filter(name=>name.endsWith('.html')).length,0,'games/ não deve conter HTML diretamente');
+ const groups=new Map();
+ for(const example of games.examples){
+   const [folder,filename]=example.path.split('/');
+   assert.match(folder,/^game-[a-z0-9-]+$/);
+   assert.match(filename,/^[a-z0-9-]+\.html$/);
+   if(!groups.has(folder))groups.set(folder,[]);
+   groups.get(folder).push(example);
+ }
+ for(const [folder,entries] of groups){
+   const local=await json(folder+'/examples.json');
+   assert.equal(local.version,1);
+   assert.equal(local.category,'games');
+   assert.deepEqual(local.examples,entries,'manifesto não sincronizado em '+folder);
+ }
 });

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Arrastar e associar",
+  "description": "Exemplos de Arrastar e associar. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "arrastar-e-associar",
+      "title": "Arrastar e associar",
+      "description": "Associe componentes de hardware às suas funções por arraste, toque ou teclado.",
+      "howItWorks": "O aluno liga cada componente a um único destino; o jogo valida a relação, apresenta feedback pedagógico e permite desfazer ou recomeçar.",
+      "subtype": "Arrastar e associar",
+      "features": [
+        "Associação 1:1",
+        "Touch e teclado"
+      ],
+      "minutes": 6,
+      "path": "game-arrastar-e-associar/hardware.html"
+    }
+  ]
+}

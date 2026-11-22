@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Arrastar e classificar",
+  "description": "Exemplos de Arrastar e soltar. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "arrastar-e-classificar",
+      "title": "Arrastar e classificar",
+      "description": "Associe palavras às categorias Web ou Natureza.",
+      "howItWorks": "Arraste um termo até sua categoria ou selecione o termo e depois o destino, também pelo teclado.",
+      "subtype": "Arrastar e soltar",
+      "features": [
+        "Arrastar",
+        "Classificação"
+      ],
+      "minutes": 5,
+      "path": "game-arrastar-e-classificar/web-e-natureza.html"
+    }
+  ]
+}

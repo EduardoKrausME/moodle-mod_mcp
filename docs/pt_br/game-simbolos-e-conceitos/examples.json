@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Símbolos e conceitos",
+  "description": "Exemplos de Associação visual. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "simbolos-e-conceitos",
+      "title": "Símbolos e conceitos",
+      "description": "Relacione imagens simbólicas a seus conceitos.",
+      "howItWorks": "Cada símbolo possui um seletor de conceito; uma verificação confere quantas associações estão corretas.",
+      "subtype": "Associação visual",
+      "features": [
+        "Símbolos",
+        "Associação"
+      ],
+      "minutes": 5,
+      "path": "game-simbolos-e-conceitos/simbolos-do-cotidiano.html"
+    }
+  ]
+}

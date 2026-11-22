@@ -2,7 +2,7 @@
   "version": 1,
   "category": "games",
   "title": "Games",
-  "description": "Jogos didáticos executados em HTML, CSS e JavaScript, com foco em pequenas mecânicas reutilizáveis.",
+  "description": "Catálogo dos jogos educativos. Os HTMLs e os manifestos individuais ficam em pastas game-<tipo>.",
   "examples": [
     {
       "id": "jogo-da-memoria",
@@ -15,7 +15,7 @@
         "Pares"
       ],
       "minutes": 5,
-      "path": "games/jogo-da-memoria.html"
+      "path": "game-jogo-da-memoria/conceitos-de-tecnologia.html"
     },
     {
       "id": "caca-palavras",
@@ -28,7 +28,7 @@
         "Seleção"
       ],
       "minutes": 5,
-      "path": "games/caca-palavras.html"
+      "path": "game-caca-palavras/sol-mar-e-lua.html"
     },
     {
       "id": "quebra-cabeca-deslizante",
@@ -41,7 +41,7 @@
         "Movimentos"
       ],
       "minutes": 5,
-      "path": "games/quebra-cabeca-deslizante.html"
+      "path": "game-quebra-cabeca-deslizante/pecas-numeradas.html"
     },
     {
       "id": "quebra-cabeca-de-imagens",
@@ -55,7 +55,7 @@
         "Arrastar ou selecionar"
       ],
       "minutes": 7,
-      "path": "games/quebra-cabeca-de-imagens.html"
+      "path": "game-quebra-cabeca-de-imagens/paisagem.html"
     },
     {
       "id": "arrastar-e-associar",
@@ -68,7 +68,7 @@
         "Touch e teclado"
       ],
       "minutes": 6,
-      "path": "games/arrastar-e-associar.html"
+      "path": "game-arrastar-e-associar/hardware.html"
     },
     {
       "id": "arrastar-e-classificar",
@@ -81,7 +81,7 @@
         "Classificação"
       ],
       "minutes": 5,
-      "path": "games/arrastar-e-classificar.html"
+      "path": "game-arrastar-e-classificar/web-e-natureza.html"
     },
     {
       "id": "palavras-cruzadas",
@@ -94,7 +94,7 @@
         "Digitação"
       ],
       "minutes": 5,
-      "path": "games/palavras-cruzadas.html"
+      "path": "game-palavras-cruzadas/vocabulario.html"
     },
     {
       "id": "letras-embaralhadas",
@@ -107,7 +107,7 @@
         "Sequência"
       ],
       "minutes": 5,
-      "path": "games/letras-embaralhadas.html"
+      "path": "game-letras-embaralhadas/palavras-educacionais.html"
     },
     {
       "id": "ordenar-a-sequencia",
@@ -120,7 +120,21 @@
         "Reordenação"
       ],
       "minutes": 5,
-      "path": "games/ordenar-a-sequencia.html"
+      "path": "game-coloque-na-ordem-correta/resolucao-de-problemas.html"
+    },
+    {
+      "id": "coloque-na-ordem-correta",
+      "title": "Coloque na ordem correta",
+      "description": "Organize as sete etapas de um projeto digital, com troca por setas, arraste ou toque e conferência sob demanda.",
+      "howItWorks": "O estudante reorganiza cartões embaralhados, confere quantas etapas estão na posição esperada, recebe dicas e pode desfazer ou recomeçar. Duas sequências equivalentes são aceitas.",
+      "subtype": "Ordenação de etapas",
+      "features": [
+        "Arraste e teclado",
+        "Duas ordens válidas",
+        "Feedback sob demanda"
+      ],
+      "minutes": 6,
+      "path": "game-coloque-na-ordem-correta/desenvolvimento-de-software.html"
     },
     {
       "id": "jogo-da-forca",
@@ -133,7 +147,7 @@
         "Tentativas"
       ],
       "minutes": 5,
-      "path": "games/jogo-da-forca.html"
+      "path": "game-jogo-da-forca/planeta.html"
     },
     {
       "id": "simbolos-e-conceitos",
@@ -146,7 +160,7 @@
         "Associação"
       ],
       "minutes": 5,
-      "path": "games/simbolos-e-conceitos.html"
+      "path": "game-simbolos-e-conceitos/simbolos-do-cotidiano.html"
     },
     {
       "id": "quiz-relampago",
@@ -159,7 +173,7 @@
         "Perguntas"
       ],
       "minutes": 5,
-      "path": "games/quiz-relampago.html"
+      "path": "game-quiz-relampago/conhecimentos-gerais.html"
     },
     {
       "id": "encontre-as-diferencas",
@@ -172,7 +186,7 @@
         "Percepção"
       ],
       "minutes": 5,
-      "path": "games/encontre-as-diferencas.html"
+      "path": "game-encontre-as-diferencas/paisagem.html"
     },
     {
       "id": "bingo-educativo",
@@ -185,7 +199,7 @@
         "Tabuleiro"
       ],
       "minutes": 5,
-      "path": "games/bingo-educativo.html"
+      "path": "game-bingo-educativo/numeros.html"
     }
   ]
 }

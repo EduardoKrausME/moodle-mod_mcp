@@ -10,7 +10,7 @@ import {fileURLToPath} from 'node:url';
 import {Script} from 'node:vm';
 
 const docs=resolve(dirname(fileURLToPath(import.meta.url)),'..');
-const html=await readFile(resolve(docs,'games/quebra-cabeca-de-imagens.html'),'utf8');
+const html=await readFile(resolve(docs,'game-quebra-cabeca-de-imagens/paisagem.html'),'utf8');
 const manifest=JSON.parse(await readFile(resolve(docs,'games/examples.json'),'utf8'));
 const match=html.match(/<script>([\s\S]*?)<\/script>/i);
 assert.ok(match,'exemplo precisa conter JavaScript embutido');
@@ -71,7 +71,7 @@ test('configurações e permutações inválidas não são aceitas',()=>{
 test('o JSON da galeria registra o exemplo e documenta o uso de imagem',()=>{
   const entry=manifest.examples.find(example=>example.id==='quebra-cabeca-de-imagens');
   assert.ok(entry,'exemplo não cadastrado');
-  assert.equal(entry.path,'games/quebra-cabeca-de-imagens.html');
+  assert.equal(entry.path,'game-quebra-cabeca-de-imagens/paisagem.html');
   assert.ok(entry.description&&entry.howItWorks&&entry.subtype);
   assert.ok(entry.features.some(feature=>/SVG/.test(feature)),'imagem SVG deve estar documentada');
 });

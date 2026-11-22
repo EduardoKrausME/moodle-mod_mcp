@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Encontre as diferenças",
+  "description": "Exemplos de Observação. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "encontre-as-diferencas",
+      "title": "Encontre as diferenças",
+      "description": "Compare duas paisagens e identifique três diferenças.",
+      "howItWorks": "A imagem SVG possui três alterações na versão da direita; regiões clicáveis e acessíveis registram os acertos.",
+      "subtype": "Observação",
+      "features": [
+        "SVG",
+        "Percepção"
+      ],
+      "minutes": 5,
+      "path": "game-encontre-as-diferencas/paisagem.html"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Caça-palavras",
+  "description": "Exemplos de Caça-palavras. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "caca-palavras",
+      "title": "Caça-palavras",
+      "description": "Encontre palavras escondidas em uma grade de letras.",
+      "howItWorks": "Selecione início e fim de uma sequência horizontal ou vertical; o script valida a palavra encontrada.",
+      "subtype": "Caça-palavras",
+      "features": [
+        "Grade de letras",
+        "Seleção"
+      ],
+      "minutes": 5,
+      "path": "game-caca-palavras/sol-mar-e-lua.html"
+    }
+  ]
+}

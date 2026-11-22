@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coloque na ordem correta - Desenvolvimento de software</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#25324e;background:#f5f7fb;--panel:#fff;--ink:#25324e;--muted:#65718a;--line:#dde3ee;--accent:#6656c9;--soft:#f1eeff;--success:#176a52;--successbg:#e7f6ef;--warning:#90602b;--warningbg:#fff3df;--shadow:0 12px 35px #2136600b;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh}
+button{font:inherit}
+button:focus-visible{outline:3px solid #ae9bfa;outline-offset:3px}
+.activity{max-width:980px;margin:auto;padding:35px 22px 50px;line-height:1.55}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.7px;font-weight:850;color:var(--accent);margin:0 0 8px}
+h1{font-size:clamp(26px,4vw,40px);letter-spacing:-1.2px;line-height:1.15;margin:0 0 13px}
+.intro{max-width:790px;font-size:15px;color:var(--muted);margin:0 0 22px}
+.context{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px 20px;margin-bottom:19px;box-shadow:var(--shadow)}
+.context strong{font-size:14px}
+.context p{font-size:13px;color:var(--muted);margin:7px 0 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow)}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.section-head h2{font-size:18px;letter-spacing:-.4px;margin:0}
+.pill{background:var(--soft);color:var(--accent);border-radius:30px;padding:7px 11px;font-size:11px;font-weight:800}
+.instructions{font-size:13px;color:var(--muted);margin:0 0 17px}
+.sequence{list-style:none;display:grid;gap:10px;padding:0;margin:0}
+.step{display:flex;align-items:center;gap:13px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:85px;position:relative;transition:background-color .15s,border-color .15s,box-shadow .15s}
+.step:hover{border-color:#bcb4ed}
+.step.drop-before:before,.step.drop-after:after{content:"";height:4px;border-radius:5px;background:var(--accent);position:absolute;left:10px;right:10px}
+.step.drop-before:before{top:-6px}.step.drop-after:after{bottom:-6px}
+.step.correct{background:#f2faf5;border-color:#a4d7c0}.step.wrong{border-color:#f1c999;background:#fffbf6}
+.position{width:39px;height:39px;flex:none;display:grid;place-items:center;border-radius:10px;background:#ebe9fa;color:var(--accent);font-size:14px;font-weight:850}
+.step-copy{flex:1;min-width:0}.step-copy strong{display:block;font-size:14px;line-height:1.36}.step-copy p{font-size:12px;line-height:1.45;margin:5px 0 0;color:var(--muted);overflow-wrap:anywhere}
+.step-buttons{display:flex;gap:5px;align-items:center;flex:none}
+.shift{width:37px;height:39px;display:grid;place-items:center;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--accent);font-size:20px;cursor:pointer}
+.shift:hover:not(:disabled){border-color:var(--accent);background:var(--soft)}
+.shift:disabled{opacity:.28;cursor:not-allowed}
+.handle{display:grid;place-items:center;width:35px;height:45px;border-radius:8px;cursor:grab;touch-action:none;user-select:none;color:#7f88a0;font-size:21px;font-weight:800}
+.handle:active{cursor:grabbing}
+.handle:hover{background:var(--soft)}
+.dragging{opacity:.55}
+.drag-preview{position:fixed;pointer-events:none;z-index:500;background:#fff;border:2px solid var(--accent);box-shadow:0 15px 38px #17254855;color:#273553;border-radius:11px;padding:12px 17px;font-size:13px;font-weight:750;max-width:min(260px,75vw);transform:translate(-50%,-50%)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--accent);padding:12px 17px;border-radius:10px;background:var(--accent);color:#fff;font-size:13px;font-weight:760;cursor:pointer;min-height:44px}
+.btn:hover:not(:disabled){filter:brightness(.94)}
+.btn.secondary{background:var(--panel);color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.status{margin-top:18px;min-height:54px;border-radius:11px;background:#f0f1fb;color:#495574;padding:14px 16px;font-size:13px}
+.status.success{background:var(--successbg);color:var(--success)}
+.status.warning{background:var(--warningbg);color:var(--warning)}
+.score{display:flex;align-items:center;justify-content:space-between;margin-top:17px;gap:15px;color:var(--muted);font-size:12px;font-weight:720}
+.track{height:9px;border-radius:9px;background:#e7e9f2;overflow:hidden;margin:8px 0 0}
+.track span{display:block;background:var(--accent);height:100%;width:0;transition:width .2s}
+.finish{background:var(--successbg);border:1px solid #9bd3b9;padding:17px 19px;border-radius:12px;margin-top:16px;color:var(--success)}
+.finish strong{display:block;font-size:18px}
+.finish p{margin:5px 0 0;font-size:13px}
+.note{font-size:12px;color:var(--muted);margin:16px 0 0}
+@media(max-width:740px){.activity{padding:23px 15px 32px}.card{padding:16px}.step{gap:9px;padding:12px 10px}.position{width:32px;height:36px}.step-copy strong{font-size:13px}.step-copy p{font-size:11px}.shift{width:34px;height:37px}.handle{width:24px}}
+@media(max-width:460px){.step{display:grid;grid-template-columns:33px minmax(0,1fr) auto}.step-buttons{grid-column:2/4;justify-content:flex-end}.step-copy p{margin-top:3px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--panel:#222b3d;--ink:#eef0f9;--muted:#b0bbd3;--line:#3a455d;--accent:#b8a9ff;--soft:#34304e;--success:#a6e0c4;--successbg:#204335;--warning:#ecc795;--warningbg:#463624}body{background:#141c2c}.step,.shift,.drag-preview{background:#263149;color:var(--ink)}.step.correct{background:#1f3b31;border-color:#447962}.step.wrong{background:#403327;border-color:#876842}.position{background:#363153}.status{background:#2b3550;color:#d1daec}.finish{border-color:#4f8d6f}.track{background:#404760}}
+</style>
+</head>
+<body>
+<main id="sequence-activity" class="activity">
+ <p class="eyebrow">Desafio de sequência lógica</p>
+ <h1>Qual é a ordem para construir uma solução digital?</h1>
+ <p class="intro">Uma equipe recebeu um problema real e precisa organizar o trabalho antes de entregar um software. Reorganize os cartões na sequência adequada, levando em conta as dependências entre as etapas.</p>
+ <section class="context" aria-label="Situação do exercício">
+  <strong>Seu desafio</strong>
+  <p>Arraste os cartões pelo símbolo à direita ou use os botões de subir e descer. Quando achar que a ordem está certa, clique em Conferir sequência. A documentação e os testes podem ocorrer em qualquer ordem depois da construção do protótipo, mas ambos devem acontecer antes da entrega.</p>
+ </section>
+ <section class="card" aria-labelledby="steps-title">
+  <div class="section-head">
+   <h2 id="steps-title">Organize as sete etapas</h2>
+   <span class="pill">Toque, arraste ou use as setas</span>
+  </div>
+  <p class="instructions">A conferência não é automática: você decide quando verificar a resposta, e pode solicitar uma dica sem perder a possibilidade de tentar novamente.</p>
+  <ol id="steps" class="sequence" aria-label="Lista de etapas que podem ser reorganizadas"></ol>
+  <div class="score"><span id="progress-label">Confira para ver os acertos</span><span><span id="moves">0</span> movimentos · <span id="checks">0</span> verificações</span></div>
+  <div class="track" id="progress" role="progressbar" aria-label="Etapas na posição prevista" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0"><span id="progress-fill"></span></div>
+  <div class="controls">
+   <button type="button" class="btn" id="check">Conferir sequência</button>
+   <button type="button" class="btn secondary" id="hint">Mostrar dica</button>
+   <button type="button" class="btn secondary" id="undo" disabled>Desfazer</button>
+   <button type="button" class="btn secondary" id="restart">Recomeçar</button>
+  </div>
+  <div id="status" class="status" role="status" aria-live="polite" aria-atomic="true">Preparando as etapas...</div>
+  <div class="finish" id="finish" hidden role="status"><strong>Parabéns, sequência concluída!</strong><p>Você respeitou as dependências entre as etapas. Este resultado é apenas uma conquista dentro do jogo, não uma nota ou conclusão acadêmica registrada no Moodle.</p></div>
+  <p class="note">O exercício funciona sem conexão ao Moodle; quando executado dentro de uma atividade com a API de progresso disponível, tenta retomar e registrar o estado individual.</p>
+ </section>
+</main>
+<script>(function sequenceGame(){
+"use strict";
+const data={
+ type:"sequence",title:"Da ideia à entrega de um software",
+ settings:{allowRetry:true,shuffle:true,saveKey:"exampleSequence05"},
+ steps:[
+  {id:"problem",label:"Identificar o problema",description:"Entender a necessidade real e quem será afetado."},
+  {id:"requirements",label:"Levantar os requisitos",description:"Definir o que a solução deve atender e suas restrições."},
+  {id:"planning",label:"Planejar a solução",description:"Desenhar o fluxo e dividir o trabalho em entregas."},
+  {id:"prototype",label:"Construir um protótipo",description:"Implementar uma primeira versão para avaliação."},
+  {id:"tests",label:"Testar com usuários",description:"Verificar o comportamento, encontrar falhas e ajustar."},
+  {id:"documentation",label:"Documentar a solução",description:"Registrar as decisões e as orientações de utilização."},
+  {id:"delivery",label:"Publicar e acompanhar",description:"Disponibilizar a versão e observar o uso em produção."}
+ ],
+ acceptedOrders:[
+  ["problem","requirements","planning","prototype","documentation","tests","delivery"]
+ ]
+};
+const $=id=>document.getElementById(id);
+const root=$("sequence-activity"),list=$("steps"),status=$("status"),movesLabel=$("moves"),checksLabel=$("checks"),track=$("progress"),fill=$("progress-fill"),progressLabel=$("progress-label"),finish=$("finish"),undoButton=$("undo");
+let state=null,history=[],drag=null,ghost=null,disposed=false,revision=null,saveQueue=Promise.resolve(),changedBeforeLoad=false;
+const sdk=window.MoodleMCP&&window.MoodleMCP.progress?window.MoodleMCP.progress:null;
+function validate(config){
+ if(!config||config.type!=="sequence"||!config.settings||!Array.isArray(config.steps)||config.steps.length<1)return false;
+ const ids=config.steps.map(s=>s?.id);
+ if(ids.some(id=>typeof id!=="string"||!/^[a-z][a-z0-9_-]*$/.test(id))||new Set(ids).size!==ids.length)return false;
+ if(config.steps.some(s=>typeof s.label!=="string"||!s.label.trim()||typeof s.description!=="string"))return false;
+ if(!Array.isArray(config.acceptedOrders))return false;
+ return config.acceptedOrders.every(order=>isPermutation(order,ids));
+}
+function isPermutation(values,ids){
+ return Array.isArray(values)&&values.length===ids.length&&
+   new Set(values).size===ids.length&&values.every(id=>ids.includes(id));
+}
+function accepted(order,config){
+ const canonical=config.steps.map(s=>s.id);
+ return [canonical,...config.acceptedOrders].some(candidate=>candidate.every((id,i)=>order[i]===id));
+}
+function reorder(ids,fromId,toId,after=false){
+ if(fromId===toId||!ids.includes(fromId)||!ids.includes(toId))return [...ids];
+ const next=ids.filter(id=>id!==fromId);
+ const destination=next.indexOf(toId)+(after?1:0);
+ next.splice(destination,0,fromId);
+ return next;
+}
+function shuffleIds(config){
+ const canonical=config.steps.map(s=>s.id);
+ if(canonical.length<=1)return canonical;
+ for(let attempt=0;attempt<64;attempt++){
+  const shuffled=[...canonical];
+  for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
+  if(!accepted(shuffled,config))return shuffled;
+ }
+ for(let i=0;i<canonical.length;i++){
+  for(let j=i+1;j<canonical.length;j++){
+   const alternative=[...canonical];[alternative[i],alternative[j]]=[alternative[j],alternative[i]];
+   if(!accepted(alternative,config))return alternative;
+  }
+ }
+ return canonical; // Todas as permutações possíveis são válidas: nunca entrar em loop infinito.
+}
+function closestReference(order,config){
+ const options=[config.steps.map(s=>s.id),...config.acceptedOrders];
+ return options.reduce((best,next)=>{
+  const value=next.reduce((sum,id,i)=>sum+(id===order[i]?1:0),0);
+  return value>best.matches?{order:next,matches:value}:best;
+ },{order:options[0],matches:-1});
+}
+function getState(){return {order:[...state.order],moves:state.moves,checks:state.checks,finished:state.finished};}
+function restoreState(snapshot){
+ if(!snapshot||typeof snapshot!=="object"||!isPermutation(snapshot.order,data.steps.map(s=>s.id))||
+ !Number.isInteger(snapshot.moves)||snapshot.moves<0||snapshot.moves>1000000||
+ !Number.isInteger(snapshot.checks)||snapshot.checks<0||snapshot.checks>1000000||
+ typeof snapshot.finished!=="boolean"||snapshot.finished&&!accepted(snapshot.order,data))return false;
+ state={order:[...snapshot.order],moves:snapshot.moves,checks:snapshot.checks,finished:snapshot.finished,checked:false};
+ history=[];render();return true;
+}
+function message(text,kind=""){status.className="status"+(kind?" "+kind:"");status.textContent=text;}
+function button(label,cls,description,disabled,fn){
+ const b=document.createElement("button");b.type="button";b.className=cls;b.textContent=label;b.disabled=disabled;b.setAttribute("aria-label",description);b.addEventListener("click",fn);return b;
+}
+function render(focus){
+ if(disposed||!state)return;
+ const before=state.checked?closestReference(state.order,data):null;
+ list.replaceChildren();
+ state.order.forEach((id,index)=>{
+  const item=data.steps.find(s=>s.id===id);
+  const li=document.createElement("li");li.className="step";li.dataset.id=id;
+  if(before)li.classList.add(before.order[index]===id?"correct":"wrong");
+  const number=document.createElement("span");number.className="position";number.textContent=String(index+1).padStart(2,"0");number.setAttribute("aria-hidden","true");
+  const copy=document.createElement("div");copy.className="step-copy";
+  const strong=document.createElement("strong");strong.textContent=item.label;
+  const p=document.createElement("p");p.textContent=item.description;
+  copy.append(strong,p);
+  const controls=document.createElement("div");controls.className="step-buttons";
+  const up=button("↑","shift","Mover "+item.label+" para cima",index===0||state.finished,()=>handleAction({type:"move",id,delta:-1}));
+  const down=button("↓","shift","Mover "+item.label+" para baixo",index===state.order.length-1||state.finished,()=>handleAction({type:"move",id,delta:1}));
+  up.dataset.action="up";up.dataset.id=id;
+  down.dataset.action="down";down.dataset.id=id;
+  const handle=document.createElement("span");handle.className="handle";handle.textContent="⠿";handle.title="Arraste para reordenar";handle.setAttribute("aria-hidden","true");
+  handle.addEventListener("pointerdown",event=>startDrag(event,id));
+  controls.append(up,down,handle);li.append(number,copy,controls);list.append(li);
+ });
+ const count=state.order.length;
+ const matched=before?before.matches:0;
+ movesLabel.textContent=String(state.moves);checksLabel.textContent=String(state.checks);
+ progressLabel.textContent=state.checked?matched+" de "+count+" etapas na posição prevista":"Confira para ver os acertos";
+ track.setAttribute("aria-valuemax",String(count));track.setAttribute("aria-valuenow",String(matched));
+ fill.style.width=(matched/count*100)+"%";
+ finish.hidden=!state.finished;
+ $("check").disabled=state.finished;
+ $("hint").disabled=state.finished||count<2;
+ undoButton.disabled=state.finished||!history.length;
+ if(focus){
+  const element=Array.from(list.querySelectorAll(".shift")).find(b=>b.dataset.id===focus.id&&b.dataset.action===focus.direction);
+  if(element&&!element.disabled)element.focus();
+  else list.querySelector(`[data-id="${focus.id}"] .shift:not(:disabled)`)?.focus();
+ }
+}
+function moveTo(next,explanation,focus){
+ if(next.every((id,i)=>id===state.order[i]))return;
+ history.push(getState());if(history.length>60)history.shift();
+ state.order=next;state.moves++;state.checked=false;state.finished=false;
+ render(focus);
+ message(explanation+" Pressione Conferir sequência quando quiser verificar.");
+ persist();
+}
+function handleAction(action){
+ if(!state||disposed)return;
+ if(action.type==="move"){
+  const index=state.order.indexOf(action.id),target=index+action.delta;
+  if(state.finished||index<0||target<0||target>=state.order.length)return;
+  const result=[...state.order];[result[index],result[target]]=[result[target],result[index]];
+  const label=data.steps.find(x=>x.id===action.id).label;
+  moveTo(result,label+" agora está na posição "+(target+1)+".",{id:action.id,direction:action.delta<0?"up":"down"});
+ }else if(action.type==="drop"){
+  if(state.finished)return;
+  const result=reorder(state.order,action.id,action.targetId,action.after);
+  const place=result.indexOf(action.id)+1,label=data.steps.find(s=>s.id===action.id).label;
+  moveTo(result,label+" movido para a posição "+place+".");
+ }else if(action.type==="check"){
+  state.checks++;state.checked=true;
+  const result=closestReference(state.order,data);
+  const correct=accepted(state.order,data);
+  state.finished=correct;
+  render();persist();
+  if(correct)message("Sequência correta! As sete etapas estão em uma ordem válida. Testes e documentação podem trocar de posição após o protótipo.","success");
+  else message("Ainda não está correta: "+result.matches+" de "+state.order.length+" etapas estão na posição esperada. Você pode ajustar e conferir novamente.","warning");
+ }else if(action.type==="hint"){
+  const best=closestReference(state.order,data);
+  const first=state.order.findIndex((id,i)=>id!==best.order[i]);
+  if(first<0)message("Sua sequência parece correta. Pressione Conferir sequência.");
+  else{
+   const step=data.steps.find(s=>s.id===state.order[first]);
+   message("Dica: observe a etapa “"+step.label+"” na posição "+(first+1)+". Compare o que precisa acontecer antes dela.","warning");
+  }
+ }else if(action.type==="undo"){
+  if(!history.length||state.finished)return;
+  const previous=history.pop();state={...previous,checked:false};
+  render();persist();message("Última alteração desfeita. Continue reorganizando as etapas.");
+ }else if(action.type==="reset"){
+  clearDrag();
+  state={order:shuffleIds(data),moves:0,checks:0,finished:false,checked:false};history=[];
+  render();persist();message("Etapas embaralhadas novamente. Organize o processo e confira quando estiver pronto.");
+ }
+}
+function clearDrag(){
+ if(ghost)ghost.remove();ghost=null;
+ list.querySelectorAll(".drop-before,.drop-after,.dragging").forEach(node=>node.classList.remove("drop-before","drop-after","dragging"));
+ drag=null;
+}
+function startDrag(event,id){
+ if(!state||state.finished||event.isPrimary===false||event.button!==0)return;
+ drag={id,pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,moved:false};
+ try{event.target.setPointerCapture(event.pointerId);}catch(_){}
+}
+function moveDrag(event){
+ if(!drag||event.pointerId!==drag.pointerId)return;
+ if(!drag.moved&&Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)<8)return;
+ drag.moved=true;event.preventDefault();
+ if(!ghost){
+  ghost=document.createElement("div");ghost.className="drag-preview";
+  ghost.textContent=data.steps.find(x=>x.id===drag.id).label;
+  document.body.append(ghost);
+  list.querySelector(`[data-id="${drag.id}"]`)?.classList.add("dragging");
+ }
+ ghost.style.left=event.clientX+"px";ghost.style.top=event.clientY+"px";
+ list.querySelectorAll(".drop-before,.drop-after").forEach(x=>x.classList.remove("drop-before","drop-after"));
+ const target=document.elementFromPoint(event.clientX,event.clientY)?.closest(".step");
+ if(target&&list.contains(target)&&target.dataset.id!==drag.id){
+  target.classList.add(event.clientY>target.getBoundingClientRect().top+target.getBoundingClientRect().height/2?"drop-after":"drop-before");
+ }
+}
+function endDrag(event){
+ if(!drag||drag.pointerId!==event.pointerId)return;
+ const active=drag;
+ const target=active.moved?document.elementFromPoint(event.clientX,event.clientY)?.closest(".step"):null;
+ const after=!!target&&event.clientY>target.getBoundingClientRect().top+target.getBoundingClientRect().height/2;
+ clearDrag();
+ if(!active.moved)return;
+ if(target&&list.contains(target)&&target.dataset.id!==active.id){
+  handleAction({type:"drop",id:active.id,targetId:target.dataset.id,after});
+ }else{
+  message("Movimento cancelado. Solte o cartão sobre outra etapa, ou use os botões ↑ e ↓.");
+ }
+}
+function destroy(){
+ disposed=true;clearDrag();
+ document.removeEventListener("pointermove",moveDrag);
+ document.removeEventListener("pointerup",endDrag);
+ document.removeEventListener("pointercancel",clearDrag);
+ window.removeEventListener("pagehide",destroy);
+}
+function persist(){
+ if(!sdk||disposed)return;
+ if(!revision){changedBeforeLoad=true;return;}
+ const snapshot=getState();
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!revision)return;
+  const safeData=revision.data&&typeof revision.data==="object"&&!Array.isArray(revision.data)?revision.data:{};
+  revision=await sdk.save({version:revision.version,location:"games/sequence-example-05",data:{...safeData,[data.settings.saveKey]:snapshot}});
+ }).catch(async()=>{
+  try{
+   revision=await sdk.load();
+   const saved=revision?.data?.[data.settings.saveKey];
+   if(saved&&restoreState(saved))message("Outra janela atualizou o progresso. A versão salva foi recuperada para evitar sobrescrever alterações.","warning");
+   else message("Não foi possível sincronizar este movimento. Você pode continuar a atividade localmente.","warning");
+  }catch(_){revision=null;message("O Moodle não respondeu ao salvamento; o jogo continua disponível nesta página.","warning");}
+ });
+}
+function init(){
+ if(!validate(data)){message("O exercício não pôde ser iniciado: configuração inválida.","warning");return;}
+ state={order:shuffleIds(data),moves:0,checks:0,finished:false,checked:false};
+ render();
+ message("As etapas já foram embaralhadas. Use ↑ ou ↓ para reposicionar, ou arraste pelo símbolo à direita.");
+ document.addEventListener("pointermove",moveDrag,{passive:false});
+ document.addEventListener("pointerup",endDrag);
+ document.addEventListener("pointercancel",clearDrag);
+ window.addEventListener("pagehide",destroy);
+ $("check").addEventListener("click",()=>handleAction({type:"check"}));
+ $("hint").addEventListener("click",()=>handleAction({type:"hint"}));
+ $("undo").addEventListener("click",()=>handleAction({type:"undo"}));
+ $("restart").addEventListener("click",()=>handleAction({type:"reset"}));
+ if(sdk){
+  sdk.load().then(snapshot=>{
+   if(disposed)return;
+   revision=snapshot;
+   if(changedBeforeLoad){persist();return;}
+   const saved=snapshot?.data?.[data.settings.saveKey];
+   if(saved&&restoreState(saved))message("Sua sequência anterior foi recuperada. Continue a atividade quando quiser.");
+  }).catch(()=>message("O progresso não pôde ser carregado do Moodle. A atividade continua disponível.","warning"));
+ }
+}
+init();
+})();</script>
+</body>
+</html>

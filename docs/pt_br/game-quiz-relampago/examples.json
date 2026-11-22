@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Quiz relâmpago",
+  "description": "Exemplos de Desafio de tempo. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "quiz-relampago",
+      "title": "Quiz relâmpago",
+      "description": "Responda perguntas curtas antes de terminar o cronômetro.",
+      "howItWorks": "O tempo começa somente ao clicar em iniciar; as respostas incrementam a pontuação demonstrativa.",
+      "subtype": "Desafio de tempo",
+      "features": [
+        "Cronômetro",
+        "Perguntas"
+      ],
+      "minutes": 5,
+      "path": "game-quiz-relampago/conhecimentos-gerais.html"
+    }
+  ]
+}

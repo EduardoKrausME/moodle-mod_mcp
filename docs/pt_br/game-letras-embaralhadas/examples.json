@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Letras embaralhadas",
+  "description": "Exemplos de Anagramas. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "letras-embaralhadas",
+      "title": "Letras embaralhadas",
+      "description": "Descubra palavras reorganizando letras disponíveis.",
+      "howItWorks": "Selecione as letras na ordem desejada; o algoritmo verifica o anagrama e libera o próximo desafio.",
+      "subtype": "Anagramas",
+      "features": [
+        "Letras",
+        "Sequência"
+      ],
+      "minutes": 5,
+      "path": "game-letras-embaralhadas/palavras-educacionais.html"
+    }
+  ]
+}

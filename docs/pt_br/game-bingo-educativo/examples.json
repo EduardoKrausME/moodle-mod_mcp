@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Bingo educativo",
+  "description": "Exemplos de Bingo. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "bingo-educativo",
+      "title": "Bingo educativo",
+      "description": "Sorteie e marque números até completar uma linha.",
+      "howItWorks": "O sorteio não repete números; a validação confere linhas, colunas e diagonais marcadas.",
+      "subtype": "Bingo",
+      "features": [
+        "Sorteio",
+        "Tabuleiro"
+      ],
+      "minutes": 5,
+      "path": "game-bingo-educativo/numeros.html"
+    }
+  ]
+}

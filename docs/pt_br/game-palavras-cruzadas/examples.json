@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Palavras cruzadas",
+  "description": "Exemplos de Palavras cruzadas. Cada atividade é um HTML independente e contém somente o conteúdo pedagógico.",
+  "examples": [
+    {
+      "id": "palavras-cruzadas",
+      "title": "Palavras cruzadas",
+      "description": "Preencha um cruzamento de três palavras por meio de pistas.",
+      "howItWorks": "A grade possui letras compartilhadas; os campos são conferidos contra uma estrutura de posições e respostas.",
+      "subtype": "Palavras cruzadas",
+      "features": [
+        "Cruzamentos",
+        "Digitação"
+      ],
+      "minutes": 5,
+      "path": "game-palavras-cruzadas/vocabulario.html"
+    }
+  ]
+}
