@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Escape room - O Observatório do Tempo</title>
+<style>
+:root{color-scheme:light;--bg:#ebf3f6;--surface:#fffefa;--ink:#203c4b;--muted:#526c7c;--line:#cbdde6;--blue:#195f86;--soft:#e9f4fa;--green:#21634d;--palegreen:#e3f6ea;--amber:#83571d;--paleamber:#fff1d3;--red:#964838;--palered:#ffece7;--shade:0 9px 30px #21435414;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0}main{max-width:1190px;margin:auto;padding:25px 16px 40px}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(30px,4vw,43px);line-height:1.15;margin:3px 0 12px}h2{font-size:21px;margin-bottom:11px}h3{font-size:16px;margin-bottom:9px}p{line-height:1.6}.eyebrow{font-size:11px;letter-spacing:1.5px;font-weight:850;color:var(--blue);text-transform:uppercase;margin:0 0 7px}.intro{color:var(--muted);font-size:14px;max-width:850px}.hero,.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shade)}.hero{background:linear-gradient(110deg,var(--surface),var(--soft))}.metrics{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0}.metric{min-width:116px;padding:8px 12px;border:1px solid var(--line);background:var(--surface);border-radius:11px}.metric small{display:block;color:var(--muted);font-size:11px}.metric strong{font-size:20px;font-variant-numeric:tabular-nums}.bar{height:9px;background:#c9dce6;border-radius:20px;overflow:hidden;margin-bottom:17px}.bar>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#2e93ad,#42a783);transition:width .25s}.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(285px,.8fr);gap:16px;align-items:start}.column{display:grid;gap:16px;min-width:0}.pill{border-radius:20px;background:var(--soft);color:var(--blue);font-size:11px;font-weight:800;padding:5px 10px}.sub{font-size:12px;color:var(--muted)}.scene{border:1px solid #9cbfd1;border-radius:13px;overflow:hidden;background:#d9eaf1;margin:12px 0}.scene svg{width:100%;height:auto;display:block;aspect-ratio:900/420}.split{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}.section{border-top:1px solid var(--line);padding-top:14px;margin-top:17px}.clues,.locks{display:grid;gap:10px}.clues{grid-template-columns:repeat(2,minmax(0,1fr))}.clue,.lock{min-width:0;border:1px solid var(--line);border-radius:12px;padding:13px;background:#f4fafc}.clue.found,.lock.open{background:var(--palegreen);border-color:#9fcbb3}.clue strong,.lock strong{font-size:13px;display:block;margin-bottom:5px}.clue small,.lock small{font-size:11px;color:var(--muted);display:block;margin-bottom:9px}.lock p{font-size:12px}.state{font-size:11px;font-weight:850;border-radius:18px;background:#dfeef4;display:inline-block;padding:3px 8px;margin-bottom:9px}.lock.open .state{background:#c7ead4}.button{min-height:44px;border:1px solid var(--blue);border-radius:10px;padding:9px 12px;background:var(--blue);color:white;cursor:pointer;font-size:12px;font-weight:800;line-height:1.35}.button:hover:not(:disabled){filter:brightness(.9)}.button.secondary{color:var(--blue);background:var(--surface)}.button.hint{background:var(--paleamber);border-color:#c99b50;color:var(--amber)}.button.door{background:var(--green);border-color:var(--green)}.button.danger{background:var(--surface);color:var(--red);border-color:#c78c79}.button:disabled{opacity:.56;cursor:not-allowed}button:focus-visible,input:focus-visible,[tabindex=-1]:focus-visible{outline:3px solid #e8a334;outline-offset:3px}input{width:100%;min-height:44px;border:2px solid #98b7c6;border-radius:9px;padding:9px 10px;font:16px system-ui;background:#fff;color:#244454}.lock label{display:block;font-size:12px;font-weight:750;margin:12px 0 5px}.lock form .button{margin-top:9px}.flex{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:9px}.explain{color:var(--green)}.hintbox{font-size:12px;background:var(--paleamber);border:1px solid #d4b57a;padding:10px;border-radius:8px;margin:9px 0}.feedback{padding:14px;border-radius:11px;background:var(--soft);border:1px solid #a8cbdc;font-size:13px;min-height:72px;line-height:1.65}.feedback.good{background:var(--palegreen);border-color:#9fcbb3}.feedback.bad{background:var(--palered);border-color:#e0b7aa}.feedback.note{background:var(--paleamber);border-color:#ddc18f}.feedback strong{display:block;margin-bottom:4px}.rooms,.inventory{list-style:none;padding:0;margin:10px 0;display:grid;gap:8px}.list-btn{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 11px;text-align:left;background:var(--surface);color:var(--ink);min-height:49px;cursor:pointer}.list-btn strong{font-size:12px;display:block}.list-btn small{font-size:11px;display:block;color:var(--muted)}.list-btn.active{border:2px solid var(--blue);background:var(--soft)}.list-btn:disabled{opacity:.58;cursor:not-allowed}.note{font-size:11px;color:var(--muted)}.read{border:1px solid var(--line);border-radius:11px;padding:13px;background:var(--soft);font-size:12px;line-height:1.6;margin-top:12px}.read strong{display:block}.end{background:linear-gradient(130deg,var(--palegreen),var(--paleamber));padding:14px;border:1px solid #a4c0ae;border-radius:12px;margin-top:15px}.end p,.end li{font-size:12px}.end li{margin:8px 0}.confirm{background:var(--palered);border:1px solid #caa194;padding:12px;border-radius:10px;margin-top:10px;font-size:12px}.error{border:2px solid #aa4233;padding:15px;border-radius:12px;background:#fff0ec;color:#7a2f24}[hidden]{display:none!important}
+@media(max-width:960px){.layout{grid-template-columns:1fr}}@media(max-width:550px){main{padding:11px 9px 30px}.hero,.panel{padding:14px}.clues{grid-template-columns:1fr}.metric{min-width:95px}.scene svg{min-height:170px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(prefers-contrast:more){.button,.clue,.lock,.list-btn{border-width:3px}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#152b38;--surface:#223d4c;--ink:#eaf7ff;--muted:#c4d7e3;--line:#52788a;--blue:#b6e0ff;--soft:#344f60;--green:#b9f4d1;--palegreen:#305242;--amber:#ffdaa3;--paleamber:#53442d;--red:#ffae9f;--palered:#563a34;--shade:0 10px 20px #0004}.hero{background:linear-gradient(110deg,#223d4c,#314c5b)}.clue,.lock{background:#2a4657}.clue.found,.lock.open{background:var(--palegreen)}.button{background:var(--blue);color:#16374a}.button.secondary,.button.danger{background:var(--surface);color:var(--blue)}.button.danger{color:var(--red)}.button.hint{background:var(--paleamber);color:var(--amber)}.button.door{background:#a8e7c3;color:#183b2a}.list-btn{background:#2b4859}.list-btn.active{background:var(--soft)}input{background:#1b3544;color:#f0faff;border-color:#80a8bb}.read{background:var(--soft)}.state{background:#395867}.lock.open .state{background:#3b7054}.end{background:linear-gradient(110deg,#305744,#564a30)}}
+</style>
+</head>
+<body>
+<main id="activity">
+<section class="hero"><p class="eyebrow">Jogo 27 · Escape room educativo</p><h1>O Observatório do Tempo</h1>
+<p class="intro">Reative um observatório meteorológico: examine objetos, recolha pistas, abra as estações da chuva e dos ventos e reúna seus resultados na central para descobrir a saída. Você pode explorar as duas estações em qualquer ordem.</p>
+<p class="note">Sem limite de tentativas nem cronômetro. Nenhuma pista é consumida; conclusão apenas formativa, sem notas oficiais.</p></section>
+<div class="metrics" aria-label="Progresso">
+<div class="metric"><small>Salas visitadas</small><strong id="nrooms">1/5</strong></div><div class="metric"><small>Pistas</small><strong id="nclues">0/8</strong></div>
+<div class="metric"><small>Cadeados abertos</small><strong id="nlocks">0/5</strong></div><div class="metric"><small>Dicas</small><strong id="nhints">0</strong></div>
+<div class="metric"><small>Erros diferentes</small><strong id="nwrong">0</strong></div></div>
+<div class="bar" role="progressbar" id="progress" aria-label="Cadeados resolvidos" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0"><span id="barfill"></span></div>
+<div class="layout">
+<div class="column"><section class="panel" aria-labelledby="room-title">
+<div class="split"><h2 id="room-title" tabindex="-1">Hall dos instrumentos</h2><span id="room-label" class="pill">Sala inicial</span></div>
+<p id="room-sub" class="sub">Examine os instrumentos.</p>
+<div class="scene">
+<svg id="art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" role="img" aria-labelledby="art-title art-desc">
+<title id="art-title">Hall de instrumentos</title><desc id="art-desc">Ilustração do hall de um observatório com equipamentos e portas.</desc>
+<defs><linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f6f3e7"/><stop offset="1" stop-color="#cfdfdf"/></linearGradient><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#9fcfdf"/><stop offset="1" stop-color="#e5f6f5"/></linearGradient><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f6fbfc"/><stop offset="1" stop-color="#86aeb9"/></linearGradient></defs>
+<!-- Ilustração original com cinco cenas, uma por ambiente -->
+<g data-scene="hall"><rect width="900" height="420" fill="url(#wall)"/><rect y="310" width="900" height="110" fill="#b6c9ca"/>
+<rect x="47" y="78" width="249" height="226" rx="9" fill="#fff8e7" stroke="#65869a" stroke-width="8"/>
+<rect x="62" y="95" width="219" height="37" rx="5" fill="#2a627a"/><text x="172" y="120" font-family="sans-serif" font-size="21" font-weight="bold" text-anchor="middle" fill="white">INSTRUMENTOS</text>
+<path d="M84 165h183M84 198h183M84 231h183M84 263h183" stroke="#a6bcc5" stroke-width="8" stroke-linecap="round"/>
+<path d="M350 310V172" stroke="#526b71" stroke-width="10"/><path d="M331 176h38l-9 116h-19Z" fill="#b8e2ee" stroke="#417b8f" stroke-width="6"/><path d="M338 218h25M339 248h22" stroke="#4b8295" stroke-width="5"/>
+<path d="M419 312V180M419 193l51-25M419 193l-48-31M419 193v58" stroke="#526e7a" stroke-width="10" stroke-linecap="round"/><circle cx="469" cy="168" r="16" fill="#e3b665"/><circle cx="372" cy="165" r="16" fill="#e3b665"/><circle cx="419" cy="251" r="16" fill="#e3b665"/>
+<rect x="529" y="92" width="146" height="254" rx="7" fill="#2c7793" stroke="#22516b" stroke-width="7"/><rect x="543" y="109" width="117" height="223" fill="#d5ebf1"/><circle cx="645" cy="226" r="8" fill="#bc996d"/>
+<rect x="707" y="92" width="147" height="254" rx="7" fill="#bba075" stroke="#8a6849" stroke-width="7"/><rect x="721" y="109" width="118" height="223" fill="#f3ebd9"/><circle cx="824" cy="226" r="8" fill="#98784e"/>
+<text x="600" y="66" font-family="sans-serif" font-size="21" font-weight="bold" text-anchor="middle" fill="#2a6885">CHUVA</text><text x="781" y="66" font-family="sans-serif" font-size="21" font-weight="bold" text-anchor="middle" fill="#775d3d">VENTO</text></g>
+<g data-scene="rain" display="none"><rect width="900" height="420" fill="url(#wall)"/><rect y="320" width="900" height="100" fill="#afc4c6"/>
+<rect x="44" y="47" width="356" height="257" rx="8" fill="#7196a9" stroke="#486b7e" stroke-width="9"/><rect x="58" y="62" width="326" height="230" fill="url(#sky)"/>
+<g fill="#e5f4f8"><ellipse cx="132" cy="112" rx="55" ry="20"/><ellipse cx="259" cy="127" rx="68" ry="22"/></g><g stroke="#6ab6d8" stroke-width="7" stroke-linecap="round"><path d="M105 160l-15 27M143 166l-15 26M243 170l-15 27M285 169l-14 27M338 183l-15 27"/></g><path d="M219 57V292M58 174H384" stroke="#f8fcff" stroke-width="11"/>
+<rect x="463" y="294" width="370" height="34" rx="8" fill="#b99b76" stroke="#8d704d" stroke-width="5"/>
+<path d="M506 332v80M806 332v80" stroke="#78959a" stroke-width="13"/>
+<path d="M533 114h95l-17 175h-61Z" fill="#d6f1f6" stroke="#53879a" stroke-width="7"/><path d="M546 224h69l-8 61h-49Z" fill="#75bdda"/><path d="M547 174h67M547 196h67M549 217h63M550 240h60M552 262h55" stroke="#4d8192" stroke-width="4"/>
+<rect x="675" y="123" width="130" height="157" rx="8" fill="#fff5df" stroke="#a18d69" stroke-width="5"/><path d="M695 163h90M695 190h76M695 218h87M695 245h65" stroke="#a2b4b4" stroke-width="7" stroke-linecap="round"/>
+<text x="667" y="79" font-family="sans-serif" text-anchor="middle" font-size="21" font-weight="bold" fill="#245f7e">ESTAÇÃO DA CHUVA</text></g>
+<g data-scene="wind" display="none"><rect width="900" height="420" fill="#d5e7e5"/><rect y="320" width="900" height="100" fill="#afc5c9"/>
+<rect x="51" y="38" width="364" height="270" rx="10" fill="#fff9e8" stroke="#6b8b9b" stroke-width="8"/><circle cx="231" cy="179" r="108" fill="#e8f3f4" stroke="#457f90" stroke-width="6"/>
+<path d="M231 77V283M125 179h215" stroke="#4a8190" stroke-width="5"/><path d="M231 97l23 81-23-13-23 13Z" fill="#c5845a"/><path d="M231 262l-23-82 23 13 23-13Z" fill="#779fac"/>
+<text x="231" y="102" font-family="sans-serif" font-size="20" fill="#1b5c76" text-anchor="middle">N</text><text x="231" y="275" font-family="sans-serif" font-size="20" fill="#1b5c76" text-anchor="middle">S</text><text x="111" y="187" font-family="sans-serif" font-size="20" fill="#1b5c76" text-anchor="middle">O</text><text x="350" y="187" font-family="sans-serif" font-size="20" fill="#1b5c76" text-anchor="middle">L</text>
+<path d="M144 181h170" stroke="#d6a168" stroke-width="6" stroke-dasharray="13 9"/>
+<path d="M667 314V127M667 139l72-35M667 139l-74-43M667 139v84" stroke="#52717b" stroke-width="11" stroke-linecap="round"/><circle cx="738" cy="103" r="22" fill="#dfb35e"/><circle cx="593" cy="96" r="22" fill="#dfb35e"/><circle cx="667" cy="224" r="22" fill="#dfb35e"/>
+<path d="M548 324h263" stroke="#a68c6b" stroke-width="33"/><path d="M582 340v70M779 340v70" stroke="#698b93" stroke-width="12"/>
+<text x="656" y="64" font-family="sans-serif" text-anchor="middle" font-size="22" font-weight="bold" fill="#286780">VENTO E DIREÇÃO</text></g>
+<g data-scene="core" display="none"><rect width="900" height="420" fill="#d6e5e8"/><rect y="320" width="900" height="100" fill="#a2b8bf"/>
+<rect x="57" y="76" width="360" height="220" rx="13" fill="#324f61" stroke="#223e50" stroke-width="8"/><rect x="74" y="92" width="327" height="186" rx="6" fill="#2c7694"/>
+<path d="M94 245l59-81 53 36 54-70 43 48 66-73" fill="none" stroke="#ace7dc" stroke-width="9" stroke-linejoin="round"/><path d="M93 216h294M93 178h294" stroke="#93c9cf" stroke-opacity=".4" stroke-width="4"/>
+<rect x="470" y="76" width="358" height="220" rx="13" fill="#324f61" stroke="#223e50" stroke-width="8"/><rect x="485" y="92" width="327" height="186" rx="6" fill="#2c7694"/>
+<circle cx="648" cy="181" r="75" fill="none" stroke="#a6e1db" stroke-width="6"/><path d="M648 107v150M574 181h148" stroke="#a6e1db" stroke-width="5"/><path d="M648 131l24 50-24-12-24 12Z" fill="#efd08b"/>
+<path d="M54 299h790l-28 43H83Z" fill="#a1b8c3" stroke="#637c8a" stroke-width="6"/><path d="M103 342v69M796 342v69" stroke="#68818c" stroke-width="13"/>
+<text x="445" y="54" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="bold" fill="#2d6076">CENTRAL DE ANÁLISE</text></g>
+<g data-scene="exit" display="none"><rect width="900" height="420" fill="url(#sky)"/><circle cx="720" cy="100" r="55" fill="#f8d18c"/>
+<path d="M0 320L155 154L309 320L454 133L618 315L759 188L900 311V420H0Z" fill="#8baeb5"/>
+<path d="M0 354L191 246L377 355L568 229L900 351V420H0Z" fill="#5e968d"/>
+<rect x="304" y="130" width="183" height="239" rx="8" fill="#f2ebdf" stroke="#647f88" stroke-width="9"/><path d="M337 360V235Q396 160 456 235V360Z" fill="#b7e3ed" stroke="#417b8c" stroke-width="8"/>
+<path d="M308 131l88-93 92 93Z" fill="#426e7e"/><circle cx="396" cy="80" r="11" fill="#e4bc78"/><path d="M396 74V44" stroke="#567b8a" stroke-width="8"/><path d="M0 387q210-54 422 0t478 0V420H0Z" fill="#4a8875"/>
+<text x="690" y="374" font-family="sans-serif" font-size="27" font-weight="bold" text-anchor="middle" fill="#235a61">MISSÃO CONCLUÍDA</text></g>
+</svg></div><p class="sub" id="scene-desc">A ilustração apresenta a sala atual. Todos os objetos e portas também estão disponíveis nos controles textuais.</p>
+<h3 class="section">Objetos e pistas</h3><p class="sub">Selecione qualquer objeto para examinar. Depois, releia a pista no inventário sem coletar outra cópia.</p><div id="clues" class="clues" aria-label="Objetos da sala atual"></div>
+<div id="clue-detail" class="read" hidden><strong id="detail-title"></strong><p id="detail-text"></p></div>
+<h3 class="section">Cadeados e portas</h3><p class="sub">Após abrir um cadeado, escolha quando atravessar. Uma sala pode exigir mais de uma porta desbloqueada.</p><div id="locks" class="locks" aria-label="Cadeados disponíveis nesta sala"></div>
+</section></div>
+<div class="column">
+<section class="panel"><h2>Mapa de salas</h2><p class="sub">O mapa mostra salas bloqueadas e visitadas. Volte a qualquer sala já alcançada sem perder o progresso.</p><ol id="rooms" class="rooms" aria-label="Lista de salas com estado de acesso"></ol></section>
+<section class="panel"><h2>Inventário</h2><p class="sub">Pistas recolhidas são permanentes. Escolha um item para reler seu texto completo.</p><ul id="inventory" class="inventory"></ul><p id="empty-inventory" class="sub">Nenhum objeto recolhido.</p></section>
+<section class="panel"><h2>Feedback da missão</h2><div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"><strong id="feedback-title">Orientação</strong><span id="feedback-text">Examine os instrumentos para começar.</span></div>
+<div id="ending" class="end" hidden><h3>Observatório reativado!</h3><p>As duas estações foram verificadas e o relatório foi concluído. Esta conquista é formativa e não gera nota ou conclusão acadêmica oficial.</p><ol id="summary"></ol></div>
+<div class="flex"><button id="reset" type="button" class="button danger">Recomeçar missão</button></div>
+<div id="confirm" class="confirm" hidden role="group" aria-label="Confirmar reinício"><p>Recomeçar apaga todas as pistas, cadeados, dicas e tentativas registradas desta missão. Deseja continuar?</p><div class="flex"><button id="yes" class="button danger" type="button">Confirmar reinício</button><button id="no" class="button secondary" type="button">Cancelar</button></div></div>
+<p class="note">Funciona sem conexão externa; a sincronização só ocorre quando a ponte MoodleMCP estiver presente. Os gabaritos são visíveis no código e não são adequados para avaliação oficial.</p></section>
+</div></div></main>
+<script>
+(function escapeRoom(){
+"use strict";
+const DATA={"type":"escape_room","title":"O Observatório do Tempo","settings":{"startRoom":"hall","finishRoom":"exit","hintsPerLock":2,"wrongHistoryLimit":12},"rooms":[{"id":"hall","title":"Hall dos instrumentos","subtitle":"Examine os documentos dos instrumentos para acessar as duas estações.","scene":"hall","sceneDescription":"Hall de observatório com mural de instrumentos, medidor de chuva, anemômetro e duas portas laterais.","requiresLocks":[],"clues":[{"id":"c-gauge","object":"Ficha da precipitação","sector":"Mural de instrumentos","text":"O pluviômetro mede a quantidade de precipitação acumulada, usualmente registrada em milímetros."},{"id":"c-speed","object":"Ficha do vento","sector":"Mesa dos equipamentos","text":"O anemômetro mede a velocidade do vento; a direção pode ser indicada por um cata-vento ou biruta."}],"locks":[{"id":"l-rain","label":"Porta da chuva","prompt":"Qual instrumento mede a chuva acumulada?","answers":["pluviômetro"],"requiresClues":["c-gauge"],"requiresLocks":[],"unlocks":"rain","hints":["Leia a ficha da precipitação no mural.","É o instrumento de coleta e medição da água da chuva."],"explanation":"O pluviômetro permite medir a precipitação em determinado intervalo.","consumes":false},{"id":"l-wind","label":"Porta dos ventos","prompt":"Qual instrumento mede a velocidade do vento?","answers":["anemômetro"],"requiresClues":["c-speed"],"requiresLocks":[],"unlocks":"wind","hints":["Examine a ficha dos instrumentos de vento.","Não confunda velocidade, medida pelo equipamento solicitado, com direção."],"explanation":"O anemômetro mede a velocidade do vento; outros instrumentos indicam sua direção.","consumes":false}]},{"id":"rain","title":"Estação da chuva","subtitle":"Interprete os registros e converta milímetros de chuva em volume por área.","scene":"rain","sceneDescription":"Janela com nuvens e gotas, pluviômetro graduado e caderno de precipitação sobre uma bancada.","requiresLocks":[],"clues":[{"id":"c-rain-amount","object":"Leitura do pluviômetro","sector":"Prancheta da bancada","text":"Foram registrados 18 mm de chuva em 24 horas."},{"id":"c-rain-unit","object":"Tabela de equivalência","sector":"Painel de medidas","text":"Uma precipitação de 1 mm equivale a 1 litro de água por metro quadrado de superfície horizontal."}],"locks":[{"id":"l-rain-core","label":"Terminal de chuva","prompt":"A leitura foi de 18 mm. Quantos litros por metro quadrado isso representa?","answers":["18","18 l/m²","18 l/m2","18 litros por metro quadrado"],"requiresClues":["c-rain-amount","c-rain-unit"],"requiresLocks":[],"unlocks":"core","hints":["Primeiro identifique a quantidade de milímetros no relatório.","Use a equivalência: 1 mm de chuva corresponde a 1 L/m²."],"explanation":"Uma precipitação de 18 mm corresponde a 18 L/m² sobre uma superfície horizontal.","consumes":false}]},{"id":"wind","title":"Estação dos ventos","subtitle":"Investigue a direção meteorológica de origem do vento.","scene":"wind","sceneDescription":"Rosa dos ventos com pontos cardeais, anemômetro e seta mostrando ar do oeste para o leste.","requiresLocks":[],"clues":[{"id":"c-wind-map","object":"Mapa de deslocamento","sector":"Quadro com rosa dos ventos","text":"O ar representado na seta move-se do oeste para o leste."},{"id":"c-wind-rule","object":"Regra de direção","sector":"Caderno do observador","text":"Na meteorologia, a direção de um vento é identificada pelo local de onde ele vem, e não para onde sopra."}],"locks":[{"id":"l-wind-core","label":"Terminal de vento","prompt":"Se o ar se desloca do oeste para o leste, o vento é de qual direção?","answers":["oeste","do oeste"],"requiresClues":["c-wind-map","c-wind-rule"],"requiresLocks":[],"unlocks":"core","hints":["Leia a regra de nomeação meteorológica.","Encontre a origem da seta, e não seu destino."],"explanation":"É um vento de oeste porque a direção é definida pelo ponto de onde o ar vem.","consumes":false}]},{"id":"core","title":"Central meteorológica","subtitle":"Reúna os resultados das estações e finalize o relatório.","scene":"core","sceneDescription":"Central de análise ilustrada com dois monitores, um de chuva e outro de vento, séries históricas e porta de saída.","requiresLocks":["l-rain-core","l-wind-core"],"clues":[{"id":"c-climate","object":"Caderno de conceitos","sector":"Mesa de análise","text":"Tempo meteorológico descreve condições atmosféricas de curto prazo; clima descreve padrões estatísticos ao longo de períodos prolongados."},{"id":"c-series","object":"Relatório histórico","sector":"Painel de observações","text":"Comparar registros de muitas décadas permite estudar padrões de longo prazo, e não apenas as condições de hoje."}],"locks":[{"id":"l-exit","label":"Porta final do observatório","prompt":"Ao analisar padrões atmosféricos durante décadas, estudamos o tempo meteorológico de hoje ou o clima?","answers":["clima","o clima"],"requiresClues":["c-climate","c-series","c-rain-amount","c-wind-map"],"requiresLocks":["l-rain-core","l-wind-core"],"unlocks":"exit","hints":["Leia as duas definições no caderno de conceitos.","A questão fala de padrões de décadas, não de condições de um dia."],"explanation":"Clima representa padrões estatísticos de longo prazo; tempo meteorológico descreve condições em um momento ou intervalo curto.","consumes":false}]},{"id":"exit","title":"Saída - missão concluída","subtitle":"As estações foram verificadas e a saída está liberada.","scene":"exit","sceneDescription":"Observatório ilustrado ao amanhecer, com montanhas, céu luminoso e porta aberta.","requiresLocks":["l-exit"],"clues":[],"locks":[]}]};
+const root=document.getElementById("activity"),$=id=>root.querySelector("#"+id);
+const controller=new AbortController(),sdk=window.MoodleMCP&&window.MoodleMCP.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const storeKey="escapeRoomObservatoryV1",location="games/escape-room-observatory";
+let state=initialState(DATA),ready=false,disposed=false,modified=false,remote=null,queue=Promise.resolve(),stamp=0,drafts={},lastClue=null;
+// PURE_START
+function normalize(t){return typeof t==="string"?t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLocaleLowerCase("pt-BR").replace(/\s+/g," "):"";}
+function roomMap(d){return new Map(d.rooms.map(r=>[r.id,r]));}
+function clueMap(d){return new Map(d.rooms.flatMap(r=>r.clues.map(c=>[c.id,{...c,roomId:r.id}])));}
+function lockMap(d){return new Map(d.rooms.flatMap(r=>r.locks.map(l=>[l.id,{...l,roomId:r.id}])));}
+function validate(d){
+ if(!d||d.type!=="escape_room"||!d.title||typeof d.title!=="string"||!d.settings||
+  typeof d.settings.startRoom!=="string"||typeof d.settings.finishRoom!=="string"||
+  d.settings.hintsPerLock!==2||!Number.isInteger(d.settings.wrongHistoryLimit)||
+  d.settings.wrongHistoryLimit<1||d.settings.wrongHistoryLimit>20||!Array.isArray(d.rooms)||d.rooms.length<3||d.rooms.length>10)return false;
+ const rooms=new Map(),clues=new Map(),locks=new Map(),ids=new Set();
+ function unique(id){if(typeof id!=="string"||!/^[a-z][a-z0-9-]*$/.test(id)||ids.has(id))return false;ids.add(id);return true;}
+ for(const r of d.rooms){
+  if(!r||!unique(r.id)||!["title","subtitle","scene","sceneDescription"].every(k=>typeof r[k]==="string"&&r[k].trim())||
+    !Array.isArray(r.requiresLocks)||new Set(r.requiresLocks).size!==r.requiresLocks.length||
+    !Array.isArray(r.clues)||r.clues.length>8||!Array.isArray(r.locks)||r.locks.length>4)return false;
+  rooms.set(r.id,r);
+  for(const c of r.clues){
+   if(!c||!unique(c.id)||!["object","sector","text"].every(k=>typeof c[k]==="string"&&c[k].trim()))return false;
+   clues.set(c.id,c);
+  }
+  for(const l of r.locks){
+   if(!l||!unique(l.id)||!["label","prompt","explanation"].every(k=>typeof l[k]==="string"&&l[k].trim())||
+    !Array.isArray(l.answers)||l.answers.length<1||l.answers.length>6||
+    l.answers.some(x=>typeof x!=="string"||!normalize(x)||normalize(x).length>64)||
+    new Set(l.answers.map(normalize)).size!==l.answers.length||
+    !Array.isArray(l.requiresClues)||new Set(l.requiresClues).size!==l.requiresClues.length||
+    !Array.isArray(l.requiresLocks)||new Set(l.requiresLocks).size!==l.requiresLocks.length||
+    !Array.isArray(l.hints)||l.hints.length!==d.settings.hintsPerLock||
+    l.hints.some(x=>typeof x!=="string"||!x.trim())||typeof l.unlocks!=="string"||l.consumes!==false)return false;
+   locks.set(l.id,l);
+  }
+ }
+ const start=d.settings.startRoom,finish=d.settings.finishRoom;
+ if(!rooms.has(start)||!rooms.has(finish)||start===finish||rooms.get(start).requiresLocks.length||
+    rooms.get(finish).clues.length||rooms.get(finish).locks.length)return false;
+ for(const r of d.rooms){
+  if(r.id!==finish&&r.locks.length===0)return false;
+  if(r.requiresLocks.some(id=>!locks.has(id)))return false;
+  for(const l of r.locks)if(!rooms.has(l.unlocks)||l.unlocks===r.id||l.unlocks===start||
+    l.requiresClues.some(id=>!clues.has(id))||l.requiresLocks.some(id=>!locks.has(id)||id===l.id))return false;
+ }
+ const visiting=new Set(),done=new Set();
+ function walk(id){if(visiting.has(id))return false;if(done.has(id))return true;
+  visiting.add(id);for(const l of rooms.get(id).locks)if(!walk(l.unlocks))return false;
+  visiting.delete(id);done.add(id);return true;}
+ if(!walk(start))return false;
+ // Proof by monotone fixed point: every required clue/lock and every destination must be obtainable.
+ const seen=new Set([start]),gathered=new Set(),opened=new Set();
+ for(let step=0;step<100;step++){
+  let changed=false;
+  for(const id of seen)for(const c of rooms.get(id).clues)if(!gathered.has(c.id)){gathered.add(c.id);changed=true;}
+  for(const id of seen)for(const l of rooms.get(id).locks){
+   if(!opened.has(l.id)&&l.requiresClues.every(x=>gathered.has(x))&&l.requiresLocks.every(x=>opened.has(x))){opened.add(l.id);changed=true;}
+  }
+  for(const id of seen)for(const l of rooms.get(id).locks){
+   if(opened.has(l.id)&&!seen.has(l.unlocks)&&rooms.get(l.unlocks).requiresLocks.every(x=>opened.has(x))){seen.add(l.unlocks);changed=true;}
+  }
+  if(!changed)break;
+ }
+ return seen.size===rooms.size&&seen.has(finish)&&opened.size===locks.size&&gathered.size===clues.size;
+}
+function initialState(d){return {v:1,room:d.settings.startRoom,visited:[d.settings.startRoom],inventory:[],opened:[],hints:{},wrong:{},complete:false};}
+function missing(s,l,d){return {clues:l.requiresClues.filter(id=>!s.inventory.includes(id)).map(id=>clueMap(d).get(id).object),locks:l.requiresLocks.filter(id=>!s.opened.includes(id)).map(id=>lockMap(d).get(id).label)};}
+function canEnter(s,id,d){const r=roomMap(d).get(id);return !!r&&r.requiresLocks.every(x=>s.opened.includes(x));}
+function validState(s,d){
+ if(!s||typeof s!=="object"||Array.isArray(s)||s.v!==1||typeof s.room!=="string"||
+ !Array.isArray(s.visited)||s.visited.length<1||s.visited.length>d.rooms.length||s.visited[0]!==d.settings.startRoom||
+ new Set(s.visited).size!==s.visited.length||!s.visited.includes(s.room)||
+ !Array.isArray(s.inventory)||new Set(s.inventory).size!==s.inventory.length||
+ !Array.isArray(s.opened)||new Set(s.opened).size!==s.opened.length||
+ !s.hints||typeof s.hints!=="object"||Array.isArray(s.hints)||!s.wrong||typeof s.wrong!=="object"||Array.isArray(s.wrong)||
+ typeof s.complete!=="boolean")return false;
+ const rooms=roomMap(d),clues=clueMap(d),locks=lockMap(d);
+ if(s.visited.some(id=>!rooms.has(id))||
+ s.inventory.some(id=>!clues.has(id)||!s.visited.includes(clues.get(id).roomId))||
+ s.opened.some(id=>!locks.has(id)||!s.visited.includes(locks.get(id).roomId)))return false;
+ for(let i=1;i<s.visited.length;i++)if(!canEnter(s,s.visited[i],d)||
+  !s.visited.slice(0,i).some(x=>rooms.get(x).locks.some(l=>l.unlocks===s.visited[i]&&s.opened.includes(l.id))))return false;
+ for(const id of s.opened){
+  const lock=locks.get(id);
+  if(lock.requiresClues.some(x=>!s.inventory.includes(x))||lock.requiresLocks.some(x=>!s.opened.includes(x)))return false;
+ }
+ for(const [id,n] of Object.entries(s.hints))
+  if(!locks.has(id)||!s.visited.includes(locks.get(id).roomId)||!Number.isInteger(n)||n<1||n>d.settings.hintsPerLock)return false;
+ for(const [id,values] of Object.entries(s.wrong)){
+  if(!locks.has(id)||!s.visited.includes(locks.get(id).roomId)||!Array.isArray(values)||values.length>d.settings.wrongHistoryLimit||
+   new Set(values).size!==values.length||values.some(x=>typeof x!=="string"||!x||x.length>64||x!==normalize(x)||locks.get(id).answers.some(a=>normalize(a)===x)))return false;
+ }
+ return s.complete===(s.room===d.settings.finishRoom)&&(!s.complete||rooms.get(d.settings.finishRoom).requiresLocks.every(x=>s.opened.includes(x)));
+}
+function transition(s,a,d){
+ if(!validState(s,d))return {state:s,changed:false,kind:"bad",message:"Estado inválido: nenhuma mudança aplicada."};
+ if(!a||typeof a.type!=="string")return {state:s,changed:false,kind:"note",message:"Escolha um comando válido."};
+ if(a.type==="restart")return {state:initialState(d),changed:true,kind:"note",message:"Missão reiniciada."};
+ const rooms=roomMap(d),clues=clueMap(d),room=rooms.get(s.room),l=room.locks.find(x=>x.id===a.id);
+ if(a.type==="collect"){
+  const c=room.clues.find(x=>x.id===a.id);
+  if(!c)return {state:s,changed:false,kind:"bad",message:"A pista não está nesta sala."};
+  if(s.inventory.includes(c.id))return {state:s,changed:false,kind:"note",message:"Pista já recolhida: "+c.text};
+  if(s.complete)return {state:s,changed:false,kind:"note",message:"Missão terminada. Use o inventário para revisar."};
+  return {state:{...s,inventory:[...s.inventory,c.id]},changed:true,kind:"good",message:"Pista recolhida: "+c.object+". "+c.text};
+ }
+ if(a.type==="read"){
+  const c=clues.get(a.id);
+  if(!c||!s.inventory.includes(a.id))return {state:s,changed:false,kind:"bad",message:"Pista ainda não encontrada."};
+  return {state:s,changed:false,kind:"note",message:"Pista: "+c.object+". "+c.text};
+ }
+ if(a.type==="revisit"){
+  if(s.complete)return {state:s,changed:false,kind:"note",message:"Missão finalizada. Releia o inventário e o resumo."};
+  if(!s.visited.includes(a.target))return {state:s,changed:false,kind:"bad",message:"Sala ainda bloqueada. Abra uma porta primeiro."};
+  if(s.room===a.target)return {state:s,changed:false,kind:"note",message:"Você já está nesta sala."};
+  return {state:{...s,room:a.target},changed:true,kind:"note",message:"Você voltou à sala "+rooms.get(a.target).title+". Nada foi perdido."};
+ }
+ if(a.type==="hint"){
+  if(!l||s.opened.includes(l.id)||s.complete)return {state:s,changed:false,kind:"note",message:"Dica não disponível para este cadeado."};
+  const count=s.hints[l.id]||0;
+  if(count>=d.settings.hintsPerLock)return {state:s,changed:false,kind:"note",message:"As duas dicas já foram consultadas."};
+  return {state:{...s,hints:{...s.hints,[l.id]:count+1}},changed:true,kind:"note",message:"Dica "+(count+1)+" de 2: "+l.hints[count]+" Nenhuma porta foi aberta."};
+ }
+ if(a.type==="solve"){
+  if(!l||s.complete)return {state:s,changed:false,kind:"bad",message:"Cadeado inexistente ou missão concluída."};
+  if(s.opened.includes(l.id))return {state:s,changed:false,kind:"good",message:"Cadeado já aberto. "+l.explanation};
+  const req=missing(s,l,d),needed=[...req.clues,...req.locks];
+  if(needed.length)return {state:s,changed:false,kind:"bad",message:"Antes de responder reúna: "+needed.join("; ")+". Nenhuma pista foi consumida."};
+  const answer=normalize(a.answer);
+  if(!answer||answer.length>64)return {state:s,changed:false,kind:"bad",message:"Digite uma resposta válida de até 64 caracteres."};
+  if(l.answers.some(x=>normalize(x)===answer))return {state:{...s,opened:[...s.opened,l.id]},changed:true,kind:"good",message:"Cadeado aberto! "+l.explanation+" Você decide quando atravessar a porta."};
+  const wrong=s.wrong[l.id]||[];
+  if(wrong.includes(answer))return {state:s,changed:false,kind:"bad",message:"Essa resposta já foi tentada. Revise suas pistas."};
+  if(wrong.length>=d.settings.wrongHistoryLimit)return {state:s,changed:false,kind:"bad",message:"Resposta incorreta. O histórico está cheio, mas você pode continuar tentando sem limite."};
+  return {state:{...s,wrong:{...s.wrong,[l.id]:[...wrong,answer]}},changed:true,kind:"bad",message:"Resposta incorreta. O cadeado permanece fechado; você pode corrigir sem perder pistas."};
+ }
+ if(a.type==="travel"){
+  if(!l||!s.opened.includes(l.id)||s.complete)return {state:s,changed:false,kind:"bad",message:"Não é possível atravessar uma porta fechada."};
+  const dest=l.unlocks;
+  if(!canEnter(s,dest,d))return {state:s,changed:false,kind:"bad",message:"Sala ainda bloqueada: é preciso resolver os demais cadeados exigidos."};
+  const visited=s.visited.includes(dest)?s.visited:[...s.visited,dest];
+  const completed=dest===d.settings.finishRoom;
+  return {state:{...s,room:dest,visited,complete:completed},changed:true,kind:completed?"good":"note",message:completed?"Missão concluída! Todos os cinco cadeados foram abertos.":"Nova sala: "+rooms.get(dest).title+". Examine os objetos e cadeados."};
+ }
+ return {state:s,changed:false,kind:"bad",message:"Ação indisponível nesta sala."};
+}
+// PURE_END
+function E(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+function getState(){return {v:1,room:state.room,visited:[...state.visited],inventory:[...state.inventory],opened:[...state.opened],hints:{...state.hints},wrong:Object.fromEntries(Object.entries(state.wrong).map(([id,x])=>[id,[...x]])),complete:state.complete};}
+function restoreState(saved){
+ if(!validState(saved,DATA))return false;
+ state={v:1,room:saved.room,visited:[...saved.visited],inventory:[...saved.inventory],opened:[...saved.opened],hints:{...saved.hints},wrong:Object.fromEntries(Object.entries(saved.wrong).map(([id,x])=>[id,[...x]])),complete:saved.complete};
+ lastClue=null;drafts={};render(state,false);return true;
+}
+function announce(message,kind="note"){
+ $("feedback").className="feedback "+kind;
+ $("feedback-title").textContent=kind==="good"?"Descoberta":kind==="bad"?"Revise sua tentativa":"Orientação";
+ $("feedback-text").textContent=message;
+}
+function detail(id){
+ if(!state.inventory.includes(id))return;
+ const c=clueMap(DATA).get(id);lastClue=id;$("clue-detail").hidden=false;
+ $("detail-title").textContent=c.object+" · "+c.sector;$("detail-text").textContent=c.text;
+}
+function snapshot(){
+ const e=document.activeElement;if(!e||!root.contains(e)||!e.dataset.focusKey)return null;
+ return {key:e.dataset.focusKey,start:e.tagName==="INPUT"?e.selectionStart:null,end:e.tagName==="INPUT"?e.selectionEnd:null};
+}
+function restoreFocus(old){
+ if(!old)return;
+ for(const e of root.querySelectorAll("[data-focus-key]"))if(e.dataset.focusKey===old.key&&!e.disabled){
+  e.focus({preventScroll:true});if(e.tagName==="INPUT"&&typeof old.start==="number")e.setSelectionRange(old.start,old.end);return;
+ }
+}
+function render(s,preserve=true){
+ if(disposed||!validate(DATA)||!validState(s,DATA))return;
+ const old=preserve?snapshot():null,r=roomMap(DATA).get(s.room);
+ $("room-title").textContent=r.title;$("room-sub").textContent=r.subtitle;
+ $("room-label").textContent=s.complete?"Missão finalizada":"Ambiente "+(DATA.rooms.findIndex(x=>x.id===r.id)+1)+" de 5";
+ $("art-title").textContent=r.title;$("art-desc").textContent=r.sceneDescription;$("scene-desc").textContent=r.sceneDescription+" Todos os objetos e portas também aparecem em texto.";
+ for(const g of root.querySelectorAll("[data-scene]"))g.setAttribute("display",g.dataset.scene===r.scene?"inline":"none");
+ $("nrooms").textContent=s.visited.length+"/5";$("nclues").textContent=s.inventory.length+"/8";$("nlocks").textContent=s.opened.length+"/5";
+ $("nhints").textContent=String(Object.values(s.hints).reduce((a,b)=>a+b,0));
+ $("nwrong").textContent=String(Object.values(s.wrong).reduce((a,b)=>a+b.length,0));
+ $("progress").setAttribute("aria-valuenow",String(s.opened.length));$("barfill").style.width=(s.opened.length*20)+"%";$("reset").disabled=!ready;
+ const container=$("clues");container.replaceChildren();
+ if(!r.clues.length)container.append(E("p","sub","Nenhuma pista nova nesta sala. Consulte o inventário para reler o conteúdo."));
+ for(const c of r.clues){
+  const found=s.inventory.includes(c.id),card=E("article","clue"+(found?" found":""));
+  const button=E("button","button"+(found?" secondary":""),found?"Reler pista":"Examinar e recolher");button.type="button";button.dataset.collect=c.id;button.dataset.focusKey="collect:"+c.id;button.disabled=!ready;
+  card.append(E("strong","",c.object),E("small","",c.sector),button,E("small","",found?"Já está no inventário e não será duplicada.":"Ainda não examinada."));container.append(card);
+ }
+ const locks=$("locks");locks.replaceChildren();
+ if(!r.locks.length)locks.append(E("p","sub","Nenhum cadeado restante; releia o inventário e as soluções."));
+ for(const l of r.locks){
+  const open=s.opened.includes(l.id),card=E("article","lock"+(open?" open":""));
+  card.append(E("strong","",l.label),E("span","state",open?"Aberto":"Fechado"));
+  if(open){
+   card.append(E("p","explain",l.explanation));
+   const enter=E("button","button door","Entrar em "+roomMap(DATA).get(l.unlocks).title);
+   enter.type="button";enter.dataset.travel=l.id;enter.dataset.focusKey="travel:"+l.id;enter.disabled=!ready||s.complete||!canEnter(s,l.unlocks,DATA);
+   card.append(enter);
+   if(!canEnter(s,l.unlocks,DATA))card.append(E("p","sub","A sala exige também: "+roomMap(DATA).get(l.unlocks).requiresLocks.filter(x=>!s.opened.includes(x)).map(x=>lockMap(DATA).get(x).label).join("; ")+". Retorne e conclua a outra investigação."));
+  }else{
+   card.append(E("p","",l.prompt));
+   const requirements=missing(s,l,DATA),remaining=[...requirements.clues,...requirements.locks];
+   card.append(E("p","sub",remaining.length?"Antes de responder, reúna: "+remaining.join("; ")+".":"Requisitos reunidos: você pode responder."));
+   const form=E("form");form.dataset.formLock=l.id;const label=E("label","","Sua resposta");label.htmlFor="answer-"+l.id;
+   const input=E("input");input.id="answer-"+l.id;input.type="text";input.maxLength=64;input.autocomplete="off";input.spellcheck=false;input.value=drafts[l.id]||"";input.dataset.answer=l.id;input.dataset.focusKey="answer:"+l.id;input.disabled=!ready;
+   const verify=E("button","button","Verificar resposta");verify.type="submit";verify.disabled=!ready;verify.dataset.focusKey="submit:"+l.id;
+   form.append(label,input,verify);card.append(form);
+   const controls=E("div","flex"),used=s.hints[l.id]||0;
+   const hint=E("button","button hint","Pedir dica "+Math.min(used+1,2)+" de 2");hint.type="button";hint.dataset.hint=l.id;hint.dataset.focusKey="hint:"+l.id;hint.disabled=!ready||used>=2;
+   controls.append(hint,E("span","sub","Dicas usadas: "+used+"/2"));card.append(controls);
+   for(let i=0;i<used;i++)card.append(E("p","hintbox","Dica "+(i+1)+": "+l.hints[i]));
+   if(s.wrong[l.id]?.length)card.append(E("p","sub","Respostas incorretas distintas registradas: "+s.wrong[l.id].length+". Tentativas ilimitadas."));
+  }
+  locks.append(card);
+ }
+ const rooms=$("rooms");rooms.replaceChildren();
+ for(const room of DATA.rooms){
+  const li=E("li"),b=E("button","list-btn"+(s.room===room.id?" active":""));b.type="button";b.dataset.revisit=room.id;b.dataset.focusKey="room:"+room.id;
+  b.disabled=!ready||s.complete||!s.visited.includes(room.id);
+  b.append(E("strong","",room.title),E("small","",s.room===room.id?"Sala atual":s.visited.includes(room.id)?"Visitada · pode voltar":"Bloqueada · abra uma porta"));if(room.id===s.room)b.setAttribute("aria-current","location");
+  li.append(b);rooms.append(li);
+ }
+ const inv=$("inventory");inv.replaceChildren();$("empty-inventory").hidden=s.inventory.length>0;
+ for(const id of s.inventory){
+  const c=clueMap(DATA).get(id),li=E("li"),b=E("button","list-btn");b.type="button";b.dataset.read=id;b.dataset.focusKey="read:"+id;
+  b.append(E("strong","",c.object),E("small","",roomMap(DATA).get(c.roomId).title+" · Reabrir pista permanente"));li.append(b);inv.append(li);
+ }
+ if(lastClue&&s.inventory.includes(lastClue))detail(lastClue);else $("clue-detail").hidden=true;
+ $("ending").hidden=!s.complete;
+ const summary=$("summary");summary.replaceChildren();
+ if(s.complete)for(const room of DATA.rooms)for(const l of room.locks)if(s.opened.includes(l.id)){
+  const li=E("li");li.append(E("strong","",l.label+": "),document.createTextNode(l.explanation));summary.append(li);
+ }
+ restoreFocus(old);
+}
+function persist(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),token=++stamp;
+ queue=queue.then(async()=>{
+  if(disposed||!remote||token!==stamp)return;
+  const base=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const payload={...base,[storeKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(payload)).length>12288){announce("Progresso acima de 12 KiB: nenhuma sincronização foi realizada.","bad");return;}
+  const saved=await progress.save({version:remote.version,location,data:payload});
+  if(!disposed)remote={...saved,data:payload};
+ }).catch(async()=>{
+  if(disposed)return;stamp++;
+  try{
+   const current=await progress.load();if(disposed)return;
+   if(current?.data?.[storeKey]&&restoreState(current.data[storeKey])){
+    remote=current;announce("Estado remoto alterado ou falha no salvamento: o progresso remoto foi restaurado sem sobrescrever outra sessão.","bad");
+   }else{remote=null;announce("Não foi possível reconciliar a versão remota; novas gravações foram suspensas, mas a missão continua localmente.","bad");}
+  }catch(_){remote=null;announce("A sincronização falhou. O progresso remoto não está confirmado.","bad");}
+ });
+}
+function handleAction(action){
+ if(disposed||!ready)return;
+ const from=state.room,result=transition(state,action,DATA);
+ if(!result.changed){if((action.type==="collect"||action.type==="read")&&state.inventory.includes(action.id))detail(action.id);announce(result.message,result.kind);return;}
+ state=result.state;modified=true;
+ if(action.type==="collect")lastClue=action.id;
+ if(["travel","revisit","restart"].includes(action.type)){lastClue=null;drafts={};}
+ if(action.type==="solve"&&state.opened.includes(action.id))delete drafts[action.id];
+ render(state,from===state.room);persist();announce(result.message,result.kind);
+ if(action.type==="collect")detail(action.id);
+ if(["travel","revisit"].includes(action.type))$("room-title").focus({preventScroll:true});
+ if(action.type==="solve"&&state.opened.includes(action.id)){
+  const door=[...root.querySelectorAll("[data-travel]")].find(e=>e.dataset.travel===action.id&&!e.disabled);
+  (door||$("room-title")).focus({preventScroll:true});
+ }
+}
+function askReset(){
+ if(state.visited.length===1&&!state.inventory.length&&!state.opened.length&&!Object.keys(state.hints).length&&!Object.keys(state.wrong).length){handleAction({type:"restart"});return;}
+ $("confirm").hidden=false;$("yes").focus({preventScroll:true});announce("Recomeçar apagará o progresso atual. Confirme ou cancele.","note");
+}
+function destroy(){disposed=true;stamp++;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){if(container)container.replaceChildren(E("div","error","Não é possível começar: existem salas, pistas ou cadeados com dados inválidos ou dependências impossíveis."));return;}
+ render(state,false);
+ if(progress)try{
+  const existing=await progress.load();if(disposed)return;remote=existing;
+  if(!modified&&existing?.data?.[storeKey]&&!restoreState(existing.data[storeKey]))announce("O estado salvo é inválido ou incompatível com este jogo; nenhuma informação remota foi sobrescrita.","bad");
+ }catch(_){remote=null;announce("Falha ao carregar o progresso. A atividade funciona localmente sem sincronização confirmada.","bad");}
+ else announce("Modo independente ativo; não há sincronização de progresso confirmada.","note");
+ if(disposed)return;ready=true;render(state,false);
+}
+root.addEventListener("input",e=>{if(e.target?.dataset.answer)drafts[e.target.dataset.answer]=e.target.value;},{signal:controller.signal});
+root.addEventListener("submit",e=>{const f=e.target;if(!f?.dataset.formLock)return;e.preventDefault();const input=f.querySelector("input[data-answer]");if(input)handleAction({type:"solve",id:f.dataset.formLock,answer:input.value});},{signal:controller.signal});
+root.addEventListener("click",e=>{
+ const b=e.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.collect){handleAction({type:"collect",id:b.dataset.collect});return;}
+ if(b.dataset.read){handleAction({type:"read",id:b.dataset.read});return;}
+ if(b.dataset.hint){handleAction({type:"hint",id:b.dataset.hint});return;}
+ if(b.dataset.travel){handleAction({type:"travel",id:b.dataset.travel});return;}
+ if(b.dataset.revisit){handleAction({type:"revisit",target:b.dataset.revisit});return;}
+ if(b.id==="reset"){askReset();return;}
+ if(b.id==="yes"){$("confirm").hidden=true;handleAction({type:"restart"});$("reset").focus({preventScroll:true});return;}
+ if(b.id==="no"){$("confirm").hidden=true;$("reset").focus({preventScroll:true});announce("Reinício cancelado. O progresso foi preservado.");}
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();
+</script></body></html>
