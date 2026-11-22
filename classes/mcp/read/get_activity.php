@@ -113,6 +113,9 @@ final class get_activity extends base_tool {
             "draftsha256" => $revision ? $revision->sha256 : null,
             "html" => $revision ? untrusted_content::text($revision->content) : "",
             "publishedsha256" => $published ? $published->sha256 : null,
+            "questionselection" => json_decode($mcp->informationjson ?? "{}", true)["selection"] ?? "all",
+            "questionsperattempt" => json_decode($mcp->informationjson ?? "{}", true)["count"] ?? 0,
+            "shufflequestions" => json_decode($mcp->informationjson ?? "{}", true)["shuffle"] ?? false,
             "type" => $mcp->activitytype,
             "information" => $mcp->informationjson === null ? null :
                 json_decode($mcp->informationjson, true),

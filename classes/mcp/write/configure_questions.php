@@ -1,69 +1,30 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// Copyright 2026 Eduardo Kraus. GNU GPL v3 or later.
 
-/**
- * Confirmed MCP configuration of server-side native question selection.
- *
- * @package mod_mcp
- * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
-use mod_mcp\question\configuration;
-use mod_mcp\question\slots;
+use mod_mcp\content\metadata;
 use moodle_exception;
 
 /**
- * The plugin is discovered by local_mcp through the mod_mcp provider.
+ * Existing API name and schema; stores all/random/shuffle in information JSON.
  */
 final class configure_questions extends activity_tool {
-    /**
-     * Return the MCP tool name.
-     *
-     * @return string Tool name.
-     */
     public function get_name(): string {
         return "mcp_configure_questions";
     }
 
-    /**
-     * Return the human-readable title.
-     *
-     * @return string Tool title.
-     */
     public function get_title(): string {
-        return "MCP activity: configure native question selection";
+        return "MCP activity: configure JSON question selection";
     }
 
-    /**
-     * Describe the confirmed operation.
-     *
-     * @return string Tool description.
-     */
     public function get_description(): string {
-        return "Set all or random-subset selection and optional order shuffle, with a revision fingerprint; never publish.";
+        return "Choose all or a random subset and optionally shuffle question order. " .
+            "Operates on JSON questions, not Moodle Question Bank. Confirmation required.";
     }
 
-    /**
-     * Declare the required settings and optimistic-concurrency fingerprint.
-     *
-     * @return array JSON schema.
-     */
     public function get_input_schema(): array {
         return $this->object_schema([
             "cmid" => ["type" => "integer", "minimum" => 1],
@@ -74,64 +35,47 @@ final class configure_questions extends activity_tool {
         ], ["cmid", "questionselection", "questionsperattempt", "shufflequestions", "expectedhash"]);
     }
 
-    /**
-     * Apply validation before previews and writes.
-     *
-     * @param array $arguments User-supplied options and fingerprint.
-     * @return array Validated settings.
-     */
     private function proposed(array $arguments): array {
         $mcp = $this->activity($arguments);
-        $hash = configuration::fingerprint($mcp);
+        if ($mcp->activitytype !== "quiz") {
+            throw new moodle_exception("questionnotconfigured", "mcp");
+        }
+        $hash = metadata::fingerprint($mcp);
         if (!hash_equals($hash, (string)$arguments["expectedhash"])) {
             throw new moodle_exception("revisionconflict", "mcp");
         }
-        $mode = (string)$arguments["questionselection"];
+        $info = metadata::information($mcp);
+        $available = count($info["questions"] ?? []);
+        $mode = $arguments["questionselection"];
         $count = (int)$arguments["questionsperattempt"];
-        $shuffle = $arguments["shufflequestions"] === true ? 1 : 0;
-        configuration::validate($mode, $count, $shuffle);
-        $available = count(slots::active((int)$mcp->id));
-        if ($mode === "random" && $count > $available) {
+        $shuffle = $arguments["shufflequestions"] === true;
+        if (!in_array($mode, ["all", "random"], true) || $count < 0 ||
+                ($mode === "random" && ($count < 1 || $count > $available))) {
             throw new moodle_exception("invalidquestioncount", "mcp");
         }
+        $info["selection"] = $mode;
+        $info["count"] = $mode === "all" ? 0 : $count;
+        $info["shuffle"] = $shuffle;
+        metadata::validate("quiz", $info);
         return ["cmid" => (int)$arguments["cmid"], "questionselection" => $mode,
-            "questionsperattempt" => $mode === "all" ? 0 : $count,
-            "shufflequestions" => (bool)$shuffle, "available" => $available,
-            "expectedhash" => $hash];
+            "questionsperattempt" => $info["count"], "shufflequestions" => $shuffle,
+            "available" => $available, "expectedhash" => $hash, "information" => $info];
     }
 
-    /**
-     * Preview a configuration update without persisting changes.
-     *
-     * @param array $arguments Requested configuration.
-     * @param authenticated_identity $identity Connected Moodle user.
-     * @return array Safe preview without academic records.
-     */
     public function preview(array $arguments, authenticated_identity $identity): array {
-        return $this->proposed($arguments) + ["published" => false];
+        $proposed = $this->proposed($arguments);
+        unset($proposed["information"]);
+        return $proposed + ["published" => false];
     }
 
-    /**
-     * Persist only the settings after explicit MCP confirmation.
-     *
-     * @param array $arguments Confirmed configuration.
-     * @param authenticated_identity $identity Connected Moodle user.
-     * @return array Stored settings.
-     */
     public function execute(array $arguments, authenticated_identity $identity): array {
-        global $DB;
         $this->resolve_context($arguments);
-        $transaction = $DB->start_delegated_transaction();
         $proposed = $this->proposed($arguments);
         $mcp = $this->activity($arguments);
-        $DB->update_record("mcp", (object)[
-            "id" => $mcp->id,
-            "questionselection" => $proposed["questionselection"],
-            "questionsperattempt" => $proposed["questionsperattempt"],
-            "shufflequestions" => $proposed["shufflequestions"] ? 1 : 0,
-            "timemodified" => time(),
-        ]);
-        $transaction->allow_commit();
+        $hash = metadata::save((int)$mcp->id, "quiz",
+            $proposed["information"], $arguments["expectedhash"]);
+        unset($proposed["information"]);
+        $proposed["settingshash"] = $hash;
         return $proposed + ["published" => false];
     }
 }

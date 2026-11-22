@@ -51,3 +51,27 @@
         <button class="btn btn-primary" type="submit">{{#str}}savedraft, mcp{{/str}}</button>
     </form>
 </section>
+
+<section class="card p-4 my-3">
+    <h2>{{#str}}informationtitle, mcp{{/str}}</h2>
+    <form action="{{actionurl}}" method="post">
+        <input type="hidden" name="sesskey" value="{{sesskey}}">
+        <input type="hidden" name="id" value="{{cmid}}">
+        <input type="hidden" name="settingshash" value="{{settingshash}}">
+        <input type="hidden" name="action" value="saveinfo">
+        <div class="mb-3">
+            <label class="form-label" for="mod-mcp-type">{{#str}}activitytype, mcp{{/str}}</label>
+            <input class="form-control" id="mod-mcp-type" name="type" maxlength="40"
+                   value="{{activitytype}}" pattern="[a-z][a-z0-9_]*"
+                   placeholder="quiz, survey, timeline, case, simulation...">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="mod-mcp-information">{{#str}}informationjson, mcp{{/str}}</label>
+            <textarea class="form-control font-monospace" rows="18" id="mod-mcp-information"
+                      name="information" spellcheck="false"
+                      aria-describedby="mod-mcp-information-help">{{informationjson}}</textarea>
+            <p class="form-text" id="mod-mcp-information-help">{{#str}}informationhelp, mcp{{/str}}</p>
+        </div>
+        <button class="btn btn-primary" type="submit">{{#str}}saveinformation, mcp{{/str}}</button>
+    </form>
+</section>

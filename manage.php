@@ -23,6 +23,7 @@
  */
 
 use mod_mcp\content\service;
+use mod_mcp\content\metadata;
 use mod_mcp\output\activity;
 
 require_once(__DIR__ . "/../../config.php");
@@ -42,6 +43,14 @@ if (data_submitted() && $action === "save") {
     service::save((int)$mcp->id, $content, (int)$USER->id, $expectedrevision);
     redirect(new moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]),
         get_string("draftsaved", "mcp"));
+} else if (data_submitted() && $action === "saveinfo") {
+    require_sesskey();
+    $type = trim(optional_param("type", "", PARAM_TEXT));
+    $information = trim(optional_param("information", "", PARAM_RAW));
+    metadata::save((int)$mcp->id, $type ?: null,
+        $information === "" ? null : $information, required_param("settingshash", PARAM_ALPHANUMEXT));
+    redirect(new moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]),
+        get_string("draftsaved", "mcp"));
 } else if (data_submitted() && $action === "publish") {
     require_sesskey();
     $revision = required_param("revision", PARAM_INT);
@@ -57,6 +66,11 @@ $PAGE->set_cm($cm, $course);
 $draft = service::get((int)$mcp->id, (int)$mcp->draftrevision);
 $data = [
     "draftcontent" => $draft ? $draft->content : "",
+    "activitytype" => $mcp->activitytype ?? "",
+    "informationjson" => $mcp->informationjson === null ? "" :
+        json_encode(json_decode($mcp->informationjson, true),
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE),
+    "settingshash" => metadata::fingerprint($mcp),
     "prompt" => activity::prompt($mcp, $cm),
     "promptpage" => activity::prompt($mcp, $cm, "page"),
     "promptoptions" => activity::prompt_options($mcp, $cm),
