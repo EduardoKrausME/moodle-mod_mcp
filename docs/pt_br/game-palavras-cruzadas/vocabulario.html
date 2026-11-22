@@ -1,6 +1,29 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Palavras cruzadas</title><style>
 :root{font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:#263452;background:#fff6ed;--accent:#bb6b38}*{box-sizing:border-box}body{margin:0;padding:39px 36px 52px}main{max-width:875px;margin:auto}.eyebrow{font-size:11px;text-transform:uppercase;color:var(--accent);font-weight:820;letter-spacing:1.8px}h1{font-size:38px;line-height:1.12;margin:9px 0 13px;letter-spacing:-1px}h2{font-size:21px}header p{color:#67748d;max-width:650px;font-size:15px}.panel{background:white;border:1px solid #e0e4f1;border-radius:18px;padding:27px;margin-top:26px;box-shadow:0 10px 30px #2d39610a}.small{color:#78839a;font-size:13px}.btn{font:inherit;font-size:14px;font-weight:730;background:var(--accent);border:1px solid var(--accent);color:white;border-radius:10px;padding:11px 15px;cursor:pointer}.btn.alt{color:var(--accent);background:#fff}.btn:disabled{opacity:.4;cursor:not-allowed}.status{margin:17px 0 0;color:#52617c;font-weight:660;min-height:20px}.status.good{color:#1b8565}.status.warn{color:#a56326}.grid{display:grid;gap:12px}.twocol{grid-template-columns:repeat(2,minmax(0,1fr))}.threecol{grid-template-columns:repeat(3,minmax(0,1fr))}.card-btn{background:#fff;border:1px solid #dce1ee;border-radius:12px;min-height:70px;padding:16px;font:inherit;font-size:16px;font-weight:740;color:#384765;cursor:pointer}.card-btn:hover,.card-btn.selected{border-color:var(--accent);background:#f0effe}.card-btn.matched{background:#e6f7ef;border-color:#85c8ac;color:#26795b}.actions{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}.smallbtn{border:1px solid #dbe0eb;background:white;border-radius:7px;color:var(--accent);padding:6px 11px;font:inherit;cursor:pointer}.game-grid{display:grid;gap:5px;width:max-content;max-width:100%}.word-grid{grid-template-columns:repeat(8,40px)}.letter{border:1px solid #d7ddeb;width:40px;height:40px;border-radius:7px;background:#fff;font:inherit;font-weight:780;color:#384662;cursor:pointer}.letter.selected{background:#e4dfff;border-color:var(--accent)}.letter.found{background:#d3f4e4;border-color:#39aa82}.tiles{grid-template-columns:repeat(3,90px);background:#e5e5f4;padding:8px;border-radius:12px}.tile{width:90px;height:90px;border:0;background:var(--accent);color:white;font-size:25px;font-weight:800;border-radius:9px;cursor:pointer}.tile.empty{background:transparent}.bucket{min-height:95px;border:2px dashed #bfc5de;padding:13px;border-radius:11px}.bucket h3{margin:0 0 8px;font-size:14px}.terms{display:flex;flex-wrap:wrap;gap:8px}.term{border:1px solid #d6dbea;background:#fff;padding:10px 13px;border-radius:8px;cursor:grab;font:inherit;font-weight:670}.term.selected{outline:2px solid var(--accent)}.term.placed{background:#e0f7ed;border-color:#6ac09d}.crossword{display:grid;grid-template-columns:repeat(5,46px);gap:3px;width:max-content;background:#1d2741;padding:6px;border-radius:10px}.crossword input{width:46px;height:46px;border:0;border-radius:4px;text-align:center;font-size:20px;font-weight:800;text-transform:uppercase;color:#26344e}.crossword .empty{background:#26324f}.kbd{display:flex;gap:7px;flex-wrap:wrap;max-width:520px}.kbd button{width:43px;height:42px;border:1px solid #dce1ed;border-radius:8px;background:#fff;font:inherit;font-weight:700;color:#394865;cursor:pointer}.kbd button:disabled{background:#edf0f7;opacity:.45}.blank{font-size:31px;letter-spacing:10px;font-weight:800;overflow-wrap:anywhere}.pair-row{display:flex;gap:15px;align-items:center;margin:10px 0;padding:9px;background:#f8f9fc;border-radius:11px}.pair-row b{font-size:27px;width:46px;text-align:center}.pair-row select{flex:1;padding:11px;border-radius:8px;border:1px solid #d8ddeb;background:#fff;font:inherit;max-width:90%}.ordered{display:grid;gap:9px}.ordered-row{display:flex;align-items:center;gap:12px;border:1px solid #dfe3ee;border-radius:11px;padding:12px 14px}.ordered-row span{flex:1}.scene-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.scene{position:relative;border:1px solid #dce3ee;border-radius:12px;overflow:hidden}.scene svg{width:100%;height:auto;display:block}.hotspot{position:absolute;background:transparent;border:2px solid transparent;border-radius:50%;width:19%;height:24%;transform:translate(-50%,-50%);cursor:pointer}.hotspot.found{border-color:#2fa87f;background:#21a57b33}.bingo{display:grid;grid-template-columns:repeat(4,64px);gap:5px}.bingo button{border:1px solid #dce0ed;border-radius:9px;width:64px;height:64px;background:#fff;color:#3e4a65;font:inherit;font-size:21px;font-weight:800;cursor:pointer}.bingo button.marked{background:#d8f4e9;border-color:#58ba93;color:#1e7a59}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #9d8df0;outline-offset:2px}@media(max-width:650px){body{padding:24px 16px}.panel{padding:18px}h1{font-size:29px}.twocol,.scene-grid{grid-template-columns:1fr}.word-grid{grid-template-columns:repeat(8,31px)}.letter{width:31px;height:31px}.tiles{grid-template-columns:repeat(3,72px)}.tile{width:72px;height:72px}.crossword{grid-template-columns:repeat(5,39px)}.crossword input{width:39px;height:39px}.bingo{grid-template-columns:repeat(4,52px)}.bingo button{width:52px;height:52px}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
-</style></head><body><main><header><span class="eyebrow">GAME EDUCATIVO · Palavras cruzadas</span><h1>Palavras cruzadas</h1><p>Preencha um cruzamento de três palavras por meio de pistas.</p></header><div id="game"></div></main><script>(function gameEngine(c){
+
+/* Crossword: 26 palavras, pistas numeradas e navegação acessível também no celular. */
+.crossword-page main{max-width:1120px}
+.crossword-page .crossword-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+.crossword-page .crossword-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;padding:3px 3px 12px}
+.crossword-page .crossword{width:max-content;max-width:none;display:grid;grid-template-columns:repeat(var(--cw-cols),var(--cw-cell));gap:2px;background:#26324f;border-radius:9px;padding:5px}
+.crossword-page .cw-square{position:relative;width:var(--cw-cell);height:var(--cw-cell);background:#fff;border-radius:3px}
+.crossword-page .cw-square.empty{background:#26324f}
+.crossword-page .cw-square input{width:100%;height:100%;border:0;border-radius:3px;background:transparent;padding:10px 1px 1px;text-align:center;color:#24344c;font-size:clamp(15px,1.6vw,22px);font-weight:800;text-transform:uppercase}
+.crossword-page .cw-square .cw-number{position:absolute;top:1px;left:3px;color:#54617b;font-size:10px;font-weight:750;line-height:1;pointer-events:none}
+.crossword-page .cw-square.active-word{background:#fff3d9}
+.crossword-page .cw-square.active-word:focus-within{background:#ffdfa1}
+.crossword-page .cw-square.correct-word{background:#e1f6e9}
+.crossword-page .cw-square input:focus-visible{outline:2px solid #bb6b38;outline-offset:-2px}
+.crossword-page .cw-clues{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.crossword-page .cw-clues h3{font-size:16px;color:#3b4b69;margin:0 0 12px}
+.crossword-page .cw-clues ol{padding:0;list-style:none;display:grid;gap:5px;margin:0}
+.crossword-page .cw-clues li{margin:0}
+.crossword-page .cw-clue{display:block;width:100%;text-align:left;border:1px solid transparent;border-radius:8px;background:transparent;color:#374862;font:inherit;font-size:14px;line-height:1.45;padding:8px;cursor:pointer}
+.crossword-page .cw-clue:hover,.crossword-page .cw-clue.selected{background:#fff0df;border-color:#e7bd99}
+.crossword-page .cw-clue.correct{color:#267451;background:#e5f8ed}
+.crossword-page #cw-counter{margin:8px 0;color:#52617c;font-weight:650}
+@media(max-width:650px){.crossword-page .cw-clues{grid-template-columns:1fr}.crossword-page .crossword{--cw-cell:34px!important}.crossword-page .cw-square input{font-size:17px}.crossword-page .cw-clue{font-size:14px}}
+</style></head><body class="crossword-page"><main><header><span class="eyebrow">GAME EDUCATIVO · Palavras cruzadas</span><h1>Palavras cruzadas</h1><p>Resolva 26 palavras interligadas com pistas sobre natureza e cotidiano.</p></header><div id="game"></div></main><script>(function gameEngine(c){
 const root=document.getElementById("game");let state={};
 const escape=s=>{const a=document.createElement("div");a.textContent=String(s);return a.innerHTML;};
 const panel=markup=>{root.innerHTML=`<section class="panel">${markup}<p id="game-status" class="status" role="status" aria-live="polite"></p></section>`;};
@@ -31,60 +54,118 @@ function drag(){
  root.querySelectorAll("[data-target]").forEach(z=>{z.onclick=()=>assign(z.dataset.target);z.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();assign(z.dataset.target);}};z.addEventListener("dragover",e=>e.preventDefault());z.addEventListener("drop",e=>{e.preventDefault();const value=e.dataTransfer.getData("text/plain");if(/^\d+$/.test(value))selected=+value;assign(z.dataset.target);});});
 }
 function crossword(){
- const correct=new Map(),words=[];
- function place(word,row,col,dr,dc){
-  const keys=[...word].map((letter,i)=>{const key=`${row+i*dr}-${col+i*dc}`;correct.set(key,letter);return key;});
-  words.push({keys,direction:dr?"vertical":"horizontal"});
- }
- place("LUA",2,0,0,1);place("MAR",1,2,1,0);place("RUA",3,2,0,1);
- panel(`<h2>Complete as palavras cruzadas</h2><p class="small">Horizontal: satélite natural da Terra (3); via urbana (3). Vertical: grande extensão de água salgada (3).</p><p class="small">Digite uma letra para avançar. Para corrigir, selecione a célula e digite outra letra. Use as setas para mudar a direção.</p><div class="crossword">${Array.from({length:25},(_,k)=>{const key=`${Math.floor(k/5)}-${k%5}`;return correct.has(key)?`<input maxlength="1" aria-label="Letra linha ${Math.floor(k/5)+1}, coluna ${k%5+1}" data-key="${key}" autocomplete="off" autocapitalize="characters" spellcheck="false">`:"<span class='empty'></span>";}).join("")}</div><div class="actions"><button id="check" class="btn">Conferir cruzadinha</button><button id="clean" class="btn alt">Limpar</button></div>`);
- const inputs=[...root.querySelectorAll("[data-key]")];
- const byKey=new Map(inputs.map(input=>[input.dataset.key,input]));
+ const rows=22,cols=17;
+ const entries=[{"answer":"CHUVA","row":0,"col":5,"direction":"H","clue":"Precipitação de gotas de água das nuvens."},{"answer":"CIDADE","row":0,"col":5,"direction":"V","clue":"Área urbana com ruas, bairros e serviços."},{"answer":"LAGO","row":2,"col":13,"direction":"H","clue":"Massa de água cercada por terra."},{"answer":"ARVORE","row":3,"col":5,"direction":"H","clue":"Planta de tronco lenhoso e copa."},{"answer":"ESTRELA","row":3,"col":10,"direction":"V","clue":"Astro que produz sua própria luz, como o Sol."},{"answer":"ANIMAL","row":2,"col":14,"direction":"V","clue":"Ser vivo que se alimenta de outros organismos."},{"answer":"FLORESTA","row":6,"col":7,"direction":"H","clue":"Área com grande concentração de árvores."},{"answer":"TERRA","row":8,"col":12,"direction":"V","clue":"Planeta em que vivemos."},{"answer":"VENTO","row":9,"col":8,"direction":"V","clue":"Ar em movimento."},{"answer":"AREIA","row":9,"col":10,"direction":"H","clue":"Grãos que formam grande parte das praias."},{"answer":"AGUA","row":9,"col":14,"direction":"V","clue":"Substância essencial à vida, encontrada em rios e mares."},{"answer":"NUVEM","row":10,"col":5,"direction":"H","clue":"Conjunto visível de gotículas ou cristais na atmosfera."},{"answer":"MONTANHA","row":12,"col":5,"direction":"H","clue":"Grande elevação natural do relevo."},{"answer":"OCEANO","row":12,"col":6,"direction":"V","clue":"Imensa extensão de água salgada."},{"answer":"JARDIM","row":13,"col":3,"direction":"V","clue":"Espaço com plantas cultivadas para lazer ou ornamentação."},{"answer":"DIA","row":13,"col":13,"direction":"V","clue":"Período iluminado pelo Sol, em oposição à noite."},{"answer":"PLANTA","row":15,"col":8,"direction":"H","clue":"Ser vivo que geralmente faz fotossíntese."},{"answer":"NOITE","row":15,"col":11,"direction":"V","clue":"Período em que o Sol está abaixo do horizonte local."},{"answer":"ENERGIA","row":15,"col":0,"direction":"H","clue":"Capacidade de produzir trabalho ou provocar transformações."},{"answer":"SOL","row":17,"col":5,"direction":"H","clue":"Estrela central do Sistema Solar."},{"answer":"RIO","row":17,"col":10,"direction":"H","clue":"Curso natural de água que flui por um leito."},{"answer":"LUA","row":17,"col":7,"direction":"V","clue":"Satélite natural da Terra."},{"answer":"MAR","row":18,"col":13,"direction":"V","clue":"Porção do oceano próxima ou parcialmente cercada por terra."},{"answer":"NATUREZA","row":19,"col":6,"direction":"H","clue":"Conjunto dos seres vivos e dos elementos do mundo físico."},{"answer":"RUA","row":19,"col":10,"direction":"V","clue":"Via urbana usada por pedestres e veículos."},{"answer":"PRAIA","row":21,"col":6,"direction":"H","clue":"Faixa de areia ou pedras junto a um corpo de água."}];
+ const correct=new Map(),starts=new Map(),words=[];
+ const entryStarts=new Map();
+ entries.forEach((entry,id)=>{
+  const keys=[...entry.answer].map((letter,i)=>{
+   const row=entry.row+(entry.direction==="V"?i:0),col=entry.col+(entry.direction==="H"?i:0),key=row+"-"+col;
+   if(row<0||col<0||row>=rows||col>=cols||(correct.has(key)&&correct.get(key)!==letter)){
+    throw new Error("Palavras cruzadas com posição inválida: "+entry.answer);
+   }
+   correct.set(key,letter);return key;
+  });
+  const start=keys[0];entryStarts.set(id,start);
+  words.push({...entry,id,keys,direction:entry.direction==="H"?"horizontal":"vertical"});
+ });
+ const ordered=words.slice().sort((a,b)=>a.row-b.row||a.col-b.col);
+ let nextNumber=0;
+ ordered.forEach(word=>{
+  const key=entryStarts.get(word.id);
+  if(!starts.has(key))starts.set(key,++nextNumber);
+  word.number=starts.get(key);
+ });
+ const alphabetLabel=word=>word.number+" "+(word.direction==="horizontal"?"horizontal":"vertical");
+ const hints=direction=>words.filter(w=>w.direction===direction).sort((a,b)=>a.number-b.number).map(word=>
+   '<li><button type="button" class="cw-clue" data-word="'+word.id+'">'+word.number+'. '+escape(word.clue)+' ('+word.answer.length+')</button></li>'
+ ).join("");
+ panel('<h2>26 palavras para descobrir</h2>'+
+  '<p class="small">Complete as palavras a partir das pistas. Clique em uma pista para começar, digite uma letra para avançar automaticamente e substitua qualquer letra digitando outra. Nos cruzamentos, use as setas para mudar de direção. As respostas são escritas sem acentos.</p>'+
+  '<p id="cw-counter" aria-live="polite">0 de '+words.length+' palavras corretas.</p>'+
+  '<div class="crossword-layout"><div class="crossword-scroll" role="region" tabindex="0" aria-label="Tabuleiro de palavras cruzadas; deslize horizontalmente no celular">'+
+  '<div class="crossword" id="cw-grid" style="--cw-cols:'+cols+';--cw-cell:40px">'+
+  Array.from({length:rows*cols},(_,i)=>{
+   const row=Math.floor(i/cols),col=i%cols,key=row+"-"+col;
+   if(!correct.has(key))return '<span class="cw-square empty" aria-hidden="true"></span>';
+   const number=starts.get(key);
+   return '<span class="cw-square" data-cell="'+key+'">'+(number?'<span class="cw-number" aria-hidden="true">'+number+'</span>':"")+
+    '<input data-key="'+key+'" maxlength="1" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Linha '+(row+1)+', coluna '+(col+1)+(number?", início "+number:"")+'"></span>';
+  }).join("")+'</div></div>'+
+  '<div class="cw-clues"><section aria-label="Pistas horizontais"><h3>Horizontais</h3><ol>'+hints("horizontal")+'</ol></section>'+
+  '<section aria-label="Pistas verticais"><h3>Verticais</h3><ol>'+hints("vertical")+'</ol></section></div></div>'+
+  '<div class="actions"><button id="check" class="btn">Conferir palavras</button><button id="clean" class="btn alt">Limpar respostas</button></div>');
+ const inputs=[...root.querySelectorAll("#cw-grid input")],byKey=new Map(inputs.map(input=>[input.dataset.key,input]));
+ const byId=new Map(words.map(word=>[word.id,word]));
  let activeWord=null;
- function selectWord(input){
-  if(activeWord&&activeWord.keys.includes(input.dataset.key))return;
-  const candidates=words.filter(word=>word.keys.includes(input.dataset.key));
-  activeWord=candidates.find(word=>word.direction==="horizontal")||candidates[0];
+ function candidates(key){return words.filter(word=>word.keys.includes(key));}
+ function highlight(){
+  root.querySelectorAll(".cw-square.active-word").forEach(square=>square.classList.remove("active-word"));
+  root.querySelectorAll(".cw-clue.selected").forEach(button=>button.classList.remove("selected"));
+  if(!activeWord)return;
+  for(const key of activeWord.keys){
+   const square=byKey.get(key)?.closest(".cw-square");if(square)square.classList.add("active-word");
+  }
+  root.querySelector('[data-word="'+activeWord.id+'"]')?.classList.add("selected");
  }
- function focusCell(input){if(input){input.focus();input.select();}}
- function enterLetter(input,text){
-  const letters=[...text.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleUpperCase("pt-BR")].filter(letter=>/^[A-Z]$/.test(letter));
-  if(!letters.length)return;
+ function selectWord(input,prefer){
+  const choices=candidates(input.dataset.key);
+  if(prefer){activeWord=choices.find(word=>word.id===prefer.id)||choices[0];}
+  else if(!activeWord||!activeWord.keys.includes(input.dataset.key)){
+   activeWord=choices.find(word=>word.direction==="horizontal")||choices[0];
+  }
+  highlight();
+ }
+ function focusCell(input){if(input){input.focus({preventScroll:true});input.select();input.scrollIntoView({block:"nearest",inline:"nearest"});}}
+ function enterLetter(input,value){
+  const letter=[...value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleUpperCase("pt-BR")].findLast(ch=>/^[A-Z]$/.test(ch));
+  if(!letter)return;
   selectWord(input);
-  input.value=letters[letters.length-1];
+  input.value=letter;
+  clearCorrectHighlight();
   const next=byKey.get(activeWord.keys[activeWord.keys.indexOf(input.dataset.key)+1]);
   if(next)focusCell(next);else input.select();
  }
+ function clearCorrectHighlight(){
+  root.querySelectorAll(".cw-square.correct-word").forEach(square=>square.classList.remove("correct-word"));
+  root.querySelectorAll(".cw-clue.correct").forEach(button=>button.classList.remove("correct"));
+ }
  inputs.forEach(input=>{
   input.addEventListener("focus",()=>{selectWord(input);input.select();});
-  input.addEventListener("click",()=>input.select());
+  input.addEventListener("click",()=>{
+   const choices=candidates(input.dataset.key);
+   if(choices.length>1&&activeWord&&choices.some(w=>w.id===activeWord.id)){
+    activeWord=choices.find(w=>w.id!==activeWord.id)||activeWord;highlight();
+   }
+   input.select();
+  });
   input.addEventListener("keydown",event=>{
    if(event.key.startsWith("Arrow")){
     const steps={ArrowRight:[0,1,"horizontal"],ArrowLeft:[0,-1,"horizontal"],ArrowDown:[1,0,"vertical"],ArrowUp:[-1,0,"vertical"]};
     const step=steps[event.key];
     if(!step)return;
-    const [row,col]=input.dataset.key.split("-").map(Number);
-    const target=byKey.get(`${row+step[0]}-${col+step[1]}`);
+    const [r,c]=input.dataset.key.split("-").map(Number);
+    const target=byKey.get((r+step[0])+"-"+(c+step[1]));
     if(target){
      event.preventDefault();
-     activeWord=words.find(word=>word.direction===step[2]&&word.keys.includes(input.dataset.key)&&word.keys.includes(target.dataset.key))||activeWord;
+     const word=words.find(w=>w.direction===step[2]&&w.keys.includes(input.dataset.key)&&w.keys.includes(target.dataset.key));
+     if(word)activeWord=word;
      focusCell(target);
     }
    }else if(event.key==="Backspace"){
-    event.preventDefault();
-    selectWord(input);
+    event.preventDefault();selectWord(input);clearCorrectHighlight();
     if(input.value){input.value="";return;}
-    const previous=byKey.get(activeWord.keys[activeWord.keys.indexOf(input.dataset.key)-1]);
-    if(previous){previous.value="";focusCell(previous);}
+    const prev=byKey.get(activeWord.keys[activeWord.keys.indexOf(input.dataset.key)-1]);
+    if(prev){prev.value="";focusCell(prev);}
+   }else if(event.key==="Delete"){
+    event.preventDefault();input.value="";clearCorrectHighlight();
    }else if(!event.ctrlKey&&!event.metaKey&&!event.altKey&&!event.isComposing&&/^[a-zA-ZÀ-ÿ]$/.test(event.key)){
-    event.preventDefault();
-    enterLetter(input,event.key);
+    event.preventDefault();enterLetter(input,event.key);
    }
   });
   input.addEventListener("beforeinput",event=>{
    if(!event.isComposing&&event.data&&(event.inputType==="insertText"||event.inputType==="insertReplacementText")){
-    event.preventDefault();
-    enterLetter(input,event.data);
+    event.preventDefault();enterLetter(input,event.data);
    }
   });
   input.addEventListener("input",event=>{
@@ -92,8 +173,32 @@ function crossword(){
   });
   input.addEventListener("compositionend",()=>{if(input.value)enterLetter(input,input.value);});
  });
- root.querySelector("#check").onclick=()=>{const count=inputs.filter(input=>input.value.trim().toLocaleUpperCase("pt-BR")===correct.get(input.dataset.key)).length;status(count===correct.size?"Parabéns! Todas as letras estão corretas.":`${count} de ${correct.size} letras corretas.`,count===correct.size);};
- root.querySelector("#clean").onclick=()=>{inputs.forEach(input=>input.value="");status("Tabuleiro limpo.");};
+ root.querySelectorAll("[data-word]").forEach(button=>button.addEventListener("click",()=>{
+  const word=byId.get(Number(button.dataset.word));if(!word)return;
+  activeWord=word;highlight();
+  const first=word.keys.map(key=>byKey.get(key)).find(input=>!input.value)||byKey.get(word.keys[0]);
+  focusCell(first);
+ }));
+ root.querySelector("#check").onclick=()=>{
+  clearCorrectHighlight();
+  let count=0;
+  for(const word of words){
+   if(word.keys.every((key,i)=>byKey.get(key).value.toUpperCase()===word.answer[i])){
+    count++;
+    root.querySelector('[data-word="'+word.id+'"]')?.classList.add("correct");
+    for(const key of word.keys)byKey.get(key).closest(".cw-square").classList.add("correct-word");
+   }
+  }
+  root.querySelector("#cw-counter").textContent=count+" de "+words.length+" palavras corretas.";
+  status(count===words.length?"Parabéns! Você completou as 26 palavras cruzadas!":count+" de "+words.length+" palavras corretas. Revise as demais.",count===words.length);
+ };
+ root.querySelector("#clean").onclick=()=>{
+  inputs.forEach(input=>input.value="");
+  clearCorrectHighlight();
+  root.querySelector("#cw-counter").textContent="0 de "+words.length+" palavras corretas.";
+  status("Respostas apagadas. Você pode começar novamente.");
+  if(activeWord)focusCell(byKey.get(activeWord.keys[0]));
+ };
 }
 function anagram(){
  const rounds=[["SOURC","CURSO","Ambiente de aprendizagem organizado em módulos."],["VORIL","LIVRO","Recurso composto por capítulos."],["LUAA","AULA","Encontro de ensino e aprendizagem."]];let round=0,selected=[];
@@ -130,4 +235,4 @@ function bingo(){
  function draw(){panel(`<h2>Bingo de números</h2><p class="small">Sorteie um número e marque-o no tabuleiro. Complete uma linha, coluna ou diagonal.</p><div class="bingo">${numbers.map((n,i)=>`<button data-i="${i}" class="${marked.has(i)?"marked":""}" aria-pressed="${marked.has(i)}">${n}</button>`).join("")}</div><div class="actions"><button id="draw" class="btn" ${drawn.size===16?"disabled":""}>Sortear número</button><button id="reset" class="btn alt">Novo jogo</button></div><p id="called" class="small">Sorteados: ${[...drawn].join(", ")||"nenhum"}</p>`);root.querySelector("#reset").onclick=bingo;root.querySelector("#draw").onclick=()=>{const left=numbers.filter(x=>!drawn.has(x));const val=left[Math.floor(Math.random()*left.length)];drawn.add(val);draw();status("Número sorteado: "+val);};root.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,n=numbers[i];if(!drawn.has(n)){status("Esse número ainda não foi sorteado.");return;}marked.has(i)?marked.delete(i):marked.add(i);draw();if(hasBingo())status("BINGO! Você completou uma linha, coluna ou diagonal.",true);else status("Número "+n+" marcado.",true);});}draw();
 }
 switch(c.mode){case"memory":memory();break;case"search":search();break;case"puzzle":puzzle();break;case"drag":drag();break;case"crossword":crossword();break;case"anagram":anagram();break;case"order":order();break;case"hangman":hangman();break;case"iconmatch":iconmatch();break;case"quick":quick();break;case"differences":differences();break;case"bingo":bingo();break;}
-})({"title":"Palavras cruzadas","subtype":"Palavras cruzadas","kind":"Palavras cruzadas","subtitle":"Preencha um cruzamento de três palavras por meio de pistas.","mode":"crossword","accent":"#bb6b38","background":"#fff6ed"});</script></body></html>
+})({"title":"Palavras cruzadas","subtype":"Palavras cruzadas","kind":"Palavras cruzadas","subtitle":"Resolva 26 palavras interligadas com pistas sobre natureza e cotidiano.","mode":"crossword","accent":"#bb6b38","background":"#fff6ed"});</script></body></html>
