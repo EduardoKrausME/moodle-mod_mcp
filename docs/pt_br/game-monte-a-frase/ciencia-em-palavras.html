@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Monte a frase - Ciência em palavras</title><style>
+:root{font:16px/1.52 system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:light;--bg:#f4f3fc;--paper:#fff;--ink:#2e3354;--muted:#697290;--line:#dce0f1;--violet:#5747b8;--violet-dark:#43369c;--violet-bg:#eeebff;--good:#116d57;--good-bg:#e1f6ed;--warn:#94612a;--warn-bg:#fff3e5;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #eea43b;outline-offset:3px}button:disabled{cursor:not-allowed;opacity:.46}
+main{max-width:1180px;margin:auto;padding:32px 20px 48px}.eyebrow{margin:0 0 7px;font-size:11px;letter-spacing:1.5px;color:var(--violet);text-transform:uppercase;font-weight:860}h1{margin:0 0 10px;font-size:clamp(29px,4vw,43px);letter-spacing:-.9px;line-height:1.17}
+.intro{max-width:950px;font-size:14px;color:var(--muted);margin:0 0 19px}.stats{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:13px}.stat{min-width:110px;border:1px solid var(--line);border-radius:11px;background:var(--paper);padding:8px 14px}.stat small{display:block;font-size:11px;color:var(--muted)}.stat strong{font-variant-numeric:tabular-nums;font-size:20px}
+.stats-note{font-size:11px;color:var(--muted);margin-left:auto}.progress{background:#dde0ef;height:9px;overflow:hidden;border-radius:20px;margin-bottom:18px}.progress span{display:block;height:100%;background:linear-gradient(90deg,#6654c5,#4bb49f);width:0;transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(265px,.73fr);gap:16px;align-items:start}.panel{padding:22px;background:var(--paper);border:1px solid var(--line);border-radius:19px;min-width:0;box-shadow:0 8px 29px #22286108}.panel h2{font-size:18px;margin:0 0 10px}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap}.topline small{font-size:12px;font-weight:800;color:var(--muted)}.tag{font-size:11px;font-weight:850;border-radius:30px;background:var(--violet-bg);color:var(--violet);padding:7px 11px}
+.challenge{font-size:clamp(22px,3vw,30px);margin:15px 0 9px;letter-spacing:-.45px;line-height:1.25}.task{font-size:13px;color:var(--muted);margin:0 0 18px}
+.subhead{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:0 0 9px}.subhead strong{font-size:13px}.subhead span{font-size:12px;color:var(--muted)}
+.sentence-zone{border:2px dashed #a9a1dc;border-radius:14px;padding:16px;min-height:116px;background:linear-gradient(145deg,#faf9ff,#f0efff);margin-bottom:17px}
+.sentence-zone.empty{display:grid;align-items:center}.empty-instruction{font-size:13px;color:#6d67a0;text-align:center;margin:12px}.chips{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.phrase-chip{border:1px solid #bdb3e9;border-radius:10px;background:white;box-shadow:0 3px 10px #3323770b;padding:8px;display:flex;align-items:center;gap:5px;max-width:100%}
+.phrase-chip .word{border:0;background:transparent;color:var(--ink);font-size:15px;font-weight:830;padding:6px 4px;white-space:normal;overflow-wrap:anywhere;text-align:center;cursor:pointer}
+.phrase-chip .arrow{width:29px;height:29px;display:grid;place-items:center;border:1px solid #cfd0e7;border-radius:7px;background:#f2f0fb;color:var(--violet);font-size:15px;font-weight:900;cursor:pointer}
+.phrase-chip .arrow:disabled{opacity:.33}.phrase-chip .word:hover:not(:disabled){color:var(--violet);text-decoration:underline}
+.bank{background:#f6f8ff;border:1px solid var(--line);border-radius:13px;padding:15px;min-height:109px}.bank .chips{gap:9px}.token{border:2px solid #cac9e5;border-radius:10px;padding:11px 15px;background:var(--paper);color:var(--ink);font-size:14px;font-weight:840;min-height:45px;cursor:pointer;transition:background .15s,border-color .15s}
+.token:hover:not(:disabled){border-color:#887bc8;background:var(--violet-bg)}.bank-empty{font-size:12px;color:var(--muted);margin:0}
+.preview{margin-top:15px;padding:12px 14px;border:1px solid var(--line);border-radius:11px;background:#f9faff;font-size:13px;color:var(--ink)}
+.preview strong{font-size:12px;display:block;color:var(--muted);margin-bottom:4px}
+.preview p{font-weight:740;font-size:16px;line-height:1.6;margin:0;overflow-wrap:anywhere}
+.feedback{margin-top:16px;padding:13px 15px;min-height:66px;border-radius:11px;border:1px solid #d4ddf0;background:#f0f3fc;color:#4b5e85;font-size:13px}
+.feedback.good{background:var(--good-bg);border-color:#a1d3bd;color:var(--good)}.feedback.warn{background:var(--warn-bg);border-color:#e8c4a0;color:var(--warn)}.feedback strong{display:block;font-size:14px;margin-bottom:4px}
+.explanation{padding:15px;background:var(--good-bg);color:var(--good);border:1px solid #a5d9bf;border-radius:11px;margin-top:14px;font-size:13px}.explanation strong{font-size:15px}.explanation p{margin:6px 0 0;line-height:1.62}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:15px}.controls .grow{flex:1}.btn{border:1px solid var(--violet);border-radius:10px;padding:11px 15px;background:var(--violet);color:#fff;font-size:13px;font-weight:850;cursor:pointer}
+.btn.secondary{color:var(--violet);background:var(--paper)}.btn.quiet{border-color:#d2cbed;color:#5b5391;background:#f7f5ff}.btn:hover:not(:disabled){filter:brightness(.93)}
+.rules{font-size:12px;color:var(--muted);padding-left:20px}.rules li{margin:8px 0}.journey{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:12px 0}
+.step{display:flex;align-items:center;justify-content:center;flex-direction:column;min-height:61px;gap:4px;border:1px solid var(--line);border-radius:10px;background:#f8f8fd;color:var(--ink)}
+.step strong{font-size:17px}.step small{font-size:10px;color:var(--muted)}.step.current{border:2px solid #9188ce;background:var(--violet-bg);color:var(--violet)}.step.done{background:var(--good-bg);border-color:#9ed1b7;color:var(--good)}
+.tip{margin-top:15px;background:var(--violet-bg);color:#524a90;border-radius:11px;padding:13px;font-size:12px}.tip strong{display:block;margin-bottom:5px}.tip p{margin:0}
+.summary h2{font-size:27px;letter-spacing:-.5px}.summary p{font-size:13px;color:var(--muted)}.review{display:grid;gap:8px;margin:15px 0}
+.review-card{border:1px solid #c8dccf;background:#f0faf4;border-radius:11px;padding:13px}.review-card strong{display:block;font-size:13px;color:#1d614e}.review-card .quote{display:block;font-size:14px;font-weight:820;margin:6px 0;color:#2d5144}
+.review-card p{font-size:12px;color:#517064;margin:5px 0}
+.small{font-size:11px;color:var(--muted);margin:15px 0 0}
+[hidden]{display:none!important}
+@media(max-width:860px){.layout{grid-template-columns:1fr}.panel{padding:17px}.journey{max-width:480px}}
+@media(max-width:560px){main{padding:22px 12px 35px}.panel{padding:13px}.sentence-zone,.bank{padding:10px}.chips{gap:6px}.phrase-chip{padding:5px;gap:3px}.phrase-chip .word{font-size:13px;padding:5px 3px}.phrase-chip .arrow{width:26px;height:26px}.token{font-size:13px;padding:9px 12px;min-height:42px}.stats-note{margin-left:0}.controls .btn{flex-grow:1}.journey{gap:5px}.step{min-height:56px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#1c2137;--paper:#2b304a;--ink:#eef0ff;--muted:#bac2df;--line:#4b5172;--violet:#d5caff;--violet-dark:#b5a0fd;--violet-bg:#444062;--good:#b6f2d5;--good-bg:#294b3e;--warn:#f7d0a2;--warn-bg:#513b2e}.sentence-zone{background:#333453;border-color:#7a71b2}.empty-instruction{color:#cdc4f6}.phrase-chip{background:#363a5a;border-color:#7773a9;box-shadow:none}.phrase-chip .arrow{background:#4a496e;border-color:#7775ac;color:#f3eeff}
+.bank{background:#313750}.token{background:#383c59;border-color:#79769d}.token:hover:not(:disabled){background:#4a456c}.preview{background:#32394e}.feedback{background:#354064;border-color:#58658c;color:#e3e9ff}.feedback.good{background:var(--good-bg);color:var(--good)}.feedback.warn{background:var(--warn-bg);color:var(--warn)}
+.explanation{background:var(--good-bg);color:var(--good)}.btn.quiet{background:#3d3e5d;color:#e6dcff;border-color:#7778a9}.step{background:#343b55}.step.current{background:#484366;color:#f2eaff}.step.done{background:var(--good-bg);color:var(--good)}.tip{color:#e8dcff}.review-card{background:#2e4c3d;border-color:#53846b}.review-card strong,.review-card .quote{color:#c7ffe0}.review-card p{color:#b8e3c9}}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 21 · Linguagem e raciocínio</p>
+<h1>Monte a frase: Ciência em palavras</h1>
+<p class="intro">Organize palavras embaralhadas para construir cinco afirmações sobre ciência, água e convivência. Toque nos blocos para adicioná-los, use as setas para reorganizar, toque na palavra para removê-la e confira quando a frase estiver completa. A atividade considera palavras repetidas, pontuação e mais de uma ordem correta.</p>
+<div class="stats"><div class="stat"><small>Frases concluídas</small><strong id="done">0 / 5</strong></div><div class="stat"><small>Conferências incorretas</small><strong id="mistakes">0</strong></div><span class="stats-note">Sem cronômetro e sem nota acadêmica.</span></div>
+<div id="progress" class="progress" role="progressbar" aria-label="Frases concluídas" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0"><span id="progress-fill"></span></div>
+<div class="layout">
+<section class="panel" id="game-panel" aria-labelledby="challenge">
+ <div class="topline"><small id="position">Frase 1 de 5</small><span class="tag" id="topic">Pensamento científico</span></div>
+ <h2 id="challenge" class="challenge" tabindex="-1">Organize as palavras.</h2>
+ <p class="task">A posição de cada bloco define a frase; a pontuação já faz parte das palavras.</p>
+ <div class="subhead"><strong id="sentence-title" tabindex="-1">Sua construção</strong><span id="selected-count">0 / 6 blocos</span></div>
+ <div class="sentence-zone empty" id="sentence" role="group" aria-label="Frase organizada pelo aluno">
+  <p class="empty-instruction">Selecione palavras do banco para começar.</p>
+ </div>
+ <div class="subhead"><strong>Banco de palavras</strong><span>Selecione para acrescentar ao final da frase</span></div>
+ <div id="bank" class="bank" role="group" aria-label="Palavras embaralhadas disponíveis"></div>
+ <div class="preview" aria-live="polite" aria-atomic="true"><strong>Leitura da frase atual</strong><p id="preview">Sua frase ainda está vazia.</p></div>
+ <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"><strong id="feedback-heading">Sua construção</strong><span id="feedback-message">Preparando a atividade...</span></div>
+ <div id="explanation" class="explanation" hidden><strong>Por que esta frase está correta?</strong><p id="explanation-text"></p></div>
+ <div class="controls">
+  <button id="undo" type="button" class="btn quiet" disabled>Desfazer</button>
+  <button id="clear" type="button" class="btn quiet" disabled>Limpar frase</button>
+  <button id="hint" type="button" class="btn secondary" disabled>Dica</button>
+  <span class="grow" aria-hidden="true"></span>
+  <button id="check" type="button" class="btn" disabled>Conferir frase</button>
+  <button id="next" type="button" class="btn" disabled hidden>Próxima frase</button>
+ </div>
+</section>
+<section class="panel summary" id="summary-panel" aria-labelledby="summary-title" hidden>
+ <p class="eyebrow">Revisão final</p><h2 id="summary-title" tabindex="-1">Cinco frases concluídas!</h2><p id="summary-stats"></p><div id="review" class="review" aria-label="Frases e explicações"></div>
+ <button id="summary-reset" type="button" class="btn">Jogar novamente</button>
+</section>
+<aside class="panel" aria-labelledby="guide-heading">
+ <h2 id="guide-heading">Como montar as frases</h2>
+ <p class="task">Todos os blocos devem ser usados uma vez. Palavras iguais podem existir mais de uma vez, pois cada ocorrência possui um ID próprio.</p>
+ <div id="steps" class="journey" role="list" aria-label="Progresso das cinco frases"></div>
+ <ol class="rules">
+  <li>Escolha os blocos no banco para inseri-los na frase.</li>
+  <li>Use as setas ao lado da palavra para movê-la para a esquerda ou direita.</li>
+  <li>Toque no próprio bloco da frase para devolvê-lo ao banco.</li>
+  <li>O botão Desfazer restaura sua última alteração; Limpar frase reinicia apenas a montagem atual.</li>
+  <li>Confira quando todos os blocos estiverem posicionados e leia a justificativa antes de avançar.</li>
+ </ol>
+ <div class="tip"><strong>Duas construções podem estar corretas</strong><p>Em uma rodada, “Maria e João estudam juntos.” e “João e Maria estudam juntos.” são aceitas. Em outra, há dois “que” idênticos, e trocar as duas ocorrências não causa reprovação.</p></div>
+ <div class="controls"><button id="reset" type="button" class="btn secondary" disabled>Recomeçar atividade</button></div>
+ <p class="small">Os botões funcionam com toque, Tab, Enter e Espaço. Há foco visível, mensagens para leitores de tela e suporte a movimento reduzido.</p>
+</aside>
+</div>
+<p class="small">Não são usadas imagens, áudio, fontes externas, bibliotecas ou CDN. A correção acontece no navegador apenas para fins formativos, sem nota ou conclusão acadêmica no Moodle.</p>
+</main><script>(function sentenceBuilder(){
+"use strict";
+const DATA={"type":"sentence_order","title":"Monte a frase - Ciência em palavras","settings":{"seed":"ciencia-palavras-2026","maxTokens":14},"rounds":[{"id":"metodo-cientifico","topic":"Pensamento científico","task":"Organize a afirmação sobre investigação.","tokens":[{"id":"a","text":"A"},{"id":"b","text":"ciência"},{"id":"c","text":"começa"},{"id":"d","text":"com"},{"id":"e","text":"boas"},{"id":"f","text":"perguntas."}],"acceptedOrders":[["a","b","c","d","e","f"]],"clue":"Comece pelo artigo definido e termine com a palavra que encerra a ideia.","explanation":"O sujeito “A ciência” vem antes do verbo “começa”, seguido do complemento “com boas perguntas”. O ponto final permanece ligado à última palavra."},{"id":"agua-tratamento","topic":"Saúde e água","task":"Monte a frase que explica por que a água exige cuidado.","tokens":[{"id":"a","text":"Nós"},{"id":"b","text":"sabemos"},{"id":"c","text":"que"},{"id":"d","text":"a"},{"id":"e","text":"água"},{"id":"f","text":"que"},{"id":"g","text":"bebemos"},{"id":"h","text":"precisa"},{"id":"i","text":"de"},{"id":"j","text":"tratamento."}],"acceptedOrders":[["a","b","c","d","e","f","g","h","i","j"]],"clue":"A frase contém dois “que” com funções diferentes, mas ambos precisam aparecer na sequência.","explanation":"Em “Nós sabemos que...”, o primeiro “que” introduz uma oração; em “a água que bebemos”, o segundo retoma “água”. São duas ocorrências com IDs diferentes e o mesmo texto visível."},{"id":"colaboracao","topic":"Colaboração","task":"Duas ordens diferentes expressam a mesma ideia: organize os blocos.","tokens":[{"id":"a","text":"Maria"},{"id":"b","text":"e"},{"id":"c","text":"João"},{"id":"d","text":"estudam"},{"id":"e","text":"juntos."}],"acceptedOrders":[["a","b","c","d","e"],["c","b","a","d","e"]],"clue":"Os dois nomes próprios podem trocar de posição, mas “e” deve ligar os dois.","explanation":"“Maria e João estudam juntos.” e “João e Maria estudam juntos.” são igualmente corretas. O sujeito composto exige o verbo no plural."},{"id":"chuva-solo","topic":"Ciclo da água","task":"Organize a frase de tempo e consequência.","tokens":[{"id":"a","text":"Quando"},{"id":"b","text":"chove,"},{"id":"c","text":"o"},{"id":"d","text":"solo"},{"id":"e","text":"absorve"},{"id":"f","text":"parte"},{"id":"g","text":"da"},{"id":"h","text":"água."}],"acceptedOrders":[["a","b","c","d","e","f","g","h"]],"clue":"A vírgula aparece depois da expressão temporal, antes do sujeito “o solo”.","explanation":"“Quando chove,” apresenta a circunstância de tempo; depois da vírgula vêm o sujeito “o solo”, o verbo “absorve” e seu complemento."},{"id":"experimento","topic":"Causa e efeito","task":"Forme uma explicação para o resultado de um experimento.","tokens":[{"id":"a","text":"O"},{"id":"b","text":"experimento"},{"id":"c","text":"funcionou"},{"id":"d","text":"porque"},{"id":"e","text":"seguimos"},{"id":"f","text":"todas"},{"id":"g","text":"as"},{"id":"h","text":"etapas."}],"acceptedOrders":[["a","b","c","d","e","f","g","h"]],"clue":"A palavra “porque” deve introduzir o motivo do resultado.","explanation":"A primeira oração apresenta o resultado; a oração introduzida por “porque” fornece a causa. O ponto final marca o encerramento da frase."}]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id),controller=new AbortController();
+const sdk=window.MoodleMCP?.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const storageKey="sentenceScienceWordsV1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,saveQueue=Promise.resolve(),saveGeneration=0;
+
+// Pure rules, no UI or Moodle dependency.
+function hashSeed(source){let h=2166136261;for(let i=0;i<source.length;i++){h^=source.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function shuffle(ids,seed){
+ const a=[...ids];let n=hashSeed(seed)||1;
+ function random(){n^=n<<13;n^=n>>>17;n^=n<<5;return(n>>>0)/4294967296;}
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+function tokenById(round,id){return round.tokens.find(t=>t.id===id)||null;}
+function isAccepted(round,order){
+ if(!Array.isArray(order)||order.length!==round.tokens.length)return false;
+ return round.acceptedOrders.some(accepted=>accepted.every((id,index)=>tokenById(round,id)?.text===tokenById(round,order[index])?.text));
+}
+function validate(data){
+ if(!data||data.type!=="sentence_order"||typeof data.title!=="string"||!data.title.trim()||!data.settings||typeof data.settings.seed!=="string"||!data.settings.seed.trim()||!Number.isInteger(data.settings.maxTokens)||data.settings.maxTokens<3||data.settings.maxTokens>20||!Array.isArray(data.rounds)||data.rounds.length<3||data.rounds.length>12)return false;
+ const roundIds=new Set();
+ for(const round of data.rounds){
+  if(!round||typeof round.id!=="string"||!/^[a-z0-9-]+$/.test(round.id)||roundIds.has(round.id)||typeof round.topic!=="string"||!round.topic.trim()||typeof round.task!=="string"||!round.task.trim()||typeof round.clue!=="string"||!round.clue.trim()||typeof round.explanation!=="string"||!round.explanation.trim()||!Array.isArray(round.tokens)||round.tokens.length<3||round.tokens.length>data.settings.maxTokens||!Array.isArray(round.acceptedOrders)||round.acceptedOrders.length<1||round.acceptedOrders.length>6)return false;
+  roundIds.add(round.id);
+  const tokens=new Set();
+  for(const t of round.tokens){
+   if(!t||typeof t.id!=="string"||!/^[a-z0-9-]+$/.test(t.id)||tokens.has(t.id)||typeof t.text!=="string"||!t.text.trim()||t.text!==t.text.trim()||t.text.length>45)return false;
+   tokens.add(t.id);
+  }
+  const canonical=new Set();
+  for(const order of round.acceptedOrders){
+   if(!Array.isArray(order)||order.length!==round.tokens.length||new Set(order).size!==tokens.size||order.some(id=>!tokens.has(id)))return false;
+   const textKey=order.map(id=>tokenById(round,id).text).join("\u0000");
+   if(canonical.has(textKey))return false;
+   canonical.add(textKey);
+  }
+ }
+ return true;
+}
+function bankOrder(data,round){
+ const source=round.tokens.map(t=>t.id),ordered=shuffle(source,data.settings.seed+"/"+round.id);
+ if(isAccepted(round,ordered))return [...ordered.slice(1),ordered[0]];
+ return ordered;
+}
+function initialState(data){return {index:0,rounds:data.rounds.map(()=>({selected:[],previous:null,errors:0,solved:false})),completed:false};}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Number.isInteger(s.index)||s.index<0||s.index>data.rounds.length||!Array.isArray(s.rounds)||s.rounds.length!==data.rounds.length||typeof s.completed!=="boolean"||s.completed!==(s.index===data.rounds.length))return false;
+ for(let i=0;i<data.rounds.length;i++){
+  const round=data.rounds[i],entry=s.rounds[i],ids=new Set(round.tokens.map(t=>t.id));
+  if(!entry||!Array.isArray(entry.selected)||entry.selected.length>ids.size||new Set(entry.selected).size!==entry.selected.length||entry.selected.some(id=>!ids.has(id))||!(entry.previous===null||Array.isArray(entry.previous))||!Number.isInteger(entry.errors)||entry.errors<0||entry.errors>1000||typeof entry.solved!=="boolean")return false;
+  if(entry.previous!==null&&(entry.previous.length>ids.size||new Set(entry.previous).size!==entry.previous.length||entry.previous.some(id=>!ids.has(id))))return false;
+  if(entry.solved&&(!isAccepted(round,entry.selected)||entry.previous!==null))return false;
+  if(i<s.index&&!entry.solved)return false;
+  if(i>s.index&&(entry.selected.length!==0||entry.previous!==null||entry.errors!==0||entry.solved))return false;
+ }
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(data),changed:true,kind:"neutral",message:"Atividade reiniciada. Monte a primeira frase."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"Progresso inválido; a alteração foi bloqueada."};
+ if(s.completed)return {state:s,changed:false,kind:"neutral",message:"Todas as frases foram concluídas."};
+ const round=data.rounds[s.index],entry=s.rounds[s.index];
+ if(action?.type==="next"){
+  if(!entry.solved)return {state:s,changed:false,kind:"warn",message:"Confira a frase corretamente antes de avançar."};
+  const index=s.index+1;
+  return {state:{...s,index,completed:index===data.rounds.length},changed:true,kind:"neutral",message:index===data.rounds.length?"Parabéns! Você montou todas as frases.":"Nova frase: selecione os blocos na ordem correta."};
+ }
+ if(entry.solved)return {state:s,changed:false,kind:"neutral",message:"Frase concluída. Avance para a próxima."};
+ function updated(selected,previous=entry.selected){
+  const next={...entry,selected,previous:[...previous]};
+  return {...s,rounds:s.rounds.map((x,i)=>i===s.index?next:x)};
+ }
+ if(action?.type==="add"){
+  if(!tokenById(round,action.id)||entry.selected.includes(action.id))return {state:s,changed:false,kind:"warn",message:"Esse bloco não está disponível no banco de palavras."};
+  const order=[...entry.selected,action.id];
+  return {state:updated(order),changed:true,kind:"neutral",message:"Bloco acrescentado. "+order.length+" de "+round.tokens.length+" blocos escolhidos."};
+ }
+ if(action?.type==="remove"){
+  if(!entry.selected.includes(action.id))return {state:s,changed:false,kind:"warn",message:"Esse bloco não está na frase."};
+  const next=entry.selected.filter(id=>id!==action.id);
+  return {state:updated(next),changed:true,kind:"neutral",message:"Bloco devolvido ao banco de palavras."};
+ }
+ if(action?.type==="move"){
+  const index=entry.selected.indexOf(action.id);
+  if(index<0||![-1,1].includes(action.delta)||index+action.delta<0||index+action.delta>=entry.selected.length)return {state:s,changed:false,kind:"warn",message:"Não há outra posição disponível nessa direção."};
+  const next=[...entry.selected],j=index+action.delta;
+  [next[index],next[j]]=[next[j],next[index]];
+  return {state:updated(next),changed:true,kind:"neutral",message:"Bloco movido para "+(j+1)+"ª posição."};
+ }
+ if(action?.type==="undo"){
+  if(entry.previous===null)return {state:s,changed:false,kind:"neutral",message:"Não há alteração para desfazer."};
+  const next={...entry,selected:[...entry.previous],previous:null};
+  return {state:{...s,rounds:s.rounds.map((x,i)=>i===s.index?next:x)},changed:true,kind:"neutral",message:"Última alteração desfeita."};
+ }
+ if(action?.type==="clear"){
+  if(entry.selected.length===0)return {state:s,changed:false,kind:"neutral",message:"A frase já está vazia."};
+  return {state:updated([]),changed:true,kind:"neutral",message:"Todos os blocos voltaram para o banco."};
+ }
+ if(action?.type==="check"){
+  if(entry.selected.length!==round.tokens.length)return {state:s,changed:false,kind:"warn",message:"A frase está incompleta: use todos os "+round.tokens.length+" blocos antes de conferir."};
+  if(isAccepted(round,entry.selected)){
+   const solved={...entry,solved:true,previous:null};
+   return {state:{...s,rounds:s.rounds.map((x,i)=>i===s.index?solved:x)},changed:true,kind:"good",message:"Frase correta! "+round.explanation};
+  }
+  const wrong={...entry,errors:entry.errors+1};
+  return {state:{...s,rounds:s.rounds.map((x,i)=>i===s.index?wrong:x)},changed:true,kind:"warn",message:"A ordem ainda não está correta. "+round.clue+" Você pode mover ou retirar blocos antes de tentar novamente."};
+ }
+ if(action?.type==="hint")return {state:s,changed:false,kind:"neutral",message:"Dica: "+round.clue};
+ return {state:s,changed:false,kind:"neutral",message:"Selecione palavras para montar a frase."};
+}
+// End pure rules.
+
+function el(tag,cls,value){const n=document.createElement(tag);if(cls)n.className=cls;if(value!==undefined)n.textContent=value;return n;}
+function getState(){return {index:state.index,completed:state.completed,rounds:state.rounds.map(e=>({selected:[...e.selected],previous:e.previous===null?null:[...e.previous],errors:e.errors,solved:e.solved}))};}
+function restoreState(value){
+ if(!validState(value,DATA))return false;
+ state={index:value.index,completed:value.completed,rounds:value.rounds.map(e=>({selected:[...e.selected],previous:e.previous===null?null:[...e.previous],errors:e.errors,solved:e.solved}))};
+ render();return true;
+}
+function announce(message,kind="neutral"){
+ $("feedback").className="feedback"+(kind==="good"?" good":kind==="warn"?" warn":"");
+ $("feedback-heading").textContent=kind==="good"?"Frase correta":kind==="warn"?"Revise a construção":"Sua construção";
+ $("feedback-message").textContent=message;
+}
+function renderSteps(){
+ const list=$("steps");list.replaceChildren();
+ DATA.rounds.forEach((r,i)=>{
+  const entry=state.rounds[i],n=el("div","step"+(entry.solved?" done":!state.completed&&i===state.index?" current":""));
+  n.setAttribute("role","listitem");
+  n.setAttribute("aria-label","Frase "+(i+1)+": "+(entry.solved?"concluída":i===state.index?"atual":"pendente"));
+  n.append(el("strong","",String(i+1)),el("small","",entry.solved?"Concluída":i===state.index&&!state.completed?"Atual":"Pendente"));
+  list.append(n);
+ });
+}
+function renderReview(){
+ const list=$("review");list.replaceChildren();
+ DATA.rounds.forEach((r,i)=>{
+  const entry=state.rounds[i],item=el("article","review-card");
+  item.append(el("strong","",(i+1)+". "+r.topic));
+  const sentence=r.acceptedOrders[0].map(id=>tokenById(r,id).text).join(" ");
+  item.append(el("span","quote",sentence));
+  item.append(el("p","",r.explanation));
+  item.append(el("p","","Conferências incorretas: "+entry.errors));
+  list.append(item);
+ });
+}
+function render(){
+ if(!state||disposed)return;
+ const total=DATA.rounds.length,done=state.rounds.filter(e=>e.solved).length,errorCount=state.rounds.reduce((sum,e)=>sum+e.errors,0);
+ $("done").textContent=done+" / "+total;$("mistakes").textContent=String(errorCount);
+ $("progress").setAttribute("aria-valuenow",String(done));$("progress-fill").style.width=100*done/total+"%";
+ $("game-panel").hidden=state.completed;$("summary-panel").hidden=!state.completed;
+ $("reset").disabled=!ready;renderSteps();
+ if(state.completed){
+  $("summary-stats").textContent="Você montou "+total+" frases e fez "+errorCount+" conferência(s) incorreta(s). Revise os exemplos e as explicações.";
+  renderReview();return;
+ }
+ const r=DATA.rounds[state.index],entry=state.rounds[state.index],locked=entry.solved;
+ $("position").textContent="Frase "+(state.index+1)+" de "+total;
+ $("topic").textContent=r.topic;$("challenge").textContent=r.task;
+ $("selected-count").textContent=entry.selected.length+" / "+r.tokens.length+" blocos";
+ const sentence=$("sentence");sentence.replaceChildren();
+ sentence.classList.toggle("empty",entry.selected.length===0);
+ if(entry.selected.length===0)sentence.append(el("p","empty-instruction","A frase aparecerá aqui à medida que você selecionar os blocos abaixo."));
+ else{
+  const list=el("div","chips");list.setAttribute("role","list");list.setAttribute("aria-label","Palavras na ordem escolhida");
+  entry.selected.forEach((id,i)=>{
+   const token=tokenById(r,id),chip=el("div","phrase-chip");chip.setAttribute("role","listitem");
+   const left=el("button","arrow","←");left.type="button";left.dataset.move=id;left.dataset.delta="-1";left.disabled=!ready||locked||i===0;left.setAttribute("aria-label","Mover "+token.text+" da posição "+(i+1)+" para a esquerda");
+   const remove=el("button","word",token.text);remove.type="button";remove.dataset.remove=id;remove.disabled=!ready||locked;remove.setAttribute("aria-label","Remover "+token.text+" da posição "+(i+1)+" e devolver ao banco");
+   const right=el("button","arrow","→");right.type="button";right.dataset.move=id;right.dataset.delta="1";right.disabled=!ready||locked||i===entry.selected.length-1;right.setAttribute("aria-label","Mover "+token.text+" da posição "+(i+1)+" para a direita");
+   chip.append(left,remove,right);list.append(chip);
+  });
+  sentence.append(list);
+ }
+ const bank=$("bank");bank.replaceChildren();
+ const used=new Set(entry.selected),available=bankOrder(DATA,r).filter(id=>!used.has(id));
+ if(available.length===0)bank.append(el("p","bank-empty","Todos os blocos foram selecionados. Você pode reorganizá-los na frase."));
+ else{
+  const row=el("div","chips");row.setAttribute("role","list");row.setAttribute("aria-label","Banco de palavras disponível");
+  available.forEach(id=>{
+   const t=tokenById(r,id),holder=el("div");holder.setAttribute("role","listitem");
+   const button=el("button","token",t.text);button.type="button";button.dataset.add=id;button.disabled=!ready||locked;
+   button.setAttribute("aria-label","Acrescentar "+t.text+" à frase, bloco "+(bankOrder(DATA,r).indexOf(id)+1));
+   holder.append(button);row.append(holder);
+  });
+  bank.append(row);
+ }
+ const content=entry.selected.map(id=>tokenById(r,id).text).join(" ");
+ $("preview").textContent=content||"Sua frase ainda está vazia.";
+ $("check").disabled=!ready||locked||entry.selected.length!==r.tokens.length;
+ $("undo").disabled=!ready||locked||entry.previous===null;
+ $("clear").disabled=!ready||locked||entry.selected.length===0;
+ $("hint").disabled=!ready||locked;
+ $("next").hidden=!locked;$("next").disabled=!ready||!locked;
+ $("next").textContent=state.index===total-1?"Ver resultado final":"Próxima frase";
+ $("explanation").hidden=!locked;if(locked)$("explanation-text").textContent=r.explanation;
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++saveGeneration;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||stamp!==saveGeneration)return;
+  const current=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const value={...current,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(value)).length>12288){announce("Progresso acima do limite de 12 KiB. Continue nesta página.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/sentence-science-words",data:value});
+ }).catch(async()=>{
+  if(disposed)return;saveGeneration++;
+  try{remote=await progress.load();if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))announce("Outra sessão atualizou o progresso. Recuperei a versão mais recente.","warn");
+   else announce("O progresso salvo não pôde ser conciliado; você ainda pode continuar aqui.","warn");
+  }catch(_){remote=null;announce("Sem sincronização com Moodle. O jogo continua funcionando.","warn");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const outcome=transition(state,action,DATA);
+ if(!outcome.changed){announce(outcome.message,outcome.kind);return;}
+ state=outcome.state;modified=true;render();save();announce(outcome.message,outcome.kind);
+ if(state.completed){$("summary-title").focus({preventScroll:true});return;}
+ if(action.type==="next"||action.type==="restart"){$("challenge").focus({preventScroll:true});return;}
+ if(action.type==="check"){$("feedback").focus({preventScroll:true});return;}
+ if(action.type==="add"){
+  const available=$("bank").querySelector("button[data-add]:not(:disabled)");
+  if(available)available.focus({preventScroll:true});else $("check").focus({preventScroll:true});
+ }else if(action.type==="move"||action.type==="remove"){
+  const target=root.querySelector('button[data-remove="'+action.id+'"]:not(:disabled)');
+  if(target)target.focus({preventScroll:true});else $("sentence-title").focus({preventScroll:true});
+ }else if(action.type==="undo")$("undo").focus({preventScroll:true});
+ else if(action.type==="clear")$("sentence-title").focus({preventScroll:true});
+}
+function destroy(){disposed=true;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){announce("Configuração inválida. Revise tokens e ordens aceitas.","warn");return;}
+ state=initialState(data);render();
+ if(progress)try{
+  const value=await progress.load();if(disposed)return;remote=value;
+  if(!modified&&value.data?.[storageKey]&&restoreState(value.data[storageKey]))announce("Progresso recuperado. Continue de onde parou.");
+  else announce("Selecione palavras do banco e construa a primeira frase.");
+ }catch(_){announce("Sem sincronização com Moodle. A atividade funciona normalmente.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",event=>{
+ const b=event.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.add){handleAction({type:"add",id:b.dataset.add});return;}
+ if(b.dataset.remove){handleAction({type:"remove",id:b.dataset.remove});return;}
+ if(b.dataset.move){handleAction({type:"move",id:b.dataset.move,delta:Number(b.dataset.delta)});return;}
+ if(b.id==="check")handleAction({type:"check"});
+ else if(b.id==="undo")handleAction({type:"undo"});
+ else if(b.id==="clear")handleAction({type:"clear"});
+ else if(b.id==="hint")handleAction({type:"hint"});
+ else if(b.id==="next")handleAction({type:"next"});
+ else if(b.id==="reset"||b.id==="summary-reset")handleAction({type:"restart"});
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>

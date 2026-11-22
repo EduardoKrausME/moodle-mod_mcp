@@ -133,3 +133,11 @@ node --test docs/pt_br/tests/maze.test.mjs
 ```
 
 A suíte cobre BFS e solvabilidade, duas saídas, grades irregulares, portões obrigatórios, perguntas bloqueadas, erros e acertos, passos diagonais proibidos, paredes, reinício, progresso inválido, navegação por teclado, toque, diálogo nativo, SDK opcional e sincronização do catálogo.
+
+Para o jogo 21 (Monte a frase - Ciência em palavras), execute:
+
+```bash
+node --test docs/pt_br/tests/sentence-order.test.mjs
+```
+
+O teste cobre palavras repetidas com IDs próprios, equivalência entre ocorrências iguais, pontuação, duas ordens gramaticais válidas, gabaritos incompletos ou desconhecidos, embaralhamento determinístico, seleção e movimento dos tokens, remoção, desfazer, limpar, correção, tentativa parcial, estado restaurado, acessibilidade e igualdade dos manifestos.
