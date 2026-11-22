@@ -30,12 +30,14 @@ use stdClass;
 /**
  * Portable nullable JSON metadata, with a strict quiz schema.
  * Never give a learner the author-owned answer key.
-  * @package mod_mcp
+ * @package mod_mcp
  */
 final class metadata {
     /**
      * validate for JSON assessment handling.
      *
+     * @param ?string $type Parameter.
+     * @param mixed $information Parameter.
      * @return ?string Result.
      */
     public static function validate(?string $type, $information): ?string {
@@ -74,6 +76,7 @@ final class metadata {
     /**
      * validate quiz for JSON assessment handling.
      *
+     * @param array $info Parameter.
      * @return void Result.
      */
     private static function validate_quiz(array $info): void {
@@ -149,6 +152,7 @@ final class metadata {
     /**
      * information for JSON assessment handling.
      *
+     * @param stdClass $mcp Parameter.
      * @return ?array Result.
      */
     public static function information(stdClass $mcp): ?array {
@@ -182,6 +186,7 @@ final class metadata {
     /**
      * fingerprint for JSON assessment handling.
      *
+     * @param stdClass $mcp Parameter.
      * @return string Result.
      */
     public static function fingerprint(stdClass $mcp): string {
@@ -192,6 +197,10 @@ final class metadata {
     /**
      * save for JSON assessment handling.
      *
+     * @param int $mcpid Parameter.
+     * @param ?string $type Parameter.
+     * @param mixed $information Parameter.
+     * @param ?string $expectedhash Parameter.
      * @return string Result.
      */
     public static function save(int $mcpid, ?string $type, $information, ?string $expectedhash = null): string {

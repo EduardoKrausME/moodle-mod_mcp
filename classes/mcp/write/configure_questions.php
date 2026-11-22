@@ -30,7 +30,7 @@ use moodle_exception;
 
 /**
  * Existing API name and schema; stores all/random/shuffle in information JSON.
-  * @package mod_mcp
+ * @package mod_mcp
  */
 final class configure_questions extends activity_tool {
     /**
@@ -79,6 +79,7 @@ final class configure_questions extends activity_tool {
     /**
      * proposed for JSON assessment handling.
      *
+     * @param array $arguments Parameter.
      * @return array Result.
      */
     private function proposed(array $arguments): array {
@@ -111,6 +112,8 @@ final class configure_questions extends activity_tool {
     /**
      * preview for JSON assessment handling.
      *
+     * @param array $arguments Parameter.
+     * @param authenticated_identity $identity Parameter.
      * @return array Result.
      */
     public function preview(array $arguments, authenticated_identity $identity): array {
@@ -122,6 +125,8 @@ final class configure_questions extends activity_tool {
     /**
      * execute for JSON assessment handling.
      *
+     * @param array $arguments Parameter.
+     * @param authenticated_identity $identity Parameter.
      * @return array Result.
      */
     public function execute(array $arguments, authenticated_identity $identity): array {

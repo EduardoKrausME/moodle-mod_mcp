@@ -31,7 +31,7 @@ use mod_mcp\question\attempts;
 
 /** JSON assessment never uses Question Engine.
  * @covers \mod_mcp\question\attempts
-  * @package mod_mcp
+ * @package mod_mcp
  */
 final class assessment_test extends advanced_testcase {
     /**

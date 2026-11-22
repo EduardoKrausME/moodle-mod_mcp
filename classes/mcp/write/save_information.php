@@ -29,7 +29,7 @@ use mod_mcp\content\metadata;
 
 /**
  * ChatGPT/Claude write tool; the information JSON never goes through a question bank.
-  * @package mod_mcp
+ * @package mod_mcp
  */
 final class save_information extends activity_tool {
     /**
@@ -77,6 +77,8 @@ final class save_information extends activity_tool {
     /**
      * preview for JSON assessment handling.
      *
+     * @param array $arguments Parameter.
+     * @param authenticated_identity $identity Parameter.
      * @return array Result.
      */
     public function preview(array $arguments, authenticated_identity $identity): array {
@@ -99,6 +101,8 @@ final class save_information extends activity_tool {
     /**
      * execute for JSON assessment handling.
      *
+     * @param array $arguments Parameter.
+     * @param authenticated_identity $identity Parameter.
      * @return array Result.
      */
     public function execute(array $arguments, authenticated_identity $identity): array {

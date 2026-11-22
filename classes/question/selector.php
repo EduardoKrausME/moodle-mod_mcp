@@ -28,12 +28,16 @@ use moodle_exception;
 
 /**
  * Preserve existing all/random/shuffle semantics, but draw from validated JSON.
-  * @package mod_mcp
+ * @package mod_mcp
  */
 final class selector {
     /**
      * choose for JSON assessment handling.
      *
+     * @param array $questions Parameter.
+     * @param string $mode Parameter.
+     * @param int $count Parameter.
+     * @param bool $shuffle Parameter.
      * @return array Result.
      */
     public static function choose(array $questions, string $mode, int $count, bool $shuffle): array {

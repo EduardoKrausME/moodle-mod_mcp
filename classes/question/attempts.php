@@ -34,12 +34,15 @@ use stdClass;
 
 /**
  * One server-owned JSON quiz attempt per student. No Question Engine or bank tables.
-  * @package mod_mcp
+ * @package mod_mcp
  */
 final class attempts {
     /**
      * locked for JSON assessment handling.
      *
+     * @param int $mcpid Parameter.
+     * @param int $userid Parameter.
+     * @param callable $callback Parameter.
      * @return mixed Result.
      */
     private static function locked(int $mcpid, int $userid, callable $callback) {
@@ -58,6 +61,8 @@ final class attempts {
     /**
      * own for JSON assessment handling.
      *
+     * @param int $mcpid Parameter.
+     * @param int $userid Parameter.
      * @return ?stdClass Result.
      */
     public static function own(int $mcpid, int $userid): ?stdClass {
@@ -117,6 +122,8 @@ final class attempts {
     /**
      * status for JSON assessment handling.
      *
+     * @param stdClass $mcp Parameter.
+     * @param ?stdClass $attempt Parameter.
      * @return array Result.
      */
     public static function status(stdClass $mcp, ?stdClass $attempt): array {

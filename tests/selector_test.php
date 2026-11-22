@@ -30,7 +30,7 @@ use mod_mcp\question\selector;
 /**
  * JSON subset and shuffle semantics.
  * @covers \mod_mcp\question\selector
-  * @package mod_mcp
+ * @package mod_mcp
  */
 final class selector_test extends advanced_testcase {
     /**
