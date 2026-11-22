@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Complete as lacunas - O ciclo da água</title><style>
+:root{font:16px/1.58 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--bg:#eff6f9;--ink:#253b4e;--muted:#617d8d;--line:#d8e7ee;--panel:#fff;--blue:#087ca3;--deep:#086384;--soft:#e6f3f9;--green:#137b60;--green-bg:#dff5eb;--orange:#9b5c2a;--orange-bg:#fff0e0;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button,input,select{font:inherit}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #efa940;outline-offset:3px}
+main{max-width:1170px;margin:auto;padding:32px 22px 48px}
+.eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:820;color:var(--blue);margin:0 0 9px}
+h1{font-size:clamp(27px,4vw,40px);letter-spacing:-.9px;line-height:1.18;margin:0 0 10px}
+.intro{font-size:14px;color:var(--muted);max-width:950px;margin:0 0 19px}
+.metrics{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:13px}
+.stat{min-width:105px;padding:8px 14px;background:var(--panel);border:1px solid var(--line);border-radius:11px}
+.stat small{font-size:11px;color:var(--muted);display:block}.stat b{font-variant-numeric:tabular-nums;font-size:19px}
+.metrics .note{margin-left:auto;color:var(--muted);font-size:11px}
+.progress{height:9px;background:#dbe9ef;border-radius:20px;overflow:hidden;margin-bottom:18px}.progress span{display:block;height:100%;width:0;background:#25a891;transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(275px,.7fr);gap:16px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;min-width:0;padding:21px;box-shadow:0 9px 25px #1e4c570a}
+.panel h2{font-size:17px;margin:0 0 10px}
+.mode{display:flex;background:#eaf1f7;border-radius:11px;padding:4px;gap:5px;margin:0 0 15px}
+.mode button{flex:1;background:transparent;color:#4b6d7b;border:0;border-radius:8px;padding:10px 12px;font-size:12px;font-weight:790;cursor:pointer}.mode button[aria-pressed=true]{background:var(--panel);color:var(--blue);box-shadow:0 1px 7px #183c5430}
+.article{white-space:pre-wrap;font-size:16px;line-height:2.65;color:var(--ink);overflow-wrap:anywhere;border-radius:11px;border:1px solid #e4edf2;background:#fbfdff;padding:20px 18px}
+.blank{display:inline-flex;vertical-align:middle;align-items:center;gap:4px;white-space:normal;margin:0 2px}
+.blank .index{color:var(--blue);font-size:10px;font-weight:850;align-self:flex-start;margin:5px 1px 0 0}
+.blank input,.blank select{max-width:min(230px,67vw);width:clamp(142px,17vw,210px);border:2px solid #a3bfd0;border-radius:8px;background:#fff;color:#243c4f;padding:9px 9px;font-size:12px;font-weight:730;line-height:1.3}
+.blank select{width:clamp(148px,17vw,215px);cursor:pointer}
+.blank.right input,.blank.right select{border-color:#64ba94;background:#e5f8ed;color:#155f46}
+.blank.wrong input,.blank.wrong select{border-color:#e0ac78;background:#fff5e8;color:#895022}
+.blank .small-button{min-width:29px;height:31px;border-radius:7px;padding:0 5px;background:#eaf1f5;border:1px solid #cbdde5;color:var(--blue);font-size:11px;font-weight:850;cursor:pointer}
+.blank .small-button:hover:not(:disabled){background:#dceaf5}.blank .small-button:disabled{opacity:.38;cursor:not-allowed}
+.blank .hint{color:#947029}
+.instructions{color:var(--muted);font-size:11px;margin:12px 0 0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}
+.btn{border:1px solid var(--blue);border-radius:10px;background:var(--blue);color:#fff;font-size:12px;font-weight:830;padding:11px 14px;cursor:pointer}
+.btn.secondary{background:var(--panel);color:var(--blue)}
+.btn:hover:not(:disabled){filter:brightness(.94)}.btn:disabled{opacity:.47;cursor:not-allowed}
+.guidance{border:1px solid var(--line);border-radius:11px;background:var(--soft);padding:12px 14px;color:#37667a;font-size:12px}
+.words{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 12px}
+.word{padding:6px 10px;border-radius:99px;background:#eef5f8;border:1px solid #cbdfe7;color:#366b7d;font-size:11px;font-weight:730}
+.tip{font-size:12px;color:var(--muted);margin:8px 0}
+.hint-area{border-top:1px solid var(--line);padding-top:15px;margin-top:16px}.hint-area h3{font-size:14px;margin:0 0 9px}
+.hints{display:grid;gap:7px}.hint-item{border-radius:9px;background:#fff6e7;border:1px solid #e5d1b4;padding:10px;font-size:12px;color:#805621}
+.feedback{border-radius:11px;margin-top:16px;min-height:55px;padding:14px 16px;background:#e3f0f9;color:#38596b;font-size:13px}
+.feedback.right{background:var(--green-bg);color:var(--green)}.feedback.wrong{background:var(--orange-bg);color:var(--orange)}
+.summary{margin-top:15px;background:var(--green-bg);border:1px solid #a0d9bc;border-radius:12px;padding:16px;color:var(--green)}
+.summary strong{font-size:18px;display:block}.summary p{margin:5px 0 0;font-size:12px;color:inherit}
+.review{margin-top:15px;border-top:1px solid var(--line);padding-top:12px}
+.review h3{font-size:14px;margin:0 0 9px}.review-list{display:grid;gap:8px}.review-item{border:1px solid #c5dfd3;border-radius:9px;background:#f7fcf9;padding:10px 12px}.review-item strong{font-size:12px;display:block}.review-item p{font-size:12px;margin:2px 0;color:var(--muted)}
+.smallnote{font-size:11px;color:var(--muted);margin:14px 0 0}
+[hidden]{display:none!important}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.panel{padding:17px}.article{padding:16px}.metrics .note{margin-left:0}}
+@media(max-width:510px){main{padding:24px 12px 33px}.panel{padding:12px}.article{padding:12px;font-size:14px;line-height:2.8}.blank input,.blank select{width:clamp(128px,42vw,170px);padding:8px 6px}.blank .small-button{min-width:27px}.metrics .stat{padding:7px 11px;min-width:88px}.stat b{font-size:17px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#14222b;--ink:#e4f2f5;--muted:#b1c9d0;--line:#3c5763;--panel:#253640;--blue:#79d4f0;--deep:#55b4cf;--soft:#304952;--green:#9ae6c5;--green-bg:#254c3d;--orange:#f1ca9c;--orange-bg:#4a392d}.mode{background:#314752}.mode button{color:#d2e8f0}.mode button[aria-pressed=true]{background:#405766;color:#e1f8ff}.article{background:#243942;border-color:#415a63}.blank input,.blank select{background:#2e444f;color:#e9f7fc;border-color:#6792a4}.blank.right input,.blank.right select{background:#28503d;border-color:#76b592;color:#e1ffed}.blank.wrong input,.blank.wrong select{background:#4a392d;border-color:#b18a61;color:#fff2d3}.blank .small-button{background:#36505b;border-color:#557481;color:#d1eff7}.guidance{color:#d0e9f2}.word{background:#36505d;color:#e1f6fb;border-color:#527683}.hint-item{background:#4b3c2b;border-color:#927447;color:#fce0ac}.feedback{background:#304e60;color:#d4eaf4}.feedback.right{background:var(--green-bg);color:var(--green)}.feedback.wrong{background:var(--orange-bg);color:var(--orange)}.summary{border-color:#5e987b}.review-item{background:#2c483e;border-color:#557868}}
+</style></head>
+<body>
+<main id="activity">
+<p class="eyebrow">Jogo 13 · Compreensão de texto</p>
+<h1>Complete as lacunas: o ciclo da água</h1>
+<p class="intro">Leia o texto sobre o movimento da água na natureza e complete as 11 lacunas. Você pode escolher termos do banco de palavras ou digitar as respostas, inclusive com variações aceitas. Verifique cada lacuna separadamente ou confira todo o texto e use dicas quando necessário.</p>
+<div class="metrics">
+ <div class="stat"><small>Preenchidas</small><b id="answered">0 / 11</b></div>
+ <div class="stat"><small>Verificadas corretas</small><b id="correct">0 / 11</b></div>
+ <div class="stat"><small>Dicas utilizadas</small><b id="hint-count">0 / 4</b></div>
+ <span class="note">Termos repetidos podem ser usados em mais de uma lacuna.</span>
+</div>
+<div id="progress" class="progress" role="progressbar" aria-label="Lacunas verificadas corretas" aria-valuemin="0" aria-valuemax="11" aria-valuenow="0"><span id="progress-fill"></span></div>
+<div class="layout">
+<section class="panel" aria-labelledby="text-title">
+ <h2 id="text-title">A água em movimento</h2>
+ <div class="mode" role="group" aria-label="Forma de preencher as lacunas">
+  <button type="button" data-mode="select" id="mode-select" aria-pressed="true">Selecionar termos</button>
+  <button type="button" data-mode="type" id="mode-type" aria-pressed="false">Digitar respostas</button>
+ </div>
+ <div id="text" class="article" role="group" aria-label="Texto com onze lacunas"></div>
+ <p id="instructions" class="instructions">Cada campo tem um número. Use o teclado ou o toque para escolher ou digitar uma resposta. O botão ✓ verifica somente aquela lacuna, enquanto ? revela uma dica sem preencher a resposta.</p>
+ <div class="actions">
+  <button id="check-all" class="btn" type="button" disabled>Conferir todo o texto</button>
+  <button id="reset" class="btn secondary" type="button" disabled>Recomeçar atividade</button>
+ </div>
+</section>
+<aside class="panel" aria-labelledby="bank-title">
+ <h2 id="bank-title">Banco de palavras</h2>
+ <div class="guidance">Algumas palavras desta lista não são utilizadas, enquanto outras podem aparecer mais de uma vez no texto. A grafia com ou sem acentos é aceita no modo digitação.</div>
+ <div id="word-bank" class="words" aria-label="Palavras disponíveis"></div>
+ <p class="tip">A digitação também aceita sinônimos previamente definidos, como “ciclo hidrológico” no lugar de “ciclo da água”. Espaços extras, diferenças de maiúsculas e acentos não prejudicam a correção.</p>
+ <div class="hint-area">
+  <h3>Dicas reveladas</h3>
+  <div id="hint-list" class="hints" aria-live="polite"><p class="tip">Você ainda não utilizou dicas.</p></div>
+ </div>
+</aside>
+</div>
+<div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">Preparando o texto...</div>
+<div id="finish" class="summary" role="status" tabindex="-1" hidden><strong>Texto concluído! Você verificou as 11 lacunas.</strong><p>Os conceitos foram identificados corretamente. Esta conquista é formativa, sem nota ou conclusão acadêmica oficial no Moodle.</p></div>
+<section id="review" class="panel review" aria-label="Explicações dos conceitos" hidden><h3>Por que essas respostas estão corretas?</h3><div id="review-list" class="review-list"></div></section>
+<p class="smallnote">O jogo funciona offline e não utiliza banco de questões, recursos externos ou scripts de terceiros. A persistência só é solicitada quando o SDK do Mod MCP estiver disponível.</p>
+</main><script>(function fillBlanksApp(){
+"use strict";
+const DATA={"type":"fill_blanks","title":"O ciclo da água: complete o texto","segments":[{"text":"Quando a luz do Sol aquece rios, lagos e oceanos, parte da água passa para a atmosfera por "},{"blankId":"evaporacao-a"},{"text":". Esse processo transforma a água líquida em "},{"blankId":"vapor"},{"text":". Em regiões mais frias da atmosfera, o vapor pode sofrer "},{"blankId":"condensacao"},{"text":" e formar gotículas suspensas que compõem as "},{"blankId":"nuvens"},{"text":".\n\nQuando as gotículas ou cristais de gelo ficam grandes, ocorre a "},{"blankId":"precipitacao"},{"text":", que pode produzir chuva, neve ou granizo. Parte da água infiltra-se no "},{"blankId":"solo"},{"text":" e pode abastecer os "},{"blankId":"aquiferos"},{"text":". Outra parte percorre a superfície por "},{"blankId":"escoamento"},{"text":" até alcançar rios e lagos.\n\nAs plantas também liberam vapor de água por "},{"blankId":"transpiracao"},{"text":". Esses processos integram o "},{"blankId":"ciclo"},{"text":". Em um dia quente e com vento, a "},{"blankId":"evaporacao-b"},{"text":" pode ocorrer mais rapidamente, desde que haja água disponível."}],"blanks":[{"id":"evaporacao-a","answers":["evaporação"],"hint":"Mudança da água líquida para o estado gasoso.","explanation":"A evaporação transforma água líquida em vapor e pode ocorrer na superfície de rios, lagos e oceanos."},{"id":"vapor","answers":["vapor de água","vapor d'água"],"hint":"Nome da água no estado gasoso; são três palavras na forma mais comum.","explanation":"O vapor de água é a forma gasosa da água presente na atmosfera."},{"id":"condensacao","answers":["condensação"],"hint":"Transformação do vapor em pequenas gotículas líquidas.","explanation":"A condensação ocorre quando vapor de água se transforma em líquido, como nas gotículas que compõem as nuvens."},{"id":"nuvens","answers":["nuvens"],"hint":"Conjuntos visíveis de gotículas e/ou cristais de gelo suspensos na atmosfera.","explanation":"As nuvens são formadas por gotículas de água e/ou pequenos cristais de gelo."},{"id":"precipitacao","answers":["precipitação"],"hint":"Etapa em que a água cai da atmosfera como chuva, neve ou granizo.","explanation":"A precipitação devolve água da atmosfera à superfície, por exemplo como chuva."},{"id":"solo","answers":["solo"],"hint":"Camada da superfície terrestre onde a água pode se infiltrar.","explanation":"Parte da água penetra no solo e pode chegar a camadas subterrâneas."},{"id":"aquiferos","answers":["aquíferos"],"hint":"Formações geológicas que armazenam e transmitem água subterrânea.","explanation":"Aquíferos são formações geológicas capazes de armazenar e transmitir água subterrânea."},{"id":"escoamento","answers":["escoamento superficial","escoamento"],"hint":"Movimento da água sobre o terreno em direção a corpos d'água.","explanation":"O escoamento superficial transporta parte da água da chuva até rios, lagos e oceanos."},{"id":"transpiracao","answers":["transpiração"],"hint":"Processo em que plantas liberam vapor de água, sobretudo por suas folhas.","explanation":"Na transpiração, plantas perdem água para a atmosfera, principalmente através dos estômatos."},{"id":"ciclo","answers":["ciclo da água","ciclo hidrológico"],"hint":"Nome do conjunto contínuo de movimentos e mudanças de estado da água na natureza.","explanation":"O ciclo da água, também chamado ciclo hidrológico, liga atmosfera, superfície e reservatórios subterrâneos."},{"id":"evaporacao-b","answers":["evaporação"],"hint":"É o mesmo processo indicado na primeira lacuna do texto.","explanation":"Temperatura, vento, umidade do ar e disponibilidade de água influenciam a evaporação."}],"settings":{"mode":"select","wordBank":["transpiração","condensação","nuvens","evaporação","precipitação","aquíferos","solo","vapor de água","escoamento superficial","ciclo da água","ciclo hidrológico","fotossíntese","erosão","fusão nuclear"],"allowTyping":true,"ignoreAccents":true,"ignoreCase":true,"collapseWhitespace":true,"maxHints":4}};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id);
+const controller=new AbortController(),sdk=window.MoodleMCP?.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const storageKey="fillBlanksWaterCycleV1";
+let state=null,ready=false,disposed=false,modified=false,revision=null,queue=Promise.resolve(),lastMode=null;
+
+// Pure rules used by regression tests.
+function normalize(value,settings){
+ let text=String(value).trim();
+ if(settings.collapseWhitespace)text=text.replace(/\s+/g," ");
+ if(settings.ignoreCase)text=text.toLocaleLowerCase("pt-BR");
+ if(settings.ignoreAccents)text=text.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+ return text;
+}
+function getBlank(data,id){return data.blanks.find(b=>b.id===id);}
+function validate(data){
+ if(!data||data.type!=="fill_blanks"||typeof data.title!=="string"||!data.title.trim()||!Array.isArray(data.segments)||data.segments.length<3||data.segments.length>80||!Array.isArray(data.blanks)||data.blanks.length<3||data.blanks.length>25||!data.settings||!["select","type"].includes(data.settings.mode)||typeof data.settings.allowTyping!=="boolean"||!["ignoreAccents","ignoreCase","collapseWhitespace"].every(k=>typeof data.settings[k]==="boolean")||!Number.isInteger(data.settings.maxHints)||data.settings.maxHints<0||data.settings.maxHints>25||!Array.isArray(data.settings.wordBank)||data.settings.wordBank.length===0||data.settings.wordBank.length>40)return false;
+ const blankIds=new Set(),refs=new Map(),bank=new Set();
+ for(const word of data.settings.wordBank){
+  if(typeof word!=="string"||!word.trim()||word.length>80)return false;
+  const k=normalize(word,data.settings);if(bank.has(k))return false;bank.add(k);
+ }
+ for(const b of data.blanks){
+  if(!b||typeof b.id!=="string"||!/^[a-z0-9-]+$/.test(b.id)||blankIds.has(b.id)||!Array.isArray(b.answers)||b.answers.length<1||b.answers.length>5||typeof b.hint!=="string"||!b.hint.trim()||typeof b.explanation!=="string"||!b.explanation.trim())return false;
+  const answers=new Set();
+  for(const answer of b.answers){
+   if(typeof answer!=="string"||!answer.trim()||answer.length>80)return false;
+   const key=normalize(answer,data.settings);if(answers.has(key))return false;answers.add(key);
+  }
+  if(![...answers].some(a=>bank.has(a)))return false;
+  blankIds.add(b.id);
+ }
+ for(const part of data.segments){
+  if(!part||typeof part!=="object"||Array.isArray(part)||Object.keys(part).length!==1)return false;
+  if(Object.hasOwn(part,"text")){if(typeof part.text!=="string"||!part.text||part.text.length>1600)return false;}
+  else if(Object.hasOwn(part,"blankId")){
+   if(typeof part.blankId!=="string"||!blankIds.has(part.blankId)||refs.has(part.blankId))return false;
+   refs.set(part.blankId,true);
+  }else return false;
+ }
+ return refs.size===blankIds.size&&data.segments.some(part=>Object.hasOwn(part,"text"));
+}
+function initialState(data){return {mode:data.settings.mode,answers:{},checked:{},hints:[],checks:0,completed:false};}
+function isCorrect(data,id,answer){const b=getBlank(data,id);return !!b&&b.answers.some(a=>normalize(a,data.settings)===normalize(answer??"",data.settings));}
+function correctCount(data,s){return data.blanks.filter(b=>s.checked[b.id]==="right").length;}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!["select","type"].includes(s.mode)||(!data.settings.allowTyping&&s.mode==="type")||!s.answers||typeof s.answers!=="object"||Array.isArray(s.answers)||!s.checked||typeof s.checked!=="object"||Array.isArray(s.checked)||!Array.isArray(s.hints)||!Number.isInteger(s.checks)||s.checks<0||s.checks>100000||typeof s.completed!=="boolean")return false;
+ const ids=new Set(data.blanks.map(b=>b.id));
+ for(const [id,v] of Object.entries(s.answers))if(!ids.has(id)||typeof v!=="string"||!v.trim()||v.length>80)return false;
+ for(const [id,status] of Object.entries(s.checked)){
+  if(!ids.has(id)||!["right","wrong"].includes(status)||status==="right"!==isCorrect(data,id,s.answers[id])||status==="wrong"&&isCorrect(data,id,s.answers[id]))return false;
+ }
+ if(s.hints.length>data.settings.maxHints||new Set(s.hints).size!==s.hints.length||s.hints.some(id=>!ids.has(id)))return false;
+ return s.completed===(correctCount(data,s)===data.blanks.length);
+}
+function transition(s,action,data){
+ if(action?.type==="reset")return {state:initialState(data),changed:true,kind:"neutral",message:"Atividade reiniciada. Preencha as lacunas novamente."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"O estado atual é inválido."};
+ if(action?.type==="mode"){
+  if(!["select","type"].includes(action.value)||action.value==="type"&&!data.settings.allowTyping)return {state:s,changed:false,kind:"warn",message:"Modo não permitido."};
+  if(s.mode===action.value)return {state:s,changed:false,kind:"neutral",message:"Modo já selecionado."};
+  return {state:{...s,mode:action.value},changed:true,kind:"neutral",message:action.value==="select"?"Selecione as palavras nas listas das lacunas.":"Digite as respostas diretamente nas lacunas."};
+ }
+ if(action?.type==="set"){
+  const b=getBlank(data,action.id),raw=action.value;
+  if(!b||typeof raw!=="string"||raw.length>80)return {state:s,changed:false,kind:"warn",message:"Resposta inválida."};
+  if(action.source==="select"&&raw!==""&&!data.settings.wordBank.includes(raw)&&raw!==s.answers[b.id])return {state:s,changed:false,kind:"warn",message:"Escolha uma opção do banco de palavras."};
+  if(action.source!=="select"&&action.source!=="type")return {state:s,changed:false,kind:"warn",message:"Origem da resposta inválida."};
+  if(action.source!==s.mode)return {state:s,changed:false,kind:"warn",message:"Seleção ou digitação no modo incorreto."};
+  const answers={...s.answers},checked={...s.checked},newValue=raw;
+  if((answers[b.id]||"")===newValue)return {state:s,changed:false,kind:"neutral",message:"Resposta mantida."};
+  if(newValue.trim())answers[b.id]=newValue;else delete answers[b.id];
+  delete checked[b.id];
+  return {state:{...s,answers,checked,completed:false},changed:true,kind:"neutral",message:"Resposta atualizada na lacuna."};
+ }
+ if(action?.type==="hint"){
+  const b=getBlank(data,action.id);
+  if(!b)return {state:s,changed:false,kind:"warn",message:"Lacuna desconhecida."};
+  if(s.hints.includes(b.id))return {state:s,changed:false,kind:"neutral",message:"Essa dica já foi revelada."};
+  if(s.hints.length>=data.settings.maxHints)return {state:s,changed:false,kind:"warn",message:"Todas as dicas já foram utilizadas."};
+  return {state:{...s,hints:[...s.hints,b.id]},changed:true,kind:"neutral",message:"Dica da lacuna "+(data.blanks.indexOf(b)+1)+": "+b.hint};
+ }
+ if(action?.type==="check"||action?.type==="checkAll"){
+  if(action.type==="check"&&!getBlank(data,action.id))return {state:s,changed:false,kind:"warn",message:"Lacuna desconhecida."};
+  const targets=action.type==="checkAll"?data.blanks:[getBlank(data,action.id)],checked={...s.checked};
+  for(const b of targets)checked[b.id]=isCorrect(data,b.id,s.answers[b.id])?"right":"wrong";
+  const next={...s,checked,checks:s.checks+1};
+  next.completed=correctCount(data,next)===data.blanks.length;
+  if(action.type==="checkAll"){
+   const right=correctCount(data,next),missing=data.blanks.filter(b=>!next.answers[b.id]).length;
+   return {state:next,changed:true,kind:next.completed?"right":"warn",message:next.completed?"Parabéns! Todas as lacunas foram verificadas corretamente.":right+" de "+data.blanks.length+" lacunas corretas; "+missing+" ainda sem resposta. Revise as marcações em destaque."};
+  }
+  const b=targets[0],ok=checked[b.id]==="right";
+  return {state:next,changed:true,kind:ok?"right":"warn",message:ok?"Correto! "+b.explanation:"Lacuna "+(data.blanks.indexOf(b)+1)+": "+(next.answers[b.id]?"Resposta diferente da esperada.":"Ainda sem resposta.")+" Revise o trecho e consulte a dica se necessário."};
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Preencha uma lacuna para começar."};
+}
+// End pure rules.
+
+function el(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node;}
+function message(text,kind="neutral"){const box=$("feedback");box.textContent=text;box.className="feedback"+(kind==="right"?" right":kind==="warn"?" wrong":"");}
+function getState(){return {...state,answers:{...state.answers},checked:{...state.checked},hints:[...state.hints]};}
+function restoreState(v){if(!validState(v,DATA))return false;state={...v,answers:{...v.answers},checked:{...v.checked},hints:[...v.hints]};render();return true;}
+function contextFor(index){
+ let previous="",next="";
+ for(let i=index-1;i>=0;i--)if(Object.hasOwn(DATA.segments[i],"text")){previous=DATA.segments[i].text;break;}
+ for(let i=index+1;i<DATA.segments.length;i++)if(Object.hasOwn(DATA.segments[i],"text")){next=DATA.segments[i].text;break;}
+ return (previous.replace(/\s+/g," ").slice(-44).trim()+" [lacuna] "+next.replace(/\s+/g," ").slice(0,44).trim()).trim();
+}
+function buildPassage(){
+ const area=$("text"),mode=state.mode;area.replaceChildren();
+ let ordinal=0;
+ DATA.segments.forEach((part,i)=>{
+  if(Object.hasOwn(part,"text")){area.append(document.createTextNode(part.text));return;}
+  ordinal++;
+  const wrap=el("span","blank");wrap.dataset.blank=part.blankId;
+  wrap.append(el("span","index",String(ordinal)));
+  const control=el(mode==="select"?"select":"input");
+  control.dataset.answerId=part.blankId;control.id="answer-"+part.blankId;
+  control.setAttribute("aria-label","Lacuna "+ordinal+": "+contextFor(i));
+  control.setAttribute("aria-describedby","instructions");
+  if(mode==="select"){
+   const placeholder=el("option","","Escolha...");placeholder.value="";control.append(placeholder);
+   for(const word of DATA.settings.wordBank){const option=el("option","",word);option.value=word;control.append(option);}
+  }else{control.type="text";control.maxLength=80;control.autocomplete="off";control.spellcheck=false;control.placeholder="Digite...";}
+  wrap.append(control);
+  const hint=el("button","small-button hint","?");hint.type="button";hint.dataset.hint=part.blankId;hint.setAttribute("aria-label","Mostrar dica da lacuna "+ordinal);
+  const check=el("button","small-button","✓");check.type="button";check.dataset.check=part.blankId;check.setAttribute("aria-label","Verificar lacuna "+ordinal);
+  wrap.append(hint,check);area.append(wrap);
+ });
+ lastMode=mode;
+}
+function renderHints(){
+ const area=$("hint-list");area.replaceChildren();
+ if(!state.hints.length)area.append(el("p","tip","Você ainda não utilizou dicas."));
+ state.hints.forEach(id=>{const b=getBlank(DATA,id),n=DATA.blanks.indexOf(b)+1;area.append(el("div","hint-item","Lacuna "+n+": "+b.hint));});
+}
+function renderReview(){
+ const area=$("review-list");area.replaceChildren();
+ DATA.blanks.forEach((b,index)=>{
+  const div=el("div","review-item");
+  div.append(el("strong","", "Lacuna "+(index+1)+": "+state.answers[b.id]));
+  div.append(el("p","",b.explanation));area.append(div);
+ });
+}
+function render(){
+ if(disposed||!state)return;
+ if(lastMode!==state.mode)buildPassage();
+ const readyInputs=root.querySelectorAll("[data-answer-id]");
+ readyInputs.forEach(input=>{
+  const id=input.dataset.answerId,v=state.answers[id]||"";
+  if(input.tagName==="SELECT"){
+   const oldTyped=input.querySelector('option[data-typed]');
+   if(oldTyped&&oldTyped.value!==v)oldTyped.remove();
+   if(v&&!DATA.settings.wordBank.includes(v)&&![...input.options].some(opt=>opt.value===v)){
+    const typed=el("option","","Digitado anteriormente: "+v);
+    typed.value=v;typed.dataset.typed="true";input.append(typed);
+   }
+  }
+  if(input.value!==v)input.value=v;
+  const wrap=input.closest(".blank");wrap.classList.toggle("right",state.checked[id]==="right");
+  wrap.classList.toggle("wrong",state.checked[id]==="wrong");
+  input.setAttribute("aria-invalid",String(state.checked[id]==="wrong"));
+  input.disabled=!ready||state.completed;
+ });
+ for(const button of root.querySelectorAll("[data-check]"))button.disabled=!ready||state.completed;
+ for(const button of root.querySelectorAll("[data-hint]"))button.disabled=!ready||state.completed||state.hints.length>=DATA.settings.maxHints&&!state.hints.includes(button.dataset.hint);
+ $("mode-select").setAttribute("aria-pressed",String(state.mode==="select"));
+ $("mode-type").setAttribute("aria-pressed",String(state.mode==="type"));
+ $("answered").textContent=Object.keys(state.answers).length+" / "+DATA.blanks.length;
+ $("correct").textContent=correctCount(DATA,state)+" / "+DATA.blanks.length;
+ $("hint-count").textContent=state.hints.length+" / "+DATA.settings.maxHints;
+ $("progress").setAttribute("aria-valuenow",String(correctCount(DATA,state)));
+ $("progress-fill").style.width=correctCount(DATA,state)/DATA.blanks.length*100+"%";
+ $("check-all").disabled=!ready||state.completed;
+ $("reset").disabled=!ready;
+ $("finish").hidden=!state.completed;
+ $("review").hidden=!state.completed;
+ if(state.completed)renderReview();
+ renderHints();
+}
+function save(){
+ if(!progress||!revision||disposed)return;
+ queue=queue.then(async()=>{
+  if(disposed||!revision)return;
+  const saved=revision.data&&typeof revision.data==="object"&&!Array.isArray(revision.data)?revision.data:{};
+  const data={...saved,[storageKey]:getState()};
+  if(new TextEncoder().encode(JSON.stringify(data)).length>12288){message("O progresso ultrapassou 12 KiB e não foi enviado.","warn");return;}
+  revision=await progress.save({version:revision.version,location:"games/fill-blanks-water-cycle",data});
+ }).catch(async()=>{
+  if(disposed)return;
+  try{revision=await progress.load();
+   if(revision?.data?.[storageKey]&&restoreState(revision.data[storageKey]))message("O progresso foi alterado em outra janela. Recuperei a versão mais recente.","warn");
+   else message("Não foi possível conciliar o progresso salvo. Continue nesta página.","warn");
+  }catch(_){revision=null;message("Não foi possível salvar no Moodle. Continue normalmente nesta página.","warn");}
+ });
+}
+function handleAction(action,persist=true){
+ if(!ready||disposed)return;
+ const result=transition(state,action,DATA);
+ if(!result.changed){if(action.type!=="set")message(result.message,result.kind);return;}
+ state=result.state;modified=true;render();
+ if(persist)save();
+ if(action.type!=="set"){
+  message(result.message,result.kind);
+  if(action.type==="check"||action.type==="checkAll")$("feedback").focus({preventScroll:true});
+  if(state.completed)$("finish").focus({preventScroll:true});
+ }
+}
+function destroy(){disposed=true;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){message("Os segmentos, opções ou respostas do jogo são inválidos.","warn");return;}
+ state=initialState(data);
+ for(const word of data.settings.wordBank)$("word-bank").append(el("span","word",word));
+ render();
+ if(progress)try{
+  const snapshot=await progress.load();if(disposed)return;revision=snapshot;
+  if(!modified&&snapshot.data?.[storageKey]&&restoreState(snapshot.data[storageKey]))message("Seu progresso foi recuperado. Continue preenchendo.");
+  else message("Escolha palavras nas lacunas ou mude para o modo digitação.");
+ }catch(_){message("Sem sincronização com o Moodle. A atividade funciona normalmente.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("input",event=>{
+ const input=event.target.closest("input[data-answer-id]");
+ if(input&&!event.isComposing)handleAction({type:"set",id:input.dataset.answerId,value:input.value,source:"type"},false);
+},{signal:controller.signal});
+root.addEventListener("change",event=>{
+ const select=event.target.closest("select[data-answer-id]");
+ if(select)handleAction({type:"set",id:select.dataset.answerId,value:select.value,source:"select"});
+ const input=event.target.closest("input[data-answer-id]");
+ if(input){handleAction({type:"set",id:input.dataset.answerId,value:input.value,source:"type"},false);save();}
+},{signal:controller.signal});
+root.addEventListener("click",event=>{
+ const b=event.target.closest("button");
+ if(!b||!root.contains(b))return;
+ if(b.dataset.hint){handleAction({type:"hint",id:b.dataset.hint});return;}
+ if(b.dataset.check){handleAction({type:"check",id:b.dataset.check});return;}
+ if(b.dataset.mode){handleAction({type:"mode",value:b.dataset.mode});return;}
+ if(b.id==="check-all")handleAction({type:"checkAll"});
+ if(b.id==="reset")handleAction({type:"reset"});
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script>
+</body></html>

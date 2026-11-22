@@ -69,3 +69,11 @@ node --test docs/pt_br/tests/true-false.test.mjs
 ```
 
 O teste cobre booleano recebido como string, clique duplo, explicações, textos longos, retorno à afirmação anterior, retomada de progresso, funcionamento offline e sincronização dos catálogos.
+
+Para o jogo 13 (Complete as lacunas - O ciclo da água), execute:
+
+```bash
+node --test docs/pt_br/tests/fill-blanks.test.mjs
+```
+
+O teste abrange estrutura dos segmentos, lacunas com respostas repetidas e IDs exclusivos, sinônimos, textos com pontuação, termos compostos, opções ausentes do banco, proteção contra HTML inseguro, seleção e digitação, conferência, dicas, restauração de estado e sincronização dos catálogos.
