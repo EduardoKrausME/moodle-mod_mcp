@@ -44,7 +44,7 @@ with a fallback for older or restricted browsers and announces the result.
   creating anything.
 
 All modes reuse the sandboxed HTML runtime and the
-[student SDK and authoring API catalogue](API.md). These are authoring prompts,
+[student SDK and authoring API catalogue](.chatgpt/API.md). These are authoring prompts,
 not built-in templates or a claim that unsupported reporting, execution or
 grading APIs are available.
 
@@ -103,7 +103,7 @@ assessment instructions. The Portuguese and English prompts remain unchanged.
 ## Student runtime API (1.1)
 
 The complete, maintained inventory of student SDK actions, Moodle web services
-and authoring MCP tools is in [API.md](API.md). The authoring prompts link directly
+and authoring MCP tools is in [API.md](.chatgpt/API.md). The authoring prompts link directly
 to this catalogue. Structured position tracking uses
 `MoodleMCP.progress.getStatus()` and
 `MoodleMCP.progress.saveStatus({version, location, percent, currentstep, totalsteps})`
@@ -178,4 +178,4 @@ Conheça a [galeria de exemplos do Mod MCP](docs/pt_br/), com sete modos de auto
 
 Para publicar como site, habilite GitHub Pages com origem na branch `master`, diretório `/docs`. Localmente, use `python3 -m http.server 8000 -d docs` e abra `http://localhost:8000/pt_br/`.
 
-Os resultados dos exemplos na galeria são simulações locais; notas reais, respostas dos estudantes, conclusão e publicação são responsabilidade dos serviços e fluxos oficiais do Mod MCP. Veja [API.md](API.md) e as [especificações de jogos](.chatgpt/games/README.md).
+Os resultados dos exemplos na galeria são simulações locais; notas reais, respostas dos estudantes, conclusão e publicação são responsabilidade dos serviços e fluxos oficiais do Mod MCP. Veja [API.md](.chatgpt/API.md) e as [especificações de jogos](.chatgpt/games/README.md).

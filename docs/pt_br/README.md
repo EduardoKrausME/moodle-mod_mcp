@@ -22,7 +22,7 @@ Para cadastrar um jogo, crie `game-<modalidade>/<nome>.html`, registre-o no `gam
 
 Os cards exibem um iframe de **1024 × 640 pixels** com `transform: scale(...)` baseado na largura do card; isso mantém o layout real do exemplo sem tentar reescrever seu HTML. O iframe é isolado com `sandbox="allow-scripts"`, **sem** `allow-same-origin`, e a prévia ampliada também. Os iframes dos cards são iniciados sob demanda, e a grade mostra no máximo 12 itens por vez. A prévia ampliada permite experimentar os controles, abrir o HTML em outra aba, visualizar e copiar o código.
 
-Os exemplos são demonstrações independentes do Moodle. O resultado de um quiz, pesquisa ou jogo na galeria é **local ao navegador e não é uma nota, resposta registrada ou conclusão no Moodle**. Para persistência, avaliações reais e publicação, integre o HTML ao fluxo oficial e consulte [API.md](../../API.md). Não coloque tokens, segredos ou URLs privados nos exemplos.
+Os exemplos são demonstrações independentes do Moodle. O resultado de um quiz, pesquisa ou jogo na galeria é **local ao navegador e não é uma nota, resposta registrada ou conclusão no Moodle**. Para persistência, avaliações reais e publicação, integre o HTML ao fluxo oficial e consulte [API.md](../../.chatgpt/API.md). Não coloque tokens, segredos ou URLs privados nos exemplos.
 
 Os arquivos `games/*.html` foram migrados para suas pastas específicas. A pasta `games/` permanece apenas como índice da galeria, e cada modalidade pode reunir quantos exemplos forem necessários.
 
