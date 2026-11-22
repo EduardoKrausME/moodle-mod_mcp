@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="description" content="Laboratório de pontes: descubra trajetórias de carga, tração, compressão, cortante e momento fletor, compare cinco estruturas e investigue uma viga biapoiada com cálculos de equilíbrio.">
+<title>Como uma ponte suporta toneladas sem cair? | Caderno de estruturas</title>
+<style>
+:root{--blue:#102b46;--blue2:#173a57;--grid:#2d5876;--dark:#0b2034;--cyan:#a3e3eb;--steel:#d3eaf0;--orange:#ffb260;--rust:#bc664a;--cream:#f5f1e6;--paper:#e6e4da;--ink:#203a45;--muted:#4f6370;--line:#a5b5b9;--display:"Trebuchet MS",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;font-family:var(--display);color:var(--ink);background:var(--cream)}
+*,*:before,*:after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;line-height:1.72;min-width:300px;background:var(--cream)}
+h1,h2,h3,figure,p{margin-top:0}
+h1,h2,h3{line-height:1.15}
+h2{font-size:clamp(1.9rem,3.7vw,3.6rem);letter-spacing:-.046em;font-weight:800}
+h3{font-size:clamp(1.13rem,1.8vw,1.48rem)}
+p{margin-bottom:1.15em}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.55;cursor:default}
+a{color:#175e79;text-underline-offset:4px}
+a:hover{color:#a24b2e}
+:focus-visible{outline:3px solid #ffd06a;outline-offset:4px}
+[hidden]{display:none!important}
+.wrap{width:min(1240px,calc(100% - 48px));margin-inline:auto}
+.mono{font-family:var(--mono)}
+.eyebrow{font:800 .72rem/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase}
+.skip{position:absolute;top:-100px;left:12px;background:#fff;color:#1e3441;padding:12px 16px;z-index:100}
+.skip:focus{top:12px}
+.blueprint{background-color:var(--blue);background-image:linear-gradient(#87afc40e 1px,transparent 1px),linear-gradient(90deg,#87afc40e 1px,transparent 1px),linear-gradient(#87afc419 1px,transparent 1px),linear-gradient(90deg,#87afc419 1px,transparent 1px);background-size:20px 20px,20px 20px,100px 100px,100px 100px;color:#edf8f7}
+.cover{position:relative;isolation:isolate;overflow:hidden}
+.cover:before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(ellipse at 69% 15%,#2a72934e 0,transparent 44%),linear-gradient(135deg,#081f37bb 0%,#17395770 100%)}
+.cover-top{padding:24px 0;display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid #7aa2b464}
+.cover-top .serial{padding:8px 12px;border:1px solid #95ceda;font:800 .71rem var(--mono);letter-spacing:.04em;color:#b9eef2}
+.cover-top .eyebrow{color:#c4ebee}
+.cover-grid{display:grid;grid-template-columns:.97fr 1.03fr;gap:20px;align-items:center;padding:63px 0 63px;min-height:620px}
+.cover h1{font-size:clamp(3rem,5.5vw,5.6rem);line-height:1;letter-spacing:-.075em;margin:17px 0 28px;max-width:620px}
+.cover h1 em{font-style:normal;color:#ffbd70}
+.cover .lead{font-size:1.09rem;max-width:600px;color:#d0e8ed;line-height:1.9}
+.cover .meta{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 0}
+.cover .meta span{font:.76rem var(--mono);padding:8px 11px;border:1px solid #76a2b2;color:#c7e4e9;background:#143853}
+.cover-figure{margin:0}
+.cover-figure svg{width:100%;height:auto;display:block}
+.cover-figure figcaption{font:.77rem/1.65 var(--mono);color:#add0da;margin-top:10px}
+.draw-line{height:13px;background:repeating-linear-gradient(90deg,#ffb260 0 28px,#173650 28px 39px,#a1dbe1 39px 52px)}
+.plate-id{font:800 .76rem/1.4 var(--mono);letter-spacing:.11em;color:#2b788e;text-transform:uppercase}
+.section{padding:87px 0;border-bottom:1px solid #c5ccc6}
+.section-head{display:grid;grid-template-columns:205px 1fr;gap:37px;margin-bottom:39px}
+.section-head .plate-id{padding-top:11px}
+.section-head h2{max-width:890px;margin:0 0 19px}
+.section-head p{max-width:850px;color:#53646a;line-height:1.86;font-size:1.06rem}
+.prologue{display:grid;grid-template-columns:210px 1fr;gap:52px;padding:90px 0}
+.prologue .number{font:800 6.9rem/.9 var(--mono);letter-spacing:-.12em;color:#b1c0be}
+.prologue h2{max-width:850px;margin:15px 0 22px}
+.prologue .lead{font-size:1.27rem;color:#284650;line-height:1.78}
+.prologue p{max-width:875px;font-size:1.04rem;line-height:1.91;color:#4c5c60}
+.accent-note{background:#e7e3d5;padding:19px 23px;border-left:5px solid #b86a43;color:#42525a;margin-top:25px}
+.accent-note strong{color:#7b3a29}
+.darklab{background:#102b46;color:#f0f8f8;padding:85px 0;border-bottom:8px solid #be8a5c}
+.darklab .section-head p{color:#c7e0e6}
+.darklab .plate-id{color:#9cdaeb}
+.lab-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(290px,.78fr);gap:19px;align-items:start}
+.monitor{background:#0c233b;border:1px solid #527991;min-width:0}
+.monitor-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#204761;padding:13px 18px;border-bottom:1px solid #618da2;font:750 .77rem var(--mono)}
+.monitor-head span:last-child{color:#bddde6}
+.beam-view{padding:15px 13px 11px;min-width:0}
+.beam-view svg{width:100%;height:auto;display:block}
+.beam-view .moving-truck{transition:transform .2s ease}
+.beam-view .draw-stroke{fill:none;stroke:#a4dfea;stroke-width:4}
+.beam-view .static-grid{fill:none;stroke:#345975;stroke-width:1}
+.beam-view .guide{fill:none;stroke:#7799aa;stroke-width:2;stroke-dasharray:7 7}
+.beam-view .load{stroke:#ffbd75;stroke-width:7;stroke-linecap:round}
+.beam-view .reaction{stroke:#9aedd5;stroke-width:6;stroke-linecap:round}
+.beam-view .load-head{fill:#ffbd75}
+.beam-view .react-head{fill:#9aedd5}
+.beam-view text{font-family:var(--mono);font-size:18px;fill:#d3edf0}
+.beam-view .major{font-size:21px;font-weight:800;fill:#ffdc9e}
+.beam-view .beam{fill:#80aec2;stroke:#c2e5ed;stroke-width:3}
+.monitor-legend{padding:0 18px 17px;font:.78rem/1.7 var(--mono);color:#bdd8e1}
+.curves{border-top:1px solid #385a71;padding:20px}
+.curves h3{font:800 .84rem var(--mono);color:#c4e6eb;letter-spacing:.05em;margin:0 0 10px}
+.curves svg{width:100%;height:auto;display:block}
+.curves .axis{stroke:#6b91a6;stroke-width:2;fill:none}
+.curves .grid{stroke:#33526b;stroke-width:1;fill:none;stroke-dasharray:3 7}
+.curves .shear-line{stroke:#ffbe75;stroke-width:4;fill:none;stroke-linejoin:round}
+.curves .moment-line{stroke:#9addd9;stroke-width:4;fill:none;stroke-linejoin:round}
+.curves text{font:17px var(--mono);fill:#d8e8ea}
+.curves .chart-label{font-weight:800;fill:#ffc58c}
+.lab-note{padding:15px 20px;margin:0;background:#294559;color:#d7e9ed;font-size:.83rem;line-height:1.8}
+.control-stack{display:grid;gap:16px}
+.control-card{background:#f0f2eb;color:#234352;padding:25px;border:1px solid #afc3c3}
+.control-card h3{margin:0 0 15px;font-size:1.45rem}
+.control-card p{font-size:.87rem;color:#46616b;line-height:1.82}
+.control-card .tag{font:750 .73rem var(--mono);text-transform:uppercase;color:#2d7283}
+.control-label{display:flex;justify-content:space-between;gap:12px;font-size:.86rem;font-weight:780;align-items:center;margin-top:16px}
+.control-label output{font:.87rem var(--mono);color:#9c5030;white-space:nowrap}
+.control-card input[type=range]{width:100%;accent-color:#266f8b;margin:11px 0 4px;cursor:pointer}
+.control-card .range-note{font:.73rem/1.5 var(--mono);color:#5b747a;margin:0}
+.control-card .check{display:flex;gap:10px;align-items:center;margin:15px 0;color:#345766;font-size:.89rem}
+.control-card .check input{width:18px;height:18px;accent-color:#286b78}
+.control-card button{padding:11px 16px;border:1px solid #467788;background:#266780;color:#fff;font-weight:750}
+.control-card button:hover{background:#1e4d65}
+.formula{padding:25px;background:#223d4e;border:1px solid #688d9c;color:#edf9f1}
+.formula h3{font-size:1.24rem;margin:0 0 14px}
+.formula .calcs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.formula .calc{background:#102b40;padding:13px 14px;border-left:3px solid #e7b274}
+.formula .calc:nth-child(even){border-left-color:#96d7d7}
+.formula .calc small{display:block;font:.76rem var(--mono);color:#c1d8e0}
+.formula .calc strong{display:block;font:750 clamp(1.05rem,2.1vw,1.45rem) var(--mono);color:#f5e6cb;margin-top:8px;overflow-wrap:anywhere}
+.formula p{font-size:.83rem;line-height:1.78;color:#d0e3e8;margin:18px 0 0}
+.formula code{font-family:var(--mono);color:#ffc58d;overflow-wrap:anywhere}
+.blueprint-caption{background:#21425d;color:#d4e9ee;padding:18px 22px;margin-top:20px;font-size:.86rem;line-height:1.8;border-left:4px solid #ffc27b}
+.forces{background:#f1eee6}
+.force-grid{display:grid;grid-template-columns:1fr 1fr;gap:31px;align-items:start}
+.force-figure{margin:0;border:1px solid #b5c9ca;padding:22px;background:#e7f0eb}
+.force-figure svg{width:100%;height:auto;display:block}
+.force-figure figcaption{font-size:.8rem;color:#51696c;margin-top:14px}
+.force-text p{font-size:1rem;line-height:1.88;color:#526368}
+.force-text h3{margin:19px 0 12px}
+.force-chooser{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.force-chooser button{padding:10px 13px;border:1px solid #7ca4aa;background:#fafaf2;color:#265967;font:.79rem var(--mono)}
+.force-chooser button[aria-pressed="true"]{background:#265d73;color:white;border-color:#265d73}
+.force-chooser button:hover{border-color:#ac593b}
+.force-explain{background:#e2ebdf;padding:20px 23px;border-left:5px solid #bf7949;min-height:165px}
+.force-explain strong{display:block;font:800 1.13rem var(--display);margin-bottom:8px;color:#244d5c}
+.force-explain p{margin:0}
+.force-layer{display:none}
+.force-layer.active{display:block}
+.types{background:#e7e5dc;padding:89px 0}
+.types-layout{display:grid;grid-template-columns:.36fr .64fr;gap:26px}
+.type-chooser{display:grid;gap:11px;align-content:start}
+.type-chooser button{padding:18px;background:#f7f3e9;border:1px solid #a4b3b6;color:#284550;text-align:left;display:flex;gap:16px;align-items:center}
+.type-chooser button .code{font:800 .86rem var(--mono);color:#b36344;flex:none}
+.type-chooser button strong{font-size:1.02rem}
+.type-chooser button[aria-pressed="true"]{background:#193b53;color:#f0faf7;border-color:#193b53}
+.type-chooser button[aria-pressed="true"] .code{color:#ffd0a2}
+.type-chooser button:hover{border-color:#b06342}
+.type-board{background-color:#15334f;background-image:linear-gradient(#afd0e30f 1px,transparent 1px),linear-gradient(90deg,#afd0e30f 1px,transparent 1px);background-size:22px 22px;border:1px solid #4c7490;padding:20px;color:#edf6f5}
+.type-board h3{font:800 1.5rem var(--display);margin:8px 0 17px}
+.type-art{min-height:300px}
+.type-art svg{width:100%;height:auto;display:block}
+.type-art svg[hidden]{display:none!important}
+.type-art .arch-line{fill:none;stroke:#99cbe3;stroke-width:12;stroke-linejoin:round}
+.type-art .deck-line{stroke:#b9dae6;stroke-width:13;stroke-linecap:round}
+.type-art .forces{fill:none;stroke:#ffb877;stroke-width:6;stroke-linecap:round}
+.type-art .tension{stroke:#76d6c0;stroke-width:7;fill:none}
+.type-art .compression{stroke:#ffbd76;stroke-width:8;fill:none}
+.type-art .base{fill:#6b8ba3}
+.type-art .support{fill:#c6e0dd}
+.type-art text{font:18px var(--mono);fill:#d3ecf2}
+.type-art .small{font-size:15px;fill:#b4d6e1}
+.type-board p{color:#d2e4e9;font-size:.92rem;line-height:1.82}
+.type-board .route{padding:14px 18px;background:#234860;border-left:4px solid #f4ba7c;color:#e7f1ed}
+.type-board .route strong{color:#ffdda8}
+.type-board .consequence{margin-top:16px;color:#e3eee9;font-size:.87rem}
+.type-key{display:flex;flex-wrap:wrap;gap:17px;font:.76rem var(--mono);color:#e0edf2;margin-top:16px}
+.type-key b{display:inline-block;width:14px;height:6px;vertical-align:middle;margin-right:6px}
+.foundation{padding:89px 0}
+.foundation-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:start}
+.foundation figure{margin:0;padding:22px;background:#e3e7dd;border:1px solid #b4c1be}
+.foundation figure svg{width:100%;height:auto;display:block}
+.foundation figure figcaption{font-size:.82rem;color:#54666a;margin-top:13px}
+.foundation-copy p{font-size:1.03rem;color:#516167;line-height:1.92}
+.foundation-copy h3{margin:15px 0 12px}
+.foundation-copy ul{padding-left:22px;color:#475d66}
+.foundation-copy li{margin:0 0 12px}
+.failure{background:#e4e8df;padding:85px 0}
+.failure-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.failure-card{background:#f5f6ee;border:1px solid #b0bdba;padding:25px}
+.failure-card h3{margin:0 0 14px}
+.failure-card p{color:#52656b;font-size:.95rem;line-height:1.84}
+.failure-card svg{display:block;width:100%;height:auto;background:#e5edf0;margin:10px 0 17px;border:1px solid #b9ced1}
+.materials{padding:84px 0;background:#24384a;color:#f0f7f5}
+.materials .section-head p{color:#d3e4e7}
+.materials .plate-id{color:#b9e0e7}
+.materials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.material{padding:25px 22px;background:#2e5065;border-top:5px solid #9bd8d9}
+.material:nth-child(2){border-color:#ffc38a}
+.material:nth-child(3){border-color:#a7be9c}
+.material h3{color:#f2efdf}
+.material p{color:#d7e5e4;font-size:.92rem;line-height:1.85}
+.material-note{margin-top:25px;color:#cfdfe4;line-height:1.85}
+.safety{padding:87px 0;background:#f3efdf}
+.safety-intro{display:grid;grid-template-columns:1fr 1fr;gap:35px;margin-bottom:35px}
+.safety-intro p{font-size:1.01rem;color:#51656a;line-height:1.91}
+.check-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.check-panel{padding:24px;background:#e6e9dc;border-top:4px solid #ba6f4b}
+.check-panel:nth-child(2){border-color:#357889}
+.check-panel:nth-child(3){border-color:#6b8a70}
+.check-panel h3{margin-bottom:12px}
+.check-panel p{color:#4d6267;font-size:.92rem;line-height:1.79}
+.quiz{padding:86px 0;background:#e6ecea}
+.quiz-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:48px}
+.quiz-side p{color:#526b6d;line-height:1.92;font-size:1.04rem}
+.question{border:0;border-bottom:1px solid #b9c9c9;padding:0 0 24px;margin:0 0 25px;min-width:0}
+.question legend{width:100%;font-weight:800;line-height:1.56;padding:0;margin-bottom:11px}
+.question label{display:flex;gap:12px;align-items:flex-start;padding:11px 13px;margin:8px 0;background:#fcfcf5;border:1px solid #aebfc1;cursor:pointer}
+.question label:has(input:checked){border-color:#367488;background:#e2f1ef}
+.question input{margin-top:6px;flex:none;accent-color:#2b7183}
+.question-feedback{font-size:.9rem;color:#285d65;min-height:1.5em;margin:13px 0 0}
+.quiz-actions{display:flex;gap:10px;flex-wrap:wrap}
+.quiz-actions button{padding:12px 17px;border:1px solid #336a7d;background:#255c72;color:#fff;font-weight:780}
+.quiz-actions button.alt{background:transparent;color:#265c70}
+.quiz-result{font-size:1.3rem;font-weight:770;margin-top:18px}
+.footerband{background:#0f3950;color:#f2fcf4;padding:65px 0}
+.footerband h2{max-width:920px}
+.footerband p{max-width:900px;color:#cfe7e9;font-size:1.08rem;line-height:1.86}
+.references{padding:46px 0 72px}
+.references h2{font-size:1.43rem}
+.references p{font-size:.87rem;line-height:1.84;color:#4e6268}
+.references a{overflow-wrap:anywhere}
+@media(max-width:1000px){.cover-grid,.section-head,.prologue,.lab-grid,.force-grid,.types-layout,.foundation-grid,.safety-intro,.quiz-grid{grid-template-columns:1fr}.cover-grid{padding:46px 0}.section-head{gap:12px}.lab-grid{gap:17px}.prologue{gap:8px}.prologue .number{font-size:4rem}.types-layout{gap:15px}.type-chooser{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.type-chooser button{padding:12px 9px;display:block}.type-chooser button .code{display:block;margin-bottom:4px}}
+@media(max-width:700px){.wrap{width:calc(100% - 30px)}.cover-top{flex-wrap:wrap}.cover h1{font-size:clamp(2.9rem,10.5vw,5.2rem)}.section,.darklab,.types,.foundation,.failure,.materials,.safety,.quiz{padding:60px 0}.prologue{padding:61px 0}.force-grid,.failure-grid,.materials-grid,.check-grid{grid-template-columns:1fr}.type-chooser{grid-template-columns:1fr 1fr}.type-chooser button{padding:11px}.formula .calcs{grid-template-columns:1fr 1fr}.lab-note{padding:14px}.control-card{padding:19px}.curves{padding:12px}.type-board{padding:12px}.type-art{min-height:0}.cover-grid{gap:8px}}
+@media(max-width:425px){.formula .calcs{grid-template-columns:1fr}.monitor-head span:last-child{width:100%}.type-chooser{grid-template-columns:1fr}.type-chooser button{display:flex}.type-chooser button .code{margin:0}.cover .meta span{font-size:.67rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para a atividade</a>
+<main id="conteudo">
+<section class="cover blueprint" aria-labelledby="titulo">
+ <div class="wrap">
+  <div class="cover-top"><span class="eyebrow">Caderno de engenharia estrutural / 08–10</span><span class="serial">PRANCHA: ESTRUTURAS-01 · MODELO DIDÁTICO</span></div>
+  <div class="cover-grid">
+   <div>
+    <span class="eyebrow" style="color:#9ed6de">Forças invisíveis. Estruturas reais.</span>
+    <h1 id="titulo">Como uma ponte suporta <em>toneladas</em> sem cair?</h1>
+    <p class="lead">Uma ponte não desafia a gravidade: ela organiza forças e as transmite para apoios, fundações e terreno. Siga esse percurso em desenhos de engenharia, depois mova uma carga e veja o que muda — sem confundir uma simulação escolar com um projeto seguro.</p>
+    <div class="meta"><span>Cinco tipologias</span><span>Equilíbrio estático</span><span>Laboratório de cortante e momento</span></div>
+   </div>
+   <figure class="cover-figure">
+    <svg viewBox="0 0 740 520" role="img" aria-labelledby="heroTitle heroDesc">
+     <title id="heroTitle">Prancha original em perspectiva de uma ponte de treliça sobre um rio</title>
+     <desc id="heroDesc">Desenho vetorial inspirado em projeto de engenharia: ponte de treliça metálica em perspectiva, pilares, terreno, linhas de cota, flechas de carga e rio, sobre fundo azul quadriculado. Não representa ponte real.</desc>
+     <g stroke="#345976" stroke-width="1" opacity=".55"><path d="M0 60H740 M0 120H740 M0 180H740 M0 240H740 M0 300H740 M0 360H740 M0 420H740 M0 480H740 M70 0V520 M140 0V520 M210 0V520 M280 0V520 M350 0V520 M420 0V520 M490 0V520 M560 0V520 M630 0V520 M700 0V520"/></g>
+     <path d="M36 421 Q195 377 363 431 T707 410" fill="none" stroke="#559fbb" stroke-width="12"/>
+     <path d="M36 447 Q196 409 363 460 T707 440" fill="none" stroke="#397b9e" stroke-width="5" stroke-dasharray="13 13"/>
+     <g fill="#7c9cad" stroke="#c8e7ee" stroke-width="3"><path d="M131 361 L155 351 L155 440 L131 451Z"/><path d="M603 310 L629 299 L629 410 L603 421Z"/></g>
+     <path d="M95 323 L596 252 L690 281 L190 352Z" fill="#4e809b" stroke="#e3f4f4" stroke-width="5"/>
+     <path d="M95 307 L596 237 L690 266 L190 337Z" fill="#6e9ab3" stroke="#cbe3e6" stroke-width="4"/>
+     <g fill="none" stroke="#a3dae5" stroke-width="8" stroke-linejoin="round">
+      <path d="M103 304 L104 160 L599 89 L599 239Z"/><path d="M104 160 L171 284 L239 141 L305 265 L374 120 L441 246 L507 101 L599 239"/>
+      <path d="M190 337 L190 205 L683 130 L683 261Z"/><path d="M190 205 L260 327 L328 185 L397 306 L464 166 L530 287 L597 146 L683 261"/>
+     </g>
+     <g stroke="#78bacb" stroke-width="4" opacity=".75"><path d="M103 161 L190 204 M239 141 L328 184 M374 120 L464 165 M507 101 L597 146 M599 89 L683 131"/></g>
+     <g stroke="#ffbd75" stroke-width="7" stroke-linecap="round"><path d="M315 45 V170 M450 32 V144 M556 34 V125"/></g>
+     <g fill="#ffbd75"><path d="M303 162 L327 162 L315 183Z"/><path d="M438 137 L462 137 L450 160Z"/><path d="M544 119 L568 119 L556 144Z"/></g>
+     <g stroke="#8fdec9" stroke-width="6" stroke-linecap="round"><path d="M143 427 V373 M615 404 V343"/></g>
+     <g fill="#8fdec9"><path d="M131 385 L155 385 L143 363Z"/><path d="M603 355 L627 355 L615 333Z"/></g>
+     <g fill="none" stroke="#83b2c8" stroke-width="2" stroke-dasharray="8 8"><path d="M95 380 L690 297 M94 395 L690 312 M94 392 L94 420 M690 303 L690 334"/></g>
+     <g font="17px monospace" fill="#d5e9ee"><text x="53" y="470">SUPORTE A</text><text x="571" y="456">SUPORTE B</text><text x="339" y="496">VÃO / COMPRIMENTO</text><text x="25" y="36" fill="#ffca90">CARGAS ↓</text></g>
+    </svg>
+    <figcaption>Figura 1. Ilustração SVG autoral, conceitual, fora de escala. As setas representam forças e reações, não um dimensionamento de ponte real.</figcaption>
+   </figure>
+  </div>
+ </div>
+ <div class="draw-line" aria-hidden="true"></div>
+</section>
+
+<section class="prologue wrap" aria-labelledby="fundamento">
+ <div><div class="number" aria-hidden="true">01</div><span class="plate-id">O problema físico</span></div>
+ <div>
+  <h2 id="fundamento">O peso precisa encontrar um caminho até o terreno.</h2>
+  <p class="lead">Um caminhão não fica suspenso porque o aço é “forte” em abstrato: cada peça da ponte participa de um sistema que transmite efeitos de carga entre componentes, apoios e fundações.</p>
+  <p>Considere um veículo sobre o tabuleiro. A força vertical aplicada provoca esforços no tabuleiro e nas vigas ou sistemas que o sustentam. Em seguida, esses efeitos chegam a aparelhos de apoio, pilares ou encontros, passam pelas fundações e finalmente interagem com o solo ou rocha. Esse é um <strong>caminho de cargas</strong>, que pode incluir componentes submetidos à tração, compressão, flexão, cisalhamento e torção.</p>
+  <p>Uma ponte também precisa suportar seu <strong>peso próprio</strong>, cargas de tráfego e pedestres, condições de construção, vento, variação de temperatura e efeitos ambientais. Dependendo do local, entram na avaliação sismos, impacto, correnteza e erosão em torno de fundações. O desempenho é verificado em diferentes estados-limite e combinações de carga, não apenas com uma pergunta como “aguenta quantas toneladas?”.</p>
+  <div class="accent-note"><strong>Unidade antes da conta:</strong> tonelada é unidade de massa. Para representar a ação vertical em um modelo de equilíbrio, usamos força em <strong>quilonewtons (kN)</strong>. Apenas como comparação sob gravidade convencional, 1 tonelada-força corresponde a aproximadamente 9,81 kN. Essa equivalência não substitui modelagem de eixos, dinâmica, segurança ou distribuição das cargas.</div>
+ </div>
+</section>
+
+<section class="darklab" aria-labelledby="labTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="plate-id">02 / Bancada de equilíbrio</span><div><h2 id="labTitle">Mova a carga. Observe para onde vai a força.</h2><p>Modelo idealizado de uma viga biapoiada com dois apoios simples, uma força vertical concentrada P e, opcionalmente, uma carga uniformemente distribuída w. Altere valores e observe reações, cortante e momento; os números são resultados matemáticos apenas dessas hipóteses.</p></div></div>
+  <div class="lab-grid">
+   <div class="monitor">
+    <div class="monitor-head"><span>DIAGRAMA DE CORPO LIVRE / 2D</span><span>SEM DIMENSIONAMENTO · SEM VERIFICAÇÃO DE RESISTÊNCIA</span></div>
+    <div class="beam-view">
+     <svg viewBox="0 0 960 365" role="img" aria-labelledby="beamTitle beamDesc">
+      <title id="beamTitle">Viga biapoiada com carga concentrada móvel, carga distribuída e reações dos apoios</title>
+      <desc id="beamDesc">A viga horizontal está apoiada sobre articulação à esquerda e rolete à direita. A seta âmbar P move-se conforme o controle de posição e as reações A e B sobem a partir dos apoios. Quando a carga distribuída está ativa, aparecem pequenas setas repetidas ao longo da viga. Os valores também são apresentados em texto.</desc>
+      <g class="static-grid"><path d="M0 55H960 M0 110H960 M0 165H960 M0 220H960 M0 275H960 M0 330H960 M95 0V365 M190 0V365 M285 0V365 M380 0V365 M475 0V365 M570 0V365 M665 0V365 M760 0V365 M855 0V365"/></g>
+      <path class="guide" d="M112 49 V317 M848 49 V317"/>
+      <path class="beam" d="M110 193 H850 V212 H110Z"/>
+      <g fill="#a5cbd9"><path d="M110 213 L86 252 H134Z"/><circle cx="836" cy="241" r="13"/><circle cx="864" cy="241" r="13"/></g>
+      <path class="draw-stroke" d="M82 255 H138 M825 260 H875"/>
+      <g id="distributedArrows"></g>
+      <g class="moving-truck" id="loadGroup">
+       <path class="load" d="M0 56 V178"/>
+       <path class="load-head" d="M-13 162 H13 L0 187Z"/>
+       <rect x="-42" y="14" width="84" height="34" rx="5" fill="#ffbd75" stroke="#d1e4ec" stroke-width="3"/>
+       <path d="M-24 14 L-15 1 H13 L28 14" fill="#ffbd75" stroke="#d1e4ec" stroke-width="3"/>
+       <circle cx="-21" cy="51" r="10" fill="#34465b" stroke="#f1d9ac" stroke-width="3"/>
+       <circle cx="21" cy="51" r="10" fill="#34465b" stroke="#f1d9ac" stroke-width="3"/>
+      </g>
+      <text x="106" y="285">A</text><text x="832" y="285">B</text>
+      <g>
+       <path class="reaction" d="M110 347 V276"/><path class="react-head" d="M98 287 L122 287 L110 265Z"/>
+       <path class="reaction" d="M850 347 V276"/><path class="react-head" d="M838 287 L862 287 L850 265Z"/>
+      </g>
+      <text id="leftReactionLabel" x="145" y="328">R_A</text><text id="rightReactionLabel" x="650" y="328">R_B</text>
+      <text id="pointLoadLabel" x="480" y="38" class="major">P = 120 kN</text>
+      <path class="guide" d="M110 302 H850"/>
+      <text x="474" y="298" text-anchor="middle">vão L</text>
+      <text id="distributedLabel" x="475" y="100" text-anchor="middle">w = 0 kN/m</text>
+     </svg>
+    </div>
+    <div class="monitor-legend">AMARELO ↓ carga aplicada; VERDE ↑ reações de apoio. O desenho não inclui tamanho da seção, rigidez, múltiplos eixos, efeitos laterais nem deformações reais.</div>
+    <div class="curves">
+      <h3>ESFORÇO CORTANTE V(x) / DIAGRAMA MATEMÁTICO</h3>
+      <svg viewBox="0 0 960 240" role="img" aria-labelledby="shearTitle shearDesc">
+       <title id="shearTitle">Diagrama calculado de esforço cortante da viga idealizada</title>
+       <desc id="shearDesc">Gráfico de cortante ao longo do vão. A carga pontual provoca salto no diagrama, e a carga uniforme, quando habilitada, produz variação linear entre seus pontos. Valores resumidos são apresentados no painel de resultados.</desc>
+       <g class="grid"><path d="M110 55H850 M110 96H850 M110 137H850 M110 178H850 M110 219H850 M110 0V228 M295 0V228 M480 0V228 M665 0V228 M850 0V228"/></g>
+       <path class="axis" d="M110 137 H850 M110 20 V220"/>
+       <path class="shear-line" id="shearPath" d="M110 90H480V183H850"/>
+       <text class="chart-label" x="23" y="39">V (kN)</text><text x="112" y="231">0</text><text x="831" y="231">L</text><text x="72" y="143">0</text>
+      </svg>
+      <h3 style="margin-top:20px">MOMENTO FLETOR M(x) / DIAGRAMA MATEMÁTICO</h3>
+      <svg viewBox="0 0 960 235" role="img" aria-labelledby="momentTitle momentDesc">
+       <title id="momentTitle">Diagrama calculado de momento fletor da viga idealizada</title>
+       <desc id="momentDesc">Curva de momento fletor positivo ao longo do vão, nula nos apoios e máxima em uma posição que depende das cargas e do local da força pontual. O máximo é informado numericamente.</desc>
+       <g class="grid"><path d="M110 44H850 M110 94H850 M110 144H850 M110 194H850 M110 0V224 M295 0V224 M480 0V224 M665 0V224 M850 0V224"/></g>
+       <path class="axis" d="M110 194H850 M110 20V216"/>
+       <path class="moment-line" id="momentPath" d="M110 194 L480 70 L850 194"/>
+       <text class="chart-label" x="17" y="34">M (kN·m)</text><text x="111" y="229">0</text><text x="828" y="229">L</text><text x="70" y="201">0</text>
+      </svg>
+    </div>
+    <p class="lab-note">A curva do momento mostra <strong>o esforço solicitado</strong>, não resistência disponível, deslocamento, probabilidade de falha ou limite de segurança. O cortante é uma resultante interna, não uma tesoura cortando literalmente o tabuleiro.</p>
+   </div>
+   <div class="control-stack">
+    <div class="control-card">
+      <span class="tag">Configuração da viga</span><h3>Parâmetros de equilíbrio</h3>
+      <label class="control-label" for="span">Vão teórico L <output for="span" id="spanOut">20 m</output></label>
+      <input id="span" type="range" min="10" max="40" step="2" value="20">
+      <p class="range-note">10 a 40 metros, viga idealizada</p>
+      <label class="control-label" for="point">Carga pontual P <output for="point" id="pointOut">120 kN</output></label>
+      <input id="point" type="range" min="20" max="240" step="10" value="120">
+      <p class="range-note">Representa força vertical, não veículo completo.</p>
+      <label class="control-label" for="position">Posição da carga (a/L) <output for="position" id="positionOut">50%</output></label>
+      <input id="position" type="range" min="5" max="95" step="5" value="50">
+      <p class="range-note">Medida desde o apoio A.</p>
+      <label class="check"><input id="enableUniform" type="checkbox"> Incluir carga distribuída uniforme w</label>
+      <label class="control-label" for="uniform">Carga distribuída w <output for="uniform" id="uniformOut">12 kN/m</output></label>
+      <input id="uniform" type="range" min="0" max="30" step="2" value="12" disabled>
+      <p class="range-note">Modelo opcional de ação uniforme; não é peso próprio calculado a partir de material.</p>
+      <button id="resetLab" type="button">Restaurar valores</button>
+    </div>
+    <div class="formula" role="status" aria-live="polite" aria-atomic="true">
+      <h3>Resultados do modelo</h3>
+      <div class="calcs">
+       <div class="calc"><small>Reação no apoio A</small><strong id="leftReaction">60,0 kN</strong></div>
+       <div class="calc"><small>Reação no apoio B</small><strong id="rightReaction">60,0 kN</strong></div>
+       <div class="calc"><small>Força vertical total ↓</small><strong id="totalForce">120,0 kN</strong></div>
+       <div class="calc"><small>Maior momento positivo</small><strong id="maxMoment">600,0 kN·m</strong></div>
+       <div class="calc"><small>Posição de M máximo</small><strong id="maxX">10,00 m</strong></div>
+       <div class="calc"><small>Máx. |cortante|</small><strong id="maxShear">60,0 kN</strong></div>
+      </div>
+      <p id="labExplanation">Com a carga no centro, cada apoio recebe metade da carga pontual. Mover P altera reações e o momento.</p>
+      <p>Equilíbrio vertical: <code>R_A + R_B = P + wL</code>.<br>Momento em A: <code>R_B·L = P·a + wL·(L/2)</code>.<br><code>M(x) = R_A·x − w·x²/2 − P·max(0, x−a)</code>.</p>
+      <p>Convenção: forças verticais descendentes positivas nos carregamentos; momento positivo de flexão sagente. O modelo pressupõe viga estaticamente determinada, apoios ideais e cargas estáticas. Não considera esforços horizontais.</p>
+    </div>
+   </div>
+  </div>
+  <div class="blueprint-caption"><strong>Experimente:</strong> mova P para perto de um apoio e observe as reações; depois coloque a carga no meio e aumente o vão. Em equilíbrio simples, R_A depende da distância da carga até B e R_B depende da distância até A. A curva de M(x) responde à geometria e à carga, não apenas à força total.</div>
+ </div>
+</section>
+
+<section class="section forces" aria-labelledby="effortsTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="plate-id">03 / Mecânica de estruturas</span><div><h2 id="effortsTitle">Cinco modos de uma peça resistir ou perder estabilidade.</h2><p>Selecione o tipo de solicitação para ver um desenho independente. Uma mesma ponte pode apresentar vários desses efeitos ao mesmo tempo, e a distribuição de tensões depende de geometria, materiais, apoios e ações.</p></div></div>
+  <div class="force-grid">
+   <figure class="force-figure">
+    <svg viewBox="0 0 720 410" role="img" aria-labelledby="forcesSvgTitle forcesSvgDesc">
+     <title id="forcesSvgTitle">Ilustrações alternativas de tração, compressão, flexão, cisalhamento e torção</title>
+     <desc id="forcesSvgDesc">Um diagrama técnico muda conforme o efeito selecionado: barra puxada, barra comprimida, viga fletida, planos cortantes deslocados ou barra torcida. Setas apontam a ação de forças de forma esquemática.</desc>
+     <rect width="720" height="410" fill="#e6f0ed"/>
+     <g fill="none" stroke="#86b0b6" stroke-width="2"><path d="M0 82H720 M0 164H720 M0 246H720 M0 328H720 M110 0V410 M220 0V410 M330 0V410 M440 0V410 M550 0V410 M660 0V410"/></g>
+     <g class="force-layer active" data-force-layer="tension">
+      <rect x="220" y="147" width="280" height="108" fill="#8fbab5" stroke="#356f78" stroke-width="7"/>
+      <path d="M221 201 H74 M499 201 H647" stroke="#c16e4d" stroke-width="11" stroke-linecap="round"/>
+      <g fill="#c16e4d"><path d="M88 181 L58 201 L88 221Z"/><path d="M632 181 L661 201 L632 221Z"/></g>
+      <text x="270" y="200" font-family="monospace" font-size="23" fill="#205561">TRAÇÃO</text>
+     </g>
+     <g class="force-layer" data-force-layer="compression">
+      <rect x="219" y="146" width="281" height="111" fill="#93b7bf" stroke="#34667d" stroke-width="7"/>
+      <path d="M60 202 H199 M650 202 H518" stroke="#bd6f49" stroke-width="11" stroke-linecap="round"/>
+      <g fill="#bd6f49"><path d="M186 184 L217 202 L186 220Z"/><path d="M532 184 L501 202 L532 220Z"/></g>
+      <text x="257" y="209" font-family="monospace" font-size="22" fill="#244c5c">COMPRESSÃO</text>
+     </g>
+     <g class="force-layer" data-force-layer="bending">
+      <path d="M120 193 Q353 304 590 193" fill="none" stroke="#33748c" stroke-width="27"/>
+      <path d="M120 181 Q353 292 590 181" fill="none" stroke="#e5ad68" stroke-width="8"/>
+      <path d="M120 206 Q353 319 590 206" fill="none" stroke="#54a3a0" stroke-width="8"/>
+      <path d="M355 72 V185" stroke="#be714e" stroke-width="11" stroke-linecap="round"/>
+      <path d="M336 171 H374 L355 199Z" fill="#be714e"/>
+      <path d="M120 212 L92 260 H148Z M590 212 L562 260 H618Z" fill="#678f9a"/>
+      <text x="239" y="361" font-family="monospace" font-size="22" fill="#295d68">FLEXÃO (EXAGERADA)</text>
+     </g>
+     <g class="force-layer" data-force-layer="shear">
+      <path d="M207 151 H352 V276 H207Z" fill="#9abcb7" stroke="#356a75" stroke-width="6"/>
+      <path d="M368 127 H513 V253 H368Z" fill="#6da3aa" stroke="#356a75" stroke-width="6"/>
+      <path d="M270 58 V125 M444 344 V271" stroke="#bd6648" stroke-width="11" stroke-linecap="round"/>
+      <g fill="#bd6648"><path d="M251 113 H289 L270 142Z"/><path d="M425 278 H463 L444 254Z"/></g>
+      <text x="236" y="387" font-family="monospace" font-size="22" fill="#295d68">CISALHAMENTO</text>
+     </g>
+     <g class="force-layer" data-force-layer="torsion">
+      <path d="M247 111 L485 153 L485 277 L247 236Z" fill="#8dafb8" stroke="#35697c" stroke-width="6"/>
+      <ellipse cx="247" cy="173" rx="51" ry="65" fill="#bed5d8" stroke="#35697c" stroke-width="6"/>
+      <ellipse cx="485" cy="215" rx="49" ry="62" fill="#749eac" stroke="#35697c" stroke-width="6"/>
+      <path d="M156 119 Q176 56 254 62" fill="none" stroke="#b66747" stroke-width="10" stroke-linecap="round"/>
+      <path d="M238 42 L269 67 L233 85Z" fill="#b66747"/>
+      <path d="M567 264 Q547 340 472 342" fill="none" stroke="#b66747" stroke-width="10" stroke-linecap="round"/>
+      <path d="M494 360 L461 343 L493 321Z" fill="#b66747"/>
+      <text x="289" y="386" font-family="monospace" font-size="22" fill="#295d68">TORÇÃO</text>
+     </g>
+    </svg>
+    <figcaption>Figura 3. Diagrama SVG autoral com deformações e movimentos intencionalmente exagerados, apenas para identificar os cinco modos de solicitação, não para calcular tensões.</figcaption>
+   </figure>
+   <div class="force-text">
+    <div class="force-chooser" role="group" aria-label="Escolha o esforço estrutural">
+     <button type="button" data-force="tension" aria-pressed="true">Tração</button>
+     <button type="button" data-force="compression" aria-pressed="false">Compressão</button>
+     <button type="button" data-force="bending" aria-pressed="false">Flexão</button>
+     <button type="button" data-force="shear" aria-pressed="false">Cisalhamento</button>
+     <button type="button" data-force="torsion" aria-pressed="false">Torção</button>
+    </div>
+    <div class="force-explain" role="status" aria-live="polite" aria-atomic="true">
+     <strong id="forceTitle">Tração · forças que puxam</strong>
+     <p id="forceText">Uma peça tracionada tende a alongar. Cabos e tirantes de pontes são exemplos típicos: carregam esforço axial de tração, que deve ser transmitido adequadamente às conexões e ancoragens.</p>
+    </div>
+    <h3>Não existe “peça forte” independente de como ela trabalha.</h3>
+    <p>Um cabo eficiente sob tração não pode ser usado como coluna esbelta submetida à compressão sem problemas de instabilidade; uma barra comprimida pode flambar antes de atingir a resistência ideal do material. A flexão envolve tensões de sinais opostos na seção de uma viga simples, enquanto cortante e torção produzem estados de tensão próprios.</p>
+    <p>Esses efeitos são internos. A força aplicada e as reações são externas no corpo livre isolado; os diagramas de V(x) e M(x) descrevem os resultados internos necessários ao equilíbrio de partes da viga.</p>
+   </div>
+  </div>
+</section>
+
+<section class="types" aria-labelledby="typesTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="plate-id">04 / Cinco famílias estruturais</span><div><h2 id="typesTitle">Pontes diferentes. Caminhos de força diferentes.</h2><p>Alterar a tipologia muda quais componentes recebem e transmitem esforços predominantes. Os esquemas destacam apenas o caminho geral da carga vertical: em pontes reais, efeitos locais, secundários, vento, dinâmica e condições de apoio podem mudar muito o comportamento.</p></div></div>
+  <div class="types-layout">
+   <div class="type-chooser" role="group" aria-label="Escolha o tipo de ponte">
+    <button type="button" data-type="beam" aria-pressed="true"><span class="code">01</span><strong>Viga</strong></button>
+    <button type="button" data-type="arch" aria-pressed="false"><span class="code">02</span><strong>Arco</strong></button>
+    <button type="button" data-type="truss" aria-pressed="false"><span class="code">03</span><strong>Treliça</strong></button>
+    <button type="button" data-type="suspension" aria-pressed="false"><span class="code">04</span><strong>Suspensa</strong></button>
+    <button type="button" data-type="stayed" aria-pressed="false"><span class="code">05</span><strong>Estaiada</strong></button>
+   </div>
+   <div class="type-board">
+    <span class="eyebrow" style="color:#a7d9e8">PRANCHA COMPARATIVA / CARGAS VERTICAIS</span>
+    <h3 id="typeTitle">Ponte de viga</h3>
+    <div class="type-art">
+      <svg data-type-art="beam" viewBox="0 0 800 355" role="img" aria-labelledby="beamTypeTitle beamTypeDesc">
+       <title id="beamTypeTitle">Ponte de viga simplesmente apoiada</title><desc id="beamTypeDesc">Viga reta com tabuleiro, carga vertical e duas reações de apoio; o caminho principal é flexão e cisalhamento da viga até os apoios.</desc>
+       <path class="deck-line" d="M95 160H707"/><path d="M95 174H707" stroke="#7197ab" stroke-width="13"/>
+       <path class="support" d="M128 188 L96 237 H160Z M674 188 L644 237 H707Z"/>
+       <path class="compression" d="M165 146H636"/><path class="tension" d="M163 193H637"/>
+       <path class="forces" d="M403 39V139"/><path d="M388 129H418L403 154Z" fill="#ffb877"/>
+       <path class="tension" d="M125 286V233 M675 286V233"/><path d="M114 248H136L125 229Z M664 248H686L675 229Z" fill="#76d6c0"/>
+       <text x="275" y="100">P ↓ carga sobre viga</text><text x="220" y="327">Flexão + cortante → apoios</text>
+      </svg>
+      <svg data-type-art="arch" viewBox="0 0 800 355" role="img" aria-labelledby="archTypeTitle archTypeDesc" hidden>
+       <title id="archTypeTitle">Ponte em arco com compressão no arco e empuxos nas extremidades</title><desc id="archTypeDesc">Um tabuleiro horizontal transmite carga ao arco curvo abaixo, o arco transmite compressão e empuxos horizontais para encontros robustos.</desc>
+       <path class="deck-line" d="M94 145H706"/>
+       <path class="arch-line" d="M117 280 Q390 37 682 280"/>
+       <g stroke="#8cbbc9" stroke-width="6"><path d="M167 145V229 M237 145V177 M310 145V142 M477 145V141 M565 145V177 M626 145V231"/></g>
+       <path class="forces" d="M391 33V117"/><path d="M377 109H405L391 132Z" fill="#ffb877"/>
+       <path class="compression" d="M176 246 Q389 97 621 247"/>
+       <g class="support"><rect x="90" y="270" width="69" height="59"/><rect x="648" y="270" width="69" height="59"/></g>
+       <path class="compression" d="M106 267L65 267 M694 267H741"/>
+       <text x="283" y="330">Arco → encontros + empuxo</text>
+      </svg>
+      <svg data-type-art="truss" viewBox="0 0 800 355" role="img" aria-labelledby="trussTypeTitle trussTypeDesc" hidden>
+       <title id="trussTypeTitle">Ponte em treliça com barras trianguladas</title><desc id="trussTypeDesc">Treliça plana com cordões superior e inferior, diagonais e montantes. Tração e compressão axiais são os esforços principais no modelo ideal de barras articuladas; o tabuleiro ainda pode trabalhar à flexão.</desc>
+       <path class="deck-line" d="M94 224H707"/>
+       <g fill="none" stroke-width="10" stroke-linejoin="round"><path stroke="#ffb877" d="M106 110H694"/><path stroke="#76d6c0" d="M106 223H694"/><path stroke="#b9dae6" d="M106 110V223 M204 110V223 M302 110V223 M400 110V223 M498 110V223 M596 110V223 M694 110V223"/><path stroke="#98cbe1" d="M106 223L204 110L302 223L400 110L498 223L596 110L694 223"/></g>
+       <g class="support"><path d="M126 240L99 275H152Z"/><path d="M673 240L646 275H700Z"/></g>
+       <path class="forces" d="M400 30V91"/><path d="M386 83H414L400 107Z" fill="#ffb877"/>
+       <text x="210" y="328">Barras → nós → apoios</text>
+      </svg>
+      <svg data-type-art="suspension" viewBox="0 0 800 355" role="img" aria-labelledby="suspTypeTitle suspTypeDesc" hidden>
+       <title id="suspTypeTitle">Ponte suspensa com cabo principal, pendurais, torres e ancoragens</title><desc id="suspTypeDesc">Tabuleiro horizontal suspenso por pendurais verticais ligados a um cabo curvo principal, que passa sobre torres e se ancora nas extremidades.</desc>
+       <path class="deck-line" d="M82 243H719"/>
+       <g fill="none" stroke="#9bbbd1" stroke-width="16"><path d="M217 292V52 M580 292V52"/></g>
+       <path class="tension" d="M34 312 Q84 27 217 72 Q395 294 580 72 Q708 26 769 312"/>
+       <g stroke="#74d9be" stroke-width="6"><path d="M279 121V243 M340 172V243 M401 187V243 M462 172V243 M521 121V243"/></g>
+       <g class="support"><rect x="0" y="288" width="78" height="44"/><rect x="722" y="288" width="78" height="44"/></g>
+       <path class="forces" d="M401 36V194"/><path d="M387 187H415L401 211Z" fill="#ffb877"/>
+       <text x="228" y="336">Tabuleiro → pendurais → cabo → ancoragens/torres</text>
+      </svg>
+      <svg data-type-art="stayed" viewBox="0 0 800 355" role="img" aria-labelledby="stayedTypeTitle stayedTypeDesc" hidden>
+       <title id="stayedTypeTitle">Ponte estaiada com cabos diretos ligados aos mastros</title><desc id="stayedTypeDesc">Tabuleiro horizontal sustentado por cabos inclinados diretamente conectados a uma torre central, sem cabo principal suspenso e pendurais.</desc>
+       <path class="deck-line" d="M62 240H737"/>
+       <path d="M400 319V25" stroke="#9ec8d9" stroke-width="22"/>
+       <g class="tension"><path d="M400 53L123 239 M400 91L218 239 M400 129L304 239 M400 53L679 239 M400 91L583 239 M400 129L495 239"/></g>
+       <path class="forces" d="M304 37V207 M583 37V207"/><path d="M290 199H318L304 222Z M569 199H597L583 222Z" fill="#ffb877"/>
+       <g class="support"><rect x="370" y="315" width="60" height="28"/></g>
+       <text x="184" y="341">Tabuleiro → estais → torre/fundação</text>
+      </svg>
+    </div>
+    <div class="type-key"><span><b style="background:#ffb877"></b>Compressão ou carga (exemplo)</span><span><b style="background:#76d6c0"></b>Tração (exemplo)</span><span><b style="background:#b9dae6"></b>Componentes estruturais</span></div>
+    <p class="route" id="typeRoute" role="status" aria-live="polite" aria-atomic="true"><strong>Caminho principal:</strong> carga do tabuleiro → vigas → aparelhos de apoio → pilares/encontros → fundações → terreno.</p>
+    <p class="consequence" id="typeDetail">Uma viga simplesmente apoiada resiste tipicamente por flexão e cortante. Na flexão positiva gravitacional, a região superior tende à compressão e a inferior à tração; a configuração e a distribuição mudam conforme o sistema real.</p>
+   </div>
+  </div>
+  <div class="accent-note"><strong>Leitura dos desenhos:</strong> os esforços de algumas barras de treliça podem mudar de sinal com o carregamento, e os tabuleiros de pontes de arco, suspensas ou estaiadas também trabalham à flexão. As cores não determinam universalmente quais elementos sempre estarão tracionados ou comprimidos.</div>
+ </div>
+</section>
+
+<section class="foundation" aria-labelledby="foundationTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="plate-id">05 / A última transferência</span><div><h2 id="foundationTitle">A estrutura não termina no pilar: ela conversa com o terreno.</h2><p>Encontros, pilares, aparelhos de apoio e fundações participam do caminho da carga. Suas dimensões e escolhas dependem de geologia, hidrologia, estabilidade, recalques e solicitações horizontais além das verticais.</p></div></div>
+  <div class="foundation-grid">
+   <figure>
+    <svg viewBox="0 0 790 540" role="img" aria-labelledby="foundationSvgTitle foundationSvgDesc">
+     <title id="foundationSvgTitle">Corte esquemático do caminho de carga até fundações profundas</title>
+     <desc id="foundationSvgDesc">Tabuleiro transfere esforços para um apoio, pilar, bloco de fundação e estacas ancoradas em solo. Setas mostram o caminho descendente. Um rio ao lado representa risco de erosão local, sem valores de projeto.</desc>
+     <rect width="790" height="540" fill="#dce8e5"/>
+     <path d="M0 272H790V540H0Z" fill="#b89f81"/>
+     <path d="M0 376Q230 347 418 384T790 367V540H0Z" fill="#9f8971"/>
+     <path d="M0 465Q279 438 453 468T790 463V540H0Z" fill="#8b7d69"/>
+     <path d="M0 271H790" stroke="#668777" stroke-width="6"/>
+     <path d="M0 280Q125 267 222 281T444 279V346H0Z" fill="#7bb7be" opacity=".8"/>
+     <g fill="#b5d2db" stroke="#4e6c82" stroke-width="6"><rect x="40" y="125" width="718" height="52"/><rect x="477" y="178" width="93" height="28"/><rect x="494" y="206" width="59" height="139"/><rect x="423" y="345" width="202" height="42"/><rect x="447" y="387" width="38" height="135"/><rect x="516" y="387" width="38" height="135"/><rect x="585" y="387" width="38" height="135"/></g>
+     <g fill="none" stroke="#bc6949" stroke-width="9" stroke-linecap="round"><path d="M522 35V110 M522 214V328 M469 391V485 M538 391V485 M604 391V485"/></g>
+     <g fill="#bc6949"><path d="M508 101H536L522 125Z M508 315H536L522 341Z M457 473H481L469 494Z M526 473H550L538 494Z M592 473H616L604 494Z"/></g>
+     <g fill="#375d68" font-family="monospace" font-size="22"><text x="63" y="92">TABULEIRO</text><text x="583" y="224">APOIO</text><text x="570" y="286">PILAR</text><text x="60" y="351">RIO / MARGEM</text><text x="52" y="425">SOLO</text><text x="60" y="508">ESTRATOS</text><text x="627" y="415">BLOCO</text><text x="627" y="449">ESTACAS</text></g>
+     <path d="M143 285Q184 312 216 293" fill="none" stroke="#e5f5ee" stroke-width="6"/>
+    </svg>
+    <figcaption>Figura 9. Corte de fundação SVG original e esquemático, fora de escala. Estacas são uma possibilidade, não uma solução obrigatória. Direção e magnitude real das forças dependem do projeto e das condições do solo.</figcaption>
+   </figure>
+   <div class="foundation-copy">
+    <h3>Reações não desaparecem nos apoios.</h3>
+    <p>As forças que chegam a um apoio precisam ser transferidas de forma compatível com as deformações e os deslocamentos previstos. Aparelhos de apoio podem permitir rotação ou movimento longitudinal por expansão térmica, enquanto outros restringem determinados deslocamentos e recebem esforços horizontais.</p>
+    <p>Fundações superficiais e profundas interagem com solo ou rocha. Para decidir entre alternativas, é preciso conhecer resistência, compressibilidade, profundidade de camadas, nível de água e possíveis perdas de suporte. A erosão localizada da base em leitos de rios, chamada <em>scour</em>, pode comprometer a estabilidade mesmo quando vigas e cabos permanecem íntegros.</p>
+    <ul>
+     <li><strong>Recalque:</strong> deslocamento do terreno/fundação que pode impor deformações à estrutura.</li>
+     <li><strong>Correnteza e cheias:</strong> ações hidráulicas, detritos, flutuação e processos de erosão exigem análise própria.</li>
+     <li><strong>Continuidade do caminho:</strong> falhas de ligação, apoio ou fundação podem interromper a transferência de esforços.</li>
+    </ul>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="failure" aria-labelledby="failureTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="plate-id">06 / Não basta aguentar uma vez</span><div><h2 id="failureTitle">Flambagem, fadiga e vibrações contam histórias distintas.</h2><p>Alguns riscos se relacionam à instabilidade geométrica, outros à repetição de ciclos de tensão, a movimentos excessivos ou ao acúmulo de danos e deterioração. Resistência instantânea não esgota a segurança ou a durabilidade de uma ponte.</p></div></div>
+  <div class="failure-grid">
+   <article class="failure-card">
+    <h3>Flambagem e instabilidade</h3>
+    <svg viewBox="0 0 640 300" role="img" aria-labelledby="buckTitle buckDesc">
+     <title id="buckTitle">Coluna ideal reta ao lado de uma coluna com deslocamento lateral por flambagem</title><desc id="buckDesc">À esquerda, uma barra comprimida idealmente reta entre apoios. À direita, uma barra esbelta apresenta curvatura lateral exagerada sob esforço axial compressivo.</desc>
+     <rect width="640" height="300" fill="#e5edf0"/>
+     <g fill="none" stroke="#6797a0" stroke-width="4"><path d="M80 75H258 M80 245H258 M382 75H559 M382 245H559"/></g>
+     <path d="M165 80V239" stroke="#4d8498" stroke-width="20" stroke-linecap="round"/>
+     <path d="M470 80Q556 153 470 239" fill="none" stroke="#b76a51" stroke-width="20" stroke-linecap="round"/>
+     <g stroke="#ba7256" stroke-width="8"><path d="M165 23V61 M470 23V61"/></g>
+     <g fill="#ba7256"><path d="M154 50H177L165 71Z M458 50H482L470 71Z"/></g>
+     <g font-family="monospace" font-size="17" fill="#345c6c"><text x="98" y="282">Barra ideal</text><text x="411" y="282">Flambagem (esquema)</text></g>
+    </svg>
+    <p>Uma peça esbelta comprimida pode perder estabilidade e se deformar lateralmente antes de atingir a resistência axial teórica do material. Comprimento efetivo, seção, vinculações, imperfeições e excentricidade alteram o comportamento. O desenho exagera a curvatura apenas para visualizar o mecanismo.</p>
+   </article>
+   <article class="failure-card">
+    <h3>Fadiga e repetição de carregamentos</h3>
+    <svg viewBox="0 0 640 300" role="img" aria-labelledby="fatigueTitle fatigueDesc">
+     <title id="fatigueTitle">Histórico ilustrativo de ciclos de carregamento e detalhe de uma ligação</title><desc id="fatigueDesc">Gráfico senoidal conceitual de amplitude de tensão versus ciclos, sem escala ou limites numéricos, e uma chapa com ligação ilustrativa ao lado. Não estabelece previsão de vida em fadiga.</desc>
+     <rect width="640" height="300" fill="#e5edf0"/>
+     <g stroke="#6c8e9c" stroke-width="3" fill="none"><path d="M55 42V242H591 M55 145H591"/></g>
+     <path d="M55 145 C83 35 113 35 145 145 S204 255 237 145 S302 35 335 145 S398 255 431 145 S497 35 529 145 S572 255 590 145" fill="none" stroke="#b96a4a" stroke-width="7"/>
+     <g font-family="monospace" fill="#406677" font-size="18"><text x="62" y="32">Tensão cíclica (qualitativa)</text><text x="424" y="274">tempo / ciclos →</text></g>
+    </svg>
+    <p>Tráfego repetido pode produzir variações de tensão em detalhes como soldas, furos e ligações. A avaliação de fadiga envolve amplitudes, número de ciclos, detalhe, materiais, inspeções e efeitos de corrosão. Um gráfico de ondas sem dados de ensaio não estima a vida útil de uma ponte.</p>
+   </article>
+   <article class="failure-card">
+    <h3>Vibração e serviço</h3>
+    <p>Uma estrutura pode não estar próxima da ruptura e, ainda assim, apresentar deslocamentos, acelerações ou vibrações inadequados ao uso. Cargas em movimento, vento, ritmo de pedestres e características dinâmicas podem exigir análises específicas. Frequências naturais, amortecimento e excitação não são avaliados no laboratório de viga estática.</p>
+   </article>
+   <article class="failure-card">
+    <h3>Corrosão, inspeção e manutenção</h3>
+    <p>Ambiente, umidade, sais, infiltração, detalhes de drenagem e proteção dos materiais afetam durabilidade. Monitoramento e inspeções encontram deformações, fissuras e deterioração. A vida em serviço envolve intervenções e controle de riscos, não apenas cálculo inicial. Uma ponte visualmente “normal” não pode ser declarada segura sem inspeção técnica.</p>
+   </article>
+  </div>
+ </div>
+</section>
+
+<section class="materials" aria-labelledby="materialsTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="plate-id">07 / Materiais e escolhas</span><div><h2 id="materialsTitle">O material certo depende da solicitação.</h2><p>Não existe campeão universal. Forma da seção, ligações, fabricação, manutenção, vão, ambiente e custo ao longo do ciclo de vida entram na decisão junto com propriedades mecânicas.</p></div></div>
+  <div class="materials-grid">
+   <article class="material"><h3>Concreto, aço e protensão</h3><p>O concreto costuma ter bom desempenho à compressão; para responder a esforços de tração e controle de fissuração, pode trabalhar com armaduras e, em sistemas apropriados, protensão. A qualidade depende de projeto, detalhamento, cobrimento, execução e durabilidade.</p></article>
+   <article class="material"><h3>Aço estrutural</h3><p>É utilizado em vigas, treliças, cabos e ligações. Possui propriedades úteis sob tração e compressão, mas sua forma e estabilidade precisam ser verificadas, inclusive flambagem local e global, fadiga e proteção contra corrosão.</p></article>
+   <article class="material"><h3>Madeira e soluções mistas</h3><p>Madeira engenheirada e outras soluções podem ser relevantes em determinadas aplicações, considerando direção das fibras, umidade, ligações, durabilidade e normas. Sistemas mistos combinam materiais para aproveitar comportamentos complementares.</p></article>
+  </div>
+  <p class="material-note">O formato de uma viga também importa: distribuição de material longe do eixo neutro pode aumentar a rigidez à flexão em uma direção, mas precisa ser acompanhada das verificações de estabilidade, cisalhamento e ligações. Isso explica parte do uso de seções I, caixões e treliças em situações diferentes.</p>
+ </div>
+</section>
+
+<section class="safety" aria-labelledby="safetyTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="plate-id">08 / Limites do laboratório</span><div><h2 id="safetyTitle">O equilíbrio é necessário. Não é suficiente.</h2><p>Seu modelo calcula forças externas e diagramas de esforços para uma viga idealizada, mas não verifica se a geometria, o material, as fundações e as ligações podem resistir às solicitações com segurança e durabilidade.</p></div></div>
+  <div class="safety-intro">
+   <p>Uma ponte real exige normas aplicáveis, combinações de ações e verificações de resistência, serviço, estabilidade, fadiga, fratura, durabilidade e situações extremas, com dados confiáveis do local. Projetos rodoviários nos EUA, por exemplo, usam especificações da AASHTO e guias da FHWA; outros países adotam seus próprios marcos normativos.</p>
+   <p>Este HTML <strong>não realiza dimensionamento nem emite parecer de segurança</strong>. Não use seus valores de carga ou momento para construir, carregar, avaliar, reforçar ou interditar estruturas. Uma conta de equilíbrio pode estar correta enquanto uma estrutura é inadequada por flambagem, fissuração, fundação ou outro mecanismo.</p>
+  </div>
+  <div class="check-grid">
+   <div class="check-panel"><h3>1 · Quais ações?</h3><p>Peso próprio, tráfego e seus efeitos dinâmicos, frenagem, vento, variações térmicas, sismos, água, impacto e combinações de projeto relevantes.</p></div>
+   <div class="check-panel"><h3>2 · Como resiste?</h3><p>Geometria, tensões, rigidez, deformação, flambagem, fissuração, juntas, fadiga, estabilidade e caminho de cargas para cada componente.</p></div>
+   <div class="check-panel"><h3>3 · E no terreno?</h3><p>Capacidade e deformabilidade geotécnicas, erosão, inundações, fundações, manutenção, inspeção, estado de conservação e condições de operação.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="quiz" aria-labelledby="quizTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="plate-id">09 / Caderno de revisão</span><div><h2 id="quizTitle">Antes de fechar a prancheta, teste seu raciocínio.</h2><p>As questões avaliam o entendimento das relações físicas e das limitações dos modelos. A correção é formativa, não representa nota oficial no Moodle.</p></div></div>
+  <div class="quiz-grid">
+   <div class="quiz-side"><h3>Não confunda força com capacidade.</h3><p>Uma carga pode provocar reações, momentos e esforços internos calculáveis sem que tenhamos informação alguma sobre a resistência real das peças. Os resultados ajudam a compreender equilíbrio, não a autorizar tráfego.</p><p>Se errar, retorne à bancada e teste outro vão e outra posição. É melhor entender por que uma reação aumenta do que memorizar uma fórmula desconectada do caminho de forças.</p></div>
+   <form id="quizForm" novalidate>
+    <fieldset class="question" data-answer="b" data-explain="Com viga biapoiada ideal, carga pontual central e sem carga distribuída, a simetria e o equilíbrio fornecem R_A = R_B = P/2.">
+     <legend>1. Numa viga biapoiada ideal com uma única carga P no meio, sem outras forças verticais, qual relação vale?</legend>
+     <label><input type="radio" name="q1" value="a"> Um apoio recebe toda a carga e o outro recebe zero.</label>
+     <label><input type="radio" name="q1" value="b"> As duas reações verticais são iguais a P/2.</label>
+     <label><input type="radio" name="q1" value="c"> As reações dependem somente da cor do material.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="c" data-explain="Movendo a carga pontual para perto do apoio A, a reação A cresce e a reação B diminui, mantendo R_A + R_B = P neste exemplo sem w.">
+     <legend>2. No mesmo modelo, se a carga P se aproxima do apoio A, o que acontece com as reações?</legend>
+     <label><input type="radio" name="q2" value="a"> Ambas aumentam necessariamente sem mudança de P.</label>
+     <label><input type="radio" name="q2" value="b"> Ambas tornam-se negativas.</label>
+     <label><input type="radio" name="q2" value="c"> A reação em A aumenta e a em B diminui, mantendo a soma.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="a" data-explain="A ponte suspensa transmite carga por pendurais e cabo principal até torres e ancoragens; a estaiada liga o tabuleiro por cabos inclinados diretamente a torres.">
+     <legend>3. Qual distinção ajuda a separar pontes suspensas e estaiadas?</legend>
+     <label><input type="radio" name="q3" value="a"> Suspensas usam cabo principal e pendurais; estaiadas ligam o tabuleiro diretamente às torres por estais.</label>
+     <label><input type="radio" name="q3" value="b"> Suspensas não precisam de fundações.</label>
+     <label><input type="radio" name="q3" value="c"> Pontes estaiadas jamais têm esforços de flexão.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="b" data-explain="Equilíbrio não verifica resistência, estabilidade, serviço, fadiga, fundações ou efeitos dinâmicos. Uma estrutura pode equilibrar forças e ainda não ser adequada ao uso.">
+     <legend>4. O laboratório obteve R_A + R_B igual à carga total. A ponte hipotética está comprovadamente segura?</legend>
+     <label><input type="radio" name="q4" value="a"> Sim; equilíbrio por si só prova capacidade estrutural.</label>
+     <label><input type="radio" name="q4" value="b"> Não; resistência, estabilidade, fundações, combinações de cargas e outros estados-limite não foram avaliados.</label>
+     <label><input type="radio" name="q4" value="c"> Sim, desde que todas as setas estejam desenhadas em azul.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <div class="quiz-actions"><button type="button" id="gradeQuiz">Corrigir e explicar</button><button class="alt" type="reset">Refazer revisão</button></div>
+    <p class="quiz-result" id="quizResult" role="status" aria-live="polite"></p>
+   </form>
+  </div>
+ </div>
+</section>
+
+<section class="footerband">
+ <div class="wrap"><span class="eyebrow" style="color:#a5dfea">Prancha concluída / conceito essencial</span><h2>Uma ponte mantém o equilíbrio enquanto os seus componentes oferecem a resistência e a estabilidade necessárias.</h2><p>O segredo não é uma força misteriosa que anula o peso, mas o caminho das cargas, o comportamento dos materiais, a configuração estrutural, o apoio no terreno e a verificação rigorosa das condições reais. Aprender a visualizar forças é o começo da engenharia, não o seu certificado de conclusão.</p></div>
+</section>
+
+<section class="references wrap" aria-labelledby="refsTitle">
+ <h2 id="refsTitle">Fontes técnicas e imagens da atividade</h2>
+ <p>Onze ilustrações/diagramas SVG originais: vista de treliça, viga e reações, diagramas de cortante e momento, painel de esforços, cinco tipologias, corte de fundação e desenhos de flambagem e fadiga. Nenhuma fotografia ou imagem de ponte real foi incorporada. Todas as figuras são conceituais, fora de escala e identificadas como didáticas.</p>
+ <p>Referências para consulta: <a href="https://www.fhwa.dot.gov/bridge/steel.cfm" target="_blank" rel="noopener noreferrer">Federal Highway Administration (FHWA): Steel Bridges, estabilidade, fadiga e materiais</a>; <a href="https://www.fhwa.dot.gov/bridge/lrfd/lrfdtoc.cfm" target="_blank" rel="noopener noreferrer">FHWA: guia de projeto de superestruturas</a>; <a href="https://www.fhwa.dot.gov/BRIDGE/" target="_blank" rel="noopener noreferrer">FHWA: Bridges &amp; Structures, fundações, inspeções e riscos</a>; <a href="https://www.teachengineering.org/activities/cub_brid_lesson01_activity1" target="_blank" rel="noopener noreferrer">TeachEngineering: tension and compression in bridges</a>; <a href="https://rosap.ntl.bts.gov/view/dot/43721" target="_blank" rel="noopener noreferrer">FHWA/NHI: LRFD for Highway Bridge Superstructures, referência técnica</a>. Este material não substitui normas aplicáveis ou a análise de um engenheiro habilitado.</p>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+var d=document;
+var byId=function(id){return d.getElementById(id);};
+var fmt=function(n,places){return Number(n).toLocaleString("pt-BR",{minimumFractionDigits:places,maximumFractionDigits:places});};
+var controls=["span","point","position","uniform"];
+function calc(){
+ var L=Number(byId("span").value),P=Number(byId("point").value),pc=Number(byId("position").value),enabled=byId("enableUniform").checked,w=enabled?Number(byId("uniform").value):0;
+ var a=L*pc/100,RA=P*(L-a)/L+w*L/2,RB=P*a/L+w*L/2,total=P+w*L;
+ var moment=function(x){return RA*x-w*x*x/2-P*Math.max(0,x-a);};
+ var shear=function(x){return RA-w*x-(x>=a?P:0);};
+ var candidates=[0,a,L];
+ if(w>0){
+  var x1=RA/w;
+  if(x1>0&&x1<a)candidates.push(x1);
+  var x2=(RA-P)/w;
+  if(x2>a&&x2<L)candidates.push(x2);
+ }
+ var mx=0,maxX=0;
+ candidates.forEach(function(x){var m=moment(x);if(m>mx){mx=m;maxX=x;}});
+ var maxV=Math.max(Math.abs(RA),Math.abs(RA-w*a),Math.abs(RA-w*a-P),Math.abs(-RB));
+ return {L:L,P:P,pc:pc,a:a,w:w,RA:RA,RB:RB,total:total,mx:mx,maxX:maxX,maxV:maxV,moment:moment,shear:shear};
+}
+function redraw(){
+ var v=calc(),xLoad=110+740*v.pc/100;
+ byId("spanOut").textContent=fmt(v.L,0)+" m";
+ byId("pointOut").textContent=fmt(v.P,0)+" kN";
+ byId("positionOut").textContent=fmt(v.pc,0)+"%";
+ byId("uniformOut").textContent=fmt(Number(byId("uniform").value),0)+" kN/m";
+ byId("uniform").disabled=!byId("enableUniform").checked;
+ byId("loadGroup").setAttribute("transform","translate("+xLoad+" 0)");
+ byId("leftReaction").textContent=fmt(v.RA,1)+" kN";
+ byId("rightReaction").textContent=fmt(v.RB,1)+" kN";
+ byId("totalForce").textContent=fmt(v.total,1)+" kN";
+ byId("maxMoment").textContent=fmt(v.mx,1)+" kN·m";
+ byId("maxX").textContent=fmt(v.maxX,2)+" m";
+ byId("maxShear").textContent=fmt(v.maxV,1)+" kN";
+ byId("leftReactionLabel").textContent="R_A = "+fmt(v.RA,1)+" kN";
+ byId("rightReactionLabel").textContent="R_B = "+fmt(v.RB,1)+" kN";
+ byId("pointLoadLabel").textContent="P = "+fmt(v.P,0)+" kN";
+ byId("distributedLabel").textContent=v.w?"w = "+fmt(v.w,0)+" kN/m":"w = 0 kN/m";
+ var arrows=byId("distributedArrows");arrows.replaceChildren();
+ if(v.w>0){
+  for(var i=0;i<13;i++){
+   var x=110+(740*i/12);
+   var line=d.createElementNS("http://www.w3.org/2000/svg","path");
+   line.setAttribute("d","M"+x+" 113V180");
+   line.setAttribute("stroke","#ffc889");line.setAttribute("stroke-width","3");
+   arrows.appendChild(line);
+   var head=d.createElementNS("http://www.w3.org/2000/svg","path");
+   head.setAttribute("d","M"+(x-7)+" 170 L"+(x+7)+" 170 L"+x+" 187Z");
+   head.setAttribute("fill","#ffc889");
+   arrows.appendChild(head);
+  }
+ }
+ var ymax=Math.max(v.maxV,1),yShear=function(s){return 137-80*s/ymax;};
+ var shearPoints=[];
+ function addShear(x,y){shearPoints.push((shearPoints.length?"L":"M")+fmtNum(x)+","+fmtNum(y));}
+ var fmtNum=function(n){return Number(n.toFixed(2));};
+ var count=45;
+ for(var j=0;j<=count;j++){var xLeft=v.a*j/count;addShear(110+740*xLeft/v.L,yShear(v.RA-v.w*xLeft));}
+ addShear(110+740*v.a/v.L,yShear(v.RA-v.w*v.a-v.P));
+ for(var k=1;k<=count;k++){var xRight=v.a+(v.L-v.a)*k/count;addShear(110+740*xRight/v.L,yShear(v.shear(xRight)));}
+ byId("shearPath").setAttribute("d",shearPoints.join(" "));
+ var momentPoints=[];var ymaxM=Math.max(v.mx,1);
+ for(var n=0;n<=100;n++){
+  var xx=v.L*n/100,px=110+740*n/100,py=194-146*v.moment(xx)/ymaxM;
+  momentPoints.push((n?"L":"M")+fmtNum(px)+","+fmtNum(py));
+ }
+ byId("momentPath").setAttribute("d",momentPoints.join(" "));
+ var more=v.w? "Incluída carga uniforme adicional de "+fmt(v.w,0)+" kN/m.":"Considerada somente a carga pontual.";
+ byId("labExplanation").textContent="R_A + R_B = "+fmt(v.total,1)+" kN (equilíbrio). "+more+" A reação mais próxima da carga pontual recebe parcela maior da contribuição dessa carga. Os efeitos no momento dependem da posição e do vão.";
+}
+controls.forEach(function(id){byId(id).addEventListener("input",redraw);});
+byId("enableUniform").addEventListener("change",redraw);
+byId("resetLab").addEventListener("click",function(){
+ byId("span").value="20";byId("point").value="120";byId("position").value="50";byId("uniform").value="12";byId("enableUniform").checked=false;redraw();
+});
+redraw();
+var effects={
+ tension:{title:"Tração · forças que puxam",desc:"Uma peça tracionada tende a alongar. Cabos e tirantes de pontes são exemplos típicos: carregam esforço axial de tração, que deve ser transmitido adequadamente às conexões e ancoragens."},
+ compression:{title:"Compressão · forças que empurram",desc:"Barras, arcos e pilares comprimidos podem trabalhar com força axial. Em peças esbeltas, instabilidade e flambagem podem limitar o comportamento antes da resistência ideal do material."},
+ bending:{title:"Flexão · curvatura e tensões opostas",desc:"Numa viga simplesmente apoiada com cargas gravitacionais típicas, a região superior tende à compressão e a inferior à tração em zonas de momento positivo. O desenho amplia muito a curvatura e não representa deslocamento calculado."},
+ shear:{title:"Cisalhamento · tendência de deslizamento entre seções",desc:"Forças transversais produzem resultantes internas de cortante. Tensões de cisalhamento variam pela seção; o desenho mostra blocos deslocados para sugerir o mecanismo, não uma ruptura calculada."},
+ torsion:{title:"Torção · ação que tende a girar a seção",desc:"Um momento torsor pode surgir por ações excêntricas, vento ou geometrias especiais. Seções caixão e travamentos podem contribuir para resistir a esses efeitos, conforme a análise da estrutura."}
+};
+var effectButtons=Array.prototype.slice.call(d.querySelectorAll("[data-force]"));
+var forceLayers=Array.prototype.slice.call(d.querySelectorAll("[data-force-layer]"));
+effectButtons.forEach(function(b){b.addEventListener("click",function(){
+ var key=b.dataset.force,info=effects[key];
+ if(!info)return;
+ effectButtons.forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});
+ forceLayers.forEach(function(x){x.classList.toggle("active",x.dataset.forceLayer===key);});
+ byId("forceTitle").textContent=info.title;byId("forceText").textContent=info.desc;
+});});
+var bridges={
+ beam:{title:"Ponte de viga",path:"carga do tabuleiro → vigas → aparelhos de apoio → pilares/encontros → fundações → terreno.",detail:"Uma viga simplesmente apoiada resiste tipicamente por flexão e cortante. Na flexão positiva gravitacional, a região superior tende à compressão e a inferior à tração; a configuração e a distribuição mudam conforme o sistema real."},
+ arch:{title:"Ponte em arco",path:"tabuleiro → elementos de ligação ou montantes → arco comprimido → encontros com empuxos → fundações → terreno.",detail:"A geometria curva favorece transmissão de esforços de compressão ao longo do arco sob certas condições. Os encontros precisam resistir também a componentes horizontais de reação; o arco e o tabuleiro ainda podem sofrer flexão."},
+ truss:{title:"Ponte em treliça",path:"tabuleiro → nós da treliça → barras principalmente sob esforços axiais → apoios → fundações.",detail:"A triangulação oferece caminho resistente por barras. No modelo de treliça ideal com cargas aplicadas em nós e articulações, elas trabalham axialmente; em estruturas reais, rigidez de ligações e cargas fora dos nós introduzem flexão e outros efeitos. O sinal do esforço nas barras depende do caso."},
+ suspension:{title:"Ponte suspensa",path:"tabuleiro → pendurais → cabo principal em tração → torres sob compressão e ancoragens → fundações/terreno.",detail:"O cabo principal exige ancoragem adequada; a ação combinada nas torres e no tabuleiro depende do sistema real. Cabos e pendurais resistem essencialmente à tração; rigidez do tabuleiro e efeitos de vento importam."},
+ stayed:{title:"Ponte estaiada",path:"tabuleiro → estais inclinados em tração → torres e contraventamentos → fundações/terreno.",detail:"Diferentemente de uma ponte suspensa clássica, estais conectam o tabuleiro diretamente às torres. Componentes horizontais e verticais dos esforços precisam equilibrar-se no sistema estrutural; o tabuleiro também resiste à flexão."}
+};
+var bridgeButtons=Array.prototype.slice.call(d.querySelectorAll("[data-type]"));
+var bridgeArts=Array.prototype.slice.call(d.querySelectorAll("[data-type-art]"));
+bridgeButtons.forEach(function(b){b.addEventListener("click",function(){
+ var key=b.dataset.type,info=bridges[key];if(!info)return;
+ bridgeButtons.forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});
+ bridgeArts.forEach(function(x){x.hidden=x.dataset.typeArt!==key;});
+ byId("typeTitle").textContent=info.title;
+ byId("typeRoute").replaceChildren();
+ var strong=d.createElement("strong");strong.textContent="Caminho principal: ";
+ byId("typeRoute").appendChild(strong);
+ byId("typeRoute").appendChild(d.createTextNode(info.path));
+ byId("typeDetail").textContent=info.detail;
+});});
+var quiz=byId("quizForm");
+byId("gradeQuiz").addEventListener("click",function(){
+ var qs=Array.prototype.slice.call(quiz.querySelectorAll(".question"));var score=0,answered=0;
+ qs.forEach(function(q){
+  var selected=q.querySelector("input:checked"),feedback=q.querySelector(".question-feedback");
+  if(!selected){feedback.textContent="Selecione uma resposta para conferir.";return;}
+  answered++;var correct=selected.value===q.dataset.answer;if(correct)score++;
+  feedback.textContent=(correct?"Correto. ":"Revise o modelo. ")+q.dataset.explain;
+ });
+ byId("quizResult").textContent=answered<qs.length?"Você respondeu "+answered+" de "+qs.length+" questões. Acertos até agora: "+score+".":score+" de "+qs.length+" respostas corretas. "+(score===qs.length?"Você diferenciou equilíbrio e segurança de uma estrutura.":"Releia as explicações e retorne às pranchas.");
+});
+quiz.addEventListener("reset",function(){quiz.querySelectorAll(".question-feedback").forEach(function(f){f.textContent="";});byId("quizResult").textContent="";});
+}());
+</script>
+</body>
+</html>
