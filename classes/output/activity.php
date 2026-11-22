@@ -91,7 +91,7 @@ final class activity {
             $prompt .= " " . get_string("promptpublishinstructions", "mcp");
         }
         $apireference = get_string("promptapireference", "mcp",
-            "https://github.com/EduardoKrausME/moodle-mod_mcp/blob/master/API.md");
+            "https://github.com/EduardoKrausME/moodle-mod_mcp/blob/master/.chatgpt/API.md");
         return get_string("promptinstructions", "mcp") . " " .
             $apireference . " " . $prompt . " " . self::css_instructions($PAGE->theme->name);
     }
