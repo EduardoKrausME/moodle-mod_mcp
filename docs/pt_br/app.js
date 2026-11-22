@@ -28,7 +28,9 @@ function pageFromURL(){
 }
 function writePageURL(page,replace=false){
  const url=new URL(location.href);
+ if(active)url.searchParams.set("category",active.id);
  if(page===1)url.searchParams.delete("page");else url.searchParams.set("page",String(page));
+ if(catalog.some(c=>url.hash==="#"+c.id))url.hash="";
  if(url.href!==location.href)history[replace?"replaceState":"pushState"](null,"",url);
 }
 function navigatePage(page){
@@ -89,7 +91,18 @@ function render(){
  nodes.count.textContent=filtered.length+" exemplo"+(filtered.length===1?"":"s")+(paginated?" · página "+currentPage+" de "+totalPages:"");
  showState(filtered.length?"":"Nenhum exemplo encontrado. Experimente outra busca.");
 }
-function hashCategory(){const id=decodeURIComponent(location.hash.replace(/^#/,""));return catalog.find(c=>c.id===id)||catalog[0];}
+function categoryFromURL(){
+ const url=new URL(location.href);
+ const requested=url.searchParams.get("category");
+ const legacy=catalog.find(c=>url.hash==="#"+c.id);
+ const category=catalog.find(c=>c.id===requested)||legacy||catalog[0];
+ if(category&&(legacy||(requested!==null&&requested!==category.id))){
+  url.searchParams.set("category",category.id);
+  if(legacy)url.hash="";
+  if(url.href!==location.href)history.replaceState(null,"",url);
+ }
+ return category;
+}
 async function selectCategory(c){if(!c)return;closePreview(false);active=c;entriesCategory=null;entries=[];currentPage=pageFromURL();const request=++version;nodes.search.value="";nodes.subtype.value="";nodes.subtypeLabel.hidden=c.id!=="games";nodes.title.textContent=c.label;nodes.desc.textContent=c.description;nodes.eyebrow.textContent="EXPLORAR / "+c.label.toLocaleUpperCase("pt-BR");nodes.count.textContent="Carregando…";nodes.cards.replaceChildren();nodes.pagination.hidden=true;nodes.pagination.replaceChildren();showState("Carregando exemplos…");for(const btn of nodes.nav.querySelectorAll("button"))btn.setAttribute("aria-current",String(btn.dataset.category===c.id));
  try{if(!cache.has(c.id)){const data=await readJSON(c.manifest);if(!data||!Array.isArray(data.examples))throw Error("Manifesto inválido");cache.set(c.id,data);}if(version!==request)return;entries=cache.get(c.id).examples.filter(i=>i&&typeof i.title==="string"&&pathSafe(i.path)&&(c.id==="games"?/^game-[a-z0-9-]+\/[a-z0-9-]+\.html$/.test(i.path):i.path.startsWith(c.id+"/")));nodes.subtype.replaceChildren(new Option("Todos os jogos",""));if(c.id==="games"){const types=[...new Set(entries.map(i=>i.subtype).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR"));for(const s of types)nodes.subtype.add(new Option(s,s));}entriesCategory=c.id;currentPage=pageFromURL();render();syncPreviewFromURL();}catch(error){if(version!==request)return;entries=[];nodes.count.textContent="Indisponível";showState("Não foi possível carregar esta categoria. Confira o manifesto JSON ou tente recarregar a página.");console.error(error);}
 }
@@ -123,8 +136,9 @@ function closePreview(updateURL=true){
 function openPreview(item,updateURL=true){
  if(updateURL){
   const url=new URL(location.href);
-  url.hash=active.id;
+  url.searchParams.set("category",active.id);
   url.searchParams.set("preview",item.path);
+  if(catalog.some(c=>url.hash==="#"+c.id))url.hash="";
   if(url.href!==location.href)history.pushState(null,"",url);
  }
  openedPreviewPath=item.path;
@@ -200,7 +214,7 @@ nodes.search.addEventListener("input",resetPagination);
 nodes.subtype.addEventListener("change",resetPagination);
 function syncFromURL(){
  if(!catalog.length)return;
- const category=hashCategory();
+ const category=categoryFromURL();
  if(!active||active.id!==category.id)selectCategory(category);
  else if(entriesCategory===category.id){
   if(currentPage!==pageFromURL()){currentPage=pageFromURL();render();}
@@ -212,8 +226,8 @@ window.addEventListener("hashchange",syncFromURL);
 window.addEventListener("resize",()=>{if(!frameObserver)document.querySelectorAll(".card-preview").forEach(fitFrame);});
 (async()=>{try{const data=await readJSON("./catalog.json");catalog=(data.categories||[]).filter(c=>/^[a-z-]+$/.test(c.id)&&c.manifest===c.id+"/examples.json");for(const c of catalog){const b=el("button","nav-button",c.label);b.type="button";b.dataset.category=c.id;b.setAttribute("aria-current","false");b.addEventListener("click",()=>{
  const url=new URL(location.href);
- url.hash=c.id;url.searchParams.delete("page");url.searchParams.delete("preview");
+ url.searchParams.set("category",c.id);url.searchParams.delete("page");url.searchParams.delete("preview");url.hash="";
  if(url.href!==location.href)history.pushState(null,"",url);
  selectCategory(c);
-});nodes.nav.appendChild(b);}if(catalog.length)await selectCategory(hashCategory());else showState("Catálogo sem categorias.");}catch(e){showState("Não foi possível carregar o catálogo. Abra este site por HTTP(S), e não como arquivo local.");nodes.count.textContent="Indisponível";console.error(e);}})();
+});nodes.nav.appendChild(b);}if(catalog.length)await selectCategory(categoryFromURL());else showState("Catálogo sem categorias.");}catch(e){showState("Não foi possível carregar o catálogo. Abra este site por HTTP(S), e não como arquivo local.");nodes.count.textContent="Indisponível";console.error(e);}})();
 })();
