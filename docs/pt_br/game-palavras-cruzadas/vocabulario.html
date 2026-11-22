@@ -31,11 +31,69 @@ function drag(){
  root.querySelectorAll("[data-target]").forEach(z=>{z.onclick=()=>assign(z.dataset.target);z.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();assign(z.dataset.target);}};z.addEventListener("dragover",e=>e.preventDefault());z.addEventListener("drop",e=>{e.preventDefault();const value=e.dataTransfer.getData("text/plain");if(/^\d+$/.test(value))selected=+value;assign(z.dataset.target);});});
 }
 function crossword(){
- const correct=new Map();function place(word,row,col,dr,dc){[...word].forEach((letter,i)=>correct.set(`${row+i*dr}-${col+i*dc}`,letter));}
+ const correct=new Map(),words=[];
+ function place(word,row,col,dr,dc){
+  const keys=[...word].map((letter,i)=>{const key=`${row+i*dr}-${col+i*dc}`;correct.set(key,letter);return key;});
+  words.push({keys,direction:dr?"vertical":"horizontal"});
+ }
  place("LUA",2,0,0,1);place("MAR",1,2,1,0);place("RUA",3,2,0,1);
- panel(`<h2>Complete as palavras cruzadas</h2><p class="small">Horizontal: satélite natural da Terra (3); via urbana (3). Vertical: grande extensão de água salgada (3).</p><div class="crossword">${Array.from({length:25},(_,k)=>{const key=`${Math.floor(k/5)}-${k%5}`;return correct.has(key)?`<input maxlength="1" aria-label="Letra linha ${Math.floor(k/5)+1}, coluna ${k%5+1}" data-key="${key}" autocomplete="off">`:'<span class="empty"></span>';}).join("")}</div><div class="actions"><button id="check" class="btn">Conferir cruzadinha</button><button id="clean" class="btn alt">Limpar</button></div>`);
- root.querySelector("#check").onclick=()=>{const inputs=[...root.querySelectorAll("[data-key]")];const count=inputs.filter(x=>x.value.trim().toLocaleUpperCase("pt-BR")===correct.get(x.dataset.key)).length;status(count===correct.size?"Parabéns! Todas as letras estão corretas.":`${count} de ${correct.size} letras corretas.`,count===correct.size);};
- root.querySelector("#clean").onclick=()=>{root.querySelectorAll("input").forEach(x=>x.value="");status("Tabuleiro limpo.");};
+ panel(`<h2>Complete as palavras cruzadas</h2><p class="small">Horizontal: satélite natural da Terra (3); via urbana (3). Vertical: grande extensão de água salgada (3).</p><p class="small">Digite uma letra para avançar. Para corrigir, selecione a célula e digite outra letra. Use as setas para mudar a direção.</p><div class="crossword">${Array.from({length:25},(_,k)=>{const key=`${Math.floor(k/5)}-${k%5}`;return correct.has(key)?`<input maxlength="1" aria-label="Letra linha ${Math.floor(k/5)+1}, coluna ${k%5+1}" data-key="${key}" autocomplete="off" autocapitalize="characters" spellcheck="false">`:"<span class='empty'></span>";}).join("")}</div><div class="actions"><button id="check" class="btn">Conferir cruzadinha</button><button id="clean" class="btn alt">Limpar</button></div>`);
+ const inputs=[...root.querySelectorAll("[data-key]")];
+ const byKey=new Map(inputs.map(input=>[input.dataset.key,input]));
+ let activeWord=null;
+ function selectWord(input){
+  if(activeWord&&activeWord.keys.includes(input.dataset.key))return;
+  const candidates=words.filter(word=>word.keys.includes(input.dataset.key));
+  activeWord=candidates.find(word=>word.direction==="horizontal")||candidates[0];
+ }
+ function focusCell(input){if(input){input.focus();input.select();}}
+ function enterLetter(input,text){
+  const letters=[...text.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleUpperCase("pt-BR")].filter(letter=>/^[A-Z]$/.test(letter));
+  if(!letters.length)return;
+  selectWord(input);
+  input.value=letters[letters.length-1];
+  const next=byKey.get(activeWord.keys[activeWord.keys.indexOf(input.dataset.key)+1]);
+  if(next)focusCell(next);else input.select();
+ }
+ inputs.forEach(input=>{
+  input.addEventListener("focus",()=>{selectWord(input);input.select();});
+  input.addEventListener("click",()=>input.select());
+  input.addEventListener("keydown",event=>{
+   if(event.key.startsWith("Arrow")){
+    const steps={ArrowRight:[0,1,"horizontal"],ArrowLeft:[0,-1,"horizontal"],ArrowDown:[1,0,"vertical"],ArrowUp:[-1,0,"vertical"]};
+    const step=steps[event.key];
+    if(!step)return;
+    const [row,col]=input.dataset.key.split("-").map(Number);
+    const target=byKey.get(`${row+step[0]}-${col+step[1]}`);
+    if(target){
+     event.preventDefault();
+     activeWord=words.find(word=>word.direction===step[2]&&word.keys.includes(input.dataset.key)&&word.keys.includes(target.dataset.key))||activeWord;
+     focusCell(target);
+    }
+   }else if(event.key==="Backspace"){
+    event.preventDefault();
+    selectWord(input);
+    if(input.value){input.value="";return;}
+    const previous=byKey.get(activeWord.keys[activeWord.keys.indexOf(input.dataset.key)-1]);
+    if(previous){previous.value="";focusCell(previous);}
+   }else if(!event.ctrlKey&&!event.metaKey&&!event.altKey&&!event.isComposing&&/^[a-zA-ZÀ-ÿ]$/.test(event.key)){
+    event.preventDefault();
+    enterLetter(input,event.key);
+   }
+  });
+  input.addEventListener("beforeinput",event=>{
+   if(!event.isComposing&&event.data&&(event.inputType==="insertText"||event.inputType==="insertReplacementText")){
+    event.preventDefault();
+    enterLetter(input,event.data);
+   }
+  });
+  input.addEventListener("input",event=>{
+   if(!event.isComposing&&input.value)enterLetter(input,input.value);
+  });
+  input.addEventListener("compositionend",()=>{if(input.value)enterLetter(input,input.value);});
+ });
+ root.querySelector("#check").onclick=()=>{const count=inputs.filter(input=>input.value.trim().toLocaleUpperCase("pt-BR")===correct.get(input.dataset.key)).length;status(count===correct.size?"Parabéns! Todas as letras estão corretas.":`${count} de ${correct.size} letras corretas.`,count===correct.size);};
+ root.querySelector("#clean").onclick=()=>{inputs.forEach(input=>input.value="");status("Tabuleiro limpo.");};
 }
 function anagram(){
  const rounds=[["SOURC","CURSO","Ambiente de aprendizagem organizado em módulos."],["VORIL","LIVRO","Recurso composto por capítulos."],["LUAA","AULA","Encontro de ensino e aprendizagem."]];let round=0,selected=[];
