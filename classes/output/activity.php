@@ -119,7 +119,7 @@ final class activity {
         if ($sdk === false) {
             throw new \coding_exception("Cannot read the mod_mcp sandbox SDK");
         }
-        $bootstrap = "<script>\n" . $sdk . "\n</script>";
+        $bootstrap = "<script>{$sdk}</script><style>:root{background: transparent !important;}html,body{background: transparent !important;}";
 
         // Preserve the doctype even if the document has no head element.
         foreach (["/<head\b[^>]*>/i", "/<html\b[^>]*>/i"] as $pattern) {
