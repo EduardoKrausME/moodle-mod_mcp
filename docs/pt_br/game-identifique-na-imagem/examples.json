@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Identifique na imagem",
+  "description": "Exemplos independentes de identificação de componentes por hotspots, com imagem original, zoom, rótulos e acessibilidade.",
+  "examples": [
+    {
+      "id": "identifique-na-imagem-placa-mae",
+      "title": "Identifique na imagem - Componentes da placa-mãe",
+      "description": "Explore uma ilustração vetorial original e identifique seis componentes de hardware, utilizando rótulos ou perguntas sobre os pontos.",
+      "howItWorks": "Selecione um dos seis rótulos e o ponto numerado correspondente, ou utilize o modo de localizar componentes. É possível responder por botões textuais acessíveis, ampliar a ilustração e acompanhar tentativas, feedback e progresso.",
+      "subtype": "Identificação visual",
+      "features": [
+        "SVG original embutido",
+        "6 pontos interativos",
+        "Zoom com precisão",
+        "Teclado e leitor de tela"
+      ],
+      "minutes": 7,
+      "path": "game-identifique-na-imagem/componentes-da-placa-mae.html",
+      "prompt": "Crie uma atividade do tipo \"Identifique na imagem\" para o plugin mod_mcp, seguindo `.chatgpt/games/10-identifique-na-imagem.md` e a mecânica do exemplo de componentes de uma placa-mãe. O conteúdo deste exemplo é somente uma demonstração; nunca o reutilize automaticamente.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, imagens, coordenadas, JSON ou acionar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta do professor e não gere a atividade antes disso.\n\nDepois de receber a resposta, adapte o tema, os elementos visuais, os hotspots, os nomes e as explicações ao conteúdo escolhido. Pergunte apenas as informações indispensáveis: se o professor possui uma imagem para utilizar (solicite envio e autorização) ou deseja uma ilustração SVG original, a quantidade de regiões e o nível de aprendizagem. Informe explicitamente no resultado quais imagens foram utilizadas e sua origem; não invente URLs nem direitos de uso.\n\nPreserve a mecânica `image_hotspots`: uma imagem com pontos ou regiões claramente identificáveis e coordenadas normalizadas x/y entre zero e um, cada hotspot com ID estável, rótulo e explicação. Gere o contrato JSON proposto em `.chatgpt/games/10-identifique-na-imagem.md` como metadados de autoria, sem afirmar que o Moodle já interpreta automaticamente esse tipo. Valide IDs únicos, limites de coordenadas, ausência de sobreposição e coerência visual entre cada rótulo e seu hotspot. Corrija o mapeamento ao ampliar ou redimensionar a imagem. Use respostas por ID em vez de comparar apenas texto ou proximidade.\n\nImplemente o modo \"Associar rótulos\", no qual o aluno escolhe um rótulo e um ponto numerado, e o modo \"Encontre a peça\", no qual o jogo pergunta um componente e o aluno seleciona o ponto correto. Ofereça alternativa textual completa: lista de pontos numerados com descrição de posição e aparência, para que seja possível resolver com teclado ou leitor de tela sem exigir precisão visual. Inclua feedback explicativo após acerto, contador de tentativas, progresso, reinício, foco visível, suporte a toque e teclado, zoom com preservação das posições e movimento reduzido.\n\nEntregue HTML completo, autossuficiente, com CSS e JavaScript incorporados, responsivo, seguro e acessível, contendo apenas a atividade, sem menu, cabeçalho institucional, rodapé, CDN ou dependências externas. Não coloque notas oficiais nem correção acadêmica no cliente. Quando disponível, utilize somente `MoodleMCP.progress.load/save`, salvando transições significativas com controle de versão e tratamento de conflitos, respeitando 12 KiB; sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador. Com conexão MCP, utilize as APIs documentadas e só publique após aprovação explícita do professor."
+    }
+  ]
+}

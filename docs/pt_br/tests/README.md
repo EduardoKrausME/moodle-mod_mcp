@@ -45,3 +45,11 @@ node --test docs/pt_br/tests/categorize.test.mjs
 ```
 
 Esse teste cobre categorias inválidas ou vazias, itens multicategoria, IDs desconhecidos, desfazer, conferência por conjunto, estado de progresso, acessibilidade e sincronização dos dois manifestos.
+
+Para o jogo 10 (Identifique na imagem), execute:
+
+```bash
+node --test docs/pt_br/tests/image-hotspots.test.mjs
+```
+
+O teste cobre validação de coordenadas, identificação por IDs, seleção errada e repetida, duas formas de interação, zoom proporcional, descrição textual acessível e sincronização entre os dois JSONs.
