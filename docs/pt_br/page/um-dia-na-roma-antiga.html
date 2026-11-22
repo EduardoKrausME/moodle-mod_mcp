@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Uma viagem histórica ilustrada pela Roma de 125 d.C. com mapa, personagens, objetos arqueológicos e desafios críticos sobre sociedade romana.">
+<title>Um dia na Roma Antiga | Crônicas de Roma, 125 d.C.</title>
+<style>
+:root{--papyrus:#f6eedb;--paper:#fffaf0;--ink:#3d2c29;--muted:#6b5b4f;--brick:#a54232;--brick2:#7f2d29;--gold:#c39c5b;--navy:#303b50;--olive:#677154;--line:#d3bea0;--cream:#efe0c4;--glass:#fff8e7;--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;font-family:var(--sans);background:var(--papyrus);color:var(--ink)}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:290px;line-height:1.74;background:radial-gradient(ellipse at 20% 3%,#fae7c5 0,transparent 38%),var(--papyrus)}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.48;cursor:default}
+a{color:#7e3329;text-underline-offset:3px}
+a:hover{color:#463925}
+:focus-visible{outline:3px solid #2b6192;outline-offset:4px}
+h1,h2,h3,blockquote{font-family:var(--serif)}
+h1,h2,h3,p,figure{margin-top:0}
+h1,h2,h3{line-height:1.14}
+h2{font-size:clamp(2.1rem,4.1vw,4rem);letter-spacing:-.04em}
+h3{font-size:1.55rem}
+p{margin-bottom:1.24em}
+[hidden]{display:none!important}
+.wrap{width:min(1180px,calc(100% - 48px));margin-inline:auto}
+.chapter{font-size:.77rem;font-weight:850;letter-spacing:.18em;text-transform:uppercase;color:#8e352d}
+.reader{max-width:795px}
+.skip{position:absolute;top:-95px;left:14px;background:white;color:#301e19;padding:12px 17px;z-index:99}
+.skip:focus{top:14px}
+.hero{background:#812d27;color:#fff5df;position:relative;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 80% 22%,#dc9b5d6b,transparent 46%),linear-gradient(135deg,#9d4034 0%,#622826 100%);z-index:-1}
+.hero::after{content:"";position:absolute;inset:0;opacity:.14;background-image:repeating-linear-gradient(37deg,transparent 0 11px,#f5d1a2 11px 12px);pointer-events:none;z-index:-1}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid #e2b67b88;font:700 .72rem var(--sans);letter-spacing:.2em;text-transform:uppercase}
+.hero-top .seal{padding:6px 13px;border:1px solid #e6c38a}
+.hero-main{display:grid;grid-template-columns:.95fr 1.05fr;align-items:center;gap:10px;padding:67px 0 55px;min-height:575px}
+.hero h1{font-size:clamp(3.6rem,7.3vw,7rem);letter-spacing:-.065em;max-width:680px;margin:13px 0 30px;text-wrap:balance}
+.hero h1 em{font-weight:400;font-style:italic;color:#ffe1a9}
+.hero .opening{max-width:560px;font-size:1.1rem;line-height:1.85;color:#ffe6d0}
+.hero .period{display:inline-flex;gap:12px;align-items:center;margin-top:23px;background:#fff5db1c;border:1px solid #f8d1aa94;padding:13px 16px;font-size:.89rem}
+.hero .period strong{font-family:var(--serif);font-size:1.4rem;color:#fff0c1}
+.hero .tiny{color:#f3ccaf;font-size:.81rem;margin-top:18px}
+.hero-art{margin:0}
+.hero-art svg{width:100%;height:auto;display:block;filter:drop-shadow(10px 15px 20px #401b1c4f)}
+.hero-art figcaption{font-size:.77rem;color:#ffdcba;margin-top:9px}
+.hero .sky-clouds{animation:drift 14s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateX(-7px)}to{transform:translateX(9px)}}
+.mosaic-rule{height:17px;background-color:#e5c899;background-image:linear-gradient(45deg,#874a38 25%,transparent 25%),linear-gradient(-45deg,#874a38 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#874a38 75%),linear-gradient(-45deg,transparent 75%,#874a38 75%);background-position:0 0,0 9px,9px -9px,-9px 0;background-size:18px 18px}
+.preface{padding:91px 0 83px;display:grid;grid-template-columns:216px 1fr;gap:57px}
+.preface .drop{font:6.7rem/.82 var(--serif);color:#c59f79;letter-spacing:-.1em}
+.preface h2{margin:6px 0 24px}
+.preface p{font-size:1.08rem;color:#58463a;line-height:1.93}
+.preface .lead{font:1.6rem/1.55 var(--serif);color:#392824}
+.truth-key{margin-top:27px;display:flex;gap:11px;flex-wrap:wrap}
+.truth-key span{padding:8px 11px;font-size:.78rem;border:1px solid #beac91;color:#543c31;background:#fff9ec}
+.truth-key span:first-child{border-left:5px solid #6e7b62}
+.truth-key span:nth-child(2){border-left:5px solid #b3834b}
+.truth-key span:nth-child(3){border-left:5px solid #a54c42}
+.section{padding:86px 0;border-top:1px solid var(--line)}
+.section-head{display:grid;grid-template-columns:180px 1fr;gap:48px;margin-bottom:39px}
+.section-head h2{margin:0;max-width:850px}
+.section-head p{max-width:740px;color:#6d594b;margin:23px 0 0;font-size:1.08rem}
+.venue{background:#eaddc5}
+.map-layout{display:grid;grid-template-columns:1.24fr .76fr;gap:22px;align-items:stretch}
+.map-figure{margin:0;background:#ead5b8;border:8px solid #f7ecdb;box-shadow:0 16px 35px #50352521;min-width:0;position:relative}
+.map-stage{position:relative}
+.map-stage svg{display:block;width:100%;height:auto}
+.map-stage .map-pin{position:absolute;transform:translate(-50%,-50%);width:45px;height:45px;border-radius:50%;border:3px solid #ffecc8;color:#fff9e4;background:#963e31;box-shadow:0 3px 0 #62332d,0 0 0 4px #fff6e263;display:grid;place-items:center;font-weight:900;font-size:1rem;transition:transform .16s ease,background .16s}
+.map-stage .map-pin[aria-pressed="true"]{background:#344b4f;border-color:#fff;color:#fff;transform:translate(-50%,-50%) scale(1.14)}
+.map-stage .map-pin:hover{transform:translate(-50%,-50%) scale(1.14)}
+.map-stage .map-pin[data-place="subura"]{left:47%;top:22%}
+.map-stage .map-pin[data-place="forum"]{left:48%;top:47%}
+.map-stage .map-pin[data-place="market"]{left:67%;top:34%}
+.map-stage .map-pin[data-place="baths"]{left:75%;top:15%}
+.map-stage .map-pin[data-place="circus"]{left:37%;top:73%}
+.map-stage .map-pin[data-place="domus"]{left:70%;top:72%}
+.map-figure figcaption{padding:15px;color:#745746;font-size:.79rem;line-height:1.6;background:#fff7e7}
+.map-info{background:#fff8e9;border:1px solid #c9b396;padding:27px 26px}
+.map-info .map-index{font:italic 1.18rem var(--serif);color:#96442d}
+.map-info h3{font-size:2rem;margin:12px 0 18px}
+.map-info p{line-height:1.84;color:#5b493b}
+.map-info .evidence{display:block;padding:13px 14px;background:#f0e4d2;font-size:.87rem;border-left:4px solid var(--olive)}
+.map-choices{margin-top:19px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.map-choices button{background:#eee1ca;border:1px solid #bda588;color:#513e33;text-align:left;padding:9px 11px;font-size:.88rem}
+.map-choices button[aria-pressed="true"]{background:#8c392d;color:white;border-color:#8c392d}
+.map-choices button:hover{border-color:#542e25}
+.map-tip{font-size:.83rem;color:#77604c;margin:17px 0 0}
+.panorama{padding:87px 0;background:#332d2b;color:#f8ebd8}
+.panorama h2{color:#fff3dd}
+.panorama .chapter{color:#efc084}
+.panorama p{color:#edd5bd}
+.panorama-figure{margin:28px 0 0;border:1px solid #92745c;background:#4b3935;padding:18px}
+.panorama-figure svg{width:100%;height:auto;display:block}
+.panorama-figure figcaption{font-size:.82rem;margin-top:15px;color:#e9cdb5}
+.panorama .insight{display:grid;grid-template-columns:1fr 1fr;gap:35px;margin-top:35px}
+.panorama .insight p{line-height:1.9}
+.timeline{background:#f6eddc}
+.timeline-panel{display:grid;grid-template-columns:240px minmax(0,1fr);gap:25px}
+.character-list{display:grid;gap:10px;align-content:start}
+.character-btn{display:flex;gap:15px;align-items:center;text-align:left;padding:19px 14px;background:#ece0c9;border:2px solid #c3ad8d;color:#493229}
+.character-btn[aria-pressed="true"]{background:#903e32;color:#fff5e4;border-color:#903e32}
+.character-btn .portrait{font:1.9rem var(--serif);width:46px;height:46px;border:1px solid currentColor;display:grid;place-items:center;flex:none}
+.character-btn strong{display:block;font:1.3rem var(--serif)}
+.character-btn small{display:block;font-size:.78rem;line-height:1.45;margin-top:3px}
+.story-card{background:#fff9ee;border:1px solid #c7b191;box-shadow:9px 11px 0 #a0845828;padding:30px 35px 31px;min-width:0}
+.story-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-bottom:17px;border-bottom:1px solid #d9c4a8}
+.story-top span{font-size:.72rem;font-weight:900;letter-spacing:.1em;color:#9f4a38}
+.story-top .badge-fiction{font-size:.78rem;background:#f4e5cd;padding:7px 10px;color:#71392c}
+.moments{display:flex;flex-wrap:wrap;gap:8px;padding:18px 0 16px}
+.moment-btn{border:1px solid #b79d7f;background:#faf2e3;color:#543f32;font-size:.83rem;padding:8px 11px}
+.moment-btn[aria-pressed="true"]{background:#3e4b46;color:#fff;border-color:#3e4b46}
+.story-card h3{font-size:2.3rem;margin:9px 0 12px}
+.story-card .story-body{min-height:145px;font-size:1.05rem;line-height:1.94;color:#49382e}
+.story-context{margin-top:21px;background:#f2e5d0;border-left:4px solid #aa7947;padding:17px 19px}
+.story-context strong{color:#8b4f2d}
+.story-context p{font-size:.94rem;margin:7px 0 0;color:#594336}
+.story-decision{margin-top:20px;padding:20px;border:1px dashed #b9976c}
+.story-decision strong{display:block;margin-bottom:12px}
+.story-options{display:grid;gap:9px}
+.story-options button{text-align:left;padding:11px 14px;border:1px solid #bda182;background:#fcf5e8;color:#4d3428}
+.story-options button[aria-pressed="true"]{border-color:#913d2e;background:#f5dccb;font-weight:720}
+.story-options button:hover{border-color:#883c29}
+.story-feedback{margin-top:13px;min-height:23px;font-size:.92rem;color:#693d2b;line-height:1.65}
+.story-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}
+.action{padding:11px 17px;border:1px solid #804031;background:#8c3b30;color:#fff7e8;font-weight:750}
+.action:hover:not(:disabled){background:#6c2d26}
+.action.alt{color:#5f392b;background:#f5e8d6;border-color:#ad886d}
+.action.alt:hover:not(:disabled){background:#ead4bb}
+.story-foot{font-size:.84rem;color:#765c47;margin:17px 0 0}
+.status-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:39px}
+.status-card{padding:23px;background:#efe2cd;border-top:5px solid #a14739}
+.status-card:nth-child(2){border-top-color:#647e71}
+.status-card:nth-child(3){border-top-color:#ac8554}
+.status-card h3{font-size:1.5rem;margin:0 0 12px}
+.status-card p{font-size:.94rem;line-height:1.8;color:#544538}
+.homes{background:#faefe0}
+.homes-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:46px;align-items:center}
+.homes-grid p{font-size:1.06rem;line-height:1.94;color:#59483b}
+.arch-figure{margin:0;background:#e8d5b9;padding:19px;border:2px solid #c5ae8a}
+.arch-figure svg{display:block;width:100%;height:auto}
+.arch-figure figcaption{font-size:.81rem;color:#66503d;line-height:1.7;padding-top:11px}
+.compare{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:37px}
+.compare section{background:#f2e5d0;padding:24px;border-top:3px solid #a44838}
+.compare h3{margin:0 0 13px}
+.compare p{font-size:.97rem;color:#53453c}
+.politics{background:#30404b;color:#f3e8d5}
+.politics .chapter{color:#f0cb96}
+.politics h2{color:#fff5de}
+.politics p{color:#dfded5}
+.politics-layout{display:grid;grid-template-columns:1fr 1fr;gap:41px}
+.politics-layout p{line-height:1.95}
+.politics-flow{padding:20px;background:#e8dfd0;border:1px solid #aa9b80;color:#3b2a29}
+.politics-flow svg{display:block;width:100%;height:auto}
+.politics-flow figcaption{font-size:.79rem;color:#65513f;margin-top:13px}
+.politics-points{margin-top:25px;padding-left:20px}
+.politics-points li{margin-bottom:15px;color:#e8dfd0}
+.objectroom{background:#efe2c9}
+.museum{display:grid;grid-template-columns:1fr 1fr;gap:25px}
+.object-art{padding:21px 20px;background:#362c2a;color:#f3e3ce}
+.object-art svg{display:block;width:100%;height:auto;max-height:440px}
+.object-art [data-artifact]{display:none}
+.object-art[data-object="tablet"] [data-artifact="tablet"],.object-art[data-object="lamp"] [data-artifact="lamp"],.object-art[data-object="strigil"] [data-artifact="strigil"],.object-art[data-object="amphora"] [data-artifact="amphora"],.object-art[data-object="coin"] [data-artifact="coin"]{display:block}
+.object-art figcaption{font-size:.8rem;color:#dcc5aa;margin-top:13px}
+.object-explain{border:1px solid #c5ae8f;padding:26px;background:#fff7e9}
+.object-explain h3{font-size:2rem;margin:12px 0}
+.object-explain p{color:#574536;line-height:1.85}
+.object-choices{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.object-choices button{border:1px solid #af967a;background:#f3e6d1;color:#5b3c2f;padding:9px 13px;font-size:.91rem}
+.object-choices button[aria-pressed="true"]{background:#8a3c31;color:#fff;border-color:#8a3c31}
+.object-source{background:#f0e2ca;padding:15px 18px;border-left:4px solid #758366;font-size:.88rem;color:#5a4739}
+.object-source strong{display:block;color:#4d5d41}
+.baths{background:#f8f1e5}
+.baths .arch-figure{max-width:930px;margin-inline:auto}
+.baths-narrative{display:grid;grid-template-columns:1fr 1fr;gap:35px;margin-top:35px}
+.baths-narrative p{color:#5d4b3d;line-height:1.9}
+.food-school{background:#f3e4d3}
+.food-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.food-card{background:#fff8eb;border:1px solid #ceb69a;padding:26px 25px}
+.food-card h3{font-size:1.65rem}
+.food-card p{font-size:.98rem;color:#584437}
+.slavery{background:#4b3334;color:#f8e9dd}
+.slavery .chapter{color:#f5bd9e}
+.slavery h2{color:#ffead7}
+.slavery .reader p{color:#f1ddd1;line-height:1.95;font-size:1.07rem}
+.slavery .warning{padding:23px 26px;border-left:4px solid #f5c29d;background:#6b4440;margin-top:25px;max-width:950px}
+.slavery .warning strong{color:#ffdab7}
+.interpretation{background:#eadfcb}
+.interpret-grid{display:grid;grid-template-columns:1fr 1fr;gap:25px}
+.interpret-card{background:#fff9ed;border:1px solid #c9b18f;padding:27px}
+.interpret-card h3{font-size:1.7rem}
+.interpret-card p{color:#554437}
+.interpret-card .type{display:inline-block;font-size:.73rem;font-weight:850;letter-spacing:.1em;text-transform:uppercase;color:#6a755d;margin-bottom:15px}
+.interpret-card:nth-child(2) .type{color:#a34c38}
+.review{padding:82px 0;background:#f8f2e6}
+.review-layout{display:grid;grid-template-columns:.7fr 1.3fr;gap:56px}
+.review-layout .intro{color:#665242}
+.question{border:0;margin:0 0 23px;padding:0 0 23px;border-bottom:1px solid #ccb89e;min-width:0}
+.question legend{padding:0;width:100%;font-weight:820;line-height:1.55;margin-bottom:11px}
+.question label{display:flex;gap:10px;align-items:start;padding:11px 14px;margin:9px 0;background:#fffaf1;border:1px solid #cbb99f;cursor:pointer}
+.question label:has(input:checked){border-color:#9a4435;background:#f5dfcd}
+.question input{margin-top:6px;flex:none;accent-color:#8a3d2e}
+.question-feedback{font-size:.93rem;color:#754031;min-height:1.5em;margin:12px 0 0}
+.review-actions{display:flex;flex-wrap:wrap;gap:11px}
+.review-result{font:1.3rem/1.6 var(--serif);margin-top:18px}
+.closing{padding:62px 0;background:#812f2a;color:#fff2da}
+.closing h2{color:#fff0cd}
+.closing p{font-size:1.12rem;max-width:850px;line-height:1.9;color:#ffe3ce}
+.sources{padding:45px 0 72px;color:#564738}
+.sources h2{font-size:1.6rem}
+.sources p{font-size:.92rem;line-height:1.8}
+.sources a{overflow-wrap:anywhere}
+@media(max-width:1000px){
+.hero-main,.preface,.section-head,.map-layout,.timeline-panel,.homes-grid,.politics-layout,.museum,.review-layout{grid-template-columns:1fr}
+.hero-main{gap:0;padding:49px 0}.hero-art{max-width:830px}
+.preface{gap:10px}.preface .drop{font-size:4rem}
+.section-head{gap:12px}
+.map-layout{gap:16px}
+.timeline-panel{gap:15px}
+.character-list{grid-template-columns:repeat(3,1fr)}
+.character-btn{padding:12px;display:block}.character-btn .portrait{margin-bottom:9px}
+}
+@media(max-width:690px){
+.wrap{width:calc(100% - 28px)}
+.hero-top{font-size:.62rem;letter-spacing:.07em}
+.hero h1{font-size:clamp(3.25rem,12vw,4.65rem)}
+.hero-main{padding:35px 0}
+.preface,.section{padding:58px 0}
+.section-head{margin-bottom:28px}
+.panorama,.review{padding:55px 0}
+.panorama .insight,.homes-grid,.compare,.status-grid,.food-grid,.baths-narrative,.interpret-grid{grid-template-columns:1fr}
+.character-list{grid-template-columns:1fr}
+.character-btn{display:flex}
+.character-btn .portrait{margin-bottom:0}
+.story-card{padding:20px 17px}
+.story-card h3{font-size:1.85rem}
+.map-stage .map-pin{width:35px;height:35px;font-size:.81rem;border-width:2px}
+.map-choices{grid-template-columns:1fr 1fr}
+.map-info{padding:21px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<main id="conteudo">
+<section class="hero" aria-labelledby="title">
+ <div class="wrap">
+  <div class="hero-top"><span>CRÔNICAS DE ROMA · VOLUME V</span><span class="seal">125 D.C. · GOVERNO DE ADRIANO</span></div>
+  <div class="hero-main">
+   <div>
+    <span class="chapter" style="color:#f8d5a2">Uma expedição histórica ilustrada</span>
+    <h1 id="title">Um dia na <em>Roma Antiga.</em></h1>
+    <p class="opening">Da primeira fornada de pão ao burburinho do fórum, acompanhe três pessoas que vivem na mesma cidade, mas não têm os mesmos direitos, recursos ou escolhas. A Roma monumental era também uma cidade de trabalho, desigualdade, comércio, família e coerção.</p>
+    <div class="period"><strong>125</strong><span><b>Depois de Cristo</b><br>Roma imperial, durante o principado de Adriano (117–138)</span></div>
+    <p class="tiny">Os personagens e os diálogos são ficcionais. Lugares, práticas e instituições partem de evidências históricas indicadas ao longo da aula.</p>
+   </div>
+   <figure class="hero-art">
+    <svg viewBox="0 0 740 570" role="img" aria-labelledby="city-title city-desc">
+     <title id="city-title">Reconstrução ilustrada de uma paisagem da Roma imperial</title>
+     <desc id="city-desc">Vista artística com templos de colunas, edifícios de vários pavimentos, aqueduto, praça movimentada, arcos, telhados de terracota e colinas em um céu dourado. Não é uma fotografia nem uma reconstrução topográfica exata.</desc>
+     <defs><linearGradient id="sunset" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f4be7a"/><stop offset="1" stop-color="#dc8c65"/></linearGradient><pattern id="blocks" width="26" height="20" patternUnits="userSpaceOnUse"><path d="M0 19 H26 M12 0 V19" stroke="#5b3e35" stroke-width="1" opacity=".27"/></pattern></defs>
+     <rect x="3" y="4" width="732" height="552" rx="260" fill="url(#sunset)" stroke="#f4c899" stroke-width="7"/>
+     <circle cx="575" cy="132" r="56" fill="#ffe1a2" opacity=".73"/>
+     <g class="sky-clouds" fill="#fff1ca" opacity=".65"><ellipse cx="167" cy="108" rx="75" ry="14"/><ellipse cx="237" cy="91" rx="41" ry="11"/><ellipse cx="518" cy="75" rx="64" ry="13"/></g>
+     <path d="M4 305 Q92 259 189 291 T400 281 T603 266 T735 278 V552 H4Z" fill="#a97a59"/>
+     <path d="M5 374 Q103 339 200 369 T427 354 T733 351 V554 H5Z" fill="#886249"/>
+     <g transform="translate(61 223)">
+       <path d="M0 95 L91 50 L183 92 L179 110 H0Z" fill="#d5a278" stroke="#74493a" stroke-width="5"/>
+       <rect x="18" y="107" width="148" height="152" fill="#d8ba91" stroke="#8c5c45" stroke-width="5"/>
+       <g stroke="#6f4c3b" stroke-width="14"><path d="M47 111 V255 M93 111 V255 M140 111 V255"/></g>
+       <rect x="5" y="255" width="175" height="16" fill="#9a6350"/>
+       <path d="M12 110 H172" stroke="#fbdbb0" stroke-width="12"/>
+     </g>
+     <g transform="translate(251 166)">
+       <path d="M0 131 115 77 231 131 V147 H0Z" fill="#c99a72" stroke="#815442" stroke-width="5"/>
+       <rect x="15" y="147" width="202" height="183" fill="#d4aa7f" stroke="#85513d" stroke-width="5"/>
+       <path d="M36 155 V326 M83 155 V326 M132 155 V326 M179 155 V326" stroke="#f6d2a5" stroke-width="16"/>
+       <path d="M12 174 H218 M10 325 H223" stroke="#8d5843" stroke-width="14"/>
+       <path d="M29 120 H207" stroke="#f8d9a8" stroke-width="7"/>
+     </g>
+     <g transform="translate(514 208)">
+       <rect x="0" y="74" width="167" height="238" fill="#c38b6c" stroke="#814c41" stroke-width="6"/>
+       <path d="M-14 74 79 30 182 74" fill="#99533e" stroke="#724135" stroke-width="7"/>
+       <g fill="#4a3c3c"><rect x="19" y="102" width="31" height="43"/><rect x="65" y="102" width="31" height="43"/><rect x="113" y="102" width="31" height="43"/><rect x="19" y="174" width="31" height="43"/><rect x="65" y="174" width="31" height="43"/><rect x="113" y="174" width="31" height="43"/></g>
+       <rect x="50" y="243" width="64" height="70" rx="27" fill="#5e423a"/>
+       <rect width="167" height="238" y="74" fill="url(#blocks)" opacity=".55"/>
+     </g>
+     <path d="M20 472 Q204 443 335 471 T720 476 V555 H20Z" fill="#c29a6b"/>
+     <g fill="#4a3831"><ellipse cx="121" cy="456" rx="12" ry="17"/><path d="M107 473 L101 516 H140 L135 473Z"/><ellipse cx="183" cy="469" rx="12" ry="17"/><path d="M169 485 L162 526 H201 L197 485Z"/><ellipse cx="482" cy="457" rx="12" ry="16"/><path d="M470 475 L461 519 H500 L492 475Z"/><ellipse cx="607" cy="462" rx="12" ry="16"/><path d="M594 480 L589 526 H626 L620 480Z"/></g>
+     <g fill="none" stroke="#784a3b" stroke-width="6"><path d="M10 415 Q149 387 280 419"/><path d="M10 425 Q145 398 280 429"/></g>
+    </svg>
+    <figcaption>Figura 1. Panorama SVG original e artístico da Roma do século II; combina formas arquitetônicas documentadas, mas não representa uma vista real específica.</figcaption>
+   </figure>
+  </div>
+ </div>
+ <div class="mosaic-rule" aria-hidden="true"></div>
+</section>
+
+<section class="preface wrap" aria-labelledby="marco">
+ <div><div class="drop" aria-hidden="true">I</div><span class="chapter">Como ler esta viagem</span></div>
+ <div class="reader">
+  <h2 id="marco">Qual Roma estamos visitando?</h2>
+  <p class="lead">Estamos em aproximadamente 125 d.C., num império governado por Adriano, mas a experiência de cada morador da capital depende de posição social, gênero, idade, cidadania, liberdade e recursos.</p>
+  <p>A cidade abriga espaços monumentais, como o Fórum Romano, o Circo Máximo e termas, ao lado de lojas, oficinas e edifícios residenciais. As pessoas comem, compram, se deslocam, aprendem, negociam e trabalham, mas seus ritmos não obedecem a um único modelo. Não existe um “dia típico” igual para todos.</p>
+  <p>Arqueologia, inscrições, moedas, literatura e construções preservadas revelam aspectos dessa vida, embora as fontes tenham lacunas importantes: autores da elite escreveram muito mais do que trabalhadores e pessoas escravizadas. Por isso, os três personagens desta aula são <strong>inventados</strong>, e suas trajetórias combinam situações historicamente plausíveis com informação documentada.</p>
+  <div class="truth-key" aria-label="Legenda da natureza das informações"><span>Fonte documentada / evidência</span><span>Reconstrução interpretativa</span><span>Personagem e cena fictícios</span></div>
+  <p style="font-size:.87rem;margin-top:18px">As cores da legenda ajudam a reconhecer categorias, mas todas são apresentadas também por texto.</p>
+ </div>
+</section>
+
+<section class="section venue" aria-labelledby="mapTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="chapter">II / Mapa de investigação</span><div><h2 id="mapTitle">Uma cidade, muitas Romas.</h2><p>Selecione os pontos do mapa ou os nomes ao lado. A planta é uma <strong>interpretação espacial simplificada</strong> para explorar ambientes urbanos: não serve para localizar edifícios, orientar visitas nem reproduzir distâncias ou ruas com precisão arqueológica.</p></div></div>
+  <div class="map-layout">
+   <figure class="map-figure">
+    <div class="map-stage">
+     <svg viewBox="0 0 740 530" role="img" aria-labelledby="map-svg-title map-svg-desc">
+      <title id="map-svg-title">Mapa ilustrado não cartográfico de bairros e espaços da Roma imperial</title>
+      <desc id="map-svg-desc">Mapa estilizado em tons de argila com o rio Tibre à esquerda, bairros de residências, um fórum, espaços comerciais, termas e um circo. Seis botões independentes estão posicionados sobre as áreas para exploração por toque ou teclado.</desc>
+      <rect width="740" height="530" fill="#e5cfac"/>
+      <path d="M90 -20 Q184 75 130 160 T155 338 T55 556" fill="none" stroke="#8eb1a8" stroke-width="77"/>
+      <path d="M90 -20 Q184 75 130 160 T155 338 T55 556" fill="none" stroke="#cbe0ce" stroke-width="50" opacity=".65"/>
+      <g fill="#b9bf92" opacity=".45"><path d="M179 0 H740 V69 Q654 96 533 62 T179 84Z"/><path d="M178 467 Q327 415 464 479 T740 442 V530 H147Z"/></g>
+      <g fill="none" stroke="#bf9a77" stroke-width="18" stroke-linejoin="round"><path d="M212 31 L244 470 M390 24 L350 499 M559 26 L548 495 M682 20 L631 502 M178 139 L728 117 M188 280 L709 294 M179 427 L721 410"/></g>
+      <g fill="none" stroke="#f9edd7" stroke-width="8"><path d="M212 31 L244 470 M390 24 L350 499 M559 26 L548 495 M682 20 L631 502 M178 139 L728 117 M188 280 L709 294 M179 427 L721 410"/></g>
+      <g stroke="#9c6b54" stroke-width="3" fill="#c9966a">
+        <path d="M235 65 h93 v58 h-93Z"/><path d="M431 42 h80 v70 h-80Z"/><path d="M604 51 h85 v55 h-85Z"/>
+        <path d="M240 167 h91 v77 h-91Z"/><path d="M403 169 h105 v85 h-105Z"/><path d="M595 168 h91 v72 h-91Z"/>
+        <path d="M237 321 h86 v84 h-86Z"/><path d="M405 315 h112 v73 h-112Z"/><path d="M584 332 h109 v59 h-109Z"/>
+        <path d="M267 450 h77 v50 h-77Z"/><path d="M434 443 h94 v55 h-94Z"/><path d="M583 450 h119 v49 h-119Z"/>
+      </g>
+      <g stroke="#f9e8c9" stroke-width="6" fill="none">
+        <path d="M250 82 H309 M250 102 H309 M448 62 H497 M448 88 H497 M618 71 H672 M618 88 H672"/>
+        <path d="M256 186 H311 M256 217 H311 M420 187 H491 M420 218 H491 M610 184 H675 M610 213 H675"/>
+        <path d="M255 342 H304 M255 374 H304 M420 337 H499 M420 367 H499"/>
+      </g>
+      <g fill="#675440" font-family="Georgia,serif" font-size="22" font-style="italic">
+        <text transform="translate(71 379) rotate(-83)" fill="#3f7775">Tibre (esquemático)</text>
+        <text x="195" y="29">Regiões da cidade (interpretação)</text>
+      </g>
+      <g fill="none" stroke="#f6e0b9" stroke-width="7"><path d="M137 173 H203 M126 401 H199"/></g>
+      <g opacity=".75" fill="#9b674c"><circle cx="293" cy="263" r="14"/><circle cx="507" cy="140" r="12"/><circle cx="619" cy="283" r="13"/></g>
+     </svg>
+     <button type="button" class="map-pin" data-place="subura" aria-label="Ponto 1: região de residências populares" aria-pressed="false">1</button>
+     <button type="button" class="map-pin" data-place="forum" aria-label="Ponto 2: Fórum Romano" aria-pressed="true">2</button>
+     <button type="button" class="map-pin" data-place="market" aria-label="Ponto 3: mercado e oficinas" aria-pressed="false">3</button>
+     <button type="button" class="map-pin" data-place="baths" aria-label="Ponto 4: Termas de Trajano" aria-pressed="false">4</button>
+     <button type="button" class="map-pin" data-place="circus" aria-label="Ponto 5: Circo Máximo" aria-pressed="false">5</button>
+     <button type="button" class="map-pin" data-place="domus" aria-label="Ponto 6: casa de elite" aria-pressed="false">6</button>
+    </div>
+    <figcaption>Figura 2. Mapa didático SVG original, sem escala e sem coordenadas históricas exatas. Pinagens deliberadamente ilustrativas, não um levantamento arqueológico. Nenhuma rota real é calculada.</figcaption>
+   </figure>
+   <div class="map-info">
+    <span class="map-index" id="mapLabel">Ponto 02 · Espaço cívico</span>
+    <h3 id="mapName">Fórum Romano</h3>
+    <p id="mapDescription" aria-live="polite" aria-atomic="true">A praça monumental reúne edifícios religiosos, espaços de administração, tribunais, memória pública e circulação de pessoas. Não se deve confundir esse espaço cívico com a sede de uma democracia moderna: no século II d.C., o poder imperial era decisivo.</p>
+    <span class="evidence" id="mapEvidence">Base histórica: vestígios arquitetônicos do fórum e estudos das instituições romanas. A distribuição do mapa é apenas ilustrativa.</span>
+    <div class="map-choices" role="group" aria-label="Escolha um ambiente da cidade">
+     <button type="button" data-place="subura" aria-pressed="false">1 · Moradias</button>
+     <button type="button" data-place="forum" aria-pressed="true">2 · Fórum</button>
+     <button type="button" data-place="market" aria-pressed="false">3 · Comércio</button>
+     <button type="button" data-place="baths" aria-pressed="false">4 · Termas</button>
+     <button type="button" data-place="circus" aria-pressed="false">5 · Circo</button>
+     <button type="button" data-place="domus" aria-pressed="false">6 · Domus</button>
+    </div>
+    <p class="map-tip">Todos os pontos podem ser selecionados pelo teclado; os botões na lista oferecem alternativa aos pontos sobre a ilustração.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="panorama" aria-labelledby="streetsTitle">
+ <div class="wrap">
+  <span class="chapter">III / Rua e vizinhança</span><h2 id="streetsTitle">A cidade vive entre monumentos e trabalho.</h2>
+  <figure class="panorama-figure">
+   <svg viewBox="0 0 1060 470" role="img" aria-labelledby="street-svg-title street-svg-desc">
+    <title id="street-svg-title">Vista artística de uma rua romana com lojas, apartamentos e pessoas</title>
+    <desc id="street-svg-desc">Uma rua de pedras ladeada por edifícios de vários andares, oficinas abertas, pães e cerâmicas à venda, uma pessoa carregando recipientes e outra conversando perto de uma fonte.</desc>
+    <defs><linearGradient id="streetSky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d3a17d"/><stop offset="1" stop-color="#eac99d"/></linearGradient></defs>
+    <rect width="1060" height="470" fill="url(#streetSky)"/>
+    <path d="M0 313 H1060 V470 H0Z" fill="#ae9275"/>
+    <path d="M225 329 H850 L1045 470 H18Z" fill="#c2a88b"/>
+    <g fill="none" stroke="#947d65" stroke-width="3"><path d="M240 350 H838 M203 393 H887 M118 439 H978 M359 328 L254 470 M504 328 L463 470 M664 328 L737 470"/></g>
+    <g fill="#c58b64" stroke="#624d43" stroke-width="6">
+     <rect x="4" y="69" width="280" height="267"/><rect x="5" y="36" width="287" height="38" fill="#814d3a"/>
+     <rect x="781" y="73" width="272" height="265"/><rect x="772" y="44" width="286" height="36" fill="#8b5440"/>
+    </g>
+    <g fill="#694237" stroke="#e0b586" stroke-width="4">
+     <rect x="26" y="95" width="53" height="55"/><rect x="109" y="95" width="53" height="55"/><rect x="197" y="95" width="53" height="55"/>
+     <rect x="26" y="170" width="53" height="55"/><rect x="109" y="170" width="53" height="55"/><rect x="197" y="170" width="53" height="55"/>
+     <rect x="809" y="100" width="53" height="55"/><rect x="885" y="100" width="53" height="55"/><rect x="970" y="100" width="53" height="55"/>
+     <rect x="809" y="174" width="53" height="55"/><rect x="885" y="174" width="53" height="55"/><rect x="970" y="174" width="53" height="55"/>
+    </g>
+    <path d="M22 252 H252 V329 H22Z" fill="#4b3935"/>
+    <path d="M803 250 H1033 V329 H803Z" fill="#57423a"/>
+    <g fill="#d5af7b"><ellipse cx="56" cy="316" rx="22" ry="8"/><ellipse cx="104" cy="316" rx="22" ry="8"/><ellipse cx="151" cy="316" rx="22" ry="8"/><ellipse cx="200" cy="315" rx="22" ry="8"/></g>
+    <g fill="#b47856"><path d="M848 291 q-17 20 0 31 h23 q18-12 0-31Z"/><path d="M900 284 q-17 30 0 38 h28 q15-15 0-38Z"/><path d="M950 286 q-17 28 0 36 h26 q15-12 0-36Z"/></g>
+    <g fill="#dfc2a0" stroke="#6d4c3b" stroke-width="4"><path d="M395 304 l21 9 5 60 h-37Z"/><circle cx="402" cy="281" r="16"/><path d="M587 313 l19 9 6 58 h-40Z"/><circle cx="595" cy="293" r="15"/><path d="M690 290 l20 11 7 66 h-42Z"/><circle cx="698" cy="274" r="15"/></g>
+    <g fill="none" stroke="#6f5145" stroke-width="5"><path d="M402 331 l-12 60 m28-54 14 55 M592 345 l-13 54 m22-50 14 49 M689 335 l-15 59 m29-58 16 54"/></g>
+    <g fill="#d7b388"><rect x="460" y="272" width="66" height="45"/><path d="M468 272 Q491 236 518 272" fill="none" stroke="#b38967" stroke-width="9"/></g>
+    <path d="M310 264 V334 H351 V264 M314 264 H347" stroke="#7f5c45" stroke-width="7" fill="none"/>
+    <text x="30" y="25" font-family="Georgia,serif" font-size="23" fill="#6e4030">Uma rua possível; nenhuma pessoa é retrato histórico</text>
+   </svg>
+   <figcaption>Figura 3. Ilustração original de rua romana. Os detalhes combinam tipos arquitetônicos e práticas atestadas, sem pretensão de reproduzir uma rua específica em 125 d.C.</figcaption>
+  </figure>
+  <div class="insight">
+   <p>Entre o ruído de carroças, água transportada, bancas, animais e oficinas, a cidade reunia pessoas de origens diversas. A proximidade entre espaços de comércio e residência era frequente em ambientes urbanos; grandes monumentos não eliminavam problemas cotidianos de sujeira, fumaça, congestionamento e incêndio.</p>
+   <p>A economia urbana dependia de artesãos, vendedores, transportadores, trabalhadores livres, libertos e pessoas escravizadas. A circulação de cereais e outros produtos ligava a capital a regiões do Mediterrâneo; a riqueza imperial era sustentada tanto por infraestrutura quanto por assimetrias profundas de poder e exploração.</p>
+  </div>
+ </div>
+</section>
+
+<section class="section timeline" aria-labelledby="dayTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="chapter">IV / Três vozes possíveis</span><div><h2 id="dayTitle">O mesmo dia, três destinos.</h2><p>Escolha uma personagem e avance pelos cinco momentos do dia. As cenas são <strong>ficção histórica didática</strong>: seus nomes, pensamentos e decisões não são relatos de pessoas reais. As notas separam as situações plausíveis dos fatos apoiados por fontes.</p></div></div>
+  <div class="timeline-panel">
+   <div class="character-list" role="group" aria-label="Escolha a personagem">
+    <button type="button" class="character-btn" data-character="livia" aria-pressed="true" aria-controls="storyTitle storyBody storyFact storyChoice"><span class="portrait" aria-hidden="true">L</span><span><strong>Lívia</strong><small>Mulher liberta, comerciante</small></span></button>
+    <button type="button" class="character-btn" data-character="marcus" aria-pressed="false" aria-controls="storyTitle storyBody storyFact storyChoice"><span class="portrait" aria-hidden="true">M</span><span><strong>Marco</strong><small>Menino cidadão, família abastada</small></span></button>
+    <button type="button" class="character-btn" data-character="dama" aria-pressed="false" aria-controls="storyTitle storyBody storyFact storyChoice"><span class="portrait" aria-hidden="true">D</span><span><strong>Dama</strong><small>Homem escravizado, trabalhador doméstico</small></span></button>
+   </div>
+   <div class="story-card">
+    <div class="story-top"><span id="storyCounter">01 / 05 · AURORA</span><span class="badge-fiction">Cena ficcional fundamentada</span></div>
+    <div class="moments" role="group" aria-label="Escolha um momento do dia">
+     <button class="moment-btn" type="button" data-moment="0" aria-pressed="true">Aurora</button>
+     <button class="moment-btn" type="button" data-moment="1" aria-pressed="false">Manhã</button>
+     <button class="moment-btn" type="button" data-moment="2" aria-pressed="false">Meio-dia</button>
+     <button class="moment-btn" type="button" data-moment="3" aria-pressed="false">Tarde</button>
+     <button class="moment-btn" type="button" data-moment="4" aria-pressed="false">Anoitecer</button>
+    </div>
+    <h3 id="storyTitle">Lívia abre sua pequena oficina</h3>
+    <div class="story-body" id="storyBody" aria-live="polite" aria-atomic="true">Lívia, uma liberta fictícia, confere materiais e abre as portas da oficina em uma rua movimentada. O rendimento do trabalho é decisivo para manter o negócio; sua situação legal é diferente da de uma mulher escravizada, mas o passado de escravização e a organização patriarcal ainda podem pesar em suas relações.</div>
+    <div class="story-context"><strong>O que a pesquisa sustenta?</strong><p id="storyFact">Pessoas libertas participavam de atividades econômicas urbanas, e mulheres livres podiam atuar no comércio. A oficina, o nome e esta manhã específica são invenções didáticas.</p></div>
+    <div class="story-decision">
+     <strong id="storyChoice">Uma decisão: o que pode influenciar o dia dela?</strong>
+     <div class="story-options" role="group" aria-label="Escolha uma interpretação da situação">
+      <button type="button" class="story-option" data-option="0" aria-pressed="false">Priorizar materiais e vendas.</button>
+      <button type="button" class="story-option" data-option="1" aria-pressed="false">Ignorar completamente relações de status.</button>
+     </div>
+     <div class="story-feedback" id="storyFeedback" role="status" aria-live="polite">Selecione uma interpretação e leia a consequência social.</div>
+    </div>
+    <div class="story-actions"><button class="action alt" type="button" id="prevMoment">Momento anterior</button><button class="action" type="button" id="nextMoment">Momento seguinte</button><button class="action alt" type="button" id="resetStory">Reiniciar trajetória</button></div>
+    <p class="story-foot">Não há “destino correto” para pessoas históricas reais. As escolhas aqui são hipóteses comentadas, sem alterar artificialmente a condição social do personagem.</p>
+   </div>
+  </div>
+  <div class="status-grid">
+   <div class="status-card"><h3>Libertos e libertas</h3><p>Haviam sido escravizados e obtido liberdade por manumissão ou outra via. Podiam trabalhar, estabelecer negócios e constituir famílias, embora seu status, redes de patronato e limitações jurídicas variassem.</p></div>
+   <div class="status-card"><h3>Famílias de elite</h3><p>Dispunham de recursos para professores, residência ampla e redes políticas. Ser menino cidadão e possuir riqueza ampliava oportunidades, mas isso não descreve a experiência de todas as crianças romanas.</p></div>
+   <div class="status-card"><h3>Pessoas escravizadas</h3><p>Eram submetidas à propriedade e ao controle de outros, trabalhando no campo, na cidade, em residências e oficinas. Suas experiências variavam, mas a coerção e a ausência de autonomia jurídica eram estruturais.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="section homes" aria-labelledby="homesTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="chapter">V / Moradia e desigualdade</span><div><h2 id="homesTitle">Uma cidade, tetos muito diferentes.</h2><p>As escavações revelam casas de elite e edifícios residenciais multifamiliares. Não devemos concluir, a partir dos cômodos preservados das residências ricas, que toda a população vivia em átrios elegantes.</p></div></div>
+  <div class="homes-grid">
+   <figure class="arch-figure">
+    <svg viewBox="0 0 710 510" role="img" aria-labelledby="homes-svg-title homes-svg-desc">
+     <title id="homes-svg-title">Comparação esquemática entre domus e edifício residencial de vários pisos</title>
+     <desc id="homes-svg-desc">À esquerda aparece uma domus vista em corte, com átrio, pátio e salas; à direita, um edifício de vários pavimentos com pequenas unidades e lojas ao nível térreo.</desc>
+     <rect width="710" height="510" fill="#e8d5b9"/>
+     <path d="M12 446 H698" stroke="#8c6248" stroke-width="11"/>
+     <g transform="translate(13 75)">
+      <path d="M9 130 L164 43 L327 130" fill="#bb6b50" stroke="#6d4036" stroke-width="7"/>
+      <rect x="13" y="131" width="311" height="232" fill="#e8cbaa" stroke="#9f704d" stroke-width="7"/>
+      <rect x="41" y="166" width="75" height="158" fill="#a78368"/>
+      <rect x="141" y="158" width="83" height="168" fill="#a7c3b8"/>
+      <rect x="249" y="168" width="51" height="154" fill="#b28f72"/>
+      <path d="M131 149 H235" stroke="#7e5945" stroke-width="10"/>
+      <path d="M184 195 V284" stroke="#668a84" stroke-width="7"/>
+      <path d="M125 333 H241" stroke="#8c6048" stroke-width="10"/>
+      <g fill="#5d4035" font-size="19" font-family="Georgia,serif"><text x="155" y="358">Domus</text></g>
+     </g>
+     <g transform="translate(366 21)">
+      <rect x="15" y="64" width="302" height="355" fill="#c38e6c" stroke="#754d3e" stroke-width="7"/>
+      <path d="M-5 65 L164 18 L334 65" fill="#a05d48" stroke="#6a4339" stroke-width="6"/>
+      <g fill="#68483e" stroke="#e6b88e" stroke-width="7">
+       <rect x="37" y="98" width="59" height="59"/><rect x="133" y="98" width="59" height="59"/><rect x="228" y="98" width="59" height="59"/>
+       <rect x="37" y="180" width="59" height="59"/><rect x="133" y="180" width="59" height="59"/><rect x="228" y="180" width="59" height="59"/>
+       <rect x="37" y="263" width="59" height="59"/><rect x="133" y="263" width="59" height="59"/><rect x="228" y="263" width="59" height="59"/>
+      </g>
+      <g fill="#533a35"><rect x="50" y="348" width="94" height="65" rx="7"/><rect x="178" y="348" width="95" height="65" rx="7"/></g>
+      <text x="136" y="443" font-family="Georgia,serif" font-size="23" fill="#583d30">Insula / apartamentos</text>
+     </g>
+    </svg>
+    <figcaption>Figura 4. Diagrama arquitetônico SVG original, sem escala: a <em>domus</em> é representada por áreas em torno do átrio; o edifício de apartamentos combina lojas inferiores e moradias. Não é planta de edifício escavado específico.</figcaption>
+   </figure>
+   <div>
+    <h3>Casas como espelho das hierarquias</h3>
+    <p>Em muitas <em>domus</em> de famílias ricas, o átrio e outras áreas de recepção participavam da vida social e dos negócios do proprietário. Pátios, jardins, decoração, água e espaço podiam funcionar como demonstração de prestígio. Esses imóveis também dependiam do trabalho de numerosos empregados, inclusive escravizados.</p>
+    <p>Já edifícios de apartamentos conhecidos como <em>insulae</em> ofereciam unidades de qualidade muito variável. Alguns moradores enfrentavam superlotação, falta de infraestrutura, risco de incêndios e acesso desigual à água. Nem toda pessoa pobre vivia em condições idênticas, mas a desigualdade material entre unidades e bairros é parte importante da história urbana.</p>
+    <p>Estudar moradias exige cuidado com a evidência: muitas construções se perderam, passaram por reformas ou sobreviveram em estados diferentes. Os interiores mais luxuosos são frequentemente mais visíveis no registro arqueológico do que o cotidiano das famílias sem recursos.</p>
+   </div>
+  </div>
+  <div class="compare">
+   <section><h3>Água e saneamento</h3><p>Aquedutos e fontes integravam a infraestrutura de abastecimento; o acesso e as formas de uso variavam. A presença de obras hidráulicas monumentais não torna todas as residências igualmente equipadas.</p></section>
+   <section><h3>Trabalho próximo da casa</h3><p>Comércio e oficinas podiam ocupar pavimentos térreos de edifícios habitacionais, aproximando produção, venda e circulação de pessoas. Isso não elimina diferenças de renda, acesso e segurança.</p></section>
+  </div>
+ </div>
+</section>
+
+<section class="section politics" aria-labelledby="politicsTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="chapter">VI / Poder e cidadania</span><div><h2 id="politicsTitle">Quem governava uma cidade que dominava um império?</h2><p>Em 125 d.C., Roma é governada por um imperador. O Senado e as magistraturas continuam existindo, mas a configuração de poder não equivale à República de séculos anteriores nem a uma democracia representativa moderna.</p></div></div>
+  <div class="politics-layout">
+   <div>
+    <p>Adriano governou entre 117 e 138 d.C., em uma época na qual o <em>princeps</em> concentrava autoridade militar, política e administrativa. Senadores, magistrados e autoridades provinciais tinham papéis importantes, mas sua influência se relacionava a redes sociais, hierarquias e ao poder imperial.</p>
+    <p><strong>Cidadania não era universal.</strong> No século II, pessoas livres podiam ter estatutos jurídicos distintos; a grande extensão de cidadania aos habitantes livres do império ocorreu apenas em 212 d.C., com a <em>Constitutio Antoniniana</em>, e mesmo esse evento exige atenção às exceções e interpretações do texto.</p>
+    <p>Mulheres podiam possuir bens, atuar em negócios e exercer influência familiar ou social em diversas circunstâncias, mas não tinham os mesmos direitos políticos de homens cidadãos elegíveis. Pessoas escravizadas não eram cidadãos juridicamente autônomos; libertos podiam adquirir direitos e deveres condicionados a sua situação legal.</p>
+    <ul class="politics-points">
+     <li>O <strong>Fórum Romano</strong> reunia espaços de memória pública, religião, vida jurídica, administrativa e comercial, com usos que mudaram ao longo dos séculos.</li>
+     <li>A autoridade imperial dependia de governo, arrecadação, administração provincial, exército e sustentação social, não simplesmente de discursos na praça.</li>
+     <li>Relatos dos grupos dirigentes preservam sua própria visão do mundo: uma análise histórica deve buscar outras vozes nas inscrições, lápides, objetos e registros materiais.</li>
+    </ul>
+   </div>
+   <figure class="politics-flow">
+    <svg viewBox="0 0 590 505" role="img" aria-labelledby="gov-svg-title gov-svg-desc">
+     <title id="gov-svg-title">Esquema conceitual das instituições romanas sob o Principado</title>
+     <desc id="gov-svg-desc">No alto, um retângulo representa o imperador; abaixo aparecem Senado e magistrados, administração provincial e exército. Ao lado, cidadania e grupos sociais com diferentes direitos. As setas indicam relações complexas, não uma hierarquia rígida.</desc>
+     <rect width="590" height="505" fill="#e8dfd0"/>
+     <rect x="165" y="27" width="260" height="88" rx="10" fill="#914535" stroke="#63332d" stroke-width="4"/>
+     <text x="295" y="65" fill="#fff5df" text-anchor="middle" font-family="Georgia,serif" font-size="28">Imperador</text>
+     <text x="295" y="94" fill="#fff4df" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="18">Adriano, c. 125 d.C.</text>
+     <g fill="none" stroke="#a27059" stroke-width="5"><path d="M294 116 V146 H147 V180 M294 146 H448 V180"/></g>
+     <rect x="32" y="182" width="235" height="83" rx="7" fill="#c7ac85" stroke="#866d53" stroke-width="4"/>
+     <rect x="323" y="182" width="234" height="83" rx="7" fill="#c7ac85" stroke="#866d53" stroke-width="4"/>
+     <g font-family="Georgia,serif" font-size="24" text-anchor="middle" fill="#42342b"><text x="150" y="221">Senado</text><text x="150" y="246" font-size="17">e magistrados</text><text x="440" y="221">Exército</text><text x="440" y="246" font-size="17">e províncias</text></g>
+     <path d="M150 267 V312 H440 V267" stroke="#866d53" stroke-width="4" stroke-dasharray="8 9" fill="none"/>
+     <rect x="80" y="323" width="430" height="103" rx="9" fill="#ddd0b9" stroke="#a48b6b" stroke-width="3"/>
+     <g font-family="Segoe UI,sans-serif" font-size="21" text-anchor="middle" fill="#4c3e33"><text x="295" y="356" font-weight="700">Pessoas com direitos desiguais</text><text x="295" y="386" font-size="18">cidadãos · não cidadãos · libertos</text><text x="295" y="410" font-size="18">pessoas escravizadas, sem autonomia jurídica</text></g>
+     <text x="295" y="468" font-family="Segoe UI,sans-serif" font-size="17" fill="#66513e" text-anchor="middle">Modelo interpretativo, não organograma formal</text>
+    </svg>
+    <figcaption>Figura 5. Esquema original e interpretativo da distribuição de poder. As instituições não eram equivalentes entre si, e categorias sociais tinham direitos muito distintos.</figcaption>
+   </figure>
+  </div>
+ </div>
+</section>
+
+<section class="section objectroom" aria-labelledby="objectsTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="chapter">VII / Gabinete de objetos</span><div><h2 id="objectsTitle">Cinco objetos, cinco pistas arqueológicas.</h2><p>Selecione um objeto para observar uma ilustração vetorial e interpretar o que esse tipo de artefato revela. São <strong>representações autorais de classes de objetos documentadas</strong>, não fotografias nem réplicas exatas de peças de museu.</p></div></div>
+  <div class="museum">
+   <figure class="object-art" id="artifactFigure" data-object="tablet">
+    <svg viewBox="0 0 620 490" role="img" aria-labelledby="artifact-svg-title artifact-svg-desc">
+     <title id="artifact-svg-title">Mostruário ilustrado de objetos romanos</title>
+     <desc id="artifact-svg-desc">Um único objeto por vez é apresentado: tábua encerada, lâmpada de óleo, estrígil, ânfora ou moeda, escolhidos pelos botões ao lado. São ilustrações esquemáticas.</desc>
+     <rect x="10" y="10" width="600" height="470" fill="#483a33" stroke="#c5a37a" stroke-width="5"/>
+     <rect x="25" y="25" width="570" height="440" fill="none" stroke="#b89670" stroke-width="2" stroke-dasharray="5 7"/>
+     <g data-artifact="tablet">
+      <rect x="128" y="78" width="315" height="320" rx="12" fill="#ae7647" stroke="#6a3c2b" stroke-width="12"/>
+      <rect x="152" y="105" width="263" height="267" rx="5" fill="#454038" stroke="#d1ae72" stroke-width="5"/>
+      <g fill="none" stroke="#b5a78c" stroke-width="4"><path d="M180 150 H383 M180 192 H363 M180 232 H392 M180 274 H364 M180 316 H390"/></g>
+      <path d="M462 80 L480 354 495 383 511 349 496 78Z" fill="#c9a078" stroke="#68452f" stroke-width="5"/>
+     </g>
+     <g data-artifact="lamp">
+      <ellipse cx="286" cy="329" rx="200" ry="68" fill="#a97148" stroke="#76442b" stroke-width="9"/>
+      <path d="M125 299 Q115 176 285 166 Q447 172 451 298 Q329 372 125 299Z" fill="#b78359" stroke="#7d4d35" stroke-width="10"/>
+      <ellipse cx="285" cy="249" rx="81" ry="55" fill="#79533a" stroke="#e4b581" stroke-width="11"/>
+      <ellipse cx="288" cy="243" rx="34" ry="21" fill="#39251f"/>
+      <path d="M440 273 L541 262 Q582 294 537 330 L441 315Z" fill="#b78359" stroke="#76442b" stroke-width="9"/>
+      <path d="M550 286 Q582 250 545 209 Q531 242 540 252" fill="#e5a44f" stroke="#f7d395" stroke-width="5"/>
+      <path d="M139 238 Q78 223 66 287 Q85 337 137 301" fill="none" stroke="#9b6947" stroke-width="17"/>
+     </g>
+     <g data-artifact="strigil">
+      <path d="M407 119 Q270 80 201 198 Q158 288 258 348 Q322 372 366 302 Q322 326 288 305 Q250 277 281 227 Q309 178 392 178Z" fill="#a1a8a0" stroke="#657c77" stroke-width="12"/>
+      <path d="M391 173 L465 301 Q482 335 453 361 Q430 375 411 350 L331 215" fill="#a1a8a0" stroke="#657c77" stroke-width="11"/>
+      <path d="M373 128 Q294 111 245 193" fill="none" stroke="#f0e1bd" stroke-width="11" opacity=".7"/>
+     </g>
+     <g data-artifact="amphora">
+      <path d="M261 80 H353 V123 Q439 137 443 257 Q445 337 323 427 Q200 337 203 257 Q198 143 261 123Z" fill="#bd8259" stroke="#825035" stroke-width="10"/>
+      <path d="M260 123 Q139 93 166 233 Q185 283 219 245 M354 123 Q472 92 480 222 Q461 280 434 245" fill="none" stroke="#a76d4b" stroke-width="27"/>
+      <path d="M262 82 H352" stroke="#e9b185" stroke-width="26"/>
+      <path d="M214 277 H428 M246 327 H397" stroke="#76482e" stroke-width="8"/>
+      <path d="M259 171 Q322 142 367 178" fill="none" stroke="#e5ad81" stroke-width="13"/>
+     </g>
+     <g data-artifact="coin">
+      <circle cx="306" cy="245" r="171" fill="#b59b63" stroke="#7b5d38" stroke-width="12"/>
+      <circle cx="306" cy="245" r="146" fill="none" stroke="#e6d39f" stroke-width="9" stroke-dasharray="9 6"/>
+      <path d="M291 149 Q348 142 367 198 Q364 229 334 241 L356 302 Q321 326 264 310 L252 273 245 239 Q220 183 261 158Z" fill="#8e794d" stroke="#f0db9f" stroke-width="7"/>
+      <path d="M238 338 H375" stroke="#70572f" stroke-width="13"/>
+      <g font-family="Georgia,serif" fill="#eedb9b" font-size="32"><text x="238" y="124">S C</text><text x="258" y="397">ROMA</text></g>
+     </g>
+    </svg>
+    <figcaption>Figura 6. Desenhos SVG originais do tipo de objeto selecionado; nenhuma peça específica foi copiada ou reproduzida fielmente.</figcaption>
+   </figure>
+   <div class="object-explain">
+    <span class="chapter">Vitrine de evidências</span>
+    <div class="object-choices" role="group" aria-label="Escolha um objeto do cotidiano romano">
+     <button data-object="tablet" type="button" aria-pressed="true">Tábua encerada</button>
+     <button data-object="lamp" type="button" aria-pressed="false">Lâmpada</button>
+     <button data-object="strigil" type="button" aria-pressed="false">Estrígil</button>
+     <button data-object="amphora" type="button" aria-pressed="false">Ânfora</button>
+     <button data-object="coin" type="button" aria-pressed="false">Moeda</button>
+    </div>
+    <div role="status" aria-live="polite" aria-atomic="true">
+     <h3 id="objectName">Tábua encerada e estilete</h3>
+     <p id="objectDescription">Superfícies reutilizáveis com cera podiam ser marcadas por um estilete para exercícios, contas e registros. Encontrá-las ajuda a investigar práticas de escrita e administração, embora possuir tal objeto não prove que toda a população fosse alfabetizada.</p>
+    </div>
+    <div class="object-source"><strong>O que a peça permite concluir?</strong><span id="objectInference">A escrita tinha usos práticos; educação e alfabetização variavam muito conforme recursos, condições sociais e oportunidades.</span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="section baths" aria-labelledby="bathsTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="chapter">VIII / Higiene e sociabilidade</span><div><h2 id="bathsTitle">Uma ida às termas não era apenas para tomar banho.</h2><p>Instalações de banho podiam incluir áreas de exercício, conversa, encontros e diferentes ambientes aquecidos. Em Roma, as Termas de Trajano já existiam em 125 d.C.; esta ilustração apresenta a lógica geral de ambientes termais romanos, não sua planta exata.</p></div></div>
+  <figure class="arch-figure">
+   <svg viewBox="0 0 1050 480" role="img" aria-labelledby="bath-svg-title bath-svg-desc">
+    <title id="bath-svg-title">Corte interpretativo de ambientes de um complexo termal romano</title>
+    <desc id="bath-svg-desc">Três salas lado a lado, uma fria, uma morna e outra quente; a última mostra piso suspenso sobre pilares de aquecimento subterrâneo, usado em um hipocausto.</desc>
+    <rect width="1050" height="480" fill="#e8d5b9"/>
+    <g fill="#c79b70" stroke="#7e5a44" stroke-width="7">
+     <rect x="22" y="125" width="318" height="287"/><rect x="368" y="125" width="315" height="287"/><rect x="710" y="125" width="313" height="287"/>
+    </g>
+    <g fill="#ead1ac"><path d="M26 125 Q175 -28 336 125Z"/><path d="M374 125 Q525 -28 679 125Z"/><path d="M716 125 Q865 -28 1018 125Z"/></g>
+    <g stroke="#845a42" stroke-width="13" fill="none"><path d="M26 126 H337 M375 126 H679 M712 126 H1020"/></g>
+    <rect x="41" y="292" width="281" height="111" fill="#89afa7" stroke="#4e817e" stroke-width="8"/>
+    <rect x="387" y="320" width="274" height="83" fill="#c7b197" stroke="#806954" stroke-width="8"/>
+    <path d="M739 320 H990" stroke="#ecdbb8" stroke-width="24"/>
+    <g fill="#865b45"><rect x="754" y="341" width="28" height="62"/><rect x="806" y="341" width="28" height="62"/><rect x="860" y="341" width="28" height="62"/><rect x="916" y="341" width="28" height="62"/></g>
+    <path d="M746 417 H990" stroke="#bf583e" stroke-width="8"/>
+    <g fill="none" stroke="#de7451" stroke-width="7" stroke-linecap="round"><path d="M756 403 V363 M833 404 V365 M906 402 V363 M969 404 V364"/></g>
+    <g font-family="Georgia,serif" text-anchor="middle" font-size="35" fill="#56382b"><text x="180" y="188">Frigidarium</text><text x="524" y="188">Tepidarium</text><text x="865" y="188">Caldarium</text></g>
+    <g font-family="Segoe UI,sans-serif" text-anchor="middle" font-size="20" fill="#5f4535"><text x="180" y="229">Frio</text><text x="524" y="229">Morno</text><text x="865" y="229">Quente</text></g>
+    <text x="868" y="457" font-family="Segoe UI,sans-serif" font-size="19" text-anchor="middle" fill="#6a4131">Hipocausto (esquema simplificado)</text>
+   </svg>
+   <figcaption>Figura 7. Corte SVG autoral de tipos de ambientes documentados em termas romanas. Nem todo edifício possuía exatamente essa disposição, percurso ou equipamento.</figcaption>
+  </figure>
+  <div class="baths-narrative">
+   <p>Os espaços podiam oferecer banho frio, morno e quente; em alguns conjuntos, o <em>hypocaustum</em> distribuía calor por baixo de pisos elevados e por estruturas de aquecimento. Havia instalações para mudar de roupa, socializar e realizar atividades físicas. Regras, custos, acesso e horários variavam conforme o local e o período.</p>
+   <p>As termas revelam uma tecnologia urbana complexa, mas não devemos transformá-la em prova de igualdade social. Pessoas de condições diversas frequentavam banhos, inclusive escravizadas em certas circunstâncias, e o acesso às instalações, ao tempo livre e ao conforto permanecia desigual. Espaços públicos não apagavam as hierarquias do império.</p>
+  </div>
+ </div>
+</section>
+
+<section class="section food-school" aria-labelledby="foodTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="chapter">IX / Alimentação, ensino e lazer</span><div><h2 id="foodTitle">O cotidiano não cabia nos monumentos.</h2><p>Alimentação, aprendizado e entretenimento variavam muito. É um erro descrever todos os habitantes como convidados de grandes banquetes ou estudantes de escolas de retórica.</p></div></div>
+  <div class="food-grid">
+   <article class="food-card"><h3>O que se comia?</h3><p>Pães, cereais, leguminosas, azeitonas, azeite, frutas e diversos preparados participavam da dieta, em proporções muito diferentes segundo renda, abastecimento e costumes. Carnes, peixes, vinhos e condimentos também apareciam em contextos variados. Banquetes luxuosos refletem sobretudo a elite, não a rotina da maioria.</p></article>
+   <article class="food-card"><h3>Quem podia estudar?</h3><p>Ensino de leitura, escrita e contas ocorria em configurações variadas, inclusive com tutores e mestres remunerados. Filhos de famílias abastadas tinham vantagens na formação literária e retórica; meninas, crianças de baixa renda e pessoas escravizadas enfrentavam acessos e expectativas desiguais. Existiam exceções, não uma escola universal.</p></article>
+   <article class="food-card"><h3>Como se divertiam?</h3><p>Corridas no Circo Máximo, espetáculos, festas religiosas e encontros em espaços públicos podiam compor a vida urbana. O Coliseu já estava em uso em 125 d.C., mas afirmar que cada morador ia diariamente aos jogos distorceria a realidade. Tempo livre e experiências de lazer dependiam de trabalho e condição social.</p></article>
+  </div>
+ </div>
+</section>
+
+<section class="section slavery" aria-labelledby="slaveryTitle">
+ <div class="wrap">
+  <span class="chapter">X / O limite da experiência</span>
+  <h2 id="slaveryTitle">A prosperidade imperial também se apoiava na escravidão.</h2>
+  <div class="reader">
+   <p>Em Roma, a escravidão não era uma condição de emprego, nem uma relação que pudesse ser comparada a trabalho assalariado. Pessoas escravizadas podiam ser compradas, vendidas e submetidas a coerção e violência, mesmo quando realizavam tarefas especializadas em casas, oficinas, propriedades rurais ou serviços administrativos.</p>
+   <p>As formas de escravização incluíam guerra, comércio de pessoas e nascimento em condição escrava, entre outras. A manumissão, ou libertação jurídica, existia e produziu comunidades importantes de libertos, mas a possibilidade de libertação não tornava a instituição menos coercitiva nem garantia liberdade futura para cada pessoa.</p>
+   <p>Nossa personagem Dama foi criada para mostrar uma desigualdade estrutural, não para servir de mero contraste dramático. Ao interpretar suas opções, a pergunta histórica correta não é “por que ele não escolheu uma vida melhor?”, mas <strong>quais instituições restringiam sua autonomia e quem se beneficiava delas?</strong></p>
+  </div>
+  <div class="warning"><strong>Nota pedagógica:</strong> historiadores precisam tratar com cuidado a escassez de testemunhos diretos de pessoas escravizadas. Usar apenas descrições de proprietários e escritores privilegiados pode apagar agência, sofrimento e experiências que não chegaram às fontes preservadas.</div>
+ </div>
+</section>
+
+<section class="section interpretation" aria-labelledby="sourceCriticTitle">
+ <div class="wrap">
+  <div class="section-head"><span class="chapter">XI / Oficina do historiador</span><div><h2 id="sourceCriticTitle">A evidência diz mais — e menos — do que parece.</h2><p>Uma inscrição, um edifício ou uma moeda não contam uma história completa por si só. Eles exigem datação, contexto, interpretação e comparação com outros vestígios.</p></div></div>
+  <div class="interpret-grid">
+   <article class="interpret-card"><span class="type">Evidência material</span><h3>Uma tábua de escrita encontrada em escavação</h3><p>Permite investigar formas de registro, materiais e práticas. Não demonstra que toda pessoa do bairro sabia escrever, que uma criança específica frequentou aulas ou que os mesmos métodos eram usados por todos os grupos sociais.</p></article>
+   <article class="interpret-card"><span class="type">Reconstrução ficcional</span><h3>“Lívia abriu sua oficina ao nascer do sol.”</h3><p>É uma cena inventada para tornar relações econômicas compreensíveis. A existência de mulheres libertas, de oficinas e de comércio urbano possui fundamento histórico; esta personagem, seu nome, horário e diálogo não vêm de um documento antigo.</p></article>
+   <article class="interpret-card"><span class="type">Evidência e cronologia</span><h3>Um monumento que levou anos para ficar pronto</h3><p>Edifícios têm fases de construção e reformas. Por exemplo, a cronologia de projetos ligados a Adriano importa: não devemos mostrar o Templo de Vênus e Roma como integralmente concluído em 125 d.C., pois sua conclusão é posterior.</p></article>
+   <article class="interpret-card"><span class="type">Pergunta de pesquisa</span><h3>Quem não está representado na fonte?</h3><p>Uma sala luxuosa ajuda a estudar práticas da elite, mas não descreve automaticamente o cotidiano de trabalhadores, imigrantes, libertos e escravizados. Sempre compare tipos de fonte e considere seus silêncios.</p></article>
+  </div>
+ </div>
+</section>
+
+<section class="review" aria-labelledby="reviewTitle">
+ <div class="wrap review-layout">
+  <div><span class="chapter">XII / Revisão histórica</span><h2 id="reviewTitle">Você sabe distinguir a Roma imaginada da Roma documentada?</h2><p class="intro">Estas perguntas não premiam decorar nomes: elas avaliam interpretação, contexto, evidência e desigualdade. O resultado é apenas feedback formativo, sem nota acadêmica.</p></div>
+  <form id="reviewForm" novalidate>
+   <fieldset class="question" data-answer="b" data-explain="Uma domus de elite e um edifício de apartamentos revelam condições de moradia diferentes; nenhuma delas deve representar automaticamente toda a população.">
+    <legend>1. Um livro mostra somente grandes casas com átrios decorados e afirma que esse era o padrão de todas as famílias romanas. Qual é o problema histórico?</legend>
+    <label><input type="radio" name="q1" value="a"> Nenhum: todas as residências romanas eram semelhantes.</label>
+    <label><input type="radio" name="q1" value="b"> A amostra privilegia moradias de elite e ignora outros tipos e condições.</label>
+    <label><input type="radio" name="q1" value="c"> Casas ricas não podem ser estudadas pela arqueologia.</label><p class="question-feedback" aria-live="polite"></p>
+   </fieldset>
+   <fieldset class="question" data-answer="a" data-explain="Em 125 d.C. o império estava sob Adriano; o Senado existia, mas o poder imperial era central, sem equivalência com a República ou democracia atual.">
+    <legend>2. Como descrever o governo romano em torno de 125 d.C.?</legend>
+    <label><input type="radio" name="q2" value="a"> Principado imperial, com autoridade decisiva do imperador e permanência de instituições como o Senado.</label>
+    <label><input type="radio" name="q2" value="b"> Uma democracia universal em que todos os habitantes votavam.</label>
+    <label><input type="radio" name="q2" value="c"> Uma República sem governante imperial desde Augusto.</label><p class="question-feedback" aria-live="polite"></p>
+   </fieldset>
+   <fieldset class="question" data-answer="c" data-explain="Pessoas escravizadas viviam sob propriedade e coerção. Uma eventual possibilidade de manumissão não equivale a poder negociar livremente sua condição.">
+    <legend>3. Uma atividade trata as escolhas de uma pessoa escravizada como se ela tivesse a autonomia de uma comerciante livre. O que precisa ser corrigido?</legend>
+    <label><input type="radio" name="q3" value="a"> Nada: todos os trabalhadores tinham os mesmos direitos.</label>
+    <label><input type="radio" name="q3" value="b"> Bastaria trocar a roupa do personagem.</label>
+    <label><input type="radio" name="q3" value="c"> É preciso explicar as restrições jurídicas e sociais da escravidão, sem equipará-la a trabalho livre.</label><p class="question-feedback" aria-live="polite"></p>
+   </fieldset>
+   <fieldset class="question" data-answer="b" data-explain="A existência de um tipo de objeto evidencia práticas possíveis, mas não autoriza generalizar alfabetização, idade, classe ou rotinas para toda a população.">
+    <legend>4. Um arqueólogo encontra uma tábua encerada. Qual inferência é mais cuidadosa?</legend>
+    <label><input type="radio" name="q4" value="a"> Todas as crianças romanas sabiam escrever.</label>
+    <label><input type="radio" name="q4" value="b"> O objeto aponta para usos da escrita, mas seu contexto precisa ser estudado antes de generalizar.</label>
+    <label><input type="radio" name="q4" value="c"> O objeto prova que uma personagem fictícia existiu.</label><p class="question-feedback" aria-live="polite"></p>
+   </fieldset>
+   <div class="review-actions"><button class="action" type="button" id="gradeReview">Corrigir e explicar</button><button class="action alt" type="reset">Refazer revisão</button></div>
+   <p id="reviewResult" class="review-result" role="status" aria-live="polite"></p>
+  </form>
+ </div>
+</section>
+
+<section class="closing"><div class="wrap">
+ <span class="chapter" style="color:#ffe4ad">Epílogo da viagem</span><h2>Roma foi uma cidade compartilhada, mas não vivida igualmente.</h2>
+ <p>Ao final do dia, Lívia, Marco e Dama percorrem condições de vida profundamente diferentes. As imagens de mármore, estradas, mercados e termas revelam capacidades notáveis da sociedade romana, mas também exigem investigar quem trabalhou nessas obras, quem podia usufruí-las e quem ficou fora das narrativas tradicionais.</p>
+</div></section>
+
+<section class="sources wrap" aria-labelledby="sourcesTitle">
+ <h2 id="sourcesTitle">Fontes históricas e transparência das imagens</h2>
+ <p>Sete ilustrações SVG produzidas especialmente para esta atividade, sem imagens externas: panorama urbano, mapa didático, cena de rua, comparação de moradias, diagrama de instituições, vitrine de artefatos e corte das termas. Nenhum SVG reproduz um objeto de museu específico ou uma planta arqueológica precisa. Personagens, horários relativos, diálogos e situações individuais são ficcionais e identificados como tal.</p>
+ <p>Referências de consulta e leitura adicional: <a href="https://openstax.org/books/world-history-volume-1/pages/7-1-the-daily-life-of-a-roman-family" target="_blank" rel="noopener noreferrer">OpenStax: The Daily Life of a Roman Family</a>; <a href="https://openstax.org/books/world-history-volume-1/pages/7-2-slavery-in-the-roman-empire" target="_blank" rel="noopener noreferrer">OpenStax: Slavery in the Roman Empire</a>; <a href="https://openstax.org/books/world-history-volume-1/pages/7-3-the-roman-economy-trade-taxes-and-conquest" target="_blank" rel="noopener noreferrer">OpenStax: Trade and economy</a>; <a href="https://www.metmuseum.org/toah/hd/hous/hd_hous.htm" target="_blank" rel="noopener noreferrer">Metropolitan Museum of Art: Roman Housing</a>; <a href="https://www.english-heritage.org.uk/learn/story-of-england/romans/roman-bathing/" target="_blank" rel="noopener noreferrer">English Heritage: Roman Bathing</a>; <a href="https://www.open.edu/openlearn/history-the-arts/hadrians-rome/content-section-2.2" target="_blank" rel="noopener noreferrer">Open University: Temple of Venus and Rome and Hadrianic chronology</a>.</p>
+</section>
+</main>
+<script>
+(function(){
+ "use strict";
+ var d=document;
+ var el=function(id){return d.getElementById(id);};
+ var locations={
+ subura:{label:"Ponto 01 · Moradia popular",name:"Ruas e moradias multifamiliares",text:"Na região urbana lembrada pelo nome Subura, diversos tipos de comércio e habitação faziam parte da vida cotidiana. Edifícios de apartamentos podiam abrigar moradores com recursos desiguais. A cena não apresenta a posição exata de uma insula em 125 d.C.",source:"Base histórica: arqueologia da habitação romana e literatura sobre a cidade; marcação e desenho são interpretativos."},
+ forum:{label:"Ponto 02 · Espaço cívico",name:"Fórum Romano",text:"A praça monumental reúne edifícios religiosos, espaços de administração, tribunais, memória pública e circulação de pessoas. Não se deve confundir esse espaço cívico com a sede de uma democracia moderna: no século II d.C., o poder imperial era decisivo.",source:"Base histórica: vestígios arquitetônicos do fórum e estudos das instituições romanas. A distribuição do mapa é apenas ilustrativa."},
+ market:{label:"Ponto 03 · Economia urbana",name:"Comércio e oficinas",text:"Lojas, mercados e oficinas distribuíam alimentos, tecidos e objetos. A capital dependia de transportes, produtores, trabalhadores livres, libertos e pessoas escravizadas. O ponto representa um tipo de atividade urbana, não um mercado arqueológico localizado.",source:"Base histórica: estudos sobre economia romana, lojas e ocupações; não representa edifício comercial identificado."},
+ baths:{label:"Ponto 04 · Banhos públicos",name:"Termas de Trajano",text:"Inauguradas antes do recorte desta aula, as Termas de Trajano ajudam a compreender a importância de grandes estabelecimentos de banho, exercício e sociabilidade na capital. O acesso e o tempo disponível para frequentá-los não eram iguais.",source:"Base histórica: complexo termal de época trajânea e estudos de ambientes de banho; o desenho é simplificado."},
+ circus:{label:"Ponto 05 · Espetáculos",name:"Circo Máximo",text:"Área monumental de corridas de carros e espetáculos. Mesmo em um lugar associado a grandes multidões, não podemos supor frequência diária de todos os romanos: trabalho, posição social e eventos condicionavam a participação.",source:"Base histórica: a longa utilização do Circo Máximo. A posição da pinagem não reproduz coordenadas reais."},
+ domus:{label:"Ponto 06 · Residência de elite",name:"Uma domus de família abastada",text:"O átrio, as áreas de recepção e a decoração de casas ricas podiam comunicar posição social. Uma domus podia funcionar também como espaço de relações comerciais e políticas, com trabalho doméstico de pessoas livres e escravizadas.",source:"Base histórica: casas escavadas em diferentes cidades romanas e estudos de moradia. Esta domus não identifica um endereço específico."}
+ };
+ var mapButtons=Array.prototype.slice.call(d.querySelectorAll("[data-place]"));
+ function showPlace(key){
+  if(!Object.prototype.hasOwnProperty.call(locations,key))return;
+  var place=locations[key];
+  el("mapLabel").textContent=place.label;el("mapName").textContent=place.name;
+  el("mapDescription").textContent=place.text;el("mapEvidence").textContent=place.source;
+  mapButtons.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.place===key));});
+ }
+ mapButtons.forEach(function(b){b.addEventListener("click",function(){showPlace(b.dataset.place);});});
+ showPlace("forum");
+ var people={
+ livia:{
+  name:"Lívia",role:"Mulher liberta e comerciante",
+  scenes:[
+   {title:"Lívia abre sua pequena oficina",body:"Lívia, uma liberta fictícia, confere materiais e abre as portas da oficina em uma rua movimentada. O rendimento do trabalho é decisivo para manter o negócio; sua situação legal é diferente da de uma mulher escravizada, mas o passado de escravização e a organização patriarcal ainda podem pesar em suas relações.",fact:"Pessoas libertas participavam de atividades econômicas urbanas, e mulheres livres podiam atuar no comércio. A oficina, o nome e esta manhã específica são invenções didáticas.",choice:"O que pode influenciar o dia dela?",options:["Priorizar materiais e vendas.","Ignorar completamente relações de status."],feedback:["Uma decisão plausível para uma comerciante; ela ainda depende das condições locais e de redes sociais.","Pouco plausível como descrição do contexto: seu status jurídico e suas relações de patronato poderiam influenciar oportunidades e obrigações."]},
+   {title:"No movimento das bancas",body:"A rua fica mais movimentada. Lívia avalia materiais, calcula custos e conversa com quem fornece produtos. O trabalho do pequeno comércio exige confiança e relações sociais. Por trás dos bens que chegam à cidade, há regiões agrícolas, transportes e trabalhadores cujos nomes frequentemente não aparecem nos relatos preservados.",fact:"Oficinas e mercados são bem documentados, mas a transação de Lívia é uma hipótese narrativa; não apresentamos preços fictícios como dados históricos.",choice:"O que um objeto vendido numa banca revela?",options:["Apenas o gosto individual do comprador.","Redes de produção, transporte e diferenças de acesso."],feedback:["É insuficiente: objetos também têm história de produção e circulação.","Correto como abordagem histórica: comércio urbano é uma pista sobre redes econômicas e trabalho."]},
+   {title:"Alimentação e trabalho",body:"No meio do dia, ela come algo simples e planeja a entrega de um pedido. Não se parece com o jantar luxuoso descrito por certos escritores: sua rotina é regulada pela necessidade de trabalhar. Pessoas de classes diferentes podiam consumir muitos dos mesmos ingredientes, mas em quantidades e preparações variadas.",fact:"A diversidade da alimentação e a diferença entre banquetes da elite e refeições cotidianas são documentadas em estudos de vida urbana.",choice:"Como tratar os banquetes nos livros?",options:["Como experiência representativa de todos.","Como prática que exige contexto social."],feedback:["Generalizar banquetes de elite apagaria experiências de grupos que não tinham acesso aos mesmos recursos.","A contextualização da fonte evita transformar riqueza excepcional em padrão social."]},
+   {title:"Uma passagem pelo fórum",body:"Lívia passa pelas proximidades do Fórum Romano e vê relações de poder tornadas visíveis em monumentos, edifícios e pessoas. Não é integrante do Senado, e circular no espaço cívico não significa participar igualmente das decisões imperiais. Seu status de liberta traz possibilidades e limites específicos.",fact:"A arquitetura monumental e as instituições são históricas; o percurso individual inventado serve para comparar acesso ao espaço e participação política.",choice:"Circular pelo fórum dá automaticamente poder político?",options:["Sim, o espaço é público.","Não, cidadania, gênero e posição importam."],feedback:["A presença física não eliminava restrições de poder e estatuto jurídico.","Correto: acesso ao lugar e influência nas decisões são coisas diferentes."]},
+   {title:"O negócio fecha, a incerteza permanece",body:"Ao anoitecer, Lívia recolhe mercadorias e contabiliza o trabalho. A atividade econômica pode abrir possibilidades a libertos e mulheres livres, mas também expõe riscos e dependência de relações sociais. A prosperidade de uma pessoa fictícia não pode ser usada para supor ascensão igual para todas.",fact:"São documentadas pessoas libertas bem-sucedidas e outras com vida difícil; nenhuma trajetória individual autoriza generalizar a experiência do conjunto.",choice:"Qual conclusão é mais adequada?",options:["A manumissão eliminava todas as barreiras.","A liberdade jurídica alterava condições, mas não nivelava recursos e status."],feedback:["Não: status de liberto e desigualdades econômicas continuavam a afetar a vida de muitas pessoas.","É a conclusão historicamente mais cuidadosa sobre diversidade de experiências de libertos."]}
+  ]
+ },
+ marcus:{
+  name:"Marco",role:"Menino cidadão de família abastada",
+  scenes:[
+   {title:"Uma casa com espaço para receber",body:"Marco acorda numa domus da família. Ele tem acesso a cômodos que expressam riqueza e pode contar com o trabalho de pessoas escravizadas no serviço da casa. Essa situação não é a infância romana típica; é apenas uma das posições possíveis numa sociedade profundamente estratificada.",fact:"A arquitetura de casas de elite e o emprego de pessoas escravizadas em serviços domésticos são documentados. Marco e sua casa não são indivíduos ou edifícios históricos.",choice:"É possível usar a domus como modelo de toda a cidade?",options:["Sim, é o modelo residencial romano.","Não, é preciso comparar moradias e recursos."],feedback:["A elite não representa todas as formas de habitar Roma.","Correto: diferentes tipos de casa correspondem a condições sociais variadas."]},
+   {title:"Letras, cálculo e disciplina",body:"Um mestre conduz atividades de leitura e escrita. Marco pode usar tábuas enceradas para praticar sinais, números e registros. Seu acesso a ensino regular e, talvez, a uma formação literária mais longa depende de recursos familiares; não é uma oportunidade distribuída universalmente.",fact:"Materiais de escrita e instrução são conhecidos pela arqueologia e por textos. Métodos e oportunidades variavam por contexto e posição social.",choice:"Uma tábua encontrada prova alfabetização universal?",options:["Não: é uma evidência a contextualizar.","Sim: prova que todos os romanos iam à escola."],feedback:["Sim, a inferência responsável requer contexto, proveniência e comparação.","Não: a distribuição desigual da educação impede tal generalização."]},
+   {title:"Uma refeição da casa",body:"A comida chega por um circuito de compras, transporte e trabalho doméstico. Marco encontra alimentos variados, mas sua experiência de consumo é diferente da de pessoas que precisam comprar pequenas porções ou preparar refeições em espaços limitados. A economia imperial é visível até no prato.",fact:"Há evidências de abastecimento amplo de Roma e de diferenças de alimentação e consumo. A refeição específica é ficcional.",choice:"O que estudar numa refeição da elite?",options:["Somente a apresentação da mesa.","Ingredientes, comércio, trabalho e acesso."],feedback:["Uma descrição decorativa perde relações econômicas e sociais fundamentais.","É uma leitura histórica mais completa: o consumo está ligado ao trabalho de muitos grupos."]},
+   {title:"Perto das instituições",body:"Marco atravessa com a família áreas monumentais da cidade e observa inscrições e estátuas que ligam prestígio público a governantes e famílias. No principado, Senado e magistraturas existem, mas o imperador concentra poder decisivo. Marco, por ser criança, tampouco participa dessas instituições.",fact:"A organização do principado e o papel da arquitetura pública na vida da elite são documentados. Este passeio é inventado.",choice:"Qual governo existe nesse período?",options:["República sem imperador.","Império sob Adriano, com instituições de tradição republicana."],feedback:["Não: o período é o Principado, em que o imperador ocupa papel central.","Correto: instituições tradicionais subsistiam numa ordem imperial."]},
+   {title:"O tempo livre como privilégio",body:"A família pode planejar visitas a espetáculos, conversas ou banhos, mas isso não significa que tenha assistido a jogos neste dia. A posição social ampliava as opções de lazer, enquanto outras pessoas permaneciam obrigadas ao trabalho. Os espetáculos são parte do contexto urbano, não o calendário obrigatório de toda criança.",fact:"Termas, circo e anfiteatros são instituições históricas; a disponibilidade de lazer dependia de situação social e circunstância.",choice:"O que explica diferenças de lazer?",options:["Recursos e obrigações de cada pessoa.","Todos tinham a mesma quantidade de tempo livre."],feedback:["Correto: renda, trabalho e obrigações mudavam o cotidiano.","Não: o império não distribuía tempo livre igualmente."]}
+  ]
+ },
+ dama:{
+  name:"Dama",role:"Homem escravizado, trabalho doméstico",
+  scenes:[
+   {title:"O dia começa sob ordens",body:"Dama, um homem escravizado fictício, começa o trabalho doméstico antes de muitas atividades de seus proprietários. Sua rotina não é uma escolha contratual entre empregos; seu estatuto jurídico e as ordens de terceiros restringem sua autonomia. Não sabemos se uma pessoa real em seu lugar teria as mesmas tarefas.",fact:"A escravidão urbana e doméstica é documentada; Dama, seus pensamentos e esta rotina particular são construção didática.",choice:"Como interpretar a ausência de liberdade?",options:["Como simples preferência por um trabalho.","Como efeito de uma instituição coercitiva."],feedback:["Essa interpretação apaga a coerção e a condição jurídica da escravidão.","Correto: não se pode tratar escravidão como acordo livre de trabalho."]},
+   {title:"Preparar os cômodos da casa",body:"Ele transporta objetos, organiza materiais e atende exigências do domicílio. Os espaços bem decorados dependem de trabalho que os observadores modernos nem sempre enxergam nas ruínas. Algumas pessoas escravizadas exerciam ocupações especializadas, mas isso não lhes garantia direitos de trabalhador livre.",fact:"Casas ricas tinham diferentes serviços exercidos por pessoas escravizadas. A atividade exata de Dama foi inventada para interpretação.",choice:"Que pergunta fazer diante de uma casa luxuosa?",options:["Quem executava e sustentava o trabalho doméstico?","Somente quanto custou cada decoração?"],feedback:["Pergunta necessária para compreender relações de trabalho invisíveis na arquitetura.","Preço e decoração são apenas parte da história material."]},
+   {title:"O trabalho não para ao meio-dia",body:"Dama participa da organização das tarefas enquanto os moradores livres da casa dispõem de tempos e obrigações diferentes. Não é correto atribuir a ele refeições, descanso ou circulação idênticos aos dos proprietários. As fontes sobreviventes raramente registram sua voz em primeira pessoa.",fact:"A distribuição desigual de trabalho e a escassez de relatos diretos de pessoas escravizadas são problemas centrais da pesquisa histórica.",choice:"Como pesquisar sua rotina sem inventar testemunhos?",options:["Criar uma citação pessoal e tratá-la como documento.","Cruzar objetos, inscrições, textos e contexto, declarando lacunas."],feedback:["Isso criaria uma evidência falsa e prejudicaria o entendimento histórico.","Correto: interpretar fontes diversas e assumir limites é melhor que fabricar relatos."]},
+   {title:"Nas proximidades da vida pública",body:"A casa pode exigir entregas ou deslocamentos; contudo, Dama não possui liberdade política ou jurídica equivalente à de um cidadão. Ver monumentos e atravessar ruas não muda sua condição. Algumas pessoas escravizadas eram libertadas por manumissão; isso não assegurava libertação nem aboliu a violência do sistema.",fact:"Manumissão e cidadania de libertos são temas documentados, mas seu alcance e consequências variavam; a libertação individual de Dama não é suposta.",choice:"Manumissão torna a escravidão menos coercitiva?",options:["Não; a possibilidade de liberdade não remove a coerção.","Sim; cada pessoa escravizada podia sair quando quisesse."],feedback:["Correto: a instituição privava pessoas de autonomia e podia sujeitá-las à violência.","Não: libertação dependia de condições jurídicas e relações de poder, não de escolha livre universal."]},
+   {title:"O fim do dia não encerra a condição",body:"Quando a casa silencia, Dama ainda vive sob o poder dos proprietários. Não sabemos o que ele pensa, e não lhe atribuímos um monólogo falso. Sua trajetória convida a estudar uma estrutura de exploração sem transformar sofrimento em espetáculo ou equivaler seu destino ao de um cidadão rico.",fact:"Este fechamento destaca as restrições estruturais da escravidão e os silêncios das fontes; não é relato autobiográfico de pessoa histórica.",choice:"Qual interpretação respeita melhor a evidência?",options:["As restrições legais e as fontes devem ser explicitadas.","Como não há diário, é seguro inventar qualquer vida e chamá-la de fato."],feedback:["Correto: contextualizar e identificar ficção é indispensável.","Não: lacunas históricas não autorizam transformar imaginação em documento."]}
+  ]
+ }
+ };
+ var momentNames=["AURORA","MANHÃ","MEIO-DIA","TARDE","ANOITECER"];
+ var selectedPerson="livia",selectedMoment=0;
+ var personButtons=Array.prototype.slice.call(d.querySelectorAll("[data-character]"));
+ var momentButtons=Array.prototype.slice.call(d.querySelectorAll("[data-moment]"));
+ var optButtons=Array.prototype.slice.call(d.querySelectorAll("[data-option]"));
+ var picked={};
+ function showStory(){
+  var person=people[selectedPerson],scene=person.scenes[selectedMoment];
+  el("storyCounter").textContent=("0"+(selectedMoment+1)).slice(-2)+" / 05 · "+momentNames[selectedMoment]+" · "+person.name;
+  el("storyTitle").textContent=scene.title;
+  el("storyBody").textContent=scene.body;
+  el("storyFact").textContent=scene.fact;
+  el("storyChoice").textContent=scene.choice;
+  personButtons.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.character===selectedPerson));});
+  momentButtons.forEach(function(b){b.setAttribute("aria-pressed",String(Number(b.dataset.moment)===selectedMoment));});
+  optButtons.forEach(function(b,i){b.textContent=scene.options[i];});
+  var key=selectedPerson+"-"+selectedMoment;var prior=picked[key];
+  optButtons.forEach(function(b,i){b.setAttribute("aria-pressed",String(prior===i));});
+  el("storyFeedback").textContent=typeof prior==="number"?scene.feedback[prior]:"Selecione uma interpretação e leia a consequência social.";
+  el("prevMoment").disabled=selectedMoment===0;
+  el("nextMoment").disabled=selectedMoment===4;
+ }
+ personButtons.forEach(function(b){b.addEventListener("click",function(){selectedPerson=b.dataset.character;selectedMoment=0;showStory();});});
+ momentButtons.forEach(function(b){b.addEventListener("click",function(){selectedMoment=Number(b.dataset.moment);showStory();});});
+ optButtons.forEach(function(b){b.addEventListener("click",function(){
+  var answer=Number(b.dataset.option);
+  picked[selectedPerson+"-"+selectedMoment]=answer;
+  showStory();
+ });});
+ el("prevMoment").addEventListener("click",function(){if(selectedMoment>0){selectedMoment--;showStory();}});
+ el("nextMoment").addEventListener("click",function(){if(selectedMoment<4){selectedMoment++;showStory();}});
+ el("resetStory").addEventListener("click",function(){selectedPerson="livia";selectedMoment=0;picked={};showStory();});
+ showStory();
+ var objects={
+ tablet:{name:"Tábua encerada e estilete",text:"Superfícies reutilizáveis com cera podiam ser marcadas por um estilete para exercícios, contas e registros. Encontrá-las ajuda a investigar práticas de escrita e administração, embora possuir tal objeto não prove que toda a população fosse alfabetizada.",inference:"A escrita tinha usos práticos; educação e alfabetização variavam muito conforme recursos, condições sociais e oportunidades."},
+ lamp:{name:"Lâmpada de óleo",text:"Pequenos recipientes de cerâmica, pedra ou metal com combustível e pavio iluminavam ambientes após escurecer. Formas e decorações variavam. Seu achado pode ajudar a estudar iluminação, manufatura e hábitos domésticos.",inference:"O uso de iluminação artificial está documentado, mas um exemplar isolado não permite inferir o horário exato de trabalho de um morador."},
+ strigil:{name:"Estrígil para limpeza corporal",text:"O estrígil era um instrumento curvo usado para raspar óleo e sujeira da pele em práticas de higiene e exercício. Aparece no contexto do cuidado corporal greco-romano, inclusive em instalações de banho.",inference:"O tipo de objeto ajuda a reconhecer técnicas corporais; não prova, por si só, que todo usuário frequentou a mesma terma."},
+ amphora:{name:"Ânfora de armazenamento e transporte",text:"Ânforas cerâmicas armazenavam e transportavam mercadorias, como vinho, azeite e molhos, em diferentes formas e origens. Marcas de produção e achados arqueológicos ajudam a reconstruir redes de comércio.",inference:"O recipiente pode fornecer pistas de circulação econômica, mas exige analisar conteúdo, forma, inscrições e contexto de escavação."},
+ coin:{name:"Moeda romana",text:"Moedas traziam imagens e inscrições ligadas à autoridade e economia, circulando em transações de escalas diversas. Um exemplar pode fornecer informações de datação e propaganda política, mas não representa toda a economia de Roma.",inference:"A moeda revela mensagens públicas e aspectos de circulação; seu contexto arqueológico importa tanto quanto o desenho."}
+ };
+ var objectButtons=Array.prototype.slice.call(d.querySelectorAll("[data-object]"));
+ function showObject(key){
+  if(!Object.prototype.hasOwnProperty.call(objects,key))return;
+  var obj=objects[key];
+  el("artifactFigure").dataset.object=key;
+  el("objectName").textContent=obj.name;
+  el("objectDescription").textContent=obj.text;
+  el("objectInference").textContent=obj.inference;
+  objectButtons.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.object===key));});
+ }
+ objectButtons.forEach(function(b){b.addEventListener("click",function(){showObject(b.dataset.object);});});
+ showObject("tablet");
+ var form=el("reviewForm"),result=el("reviewResult");
+ el("gradeReview").addEventListener("click",function(){
+  var score=0,answered=0;var qs=Array.prototype.slice.call(form.querySelectorAll(".question"));
+  qs.forEach(function(q){
+   var selected=q.querySelector("input:checked"),fb=q.querySelector(".question-feedback");
+   if(!selected){fb.textContent="Selecione uma alternativa para conferir.";return;}
+   answered++;var ok=selected.value===q.dataset.answer;
+   if(ok)score++;
+   fb.textContent=(ok?"Correto. ":"Revise o contexto. ")+q.dataset.explain;
+  });
+  result.textContent=answered<qs.length?"Você respondeu "+answered+" de "+qs.length+" questões. Acertos até agora: "+score+".":score+" de "+qs.length+" respostas corretas. "+(score===qs.length?"Você distinguiu evidência, ficção e desigualdade.":"Leia as explicações e reveja os pontos necessários.");
+ });
+ form.addEventListener("reset",function(){form.querySelectorAll(".question-feedback").forEach(function(f){f.textContent="";});result.textContent="";});
+}());
+</script>
+</body>
+</html>
