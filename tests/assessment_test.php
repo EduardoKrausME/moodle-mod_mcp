@@ -81,4 +81,62 @@ final class assessment_test extends advanced_testcase {
         $this->assertNotEmpty($stored->qubaid);
         $this->assertTrue($DB->record_exists("question_usages", ["id" => $stored->qubaid]));
     }
+
+    /**
+     * A random subset is frozen in the Question Engine, even after settings change.
+     */
+    public function test_random_subset_is_persisted_and_grades_only_selected_question(): void {
+        global $CFG, $DB, $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $qgenerator = $this->getDataGenerator()->get_plugin_generator("core_question");
+        [$category, $course, $questioncategory, $questions] = $qgenerator->setup_course_and_questions();
+        $activity = $this->getDataGenerator()->create_module("mcp", [
+            "course" => $course->id, "name" => "Random MCP assessment",
+            "grade" => 10, "questionselection" => "random",
+            "questionsperattempt" => 1, "shufflequestions" => 1,
+        ]);
+        $cm = get_coursemodule_from_id("mcp", (int)$activity->cmid, 0, false, MUST_EXIST);
+        $student = $this->getDataGenerator()->create_user();
+        $this->getDataGenerator()->enrol_user($student->id, $course->id, "student");
+        $first = (int)$questions[0]->id;
+        $second = (int)$questions[1]->id;
+        slots::attach((int)$activity->id, $first, 1, (int)$USER->id);
+        slots::attach((int)$activity->id, $second, 1, (int)$USER->id);
+
+        $revision = content_service::save((int)$activity->id,
+            "<!doctype html><html><body><p>Practice.</p></body></html>", (int)$USER->id, 0);
+        content_service::publish((int)$activity->id, $revision);
+
+        $mcp = $DB->get_record("mcp", ["id" => $activity->id], "*", MUST_EXIST);
+        $this->setUser($student);
+        $attempt = attempts::start($mcp, $cm, (int)$student->id);
+        require_once($CFG->dirroot . "/question/engine/lib.php");
+        $usage = question_engine::load_questions_usage_by_activity((int)$attempt->qubaid);
+        $this->assertCount(1, $usage->get_slots());
+        $selectedid = (int)$usage->get_question_attempt(1)->get_question()->id;
+        $this->assertContains($selectedid, [$first, $second]);
+
+        // Only future attempts should use later changes to the pool or selection mode.
+        $DB->set_field("mcp", "questionselection", "all", ["id" => $activity->id]);
+        $reloaded = question_engine::load_questions_usage_by_activity((int)$attempt->qubaid);
+        $this->assertSame($selectedid, (int)$reloaded->get_question_attempt(1)->get_question()->id);
+        $this->assertCount(1, $reloaded->get_slots());
+        $this->assertSame((int)$attempt->id, (int)attempts::own((int)$activity->id, (int)$student->id)->id);
+
+        $qa = $reloaded->get_question_attempt(1);
+        $response = $qa->get_question()->get_correct_response();
+        $post = [$qa->get_control_field_name("sequencecheck") => $qa->get_sequence_check_count()];
+        foreach ($response as $name => $answer) {
+            $post[$qa->get_qt_field_name($name)] = $answer;
+        }
+        attempts::submit($mcp, $attempt, $post, true);
+        $stored = $DB->get_record("mcp_attempts", ["id" => $attempt->id], "*", MUST_EXIST);
+        $this->assertSame("finished", $stored->status);
+        $this->assertEqualsWithDelta(10.0, (float)$stored->score, 0.001);
+        $this->expectException(\moodle_exception::class);
+        attempts::start($mcp, $cm, (int)$student->id);
+    }
+
 }
