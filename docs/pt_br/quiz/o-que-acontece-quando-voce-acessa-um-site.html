@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Quiz ilustrado sobre URL, DNS, cache, TCP, QUIC, TLS, HTTP, erros e renderização com 12 questões interativas.">
+<title>O que acontece quando você acessa um site? | Quiz Laboratório Web</title>
+<style>
+:root{color-scheme:dark;--bg:#07131d;--panel:#0c2330;--ink:#eaf5f1;--mint:#8af5cb;--amber:#ffd78b;--muted:#b5cbd0;--line:#355565;--mono:Consolas,"Liberation Mono",monospace;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);font-family:var(--sans)}
+*,*:before,*:after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:290px;line-height:1.68;background:radial-gradient(circle at 5% 8%,#15414b,transparent 32%),var(--bg)}a{color:#a4f7dc;text-underline-offset:4px}a:hover{color:var(--amber)}
+button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}:focus-visible{outline:3px solid var(--amber);outline-offset:4px}[hidden]{display:none!important}
+.wrap{width:min(1170px,calc(100% - 44px));margin:auto}.skip{position:absolute;top:-100px;left:12px;background:#fff;color:#092432;padding:12px;z-index:10}.skip:focus{top:12px}.kicker{font:700 .75rem/1.6 var(--mono);color:var(--mint);letter-spacing:.14em;text-transform:uppercase}.mono{font-family:var(--mono)}
+.masthead{background:linear-gradient(145deg,#06121e,#10323d 67%,#06121d);position:relative;overflow:hidden}.masthead:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#67dac309 1px,transparent 1px),linear-gradient(90deg,#67dac309 1px,transparent 1px);background-size:42px 42px;pointer-events:none}
+.folio{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:22px 0;border-bottom:1px solid #49727a;color:#c2dbda;font:700 .74rem/1.6 var(--mono)}.folio strong{color:var(--mint)}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:29px;min-height:440px;padding:49px 0}.hero-title{font:800 clamp(2.55rem,5.2vw,5.3rem)/1.04 var(--sans);letter-spacing:-.065em;margin:17px 0 24px}.hero-title em{color:var(--mint);font-style:normal}.hero-lead{font-size:1.06rem;color:#c9dfe0;line-height:1.86}.hero-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}.hero-tags span{border:1px solid #527e84;background:#143844;padding:8px 12px;color:#dbfbeb;font:700 .76rem var(--mono)}.hero-plate{margin:0;min-width:0}.hero-plate svg{width:100%;height:auto;display:block}.hero-plate figcaption{margin:12px 0;color:#bdd5d2;font-size:.81rem}.trace-wire{animation:packets 3s linear infinite}@keyframes packets{to{stroke-dashoffset:-88}}
+.color-band{height:10px;background:linear-gradient(90deg,#267889 0 25%,#a5f5d8 25% 49%,#19465b 49% 74%,#ffd78b 74%)}.progress-section{padding:25px 0 17px}.progress-meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font:700 .78rem var(--mono);color:#cce4e1;margin-bottom:10px}.progress-track{height:10px;background:#20404c;border:1px solid #638189;overflow:hidden}.progress-fill{height:100%;background:linear-gradient(90deg,#40b6a8,#b6f9dc);width:0;transition:width .2s ease}.progress-caption{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:12px;color:#b9d4d0;font:.82rem var(--mono)}.notice{border-left:4px solid #ffd78b;background:#17313b;color:#ecdfc6;padding:13px 18px;font-size:.88rem;line-height:1.8}
+.main-shell{padding:26px 0 64px}.question-grid{display:grid;grid-template-columns:1fr 1.03fr;align-items:start;gap:21px}.plate{margin:0;padding:16px;border:1px solid #4c727c;background:#0b2733}.plate-number{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#a9f5d8;border-bottom:1px solid #476c75;padding:0 0 12px;margin-bottom:13px;font:700 .74rem var(--mono)}.plate-picture{min-height:340px;display:grid;place-items:center;background:#081d29}.plate-picture svg{display:block;width:100%;height:auto;max-height:450px}.plate figcaption{color:#c0d7d4;font-size:.82rem;line-height:1.75;border-top:1px solid #3d606d;padding-top:12px;margin-top:14px}.plate-note{color:#a4c6c8;font:.74rem var(--mono);margin-top:10px}
+.question-card{background:#0d2733;border:1px solid #4b727a;padding:clamp(19px,3vw,32px);min-height:570px;display:flex;flex-direction:column}.question-index{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid #426873;padding-bottom:15px;color:#b5f8de;font:700 .74rem var(--mono)}.question-card h2{font:760 clamp(1.48rem,2.5vw,2.27rem)/1.2 var(--sans);margin:20px 0 15px;letter-spacing:-.025em}.question-instruction{color:#c5dadd;font-size:.94rem;line-height:1.8;margin:0 0 20px}.answers{border:0;padding:0;margin:0;min-width:0}.answers legend{color:#a5f5d8;font:700 .77rem var(--mono);margin-bottom:10px}.options{display:grid;gap:9px}.option{display:flex;align-items:center;gap:11px;min-height:58px;cursor:pointer;background:#163843;border:1px solid #597e84;padding:11px 13px}.option:hover{background:#22545a;border-color:#a8f5d8}.option.selected{border:2px solid #a8f5d8;background:#20514e;padding:10px 12px}.option input{width:20px;height:20px;flex:none;accent-color:#a0f2ce}.option-copy{min-width:0;color:#e8f6f3;font-size:.9rem;line-height:1.56;overflow-wrap:anywhere}.option-art{flex:none;width:75px;height:53px;display:grid;place-items:center;border:1px solid #527f86;background:#102b38}.option-art svg{width:73px;height:51px}
+.sequence{list-style:none;padding:0;margin:0;display:grid;gap:8px}.sequence-item{display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:8px;border:1px solid #557984;background:#173d47;padding:10px}.sequence-item .num{font:.85rem var(--mono);color:#b6f9dc}.sequence-item .label{font-size:.88rem;line-height:1.45}.order-buttons{display:flex;gap:5px}.order-buttons button{border:1px solid #8cbab9;background:#24535d;color:#f0fff7;width:36px;height:36px}.order-buttons button:not(:disabled):hover{background:#35736c}.answer-help{color:#bad2d0;font-size:.84rem;line-height:1.7;margin:14px 0 0}
+.feedback{border-left:5px solid #ffd78b;background:#403627;color:#f7e7cb;padding:16px 18px;margin:20px 0 0;line-height:1.77}.feedback.correct{background:#175047;border-color:#b0fadf;color:#e7fff4}.feedback strong{display:block;margin-bottom:8px}.feedback p{margin:0}.feedback .feedback-extra{font-size:.84rem;margin-top:8px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto;padding-top:24px}.btn{border:1px solid #b8ffe4;background:#a2f4d1;color:#12382c;padding:11px 16px;min-height:45px;font-size:.89rem;font-weight:790}.btn:hover:not(:disabled){background:#d7fff0}.btn.secondary{background:#18404c;color:#e3f9ed;border-color:#8fc6bd}.btn.secondary:hover:not(:disabled){background:#28616b}.btn.teal{background:#286c78;color:#f2fffa;border-color:#83caca}.btn.teal:hover:not(:disabled){background:#327f88}.btn.next{margin-left:auto}
+.tips{background:#153643;border-left:4px solid #a8f5d8;padding:15px 20px;margin-top:20px;color:#d2e5e0;font-size:.88rem}.tips b{color:#b9ffe5}
+.summary{max-width:970px;margin:auto;border:1px solid #4f7a82;background:#102e3a;padding:clamp(23px,4vw,45px)}.summary h2{font-size:clamp(2rem,4vw,3.45rem);letter-spacing:-.04em;margin:15px 0 19px}.summary>p{color:#cadfda}.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}.stat{background:#1b414a;border-top:4px solid #a6f5d8;padding:15px}.stat:nth-child(2){border-color:#69dbed}.stat:nth-child(3){border-color:#ffd78b}.stat b{display:block;font:750 2.2rem var(--mono);color:#baf8dd}.stat span{display:block;color:#c7e0d9;font:.76rem/1.55 var(--mono)}
+.review-list{list-style:none;display:grid;gap:10px;padding:0}.review-item{display:grid;grid-template-columns:1fr auto;align-items:center;gap:13px;padding:14px;background:#163b48;border:1px solid #4e7a81}.review-item strong{font-size:.94rem}.review-item p{margin:5px 0 0;color:#c0d9d4;font-size:.83rem}.review-item button{border:1px solid #86bebc;background:#20505a;color:#edfff8;padding:10px 12px}
+.references{border-top:1px solid #456b74;color:#c3d8d5;padding:35px 0 53px;font-size:.84rem;line-height:1.8}.references h2{font-size:1.5rem}.references p{margin:11px 0}
+.motion-reduce *,.motion-reduce *:before,.motion-reduce *:after{animation:none!important;transition:none!important}
+@media(max-width:950px){.hero-grid{grid-template-columns:1fr .85fr;min-height:0}.question-grid{grid-template-columns:1fr}.plate-picture{min-height:230px}.question-card{min-height:0}}
+@media(max-width:620px){.wrap{width:calc(100% - 28px)}.hero-grid{grid-template-columns:1fr;min-height:0;padding:32px 0;gap:20px}.hero-title{font-size:clamp(2.55rem,10vw,4.2rem)}.hero-plate{max-width:440px}.question-card{padding:18px}.plate{padding:10px}.plate-picture{min-height:0}.btn{flex:1 1 42%}.btn.next{margin-left:0}.option-art{width:59px;height:43px}.option-art svg{width:57px;height:41px}.sequence-item{grid-template-columns:24px 1fr 77px}.order-buttons button{width:33px}.summary-stats{grid-template-columns:1fr}.review-item{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#atividade">Ir para a questão</a>
+<header class="masthead"><div class="wrap">
+<div class="folio"><strong>REQUEST / LAB · EDIÇÃO 04 / 10</strong><span>DNS · TLS · HTTP · RENDER</span></div>
+<div class="hero-grid"><div><div class="kicker">Investigação interativa da Web</div>
+<h1 class="hero-title">Você digitou uma URL.<br><em>E agora?</em></h1>
+<p class="hero-lead">Siga a requisição do navegador até a tela, investigue como DNS, conexões, caches, servidores e protocolos se relacionam e identifique a camada responsável por cada falha.</p>
+<div class="hero-tags"><span>12 perguntas</span><span>SVGs originais</span><span>Diagnóstico por camadas</span></div></div>
+<figure class="hero-plate"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 360" role="img" aria-labelledby="heroTitle heroDesc"><title id="heroTitle">Mapa lógico de uma navegação web</title><desc id="heroDesc">Navegador ligado a resolvedor DNS, cache de borda e servidor de origem. Fluxos são conceituais, sem representar tráfego observado.</desc>
+<rect x="1" y="1" width="558" height="358" rx="12" fill="#092330" stroke="#507985"/>
+<g stroke="#305262" opacity=".45"><path d="M20 20V340M60 20V340M100 20V340M140 20V340M180 20V340M220 20V340M260 20V340M300 20V340M340 20V340M380 20V340M420 20V340M460 20V340M500 20V340M540 20V340M10 40H550M10 80H550M10 120H550M10 160H550M10 200H550M10 240H550M10 280H550M10 320H550"/></g>
+<path class="trace-wire" d="M110 181L280 82L448 181L280 277L110 181M110 181L448 181" fill="none" stroke="#8af5cb" stroke-width="4" stroke-dasharray="12 10"/>
+<g fill="#123f4b" stroke="#89c9bf" stroke-width="3"><rect x="27" y="143" width="160" height="77" rx="7"/><rect x="210" y="49" width="139" height="72" rx="7"/><rect x="375" y="143" width="165" height="77" rx="7"/><rect x="211" y="247" width="139" height="70" rx="7"/></g>
+<g font-family="Consolas,monospace" fill="#bcffe4" font-size="16" text-anchor="middle"><text x="106" y="185">BROWSER</text><text x="280" y="92">DNS</text><text x="457" y="185">CDN / EDGE</text><text x="280" y="289">ORIGIN</text></g>
+<text x="22" y="29" font-family="Consolas,monospace" fill="#c4e6dd" font-size="12">TRACE / NAVEGADOR → RESPOSTA → PIXELS</text><text x="21" y="345" font-family="Consolas,monospace" fill="#c4e6dd" font-size="11">MAPA DIDÁTICO · CAMINHOS PODEM VARIAR</text></svg><figcaption>Modelo lógico original; caches e conexões já abertas podem evitar etapas.</figcaption></figure></div></div></header>
+<div class="color-band" aria-hidden="true"></div>
+<div class="wrap">
+ <section class="progress-section" aria-label="Acompanhamento do quiz">
+  <div class="progress-meta"><span id="progressStep">QUESTÃO 01 / 12</span><span id="progressDone">0 de 12 conferidas</span></div>
+  <div class="progress-track" id="progressBar" role="progressbar" aria-label="Questões conferidas" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-caption"><span id="progressTopic">Da planta ao fruto maduro</span><button class="btn secondary" type="button" id="motionToggle" aria-pressed="false">Reduzir movimentos</button></div>
+  <p class="notice">Este quiz apresenta correção formativa local: não envia respostas ao Moodle nem lança notas oficiais. As figuras e situações são didáticas, sem dados de lotes reais.</p>
+ </section>
+ <main id="atividade" class="main-shell">
+  <section id="questionScreen" class="question-grid" aria-label="Questão atual">
+   <figure class="plate">
+    <div class="plate-number"><span id="plateNum">PRANCHA 01</span><span id="plateLabel">ESTRUTURA</span></div>
+    <div id="platePicture" class="plate-picture"></div>
+    <figcaption id="plateCaption">Desenho botânico e técnico ilustrativo.</figcaption>
+    <div class="plate-note">Ilustração vetorial original · Sem representar lote ou produto real</div>
+   </figure>
+   <div class="question-card">
+    <div class="question-index"><span id="questionSection">01 / ESTRUTURA</span><span id="questionType">ESCOLHA ÚNICA</span></div>
+    <h2 id="questionTitle" tabindex="-1">Carregando a primeira questão…</h2>
+    <p id="questionInstruction" class="question-instruction"></p>
+    <div id="answerMount"></div>
+    <p class="answer-help" id="answerHelp"></p>
+    <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+    <div class="actions">
+     <button type="button" id="previousButton" class="btn secondary">Anterior</button>
+     <button type="button" id="checkButton" class="btn">Conferir resposta</button>
+     <button type="button" id="nextButton" class="btn teal next">Próxima questão →</button>
+    </div>
+   </div>
+  </section>
+  <section id="summaryScreen" class="summary" hidden aria-labelledby="summaryTitle">
+   <div class="kicker">Conclusão / revisão comentada</div>
+   <h2 id="summaryTitle" tabindex="-1">Você encontrou a camada certa?</h2>
+   <p>O relatório representa apenas esta interação, sem nota acadêmica. Volte às pranchas para compreender cada camada, as respostas e os possíveis desvios da navegação.</p>
+   <div class="summary-stats">
+    <div class="stat"><b id="totalReviewed">0</b><span>QUESTÕES CONFERIDAS</span></div>
+    <div class="stat"><b id="totalMastered">0</b><span>RESPOSTAS CORRETAS AO FINAL</span></div>
+    <div class="stat"><b id="totalFirst">0</b><span>ACERTOS NA PRIMEIRA TENTATIVA</span></div>
+   </div>
+   <h3 style="font:normal 1.65rem Georgia,serif;margin:22px 0 14px">Revisitar pranchas</h3>
+   <ol id="reviewList" class="review-list"></ol>
+   <div class="actions"><button class="btn secondary" type="button" id="restartButton">Recomeçar do zero</button><button class="btn teal" type="button" id="reviewFirstButton">Rever a primeira questão</button></div>
+  </section>
+ </main>
+ <aside class="tips" aria-label="Instruções"><b>Como investigar:</b> marque uma resposta ou várias quando indicado, use as setas ↑ e ↓ para ordenar etapas, confira para obter explicações e avance ou volte para revisar. É possível reiniciar.</aside>
+ <section class="references" aria-labelledby="sourcesTitle"><h2 id="sourcesTitle">Referências e limites dos diagramas</h2><p>Todos os esquemas SVG e pictogramas de alternativas são autorais, sem fotografia, captura real de rede, endereço público válido, certificado real ou medida observada. A sequência simplifica a navegação e não cobre todos os casos de cache, service workers, paralelismo ou reutilização de conexão.</p><p>Fontes: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview" target="_blank" rel="noopener noreferrer">MDN / HTTP</a>; <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching" target="_blank" rel="noopener noreferrer">MDN / cache</a>; <a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work" target="_blank" rel="noopener noreferrer">MDN / browsers</a>; <a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Critical_rendering_path" target="_blank" rel="noopener noreferrer">MDN / renderização</a>; <a href="https://www.rfc-editor.org/rfc/rfc9114.html" target="_blank" rel="noopener noreferrer">RFC 9114 / HTTP/3</a>.</p></section>
+</div>
+<script>
+(function(){
+'use strict';
+var root=document, total=12;
+var $=function(id){return root.getElementById(id);};
+var questions=[{"section":"URL e host","type":"single","figure":"url","figureTitle":"URL e host / prancha 01","title":"Qual trecho de https://portal.exemplo.test/aula?modulo=2#video representa o host?","instruction":"Identifique a parte que fornece o nome do destino.","options":[["a","https: o esquema"],["b","portal.exemplo.test: o host"],["c","/aula: o caminho"],["d","#video: o fragmento"]],"correct":"b","hint":"O nome do host aparece depois do esquema e antes do caminho.","explain":"portal.exemplo.test é o host. /aula é caminho, modulo=2 é consulta e #video é um fragmento tratado pelo navegador, não enviado na requisição HTTP.","caption":"As partes da URL estão destacadas por cores em um endereço fictício."},{"section":"Resolução DNS","type":"single","figure":"dns","figureTitle":"Resolução DNS / prancha 02","title":"Qual é a tarefa do DNS numa navegação típica?","instruction":"Distinga a obtenção do destino da transferência do conteúdo.","options":[["a","Executar os scripts JavaScript"],["b","Resolver o host e obter informações como endereços IP"],["c","Garantir que o site não contém golpes"],["d","Pintar a interface antes da conexão"]],"correct":"b","hint":"DNS permite localizar destinos; não envia o HTML da página.","explain":"Uma consulta DNS pode retornar informações de nomes e endereços, como registros A ou AAAA. A resolução não substitui transporte, TLS ou requisição HTTP.","caption":"Navegador, resolvedor e registros são representados de modo didático."},{"section":"Caches independentes","type":"multiple","figure":"caches","figureTitle":"Caches independentes / prancha 03","title":"Quais afirmações sobre cache são corretas?","instruction":"Selecione todas as opções verdadeiras.","options":[["a","Cache HTTP fresco pode permitir reutilizar uma representação sem baixar novamente seu corpo"],["b","Cache DNS sempre armazena o corpo HTML completo"],["c","Uma resolução DNS ainda válida pode ser reutilizada"],["d","Uma requisição HTTP condicional pode receber 304 Not Modified"],["e","Toda visita precisa baixar novamente cada arquivo integralmente"]],"correct":["a","c","d"],"hint":"Separe cache de resolução de nomes de cache de representações HTTP.","explain":"Cache DNS evita algumas consultas de nome; cache HTTP pode reutilizar respostas frescas ou revalidar uma representação via 304. São mecanismos distintos.","caption":"Os cartões distinguem cache de nomes, cache de recursos e servidor."},{"section":"TCP, QUIC e HTTP/3","type":"single","figure":"protocols","figureTitle":"TCP, QUIC e HTTP/3 / prancha 04","title":"Qual alternativa mostra a pilha de protocolo típica de HTTP/3?","instruction":"Observe as miniaturas de transporte.","options":[["a","HTTP/2 sobre TLS e TCP","h2"],["b","HTTP/3 sobre QUIC/UDP, integrando TLS 1.3","h3"],["c","HTTP/3 sobre TCP sem criptografia","plain"],["d","HTML transferido apenas por DNS","dns"]],"correct":"b","hint":"QUIC é o transporte utilizado por HTTP/3.","explain":"HTTP/3 utiliza QUIC sobre UDP com segurança TLS 1.3 integrada; HTTP/2 sobre TLS e TCP é outra pilha típica de HTTPS.","caption":"O diagrama contrapõe as camadas comuns de HTTP/2 e HTTP/3."},{"section":"Segurança HTTPS","type":"multiple","figure":"tls","figureTitle":"Segurança HTTPS / prancha 05","title":"Quais afirmações sobre TLS validado são corretas?","instruction":"Diferencie proteção do canal de segurança da aplicação.","options":[["a","TLS protege confidencialidade e integridade do canal"],["b","Validar o certificado ajuda a autenticar o servidor pretendido"],["c","Um site com HTTPS válido ainda pode ser malicioso ou vulnerável"],["d","TLS garante autorização correta em todos os endpoints"],["e","HTTPS dispensa autenticação de usuários"]],"correct":["a","b","c"],"hint":"TLS não prova que todo o conteúdo e todo o código do site são seguros.","explain":"TLS protege a comunicação e a validação de certificado ajuda a autenticar o servidor. Não elimina problemas de autorização, golpes ou vulnerabilidades na aplicação.","caption":"Cadeado, navegador e servidor representam a negociação segura, sem certificado real."},{"section":"Semântica HTTP","type":"single","figure":"http","figureTitle":"Semântica HTTP / prancha 06","title":"Qual método HTTP é definido para recuperar uma representação sem pedir alteração de estado?","instruction":"Pense na semântica esperada dos métodos.","options":[["a","GET"],["b","POST"],["c","PATCH"],["d","DELETE"]],"correct":"a","hint":"É o método seguro para solicitar representações de recursos.","explain":"GET é definido como método seguro de recuperação. POST envia conteúdo para processamento, PATCH solicita alteração parcial e DELETE solicita exclusão; aplicações podem violar as semânticas, mas isso é um defeito.","caption":"Requisição e resposta HTTP/1.1 exemplificam uma troca ilustrativa."},{"section":"Status da resposta","type":"single","figure":"status","figureTitle":"Status da resposta / prancha 07","title":"DNS e conexão funcionaram, mas a rota não foi encontrada. Qual status é coerente?","instruction":"Use os cartões das alternativas.","options":[["a","302: redirecionamento","302"],["b","403: acesso recusado","403"],["c","404: recurso não encontrado","404"],["d","500: erro interno","500"]],"correct":"c","hint":"Uma rota ausente é diferente de falha DNS ou erro interno.","explain":"404 Not Found indica que não foi encontrada a representação solicitada. DNS e TLS podem ter funcionado normalmente; 403, 302 e 500 representam outras condições.","caption":"Quatro status de respostas HTTP aparecem como cartões."},{"section":"Revalidação 304","type":"single","figure":"revalidate","figureTitle":"Revalidação 304 / prancha 08","title":"O que indica HTTP 304 após uma requisição condicional?","instruction":"Diferencie revalidação de uso de cache fresco sem rede.","options":[["a","Nenhuma requisição foi enviada ao servidor"],["b","O 304 contém sempre uma nova cópia integral do recurso"],["c","O cliente pode reutilizar a representação cacheada, com metadados atualizados"],["d","O recurso foi necessariamente excluído"]],"correct":"c","hint":"304 pressupõe uma requisição condicional e uma representação armazenada.","explain":"304 Not Modified confirma que a representação armazenada pode ser reutilizada. Não envia um corpo novo e não significa ausência de tráfego na rede.","caption":"Um cliente envia If-None-Match e reutiliza o corpo armazenado."},{"section":"DOM, CSSOM e pixels","type":"single","figure":"render","figureTitle":"DOM, CSSOM e pixels / prancha 09","title":"Qual estrutura representa regras de estilo interpretadas do CSS?","instruction":"Escolha a estrutura certa nas alternativas ilustradas.","options":[["a","DOM: estrutura do documento","dom"],["b","CSSOM: regras CSS interpretadas","cssom"],["c","Layout: geometria","layout"],["d","Paint: desenho visual","paint"]],"correct":"b","hint":"Há uma estrutura própria para interpretar estilos, distinta do DOM.","explain":"CSSOM representa estilos interpretados do CSS. O DOM representa o documento, e as fases de layout e pintura participam da transformação em pixels. Navegadores reais otimizam o processo.","caption":"Quatro cartões mostram etapas conceituais de renderização."},{"section":"Falhas por camada","type":"multiple","figure":"errors","figureTitle":"Falhas por camada / prancha 10","title":"Quais associações entre erro e camada são plausíveis?","instruction":"Marque todos os diagnósticos tecnicamente consistentes.","options":[["a","NXDOMAIN pode indicar nome inexistente em DNS"],["b","Certificado inválido pode impedir HTTPS confiável"],["c","HTTP 500 pode indicar erro interno do servidor ou da aplicação"],["d","HTTP 404 comprova falha de DNS"],["e","HTTP 500 sempre significa ausência de conexão"]],"correct":["a","b","c"],"hint":"Um código HTTP pressupõe resposta de HTTP, enquanto NXDOMAIN é DNS.","explain":"NXDOMAIN é uma resposta DNS; falha de certificado envolve TLS; 500 é erro interno HTTP. Não se deve atribuir automaticamente um 404 à resolução de nomes.","caption":"Quatro painéis separam erro DNS, validação TLS e códigos de status HTTP."},{"section":"Soma ilustrativa de latência","type":"single","figure":"latency","figureTitle":"Soma ilustrativa de latência / prancha 11","title":"No exemplo sem sobreposição: DNS 30 ms, conexão 90 ms, servidor 120 ms, transferência 70 ms e renderização 80 ms. Quanto soma?","instruction":"Some os valores fictícios e ignore paralelismo.","options":[["a","270 ms"],["b","320 ms"],["c","390 ms"],["d","480 ms"]],"correct":"c","hint":"Some 30 + 90 + 120 + 70 + 80.","explain":"A soma é 390 ms, mas esse número não representa um site real. Em produção, conexões reutilizadas, cache e paralelismo fazem a duração variar.","caption":"Cinco blocos ilustram tempos hipotéticos em milissegundos."},{"section":"Sequência de carregamento","type":"sequence","figure":"journey","figureTitle":"Sequência de carregamento / prancha 12","title":"Ordene as etapas de uma primeira navegação HTTPS sem cache.","instruction":"Use ↑ e ↓ para começar pela URL e terminar nos pixels.","items":[["paint","Interpretar HTML/CSS e renderizar"],["response","Receber a resposta HTTP"],["dns","Resolver nome do host"],["url","Interpretar URL"],["request","Enviar requisição HTTP"],["connect","Estabelecer transporte e conexão segura"]],"correct":["url","dns","connect","request","response","paint"],"hint":"Primeiro interprete o endereço, depois encontre, conecte, requisite, receba e renderize.","explain":"Na hipótese de primeira navegação sem cache: URL, DNS, transporte seguro, requisição, resposta e renderização. Na Web real, paralelismo e reaproveitamento mudam essa sequência.","caption":"Fluxo conceitual; service workers, cache e conexões preexistentes foram excluídos da hipótese."}];
+var answer=Object.create(null),checked=Object.create(null),firstTry=Object.create(null),index=0,reduceMotion=false;
+function svgFrame(title,desc,b){return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 370" role="img" aria-labelledby="figTitle figDesc"><title id="figTitle">'+title+'</title><desc id="figDesc">'+desc+'</desc><defs><marker id="edgeArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#a3f7d9"/></marker></defs><rect x="1" y="1" width="538" height="368" fill="#0a1b29" stroke="#53818a"/><rect x="18" y="15" width="504" height="308" fill="#102b39" stroke="#376471"/><text x="31" y="39" font-family="Consolas,monospace" font-size="12" fill="#b3f8df">REQUEST / LAB · PLACA ILUSTRADA</text>'+b+'<text x="31" y="348" font-family="Consolas,monospace" font-size="11" fill="#bfd6d3">MODELO ORIGINAL · SEM CAPTURA DE REDE</text></svg>';}
+function t(x,y,s,c,size){return '<text x="'+x+'" y="'+y+'" font-family="Consolas,monospace" font-size="'+(size||15)+'" fill="'+(c||'#e8f4f2')+'">'+s+'</text>';}
+function card(x,y,w,h,text){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="5" fill="#19414e" stroke="#71a9aa" stroke-width="2"/>'+t(x+10,y+h/2+5,text);}
+function arr(d){return '<path d="'+d+'" fill="none" stroke="#a3f7d9" stroke-width="4" stroke-dasharray="8 7" marker-end="url(#edgeArrow)"/>';}
+function icon(k){var s='',a='#b3ffe0',z='#ffd78b';if(k==='h2'||k==='h3')s=card(5,6,65,13,k==='h2'?'HTTP/2':'HTTP/3')+card(5,22,65,12,k==='h2'?'TLS':'QUIC')+card(5,38,65,12,k==='h2'?'TCP':'UDP');else if(k==='plain'||k==='dns')s=card(8,6,59,39,k==='plain'?'TCP':'DNS');else if(['302','403','404','500'].includes(k))s='<rect x="8" y="7" width="60" height="40" rx="6" fill="#264753" stroke="'+z+'"/>'+t(16,33,k,z,20);else s='<rect x="6" y="7" width="64" height="41" rx="5" fill="#21515a" stroke="'+a+'"/>'+t(11,32,k.toUpperCase().slice(0,5),a,11);return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 76 53" aria-hidden="true" focusable="false">'+s+'</svg>';}
+function art(k){var b='',a='#a3f7d9',y='#ffd78b',c='#69dbed';
+if(k==='url')b=card(32,108,473,160,'')+t(48,155,'https://',a,23)+t(155,155,'portal.exemplo.test',y,22)+t(51,203,'/aula',c,23)+t(144,203,'?modulo=2','#ffb0a0',22)+t(329,203,'#video','#fff',22)+t(55,252,'ESQUEMA   HOST   CAMINHO / QUERY / HASH',a,13);
+if(k==='dns')b=card(29,125,147,93,'BROWSER')+card(201,125,145,93,'RESOLVEDOR')+card(369,125,150,93,'REGISTROS')+arr('M180 168H197')+arr('M349 168H365')+t(91,269,'A / AAAA / CNAME',a,18);
+if(k==='caches')b=card(27,117,145,111,'CACHE DNS')+card(202,117,145,111,'CACHE HTTP')+card(375,117,140,111,'ORIGEM')+arr('M178 165H196')+arr('M352 165H368')+t(46,277,'NOME ≠ REPRESENTAÇÃO HTML',y,18);
+if(k==='protocols')b=card(36,100,216,206,'')+card(286,100,216,206,'')+card(48,114,190,48,'HTTP/2')+card(48,172,190,49,'TLS')+card(48,232,190,50,'TCP')+card(299,114,190,48,'HTTP/3')+card(299,172,190,49,'QUIC + TLS 1.3')+card(299,232,190,50,'UDP');
+if(k==='tls')b=card(32,118,156,117,'NAVEGADOR')+card(356,118,158,117,'SERVIDOR')+arr('M191 176H349')+'<rect x="248" y="156" width="49" height="46" fill="#285d55" stroke="'+y+'" stroke-width="4"/><path d="M257 155v-16q0-19 16-19q16 0 16 19v16" stroke="'+y+'" stroke-width="4" fill="none"/>'+t(179,280,'CRIPTOGRAFIA + CERTIFICADO',a,16);
+if(k==='http')b=card(30,120,213,154,'CLIENTE')+card(302,120,208,154,'ORIGEM')+arr('M246 179H297')+t(48,190,'GET /guia',a,15)+t(327,190,'200 OK',y,17)+t(330,237,'text/html',c,16);
+if(k==='status')b=card(36,112,223,87,'302 REDIRECT')+card(281,112,222,87,'403 FORBIDDEN')+card(36,219,223,87,'404 NOT FOUND')+card(281,219,222,87,'500 SERVER ERROR');
+if(k==='revalidate')b=card(27,104,198,191,'CACHE HTTP')+card(329,104,186,191,'ORIGEM')+arr('M228 155H322')+t(231,126,'If-None-Match',y,12)+t(367,200,'304',a,26)+t(53,233,'CORPO EM CACHE',c,14);
+if(k==='render')b=card(21,133,113,91,'DOM')+card(151,133,115,91,'CSSOM')+card(284,133,115,91,'LAYOUT')+card(416,133,106,91,'PAINT')+arr('M136 172H146')+arr('M268 172H279')+arr('M401 172H410')+t(54,275,'ESTILOS → GEOMETRIA → PIXELS',a,16);
+if(k==='errors')b=card(33,105,227,90,'DNS / NXDOMAIN')+card(281,105,226,90,'TLS / CERT')+card(33,218,227,90,'HTTP / 404')+card(281,218,226,90,'HTTP / 500');
+if(k==='latency'){var ns=['DNS','CON','SRV','NET','PIX'],vs=[30,90,120,70,80],cols=['#63b0a4','#cfb37a','#76a6c9','#d49a81','#90cda2'],x=30;for(var i=0;i<5;i++){var w=vs[i]*1.1;b+='<rect x="'+x+'" y="138" width="'+w+'" height="92" fill="'+cols[i]+'"/>'+t(x+2,173,ns[i],'#08212a',10)+t(x+2,203,vs[i]+'ms','#08212a',11);x+=w+5;}b+=t(51,95,'TEMPOS FICTÍCIOS SEM PARALELISMO',a,17)+t(98,274,'30 + 90 + 120 + 70 + 80',a,18);}
+if(k==='journey'){var ns=['URL','DNS','TLS','HTTP','HTML','PIX'],x=20;for(var i=0;i<6;i++){b+=card(x,139,73,85,ns[i]);if(i<5)b+=arr('M'+(x+75)+' 173H'+(x+81));x+=86;}b+=t(49,105,'PRIMEIRA VISITA, SEM CACHE',a,16)+t(71,274,'FLUXO DIDÁTICO: O REAL PODE VARIAR',a,14);}
+return svgFrame(questions[index].figureTitle,questions[index].caption,b);}
+function chosen(q){
+ if(q.type==='sequence'){return (answer[index]||q.items.map(function(x){return x[0];})).slice();}
+ return q.type==='multiple'?(answer[index]||[]).slice():(answer[index]||'');
+}
+function equal(a,b){
+ if(Array.isArray(a)&&Array.isArray(b)){
+  if(a.length!==b.length)return false;
+  return a.slice().sort().join('|')===b.slice().sort().join('|');
+ }
+ return a===b;
+}
+function correctCount(){return questions.filter(function(q,i){return checked[i]&&checked[i].ok;}).length;}
+function reviewedCount(){return Object.keys(checked).length;}
+function updateProgress(){
+ var done=reviewedCount();
+ $('progressStep').textContent='QUESTÃO '+String(index+1).padStart(2,'0')+' / '+total;
+ $('progressDone').textContent=done+' de '+total+' conferidas';
+ $('progressFill').style.width=(done*100/total)+'%';
+ $('progressBar').setAttribute('aria-valuenow',String(done));
+ $('progressTopic').textContent=questions[index].section;
+}
+function updateSelections(){
+ Array.prototype.forEach.call($('answerMount').querySelectorAll('.option'),function(el){el.classList.toggle('selected',!!el.querySelector('input').checked);});
+}
+function render(focus){
+ var q=questions[index],isSequence=q.type==='sequence';
+ $('summaryScreen').hidden=true;$('questionScreen').hidden=false;
+ $('plateNum').textContent='PRANCHA '+String(index+1).padStart(2,'0');
+ $('plateLabel').textContent=q.section.toUpperCase();
+ $('platePicture').innerHTML=art(q.figure);
+ $('plateCaption').textContent=q.caption;
+ $('questionSection').textContent=String(index+1).padStart(2,'0')+' / '+q.section.toUpperCase();
+ $('questionType').textContent=isSequence?'ORDENAÇÃO':q.type==='multiple'?'MÚLTIPLA SELEÇÃO':'ESCOLHA ÚNICA';
+ $('questionTitle').textContent=q.title;
+ $('questionInstruction').textContent=q.instruction;
+ $('answerHelp').textContent=isSequence?'Use ↑ e ↓ para mover cada etapa.':q.type==='multiple'?'Marque uma ou mais alternativas antes de conferir.':'Escolha uma única alternativa e confira.';
+ var mount=$('answerMount');mount.replaceChildren();
+ if(isSequence){
+  var ul=document.createElement('ol');ul.className='sequence';ul.setAttribute('aria-label','Etapas em ordem editável');
+  var current=chosen(q);
+  current.forEach(function(id,j){
+   var li=document.createElement('li');li.className='sequence-item';
+   var n=document.createElement('span');n.className='num';n.textContent=String(j+1).padStart(2,'0');
+   var lab=document.createElement('span');lab.className='label';lab.textContent=q.items.find(function(it){return it[0]===id;})[1];
+   var group=document.createElement('span');group.className='order-buttons';
+   [-1,1].forEach(function(delta){
+    var b=document.createElement('button');b.type='button';b.textContent=delta<0?'↑':'↓';b.disabled=delta<0?j===0:j===current.length-1;
+    b.dataset.position=String(j);b.dataset.delta=String(delta);
+    b.setAttribute('aria-label',(delta<0?'Subir: ':'Descer: ')+lab.textContent);
+    group.appendChild(b);
+   });
+   li.appendChild(n);li.appendChild(lab);li.appendChild(group);ul.appendChild(li);
+  });mount.appendChild(ul);
+ }else{
+  var field=document.createElement('fieldset');field.className='answers';
+  var legend=document.createElement('legend');legend.textContent=q.type==='multiple'?'Selecione todas as respostas corretas':'Escolha a resposta';field.appendChild(legend);
+  var opts=document.createElement('div');opts.className='options';
+  q.options.forEach(function(opt){
+   var lab=document.createElement('label');lab.className='option';
+   var inp=document.createElement('input');inp.type=q.type==='multiple'?'checkbox':'radio';inp.name='q'+index;inp.value=opt[0];
+   inp.checked=q.type==='multiple'?chosen(q).indexOf(opt[0])!==-1:chosen(q)===opt[0];
+   var label=document.createElement('span');label.className='option-copy';label.textContent=opt[1];
+   lab.appendChild(inp);if(opt[2]){var artwork=document.createElement('span');artwork.className='option-art';artwork.innerHTML=icon(opt[2]);lab.appendChild(artwork);}lab.appendChild(label);opts.appendChild(lab);
+  });field.appendChild(opts);mount.appendChild(field);updateSelections();
+ }
+ var state=checked[index];var fb=$('feedback');
+ fb.hidden=!state;fb.className='feedback'+(state&&state.ok?' correct':'');
+ if(state){
+  fb.replaceChildren();
+  var strong=document.createElement('strong');strong.textContent=state.ok?'Correto: você identificou a relação essencial.':'Ainda não. Examine novamente a prancha.';
+  var detail=document.createElement('p');detail.textContent=state.ok?q.explain:q.hint+' '+q.explain;
+  fb.appendChild(strong);fb.appendChild(detail);
+  var small=document.createElement('p');small.className='feedback-extra';small.textContent=state.ok?'Resposta conferida. Você pode avançar ou voltar para revisar.':'Você pode alterar a resposta e conferir novamente, ou avançar e revisar depois.';
+  fb.appendChild(small);
+ }
+ $('previousButton').disabled=index===0;
+ $('checkButton').textContent=state?'Tentar novamente':'Conferir resposta';
+ $('nextButton').disabled=!state;
+ $('nextButton').textContent=index===total-1?'Ver resultado →':'Próxima questão →';
+ updateProgress();
+ if(focus){$('questionTitle').focus();$('questionScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});}
+}
+function invalidate(){if(checked[index])delete checked[index];$('feedback').hidden=true;$('checkButton').textContent='Conferir resposta';$('nextButton').disabled=true;updateProgress();}
+$('answerMount').addEventListener('change',function(e){
+ var input=e.target;
+ if(!input.matches('input'))return;
+ var q=questions[index];
+ if(q.type==='multiple'){answer[index]=Array.prototype.map.call($('answerMount').querySelectorAll('input:checked'),function(it){return it.value;});}
+ else{answer[index]=input.value;}
+ invalidate();updateSelections();
+});
+$('answerMount').addEventListener('click',function(e){
+ var b=e.target.closest('button[data-position]');if(!b)return;
+ var q=questions[index],current=chosen(q);
+ var pos=Number(b.dataset.position),next=pos+Number(b.dataset.delta);
+ if(next<0||next>=current.length)return;
+ var temp=current[pos];current[pos]=current[next];current[next]=temp;answer[index]=current;
+ invalidate();render(false);
+ var selector='button[data-position="'+next+'"][data-delta="'+b.dataset.delta+'"]';
+ var focusButton=$('answerMount').querySelector(selector);if(focusButton&&!focusButton.disabled)focusButton.focus();
+});
+$('checkButton').addEventListener('click',function(){
+ if(checked[index]){invalidate();$('questionTitle').focus();return;}
+ var q=questions[index],value=chosen(q),missing=q.type==='sequence'?false:q.type==='multiple'?value.length===0:!value;
+ if(missing){$('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Selecione uma resposta antes de conferir.';return;}
+ var ok=equal(value,q.correct);
+ if(firstTry[index]===undefined)firstTry[index]=ok;
+ checked[index]={ok:ok};
+ render(false);
+});
+$('previousButton').addEventListener('click',function(){if(index>0){index--;render(true);}});
+$('nextButton').addEventListener('click',function(){
+ if(!checked[index])return;
+ if(index===total-1){showSummary();return;}
+ index++;render(true);
+});
+function showSummary(){
+ $('questionScreen').hidden=true;$('summaryScreen').hidden=false;
+ $('progressStep').textContent='REVISÃO CONCLUÍDA';
+ $('progressTopic').textContent='Diagnóstico final / camadas de rede';
+ $('totalReviewed').textContent=String(reviewedCount())+' / '+total;
+ $('totalMastered').textContent=String(correctCount())+' / '+total;
+ $('totalFirst').textContent=String(Object.keys(firstTry).filter(function(k){return firstTry[k]===true;}).length)+' / '+total;
+ var list=$('reviewList');list.replaceChildren();
+ questions.forEach(function(q,i){
+  var li=document.createElement('li');li.className='review-item';
+  var block=document.createElement('div');
+  var strong=document.createElement('strong');strong.textContent=String(i+1).padStart(2,'0')+'. '+q.section;
+  var p=document.createElement('p');p.textContent=checked[i]?(checked[i].ok?'Correta. ':'A revisar. ')+q.explain:'Ainda não conferida. '+q.explain;
+  block.appendChild(strong);block.appendChild(p);
+  var b=document.createElement('button');b.type='button';b.textContent='Rever prancha';b.dataset.review=String(i);
+  li.appendChild(block);li.appendChild(b);list.appendChild(li);
+ });
+ $('summaryTitle').focus();$('summaryScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});
+}
+$('reviewList').addEventListener('click',function(e){var b=e.target.closest('button[data-review]');if(!b)return;index=Number(b.dataset.review);render(true);});
+$('restartButton').addEventListener('click',function(){answer=Object.create(null);checked=Object.create(null);firstTry=Object.create(null);index=0;render(true);});
+$('reviewFirstButton').addEventListener('click',function(){index=0;render(true);});
+$('motionToggle').addEventListener('click',function(){reduceMotion=!reduceMotion;document.body.classList.toggle('motion-reduce',reduceMotion);this.setAttribute('aria-pressed',String(reduceMotion));this.textContent=reduceMotion?'Restaurar movimentos':'Reduzir movimentos';});
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){reduceMotion=true;document.body.classList.add('motion-reduce');$('motionToggle').setAttribute('aria-pressed','true');$('motionToggle').textContent='Restaurar movimentos';}
+if(questions.length!==total){throw new Error('Total de questões inconsistente');}
+render(false);
+})();
+</script>
+</body>
+</html>
