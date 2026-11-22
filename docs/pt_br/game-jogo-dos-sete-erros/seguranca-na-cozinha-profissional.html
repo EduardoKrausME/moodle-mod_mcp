@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jogo dos sete erros - Segurança na cozinha profissional</title><style>
+:root{color-scheme:light;--bg:#f8f1e7;--paper:#fffdfa;--ink:#49352a;--muted:#755c4e;--line:#ead8c5;--blue:#86512e;--blue-soft:#fff0d7;--mint:#126d54;--mint-bg:#e4f7ee;--amber:#885827;--amber-bg:#fff3e4;--red:#a84434;--shadow:0 10px 30px #2344650c;font:16px/1.53 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit;cursor:pointer}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #d88724;outline-offset:3px}button:disabled{opacity:.46;cursor:not-allowed}
+main{max-width:1230px;margin:auto;padding:28px 18px 43px}.eyebrow{color:var(--blue);font-size:11px;font-weight:850;letter-spacing:1.4px;text-transform:uppercase;margin:0 0 8px}
+h1{font-size:clamp(29px,4vw,43px);letter-spacing:-.8px;line-height:1.15;margin:0 0 11px}.intro{font-size:14px;color:var(--muted);max-width:1060px;margin:0 0 18px}
+.metrics{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:13px}.metric{min-width:110px;border:1px solid var(--line);background:var(--paper);border-radius:11px;padding:8px 14px}.metric small{font-size:11px;display:block;color:var(--muted)}.metric strong{font-variant-numeric:tabular-nums;font-size:20px}.metrics .note{margin-left:auto}
+.progress{height:9px;border-radius:22px;overflow:hidden;background:#d8e6ee;margin-bottom:18px}.progress span{height:100%;width:0;background:linear-gradient(90deg,#dc9458,#399b78);display:block;transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.48fr) minmax(290px,.8fr);gap:16px;align-items:start}.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:19px;min-width:0}.panel h2{font-size:18px;margin:0 0 10px}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.topline h2{margin:0}.tag{font-size:11px;color:var(--blue);background:var(--blue-soft);border-radius:40px;font-weight:820;padding:6px 10px}
+.scene-viewport{width:100%;max-height:72vh;overflow:auto;border:1px solid #b8cfdd;border-radius:13px;background:#f6e9d8;overscroll-behavior:contain;touch-action:pan-x pan-y;scrollbar-gutter:stable;margin:13px 0 8px}
+.artwork{width:100%;position:relative;min-width:100%;cursor:crosshair;user-select:none}.artwork svg{width:100%;height:auto;display:block;aspect-ratio:1000/620;pointer-events:none}
+.dot{position:absolute;left:var(--x);top:var(--y);width:34px;height:34px;display:grid;place-items:center;transform:translate(-50%,-50%);border-radius:50%;background:#147b63e8;border:3px solid #e7fff5;box-shadow:0 0 0 4px #09573e88;font-size:17px;font-weight:900;color:white;pointer-events:none}
+.hint-area{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);border:3px dashed #eab04c;background:#f0bc4140;outline:1px solid #6e561c;pointer-events:none;border-radius:13px}
+.zoom-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 12px}.zoom-row span{font-size:12px;color:var(--muted);margin-right:auto}
+.btn{border-radius:10px;padding:10px 14px;font-size:12px;font-weight:840;color:#fff;background:var(--blue);border:1px solid var(--blue)}.btn.secondary{color:var(--blue);background:var(--paper)}.btn.quiet{color:var(--blue);background:#f0f7fc;border-color:#bdd7e8}.btn:hover:not(:disabled){filter:brightness(.92)}
+.feedback{padding:14px 15px;border-radius:11px;background:#eaf3fa;border:1px solid #bad6e6;color:#345e7c;font-size:13px;line-height:1.6;min-height:75px;margin:14px 0 0}
+.feedback strong{font-size:14px;display:block;margin-bottom:3px}.feedback.good{background:var(--mint-bg);border-color:#a3d3bb;color:var(--mint)}.feedback.warn{background:var(--amber-bg);border-color:#e6c39e;color:var(--amber)}
+.found-list{display:grid;gap:8px;margin:13px 0 0}.found-item{border-radius:10px;background:#f5f9fc;border:1px solid var(--line);padding:11px 12px}
+.found-item strong{display:block;font-size:13px}.found-item p{font-size:12px;line-height:1.57;color:var(--muted);margin:5px 0 0}
+.inspection{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.inspect-btn{min-width:0;min-height:64px;border:2px solid #c9dbe8;border-radius:11px;background:#f8fbff;text-align:left;padding:10px 12px;color:var(--ink);font-size:12px;font-weight:780;line-height:1.38}
+.inspect-btn:hover{background:var(--blue-soft);border-color:#85b2d3}.inspect-btn[aria-pressed=true]{border-color:#4eae8d;background:var(--mint-bg);color:var(--mint)}
+.inspect-btn .where{display:block;font-size:10px;color:var(--muted);font-weight:720;margin-top:4px}.inspect-btn .status{display:block;font-size:10px;font-weight:870;margin-top:4px}
+.info{background:var(--blue-soft);border-radius:11px;padding:12px 13px;font-size:12px;color:#295c81;line-height:1.6;margin-top:14px}.info strong{display:block;margin-bottom:4px}
+.rules{padding-left:19px;color:var(--muted);font-size:12px}.rules li{margin:8px 0}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:13px}.controls .grow{flex:1}
+.end{border-radius:12px;border:1px solid #9dceae;background:var(--mint-bg);color:var(--mint);padding:15px;margin:14px 0}.end strong{display:block;font-size:20px}.end p{font-size:13px;line-height:1.65;margin:6px 0 0}
+.review{display:grid;gap:9px;margin-top:15px}.review-card{border-radius:11px;border:1px solid #b2d8c0;background:#effaf3;padding:12px}.review-card strong{display:block;color:#1d664b;font-size:13px}.review-card p{font-size:12px;color:#37604c;margin:6px 0 0;line-height:1.6}
+.confirm{border:1px solid #dcb384;background:var(--amber-bg);color:var(--amber);border-radius:11px;padding:12px;margin-top:13px;font-size:12px}.confirm p{margin:0 0 9px}
+.note{font-size:11px;line-height:1.65;color:var(--muted);margin:13px 0 0}
+[hidden]{display:none!important}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.panel{padding:15px}.scene-viewport{max-height:75vh}}
+@media(max-width:550px){main{padding:19px 10px 29px}.panel{padding:11px}.inspection{gap:7px}.inspect-btn{padding:8px;min-height:66px;font-size:11px}.dot{width:27px;height:27px;font-size:14px}.metric{min-width:98px;padding:7px 11px}.metrics .note{margin-left:0}.controls .btn{flex-grow:1}}
+@media(max-width:380px){.inspection{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-contrast:more){.inspect-btn{border-color:var(--blue)}.dot{border:4px solid #fff;box-shadow:0 0 0 4px #114a3a}.hint-area{border-width:5px}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#28251f;--paper:#373029;--ink:#fff0db;--muted:#ddc8b4;--line:#645446;--blue:#ffd19c;--blue-soft:#554030;--mint:#b0f4d4;--mint-bg:#294f41;--amber:#f5d1a6;--amber-bg:#4b3c2d;--shadow:0 8px 25px #0a152550}
+.scene-viewport{background:#2f4b60;border-color:#65859a}.inspect-btn{background:#31495e;border-color:#58728c}.inspect-btn:hover{background:#3b5c79}.inspect-btn[aria-pressed=true]{background:var(--mint-bg);color:var(--mint)}.btn.quiet{background:#344f68;color:#d4edff;border-color:#5b839d}
+.feedback{background:#34526b;color:#dbecff;border-color:#60819a}.feedback.good{background:var(--mint-bg);color:var(--mint)}.feedback.warn{background:var(--amber-bg);color:var(--amber)}
+.found-item{background:#30465c}.info{color:#dbecff}.review-card{background:#30513f;border-color:#58866c}.review-card strong{color:#c7ffe0}.review-card p{color:#c4edda}.end{color:var(--mint)}
+}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 25 · Segurança alimentar e observação</p>
+<h1>Jogo dos sete erros: Segurança na cozinha profissional</h1>
+<p class="intro">Nesta cozinha profissional ilustrada há exatamente sete falhas de segurança e higiene. Toque nas regiões suspeitas da cena ou use a lista de objetos e setores para investigar sem depender da visão ou de apontamentos precisos. Cada problema identificado recebe uma explicação prática e os objetos corretos também podem ser inspecionados.</p>
+<div class="metrics"><div class="metric"><small>Problemas encontrados</small><strong id="found-count">0 / 7</strong></div><div class="metric"><small>Dicas usadas</small><strong id="hints-count">0</strong></div><div class="metric"><small>Objetos sem erro inspecionados</small><strong id="checked-count">0</strong></div><span class="note">Sem cronômetro ou nota.</span></div>
+<div class="progress" id="progress" role="progressbar" aria-label="Problemas encontrados" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0"><span id="progress-bar"></span></div>
+<div class="layout">
+<section class="panel" aria-labelledby="scene-heading">
+ <div class="topline"><h2 id="scene-heading">Cena para inspecionar</h2><span class="tag" id="inspection-status">Procure sete situações</span></div>
+ <p class="note">Ilustração vetorial original, incorporada ao HTML. Use o zoom para explorar a cena; ao ampliar, a imagem e os indicadores são redimensionados juntos.</p>
+ <div id="scene-viewport" class="scene-viewport" role="region" aria-label="Cena ilustrada; rolagem disponível ao ampliar" tabindex="0">
+  <div id="artwork" class="artwork"><svg id="kitchen-scene" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" role="img" aria-labelledby="scene-title scene-description">
+<title id="scene-title">Cozinha profissional durante o preparo de refeições</title>
+<desc id="scene-description">Ilustração panorâmica de cozinha com prateleira de mantimentos, cozinheiro de touca, bancada de preparo, tábua com ingredientes, faca, fogão, panela, exaustor, pia, tomada e piso. Os setores e objetos são descritos também em uma lista acessível, com a mesma lógica de inspeção.</desc>
+<defs>
+ <linearGradient id="wallK" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#fff4e3"/><stop offset="1" stop-color="#ecd7b9"/></linearGradient>
+ <linearGradient id="metalK" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#f8f9f4"/><stop offset=".55" stop-color="#9db3b6"/><stop offset="1" stop-color="#dce7e6"/></linearGradient>
+ <linearGradient id="floorK" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#ded6c5"/><stop offset="1" stop-color="#bfb09a"/></linearGradient>
+ <pattern id="tileK" width="46" height="46" patternUnits="userSpaceOnUse"><path d="M46 0H0V46" stroke="#a99b86" stroke-width="2" opacity=".3" fill="none"/></pattern>
+</defs>
+<rect width="1000" height="620" fill="url(#wallK)"/>
+<rect y="299" width="1000" height="181" fill="#f6ecdc"/><rect y="299" width="1000" height="181" fill="url(#tileK)"/>
+<rect y="480" width="1000" height="140" fill="url(#floorK)"/><rect y="480" width="1000" height="140" fill="url(#tileK)"/>
+<path d="M0 480H1000" stroke="#a38d71" stroke-width="6"/>
+<!-- Alimentos e saneante indevidamente juntos -->
+<rect x="35" y="122" width="210" height="15" rx="6" fill="#946944"/>
+<rect x="49" y="146" width="183" height="101" rx="8" fill="#f6e9d2" stroke="#ae8053" stroke-width="6"/>
+<path d="M55 207H227" stroke="#ad7d52" stroke-width="8"/>
+<rect x="69" y="169" width="21" height="37" rx="3" fill="#dca65f"/><rect x="91" y="160" width="18" height="46" rx="3" fill="#e4b875"/>
+<path d="M169 163H203L208 208H163Z" fill="#fff8e0" stroke="#c29d65" stroke-width="4"/>
+<text x="186" y="191" text-anchor="middle" fill="#7c5730" font-family="sans-serif" font-size="12" font-weight="bold">FARINHA</text>
+<circle cx="167" cy="226" r="11" fill="#d9573b"/><circle cx="187" cy="226" r="11" fill="#e15d42"/><path d="M168 214l5-7" stroke="#50966b" stroke-width="4"/>
+<path d="M105 184H142L149 235H101Z" fill="#e9b24d" stroke="#9e6432" stroke-width="4"/>
+<rect x="107" y="196" width="36" height="26" rx="4" fill="#fff8db"/>
+<text x="125" y="207" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#75502c" font-weight="bold">PROD.</text>
+<text x="125" y="217" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#75502c" font-weight="bold">LIMPEZA</text>
+<path d="M114 182v-12h17l7 7h11" fill="none" stroke="#475962" stroke-width="7" stroke-linecap="round"/>
+<rect x="65" y="258" width="149" height="24" rx="5" fill="#fff8ea" stroke="#d5bb98" stroke-width="3"/>
+<text x="139" y="274" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#886142" font-weight="bold">INGREDIENTES</text>
+<!-- Quadro de boas práticas -->
+<rect x="292" y="85" width="192" height="111" rx="11" fill="#446f63" stroke="#34574b" stroke-width="5"/>
+<text x="388" y="116" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="bold" fill="#fff">BOAS PRÁTICAS</text>
+<path d="M317 139h145M317 159h121M317 179h142" stroke="#edf1e4" stroke-width="6" stroke-linecap="round"/>
+<circle cx="308" cy="139" r="4" fill="#d4b368"/><circle cx="308" cy="159" r="4" fill="#d4b368"/><circle cx="308" cy="179" r="4" fill="#d4b368"/>
+<!-- Exaustor e armário refrigerado -->
+<path d="M573 89H727L745 162H557Z" fill="url(#metalK)" stroke="#72888b" stroke-width="6"/>
+<rect x="609" y="62" width="88" height="33" rx="4" fill="#8eaaad"/>
+<path d="M580 151h140" stroke="#6c8b8b" stroke-width="8" stroke-linecap="round"/>
+<rect x="809" y="97" width="169" height="182" rx="11" fill="url(#metalK)" stroke="#7b9798" stroke-width="6"/>
+<path d="M813 182h160" stroke="#779398" stroke-width="5"/>
+<path d="M955 128v37m0 40v43" stroke="#617c80" stroke-width="9" stroke-linecap="round"/>
+<rect x="835" y="116" width="28" height="50" rx="5" fill="#c6e7d5" stroke="#69a189" stroke-width="3"/>
+<path d="M848 123v36M839 141h19" stroke="#4d9377" stroke-width="5"/>
+<!-- Profissional usando touca -->
+<path d="M189 370V309q15-33 49-31q34 3 48 39v54" fill="#fffdf8" stroke="#768c8e" stroke-width="5"/>
+<path d="M190 296q-19-25 18-34q9-24 36-15q20-13 35 19q25 15 1 31Z" fill="#fff" stroke="#708790" stroke-width="5"/>
+<rect x="214" y="281" width="55" height="16" rx="6" fill="#fff" stroke="#708790" stroke-width="4"/>
+<circle cx="241" cy="316" r="27" fill="#ce916a" stroke="#925e43" stroke-width="4"/>
+<path d="M228 314h6m17 0h6" stroke="#533a2e" stroke-width="4" stroke-linecap="round"/>
+<path d="M236 329q8 7 17-1" fill="none" stroke="#73503e" stroke-width="3"/>
+<!-- Bancada e tábua mista -->
+<rect x="172" y="350" width="374" height="135" rx="9" fill="#a4afae" stroke="#718381" stroke-width="5"/>
+<rect x="163" y="351" width="389" height="29" rx="8" fill="#d1b08b" stroke="#9d7651" stroke-width="5"/>
+<path d="M186 389V474M529 389V474M186 472H530" stroke="#778884" stroke-width="9"/>
+<rect x="275" y="355" width="178" height="68" rx="10" fill="#e9c58b" stroke="#ac7b4b" stroke-width="5"/>
+<path d="M308 384q-4-16 16-18q16-13 30 1q20-2 22 19q-6 20-29 14q-28 8-39-16" fill="#efa7a1" stroke="#b76968" stroke-width="4"/>
+<path d="M316 381q16-10 35 0" stroke="#ffd6d0" stroke-width="6" fill="none"/>
+<path d="M384 402q-17-14 1-30q-4-15 15-15q18-13 27 6q12 9 1 23q-2 19-24 18q-10 7-20-2" fill="#64a562" stroke="#367747" stroke-width="4"/>
+<path d="M393 377l19 20m-1-35l-4 33m20-22l-20 20" stroke="#bce29d" stroke-width="4"/>
+<!-- Faca perigosamente apoiada na borda -->
+<path d="M451 425L478 432L474 443L448 435Z" fill="#62483a" stroke="#3e2d25" stroke-width="4"/>
+<path d="M478 433L522 438L540 442q-10 12-24 8l-43-7Z" fill="#dce6e5" stroke="#647c83" stroke-width="4"/>
+<circle cx="462" cy="434" r="3" fill="#e3c9a2"/>
+<!-- Fogão, chama, pano e panela com cabo exposto -->
+<rect x="547" y="341" width="230" height="141" rx="10" fill="#6d8389" stroke="#42575d" stroke-width="5"/>
+<rect x="541" y="326" width="245" height="39" rx="9" fill="#bac8c5" stroke="#738b8b" stroke-width="5"/>
+<ellipse cx="654" cy="336" rx="53" ry="14" fill="#465156"/>
+<path d="M603 327q-14 15 1 25q9-11 12-3q13-16-1-30" fill="#f4a647" stroke="#cc6d36" stroke-width="3"/>
+<path d="M632 328q-10 10-1 19q10-9 12-19" fill="#ffb94e"/>
+<path d="M628 269h79l-8 54q-38 13-67-4Z" fill="#8fa8ac" stroke="#4e6970" stroke-width="5"/>
+<ellipse cx="667" cy="271" rx="42" ry="11" fill="#dce7e4" stroke="#566f74" stroke-width="5"/>
+<path d="M647 255q20-14 39 0" fill="none" stroke="#6a8182" stroke-width="5"/>
+<path d="M707 282H792" stroke="#3e5257" stroke-width="18" stroke-linecap="round"/>
+<path d="M757 282H795" stroke="#d8a155" stroke-width="14" stroke-linecap="round"/>
+<path d="M563 312q21-6 36 4l8 44q-22-12-29 8l-15-16Z" fill="#ecac59" stroke="#a96c2f" stroke-width="4"/>
+<path d="M571 329l25 17m-19-3l17-16" stroke="#ffefc9" stroke-width="4"/>
+<circle cx="587" cy="386" r="9" fill="#ebd3b6" stroke="#536a70" stroke-width="4"/>
+<circle cx="740" cy="386" r="9" fill="#ebd3b6" stroke="#536a70" stroke-width="4"/>
+<!-- Pia, saboneteira e conexão elétrica -->
+<rect x="793" y="356" width="194" height="126" rx="9" fill="#98acb0" stroke="#637d82" stroke-width="5"/>
+<rect x="786" y="355" width="206" height="30" rx="6" fill="url(#metalK)" stroke="#69848b" stroke-width="5"/>
+<ellipse cx="855" cy="372" rx="47" ry="14" fill="#648995" stroke="#456c74" stroke-width="4"/>
+<ellipse cx="855" cy="371" rx="37" ry="9" fill="#acd9e8"/>
+<path d="M837 355v-44q10-21 25 0v42" stroke="#62898b" stroke-width="10" fill="none" stroke-linecap="round"/>
+<path d="M860 344v28" stroke="#73bde0" stroke-width="5" stroke-dasharray="7 5"/>
+<rect x="800" y="319" width="29" height="37" rx="6" fill="#66af8d" stroke="#3c7f68" stroke-width="3"/>
+<path d="M806 317h16" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+<rect x="889" y="312" width="55" height="42" rx="7" fill="#fff2d8" stroke="#9b855e" stroke-width="4"/>
+<circle cx="906" cy="332" r="4" fill="#796f5d"/><circle cx="929" cy="332" r="4" fill="#796f5d"/>
+<path d="M918 353q45 43-18 54" fill="none" stroke="#35434a" stroke-width="7" stroke-linecap="round"/>
+<path d="M899 407h-13" stroke="#35434a" stroke-width="7" stroke-linecap="round"/>
+<rect x="931" y="392" width="35" height="49" rx="7" fill="#d6dfdd" stroke="#758e92" stroke-width="4"/>
+<!-- Extintor, lixeira e termômetro corretamente posicionados -->
+<rect x="55" y="328" width="52" height="109" rx="9" fill="#d94937" stroke="#8b342f" stroke-width="5"/>
+<path d="M77 328v-18h18l12 12" stroke="#525451" stroke-width="7" fill="none"/>
+<rect x="63" y="367" width="37" height="31" rx="4" fill="#fff6e6"/>
+<text x="82" y="390" text-anchor="middle" fill="#bc3b2e" font-family="sans-serif" font-size="23" font-weight="bold">!</text>
+<rect x="63" y="509" width="77" height="17" rx="8" fill="#4b7066"/>
+<path d="M68 524q0-14 16-14h34q16 0 16 14l-5 61H73Z" fill="#75958a" stroke="#4b7066" stroke-width="5"/>
+<path d="M89 584h41" stroke="#456c62" stroke-width="8" stroke-linecap="round"/>
+<rect x="446" y="250" width="16" height="79" rx="7" fill="#faf4e4" stroke="#58736e" stroke-width="4"/>
+<rect x="452" y="284" width="4" height="32" rx="2" fill="#d45a47"/><circle cx="454" cy="324" r="7" fill="#d45a47"/>
+<!-- Água derramada no corredor, sem marcação -->
+<path d="M637 533q29-22 62-7q43-9 64 18q13 20-16 27q-24 16-56 3q-25 17-53-2q-36-3-23-22q-5-10 22-17Z" fill="#79c0d8" stroke="#3a8eae" stroke-width="5"/>
+<path d="M650 544q24-12 49-4m12 11q19-3 33 3m-90 11q23-3 37 2" stroke="#ddf6fc" stroke-width="5" fill="none" stroke-linecap="round"/>
+</svg><div id="markers" aria-hidden="true"></div></div>
+ </div>
+ <div class="zoom-row"><span id="zoom-label">100%</span>
+  <button id="zoom-out" class="btn secondary" type="button" disabled>Reduzir zoom</button>
+  <button id="zoom-in" class="btn secondary" type="button">Ampliar zoom</button>
+ </div>
+ <div class="controls">
+  <button id="hint" type="button" class="btn quiet" disabled>Mostrar dica de setor</button><span class="grow"></span>
+  <button id="reset" type="button" class="btn secondary" disabled>Recomeçar inspeção</button>
+ </div>
+ <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">
+  <strong id="feedback-heading">Orientação</strong><span id="feedback-message">Preparando a inspeção...</span>
+ </div>
+ <div id="completion" class="end" role="status" tabindex="-1" hidden>
+  <strong>Os sete erros foram identificados!</strong>
+  <p>Você reconheceu todos os sete pontos de atenção. Revise as explicações e compare os cuidados necessários com o procedimento correto. A conclusão é somente formativa, sem nota oficial do Moodle.</p>
+  <div id="review" class="review" aria-label="Resumo dos sete problemas e suas explicações"></div>
+ </div>
+ <div id="reset-confirm" class="confirm" role="group" aria-label="Confirmar reinício da atividade" hidden>
+  <p>Recomeçar remove os sete erros marcados, os objetos inspecionados e as dicas consultadas. Deseja continuar?</p>
+  <div class="controls"><button id="confirm-reset" type="button" class="btn">Confirmar reinício</button><button id="cancel-reset" type="button" class="btn secondary">Cancelar</button></div>
+ </div>
+</section>
+<aside class="panel" aria-labelledby="guide-heading">
+ <h2 id="guide-heading">Inspeção alternativa por objetos</h2>
+ <p class="note">A lista inclui objetos seguros e os objetos que contêm os sete problemas. Use Tab e Enter/Espaço para inspecionar. A mesma validação é usada na imagem e aqui; uma região correta só conta uma vez.</p>
+ <div id="inspection" class="inspection" role="group" aria-label="Lista acessível de objetos e setores para inspecionar"></div>
+ <div class="info"><strong>Como funciona?</strong>Escolha um objeto para verificar seu estado, ou toque na cena. Acertos ficam marcados; repetir um acerto permite reler a explicação sem ganhar outro ponto. A dica indica um setor mais amplo, sem identificar automaticamente o erro.</div>
+ <h2 style="margin-top:18px">Problemas já identificados</h2>
+ <div id="found-list" class="found-list" aria-label="Lista de problemas encontrados"><p class="note">Nenhum problema identificado até agora.</p></div>
+ <h2 style="margin-top:18px">Critérios de inspeção</h2>
+ <ol class="rules">
+  <li>Procure problemas de contaminação cruzada, armazenamento, fogo, facas, eletricidade e organização do espaço de preparo.</li>
+  <li>Marque a região suspeita na imagem ou selecione seu objeto na lista.</li>
+  <li>Leia a explicação de cada problema e continue até encontrar todos os sete.</li>
+  <li>Se precisar, use a dica de setor. Ela não registra erros automaticamente.</li>
+  <li>É possível ampliar e rolar a cena sem alterar os pontos já identificados.</li>
+ </ol>
+ <p class="note">Esta é uma cena didática fictícia. As normas sanitárias aplicáveis, os procedimentos e a avaliação de riscos do estabelecimento prevalecem.</p>
+</aside></div>
+<p class="note">Imagem utilizada: uma ilustração SVG original de cozinha profissional, incorporada neste arquivo e sem dependências externas. Não são usados áudio, fontes remotas, CDN ou serviços de terceiros. O gabarito no navegador não equivale a avaliação acadêmica oficial.</p>
+</main><script>(function sevenErrorsGame(){
+"use strict";
+const DATA={"type":"seven_errors","title":"Jogo dos sete erros - Segurança na cozinha profissional","image":{"src":"#kitchen-scene","alt":"Cena ilustrada de uma cozinha profissional com prateleira de alimentos, trabalhador de touca, tábua, faca, fogão, panela, exaustor, pia, equipamentos elétricos e piso, a ser inspecionada."},"settings":{"expectedCount":7,"maxHints":7,"zoomLevels":[1,1.5,2]},"errors":[{"id":"e-saneante","x":0.125,"y":0.331,"radius":0.053,"object":"Borrifador ao lado dos ingredientes","sector":"Prateleira esquerda da cozinha","hintRegion":{"x":0.04,"y":0.22,"w":0.21,"h":0.23},"label":"Produto de limpeza guardado com alimentos","explanation":"Produtos de limpeza devem ficar identificados e separados dos alimentos e utensílios de preparo, reduzindo o risco de contaminação química."},{"id":"e-tabua","x":0.356,"y":0.624,"radius":0.057,"object":"Tábua com frango cru e vegetais","sector":"Centro da bancada de preparo","hintRegion":{"x":0.27,"y":0.52,"w":0.19,"h":0.2},"label":"Frango cru e vegetais prontos na mesma tábua","explanation":"Carnes cruas podem transferir microrganismos a vegetais consumidos sem cocção. Separe tábuas e utensílios e higienize superfícies entre etapas."},{"id":"e-faca","x":0.492,"y":0.7,"radius":0.051,"object":"Faca projetada na borda da bancada","sector":"Borda direita da bancada de preparo","hintRegion":{"x":0.43,"y":0.61,"w":0.12,"h":0.18},"label":"Lâmina de faca projetada para a circulação","explanation":"Facas não devem ficar com a lâmina para fora da bancada ou em locais de passagem. Armazene-as com segurança para prevenir cortes."},{"id":"e-panela","x":0.763,"y":0.455,"radius":0.052,"object":"Cabo de panela voltado para fora","sector":"Parte direita do fogão","hintRegion":{"x":0.69,"y":0.37,"w":0.15,"h":0.2},"label":"Cabo da panela apontado para a circulação","explanation":"Cabos de panelas expostos podem ser esbarrados e provocar derramamento de líquidos ou alimentos quentes. Direcione-os para uma posição segura."},{"id":"e-pano","x":0.584,"y":0.549,"radius":0.051,"object":"Pano de prato perto do queimador","sector":"Parte esquerda do fogão","hintRegion":{"x":0.54,"y":0.47,"w":0.12,"h":0.2},"label":"Pano de prato próximo à chama","explanation":"Tecidos podem incendiar ao encostar em chamas ou queimadores quentes. Mantenha panos e materiais combustíveis afastados da zona de cocção."},{"id":"e-eletricidade","x":0.914,"y":0.567,"radius":0.052,"object":"Tomada e cabo ao lado da torneira","sector":"Parede e bancada da pia, à direita","hintRegion":{"x":0.85,"y":0.46,"w":0.14,"h":0.23},"label":"Conexão elétrica próxima da água","explanation":"Cabos e tomadas expostos a respingos ou umidade elevam o risco de choque e falha elétrica; localização e proteção devem seguir normas e avaliação técnica."},{"id":"e-piso","x":0.691,"y":0.882,"radius":0.07,"object":"Poça de água no piso de passagem","sector":"Piso em frente ao fogão e à pia","hintRegion":{"x":0.59,"y":0.78,"w":0.22,"h":0.2},"label":"Água derramada no piso sem sinalização","explanation":"Um piso molhado deve ser sinalizado e limpo prontamente, com medidas para evitar escorregamentos e contaminação cruzada."}],"decoys":[{"id":"s-coifa","object":"Exaustor instalado sobre o fogão","sector":"Parede superior central","explanation":"O exaustor está posicionado sobre a cocção; sua operação e manutenção devem acompanhar os procedimentos da cozinha."},{"id":"s-touca","object":"Touca do profissional de cozinha","sector":"Atrás da bancada","explanation":"O cabelo está coberto, reduzindo a possibilidade de fios caírem nos alimentos."},{"id":"s-extintor","object":"Extintor identificado","sector":"Parede esquerda","explanation":"O extintor está visível e identificado, devendo ter tipo e posicionamento adequados ao plano de prevenção do estabelecimento."},{"id":"s-lixeira","object":"Lixeira com tampa e pedal","sector":"Piso esquerdo","explanation":"A lixeira possui tampa e pedal, favorecendo o descarte sem contato direto das mãos com a tampa."},{"id":"s-sabonete","object":"Dispenser de sabonete na pia","sector":"Parte esquerda da pia","explanation":"Há um dispenser de sabonete acessível para a higienização correta das mãos."},{"id":"s-termometro","object":"Termômetro de alimentos no suporte","sector":"Parede acima da bancada","explanation":"O termômetro está guardado em suporte e pode ser usado no controle de temperaturas conforme o procedimento de preparo."}]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id);
+const controller=new AbortController(),bridge=window.MoodleMCP?.progress;
+const progress=bridge&&typeof bridge.load==="function"&&typeof bridge.save==="function"?bridge:null;
+const storageKey="sevenErrorsKitchenSafetyV1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,saveQueue=Promise.resolve(),saveStamp=0,zoom=1;
+
+// Pure rules. All hit tests use normalized coordinates, never CSS display pixels.
+function errorById(data,id){return data.errors.find(e=>e.id===id)||null;}
+function decoyById(data,id){return data.decoys.find(e=>e.id===id)||null;}
+function distance(a,b){return Math.hypot(a.x-b.x,a.y-b.y);}
+function validRegion(r,e){
+ return r&&["x","y","w","h"].every(k=>typeof r[k]==="number"&&Number.isFinite(r[k]))&&r.x>=0&&r.y>=0&&r.w>0&&r.h>0&&r.x+r.w<=1&&r.y+r.h<=1&&e.x>=r.x&&e.x<=r.x+r.w&&e.y>=r.y&&e.y<=r.y+r.h;
+}
+function validate(data){
+ if(!data||data.type!=="seven_errors"||typeof data.title!=="string"||!data.title.trim()||!data.image||data.image.src!=="#kitchen-scene"||typeof data.image.alt!=="string"||!data.image.alt.trim()||!data.settings||data.settings.expectedCount!==7||!Number.isInteger(data.settings.maxHints)||data.settings.maxHints<1||data.settings.maxHints>30||!Array.isArray(data.settings.zoomLevels)||data.settings.zoomLevels.length<2||data.settings.zoomLevels.length>5||data.settings.zoomLevels[0]!==1||data.settings.zoomLevels.some((x,i)=>!Number.isFinite(x)||x<1||x>4||(i&&x<=data.settings.zoomLevels[i-1]))||!Array.isArray(data.errors)||data.errors.length!==7||data.errors.length!==data.settings.expectedCount||!Array.isArray(data.decoys)||data.decoys.length<2||data.decoys.length>15)return false;
+ const ids=new Set(),positions=[];
+ for(const e of data.errors){
+  if(!e||typeof e.id!=="string"||!/^[a-z0-9-]+$/.test(e.id)||ids.has(e.id)||!["object","sector","label","explanation"].every(k=>typeof e[k]==="string"&&e[k].trim().length>=4)||!Number.isFinite(e.x)||!Number.isFinite(e.y)||!Number.isFinite(e.radius)||e.x<0||e.x>1||e.y<0||e.y>1||e.radius<.018||e.radius>.12||e.x-e.radius<0||e.x+e.radius>1||e.y-e.radius<0||e.y+e.radius>1||!validRegion(e.hintRegion,e)||positions.some(x=>distance(x,e)<.018))return false;
+  ids.add(e.id);positions.push(e);
+ }
+ for(const d of data.decoys){
+  if(!d||typeof d.id!=="string"||!/^[a-z0-9-]+$/.test(d.id)||ids.has(d.id)||!["object","sector","explanation"].every(k=>typeof d[k]==="string"&&d[k].trim().length>=4))return false;
+  ids.add(d.id);
+ }
+ return true;
+}
+function toNormalized(clientX,clientY,rect){
+ if(!rect||!Number.isFinite(clientX)||!Number.isFinite(clientY)||!Number.isFinite(rect.left)||!Number.isFinite(rect.top)||!Number.isFinite(rect.width)||!Number.isFinite(rect.height)||rect.width<=0||rect.height<=0)return null;
+ const x=(clientX-rect.left)/rect.width,y=(clientY-rect.top)/rect.height;
+ if(x<0||x>1||y<0||y>1)return null;
+ return {x,y};
+}
+function findRegion(data,state,p){
+ if(!p||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>1||p.y<0||p.y>1)return {kind:"none"};
+ const options=data.errors.map(e=>({id:e.id,d:distance(e,p),r:e.radius})).filter(x=>x.d<=x.r).sort((a,b)=>a.d-b.d);
+ if(!options.length)return {kind:"none"};
+ const nearest=options[0];
+ // A repeat at the discovered center is idempotent even when circles overlap.
+ if(state.found.includes(nearest.id)&&nearest.d<=nearest.r*.3)return {kind:"already",id:nearest.id};
+ const available=options.find(x=>!state.found.includes(x.id));
+ return available?{kind:"error",id:available.id}:{kind:"already",id:nearest.id};
+}
+function initialState(){return {found:[],tried:[],hints:0,highlight:null,complete:false};}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Array.isArray(s.found)||s.found.length>7||new Set(s.found).size!==s.found.length||s.found.some(id=>!errorById(data,id))||!Array.isArray(s.tried)||s.tried.length>data.decoys.length||new Set(s.tried).size!==s.tried.length||s.tried.some(id=>!decoyById(data,id))||!Number.isInteger(s.hints)||s.hints<0||s.hints>data.settings.maxHints||!(s.highlight===null||typeof s.highlight==="string"&&!!errorById(data,s.highlight)&&!s.found.includes(s.highlight))||typeof s.complete!=="boolean"||s.complete!==(s.found.length===7))return false;
+ if(s.complete&&s.highlight!==null)return false;
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(),changed:true,persist:true,kind:"neutral",message:"Inspeção reiniciada. Todos os sete problemas estão novamente disponíveis."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"Estado inválido. Nenhum resultado foi alterado."};
+ if(action?.type==="hint"){
+  if(s.complete)return {state:s,changed:false,kind:"good",message:"Todos os sete erros já foram encontrados."};
+  if(s.hints>=data.settings.maxHints)return {state:s,changed:false,kind:"neutral",message:"Você já consultou todas as dicas disponíveis."};
+  const pending=data.errors.filter(e=>!s.found.includes(e.id)),next=pending[s.hints%pending.length];
+  const result={...s,hints:s.hints+1,highlight:next.id};
+  return {state:result,changed:true,persist:true,kind:"neutral",message:"Dica "+result.hints+": inspecione "+next.sector+". O local foi realçado, mas nenhum erro foi registrado automaticamente."};
+ }
+ if(action?.type==="inspect"){
+  const id=action.id,e=errorById(data,id),d=decoyById(data,id);
+  if(e){
+   if(s.found.includes(id))return {state:s,changed:false,kind:"good",message:"Já identificado: "+e.label+". "+e.explanation};
+   if(s.complete)return {state:s,changed:false,kind:"neutral",message:"Inspeção concluída. Consulte o resumo."};
+   const found=[...s.found,id],complete=found.length===7;
+   const next={...s,found,highlight:s.highlight===id||complete?null:s.highlight,complete};
+   return {state:next,changed:true,persist:true,kind:"good",message:"Problema "+found.length+" de 7 identificado: "+e.label+". "+e.explanation+(complete?" Você concluiu a inspeção.":"")};
+  }
+  if(d){
+   if(s.complete)return {state:s,changed:false,kind:"neutral",message:"Todos os problemas já foram encontrados."};
+   if(s.tried.includes(id))return {state:s,changed:false,kind:"neutral",message:"Objeto já inspecionado: "+d.explanation};
+   return {state:{...s,tried:[...s.tried,id]},changed:true,persist:true,kind:"neutral",message:"Este objeto não corresponde a um dos sete erros: "+d.explanation};
+  }
+  return {state:s,changed:false,kind:"warn",message:"Objeto não encontrado na cena."};
+ }
+ if(action?.type==="tap"){
+  const region=findRegion(data,s,action.point);
+  if(region.kind==="none")return {state:s,changed:false,kind:"neutral",message:"Nenhuma das sete situações está nesta área. Observe outros objetos ou use a lista de inspeção."};
+  if(region.kind==="already")return transition(s,{type:"inspect",id:region.id},data);
+  return transition(s,{type:"inspect",id:region.id},data);
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Inspecione os objetos da cena ou peça uma dica."};
+}
+// End pure rules.
+
+function node(tag,cls,text){const el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el;}
+function getState(){return {found:[...state.found],tried:[...state.tried],hints:state.hints,highlight:state.highlight,complete:state.complete};}
+function restoreState(saved){
+ if(!validState(saved,DATA))return false;
+ state={found:[...saved.found],tried:[...saved.tried],hints:saved.hints,highlight:saved.highlight,complete:saved.complete};
+ render();return true;
+}
+function announce(message,kind="neutral"){
+ $("feedback").className="feedback"+(kind==="good"?" good":kind==="warn"?" warn":"");
+ $("feedback-heading").textContent=kind==="good"?"Problema identificado":kind==="warn"?"Revise a seleção":"Orientação";
+ $("feedback-message").textContent=message;
+}
+function buildOptions(){
+ const group=$("inspection"),objects=[...DATA.errors,...DATA.decoys].sort((a,b)=>a.object.localeCompare(b.object,"pt-BR"));
+ group.replaceChildren();
+ for(const x of objects){
+  const b=node("button","inspect-btn");b.type="button";b.dataset.inspect=x.id;
+  b.setAttribute("aria-pressed","false");
+  b.setAttribute("aria-label","Inspecionar "+x.object+", "+x.sector);
+  const name=node("span","",x.object),place=node("span","where",x.sector),status=node("span","status","");
+  b.append(name,place,status);group.append(b);
+ }
+}
+function renderOptions(){
+ for(const b of $("inspection").querySelectorAll("button[data-inspect]")){
+  const id=b.dataset.inspect,discovered=state.found.includes(id),safe=state.tried.includes(id);
+  b.setAttribute("aria-pressed",String(discovered));
+  b.querySelector(".status").textContent=discovered?"Erro identificado · tocar para reler":safe?"Objeto inspecionado · não é um erro":"Inspecionar objeto";
+  b.setAttribute("aria-label","Inspecionar "+(errorById(DATA,id)||decoyById(DATA,id)).object+": "+(discovered?"problema encontrado, descrição disponível":safe?"objeto já inspecionado":"ainda não inspecionado"));
+ }
+}
+function renderMarkers(){
+ const layer=$("markers");layer.replaceChildren();
+ for(let i=0;i<state.found.length;i++){
+  const e=errorById(DATA,state.found[i]),dot=node("span","dot","✓");
+  dot.style.setProperty("--x",(100*e.x)+"%");dot.style.setProperty("--y",(100*e.y)+"%");
+  dot.setAttribute("aria-hidden","true");layer.append(dot);
+ }
+ if(state.highlight){
+  const e=errorById(DATA,state.highlight),r=e.hintRegion,h=node("div","hint-area");
+  h.style.setProperty("--x",(r.x*100)+"%");h.style.setProperty("--y",(r.y*100)+"%");
+  h.style.setProperty("--w",(r.w*100)+"%");h.style.setProperty("--h",(r.h*100)+"%");
+  h.setAttribute("aria-hidden","true");layer.append(h);
+ }
+}
+function renderFound(){
+ const list=$("found-list");list.replaceChildren();
+ if(!state.found.length){list.append(node("p","note","Nenhum problema identificado até agora."));return;}
+ for(let i=0;i<state.found.length;i++){
+  const e=errorById(DATA,state.found[i]),item=node("article","found-item");
+  item.append(node("strong","",(i+1)+". "+e.label),node("p","",e.explanation));
+  list.append(item);
+ }
+}
+function renderReview(){
+ const list=$("review");list.replaceChildren();
+ if(!state.complete)return;
+ DATA.errors.forEach((e,i)=>{
+  const item=node("article","review-card");
+  item.append(node("strong","",(i+1)+". "+e.label),node("p","",e.explanation));
+  list.append(item);
+ });
+}
+function render(){
+ if(disposed||!state)return;
+ $("found-count").textContent=state.found.length+" / 7";
+ $("hints-count").textContent=String(state.hints);
+ $("checked-count").textContent=String(state.tried.length);
+ $("progress").setAttribute("aria-valuenow",String(state.found.length));
+ $("progress-bar").style.width=(100*state.found.length/7)+"%";
+ $("hint").disabled=!ready||state.complete||state.hints>=DATA.settings.maxHints;
+ $("reset").disabled=!ready;
+ $("completion").hidden=!state.complete;
+ $("inspection-status").textContent=state.complete?"Inspeção concluída":"Procure sete situações";
+ $("zoom-label").textContent=Math.round(zoom*100)+"%";
+ $("artwork").style.width=(zoom*100)+"%";
+ renderOptions();renderMarkers();renderFound();renderReview();
+}
+function changeZoom(delta){
+ const levels=DATA.settings.zoomLevels,at=levels.indexOf(zoom),next=Math.max(0,Math.min(levels.length-1,at+delta));
+ if(next===at)return;
+ zoom=levels[next];render();
+ $("zoom-in").disabled=next===levels.length-1;$("zoom-out").disabled=next===0;
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++saveStamp;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||stamp!==saveStamp)return;
+  const other=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const data={...other,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(data)).length>12288){announce("O progresso supera 12 KiB e não foi sincronizado.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/seven-errors-kitchen-safety",data});
+ }).catch(async()=>{
+  if(disposed)return;saveStamp++;
+  try{remote=await progress.load();
+   if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))announce("Outra sessão atualizou o progresso. Recuperei a versão salva mais recente.","warn");
+   else announce("Não foi possível reconciliar o progresso. Continue sem sobrescrever outra sessão.","warn");
+  }catch(_){remote=null;announce("A ponte Moodle está indisponível. O jogo funciona sem sincronização.","warn");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const result=transition(state,action,DATA);
+ if(!result.changed){announce(result.message,result.kind);return;}
+ state=result.state;modified=true;render();if(result.persist)save();
+ announce(result.message,result.kind);
+ if(state.complete&&action.type!=="restart")$("completion").focus({preventScroll:true});
+}
+function askRestart(){
+ if(state.found.length||state.tried.length||state.hints){
+  $("reset-confirm").hidden=false;$("confirm-reset").focus({preventScroll:true});
+  announce("Recomeçar removerá as identificações e dicas. Confirme ou cancele.","warn");
+ }else handleAction({type:"restart"});
+}
+function destroy(){disposed=true;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)||!document.getElementById(data.image.src.slice(1))){
+  announce("Cena ou configuração inválida. A atividade exige exatamente sete regiões identificáveis e uma ilustração disponível.","warn");return;
+ }
+ state=initialState();buildOptions();render();
+ if(progress)try{
+  const saved=await progress.load();if(disposed)return;remote=saved;
+  if(!modified&&saved.data?.[storageKey]&&restoreState(saved.data[storageKey]))announce("Progresso restaurado. Continue a inspeção no ponto em que parou.");
+  else announce("Comece a inspeção visual ou escolha um objeto na lista textual.");
+ }catch(_){announce("Não foi possível sincronizar com Moodle. A atividade continua funcional.");}
+ else announce("Jogo independente ativo; sem conexão Moodle para salvar o progresso automaticamente.");
+ if(disposed)return;ready=true;render();
+}
+$("scene-viewport").addEventListener("click",event=>{
+ if(!ready||disposed)return;
+ const svg=$("kitchen-scene"),rect=svg.getBoundingClientRect();
+ const point=toNormalized(event.clientX,event.clientY,rect);
+ if(!point){announce("Toque fora da área ilustrada: nenhuma tentativa foi contabilizada.");return;}
+ handleAction({type:"tap",point});
+},{signal:controller.signal});
+root.addEventListener("click",event=>{
+ const b=event.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.inspect){handleAction({type:"inspect",id:b.dataset.inspect});return;}
+ if(b.id==="hint"){handleAction({type:"hint"});return;}
+ if(b.id==="zoom-in"){changeZoom(1);return;}
+ if(b.id==="zoom-out"){changeZoom(-1);return;}
+ if(b.id==="reset"){askRestart();return;}
+ if(b.id==="confirm-reset"){$("reset-confirm").hidden=true;handleAction({type:"restart"});$("reset").focus({preventScroll:true});return;}
+ if(b.id==="cancel-reset"){$("reset-confirm").hidden=true;announce("Reinício cancelado. As identificações foram preservadas.");$("reset").focus({preventScroll:true});}
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>
