@@ -30,7 +30,6 @@ use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\writer;
-use question_engine;
 use stdClass;
 
 /**
@@ -52,6 +51,7 @@ final class provider implements
         $collection->add_database_table("mcp_state", [
             "userid" => "privacy:metadata:mcp_state:userid",
             "statejson" => "privacy:metadata:mcp_state:statejson",
+            "userdatajson" => "privacy:metadata:mcp_state:userdatajson",
         ], "privacy:metadata:mcp_state");
         $collection->add_database_table("mcp_tracking", [
             "userid" => "privacy:metadata:mcp_tracking:userid",
@@ -124,10 +124,6 @@ final class provider implements
         if (!$cm) {
             return;
         }
-        require_once($CFG->dirroot . "/question/engine/lib.php");
-        foreach ($DB->get_records("mcp_attempts", ["mcpid" => $cm->instance]) as $attempt) {
-            question_engine::delete_questions_usage_by_activity((int)$attempt->qubaid);
-        }
         $DB->delete_records("mcp_attempts", ["mcpid" => $cm->instance]);
         $DB->delete_records("mcp_state", ["mcpid" => $cm->instance]);
         $DB->delete_records("mcp_tracking", ["mcpid" => $cm->instance]);
@@ -139,16 +135,11 @@ final class provider implements
      */
     public static function delete_data_for_user(approved_contextlist $contextlist): void {
         global $DB, $CFG;
-        require_once($CFG->dirroot . "/question/engine/lib.php");
         $userid = (int)$contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
             $cm = self::module($context);
             if (!$cm) {
                 continue;
-            }
-            foreach ($DB->get_records("mcp_attempts", [
-                    "mcpid" => $cm->instance, "userid" => $userid]) as $attempt) {
-                question_engine::delete_questions_usage_by_activity((int)$attempt->qubaid);
             }
             $DB->delete_records("mcp_attempts", ["mcpid" => $cm->instance, "userid" => $userid]);
             $DB->delete_records("mcp_state", ["mcpid" => $cm->instance, "userid" => $userid]);

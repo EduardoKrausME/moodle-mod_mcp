@@ -48,19 +48,39 @@ All modes reuse the sandboxed HTML runtime and the
 not built-in templates or a claim that unsupported reporting, execution or
 grading APIs are available.
 
-## Native question bank and grades
+## JSON questions and grades
 
-MCP tools create native multiple-choice questions using the local_mcp question-bank service, returning their real question IDs and versions. Existing ready true/false and short-answer questions can also be attached. The mod_mcp slot table pins concrete question IDs and versions; replacing a question marks only the older slot link inactive for future attempts, preserving prior Question Engine attempts.
+The activity has nullable `activitytype` (string) and `informationjson` (JSON stored as
+database TEXT for cross-database portability) fields. ChatGPT or Claude saves these
+through `mcp_save_information` or the manager's JSON editor. `type=quiz`
+expects a self-contained list of questions, options and server-only answer keys.
+For surveys use `type=survey` and a free-form information object. If both fields
+are null, ordinary HTML pages work unchanged.
 
-Student questions are rendered in the trusted Moodle assessment area separately from the sandboxed HTML, and submission goes to the server. The module uses question_engine for attempt state, persistence and marking, and grade_update for the native gradebook. One attempt per student is currently supported. Teachers may configure all attached questions or a random subset without replacement and optionally shuffle presentation order. The server freezes the selection in the native question usage when an attempt starts. Previously started attempts are unaffected by subsequent configuration changes. The MCP tool `mcp_configure_questions` performs optimistic-concurrency checks and uses the same explicit confirmation workflow as other write tools. The JavaScript in authored HTML never supplies grades, answers or gabaritos. For advanced question behavior, grade review and manual grading, use Moodle's existing mod_quiz.
+The existing `mcp_configure_questions` authoring tool, `attempt.get/start/finish`
+and `questions.get/submit` SDK operations keep their names. They draw from the
+JSON pool using all/random selection and optional shuffle, with a frozen
+server-side question snapshot per student attempt. No Moodle Question Bank or
+Question Engine tables are used. The trusted server marks answers and posts
+grades to Moodle gradebook; the iframe and offline package never receive the answer key.
+
+Student progress stores `statejson` and a separate `userdatajson`, including
+quiz and survey answers, protected by the same per-user optimistic version.
+On mobile, downloading a graded quiz while connected preallocates its server-side
+question selection and caches only safe questions and options; responses are
+queued locally until synchronization, at which point the server grades them.
+An offline package must be downloaded in advance to take a graded quiz offline.
+
+No `db/upgrade.php` migration is provided; this storage format requires a fresh
+plugin installation. Existing attempts from the Question Engine are not migrated.
 
 ## MCP tools
 
-mcp_create_activity, mcp_get_activity, mcp_save_content, mcp_create_question, mcp_attach_question, mcp_upload_asset and mcp_publish. All write tools use local_mcp confirmation and native capability enforcement. Reconnect or refresh tool discovery after deployment.
+mcp_create_activity, mcp_get_activity, mcp_save_content, mcp_save_information, mcp_configure_questions, mcp_upload_asset and mcp_publish. All write tools use local_mcp confirmation and native capability enforcement. Reconnect or refresh tool discovery after deployment.
 
 ## Backup, privacy and testing
 
-Backup/restore includes authored HTML revisions, files and slots; student attempts are intentionally not restored by this initial version. Question references are restored only when the destination backup provides native question ID mappings. Moodle Privacy API exports and removes attempt data and anonymizes HTML revision authorship.
+Backup/restore includes authored HTML revisions, files, type and information JSON; student attempts are not restored by content-only backups. Moodle Privacy API exports and removes attempt data and anonymizes HTML revision authorship.
 
 Run the existing GitHub Actions Moodle 4.5/5.x matrix, PHP lint, PHPCS, PHPUnit and Behat before deploying. Review the current CI status; this initial implementation is not production-certified.
 

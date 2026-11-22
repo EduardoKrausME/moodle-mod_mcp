@@ -23,15 +23,15 @@ unrelated page.
 | `course.getNavigation()` | None | `{previous, next}`; each entry is an activity object or `null` |
 | `completion.get()` | None | `{enabled, mode, state, completed, canrequest}` from native Moodle completion |
 | `completion.complete()` | None | Requests completion only when allowed; requires `mod/mcp:submit` |
-| `progress.load()` | None | `{version, location, data, completed}`; generic per-user resume data |
-| `progress.save(state)` | `{version, location, data}` | Saves the generic state; returns updated snapshot; requires submit |
+| `progress.load()` | None | `{version, location, data, userdata, completed}`; generic progress and separate student data |
+| `progress.save(state)` | `{version, location, data, userdata?}` | Saves the generic state; returns updated snapshot; requires submit |
 | `progress.getStatus()` | None | `{version, location, percent, currentstep, totalsteps, status, moodlecompleted}` |
 | `progress.saveStatus(status)` | `{version, location?, percent, currentstep?, totalsteps?}` | Saves structured position, keeps unrelated generic data and returns updated status; requires submit |
 | `attempt.get()` | None | `{hasquestions, status, canstart, canfinish}`; submit capability required |
-| `attempt.start()` | None | Starts the single native attempt, selecting its server-controlled question set |
-| `attempt.finish()` | None | Finalizes the native attempt through Question Engine |
-| `questions.get()` | None | `{attempt, questions}`; safe native question markup for an active attempt |
-| `questions.submit(responses, finish)` | `responses` is a map of native question fields to string values; `finish` optional boolean | Submits to Question Engine; does **not** grade in HTML |
+| `attempt.start()` | None | Starts one JSON question attempt with server-side all/random/shuffle selection |
+| `attempt.finish()` | None | Server-grades the saved JSON answers and records a Moodle grade |
+| `questions.get()` | None | `{attempt, questions}`; safe structured JSON questions and HTML fallback |
+| `questions.submit(responses, finish)` | `responses` maps question IDs to option IDs/text/arrays; `finish` optional boolean | Saves JSON answers and, when finished, grades on the server |
 | `tracking.record(event)` | `{type, action, object, result}` | Records one bounded interaction, progress or navigation event |
 | `tracking.summary()` | None | `{summary: [{type, action, total, participants}]}`; manage capability required |
 
@@ -94,19 +94,56 @@ current generic data while enforcing the same version check. Do not write the
 reserved `_modmcpstatus` property directly. The full JSON state is limited to
 12 KiB. Invalid values and conflicting versions reject the Promise.
 
-### Permissions, assessments and telemetry
+### JSON metadata, quiz selection and privacy
 
-`completion.complete()` only works under configured native/manual/custom
-completion rules. For activities with native questions, a required attempt
-must finish before custom interactive completion is accepted.
-`questions.get()` returns only question rendering appropriate for supported
-native types; complex question behavior belongs in Moodle's trusted form.
-Teachers manage grades and edits through native Moodle APIs, not browser HTML.
+`activity.getContext()` additionally returns `type` and `information`.
+`type` is a nullable free-form identifier such as `quiz`, `survey`,
+`timeline`, `case` or `simulation`; `information` is nullable JSON.
 
-Tracking accepts types `interaction`, `progress`, `navigation`, action
-names matching `[a-z][a-z0-9_]*` (max 64 chars), object IDs up to 255
-bytes, result JSON up to 4 KiB, and up to 2,000 events per student/activity.
-`tracking.summary()` exposes aggregate counts to activity managers only.
+Example private author JSON for `type=quiz` (never put the answer key in HTML):
+
+```json
+{
+  "selection": "random",
+  "count": 2,
+  "shuffle": true,
+  "questions": [
+    {"id":"q1","text":"2 + 2?","type":"single","points":1,
+      "options":[{"id":"a","text":"3"},{"id":"b","text":"4"}],"answer":"b"},
+    {"id":"q2","text":"Capital of France?","type":"text","points":1,"answer":"Paris"},
+    {"id":"q3","text":"Prime numbers?","type":"multiple","points":2,
+      "options":[{"id":"a","text":"2"},{"id":"b","text":"4"},{"id":"c","text":"5"}],
+      "answer":["a","c"]}
+  ]
+}
+```
+
+`mcp_save_information` saves this document after confirmation; `mcp_configure_questions`
+keeps its original arguments but updates `selection`, `count`, `shuffle`
+inside the JSON. The published quiz's full question definitions are copied
+into a private attempt at start. Neither the student SDK nor
+`mod_mcp_get_mobile_content` exposes `answer` or `points`.
+
+`questions.get()` returns structured questions with `id`, `text`,
+`type`, `options`, and a server-rendered `html` fallback while an attempt is
+in progress. `questions.submit({q1: "b", q3: ["a","c"]}, false)` saves the
+answers; `finish=true` grades on the server. `attempt.finish()` grades saved
+answers. Only one attempt is supported by default. JSON questions never go
+through the Moodle Question Bank.
+
+The versioned `progress.load()` snapshot now includes a separate `userdata`
+object; `progress.save({version, location, data, userdata})` persists it
+independently of the generic `data` object. Surveys should keep their answers
+inside `userdata.survey`. JSON quiz answers also appear in `userdata.quiz`.
+This is per-user data and not an anonymous survey.
+
+On mobile, the server preallocates the random selection during the user's
+explicit download while online; the app stores only sanitized questions, then
+queues offline submissions for authenticated synchronization. The browser
+never grades itself, and the correct answer key is never downloaded.
+
+Tracking accepts `interaction`, `progress` or `navigation` events with
+bounded payloads; `tracking.summary()` is manager-only.
 
 ## 2. Moodle web-service functions
 
@@ -143,12 +180,11 @@ invent parameters or invoke writing tools without their required confirmation.
 | `mcp_create_activity` | Create an activity instance |
 | `mcp_get_activity` | Read the instance, configuration and revisions |
 | `mcp_save_content` | Save a new immutable HTML draft |
-| `mcp_create_question` | Create a supported native question |
-| `mcp_attach_question` | Attach an actual native question ID/version |
-| `mcp_configure_questions` | Choose all questions or a random subset and optionally shuffle order |
+| `mcp_save_information` | Set nullable activity type and JSON information, including quiz keys |
+| `mcp_configure_questions` | Set all/random/shuffle inside the quiz information JSON |
 | `mcp_upload_asset` | Add an authorised activity asset |
 | `mcp_publish` | Publish an approved draft |
 
 These are *authoring* tools and not methods on `window.MoodleMCP`.
-Question selection, grading, native attempt state, visibility and publication
-remain under Moodle server control.
+Question selection, grading, JSON attempt state, visibility and publication remain
+under Moodle server control.
