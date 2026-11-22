@@ -256,3 +256,111 @@ test("parent bridge resizes only its own iframe on valid measurements", () => {
     events.load();
     assert.equal(outgoing.at(-1).type, "measure");
 });
+
+
+test("sandbox SDK applies only the trusted parent's theme variables", () => {
+    const listeners = {};
+    const properties = new Map();
+    const attributes = new Map();
+    const parent = {postMessage: () => {}};
+    const declaration = {
+        setProperty: (name, value) => properties.set(name, value),
+        removeProperty: (name) => properties.delete(name)
+    };
+    const document = {
+        readyState: "loading",
+        documentElement: {
+            getAttribute: (name) => attributes.get(name) ?? null,
+            setAttribute: (name, value) => attributes.set(name, value),
+            removeAttribute: (name) => attributes.delete(name)
+        },
+        getElementById: (id) => id === "mod-mcp-theme-vars" ?
+            {sheet: {cssRules: [{style: declaration}]}} : null,
+        addEventListener: () => {}
+    };
+    const window = {
+        parent, document,
+        addEventListener: (name, callback) => {listeners[name] = callback;}
+    };
+    vm.runInNewContext(sdk, {
+        window, setTimeout, clearTimeout, Map, Set, Math, Object, Error, String, Number
+    });
+    const message = {channel: "mod_mcp", type: "theme", mode: "dark", variables: {
+        "--bs-primary": "#154f90", "--bs-accent": "rgb(10, 20, 30)",
+        "body{color:red}": "bad"
+    }};
+    listeners.message({source: {}, data: message});
+    assert.equal(properties.size, 0);
+    listeners.message({source: parent, data: message});
+    assert.equal(properties.get("--bs-primary"), "#154f90");
+    assert.equal(properties.get("--bs-accent"), "rgb(10, 20, 30)");
+    assert.equal(properties.size, 2);
+    assert.equal(attributes.get("data-bs-theme"), "dark");
+
+    listeners.message({source: parent, data: {
+        channel: "mod_mcp", type: "theme", mode: "light",
+        variables: {"--bs-secondary": "#eef0f2"}
+    }});
+    assert.equal(properties.has("--bs-primary"), false);
+    assert.equal(properties.get("--bs-secondary"), "#eef0f2");
+    assert.equal(attributes.get("data-bs-theme"), "light");
+    listeners.message({source: parent, data: {
+        channel: "mod_mcp", type: "theme", mode: null, variables: {}
+    }});
+    assert.equal(properties.size, 0);
+    assert.equal(attributes.has("data-bs-theme"), false);
+});
+
+test("parent bridge forwards the computed Moodle theme and refreshes on mode changes", () => {
+    const events = {};
+    const outgoing = [];
+    const observers = [];
+    const child = {postMessage: (message) => outgoing.push(message)};
+    const parent = {
+        mode: "dark",
+        parentElement: null,
+        getAttribute(name) { return name === "data-bs-theme" ? this.mode : null; }
+    };
+    const frame = {
+        contentWindow: child, isConnected: true, style: {height: "650px"},
+        parentElement: parent, addEventListener: () => {}
+    };
+    const computed = {
+        length: 4,
+        item: (i) => ["--bs-primary", "color", "--bs-accent", "--bad"][i],
+        getPropertyValue: (name) => ({
+            "--bs-primary": "#123456",
+            "--bs-accent": "#fedcba",
+            "--bad": "  "
+        })[name] || ""
+    };
+    const window = {
+        addEventListener: (name, cb) => {events[name] = cb;},
+        getComputedStyle: () => computed,
+        MutationObserver: class {
+            constructor(callback) {observers.push(callback);}
+            observe() {}
+        }
+    };
+    const document = {querySelector: () => frame};
+    let api;
+    const define = (dependencies, load) => {api = load({call: () => []});};
+    vm.runInNewContext(bridge, {
+        define, document, window, Set, JSON, Object, Number, Boolean, String
+    });
+    api.init({cmid: 22, preview: false});
+    const first = outgoing.find((message) => message.type === "theme");
+    assert.equal(first.variables["--bs-primary"], "#123456");
+    assert.equal(first.variables["--bs-accent"], "#fedcba");
+    assert.equal(Object.keys(first.variables).length, 2);
+    assert.equal(first.mode, "dark");
+
+    parent.mode = "light";
+    observers[0]();
+    assert.equal(outgoing.at(-1).mode, "light");
+    events.message({source: {}, data: {channel: "mod_mcp", type: "ready"}});
+    assert.equal(outgoing.at(-1).type, "theme");
+    assert.equal(outgoing.at(-1).mode, "light");
+    events.message({source: child, data: {channel: "mod_mcp", type: "ready"}});
+    assert.equal(outgoing.at(-1).type, "theme");
+});

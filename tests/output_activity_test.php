@@ -52,6 +52,8 @@ final class output_activity_test extends advanced_testcase {
         $this->assertLessThan($authoredposition, $sdkposition);
         $this->assertSame(0, strpos($result, "<!doctype html>"));
         $this->assertSame(1, substr_count($result, $script));
+        $this->assertSame(1, substr_count($result, '<style id="mod-mcp-theme-vars">:root{}</style>'));
+        $this->assertLessThan($sdkposition, strpos($result, 'id="mod-mcp-theme-vars"'));
         $this->assertStringNotContainsString('Object.defineProperty(window, "MoodleMCP"', $result);
         $this->assertStringContainsString('<script>window.authored = true;</script>', $result);
     }

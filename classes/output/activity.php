@@ -159,7 +159,10 @@ final class activity {
      */
     public static function inject_sdk(string $content): string {
         $sdkurl = new moodle_url("/mod/mcp/sdk.js");
-        $bootstrap = '<script src="' . $sdkurl->out(false) . '"></script>';
+        // A separate root rule receives the Moodle theme's computed CSS variables via the SDK bridge.
+        // The sandbox cannot inherit variables from its parent document.
+        $bootstrap = '<style id="mod-mcp-theme-vars">:root{}</style>';
+        $bootstrap .= '<script src="' . $sdkurl->out(false) . '"></script>';
         $bootstrap .= "<style>:root{background:transparent!important;}html,body{background:transparent!important;}</style>";
 
         // Preserve the doctype even if the document has no head element.

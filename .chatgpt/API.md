@@ -8,6 +8,13 @@ this file. Implementations live in `sdk.js`, `classes/runtime/api.php`,
 ## 1. Student SDK: window.MoodleMCP
 
 Published HTML receives the `window.MoodleMCP` JavaScript SDK automatically.
+In the Moodle browser, the host bridge also copies the computed CSS custom
+properties from the iframe element into a dedicated `:root` stylesheet in
+the sandbox, including `--bs-primary`, `--bs-secondary`, and theme-specific
+properties when present. The values follow the active theme and its explicit
+light/dark mode; this transfer does not grant DOM access to the parent.
+Use `var(--bs-primary, #fallback)` in authored CSS. Standalone previews and
+mobile hosts without this bridge still need those fallbacks.
 Every operation returns a **Promise**. The document is rendered in a sandboxed
 iframe: it has no Moodle cookies, session key, native gradebook access or direct
 cross-origin access. The parent bridge accepts only allowlisted requests from

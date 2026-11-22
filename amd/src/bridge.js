@@ -30,6 +30,80 @@ define(["core/ajax"], function(Ajax) {
         }
         console.log("[mod_mcp/bridge] Inicializando para cmid:", config.cmid);
 
+
+        /**
+         * The iframe has an opaque origin and cannot inherit CSS variables. Copy the
+         * computed custom properties of the iframe element, which already includes
+         * the actual theme cascade (including variables on enclosing containers).
+         */
+        const sendTheme = () => {
+            if (!frame.isConnected || !frame.contentWindow ||
+                    typeof window.getComputedStyle !== "function") {
+                return;
+            }
+            const computed = window.getComputedStyle(frame);
+            if (!computed) {
+                return;
+            }
+            const variables = {};
+            let count = 0;
+            let total = 0;
+            for (let i = 0; i < computed.length && count < 256; i++) {
+                const name = computed.item(i);
+                if (typeof name !== "string" ||
+                        !/^--[a-zA-Z][a-zA-Z0-9_-]{0,127}$/.test(name)) {
+                    continue;
+                }
+                const value = computed.getPropertyValue(name).trim();
+                if (!value || value.length > 4096 || total + name.length + value.length > 65536) {
+                    continue;
+                }
+                variables[name] = value;
+                total += name.length + value.length;
+                count++;
+            }
+
+            // Support explicit Boost-compatible dark/light selections on the parent page.
+            let mode = null;
+            let ancestor = frame;
+            while (ancestor) {
+                if (typeof ancestor.getAttribute === "function") {
+                    const attribute = ancestor.getAttribute("data-bs-theme");
+                    if (attribute === "light" || attribute === "dark") {
+                        mode = attribute;
+                        break;
+                    }
+                }
+                ancestor = ancestor.parentElement;
+            }
+            frame.contentWindow.postMessage({
+                channel: "mod_mcp", type: "theme", variables: variables, mode: mode
+            }, "*");
+        };
+
+        // Observe only the iframe and its ancestors; changes inside the host page
+        // that cannot influence its inherited variables must not trigger resync.
+        if (typeof window.MutationObserver === "function") {
+            const observer = new window.MutationObserver(sendTheme);
+            let ancestor = frame;
+            while (ancestor) {
+                observer.observe(ancestor, {
+                    attributes: true,
+                    attributeFilter: ["class", "style", "data-bs-theme", "data-theme"]
+                });
+                ancestor = ancestor.parentElement;
+            }
+        }
+        if (typeof window.matchMedia === "function") {
+            const preference = window.matchMedia("(prefers-color-scheme: dark)");
+            if (typeof preference.addEventListener === "function") {
+                preference.addEventListener("change", sendTheme);
+            } else if (typeof preference.addListener === "function") {
+                preference.addListener(sendTheme);
+            }
+        }
+        window.addEventListener("load", sendTheme);
+
         // Request a fresh measurement after the isolated content document finishes loading.
         // A direct contentDocument read would violate the allow-scripts sandbox.
         const requestMeasurement = () => {
@@ -53,6 +127,7 @@ define(["core/ajax"], function(Ajax) {
             if (msg.type === "ready") {
                 console.log("[mod_mcp/bridge] SDK sinalizou ready; solicitando altura.");
                 requestMeasurement();
+                sendTheme();
                 return;
             }
             if (msg.type === "resize") {
@@ -114,8 +189,10 @@ define(["core/ajax"], function(Ajax) {
         frame.addEventListener("load", () => {
             console.log("[mod_mcp/bridge] Evento iframe.load; solicitando altura.");
             requestMeasurement();
+            sendTheme();
         });
         requestMeasurement();
+        sendTheme();
     };
 
     return {init: init};

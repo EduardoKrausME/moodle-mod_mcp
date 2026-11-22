@@ -12,6 +12,60 @@
     const pending = new Map();
     let sequence = 0;
     let requestResize = null;
+    const inheritedThemeProperties = new Set();
+    let originalThemeMode;
+    
+    /**
+     * Set the trusted parent's CSS custom properties on a dedicated stylesheet, not on
+     * the authored document. setProperty() avoids interpreting values as CSS markup.
+     * The parent is checked by WindowProxy because sandboxed iframes have opaque origins.
+     */
+    const applyTheme = function(msg) {
+        const doc = window.document;
+        if (!doc || !doc.documentElement || typeof doc.getElementById !== "function") {
+            return;
+        }
+        const tag = doc.getElementById("mod-mcp-theme-vars");
+        const rule = tag && tag.sheet && tag.sheet.cssRules && tag.sheet.cssRules[0];
+        if (!rule || !rule.style || !msg.variables ||
+                typeof msg.variables !== "object" || Array.isArray(msg.variables)) {
+            return;
+        }
+        const style = rule.style;
+        for (const name of inheritedThemeProperties) {
+            style.removeProperty(name);
+        }
+        inheritedThemeProperties.clear();
+
+        let count = 0;
+        for (const [name, value] of Object.entries(msg.variables)) {
+            if (count >= 256) {
+                break;
+            }
+            if (!/^--[a-zA-Z][a-zA-Z0-9_-]{0,127}$/.test(name) ||
+                    typeof value !== "string" || !value.trim() || value.length > 4096) {
+                continue;
+            }
+            style.setProperty(name, value);
+            inheritedThemeProperties.add(name);
+            count++;
+        }
+
+        const root = doc.documentElement;
+        if (typeof root.getAttribute !== "function" || typeof root.setAttribute !== "function") {
+            return;
+        }
+        if (originalThemeMode === undefined) {
+            originalThemeMode = root.getAttribute("data-bs-theme");
+        }
+        if (msg.mode === "light" || msg.mode === "dark") {
+            root.setAttribute("data-bs-theme", msg.mode);
+        } else if (originalThemeMode === null) {
+            root.removeAttribute("data-bs-theme");
+        } else {
+            root.setAttribute("data-bs-theme", originalThemeMode);
+        }
+    };
 
     window.addEventListener("message", function(event) {
         if (event.source !== window.parent) {
@@ -19,6 +73,10 @@
         }
         const msg = event.data;
         if (!msg || msg.channel !== "mod_mcp") {
+            return;
+        }
+        if (msg.type === "theme") {
+            applyTheme(msg);
             return;
         }
         if (msg.type === "measure") {
