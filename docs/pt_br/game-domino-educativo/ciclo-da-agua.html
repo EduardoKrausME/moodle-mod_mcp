@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dominó educativo - Conexões do Ciclo da Água</title><style>
+:root{color-scheme:light;--bg:#eef5f7;--paper:#ffffff;--ink:#173848;--muted:#627b87;--line:#d3e3e9;--ocean:#126986;--deep:#0e5067;--sky:#e7f4fb;--aqua:#d9f2ee;--mint:#237d69;--mintbg:#e4f7ef;--warn:#915b2d;--warnbg:#fff1e0;--shadow:0 8px 30px #123e540b;font:16px/1.53 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit;cursor:pointer}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #e6a23d;outline-offset:3px}button:disabled{cursor:not-allowed;opacity:.46}
+main{max-width:1180px;margin:auto;padding:30px 20px 46px}.eyebrow{margin:0 0 7px;color:var(--ocean);font-size:11px;letter-spacing:1.5px;font-weight:850;text-transform:uppercase}
+h1{font-size:clamp(29px,4.2vw,43px);line-height:1.14;letter-spacing:-.85px;margin:0 0 10px}.intro{font-size:14px;color:var(--muted);max-width:940px;margin:0 0 18px}
+.metrics{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-bottom:13px}.metric{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:8px 15px;min-width:105px}.metric small{display:block;color:var(--muted);font-size:11px}.metric strong{font-size:20px;font-variant-numeric:tabular-nums}.metrics .note{margin-left:auto}
+.progress{height:9px;background:#d9e8ed;border-radius:20px;overflow:hidden;margin-bottom:17px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#3c9fc3,#43b69e);transition:width .25s}
+.layout{display:grid;grid-template-columns:minmax(0,1.38fr) minmax(265px,.77fr);align-items:start;gap:16px}.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);min-width:0}.panel h2{font-size:18px;margin:0 0 10px}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.topline h2{margin:0}.tag{background:var(--sky);color:var(--deep);padding:7px 11px;border-radius:50px;font-size:11px;font-weight:850}
+.chain-frame{background:linear-gradient(145deg,#e9f4f6,#dcecf0);border:1px solid #c0d9df;border-radius:14px;padding:17px 12px;margin:13px 0 10px}.chain-scroll{overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-gutter:stable;padding:8px 2px;min-height:125px}
+.chain{display:flex;gap:5px;align-items:center;width:max-content;min-width:100%;justify-content:center}
+.domino{display:flex;flex:0 0 auto;border:2px solid #639eab;border-radius:10px;background:#fff;box-shadow:0 2px 8px #13455816;overflow:hidden;min-height:82px;color:var(--ink)}
+.domino .half{width:126px;max-width:42vw;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:5px;text-align:center;padding:10px 9px;overflow-wrap:anywhere}
+.domino .half:first-child{border-right:2px solid #82b3c1;background:#f4fbff}.domino .half:last-child{background:#ecf9f7}.half-label{font-size:12px;font-weight:820;line-height:1.32}.half-meta{font-size:10px;font-weight:730;color:#527b88;letter-spacing:.3px}
+.domino.starter{border-color:#176887;box-shadow:0 0 0 3px #70c1d35c}.domino.starter .half{background:#d9eff7}
+.domino-bank{width:100%;min-height:112px;display:flex;flex-direction:column;gap:7px;border:2px solid #b6ccd5;border-radius:12px;background:#fff;padding:0;overflow:hidden;cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+.domino-bank:hover:not(:disabled){border-color:#267993;background:#f1fafe}.domino-bank[aria-pressed=true]{border-color:#136a7a;background:#e5f5f5;box-shadow:inset 0 0 0 2px #3794aa}
+.domino-bank .parts{display:grid;grid-template-columns:1fr 1fr;min-height:75px}
+.domino-bank .part{font-size:12px;font-weight:800;overflow-wrap:anywhere;line-height:1.35;display:grid;place-items:center;padding:11px 9px;text-align:center}
+.domino-bank .part:first-child{background:#eef8fb;border-right:2px solid #b4d4dd}.domino-bank .part:last-child{background:#e6f7f1}
+.domino-bank .caption{font-size:10px;font-weight:850;color:var(--deep);padding:6px 9px;background:#f1f7f9}
+.bank-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:13px}.bank-empty{font-size:13px;color:var(--muted)}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:19px}.section-head strong{font-size:15px}.section-head span{color:var(--muted);font-size:11px}
+.pointers{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.pointer{border:1px solid #bad7de;background:#f1f9fb;border-radius:10px;padding:11px 13px;min-width:0}
+.pointer small{font-size:11px;color:var(--muted);display:block}.pointer strong{font-size:13px;display:block;overflow-wrap:anywhere;margin:3px 0}
+.selection{background:#eef9f4;border:1px solid #a6d7c4;border-radius:12px;padding:13px;margin:12px 0}.selection strong{display:block;font-size:13px}.selection p{font-size:13px;margin:5px 0 0;overflow-wrap:anywhere}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}.btn{border:1px solid var(--ocean);background:var(--ocean);color:white;border-radius:10px;padding:11px 14px;font-size:12px;font-weight:840}
+.btn:hover:not(:disabled){background:var(--deep)}.btn.secondary{background:var(--paper);color:var(--deep)}.btn.secondary:hover:not(:disabled){background:var(--sky)}.btn.light{background:#e8f7f7;color:#1d6670;border-color:#abd3d2}.btn.light:hover:not(:disabled){background:#d6f0ef}
+.actions .grow{flex:1}
+.feedback{margin-top:14px;padding:13px 15px;border-radius:11px;border:1px solid #bad6e2;background:#e8f3fa;color:#315e73;font-size:13px;line-height:1.6;min-height:69px}
+.feedback strong{font-size:14px;display:block;margin-bottom:4px}.feedback.good{background:var(--mintbg);border-color:#99ccb1;color:var(--mint)}.feedback.warn{background:var(--warnbg);border-color:#dfbb9a;color:var(--warn)}
+.finish{margin-top:13px;padding:16px;background:var(--mintbg);border:1px solid #8fc5ad;color:var(--mint);border-radius:12px}.finish strong{font-size:20px}.finish p{margin:6px 0;font-size:13px}
+.rules{font-size:12px;color:var(--muted);padding-left:19px}.rules li{margin:7px 0}
+.facts{display:grid;gap:8px;margin-top:11px}.fact{background:#f2f8f9;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--ink)}
+.help{padding:12px 14px;background:var(--sky);border-radius:11px;color:#245f78;font-size:12px;line-height:1.6;margin-top:13px}.help strong{display:block;margin-bottom:3px}.help p{margin:0}
+.confirm{border:1px solid #d7af82;background:var(--warnbg);color:var(--warn);padding:13px;margin-top:13px;border-radius:12px;font-size:12px}.confirm p{margin:0}.confirm .actions{margin-top:8px}
+.note{font-size:11px;color:var(--muted);line-height:1.55;margin:13px 0 0}.sub{font-size:12px;color:var(--muted);line-height:1.55;margin:9px 0 0}
+[hidden]{display:none!important}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.panel{padding:16px}}
+@media(max-width:560px){main{padding:21px 12px 34px}.panel{padding:12px}.bank-grid{gap:7px}.domino-bank .part{font-size:11px;padding:9px 6px}.domino .half{width:114px}.chain-frame{padding:10px 7px}.actions .btn{flex-grow:1}.actions .grow{display:none}.pointers{grid-template-columns:1fr 1fr}.metric{min-width:95px;padding:7px 11px}}
+@media(max-width:380px){.bank-grid{grid-template-columns:1fr}.domino-bank{min-height:85px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important;animation:none!important}}
+@media(prefers-contrast:more){.domino-bank{border-width:3px}.domino-bank[aria-pressed=true]{outline:3px solid var(--deep)}.pointer{border:2px solid var(--deep)}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#142b35;--paper:#223e4c;--ink:#eaf7fb;--muted:#bfd4dc;--line:#456a76;--ocean:#9dddea;--deep:#c9f4fa;--sky:#315766;--aqua:#355a57;--mint:#b3f0d3;--mintbg:#2a5144;--warn:#f8d2a6;--warnbg:#574130;--shadow:0 8px 28px #020d1660}
+.chain-frame{background:#244653;border-color:#4b7180}.domino{background:#2d5262;color:#e9fcff;border-color:#76b6c3}.domino .half:first-child{background:#2f586c}.domino .half:last-child{background:#305f57}.half-meta{color:#c2e6f0}.domino.starter .half{background:#3c6571}
+.domino-bank{background:#304e5c;border-color:#648b9b}.domino-bank:hover:not(:disabled){background:#345e6a}.domino-bank[aria-pressed=true]{background:#3b6670;border-color:#a7eaf1}
+.domino-bank .part:first-child{background:#315767;border-color:#79a2af}.domino-bank .part:last-child{background:#2e5a51}.domino-bank .caption{background:#355762;color:#d7f8fb}
+.pointer{background:#2c5361;border-color:#53808e}.selection{background:#2e594e;border-color:#669b89}.btn.secondary{background:#294956;color:#e0fafc}.btn.light{background:#315c5b;color:#e3fff9;border-color:#649d9c}
+.feedback{background:#2e5869;color:#ddf4ff;border-color:#4e8395}.feedback.warn{background:var(--warnbg);color:var(--warn)}.feedback.good{background:var(--mintbg);color:var(--mint)}.help{color:#ddf7fd}.fact{background:#2e4e5c}.finish{color:var(--mint)}
+}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 24 · Associação e sequência de conceitos</p>
+<h1>Dominó educativo: Conexões do Ciclo da Água</h1>
+<p class="intro">Monte uma cadeia de oito peças ligando processos do ciclo da água às descrições correspondentes. A primeira peça já está na mesa; escolha peças do estoque, gire-as quando necessário e encaixe explicitamente à esquerda ou à direita. Várias ordens podem formar uma cadeia correta, e o desafio termina quando todas as peças completarem o ciclo.</p>
+<div class="metrics"><div class="metric"><small>Peças encaixadas</small><strong id="placed-count">1 / 8</strong></div><div class="metric"><small>Peças no estoque</small><strong id="stock-count">7</strong></div><div class="metric"><small>Dicas consultadas</small><strong id="hint-count">0</strong></div><span class="note">Sem tempo, pontuação ou ranking.</span></div>
+<div id="progress" class="progress" role="progressbar" aria-label="Peças na cadeia" aria-valuemin="0" aria-valuemax="8" aria-valuenow="1"><span id="progress-bar"></span></div>
+<div class="layout">
+<section class="panel" aria-labelledby="table-title">
+ <div class="topline"><h2 id="table-title">Mesa de conexões</h2><span class="tag" id="cycle-status">Cadeia em construção</span></div>
+ <div class="chain-frame">
+  <p class="sub">A cadeia cresce pelas extremidades. Em telas estreitas, deslize horizontalmente para consultar todas as peças; não é necessário arrastá-las.</p>
+  <div class="chain-scroll" tabindex="0" role="region" aria-label="Peças encaixadas; role horizontal navegável com rolagem">
+   <div id="chain" class="chain" role="list" aria-label="Ordem atual das peças do dominó"></div>
+  </div>
+ </div>
+ <div class="pointers" aria-label="Duas pontas disponíveis da cadeia">
+  <div class="pointer"><small>Ponta livre · esquerda</small><strong id="left-end">Energia do Sol</strong><small id="left-code">ID: solar</small></div>
+  <div class="pointer"><small>Ponta livre · direita</small><strong id="right-end">A água vira vapor</strong><small id="right-code">ID: evaporacao</small></div>
+ </div>
+ <div class="section-head"><strong>Estoque de peças</strong><span>Selecione uma peça para preparar o encaixe</span></div>
+ <div id="bank" class="bank-grid" role="group" aria-label="Peças disponíveis para selecionar"></div>
+ <p class="sub">Cada peça tem duas metades. Compare o processo com a descrição indicada pela extremidade livre, não apenas palavras idênticas.</p>
+ <div id="selection-box" class="selection" role="group" aria-label="Peça selecionada e ações" hidden>
+  <strong id="selected-label">Peça escolhida</strong><p id="selected-orientation">Orientação original</p>
+  <div class="actions">
+   <button id="flip" class="btn secondary" type="button" disabled>Girar peça</button>
+   <button id="cancel" class="btn light" type="button" disabled>Cancelar seleção</button>
+  </div>
+  <div class="actions">
+   <button class="btn" data-place="left" id="place-left" type="button" disabled>Encaixar à esquerda</button>
+   <button class="btn" data-place="right" id="place-right" type="button" disabled>Encaixar à direita</button>
+  </div>
+ </div>
+ <p id="none-selected" class="sub">Nenhuma peça selecionada. Toque ou ative uma peça com Tab e Enter/Espaço para começar.</p>
+ <div class="actions">
+  <button id="remove-last" type="button" class="btn secondary" disabled>Retirar último encaixe</button>
+  <button id="hint" type="button" class="btn light" disabled>Dica de conexão</button>
+ </div>
+ <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">
+  <strong id="feedback-title">Orientação</strong><span id="feedback-message">Preparando as peças...</span>
+ </div>
+ <div id="victory" class="finish" role="status" tabindex="-1" hidden>
+  <strong>Você completou o ciclo da água!</strong>
+  <p>Todas as oito peças foram conectadas por seus conceitos e as duas pontas voltaram ao mesmo processo. A conquista é somente formativa e não representa nota ou conclusão acadêmica no Moodle.</p>
+ </div>
+</section>
+<aside class="panel" aria-labelledby="guide-title">
+ <h2 id="guide-title">Como funciona o encaixe?</h2>
+ <ol class="rules">
+  <li>Uma peça inicial está fixa no centro da cadeia e não pode ser removida.</li>
+  <li>Escolha uma peça disponível e examine seus dois lados. Você pode girá-la, invertendo esquerda e direita.</li>
+  <li>À esquerda, a metade direita da nova peça precisa combinar com a ponta esquerda atual; à direita, a metade esquerda precisa combinar com a ponta direita atual.</li>
+  <li>Quando o encaixe falha, a peça permanece no estoque, sem consumir tentativas ou desmanchar a cadeia.</li>
+  <li>Se quiser corrigir, retire somente o último encaixe: a peça retorna à seleção com a orientação preservada.</li>
+  <li>Encaixe as sete peças restantes e feche o ciclo. As duas extremidades devem voltar ao mesmo conceito.</li>
+ </ol>
+ <div class="help"><strong>O objetivo é associar significados</strong><p>Uma metade pode mostrar o nome de um processo, como “Condensação”, enquanto a metade correspondente em outra peça traz sua definição. O jogo relaciona IDs semânticos, não a igualdade literal dos rótulos.</p></div>
+ <h2 style="margin-top:19px">Lembretes científicos</h2>
+ <div id="facts" class="facts" aria-label="Informações pedagógicas do ciclo da água"></div>
+ <div class="actions"><button id="reset" type="button" class="btn secondary" disabled>Recomeçar dominó</button></div>
+ <div id="reset-confirm" class="confirm" role="group" aria-label="Confirmação de reinício" hidden>
+  <p>Recomeçar apagará a cadeia montada, a seleção atual e o histórico de dicas. A peça inicial permanecerá fixa. Deseja continuar?</p>
+  <div class="actions"><button id="confirm-reset" type="button" class="btn">Confirmar reinício</button><button id="cancel-reset" type="button" class="btn secondary">Cancelar</button></div>
+ </div>
+ <p class="note">O jogo funciona por toque, mouse, Tab, Enter e Espaço. Não há temporizador, arrastar obrigatório, som, imagens, fontes remotas ou dependências externas.</p>
+</aside>
+</div>
+<p class="note">A verificação é feita no navegador e não envia nota, pontuação ou pedido de conclusão acadêmica ao Moodle. O salvamento do progresso só é confirmado quando a ponte Moodle está disponível.</p>
+</main><script>(function dominoGame(){
+"use strict";
+const DATA={"type":"domino","title":"Dominó educativo - Conexões do Ciclo da Água","starter":"sol-evaporacao","settings":{"allowFlip":true,"requireCycle":true,"seed":"ciclo-agua-domino-2026","maxTiles":12},"tiles":[{"id":"sol-evaporacao","left":{"id":"solar","label":"Energia do Sol"},"right":{"id":"evaporacao","label":"A água líquida se transforma em vapor"}},{"id":"evaporacao-condensacao","left":{"id":"evaporacao","label":"Evaporação"},"right":{"id":"condensacao","label":"O vapor resfria e forma pequenas gotículas"}},{"id":"condensacao-precipitacao","left":{"id":"condensacao","label":"Condensação"},"right":{"id":"precipitacao","label":"A água retorna das nuvens como chuva, neve ou granizo"}},{"id":"precipitacao-infiltracao","left":{"id":"precipitacao","label":"Precipitação"},"right":{"id":"infiltracao","label":"A água entra nos poros do solo"}},{"id":"infiltracao-aquifero","left":{"id":"aquifero","label":"Água que fica armazenada em camadas permeáveis do subsolo"},"right":{"id":"infiltracao","label":"Infiltração"}},{"id":"aquifero-nascente","left":{"id":"aquifero","label":"Aquífero"},"right":{"id":"nascente","label":"A água subterrânea aflora naturalmente"}},{"id":"nascente-escoamento","left":{"id":"nascente","label":"Nascente"},"right":{"id":"escoamento","label":"A água percorre a superfície rumo aos rios e mares"}},{"id":"escoamento-solar","left":{"id":"escoamento","label":"Escoamento superficial"},"right":{"id":"solar","label":"Energia que aquece a água e impulsiona o ciclo"}}],"facts":["A energia do Sol impulsiona a evaporação, mas o ciclo da água envolve várias trocas e reservatórios.","Evaporação e condensação descrevem mudanças físicas de estado que ajudam a explicar a formação de nuvens.","A precipitação pode ocorrer como chuva, neve ou granizo.","Parte da precipitação infiltra o solo e pode alimentar aquíferos e nascentes.","A água circula continuamente entre atmosfera, superfície e subsolo."]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id);
+const controller=new AbortController(),bridge=window.MoodleMCP?.progress;
+const progress=bridge&&typeof bridge.load==="function"&&typeof bridge.save==="function"?bridge:null;
+const storageKey="dominoWaterCycle2026V1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,saveQueue=Promise.resolve(),saveStamp=0;
+
+// Pure rules: IDs define the match; labels are only presentation.
+function tileById(data,tileId){return data.tiles.find(tile=>tile.id===tileId)||null;}
+function oriented(tile,flipped){
+ return flipped?{left:tile.right,right:tile.left}:{left:tile.left,right:tile.right};
+}
+function ends(data,placed){
+ let first=oriented(tileById(data,data.starter),false).left.id,last=oriented(tileById(data,data.starter),false).right.id;
+ for(const p of placed){
+  const face=oriented(tileById(data,p.id),p.flipped);
+  if(p.side==="left")first=face.left.id;
+  else last=face.right.id;
+ }
+ return {left:first,right:last};
+}
+function chainOf(data,placed){
+ const chain=[{id:data.starter,flipped:false}];
+ for(const p of placed){
+  const entry={id:p.id,flipped:p.flipped};
+  if(p.side==="left")chain.unshift(entry);
+  else chain.push(entry);
+ }
+ return chain;
+}
+function hasSolution(data,budget=120000){
+ const starter=tileById(data,data.starter);
+ if(!starter)return false;
+ const root=oriented(starter,false),used=new Set([data.starter]);
+ let count=0,limitReached=false;
+ function search(left,right){
+  if(++count>budget){limitReached=true;return false;}
+  if(used.size===data.tiles.length)return !data.settings.requireCycle||left===right;
+  for(const tile of data.tiles){
+   if(used.has(tile.id))continue;
+   for(const flipped of (data.settings.allowFlip?[false,true]:[false])){
+    const face=oriented(tile,flipped);
+    if(face.right.id===left){
+     used.add(tile.id);if(search(face.left.id,right))return true;used.delete(tile.id);
+    }
+    if(face.left.id===right){
+     used.add(tile.id);if(search(left,face.right.id))return true;used.delete(tile.id);
+    }
+    if(limitReached)return false;
+   }
+  }
+  return false;
+ }
+ return search(root.left.id,root.right.id);
+}
+function validate(data){
+ if(!data||data.type!=="domino"||typeof data.title!=="string"||!data.title.trim()||typeof data.starter!=="string"||!data.settings||typeof data.settings.allowFlip!=="boolean"||typeof data.settings.requireCycle!=="boolean"||typeof data.settings.seed!=="string"||!data.settings.seed.trim()||!Number.isInteger(data.settings.maxTiles)||data.settings.maxTiles<4||data.settings.maxTiles>14||!Array.isArray(data.tiles)||data.tiles.length<4||data.tiles.length>data.settings.maxTiles)return false;
+ const names=new Set(),semantic=new Set();
+ for(const tile of data.tiles){
+  if(!tile||typeof tile.id!=="string"||!/^[a-z0-9-]+$/.test(tile.id)||names.has(tile.id)||!tile.left||!tile.right)return false;
+  names.add(tile.id);
+  for(const half of [tile.left,tile.right]){
+   if(typeof half.id!=="string"||!/^[a-z0-9-]+$/.test(half.id)||typeof half.label!=="string"||!half.label.trim()||half.label!==half.label.trim()||half.label.length>150)return false;
+   semantic.add(half.id);
+  }
+ }
+ if(!names.has(data.starter)||semantic.size<3)return false;
+ if(data.facts!==undefined&&(!Array.isArray(data.facts)||data.facts.length>12||data.facts.some(x=>typeof x!=="string"||!x.trim()||x.length>320)))return false;
+ return hasSolution(data);
+}
+function hashSeed(str){
+ let v=2166136261;
+ for(let i=0;i<str.length;i++){v^=str.charCodeAt(i);v=Math.imul(v,16777619);}
+ return v>>>0;
+}
+function shuffled(ids,seed){
+ let v=hashSeed(seed)||1;const out=[...ids];
+ function random(){v^=v<<13;v^=v>>>17;v^=v<<5;return (v>>>0)/4294967296;}
+ for(let i=out.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}
+ return out;
+}
+function bankOrder(data){return shuffled(data.tiles.filter(t=>t.id!==data.starter).map(t=>t.id),data.settings.seed);}
+function initialState(){return {placed:[],selected:null,hints:0,complete:false};}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Array.isArray(s.placed)||s.placed.length>data.tiles.length-1||!Number.isInteger(s.hints)||s.hints<0||s.hints>5000||typeof s.complete!=="boolean"||!(s.selected===null||typeof s.selected==="object"&&!Array.isArray(s.selected)))return false;
+ const used=new Set([data.starter]);let e=ends(data,[]);
+ for(const p of s.placed){
+  if(!p||typeof p.id!=="string"||!tileById(data,p.id)||used.has(p.id)||typeof p.flipped!=="boolean"||(!data.settings.allowFlip&&p.flipped)||!["left","right"].includes(p.side))return false;
+  const face=oriented(tileById(data,p.id),p.flipped);
+  if(p.side==="left"){if(face.right.id!==e.left)return false;e.left=face.left.id;}
+  else{if(face.left.id!==e.right)return false;e.right=face.right.id;}
+  used.add(p.id);
+ }
+ if(s.selected!==null){
+  if(typeof s.selected.id!=="string"||!tileById(data,s.selected.id)||used.has(s.selected.id)||typeof s.selected.flipped!=="boolean"||(!data.settings.allowFlip&&s.selected.flipped))return false;
+ }
+ const complete=s.placed.length===data.tiles.length-1&&(!data.settings.requireCycle||e.left===e.right);
+ if(s.complete!==complete)return false;
+ if(s.complete&&s.selected!==null)return false;
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(),changed:true,persist:true,kind:"neutral",message:"O dominó foi reiniciado. A peça inicial permanece na mesa."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"O progresso não é válido. Nenhuma peça foi alterada."};
+ if(action?.type==="hint"){
+  if(s.complete)return {state:s,changed:false,kind:"good",message:"A cadeia já está concluída."};
+  const chain=chainOf(data,s.placed);
+  const left=oriented(tileById(data,chain[0].id),chain[0].flipped).left.label;
+  const right=oriented(tileById(data,chain[chain.length-1].id),chain[chain.length-1].flipped).right.label;
+  return {state:{...s,hints:s.hints+1},changed:true,persist:true,kind:"neutral",message:"Dica "+(s.hints+1)+": para encaixar à esquerda, a metade DIREITA da peça escolhida deve nomear "+left+"; para encaixar à direita, a metade ESQUERDA deve corresponder a "+right+". Você pode girar a peça. A dica não encaixa nem pontua."};
+ }
+ if(s.complete)return {state:s,changed:false,kind:"neutral",message:"Cadeia concluída. Explore o resultado ou reinicie."};
+ if(action?.type==="select"){
+  const tile=tileById(data,action.id);
+  if(!tile||tile.id===data.starter||s.placed.some(p=>p.id===tile.id))return {state:s,changed:false,kind:"warn",message:"Esta peça não está disponível no estoque."};
+  if(s.selected?.id===tile.id)return {state:s,changed:false,kind:"neutral",message:"Esta peça já está selecionada. Use Girar ou escolha a extremidade."};
+  return {state:{...s,selected:{id:tile.id,flipped:false}},changed:true,persist:false,kind:"neutral",message:"Peça selecionada: "+tile.left.label+" e "+tile.right.label+". Você pode girar e tentar encaixar em uma das pontas."};
+ }
+ if(action?.type==="cancel"){
+  if(s.selected===null)return {state:s,changed:false,kind:"neutral",message:"Nenhuma peça selecionada."};
+  return {state:{...s,selected:null},changed:true,persist:false,kind:"neutral",message:"Seleção cancelada, sem remover nenhuma peça."};
+ }
+ if(action?.type==="flip"){
+  if(!s.selected)return {state:s,changed:false,kind:"warn",message:"Selecione uma peça antes de girá-la."};
+  if(!data.settings.allowFlip)return {state:s,changed:false,kind:"warn",message:"Girar está desabilitado nesta atividade."};
+  return {state:{...s,selected:{...s.selected,flipped:!s.selected.flipped}},changed:true,persist:false,kind:"neutral",message:"Peça girada: as duas extremidades trocaram de lado."};
+ }
+ if(action?.type==="removeLast"){
+  if(!s.placed.length)return {state:s,changed:false,kind:"neutral",message:"Não há encaixes para desfazer."};
+  const last=s.placed[s.placed.length-1];
+  const next={...s,placed:s.placed.slice(0,-1),selected:{id:last.id,flipped:last.flipped},complete:false};
+  return {state:next,changed:true,persist:true,kind:"neutral",message:"Último encaixe retirado da "+(last.side==="left"?"esquerda":"direita")+". A peça voltou à seleção na mesma orientação."};
+ }
+ if(action?.type==="place"){
+  if(!s.selected)return {state:s,changed:false,kind:"warn",message:"Selecione uma peça do estoque antes de tentar encaixar."};
+  if(!["left","right"].includes(action.side))return {state:s,changed:false,kind:"warn",message:"Escolha esquerda ou direita."};
+  const face=oriented(tileById(data,s.selected.id),s.selected.flipped);
+  const e=ends(data,s.placed);
+  const fits=action.side==="left"?face.right.id===e.left:face.left.id===e.right;
+  if(!fits)return {state:s,changed:false,kind:"warn",message:"Encaixe incompatível à "+(action.side==="left"?"esquerda":"direita")+". Compare o conceito da ponta livre com a metade da peça selecionada; você pode girar a peça ou tentar o outro lado."};
+  const placed=[...s.placed,{id:s.selected.id,flipped:s.selected.flipped,side:action.side}];
+  const end=ends(data,placed);
+  if(placed.length===data.tiles.length-1&&data.settings.requireCycle&&end.left!==end.right)
+   return {state:s,changed:false,kind:"warn",message:"O último encaixe precisa fechar o ciclo. Tente outra orientação ou remova o último encaixe."};
+  const complete=placed.length===data.tiles.length-1;
+  const next={...s,placed,selected:null,complete};
+  return {state:next,changed:true,persist:true,kind:"good",message:complete?"Ciclo concluído! Todas as peças formam uma cadeia válida que retorna ao conceito inicial.":"Encaixe válido à "+(action.side==="left"?"esquerda":"direita")+". A peça saiu do estoque e agora faz parte da cadeia."};
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Escolha uma peça e uma das duas pontas da cadeia."};
+}
+// End pure rules.
+
+function node(tag,cls,text){
+ const x=document.createElement(tag);
+ if(cls)x.className=cls;
+ if(text!==undefined)x.textContent=text;
+ return x;
+}
+function getState(){return JSON.parse(JSON.stringify(state));}
+function restoreState(saved){
+ if(!validState(saved,DATA))return false;
+ state=JSON.parse(JSON.stringify(saved));render();return true;
+}
+function announce(message,kind="neutral"){
+ $("feedback").className="feedback"+(kind==="warn"?" warn":kind==="good"?" good":"");
+ $("feedback-title").textContent=kind==="warn"?"Tente outro encaixe":kind==="good"?"Muito bem!":"Orientação";
+ $("feedback-message").textContent=message;
+}
+function halfElement(side){
+ const half=node("div","half");
+ half.append(node("span","half-label",side.label),node("small","half-meta","Conceito "+side.id.replaceAll("-"," ")));
+ return half;
+}
+function renderChain(){
+ const container=$("chain");
+ container.replaceChildren();
+ const entries=chainOf(DATA,state.placed);
+ entries.forEach((entry,i)=>{
+  const tile=tileById(DATA,entry.id),face=oriented(tile,entry.flipped);
+  const el=node("div","domino"+(entry.id===DATA.starter?" starter":""));
+  el.setAttribute("role","listitem");
+  el.setAttribute("aria-label","Peça "+(i+1)+" de "+entries.length+(entry.id===DATA.starter?", inicial fixa":"")+". Esquerda: "+face.left.label+". Direita: "+face.right.label+".");
+  el.append(halfElement(face.left),halfElement(face.right));
+  container.append(el);
+ });
+ const first=oriented(tileById(DATA,entries[0].id),entries[0].flipped);
+ const last=oriented(tileById(DATA,entries[entries.length-1].id),entries[entries.length-1].flipped);
+ $("left-end").textContent=first.left.label;
+ $("right-end").textContent=last.right.label;
+ $("left-code").textContent="ID: "+first.left.id;
+ $("right-code").textContent="ID: "+last.right.id;
+}
+function renderBank(){
+ const bank=$("bank"),available=new Set(state.placed.map(p=>p.id));
+ const previous=document.activeElement?.dataset?.tile||null;
+ bank.replaceChildren();
+ let stock=0;
+ for(const id of bankOrder(DATA)){
+  if(available.has(id))continue;
+  stock++;
+  const t=tileById(DATA,id),face=oriented(t,state.selected?.id===id&&state.selected.flipped);
+  const button=node("button","domino-bank");
+  button.type="button";button.dataset.tile=id;
+  button.disabled=!ready||state.complete;
+  button.setAttribute("aria-pressed",String(state.selected?.id===id));
+  button.setAttribute("aria-label","Selecionar peça "+t.id+". Esquerda: "+face.left.label+". Direita: "+face.right.label+(state.selected?.id===id?". Peça selecionada.":""));
+  const parts=node("span","parts");
+  parts.append(node("span","part",face.left.label),node("span","part",face.right.label));
+  button.append(parts,node("span","caption",state.selected?.id===id?"Selecionada"+(state.selected.flipped?" · girada":""):"Selecionar peça"));
+  bank.append(button);
+ }
+ if(stock===0)bank.append(node("p","bank-empty","Nenhuma peça restante: a cadeia está completa."));
+ $("stock-count").textContent=String(stock);
+ if(previous){const current=[...bank.querySelectorAll("button[data-tile]")].find(b=>b.dataset.tile===previous);current?.focus({preventScroll:true});}
+}
+function renderSelection(){
+ const s=state.selected;
+ $("selection-box").hidden=!s;
+ $("none-selected").hidden=!!s;
+ $("flip").disabled=!ready||!s||!DATA.settings.allowFlip||state.complete;
+ $("cancel").disabled=!ready||!s||state.complete;
+ $("place-left").disabled=!ready||!s||state.complete;
+ $("place-right").disabled=!ready||!s||state.complete;
+ if(!s)return;
+ const face=oriented(tileById(DATA,s.id),s.flipped);
+ $("selected-label").textContent="Peça escolhida: "+face.left.label+" | "+face.right.label;
+ $("selected-orientation").textContent=s.flipped?"Girou 180°: as extremidades estão invertidas.":"Orientação original: gire antes de encaixar, se precisar.";
+}
+function render(){
+ if(!state||disposed)return;
+ const total=DATA.tiles.length,placed=1+state.placed.length;
+ $("placed-count").textContent=placed+" / "+total;
+ $("hint-count").textContent=String(state.hints);
+ $("progress").setAttribute("aria-valuenow",String(placed));
+ $("progress-bar").style.width=100*placed/total+"%";
+ $("cycle-status").textContent=state.complete?"Ciclo completo":"Cadeia em construção";
+ $("victory").hidden=!state.complete;
+ $("remove-last").disabled=!ready||state.complete||!state.placed.length;
+ $("reset").disabled=!ready;
+ renderChain();renderBank();renderSelection();
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++saveStamp;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||stamp!==saveStamp)return;
+  const old=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const data={...old,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(data)).length>12288){announce("O progresso ultrapassou 12 KiB e não foi sincronizado.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/domino-water-cycle",data});
+ }).catch(async()=>{
+  if(disposed)return;saveStamp++;
+  try{
+   remote=await progress.load();
+   if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))announce("Outra sessão alterou o progresso. O estado salvo mais recente foi recuperado.","warn");
+   else announce("Não foi possível conciliar o progresso. Continue nesta página sem sobrescrever a outra sessão.","warn");
+  }catch(_){remote=null;announce("Sem sincronização Moodle. A atividade continua funcionando.","warn");}
+ });
+}
+function handleAction(action){
+ if(disposed||!ready)return;
+ const focusFrom=state.selected?.id||null;
+ const result=transition(state,action,DATA);
+ if(!result.changed){announce(result.message,result.kind);return;}
+ state=result.state;modified=true;render();
+ if(result.persist)save();
+ announce(result.message,result.kind);
+ if(action.type==="place"){
+  if(state.complete)$("victory").focus({preventScroll:true});
+  else root.querySelector("#bank button[data-tile]")?.focus({preventScroll:true});
+ }else if(action.type==="removeLast"){
+  const b=[...root.querySelectorAll("#bank button[data-tile]")].find(x=>x.dataset.tile===state.selected?.id);
+  b?.focus({preventScroll:true});
+ }else if(action.type==="cancel"&&focusFrom){
+  const b=[...root.querySelectorAll("#bank button[data-tile]")].find(x=>x.dataset.tile===focusFrom);
+  b?.focus({preventScroll:true});
+ }
+}
+function askRestart(){
+ if(state.placed.length||state.selected||state.hints||state.complete){
+  $("reset-confirm").hidden=false;
+  $("confirm-reset").focus({preventScroll:true});
+  announce("O reinício apaga encaixes e dicas. Confirme ou cancele.","warn");
+ }else handleAction({type:"restart"});
+}
+async function init(container,data){
+ if(!container||!validate(data)){
+  announce("Os dados do dominó são inválidos ou não permitem montar uma cadeia completa. Revise as peças e os encaixes.","warn");return;
+ }
+ state=initialState();
+ const facts=$("facts");facts.replaceChildren();
+ for(const fact of data.facts||[])facts.append(node("div","fact",fact));
+ render();
+ if(progress)try{
+  const saved=await progress.load();if(disposed)return;remote=saved;
+  if(!modified&&saved.data?.[storageKey]&&restoreState(saved.data[storageKey]))announce("Progresso restaurado sem alterar o foco. Continue encaixando as peças.");
+  else announce("Escolha uma peça do estoque e tente encaixá-la à esquerda ou à direita.");
+ }catch(_){announce("O HTML funciona sem a ponte Moodle; a sincronização do progresso não está disponível.");}
+ else announce("Escolha uma peça no estoque. Não há conexão Moodle para salvar o progresso automaticamente.");
+ if(disposed)return;ready=true;render();
+}
+function destroy(){disposed=true;controller.abort();}
+root.addEventListener("click",event=>{
+ const b=event.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.tile){handleAction({type:"select",id:b.dataset.tile});return;}
+ if(b.dataset.place){handleAction({type:"place",side:b.dataset.place});return;}
+ if(b.id==="flip"||b.id==="cancel"||b.id==="hint"){handleAction({type:b.id});return;}
+ if(b.id==="remove-last"){handleAction({type:"removeLast"});return;}
+ if(b.id==="reset"){askRestart();return;}
+ if(b.id==="confirm-reset"){
+  $("reset-confirm").hidden=true;handleAction({type:"restart"});
+  $("reset").focus({preventScroll:true});return;
+ }
+ if(b.id==="cancel-reset"){
+  $("reset-confirm").hidden=true;announce("Reinício cancelado. Todas as peças foram preservadas.");
+  $("reset").focus({preventScroll:true});
+ }
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>

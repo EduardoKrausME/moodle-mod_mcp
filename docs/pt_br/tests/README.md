@@ -157,3 +157,11 @@ node --test docs/pt_br/tests/sudoku.test.mjs
 ```
 
 A suíte verifica tabuleiro de solução única, grades impossíveis e inválidas, pistas fixas, sobrescrita imediata, números e anotações, detecção de conflitos simultâneos, dicas de candidatos sem gabarito, limpeza, undo/redo, pilhas limitadas, navegação por setas, mobile, acessibilidade, conclusão formativa e sincronização dos JSONs.
+
+Para o jogo 24 (Dominó educativo - Conexões do Ciclo da Água), execute:
+
+```bash
+node --test docs/pt_br/tests/domino.test.mjs
+```
+
+A suíte valida ciclos, grafo insolúvel, IDs semânticos distintos dos rótulos, embaralhamento, encaixe explícito nas duas pontas, orientação invertida, duplo clique, tentativa incompatível, cancelamento, retirada apenas do último encaixe, correspondências repetidas e sequências alternativas, restauração de estado, reinício, controles acessíveis, HTML isolado e sincronização dos JSONs.
