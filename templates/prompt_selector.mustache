@@ -106,11 +106,15 @@ require([], function() {
             status.textContent = '';
             var value = field.value;
             var result;
-            if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-                result = navigator.clipboard.writeText(value).catch(function() {
-                    return copyFallback(field);
-                });
-            } else {
+            try {
+                if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                    result = navigator.clipboard.writeText(value).catch(function() {
+                        return copyFallback(field);
+                    });
+                } else {
+                    result = Promise.resolve(copyFallback(field));
+                }
+            } catch (error) {
                 result = Promise.resolve(copyFallback(field));
             }
             Promise.resolve(result).then(function(copied) {
