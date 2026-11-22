@@ -14,6 +14,38 @@ All HTML revisions are immutable and checked with an expected revision ID. Publi
 
 Custom scripts execute in a sandboxed iframe with allow-scripts but not allow-same-origin; there is no access to the authenticated Moodle DOM, cookies or gradebook from that code. Assets are stored using Moodle File API and fetched with normal permission checks. The upload tool allows safe files up to 8 MiB; use Moodle's normal upload workflow for large videos.
 
+## Authoring modes
+
+The activity authoring selector offers **Interactive (quiz/exercises)**, **Content page**,
+**Satisfaction survey**, **Timeline**, **Decision-based case study**,
+**Interactive simulation** and **I choose** (free-form authoring). Each choice
+generates a localized prompt for ChatGPT or Claude; the choice is not a new
+Moodle activity type or a different storage format. Prompts are generated on
+both the empty activity view and the management page, and all modes retain
+the same draft, preview, approval and publish flow.
+
+- **Satisfaction survey:** one question at a time; on single-choice selection,
+  save before animating the outgoing question and showing the next one. Text
+  responses and multi-select questions require confirmation. Saving must be
+  retryable and keyboard/assistive-technology use must remain possible.
+  The existing student progress API can store each learner's answers, **but
+  it is not an anonymous survey service or a teacher survey-results dashboard**.
+  Those functions require additional server-side APIs before promising them.
+- **Timeline:** verified chronological events, expandable details and optional
+  per-learner step progress.
+- **Decision-based case study:** branching decisions with feedback, valid
+  endings and resumable paths; grades require Moodle-native assessment.
+- **Interactive simulation:** adjustable parameters, documented assumptions,
+  input validation, dynamic results and saved scenarios.
+- **I choose:** ChatGPT or Claude must first ask what kind of experience the
+  teacher wants to create, accept unrestricted instructions, and wait before
+  creating anything.
+
+All modes reuse the sandboxed HTML runtime and the
+[student SDK and authoring API catalogue](API.md). These are authoring prompts,
+not built-in templates or a claim that unsupported reporting, execution or
+grading APIs are available.
+
 ## Native question bank and grades
 
 MCP tools create native multiple-choice questions using the local_mcp question-bank service, returning their real question IDs and versions. Existing ready true/false and short-answer questions can also be attached. The mod_mcp slot table pins concrete question IDs and versions; replacing a question marks only the older slot link inactive for future attempts, preserving prior Question Engine attempts.
