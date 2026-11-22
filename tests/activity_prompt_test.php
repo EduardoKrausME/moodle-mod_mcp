@@ -52,6 +52,7 @@ final class activity_prompt_test extends \advanced_testcase {
             "cmid" => 9,
             "name" => "Example",
             "url" => "https://example.org/mod/mcp/view.php?id=9",
+            "blum" => get_string("promptblum", "mcp"),
         ];
         foreach (activity::prompt_types() as $configuration) {
             $label = get_string($configuration["label"], "mcp");
@@ -60,6 +61,8 @@ final class activity_prompt_test extends \advanced_testcase {
             $this->assertNotEmpty($prompt);
             $this->assertStringNotContainsString("[[", $label);
             $this->assertStringNotContainsString("[[", $prompt);
+            $this->assertSame(1, substr_count($prompt, $args->blum));
+            $this->assertStringNotContainsString('{$a->blum}', $prompt);
         }
         $this->assertNotEmpty(get_string("promptpublishinstructions", "mcp"));
         foreach (["copyprompt", "copypromptsucceeded", "copypromptfailed"] as $key) {

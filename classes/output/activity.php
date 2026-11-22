@@ -83,6 +83,7 @@ final class activity {
             "cmid" => (int)$cm->id,
             "name" => $mcp->name,
             "url" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id]))->out(false),
+            "blum" => get_string("promptblum", "mcp"),
         ];
         $prompt = get_string($types[$type]["prompt"], "mcp", $args);
         if (!in_array($type, ["interactive", "page"], true)) {

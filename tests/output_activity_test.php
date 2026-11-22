@@ -82,6 +82,11 @@ final class output_activity_test extends advanced_testcase {
         $this->assertSame(activity::prompt($module, $cm), $data["prompt"]);
         $this->assertSame(activity::prompt($module, $cm, "page"), $data["promptpage"]);
         $this->assertNotSame($data["prompt"], $data["promptpage"]);
+        $blum = get_string("promptblum", "mcp");
+        foreach ($data["promptoptions"] as $option) {
+            $this->assertSame(1, substr_count($option["prompt"], $blum));
+            $this->assertStringNotContainsString('{$a->blum}', $option["prompt"]);
+        }
         $instructions = get_string("promptinstructions", "mcp");
         $this->assertStringContainsString("<footer>", $instructions);
         $this->assertSame(1, preg_match("/(NENHUM RODAPÉ|ANY FOOTER)/", $instructions));
