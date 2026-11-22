@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Acerte o alvo - Laboratório das transformações</title><style>
+:root{color-scheme:light;--page:#f1eff8;--card:#fff;--ink:#38334f;--muted:#615b77;--stroke:#d6cfe6;--navy:#644e98;--soft:#f0e8f8;--success:#17674c;--successBg:#e5f6ec;--alert:#a34f39;--alertBg:#fff0e9;--amber:#856123;--amberBg:#fff2d8;--shadow:0 10px 28px #17395413;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--page);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0}button{font:inherit;cursor:pointer}button:disabled{cursor:not-allowed}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #e7a23b;outline-offset:3px}main{max-width:1250px;padding:24px 17px 45px;margin:auto}h1,h2,h3,p{margin:0 0 12px}h1{font-size:clamp(28px,3.8vw,44px);line-height:1.13;letter-spacing:-.8px}h2{font-size:20px}h3{font-size:15px}p{line-height:1.65}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;font-weight:850;color:var(--navy);margin-bottom:6px}.lead{font-size:14px;color:var(--muted);max-width:740px}.small{font-size:12px;color:var(--muted)}.micro{font-size:11px;color:var(--muted)}.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(220px,.7fr);gap:20px;align-items:center;background:linear-gradient(112deg,var(--card),#e4f1f9);border:1px solid var(--stroke);border-radius:20px;padding:24px;box-shadow:var(--shadow)}.hero svg{width:100%;height:auto;display:block;max-height:220px}.metrics{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0 12px}.metric{background:var(--card);border:1px solid var(--stroke);border-radius:12px;padding:8px 13px;min-width:123px}.metric small{display:block;color:var(--muted);font-size:11px}.metric strong{font-size:20px;font-variant-numeric:tabular-nums}.bar{height:9px;border-radius:20px;background:#c5dce8;overflow:hidden;margin:0 0 17px}.bar span{height:100%;display:block;width:0;background:linear-gradient(90deg,#3676ac,#36a77f);transition:width .2s}.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(290px,.7fr);gap:16px;align-items:start}.column{display:grid;gap:16px;min-width:0}.panel{min-width:0;background:var(--card);border:1px solid var(--stroke);border-radius:17px;padding:18px;box-shadow:var(--shadow)}.between{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.button{border:1px solid var(--navy);background:var(--navy);color:white;font-size:12px;font-weight:800;line-height:1.4;border-radius:10px;padding:9px 13px;min-height:44px}.button.secondary{background:var(--card);color:var(--navy)}.button.danger{background:var(--card);color:var(--alert);border-color:#cba094}.button:hover:not(:disabled){filter:brightness(.92)}.button:disabled{opacity:.57}.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:15px 0 12px}.tile{border:1px solid var(--stroke);background:#f3f8fb;border-radius:12px;padding:9px;min-width:0;display:flex;flex-direction:column}.target{width:100%;min-width:0;min-height:124px;border:2px solid #91b5cd;border-radius:11px;background:var(--card);padding:12px 10px;text-align:left;color:var(--ink);display:flex;flex-direction:column;align-items:flex-start;gap:8px;justify-content:space-between;font-size:13px;font-weight:770;line-height:1.37;position:relative;z-index:1}.target:hover:not(:disabled){border-color:var(--navy);background:var(--soft)}.target .mark{display:grid;place-items:center;border:3px solid #679bb8;border-radius:50%;width:26px;height:26px;min-width:26px;min-height:26px;position:relative}.target .mark:after{content:"";width:9px;height:9px;display:block;border:2px solid #679bb8;border-radius:50%}.target .status{font-weight:850;font-size:11px;line-height:1.35;color:var(--muted)}.target:disabled{opacity:1;cursor:default}.target.correct{background:var(--successBg);border-color:#6bab8d}.target.wrong{background:var(--alertBg);border-color:#d39a89}.target.correct .status{color:var(--success)}.target.wrong .status{color:var(--alert)}.target.correct .mark{border-color:var(--success)}.target.correct .mark:after{border-color:var(--success);background:var(--success)}.target.wrong .mark{border-color:var(--alert)}.target.wrong .mark:after{border-color:var(--alert)}.board.moving:not(.paused) .target.active{animation:float-target 2.5s ease-in-out infinite;animation-delay:var(--delay,0s)}@keyframes float-target{0%,100%{transform:translateY(0)}50%{transform:translateY(var(--distance,4px))}}.mode-status{font-size:12px;color:var(--muted)}.tag{border-radius:20px;padding:4px 9px;background:var(--soft);color:var(--navy);font-size:11px;font-weight:850}.feedback{border:1px solid #a8cfdf;border-radius:11px;padding:13px;background:var(--soft);font-size:13px;line-height:1.65;min-height:85px}.feedback strong{display:block;margin-bottom:5px}.feedback.good{border-color:#9ccbae;background:var(--successBg)}.feedback.bad{border-color:#dfa99b;background:var(--alertBg)}.feedback.note{border-color:#dec38f;background:var(--amberBg)}.result{margin-top:13px;border:1px solid #92c8ad;border-radius:12px;background:var(--successBg);padding:14px}.result.limit{background:var(--alertBg);border-color:#d9ac9d}.result h3{font-size:18px;margin-bottom:6px}.result p{font-size:13px}.result ul{padding-left:19px;margin:10px 0}.result li{font-size:12px;margin:6px 0}.history{padding:0;margin:10px 0;list-style:none;display:grid;gap:8px}.history li{border:1px solid var(--stroke);background:#f6f9fb;border-radius:10px;padding:11px}.history strong{display:block;font-size:12px}.history .why{font-size:12px;margin:5px 0 0;line-height:1.6}.history .good{color:var(--success)}.history .bad{color:var(--alert)}.empty{color:var(--muted);font-size:12px}.confirm{margin-top:13px;padding:12px;border:1px solid #d9bd84;border-radius:11px;background:var(--amberBg);font-size:12px}.confirm p{font-size:12px}.separator{border-top:1px solid var(--stroke);padding-top:14px;margin-top:16px}.error{border:2px solid var(--alert);border-radius:13px;background:var(--alertBg);padding:16px;color:var(--alert)}[hidden]{display:none!important}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}.board{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:640px){main{padding:12px 9px 28px}.hero{grid-template-columns:1fr;padding:15px}.hero svg{max-height:140px}.panel{padding:13px}.board{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.target{min-height:135px;padding:10px}.metric{min-width:105px;padding:8px 11px}}@media(max-width:370px){.board{grid-template-columns:1fr}.target{min-height:100px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(prefers-contrast:more){.target,.button,.tile,.history li{border-width:3px}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--page:#172b3b;--card:#253e50;--ink:#edf7ff;--muted:#c5d9e5;--stroke:#597789;--navy:#b6e1ff;--soft:#33566c;--success:#b5f1d0;--successBg:#315545;--alert:#ffb4a7;--alertBg:#583d35;--amber:#ffdda3;--amberBg:#51442e;--shadow:0 10px 25px #0005}.hero{background:linear-gradient(112deg,#253e50,#304e60)}.tile{background:#2b4658}.target{background:#294557;color:var(--ink);border-color:#7ca4ba}.target:hover:not(:disabled){background:var(--soft)}.target.correct{background:var(--successBg)}.target.wrong{background:var(--alertBg)}.button{background:var(--navy);color:#193a50}.button.secondary,.button.danger{background:var(--card);color:var(--navy)}.button.danger{color:var(--alert)}.feedback{background:var(--soft)}.feedback.good,.result{background:var(--successBg)}.feedback.bad,.result.limit{background:var(--alertBg)}.feedback.note,.confirm{background:var(--amberBg)}.history li{background:#2c4a5c}}
+</style></head><body><main id="activity"><section class="hero"><div><p class="eyebrow">Jogo 30 · Reconhecimento e categorização</p><h1>Acerte o alvo: laboratório das transformações</h1>
+<p class="lead">Selecione somente as nove situações em que ocorre uma transformação química, formando substâncias diferentes. Os outros nove alvos apresentam mudanças físicas. Cada seleção oferece uma explicação e só é registrada uma vez.</p>
+<p class="micro">Os alvos começam parados e não há limite de tempo nem de erros. Movimento opcional não altera a verificação nem concede pontos extras. O resultado é formativo e não representa uma nota oficial.</p></div><div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 630 274" role="img" aria-labelledby="illustration-title illustration-desc">
+<title id="illustration-title">Bancada de ciências com diferentes experimentos</title>
+<desc id="illustration-desc">Ilustração SVG original de um laboratório escolar com béquer de água, erlenmeyer com bolhas, termômetro, frascos coloridos e um desenho de moléculas. A imagem contextualiza o conteúdo sem identificar quais alvos são respostas corretas.</desc>
+<defs>
+<linearGradient id="lab-background" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e9e3f9"/><stop offset="1" stop-color="#d5f2eb"/></linearGradient>
+<linearGradient id="lab-liquid" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#5bc4ce"/><stop offset="1" stop-color="#497aac"/></linearGradient>
+<linearGradient id="lab-bottle" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4b4d8"/><stop offset="1" stop-color="#996aa5"/></linearGradient>
+</defs>
+<rect width="630" height="274" rx="21" fill="url(#lab-background)"/>
+<rect x="32" y="32" width="566" height="158" rx="12" fill="#f9f9ff" opacity=".72" stroke="#c2badb" stroke-width="4"/>
+<rect x="43" y="189" width="545" height="21" rx="6" fill="#aa92a1"/><path d="M65 210V260M564 210V260" stroke="#816d86" stroke-width="13" stroke-linecap="round"/>
+<g transform="translate(65 66)">
+<rect width="99" height="103" rx="7" fill="#dbe8f2" stroke="#789ab0" stroke-width="5"/>
+<path d="M9 64H90V95H9Z" fill="url(#lab-liquid)" opacity=".8"/><path d="M12 44H29M12 55H29M12 68H29" stroke="#668ca6" stroke-width="4"/>
+<path d="M24 9H75" stroke="#fff" stroke-width="7" opacity=".74"/>
+<circle cx="50" cy="78" r="6" fill="#eafafa" opacity=".8"/>
+</g>
+<g transform="translate(215 65)">
+<path d="M38 6H85V27L101 98Q104 115 85 119H35Q16 115 21 98L38 27Z" fill="#e2d4f0" stroke="#7d77a1" stroke-width="5"/>
+<path d="M31 81H92L98 102Q99 112 83 113H37Q22 110 26 101Z" fill="url(#lab-bottle)"/>
+<path d="M42 14H80" stroke="#fff" stroke-width="6"/>
+<circle cx="49" cy="82" r="7" fill="#f9e5f7"/><circle cx="75" cy="69" r="5" fill="#f9e5f7"/><circle cx="63" cy="94" r="8" fill="#ecd1e9"/>
+<circle cx="43" cy="40" r="5" fill="#ae84b7" opacity=".8"/><circle cx="79" cy="49" r="4" fill="#ae84b7" opacity=".7"/>
+</g>
+<g transform="translate(372 56)">
+<rect x="23" y="2" width="25" height="113" rx="13" fill="#fff5f1" stroke="#ad8f9c" stroke-width="5"/>
+<circle cx="35" cy="120" r="18" fill="#ec8c76" stroke="#b9756e" stroke-width="5"/>
+<path d="M35 108V25" stroke="#e8776e" stroke-width="9" stroke-linecap="round"/>
+<path d="M52 25h18M52 53h14M52 81h18" stroke="#a58b9d" stroke-width="4" stroke-linecap="round"/>
+</g>
+<g transform="translate(484 57)">
+<rect x="11" y="28" width="85" height="111" rx="12" fill="#d0e8ee" stroke="#7092ae" stroke-width="5"/>
+<rect x="24" y="7" width="59" height="27" rx="5" fill="#7a7397"/>
+<rect x="21" y="77" width="67" height="50" rx="7" fill="#d2a66d" opacity=".85"/>
+<path d="M33 91h43M33 107h30" stroke="#f6e2bb" stroke-width="6" stroke-linecap="round"/>
+</g>
+<g stroke="#867da6" stroke-width="4" fill="#f9e9ad">
+<path d="M163 29L196 50L222 20"/><circle cx="163" cy="29" r="10"/><circle cx="196" cy="50" r="9"/><circle cx="222" cy="20" r="11"/>
+<path d="M342 29L361 47L390 27"/><circle cx="342" cy="29" r="8"/><circle cx="361" cy="47" r="9"/><circle cx="390" cy="27" r="8"/>
+</g>
+<text x="315" y="250" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" font-weight="800" fill="#655976">LABORATÓRIO DAS TRANSFORMAÇÕES</text>
+</svg><p class="micro">Ilustração SVG original de bancada de ciências com béquer, erlenmeyer, frascos, termômetro e moléculas. Alvos com símbolos CSS, sem imagens externas.</p></div></section>
+<div class="metrics">
+<div class="metric"><small>Transformações químicas</small><strong id="hits">0 / 9</strong></div>
+<div class="metric"><small>Mudanças físicas marcadas</small><strong id="misses">0</strong></div>
+<div class="metric"><small>Alvos já examinados</small><strong id="seen">0 / 18</strong></div>
+<div class="metric"><small>Estado</small><strong id="status" style="font-size:15px">Em andamento</strong></div>
+</div><div id="progress" class="bar" role="progressbar" aria-label="Transformações químicas identificadas" aria-valuemin="0" aria-valuemax="9" aria-valuenow="0"><span id="bar-fill"></span></div>
+<div class="layout"><section class="panel">
+<div class="between"><h2>Identifique mudanças químicas</h2><span class="tag" id="mode-label">Alvos parados</span></div>
+<p id="game-prompt" class="small"></p>
+<div class="controls"><button class="button secondary" id="motion" type="button">Ativar movimento opcional</button><button class="button secondary" id="pause" type="button" hidden>Pausar movimento</button></div>
+<p class="micro" id="motion-note">O movimento é apenas visual. Cada botão conserva uma área fixa de toque, sem colisões.</p>
+<div class="board" id="board" aria-label="Grade de alvos; avance com Tab e ative usando Enter ou Espaço"></div>
+<p class="micro">Toques fora dos botões e tentativas repetidas em alvos já examinados não contam erro. Um alvo confirmado permanece desativado até o reinício.</p>
+<div class="separator"><h3>Última escolha e feedback</h3><div class="feedback" id="feedback" role="status" aria-live="polite" aria-atomic="true"><strong id="feedback-heading">Orientação</strong><span id="feedback-body">Leia os 18 casos e selecione apenas os que geram substâncias diferentes.</span></div></div>
+<div id="outcome" class="result" hidden><h3 id="outcome-title" tabindex="-1"></h3><p id="outcome-summary"></p><ul id="outcome-list"></ul></div>
+<div class="controls"><button id="restart" class="button danger" type="button">Reiniciar atividade</button></div>
+<div id="restart-confirm" class="confirm" role="group" aria-label="Confirmar reinício" hidden><p>Reiniciar apagará os alvos examinados, acertos e erros desta tentativa. Deseja continuar?</p><div class="controls"><button id="restart-yes" class="button danger" type="button">Confirmar reinício</button><button id="restart-no" class="button secondary" type="button">Cancelar</button></div></div>
+</section><aside class="column"><section class="panel"><h2>Como jogar</h2>
+<p class="small">Selecione um cartão quando o caso descrever formação de novas substâncias. A justificativa aparece após o toque, e esse alvo não poderá ser selecionado novamente nesta rodada. Mudanças físicas também são explicadas, sem penalidade por velocidade.</p>
+<p class="small">Os alvos podem oscilar suavemente dentro de seus próprios cartões se você ativar o movimento. Pause ou volte à grade parada quando quiser, sem alterar as escolhas nem o critério químico.</p>
+<p class="small">A atividade termina quando as nove transformações químicas forem identificadas. Nesta demonstração, <strong>não existe limite de erros</strong>. Sem a ponte MoodleMCP, o progresso permanece apenas na sessão atual da página.</p></section>
+<section class="panel"><h2>Histórico e explicações</h2><p class="small">Cada escolha confirmada aparece aqui, com o critério pedagógico correspondente, para leitura posterior.</p>
+<ol class="history" id="history" aria-label="Respostas e justificativas da tentativa"></ol>
+<p class="micro">Os gabaritos do HTML não são secretos e não devem ser usados como prova de nota acadêmica.</p></section></aside></div></main><script>(function targetClick(){
+"use strict";
+const DATA={"type":"target_click","title":"Acerte o alvo - Laboratório das transformações","prompt":"Selecione somente as situações em que acontece uma transformação química, isto é, surgem substâncias diferentes das iniciais.","instructions":"Há 18 alvos, dos quais 9 representam transformações químicas e 9 mudanças físicas. Cada alvo recebe feedback explicativo. Não há limite de erros ou de tempo. O movimento suave é opcional e pode ser pausado ou desligado.","targets":[{"id":"enferrujar","label":"Um portão de ferro forma ferrugem","valid":true,"explanation":"O ferro reage com oxigênio e água, formando compostos de ferro, como óxidos e hidróxidos. Isso é transformação química."},{"id":"gelo-derreter","label":"Um cubo de gelo derrete no copo","valid":false,"explanation":"Na fusão, a água continua sendo H₂O: muda do estado sólido para o líquido sem formar outra substância."},{"id":"madeira-queimar","label":"Um pedaço de madeira queima na fogueira","valid":true,"explanation":"A combustão transforma componentes da madeira em novas substâncias, incluindo gases e cinzas."},{"id":"agua-ferver","label":"Água pura ferve e passa a vapor","valid":false,"explanation":"A ebulição transforma água líquida em vapor de água, sem alterar sua composição química."},{"id":"ovo-cozido","label":"A clara do ovo muda ao ser cozida","valid":true,"explanation":"O calor desnatura e promove alterações químicas nas proteínas, modificando suas estruturas e interações."},{"id":"papel-cortado","label":"Uma folha de papel é cortada em tiras","valid":false,"explanation":"O corte muda tamanho e forma do papel, mas não forma substâncias novas por si só."},{"id":"leite-iogurte","label":"Leite fermenta para produzir iogurte","valid":true,"explanation":"Bactérias transformam parte da lactose em ácido láctico e outros produtos, modificando a composição do leite."},{"id":"vapor-condensar","label":"O vapor de água forma gotículas no vidro frio","valid":false,"explanation":"Na condensação, o vapor retorna ao estado líquido e continua sendo água."},{"id":"bolo-assado","label":"Uma massa de bolo assa no forno","valid":true,"explanation":"Durante o cozimento ocorrem reações químicas, como transformações das proteínas e reações de escurecimento, além de mudanças físicas."},{"id":"lata-amassada","label":"Uma lata de alumínio é amassada","valid":false,"explanation":"A deformação altera a geometria do metal, mas não transforma o alumínio em outra substância."},{"id":"vinagre-bicarbonato","label":"Vinagre reage com bicarbonato e libera gás","valid":true,"explanation":"O ácido acético do vinagre reage com o bicarbonato, produzindo dióxido de carbono, água e outras espécies dissolvidas."},{"id":"sal-dissolvido","label":"Sal de cozinha se dissolve em água","valid":false,"explanation":"Na dissolução comum, os íons do sal se dispersam na água; não é uma reação química que gere uma nova substância."},{"id":"maca-escurecer","label":"Uma maçã cortada escurece ao ar","valid":true,"explanation":"Enzimas promovem a oxidação de compostos da maçã, formando produtos responsáveis pelo escurecimento."},{"id":"vidro-quebrado","label":"Um copo de vidro se quebra em pedaços","valid":false,"explanation":"A quebra altera a forma e o número de pedaços, não a composição química do vidro."},{"id":"pao-fermentar","label":"Uma massa de pão fermenta com leveduras","valid":true,"explanation":"Leveduras metabolizam açúcares e produzem novas substâncias, incluindo dióxido de carbono e etanol."},{"id":"agua-congelar","label":"Água líquida congela no congelador","valid":false,"explanation":"O congelamento muda o estado físico da água para sólido; as moléculas continuam sendo H₂O."},{"id":"fosforo-aceso","label":"A cabeça de um palito de fósforo queima","valid":true,"explanation":"A ignição e a combustão envolvem reações entre os materiais do fósforo e o oxigênio, formando outros produtos."},{"id":"cera-derrete","label":"A cera de uma vela derrete perto da chama","valid":false,"explanation":"A cera sólida liquefaz com o calor, sem precisar reagir. É diferente da combustão do vapor de cera junto ao pavio."}],"displayOrder":["lata-amassada","enferrujar","agua-ferver","leite-iogurte","gelo-derreter","vinagre-bicarbonato","papel-cortado","bolo-assado","sal-dissolvido","madeira-queimar","agua-congelar","maca-escurecer","vapor-condensar","pao-fermentar","vidro-quebrado","ovo-cozido","cera-derrete","fosforo-aceso"],"settings":{"moving":true,"initialMode":"static","maxMistakes":0,"moveDistancePx":4}};
+const root=document.getElementById("activity"),$=id=>root.querySelector("#"+id);
+const controller=new AbortController(),sdk=window.MoodleMCP&&window.MoodleMCP.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const storeKey="targetClickChemicalChangesV1",location="games/target-click-chemical-changes";
+let state=initialState(DATA),ready=false,disposed=false,modified=false,remote=null,saveQueue=Promise.resolve(),saveSerial=0;
+const media=typeof window.matchMedia==="function"?window.matchMedia("(prefers-reduced-motion: reduce)"):null;
+let reduced=!!media?.matches;
+// PURE_START
+function targetMap(d){return new Map(d.targets.map(t=>[t.id,t]));}
+function validate(d){
+ if(!d||d.type!=="target_click"||typeof d.title!=="string"||!d.title.trim()||
+ typeof d.prompt!=="string"||!d.prompt.trim()||typeof d.instructions!=="string"||!d.instructions.trim()||
+ !Array.isArray(d.targets)||d.targets.length<6||d.targets.length>30||
+ !Array.isArray(d.displayOrder)||d.displayOrder.length!==d.targets.length||!d.settings||
+ typeof d.settings.moving!=="boolean"||!["static","moving"].includes(d.settings.initialMode)||
+ (d.settings.initialMode==="moving"&&!d.settings.moving)||
+ !Number.isInteger(d.settings.maxMistakes)||d.settings.maxMistakes<0||d.settings.maxMistakes>30||
+ !Number.isInteger(d.settings.moveDistancePx)||d.settings.moveDistancePx<0||d.settings.moveDistancePx>6)return false;
+ const ids=new Set();let good=0,bad=0;
+ for(const t of d.targets){
+  if(!t||typeof t.id!=="string"||!/^[a-z][a-z0-9-]*$/.test(t.id)||ids.has(t.id)||
+   typeof t.label!=="string"||!t.label.trim()||t.label.length>150||
+   typeof t.valid!=="boolean"||typeof t.explanation!=="string"||!t.explanation.trim())return false;
+  ids.add(t.id);t.valid?good++:bad++;
+ }
+ if(!good||!bad||d.settings.maxMistakes>bad||new Set(d.displayOrder).size!==ids.size||
+ d.displayOrder.some(id=>!ids.has(id)))return false;
+ return true;
+}
+function counts(s,d){
+ const map=targetMap(d);let hits=0,misses=0;
+ for(const id of s.chosen)map.get(id).valid?hits++:misses++;
+ return {hits,misses,needed:d.targets.filter(t=>t.valid).length};
+}
+function derivedStatus(s,d){
+ const n=counts(s,d);
+ if(n.hits===n.needed)return "completed";
+ if(d.settings.maxMistakes>0&&n.misses>=d.settings.maxMistakes)return "limit";
+ return "active";
+}
+function initialState(d){return {v:1,order:[...d.displayOrder],chosen:[],mode:d.settings.initialMode,paused:false,status:"active"};}
+function validState(s,d){
+ if(!s||typeof s!=="object"||Array.isArray(s)||s.v!==1||!Array.isArray(s.order)||!Array.isArray(s.chosen)||
+ s.order.length!==d.targets.length||new Set(s.order).size!==s.order.length||
+ s.order.some(id=>!d.targets.some(t=>t.id===id))||new Set(s.chosen).size!==s.chosen.length||
+ s.chosen.some(id=>!d.targets.some(t=>t.id===id))||!["static","moving"].includes(s.mode)||
+ (s.mode==="moving"&&!d.settings.moving)||typeof s.paused!=="boolean"||
+ (s.mode==="static"&&s.paused)||!["active","completed","limit"].includes(s.status))return false;
+ const partial={chosen:[]};
+ for(const id of s.chosen){
+  if(derivedStatus(partial,d)!=="active")return false;
+  partial.chosen.push(id);
+ }
+ return s.status===derivedStatus(s,d);
+}
+function transition(s,a,d){
+ if(!validState(s,d))return {state:s,changed:false,kind:"bad",message:"Estado inválido. Nenhuma escolha foi aplicada."};
+ if(!a||typeof a.type!=="string")return {state:s,changed:false,kind:"note",message:"Escolha um comando válido."};
+ if(a.type==="restart"){
+  if(!s.chosen.length&&s.mode===d.settings.initialMode&&!s.paused)return {state:s,changed:false,kind:"note",message:"A tentativa já está no início."};
+  return {state:initialState(d),changed:true,kind:"note",message:"Nova tentativa iniciada. A grade voltou à ordem e ao movimento padrão."};
+ }
+ if(a.type==="mode"){
+  if(!d.settings.moving)return {state:s,changed:false,kind:"note",message:"Movimento não está habilitado nesta atividade."};
+  const mode=s.mode==="static"?"moving":"static";
+  return {state:{...s,mode,paused:false},changed:true,kind:"note",message:mode==="moving"?"Movimento opcional ativado. Os alvos permanecem dentro de seus próprios cartões.":"Modo estático ativado. O progresso foi preservado."};
+ }
+ if(a.type==="pause"){
+  if(s.mode!=="moving")return {state:s,changed:false,kind:"note",message:"Ative o movimento antes de pausá-lo."};
+  return {state:{...s,paused:!s.paused},changed:true,kind:"note",message:s.paused?"Movimento retomado.":"Movimento pausado sem afetar as escolhas."};
+ }
+ if(a.type==="hit"){
+  if(s.status!=="active")return {state:s,changed:false,kind:"note",message:"Esta tentativa foi encerrada. Leia as explicações ou reinicie."};
+  const target=targetMap(d).get(a.id);
+  if(!target)return {state:s,changed:false,kind:"note",message:"Nenhum alvo válido foi acionado. Não houve penalidade."};
+  if(s.chosen.includes(a.id))return {state:s,changed:false,kind:"note",message:"Esse alvo já foi examinado e não pode contar novamente."};
+  const next={...s,chosen:[...s.chosen,a.id]};
+  next.status=derivedStatus(next,d);
+  const explanation=(target.valid?"Transformação química identificada: ":"Mudança física, não química: ")+target.explanation;
+  const end=next.status==="completed"?" Você encontrou todos os alvos válidos e concluiu a atividade.":next.status==="limit"?" O limite configurado de erros foi atingido; reinicie para outra tentativa.":"";
+  return {state:next,changed:true,kind:target.valid?"good":"bad",message:explanation+end,target:target.id};
+ }
+ return {state:s,changed:false,kind:"note",message:"Ação não reconhecida. Nenhum alvo foi alterado."};
+}
+// PURE_END
+function E(tag,cls,value){const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=value;return e;}
+function getState(){return {v:1,order:[...state.order],chosen:[...state.chosen],mode:state.mode,paused:state.paused,status:state.status};}
+function restoreState(saved){
+ if(!validState(saved,DATA))return false;
+ state={v:1,order:[...saved.order],chosen:[...saved.chosen],mode:saved.mode,paused:saved.paused,status:saved.status};
+ render();return true;
+}
+function announce(message,kind="note"){
+ $("feedback").className="feedback "+kind;
+ $("feedback-heading").textContent=kind==="good"?"Transformação química":kind==="bad"?"Mudança física":"Orientação";
+ $("feedback-body").textContent=message;
+}
+function movingAllowed(){return DATA.settings.moving&&!reduced;}
+function renderHistory(){
+ const history=$("history");history.replaceChildren();
+ if(!state.chosen.length){history.append(E("li","empty","Você ainda não selecionou um alvo. As justificativas aparecerão aqui."));return;}
+ const map=targetMap(DATA);
+ for(const [i,id] of state.chosen.entries()){
+  const t=map.get(id),item=E("li");
+  item.append(E("strong","",String(i+1)+". "+t.label),E("span",t.valid?"good":"bad",t.valid?"Transformação química":"Mudança física"),E("p","why",t.explanation));
+  history.append(item);
+ }
+}
+function render(){
+ if(disposed||!validate(DATA)||!validState(state,DATA))return;
+ const map=targetMap(DATA),n=counts(state,DATA),done=state.status!=="active",board=$("board");
+ $("game-prompt").textContent=DATA.prompt;
+ $("hits").textContent=n.hits+" / "+n.needed;$("misses").textContent=String(n.misses);
+ $("seen").textContent=state.chosen.length+" / "+DATA.targets.length;
+ $("status").textContent=state.status==="completed"?"Concluído":state.status==="limit"?"Limite atingido":"Em andamento";
+ $("progress").setAttribute("aria-valuemax",String(n.needed));
+ $("progress").setAttribute("aria-valuenow",String(n.hits));
+ $("bar-fill").style.width=(100*n.hits/n.needed)+"%";
+ board.classList.toggle("moving",state.mode==="moving"&&!reduced);
+ board.classList.toggle("paused",state.paused||reduced);
+ board.style.setProperty("--distance",DATA.settings.moveDistancePx+"px");
+ const previouslyFocused=document.activeElement,hadFocusedTarget=previouslyFocused&&board.contains(previouslyFocused);
+ board.replaceChildren();
+ for(const [index,id] of state.order.entries()){
+  const target=map.get(id),chosen=state.chosen.includes(id),item=E("div","tile"),button=E("button","target"+(chosen?(target.valid?" correct":" wrong"):" active"));
+  button.type="button";button.dataset.target=id;button.style.setProperty("--delay",(-index%5)*.25+"s");
+  button.disabled=!ready||chosen||done;
+  button.setAttribute("aria-label",target.label+(chosen?(target.valid?". Já selecionado: transformação química.":". Já selecionado: mudança física."):"; selecionar como transformação química."));
+  button.append(E("span","mark"),E("span","",target.label),E("span","status",chosen?(target.valid?"Selecionado · mudança química":"Selecionado · mudança física"):"Ainda não selecionado"));
+  item.append(button);board.append(item);
+ }
+ $("mode-label").textContent=reduced?"Movimento reduzido por preferência":state.mode==="static"?"Alvos parados":state.paused?"Movimento pausado":"Movimento suave";
+ $("motion").disabled=!ready||(!movingAllowed()&&state.mode==="static");
+ $("motion").textContent=state.mode==="static"?"Ativar movimento opcional":"Voltar ao modo parado";
+ $("pause").hidden=state.mode==="static";$("pause").disabled=!ready||reduced;
+ $("pause").textContent=state.paused?"Retomar movimento":"Pausar movimento";
+ $("motion-note").textContent=reduced?"Sua preferência por movimento reduzido mantém todos os alvos estáticos; a avaliação é a mesma.":"Movimento discreto, dentro de cada cartão, sem sobreposição ou mudança nas áreas de toque.";
+ $("restart").disabled=!ready;
+ const result=$("outcome");result.hidden=!done;
+ if(done){
+  result.className="result"+(state.status==="limit"?" limit":"");
+  $("outcome-title").textContent=state.status==="completed"?"Todas as transformações químicas identificadas!":"Limite de erros da tentativa atingido";
+  $("outcome-summary").textContent=state.status==="completed"?"Você identificou "+n.hits+" transformações químicas, com "+n.misses+" mudança(s) física(s) selecionada(s). Reveja as explicações e use Reiniciar para praticar novamente.":"O limite de erros configurado interrompeu esta tentativa; as explicações continuam disponíveis.";
+  const list=$("outcome-list");list.replaceChildren();
+  list.append(E("li","",DATA.settings.maxMistakes===0?"Este exemplo não limita os erros.":"Limite de erros configurado: "+DATA.settings.maxMistakes+"."));
+  list.append(E("li","","Essa conquista é formativa e não gera nota ou conclusão acadêmica oficial."));
+ }
+ renderHistory();
+ if(hadFocusedTarget&&!done){
+  const next=board.querySelector("button.target:not(:disabled)");
+  if(next)next.focus({preventScroll:true});
+ }
+}
+function focusNextAfterHit(id){
+ if(state.status!=="active"){$("outcome-title").focus({preventScroll:true});return;}
+ const index=state.order.indexOf(id),order=state.order;
+ for(let step=1;step<=order.length;step++){
+  const candidate=order[(index+step)%order.length];
+  const button=[...$("board").querySelectorAll("button[data-target]")].find(b=>b.dataset.target===candidate&&!b.disabled);
+  if(button){button.focus({preventScroll:true});return;}
+ }
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),current=++saveSerial;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||current!==saveSerial)return;
+  const prior=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const payload={...prior,[storeKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(payload)).length>12288){announce("O progresso excederia o limite de 12 KiB e não foi sincronizado.","bad");return;}
+  const saved=await progress.save({version:remote.version,location,data:payload});
+  if(!disposed)remote={...saved,data:payload};
+ }).catch(async()=>{
+  if(disposed)return;saveSerial++;
+  try{
+   const latest=await progress.load();if(disposed)return;
+   if(latest?.data?.[storeKey]&&restoreState(latest.data[storeKey])){
+    remote=latest;announce("A versão remota mudou ou a gravação falhou. O progresso do servidor foi recuperado sem sobrescrever outra sessão.","bad");
+   }else{
+    remote=null;announce("Não foi possível reconciliar o progresso do servidor. Continue localmente sem novas gravações automáticas.","bad");
+   }
+  }catch(_){remote=null;announce("O salvamento remoto falhou e não foi confirmado. Continue localmente.","bad");}
+ });
+}
+function handleAction(a){
+ if(disposed||!ready)return;
+ const result=transition(state,a,DATA);
+ if(!result.changed){announce(result.message,result.kind);return;}
+ state=result.state;modified=true;render();save();announce(result.message,result.kind);
+ if(a.type==="hit")focusNextAfterHit(a.id);
+ if(a.type==="restart")$("restart").focus({preventScroll:true});
+ if(a.type==="mode")$("motion").focus({preventScroll:true});
+ if(a.type==="pause")$("pause").focus({preventScroll:true});
+}
+function askReset(){
+ if(!state.chosen.length&&state.mode===DATA.settings.initialMode&&!state.paused){announce("A atividade já está no início.");return;}
+ $("restart-confirm").hidden=false;$("restart-yes").focus({preventScroll:true});
+ announce("Reiniciar apagará o progresso atual. Confirme ou cancele.","note");
+}
+function destroy(){disposed=true;saveSerial++;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){
+  if(container)container.replaceChildren(E("div","error","Dados inválidos: verifique IDs, alvos corretos e incorretos, explicações, ordem e configuração."));
+  return;
+ }
+ render();
+ if(progress){
+  try{
+   const loaded=await progress.load();if(disposed)return;remote=loaded;
+   if(!modified&&loaded?.data?.[storeKey]){
+    if(restoreState(loaded.data[storeKey])){
+     const last=state.chosen.at(-1);
+     if(last){const t=targetMap(DATA).get(last);announce("Atividade retomada. Última escolha: "+t.label+". "+t.explanation,"note");}
+     else announce("Atividade retomada no início.","note");
+    }else announce("Progresso remoto inválido; ele não será sobrescrito.","bad");
+   }
+  }catch(_){remote=null;announce("Não foi possível carregar o progresso. O jogo continua sem sincronização confirmada.","bad");}
+ }else announce("Modo independente ativo. O jogo funciona, mas não há sincronização confirmada com o Moodle.");
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",event=>{
+ const button=event.target.closest("button");if(!button||!root.contains(button))return;
+ if(button.dataset.target){handleAction({type:"hit",id:button.dataset.target});return;}
+ if(button.id==="motion"){
+  if(reduced&&state.mode==="static"){announce("O movimento está desativado por sua preferência de acessibilidade.");return;}
+  handleAction({type:"mode"});return;
+ }
+ if(button.id==="pause"){if(!reduced)handleAction({type:"pause"});return;}
+ if(button.id==="restart"){askReset();return;}
+ if(button.id==="restart-yes"){$("restart-confirm").hidden=true;handleAction({type:"restart"});return;}
+ if(button.id==="restart-no"){$("restart-confirm").hidden=true;$("restart").focus({preventScroll:true});announce("Reinício cancelado. Acertos e erros foram preservados.");}
+},{signal:controller.signal});
+if(media)media.addEventListener("change",event=>{reduced=event.matches;render();announce(reduced?"Preferência por movimento reduzido detectada: alvos estáticos.":"Você pode escolher modo parado ou ativar movimento opcional.");},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>
