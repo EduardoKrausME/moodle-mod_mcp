@@ -12,10 +12,10 @@ function showState(message){nodes.state.textContent=message;}
 function fitFrame(wrapper){const frame=wrapper.querySelector("iframe");if(frame)wrapper.style.setProperty("--preview-scale",String(wrapper.clientWidth/1024));}
 function setupFrames(){if(frameObserver)frameObserver.disconnect();frameObserver=typeof ResizeObserver==="function"?new ResizeObserver((obs)=>obs.forEach((e)=>fitFrame(e.target))):null;if(observer)observer.disconnect();observer=typeof IntersectionObserver==="function"?new IntersectionObserver((obs)=>obs.forEach((e)=>{if(e.isIntersecting){const f=e.target.querySelector("iframe");if(f&&!f.src)f.src=f.dataset.src;observer.unobserve(e.target);}}),{rootMargin:"250px"}):null;}
 function card(item){
- const article=el("article","example-card"),preview=el("div","card-preview"),frame=el("iframe"),open=el("button","preview-open"),body=el("div","card-body"),meta=el("div","card-meta"),pill=el("span","category-pill",item.subtype||active.label),time=el("span","card-time",(item.minutes||"5")+" min"),heading=el("h3","",item.title),desc=el("p","card-description",item.description),how=el("p","card-how"),footer=el("div","card-footer"),button=el("button","card-link","Abrir exemplo →"),copyPrompt=el("button","card-link prompt-link","Copiar comando");
- frame.title="Prévia de "+item.title;frame.loading="lazy";frame.setAttribute("sandbox","allow-scripts");frame.dataset.src=item.path;frame.setAttribute("aria-hidden","true");frame.tabIndex=-1;open.type="button";open.setAttribute("aria-label","Abrir "+item.title);open.addEventListener("click",()=>openPreview(item));button.type="button";button.addEventListener("click",()=>openPreview(item));copyPrompt.type="button";copyPrompt.setAttribute("aria-live","polite");copyPrompt.addEventListener("click",()=>copyPromptFromCard(item,copyPrompt));
+ const article=el("article","example-card"),preview=el("div","card-preview"),frame=el("iframe"),open=el("button","preview-open"),body=el("div","card-body"),meta=el("div","card-meta"),pill=el("span","category-pill",item.subtype||active.label),time=el("span","card-time",(item.minutes||"5")+" min"),heading=el("h3","",item.title),desc=el("p","card-description",item.description),how=el("p","card-how"),footer=el("div","card-footer"),button=el("button","card-link","Abrir exemplo →");
+ frame.title="Prévia de "+item.title;frame.loading="lazy";frame.setAttribute("sandbox","allow-scripts");frame.dataset.src=item.path;frame.setAttribute("aria-hidden","true");frame.tabIndex=-1;open.type="button";open.setAttribute("aria-label","Abrir "+item.title);open.addEventListener("click",()=>openPreview(item));button.type="button";button.addEventListener("click",()=>openPreview(item));
  how.append(el("strong","","Como funciona: "),document.createTextNode(item.howItWorks||"Explore a experiência e suas interações."));
- preview.append(frame,open);meta.append(pill,time);footer.append(button,copyPrompt);body.append(meta,heading,desc,how,footer);article.append(preview,body);
+ preview.append(frame,open);meta.append(pill,time);footer.append(button);body.append(meta,heading,desc,how,footer);article.append(preview,body);
  if(frameObserver)frameObserver.observe(preview);else requestAnimationFrame(()=>fitFrame(preview));
  if(observer)observer.observe(preview);else frame.src=item.path;
  return article;
@@ -135,7 +135,6 @@ function openPreview(item,updateURL=true){
  selectedPrompt=typeof item.prompt==="string"?item.prompt:"";
  $("prompt-text").textContent=selectedPrompt;
  $("toggle-prompt").hidden=!selectedPrompt;
- $("copy-prompt").hidden=!selectedPrompt;
  showDialogView("preview");
  nodes.copyMessage.textContent="";
  sourceLoaded=null;
@@ -183,17 +182,6 @@ async function copyText(text){
  try{area.select();if(!document.execCommand("copy"))throw Error("Cópia não permitida");}
  finally{area.remove();}
 }
-async function copyPromptFromCard(item,button){
- try{
-  await copyText(item.prompt);
-  button.textContent="Comando copiado!";
-  button.setAttribute("aria-label","Comando do exemplo "+item.title+" copiado");
- }catch(_){
-  await openPreview(item);
-  showDialogView("prompt");
-  nodes.copyMessage.textContent="Não foi possível copiar automaticamente; selecione o comando.";
- }
-}
 $("toggle-code").addEventListener("click",async()=>{
  if(!nodes.codeView.hidden){showDialogView("preview");return;}
  try{nodes.code.textContent=await loadSource();showDialogView("html");}
@@ -203,10 +191,6 @@ $("toggle-prompt").addEventListener("click",()=>showDialogView($("prompt-view").
 $("copy-code").addEventListener("click",async()=>{
  try{await copyText(await loadSource());nodes.copyMessage.textContent="HTML copiado!";}
  catch(_){nodes.copyMessage.textContent="Não foi possível copiar. Use Ver HTML e selecione o código.";}
-});
-$("copy-prompt").addEventListener("click",async()=>{
- try{await copyText(selectedPrompt);nodes.copyMessage.textContent="Comando copiado!";}
- catch(_){nodes.copyMessage.textContent="Não foi possível copiar. Use Ver comando e selecione o texto.";}
 });
 $("close-dialog").addEventListener("click",()=>closePreview());
 nodes.dialog.addEventListener("close",()=>{if(!nodes.dialog.open)closePreview();});
