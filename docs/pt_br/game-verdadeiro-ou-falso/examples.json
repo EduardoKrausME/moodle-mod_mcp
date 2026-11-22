@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Verdadeiro ou falso rápido",
+  "description": "Atividades formativas de verdadeiro ou falso com correção explicativa, revisão e progresso, em HTML independente.",
+  "examples": [
+    {
+      "id": "verdadeiro-ou-falso-astronomia",
+      "title": "Verdadeiro ou falso rápido - Mitos e fatos da Astronomia",
+      "description": "Analise doze afirmações sobre o Sistema Solar, estrelas, eclipses e observação astronômica, com correção e explicação após cada resposta.",
+      "howItWorks": "Escolha Verdadeiro ou Falso para uma afirmação de cada vez, leia o feedback e avance. É possível voltar para revisar sem repetir a tentativa, acompanhar o progresso e conferir um resumo final com justificativas.",
+      "subtype": "Verdadeiro ou falso",
+      "features": [
+        "12 afirmações",
+        "Correção explicativa",
+        "Revisão sem repetir resposta",
+        "Resumo formativo e reinício"
+      ],
+      "minutes": 7,
+      "path": "game-verdadeiro-ou-falso/mitos-e-fatos-da-astronomia.html",
+      "prompt": "Crie uma atividade educacional do tipo \"Verdadeiro ou falso rápido\" para o mod_mcp, seguindo a especificação `.chatgpt/games/12-verdadeiro-ou-falso.md` e a mecânica deste exemplo de Astronomia. O tema de Astronomia serve apenas como demonstração; não o reutilize automaticamente.\n\nNa sua PRIMEIRA resposta, antes de escrever HTML, CSS, JavaScript, afirmações, respostas, explicações, JSON ou chamar ferramentas de gravação, pergunte exatamente ao professor: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta do professor e não gere a atividade antes disso.\n\nDepois da resposta, adapte as afirmações e as justificativas ao conteúdo escolhido. Pergunte somente detalhes indispensáveis, como público e nível de aprendizagem, quantidade de questões e necessidade de embaralhamento. Evite ambiguidades e afirmações opinativas. Cada afirmação deve ter uma única resposta factual e uma explicação pedagógica que esclareça a razão da resposta. Revise especialmente afirmações classificadas como falsas, para não introduzir concepções equivocadas.\n\nEntregue dados semanticamente coerentes com o contrato `true_false` descrito em `.chatgpt/games/12-verdadeiro-ou-falso.md`: `title`, `statements` com `id`, `text`, `correct` como booleano verdadeiro ou falso (nunca string) e `explanation`, e `settings.shuffle`. Se usar semente, mantenha o sorteio reproduzível. Trate o JSON como contrato proposto de autoria, e não como um formato que o servidor Moodle já interpreta automaticamente.\n\nConstrua HTML completo, funcional, responsivo e acessível, com CSS e JavaScript incorporados, somente com o conteúdo da atividade, sem menus, cabeçalho institucional, rodapé, CDN ou arquivos externos. Apresente uma afirmação por vez e botões grandes Verdadeiro/Falso, bloqueie clique duplo e resposta repetida, anuncie feedback por `aria-live` com explicação contextual, mova o foco de maneira previsível, permita avançar apenas após responder e voltar a questões anteriores para revisar sem computar uma nova tentativa. Ao concluir, exiba resumo formativo com as respostas e explicações; ofereça reinício e movimento reduzido. Não exija cronômetro.\n\nValide IDs únicos, booleanos reais, explicações obrigatórias, textos longos, resposta anterior, progresso restaurado e funcionamento offline sem SDK. Não atribua nota oficial no cliente nem considere o resultado local uma conclusão do Moodle. Quando o SDK `MoodleMCP.progress` estiver disponível, use apenas `load()` e `save()` com a versão retornada e controle de conflitos, limite de 12 KiB; sem conexão MCP, forneça HTML pronto para copiar e colar no gerenciador. Com conexão, respeite as APIs existentes e nunca publique sem aprovação expressa do professor.\n\nImagens não são necessárias para o formato deste exemplo; se o professor solicitar imagens, informe quais materiais foram utilizados, suas origens e os textos alternativos."
+    }
+  ]
+}

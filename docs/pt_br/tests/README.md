@@ -61,3 +61,11 @@ node --test docs/pt_br/tests/bingo.test.mjs
 ```
 
 O teste cobre pool insuficiente, cartelas com seed estável, sorteio sem repetição, resposta por ID, ausência de item na cartela, vitória por linha/coluna/diagonal, restauração de estado, novas cartelas, acessibilidade e sincronização dos JSONs.
+
+Para o jogo 12 (Verdadeiro ou falso rápido - Mitos e fatos da Astronomia), execute:
+
+```bash
+node --test docs/pt_br/tests/true-false.test.mjs
+```
+
+O teste cobre booleano recebido como string, clique duplo, explicações, textos longos, retorno à afirmação anterior, retomada de progresso, funcionamento offline e sincronização dos catálogos.

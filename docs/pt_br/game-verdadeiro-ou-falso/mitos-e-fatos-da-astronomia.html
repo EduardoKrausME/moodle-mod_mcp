@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Verdadeiro ou falso rápido - Astronomia</title><style>:root{font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--bg:#f3f5fa;--ink:#27364e;--muted:#61718a;--line:#dee4ee;--surface:#fff;--accent:#4b58ac;--soft:#eef0fc;--good:#147857;--good-bg:#e1f5e9;--warn:#985b2b;--warn-bg:#fff1e2;color:var(--ink);background:var(--bg)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit}button:focus-visible{outline:3px solid #eaaa40;outline-offset:3px}
+main{max-width:1100px;margin:auto;padding:32px 22px 48px}.eyebrow{font-size:11px;font-weight:850;letter-spacing:1.5px;color:var(--accent);text-transform:uppercase;margin:0 0 9px}h1{font-size:clamp(28px,4vw,41px);line-height:1.15;letter-spacing:-1px;margin:0 0 11px}.intro{font-size:14px;color:var(--muted);max-width:870px;margin:0 0 19px}
+.stats{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:13px}.stat{min-width:111px;padding:8px 14px;background:var(--surface);border:1px solid var(--line);border-radius:11px}.stat small{display:block;font-size:11px;color:var(--muted)}.stat b{font-size:20px;font-variant-numeric:tabular-nums}.stats .note{margin-left:auto;font-size:11px;color:var(--muted)}
+.progress{height:9px;background:#dfe5f0;border-radius:20px;overflow:hidden;margin-bottom:17px}.progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,#6977d4,#37ae91);transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(265px,.75fr);gap:17px;align-items:start}.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:23px;min-width:0;box-shadow:0 9px 28px #29364c0c}.panel h2{margin:0 0 13px;font-size:17px}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.topline small{font-size:12px;color:var(--muted);font-weight:760}.tag{background:var(--soft);color:var(--accent);font-size:11px;font-weight:790;padding:7px 11px;border-radius:99px}
+.statement{font-size:clamp(20px,2.6vw,30px);line-height:1.43;letter-spacing:-.45px;font-weight:820;margin:17px 0 19px;min-height:115px;overflow-wrap:anywhere}
+.prompt{font-size:13px;color:var(--muted);margin:0 0 13px}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.choice{min-height:65px;display:flex;align-items:center;justify-content:center;gap:10px;border:2px solid #cbd4e4;border-radius:12px;padding:11px 12px;background:var(--surface);color:var(--ink);font-size:16px;font-weight:820;cursor:pointer}.choice:hover:not(:disabled){border-color:#8189cc;background:#f4f2ff}.choice .symbol{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:#e9ecf8;color:#4c5ab0;font-size:18px}
+.choice.selected.right{background:var(--good-bg);border-color:#68b893;color:var(--good)}.choice.selected.wrong{background:var(--warn-bg);border-color:#e1b17d;color:var(--warn)}.choice.selected .symbol{background:#ffffff7a;color:inherit}.choice:disabled{opacity:1;cursor:default}.choice:not(.selected):disabled{opacity:.68}
+.feedback{margin-top:17px;border-radius:12px;padding:15px 18px;min-height:84px;background:#edf2fb;color:#435879;border:1px solid #d4e0f0}.feedback strong{display:block;font-size:15px;margin-bottom:5px}.feedback p{font-size:13px;line-height:1.6;margin:0}.feedback.right{background:var(--good-bg);border-color:#a6d5bd;color:var(--good)}.feedback.wrong{background:var(--warn-bg);border-color:#e6c7a7;color:var(--warn)}
+.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:21px}.toolbar .flex{flex:1}.btn{background:var(--accent);color:white;border:1px solid var(--accent);border-radius:10px;padding:11px 15px;font-size:13px;font-weight:790;cursor:pointer}.btn.secondary{background:var(--surface);color:var(--accent)}.btn:hover:not(:disabled){filter:brightness(.93)}.btn:disabled{opacity:.46;cursor:not-allowed}
+.tip{background:var(--soft);color:#4b608b;border-radius:11px;padding:13px;font-size:13px;margin:0 0 14px}.steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;margin:14px 0}.step{height:33px;display:grid;place-items:center;border-radius:7px;background:#edf0f5;border:1px solid #d9e0ec;color:#7d8aa1;font-size:12px;font-weight:800}.step.current{background:var(--soft);border-color:#7180c5;color:var(--accent);outline:1px solid #7180c5}.step.right{background:var(--good-bg);color:var(--good);border-color:#90c7ab}.step.wrong{background:var(--warn-bg);color:var(--warn);border-color:#e3b98f}
+.guide{margin:0;padding-left:19px;font-size:13px;color:var(--muted)}.guide li{padding:3px 0}
+.summary h2{font-size:26px;letter-spacing:-.7px;margin:3px 0 9px}.summary>p{color:var(--muted);font-size:14px}.review{display:grid;gap:8px;margin:16px 0}.review-item{padding:13px 14px;border:1px solid var(--line);background:#f9faff;border-radius:10px}.review-item.right{background:#f0fbf5;border-color:#b6dac5}.review-item.wrong{background:#fff8ef;border-color:#e9cbae}.review-item strong{display:block;font-size:13px;margin-bottom:6px}.review-item p{font-size:12px;margin:3px 0}.small{font-size:11px;color:var(--muted);margin:16px 0 0}[hidden]{display:none!important}
+@media(max-width:835px){.layout{grid-template-columns:1fr}.panel{padding:18px}.statement{min-height:0}.steps{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(max-width:570px){main{padding:23px 12px 34px}.panel{padding:15px}.stats .note{margin:0}.choices{gap:8px}.choice{min-height:61px;font-size:14px;padding:10px;gap:6px}.choice .symbol{width:26px;height:26px}.steps{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#161f2b;--ink:#e8edf7;--muted:#b8c6d9;--line:#3d4b62;--surface:#253245;--accent:#b7c0ff;--soft:#373e60;--good:#a8e8c9;--good-bg:#254837;--warn:#f1c6a0;--warn-bg:#4e392b}.choice{background:#29374c;border-color:#59657d}.choice:hover:not(:disabled){background:#3c4262}.choice .symbol{background:#414b6b;color:#dae0ff}.choice.selected .symbol{background:#ffffff20}.feedback{background:#303f55;color:#dae6f7;border-color:#536479}.feedback.right{background:var(--good-bg);color:var(--good);border-color:#547965}.feedback.wrong{background:var(--warn-bg);color:var(--warn);border-color:#84644e}.tip{color:#d5def8}.step{background:#303c51;border-color:#506075;color:#bdc8d9}.step.current{background:#3d4161;border-color:#8f9be3;color:#e2e6ff}.step.right{background:#28523e;border-color:#5e8e72;color:#c1efd5}.step.wrong{background:#554031;border-color:#89654c;color:#f6ceaf}.review-item{background:#2c394f}.review-item.right{background:#2b4939;border-color:#587d64}.review-item.wrong{background:#4c3b30;border-color:#84684e}}
+</style></head>
+<body>
+<main id="activity">
+ <p class="eyebrow">Jogo 12 · Descobertas do Universo</p>
+ <h1>Mitos e fatos da Astronomia</h1>
+ <p class="intro">Leia uma afirmação de cada vez e escolha verdadeiro ou falso. Após responder, veja a explicação, avance para a próxima ou volte para revisar; cada resposta é registrada uma única vez.</p>
+ <div class="stats"><div class="stat"><small>Respondidas</small><b id="answered">0 / 12</b></div><div class="stat"><small>Acertos</small><b id="score">0 / 12</b></div><span class="note">Sem limite de tempo nem penalidade por revisão.</span></div>
+ <div id="progress" class="progress" role="progressbar" aria-label="Afirmações respondidas" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><span id="progress-fill"></span></div>
+ <div class="layout">
+  <section id="game-panel" class="panel" aria-label="Afirmação e respostas">
+   <div class="topline"><small id="position">Afirmação 1 de 12</small><span class="tag" id="tag">Escolha uma opção</span></div>
+   <div id="statement" class="statement" tabindex="-1">Preparando a atividade...</div>
+   <p class="prompt" id="prompt">Esta afirmação é verdadeira ou falsa?</p>
+   <div class="choices" role="group" aria-label="Escolha uma resposta">
+    <button class="choice" type="button" data-answer="true" aria-pressed="false" disabled><span class="symbol" aria-hidden="true">✓</span>Verdadeiro</button>
+    <button class="choice" type="button" data-answer="false" aria-pressed="false" disabled><span class="symbol" aria-hidden="true">×</span>Falso</button>
+   </div>
+   <div id="feedback" class="feedback" tabindex="-1" role="status" aria-live="polite" aria-atomic="true"><strong id="feedback-title">Orientação</strong><p id="feedback-text">Preparando a atividade...</p></div>
+   <div class="toolbar"><button type="button" id="previous" class="btn secondary" disabled>Anterior</button><span class="flex" aria-hidden="true"></span><button type="button" id="next" class="btn" disabled>Próxima afirmação</button></div>
+  </section>
+  <section id="summary-panel" class="panel summary" aria-labelledby="summary-title" hidden>
+   <p class="eyebrow">Revisão das respostas</p><h2 id="summary-title" tabindex="-1">Desafio concluído!</h2>
+   <p id="summary-score"></p><div id="review" class="review"></div>
+   <div class="toolbar"><button id="review-previous" type="button" class="btn secondary">Rever última afirmação</button><button id="review-reset" type="button" class="btn">Jogar novamente</button></div>
+  </section>
+  <aside class="panel" aria-label="Orientações e acompanhamento">
+   <h2>Seu percurso</h2>
+   <div class="tip">Acertos e erros são acompanhados de explicações, para que você compreenda os conceitos e não apenas memorize a resposta.</div>
+   <div id="steps" class="steps" role="group" aria-label="Indicadores das doze afirmações"></div>
+   <ol class="guide"><li>Leia toda a afirmação.</li><li>Escolha verdadeiro ou falso.</li><li>Leia a correção explicativa.</li><li>Avance ou volte para revisar.</li></ol>
+   <div class="toolbar"><button type="button" id="reset" class="btn secondary" disabled>Recomeçar tudo</button></div>
+   <p class="small">As cores são acompanhadas de texto e explicações, para manter o resultado compreensível sem depender apenas de sinais visuais.</p>
+  </aside>
+ </div>
+ <p class="small">Este resultado é apenas formativo e não atribui nota ou conclusão acadêmica ao Moodle. A atividade funciona também sem conexão com o SDK.</p>
+</main>
+<script>(function app(){
+"use strict";
+const DATA={"type":"true_false","title":"Mitos e fatos da Astronomia","settings":{"shuffle":true,"seed":"astronomia-mitos-2026"},"statements":[{"id":"terra-translacao","text":"A Terra realiza um movimento de translação ao redor do Sol.","correct":true,"explanation":"A Terra orbita o Sol. Esse movimento e a inclinação do eixo terrestre estão relacionados ao ciclo anual das estações."},{"id":"sol-planeta","text":"O Sol é um planeta muito quente situado no centro do Sistema Solar.","correct":false,"explanation":"O Sol é uma estrela, e não um planeta. Sua energia é produzida principalmente pela fusão nuclear."},{"id":"lua-luz","text":"A Lua emite luz própria, por isso podemos observá-la no céu noturno.","correct":false,"explanation":"A maior parte da luz visível que observamos na Lua é luz do Sol refletida por sua superfície."},{"id":"ano-exato","text":"Um ano terrestre dura exatamente 365 dias, sem nenhuma diferença de horas ou minutos.","correct":false,"explanation":"O ano trópico dura aproximadamente 365 dias e um pouco menos de seis horas. Por isso, o calendário utiliza anos bissextos."},{"id":"fases-lua","text":"As fases da Lua dependem da porção de sua face iluminada pelo Sol que conseguimos enxergar da Terra.","correct":true,"explanation":"As fases resultam das posições relativas entre Sol, Terra e Lua, que alteram a fração iluminada visível."},{"id":"eclipse-cheia","text":"Todo eclipse solar acontece durante a Lua cheia, quando a Terra fica entre o Sol e a Lua.","correct":false,"explanation":"Um eclipse solar ocorre perto da Lua nova, quando a Lua fica entre a Terra e o Sol. Eclipses lunares podem ocorrer na Lua cheia."},{"id":"marte-vermelho","text":"Marte tem aparência avermelhada, em parte, pela presença de minerais ricos em óxidos de ferro na superfície.","correct":true,"explanation":"Poeira e rochas com compostos de ferro oxidado contribuem para a aparência avermelhada de Marte."},{"id":"mercurio","text":"Mercúrio é o planeta que possui a órbita mais próxima do Sol.","correct":true,"explanation":"Mercúrio é o planeta mais interno do Sistema Solar e completa uma órbita em cerca de 88 dias terrestres."},{"id":"constelacoes","text":"Todas as estrelas de uma constelação estão necessariamente muito próximas umas das outras no espaço.","correct":false,"explanation":"As estrelas de uma constelação podem estar a distâncias muito diferentes. A figura observada é uma projeção vista da Terra."},{"id":"atmosfera","text":"A atmosfera terrestre pode reduzir a nitidez das imagens capturadas por telescópios instalados no solo.","correct":true,"explanation":"A turbulência atmosférica pode distorcer a luz; técnicas como óptica adaptativa reduzem esse efeito."},{"id":"saturno-aneis","text":"Saturno é o único planeta do Sistema Solar que possui anéis.","correct":false,"explanation":"Júpiter, Urano e Netuno também possuem sistemas de anéis, embora sejam menos evidentes."},{"id":"luz-solar","text":"A luz do Sol leva aproximadamente oito minutos para chegar à Terra.","correct":true,"explanation":"A luz solar leva em média cerca de oito minutos e vinte segundos para alcançar a Terra."}]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id);
+const abort=new AbortController();
+const sdk=window.MoodleMCP?.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const progressKey="trueFalseAstronomyV1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,queue=Promise.resolve(),epoch=0;
+// Pure rules, regression tested separately.
+function validate(data){
+ if(!data||data.type!=="true_false"||typeof data.title!=="string"||!data.title.trim()||!data.settings||typeof data.settings.shuffle!=="boolean"||(data.settings.shuffle&&(typeof data.settings.seed!=="string"||!data.settings.seed.trim()))||!Array.isArray(data.statements)||data.statements.length<4||data.statements.length>40)return false;
+ const ids=new Set();let trueCount=0,falseCount=0;
+ for(const p of data.statements){
+  if(!p||typeof p.id!=="string"||!/^[a-z0-9-]+$/.test(p.id)||ids.has(p.id)||typeof p.text!=="string"||!p.text.trim()||p.text.length>800||typeof p.correct!=="boolean"||typeof p.explanation!=="string"||!p.explanation.trim())return false;
+  ids.add(p.id);
+  if(p.correct)trueCount++;else falseCount++;
+ }
+ return trueCount>0&&falseCount>0;
+}
+function hash(seed){let x=2166136261;for(let i=0;i<seed.length;i++){x^=seed.charCodeAt(i);x=Math.imul(x,16777619);}return x>>>0;}
+function orderIds(data){
+ const ids=data.statements.map(p=>p.id);if(!data.settings.shuffle)return ids;
+ let x=hash(data.settings.seed)||1;
+ function random(){x^=x<<13;x^=x>>>17;x^=x<<5;return (x>>>0)/4294967296;}
+ for(let i=ids.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]];}
+ return ids;
+}
+function initialState(data){return {order:orderIds(data),index:0,responses:{},attempts:0,completed:false};}
+function score(s,data){return Object.entries(s.responses).filter(([id,response])=>data.statements.find(p=>p.id===id)?.correct===response).length;}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Array.isArray(s.order)||!s.responses||typeof s.responses!=="object"||Array.isArray(s.responses)||!Number.isInteger(s.index)||s.index<0||s.index>data.statements.length||!Number.isInteger(s.attempts)||s.attempts<0||s.attempts>data.statements.length||typeof s.completed!=="boolean")return false;
+ const expected=orderIds(data);
+ if(s.order.length!==expected.length||s.order.some((id,i)=>id!==expected[i]))return false;
+ const answered=Object.keys(s.responses);
+ if(answered.length!==s.attempts||answered.some(id=>typeof s.responses[id]!=="boolean"||!expected.slice(0,s.attempts).includes(id)))return false;
+ return s.index<=s.attempts&&s.completed===(s.index===expected.length);
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(data),changed:true,kind:"neutral",message:"Jogo reiniciado. Leia a primeira afirmação."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"O estado da atividade é inválido."};
+ const total=s.order.length;
+ if(action?.type==="previous"){
+  if(s.index===0)return {state:s,changed:false,kind:"neutral",message:"Você já está na primeira afirmação."};
+  return {state:{...s,index:s.index-1,completed:false},changed:true,kind:"neutral",message:"Afirmação anterior. A resposta registrada está disponível para revisão."};
+ }
+ if(action?.type==="next"){
+  if(s.index===total)return {state:s,changed:false,kind:"neutral",message:"O resumo já está disponível."};
+  if(!Object.prototype.hasOwnProperty.call(s.responses,s.order[s.index]))return {state:s,changed:false,kind:"warn",message:"Escolha verdadeiro ou falso para continuar."};
+  const index=s.index+1;return {state:{...s,index,completed:index===total},changed:true,kind:"neutral",message:index===total?"Atividade concluída. Confira suas respostas.":"Próxima afirmação."};
+ }
+ if(action?.type==="answer"){
+  if(s.completed)return {state:s,changed:false,kind:"neutral",message:"A atividade já foi concluída."};
+  const id=s.order[s.index];
+  if(Object.prototype.hasOwnProperty.call(s.responses,id))return {state:s,changed:false,kind:"neutral",message:"Você já respondeu. Avance ou volte para revisar."};
+  if(typeof action.value!=="boolean")return {state:s,changed:false,kind:"warn",message:"Escolha um valor verdadeiro ou falso."};
+  if(s.index!==s.attempts)return {state:s,changed:false,kind:"warn",message:"A resposta desta afirmação já foi registrada."};
+  const item=data.statements.find(p=>p.id===id),ok=action.value===item.correct;
+  const next={...s,responses:{...s.responses,[id]:action.value},attempts:s.attempts+1};
+  return {state:next,changed:true,kind:ok?"right":"wrong",message:(ok?"Correto. ":"Não foi dessa vez. ")+(item.correct?"A afirmação é verdadeira. ":"A afirmação é falsa. ")+item.explanation};
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Escolha verdadeiro ou falso."};
+}
+// End pure rules.
+function el(tag,cls,value){const node=document.createElement(tag);if(cls)node.className=cls;if(value!==undefined)node.textContent=value;return node;}
+function getState(){return {order:[...state.order],index:state.index,responses:{...state.responses},attempts:state.attempts,completed:state.completed};}
+function restoreState(v){if(!validState(v,DATA))return false;state={order:[...v.order],index:v.index,responses:{...v.responses},attempts:v.attempts,completed:v.completed};render();return true;}
+function feedback(message,kind="neutral"){
+ const box=$("feedback");box.className="feedback"+(kind==="right"?" right":kind==="wrong"||kind==="warn"?" wrong":"");
+ $("feedback-title").textContent=kind==="right"?"Resposta correta":kind==="wrong"?"Resposta para revisar":"Orientação";
+ $("feedback-text").textContent=message;
+}
+function renderSteps(){
+ const root=$("steps");root.replaceChildren();
+ for(let i=0;i<state.order.length;i++){
+  const id=state.order[i],item=DATA.statements.find(p=>p.id===id),step=el("span","step",String(i+1));
+  if(!state.completed&&state.index===i)step.classList.add("current");
+  if(Object.prototype.hasOwnProperty.call(state.responses,id)){
+   const ok=state.responses[id]===item.correct;step.classList.add(ok?"right":"wrong");step.setAttribute("aria-label","Afirmação "+(i+1)+": "+(ok?"acerto":"revisar"));
+  }else step.setAttribute("aria-label","Afirmação "+(i+1)+": pendente");
+  root.append(step);
+ }
+}
+function renderReview(){
+ const wrap=$("review");wrap.replaceChildren();
+ state.order.forEach((id,index)=>{
+  const item=DATA.statements.find(p=>p.id===id),answer=state.responses[id],correct=answer===item.correct;
+  const row=el("div","review-item "+(correct?"right":"wrong"));
+  row.append(el("strong","",(index+1)+". "+item.text),el("p","",(correct?"Acerto. ":"Para revisar. ")+"Sua resposta: "+(answer?"Verdadeiro":"Falso")+". Resposta correta: "+(item.correct?"Verdadeiro":"Falso")+"."),el("p","",item.explanation));
+  wrap.append(row);
+ });
+}
+function render(){
+ if(disposed||!state)return;
+ const total=state.order.length;
+ $("answered").textContent=state.attempts+" / "+total;$("score").textContent=score(state,DATA)+" / "+total;
+ $("progress").setAttribute("aria-valuenow",String(state.attempts));$("progress-fill").style.width=state.attempts/total*100+"%";
+ $("game-panel").hidden=state.completed;$("summary-panel").hidden=!state.completed;
+ $("previous").disabled=!ready||state.index===0;$("reset").disabled=!ready;
+ renderSteps();
+ if(state.completed){
+  $("summary-score").textContent="Você acertou "+score(state,DATA)+" de "+total+" afirmações. Confira as explicações e revise se quiser.";
+  renderReview();return;
+ }
+ const item=DATA.statements.find(p=>p.id===state.order[state.index]),answered=Object.prototype.hasOwnProperty.call(state.responses,item.id);
+ $("position").textContent="Afirmação "+(state.index+1)+" de "+total;
+ $("statement").textContent=item.text;
+ $("tag").textContent=answered?"Resposta registrada":"Escolha uma opção";
+ $("prompt").textContent=answered?"Leia a explicação e avance, ou volte para revisar.":"A afirmação é verdadeira ou falsa?";
+ for(const b of root.querySelectorAll("[data-answer]")){
+  const answer=b.dataset.answer==="true",chosen=answered&&state.responses[item.id]===answer;
+  b.disabled=!ready||answered;b.classList.toggle("selected",chosen);b.classList.toggle("right",chosen&&answer===item.correct);b.classList.toggle("wrong",chosen&&answer!==item.correct);
+  b.setAttribute("aria-pressed",String(chosen));
+ }
+ $("next").disabled=!ready||!answered;$("next").textContent=state.index===total-1?"Ver resultado final":"Próxima afirmação";
+ if(answered){
+  const ok=state.responses[item.id]===item.correct;
+  feedback((ok?"Correto. ":"Não foi dessa vez. ")+(item.correct?"A afirmação é verdadeira. ":"A afirmação é falsa. ")+item.explanation,ok?"right":"wrong");
+ }else feedback("Leia a afirmação e escolha Verdadeiro ou Falso.");
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const copy=getState(),version=++epoch;
+ queue=queue.then(async()=>{
+  if(disposed||!remote||version!==epoch)return;
+  const previous=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const nextData={...previous,[progressKey]:copy};
+  if(new TextEncoder().encode(JSON.stringify(nextData)).length>12288){feedback("Não foi possível salvar: o estado ultrapassou 12 KiB.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/true-false-astronomy",data:nextData});
+ }).catch(async()=>{
+  if(disposed)return;epoch++;
+  try{remote=await progress.load();
+   if(remote?.data?.[progressKey]&&restoreState(remote.data[progressKey]))feedback("O estado foi alterado em outra janela. Recuperei o progresso salvo mais recente.","warn");
+   else feedback("Não foi possível conciliar o progresso salvo. Continue nesta página.","warn");
+  }catch(_){remote=null;feedback("Salvamento indisponível. Você pode continuar normalmente nesta página.","warn");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const outcome=transition(state,action,DATA);
+ if(!outcome.changed){feedback(outcome.message,outcome.kind);return;}
+ state=outcome.state;modified=true;render();save();
+ if(action.type==="answer")$("feedback").focus({preventScroll:true});
+ if(action.type==="next"&&state.completed)$("summary-title").focus({preventScroll:true});
+ else if(action.type==="next"||action.type==="previous"||action.type==="restart")$("statement").focus({preventScroll:true});
+}
+function destroy(){disposed=true;abort.abort();}
+async function init(root,data){
+ if(!root||!validate(data)){feedback("As afirmações ou suas respostas são inválidas.","warn");return;}
+ state=initialState(data);render();
+ if(progress)try{
+  const loaded=await progress.load();if(disposed)return;remote=loaded;
+  if(!modified&&loaded.data?.[progressKey]&&restoreState(loaded.data[progressKey]))feedback("Progresso recuperado. Continue a partir da afirmação salva.");
+  else feedback("Leia a primeira afirmação e escolha Verdadeiro ou Falso.");
+ }catch(_){feedback("Sem sincronização com o Moodle. O jogo funciona normalmente nesta página.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",event=>{
+ const b=event.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.answer){handleAction({type:"answer",value:b.dataset.answer==="true"});return;}
+ if(b.id==="previous"||b.id==="review-previous")handleAction({type:"previous"});
+ if(b.id==="next")handleAction({type:"next"});
+ if(b.id==="reset"||b.id==="review-reset")handleAction({type:"restart"});
+},{signal:abort.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:abort.signal});
+init(root,DATA);
+})();</script>
+</body>
+</html>
