@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Associe componentes às suas funções</title>
+<style>
+:root{color-scheme:light;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--ink:#24314d;--muted:#63718a;--line:#dce2ed;--accent:#6450cc;--light:#f1efff;--ok:#137c60;--okbg:#e9f8f1;--error:#9a4d27;--errorbg:#fff3e9}
+*{box-sizing:border-box}
+body{margin:0;background:#f6f7fd;color:var(--ink);line-height:1.5}
+button{font:inherit}
+.activity{max-width:1050px;margin:0 auto;padding:32px 24px 46px}
+.eyebrow{font-size:11px;letter-spacing:1.5px;color:var(--accent);font-weight:820;text-transform:uppercase;margin:0 0 8px}
+h1{font-size:clamp(25px,3.5vw,38px);line-height:1.17;letter-spacing:-1px;margin:0 0 11px}
+.intro{font-size:14px;color:var(--muted);max-width:750px;margin:0 0 24px}
+.progress-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 8px;font-size:13px;font-weight:700}
+.progress-track{background:#e7e8f1;height:9px;overflow:hidden;border-radius:20px;margin-bottom:22px}
+.progress-track>span{display:block;height:100%;width:0;background:var(--accent);border-radius:20px;transition:width .2s ease}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.panel{min-width:0;background:#fff;border:1px solid #e3e5f0;padding:22px;border-radius:18px;box-shadow:0 8px 24px #20305b0a}
+.panel h2{font-size:18px;letter-spacing:-.4px;margin:0 0 3px}
+.panel p{font-size:12px;color:var(--muted);margin:0 0 18px}
+.stack{display:grid;gap:12px}
+.source,.target{width:100%;min-height:82px;border:1.5px solid var(--line);border-radius:13px;background:#fff;display:flex;gap:13px;align-items:center;padding:14px;text-align:left;color:var(--ink);position:relative}
+.source{cursor:grab;touch-action:none;user-select:none}
+.source:active{cursor:grabbing}
+.source:hover:not(:disabled),.target:hover:not(:disabled){border-color:#9587e7;background:#fcfbff}
+.source.selected{border-color:var(--accent);background:var(--light);box-shadow:0 0 0 3px #6450cc17}
+.source.matched{border-color:#93d6bb;background:#eff9f4;cursor:default}
+.source:disabled{opacity:.8}
+.number{border-radius:10px;display:grid;place-items:center;width:40px;height:40px;flex:none;background:#eeecfa;color:var(--accent);font-weight:800}
+.source.matched .number{background:#d8f3e7;color:#167454}
+.item-text{display:block;min-width:0}
+.item-text strong,.target strong{display:block;font-size:14px;line-height:1.35}
+.item-text small,.target small{display:block;color:var(--muted);font-size:11px;margin-top:5px}
+.target{cursor:pointer;border-style:dashed;min-height:88px}
+.target .target-symbol{display:grid;place-items:center;flex:none;background:#f2f3f9;width:34px;height:34px;border-radius:50%;font-size:18px;color:#756bad;font-weight:800}
+.target.valid{border-color:#98d5bd;border-style:solid;background:#f2fbf7;cursor:default}
+.target.valid .target-symbol{background:#d7f4e6;color:#137b58}
+.target.available{border-color:#9384e7;background:#f9f7ff;border-style:solid}
+.target:disabled{opacity:1}
+.target strong{font-weight:720}
+.feedback{min-height:56px;border-radius:12px;margin-top:19px;padding:15px 17px;background:#eceef8;color:#435171;font-size:13px;display:flex;align-items:center}
+.feedback.success{background:var(--okbg);color:var(--ok)}
+.feedback.error{background:var(--errorbg);color:var(--error)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.action{padding:11px 16px;border-radius:10px;background:#fff;border:1px solid #d4daeb;color:#514b80;cursor:pointer;font-size:13px;font-weight:730}
+.action:hover:not(:disabled){background:#f1efff;border-color:#8d7ce3}
+.action:disabled{cursor:not-allowed;opacity:.5}
+.complete{padding:17px 19px;background:#e8f8f0;border:1px solid #b7e0cd;border-radius:12px;margin-top:20px}
+.complete h2{font-size:19px;color:#126f55;margin:0 0 5px}
+.complete p{color:#356c5a;font-size:13px;margin:0}
+.drag-ghost{position:fixed;z-index:50;pointer-events:none;background:#fff;border:2px solid var(--accent);box-shadow:0 14px 36px #1d27604a;border-radius:12px;padding:12px 16px;max-width:230px;transform:translate(-50%,-50%);font-size:13px;font-weight:750}
+button:focus-visible{outline:3px solid #a293f4;outline-offset:3px}
+@media(max-width:700px){.activity{padding:24px 15px 32px}.columns{grid-template-columns:1fr;gap:14px}.panel{padding:17px}.source,.target{min-height:72px}.panel p{margin-bottom:12px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--ink:#e8eaf5;--muted:#adb5d0;--line:#39445f;--accent:#b1a1ff;--light:#322e4e;--ok:#8ad4b1;--okbg:#183d32;--error:#e7b388;--errorbg:#483326}body{background:#151b2b}.panel,.source,.target,.action{background:#20283a;border-color:#39445f}.number{background:#34304f}.source:hover:not(:disabled),.target:hover:not(:disabled),.target.available{background:#302c45}.source.matched,.target.valid{background:#203e34;border-color:#497a66}.source.matched .number,.target.valid .target-symbol{background:#2d5848;color:#a4e5c6}.target .target-symbol{background:#303a50}.feedback{background:#2a344a;color:#cad2e7}.progress-track{background:#36415b}.complete{background:#1b4236;border-color:#396d56}.complete h2,.complete p{color:#a2e7c9}.drag-ghost{background:#27314a}}
+</style>
+</head>
+<body>
+<main class="activity">
+  <p class="eyebrow">Desafio de associação · Hardware</p>
+  <h1>Associe cada componente à sua função</h1>
+  <p class="intro">Selecione um componente e depois a função correspondente, ou arraste o componente até o destino. Cada associação correta apresenta uma explicação. Você pode usar o mouse, o toque ou o teclado.</p>
+  <div class="progress-row"><span>Seu progresso</span><output id="progress-text">0 de 6 associações corretas</output></div>
+  <div class="progress-track" id="progress-bar" role="progressbar" aria-label="Associações concluídas" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><span id="progress-fill"></span></div>
+  <div class="columns">
+    <section class="panel" aria-labelledby="sources-title">
+      <h2 id="sources-title">Componentes</h2>
+      <p>Escolha o item que deseja associar.</p>
+      <div id="sources" class="stack"></div>
+    </section>
+    <section class="panel" aria-labelledby="targets-title">
+      <h2 id="targets-title">Funções</h2>
+      <p>Selecione o destino correto do componente.</p>
+      <div id="targets" class="stack"></div>
+    </section>
+  </div>
+  <div class="feedback" id="feedback" role="status" aria-live="polite" aria-atomic="true">Comece selecionando um dos componentes à esquerda.</div>
+  <div class="actions">
+    <button class="action" id="undo" type="button" disabled>Desfazer última associação</button>
+    <button class="action" id="restart" type="button">Recomeçar atividade</button>
+  </div>
+  <section class="complete" id="complete" hidden role="status">
+    <h2>Atividade concluída!</h2>
+    <p>Você identificou a função de todos os componentes. Experimente refazer a atividade para revisar as associações.</p>
+  </section>
+</main>
+<script>
+(() => {
+"use strict";
+const data = {
+    type: "drag_match",
+    title: "Associe componentes às suas funções",
+    settings: {shuffle: true, retryWrong: true},
+    items: [
+        {id: "cpu", label: "Processador", targetId: "compute", clue: "CPU", explanation: "A CPU interpreta e executa instruções."},
+        {id: "ram", label: "Memória RAM", targetId: "volatile", clue: "Memória principal", explanation: "A RAM mantém temporariamente os dados em uso e é volátil."},
+        {id: "ssd", label: "SSD", targetId: "storage", clue: "Unidade de armazenamento", explanation: "O SSD conserva os dados mesmo após desligar o computador."},
+        {id: "network", label: "Placa de rede", targetId: "connect", clue: "Comunicação", explanation: "A interface de rede permite troca de dados com outros dispositivos."},
+        {id: "cooler", label: "Sistema de refrigeração", targetId: "cool", clue: "Controle de calor", explanation: "A refrigeração ajuda a dissipar o calor dos componentes."},
+        {id: "psu", label: "Fonte de alimentação", targetId: "power", clue: "Energia elétrica", explanation: "A fonte converte e distribui energia elétrica aos componentes."}
+    ],
+    targets: [
+        {id: "storage", label: "Armazenar arquivos de forma persistente"},
+        {id: "compute", label: "Executar instruções e cálculos"},
+        {id: "power", label: "Fornecer energia aos componentes"},
+        {id: "volatile", label: "Manter dados temporários em uso"},
+        {id: "cool", label: "Dissipar o calor do equipamento"},
+        {id: "connect", label: "Conectar o computador à rede"}
+    ]
+};
+const root = document.querySelector(".activity");
+const sourceRoot = root.querySelector("#sources");
+const targetRoot = root.querySelector("#targets");
+const feedback = root.querySelector("#feedback");
+const undo = root.querySelector("#undo");
+const restart = root.querySelector("#restart");
+const bar = root.querySelector("#progress-bar");
+const fill = root.querySelector("#progress-fill");
+const count = root.querySelector("#progress-text");
+const completed = root.querySelector("#complete");
+const sourceOrder = [...data.items];
+const targetOrder = [...data.targets];
+let selected = null;
+let matches = {};
+let history = [];
+let attempts = 0;
+let drag = null;
+let ghost = null;
+let suppressClick = false;
+const byId = (items, id) => items.find(item => item.id === id);
+function validate(dataset) {
+    const itemIds = new Set(dataset.items.map(item => item.id));
+    const targetIds = new Set(dataset.targets.map(target => target.id));
+    return itemIds.size === dataset.items.length &&
+        targetIds.size === dataset.targets.length &&
+        dataset.items.length === dataset.targets.length &&
+        dataset.items.every(item => targetIds.has(item.targetId)) &&
+        new Set(dataset.items.map(item => item.targetId)).size === dataset.items.length;
+}
+function shuffle(items) {
+    for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+    }
+}
+function announce(message, kind = "") {
+    feedback.className = "feedback" + (kind ? " " + kind : "");
+    feedback.textContent = message;
+}
+function stopDrag() {
+    if (ghost) ghost.remove();
+    ghost = null;
+    drag = null;
+    root.querySelectorAll(".target.available").forEach(node => node.classList.remove("available"));
+}
+function make(tag, cls, text) {
+    const element = document.createElement(tag);
+    if (cls) element.className = cls;
+    if (text !== undefined) element.textContent = text;
+    return element;
+}
+function render() {
+    sourceRoot.replaceChildren();
+    targetRoot.replaceChildren();
+    for (let i = 0; i < sourceOrder.length; i++) {
+        const item = sourceOrder[i];
+        const placed = matches[item.id] !== undefined;
+        const button = make("button", "source" + (placed ? " matched" : "") +
+            (selected === item.id ? " selected" : ""));
+        button.type = "button";
+        button.dataset.itemId = item.id;
+        button.disabled = placed;
+        button.setAttribute("aria-pressed", String(selected === item.id));
+        const number = make("span", "number", placed ? "✓" : String(i + 1).padStart(2, "0"));
+        number.setAttribute("aria-hidden", "true");
+        const text = make("span", "item-text");
+        text.append(make("strong", "", item.label),
+            make("small", "", placed ? "Associação realizada" : item.clue));
+        button.append(number, text);
+        button.addEventListener("click", () => {
+            if (suppressClick || placed) return;
+            selected = selected === item.id ? null : item.id;
+            render();
+            announce(selected ?
+                item.label + " selecionado. Agora escolha uma função." :
+                "Seleção cancelada. Escolha outro componente.");
+        });
+        button.addEventListener("pointerdown", event => beginDrag(event, item.id, button));
+        sourceRoot.append(button);
+    }
+    for (const target of targetOrder) {
+        const sourceId = Object.keys(matches).find(id => matches[id] === target.id);
+        const occupied = sourceId !== undefined;
+        const button = make("button", "target");
+        button.type = "button";
+        button.dataset.targetId = target.id;
+        button.disabled = occupied;
+        button.classList.toggle("valid", occupied);
+        const mark = make("span", "target-symbol", occupied ? "✓" : "+");
+        mark.setAttribute("aria-hidden", "true");
+        const content = make("span", "item-text");
+        content.append(make("strong", "", target.label));
+        if (occupied) {
+            content.append(make("small", "", "Associado a: " + byId(data.items, sourceId).label));
+        }
+        button.append(mark, content);
+        button.addEventListener("click", () => {
+            if (selected && !occupied) associate(selected, target.id);
+            else if (!selected && !occupied) announce("Selecione primeiro um componente à esquerda.");
+        });
+        targetRoot.append(button);
+    }
+    const done = Object.keys(matches).length;
+    count.value = done + " de " + data.items.length + " associações corretas";
+    count.textContent = count.value;
+    bar.setAttribute("aria-valuenow", String(done));
+    fill.style.width = (done / data.items.length * 100) + "%";
+    completed.hidden = done !== data.items.length;
+    undo.disabled = history.length === 0;
+}
+function associate(itemId, targetId) {
+    if (!byId(data.items, itemId) || !byId(data.targets, targetId) ||
+        matches[itemId] || Object.values(matches).includes(targetId)) {
+        announce("Esse destino já está ocupado. Se necessário, desfaça a última associação.", "error");
+        return;
+    }
+    const item = byId(data.items, itemId);
+    attempts++;
+    if (item.targetId !== targetId) {
+        announce("Tente novamente: " + item.label +
+            " não corresponde a essa função. Releia a descrição e experimente outro destino.", "error");
+        return;
+    }
+    matches[itemId] = targetId;
+    history.push(itemId);
+    selected = null;
+    render();
+    announce(item.label + ": associação correta! " + item.explanation, "success");
+}
+function beginDrag(event, id, source) {
+    if (event.button !== 0 || event.isPrimary === false || matches[id]) return;
+    drag = {id, x: event.clientX, y: event.clientY, moved: false, pointerId: event.pointerId};
+    try { source.setPointerCapture(event.pointerId); } catch (_) {}
+    const move = ev => {
+        if (!drag || drag.pointerId !== ev.pointerId) return;
+        if (!drag.moved && Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y) < 8) return;
+        drag.moved = true;
+        if (!ghost) {
+            ghost = make("div", "drag-ghost", byId(data.items, id).label);
+            document.body.append(ghost);
+        }
+        ghost.style.left = ev.clientX + "px";
+        ghost.style.top = ev.clientY + "px";
+        for (const node of targetRoot.querySelectorAll(".target")) node.classList.remove("available");
+        const hovered = document.elementFromPoint(ev.clientX, ev.clientY)?.closest(".target");
+        if (hovered && !hovered.disabled) hovered.classList.add("available");
+    };
+    const finish = ev => {
+        if (!drag || ev.pointerId !== drag.pointerId) return;
+        const moved = drag.moved;
+        const hovered = moved ? document.elementFromPoint(ev.clientX, ev.clientY)?.closest(".target") : null;
+        source.removeEventListener("pointermove", move);
+        source.removeEventListener("pointerup", finish);
+        source.removeEventListener("pointercancel", cancel);
+        stopDrag();
+        if (moved) {
+            suppressClick = true;
+            setTimeout(() => { suppressClick = false; }, 0);
+            if (hovered && !hovered.disabled && targetRoot.contains(hovered)) {
+                associate(id, hovered.dataset.targetId);
+            } else {
+                announce("Solte o componente sobre uma função disponível ou selecione os itens por toque.", "error");
+            }
+        }
+    };
+    const cancel = () => {
+        source.removeEventListener("pointermove", move);
+        source.removeEventListener("pointerup", finish);
+        source.removeEventListener("pointercancel", cancel);
+        stopDrag();
+    };
+    source.addEventListener("pointermove", move);
+    source.addEventListener("pointerup", finish);
+    source.addEventListener("pointercancel", cancel);
+}
+undo.addEventListener("click", () => {
+    const id = history.pop();
+    if (!id) return;
+    delete matches[id];
+    selected = null;
+    render();
+    announce("Associação de " + byId(data.items, id).label + " desfeita. Você pode tentar novamente.");
+});
+restart.addEventListener("click", () => {
+    stopDrag();
+    selected = null;
+    matches = {};
+    history = [];
+    attempts = 0;
+    shuffle(sourceOrder);
+    render();
+    announce("Atividade reiniciada. Selecione um componente para começar.");
+});
+if (!validate(data)) {
+    announce("Não foi possível iniciar: existem componentes sem destino válido.", "error");
+    restart.disabled = true;
+} else {
+    if (data.settings.shuffle) shuffle(sourceOrder);
+    render();
+}
+})();
+</script>
+</body>
+</html>
