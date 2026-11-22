@@ -29,3 +29,11 @@ O jogo 07 (Descubra a palavra) possui testes próprios para letras repetidas, ac
 ```bash
 node --test docs/pt_br/tests/word-guess.test.mjs
 ```
+
+Para a cruzadinha de Ciências Naturais (jogo 08), execute:
+
+```bash
+node --test docs/pt_br/tests/crossword.test.mjs
+```
+
+O teste verifica a consistência dos cruzamentos, numeração, acentuação, limites da grade, integridade de estados e sincronização dos catálogos.

@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Palavras cruzadas - Ciências Naturais</title>
+<style>
+:root{font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:#f4f6fc;color:#29334e;--ink:#29334e;--muted:#6d7892;--accent:#5749c6;--accent-bg:#eeebfc;--border:#dee4f0;--panel:#fff;--good:#157c5b;--good-bg:#e4f7ef;--warn:#98592c;--warn-bg:#fff1e3}
+*{box-sizing:border-box}body{margin:0;min-width:280px}button,input{font:inherit}
+:focus-visible{outline:3px solid #f4ae37!important;outline-offset:2px!important}
+main{width:min(1120px,100%);margin:auto;padding:31px 20px 46px}
+.eyebrow{font-size:11px;font-weight:820;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+h1{font-size:clamp(27px,3.7vw,39px);line-height:1.18;letter-spacing:-.9px;margin:0 0 10px}
+.intro{max-width:950px;color:var(--muted);font-size:14px;margin:0 0 21px}
+.stats{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:17px}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:9px 15px;min-width:116px}
+.stat small{display:block;color:var(--muted);font-size:11px}.stat b{font-size:19px;font-variant-numeric:tabular-nums}
+.stat-note{font-size:12px;color:var(--muted);margin-left:auto}
+.progress{height:9px;background:#e0e6f3;border-radius:20px;overflow:hidden;margin-bottom:18px}
+.progress span{display:block;width:0;height:100%;background:#26a788;transition:width .18s}
+.layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(255px,.85fr);gap:15px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:17px;padding:20px;box-shadow:0 6px 23px #2431510c;min-width:0}
+.panel h2{font-size:16px;margin:0 0 10px}
+.panel p{font-size:12px;color:var(--muted)}
+.board-scroll{max-width:100%;overflow-x:auto;padding:4px 2px 7px}
+.crossword{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:3px;max-width:580px;width:100%;margin:0 auto;aspect-ratio:11/9}
+.cell,.block{position:relative;min-width:0;min-height:0;aspect-ratio:1}
+.block{background:#202f4b;border-radius:4px}
+.cell{border:1px solid #b6c1d5;border-radius:5px;background:#fff}
+.cell.active{background:#ebe8ff;border-color:#8071df}
+.cell.selected{outline:3px solid #6557d8;z-index:2}
+.cell.verified{background:#dff5e9;border-color:#7dbb9d}
+.cell.revealed{border-bottom:3px solid #d5a644}
+.cell input{display:block;background:transparent;border:0;padding:14px 0 2px;color:#2b3450;width:100%;height:100%;text-align:center;font-size:clamp(13px,1.9vw,22px);font-weight:800;text-transform:uppercase;outline:0;caret-color:var(--accent);border-radius:5px}
+.cell input:focus-visible{outline:3px solid #faaf4d!important;outline-offset:-3px!important}
+.cell-num{position:absolute;top:1px;left:3px;font-weight:800;font-size:clamp(7px,.85vw,10px);color:#506386;pointer-events:none;line-height:1.1}
+.toolset{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.btn{border:1px solid var(--accent);border-radius:9px;padding:10px 13px;background:var(--accent);color:#fff;cursor:pointer;font-size:12px;font-weight:760}
+.btn.secondary{background:var(--panel);color:var(--accent)}
+.btn:disabled{opacity:.42;cursor:not-allowed}
+.help{font-size:12px;color:var(--muted);line-height:1.6;margin:11px 0 0}
+.active-clue{border-radius:12px;background:var(--accent-bg);padding:12px 14px;margin:0 0 15px}
+.active-clue small{color:var(--accent);font-size:11px;font-weight:820}
+.active-clue strong{display:block;font-size:14px;margin:5px 0 0;line-height:1.45}
+.clue-sections{display:grid;gap:14px}
+.clue-group h3{margin:0 0 8px;font-size:13px}
+.clue-list{list-style:none;display:grid;gap:7px;margin:0;padding:0}
+.clue-list button{width:100%;display:flex;align-items:flex-start;gap:9px;text-align:left;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--ink);padding:10px 11px;font-size:12px;line-height:1.5;cursor:pointer}
+.clue-list button:hover{border-color:#9389dc}
+.clue-list button.active{border-color:#8170da;background:var(--accent-bg)}
+.clue-list button.solved{border-color:#a1d4be;background:var(--good-bg)}
+.clue-number{background:#e9e8f8;color:#564bb3;border-radius:6px;flex:0 0 26px;text-align:center;padding:3px;font-size:11px;font-weight:840}
+.clue-list button.solved .clue-number{background:#b9e8d5;color:#156c50}
+.clue-body{flex:1}.clue-body span{display:block}.clue-body small{display:block;margin-top:3px;color:var(--muted);font-size:10px}
+.feedback{margin-top:17px;min-height:53px;background:#e9effb;color:#485878;border-radius:11px;padding:14px 17px;font-size:13px}
+.feedback.good{background:var(--good-bg);color:var(--good)}.feedback.warn{background:var(--warn-bg);color:var(--warn)}
+.done{background:var(--good-bg);color:var(--good);border:1px solid #a4d8bc;border-radius:13px;padding:16px;margin-top:13px}
+.done strong{display:block;font-size:18px}.done p{color:inherit;font-size:12px;margin:4px 0 0}
+.activity-note{font-size:11px;color:var(--muted);margin:14px 0 0}
+[hidden]{display:none!important}
+@media(max-width:800px){.layout{grid-template-columns:minmax(0,1fr)}.panel{padding:16px}.clue-sections{grid-template-columns:1fr 1fr;gap:12px}.stats .stat-note{margin-left:0}}
+@media(max-width:550px){main{padding:23px 12px 34px}.clue-sections{grid-template-columns:minmax(0,1fr)}.crossword{gap:2px;min-width:0}.cell,.block{border-radius:3px}.cell input{font-size:clamp(11px,3.2vw,18px);padding:9px 0 0}.cell-num{font-size:7px;top:0;left:2px}.panel{padding:12px}.stat{padding:7px 12px;min-width:93px}.stat b{font-size:16px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--ink:#e3e9f8;--muted:#b0bdd5;--accent:#b5a7ff;--accent-bg:#35314f;--border:#3d4860;--panel:#252e43;--good:#9ee4c7;--good-bg:#214237;--warn:#f0c297;--warn-bg:#493426}body{background:#141b2a}.block{background:#0c1625}.cell{background:#2d384e;border-color:#52617b}.cell input{color:#f3f5fd}.cell-num{color:#c1cbed}.cell.active{background:#403958;border-color:#a99ce0}.cell.selected{outline-color:#c8bdf9}.cell.verified{background:#2a5545;border-color:#648e77}.cell.revealed{border-color:#eac274}.clue-number{background:#3d3856;color:#e1d7ff}.clue-list button.solved .clue-number{background:#345d4c;color:#a2e2bf}.feedback{background:#2d3952;color:#d6e0f6}.feedback.good{background:var(--good-bg);color:var(--good)}.feedback.warn{background:var(--warn-bg);color:var(--warn)}.done{border-color:#3f7661}.progress{background:#39445b}}
+</style></head>
+<body>
+<main id="activity">
+ <p class="eyebrow">Desafio de vocabulário · Ciências Naturais</p>
+ <h1>Palavras cruzadas</h1>
+ <p class="intro">Resolva oito definições sobre Ciências Naturais, preenchendo as palavras horizontais e verticais. Selecione uma pista e digite as letras nos quadrados; as células que se cruzam são compartilhadas. Confira uma palavra quando terminar ou verifique todo o tabuleiro.</p>
+ <div class="stats">
+  <div class="stat"><small>Palavras verificadas</small><b id="verified-count">0 / 8</b></div>
+  <div class="stat"><small>Dicas utilizadas</small><b id="hints-count">0 / 3</b></div>
+  <span class="stat-note">As palavras aceitam acentos ou letras sem acento.</span>
+ </div>
+ <div id="progress" class="progress" role="progressbar" aria-label="Palavras verificadas" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0"><span id="progress-fill"></span></div>
+ <div class="layout">
+  <section class="panel" aria-labelledby="board-title">
+   <h2 id="board-title">Complete a cruzadinha</h2>
+   <div class="active-clue" role="group" aria-label="Pista selecionada">
+    <small id="active-label">Pista selecionada</small>
+    <strong id="active-clue"></strong>
+   </div>
+   <div class="board-scroll">
+    <div id="board" class="crossword" role="group" aria-label="Grade de 9 linhas e 11 colunas, com letras editáveis"></div>
+   </div>
+   <p id="keyboard-help" class="help">Use as setas para mover o foco, Backspace para apagar ou voltar, Enter para alternar a orientação em um cruzamento e Tab para avançar pelas pistas; nas extremidades, a navegação segue o comportamento normal do navegador. Você também pode tocar nas letras e nas pistas.</p>
+   <div class="toolset">
+    <button id="check-word" class="btn" type="button">Verificar palavra</button>
+    <button id="check-all" class="btn secondary" type="button">Conferir cruzadinha</button>
+    <button id="hint" class="btn secondary" type="button">Revelar letra (até 3)</button>
+    <button id="clear" class="btn secondary" type="button">Limpar letras</button>
+    <button id="reset" class="btn secondary" type="button">Recomeçar</button>
+   </div>
+  </section>
+  <section class="panel" aria-labelledby="clue-title">
+   <h2 id="clue-title">Pistas numeradas</h2>
+   <div class="clue-sections">
+    <section class="clue-group" aria-labelledby="across-title"><h3 id="across-title">Horizontais</h3><ol id="across" class="clue-list"></ol></section>
+    <section class="clue-group" aria-labelledby="down-title"><h3 id="down-title">Verticais</h3><ol id="down" class="clue-list"></ol></section>
+   </div>
+  </section>
+ </div>
+ <div id="feedback" role="status" aria-live="polite" aria-atomic="true" class="feedback">Preparando o tabuleiro...</div>
+ <div id="done" class="done" role="status" hidden><strong>Parabéns! Oito palavras verificadas.</strong><p>Você concluiu o desafio visual. Isso não atribui nota nem altera a conclusão acadêmica da atividade no Moodle.</p></div>
+ <p class="activity-note">Este jogo apresenta feedback formativo e não utiliza o banco de questões ou notas oficiais do Moodle.</p>
+</main>
+<script>(function crosswordApp(){
+"use strict";
+const DATA={"type":"crossword","id":"ciencias-naturais","title":"Palavras cruzadas: Ciências Naturais","rows":9,"cols":11,"settings":{"maxHints":3},"entries":[{"id":"ecossistema","answer":"ECOSSISTEMA","clue":"Conjunto de seres vivos e do ambiente físico em interação.","explanation":"Um ecossistema reúne organismos, fatores físicos e suas interações.","row":0,"col":0,"direction":"across"},{"id":"oxigenio","answer":"OXIGÊNIO","clue":"Gás essencial à respiração de muitos seres vivos, representado pelo símbolo O.","explanation":"O oxigênio participa da respiração celular aeróbica e de várias reações químicas.","row":0,"col":2,"direction":"down"},{"id":"energia","answer":"ENERGIA","clue":"Grandeza envolvida na realização de trabalho e em transformações físicas.","explanation":"A energia pode ser transferida e transformada, como da luz para energia química na fotossíntese.","row":0,"col":8,"direction":"down"},{"id":"agua","answer":"ÁGUA","clue":"Substância líquida indispensável à maior parte das formas de vida.","explanation":"A água participa de processos biológicos, regula temperaturas e transporta substâncias.","row":0,"col":10,"direction":"down"},{"id":"planeta","answer":"PLANETA","clue":"Corpo celeste que orbita uma estrela e não produz luz própria.","explanation":"A Terra é um planeta do Sistema Solar, orbitando o Sol.","row":2,"col":6,"direction":"down"},{"id":"celula","answer":"CÉLULA","clue":"Unidade básica estrutural e funcional dos seres vivos.","explanation":"As células compõem os organismos e realizam processos fundamentais à vida.","row":4,"col":1,"direction":"across"},{"id":"solo","answer":"SOLO","clue":"Camada superficial da Terra que pode sustentar o crescimento de plantas.","explanation":"O solo contém partículas minerais, matéria orgânica, água, ar e organismos.","row":7,"col":1,"direction":"across"},{"id":"fauna","answer":"FAUNA","clue":"Conjunto de animais presentes em uma região ou ecossistema.","explanation":"Fauna é o conjunto de espécies animais de determinado ambiente.","row":8,"col":5,"direction":"across"}]};
+const root=document.getElementById("activity");
+const $=id=>document.getElementById(id);
+const controller=new AbortController();
+const progress=window.MoodleMCP?.progress?.load&&window.MoodleMCP?.progress?.save?window.MoodleMCP.progress:null;
+const storageKey="crosswordNaturalSciencesV1";
+let board=null,state=null,activeId=null,ready=false,disposed=false,changed=false,revision=null,saveQueue=Promise.resolve(),dirty=false;
+
+// Pure helpers (also exercised by the automated regression tests).
+function normalize(value){
+ return String(value).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleUpperCase("pt-BR");
+}
+function letter(value){
+ const v=normalize(value).replace(/[^A-Z]/g,"");
+ return v.length? v[0]:"";
+}
+function key(row,col){return row+","+col;}
+function createBoard(data){
+ if(!data||data.type!=="crossword"||!Number.isInteger(data.rows)||!Number.isInteger(data.cols)||data.rows<3||data.cols<3||data.rows>18||data.cols>18||!Array.isArray(data.entries)||data.entries.length<3||data.entries.length>20||!data.settings||!Number.isInteger(data.settings.maxHints)||data.settings.maxHints<0||data.settings.maxHints>10)return null;
+ const cells=new Map(),placed=[],ids=new Set(),directions=new Set();
+ for(const entry of data.entries){
+  if(!entry||typeof entry.id!=="string"||!/^[a-z0-9-]+$/.test(entry.id)||ids.has(entry.id)||!["across","down"].includes(entry.direction)||!Number.isInteger(entry.row)||!Number.isInteger(entry.col)||entry.row<0||entry.col<0||typeof entry.answer!=="string"||!entry.answer||typeof entry.clue!=="string"||!entry.clue.trim()||typeof entry.explanation!=="string"||!entry.explanation.trim())return null;
+  const answer=normalize(entry.answer);
+  if(!/^[A-Z]{2,18}$/.test(answer))return null;
+  const dr=entry.direction==="down"?1:0,dc=entry.direction==="across"?1:0;
+  if(entry.row+(answer.length-1)*dr>=data.rows||entry.col+(answer.length-1)*dc>=data.cols)return null;
+  const positions=[];
+  for(let i=0;i<answer.length;i++){
+   const r=entry.row+dr*i,c=entry.col+dc*i,k=key(r,c),prev=cells.get(k);
+   if(prev&&(prev.char!==answer[i]||prev.directions.has(entry.direction)||prev.entries.length>=2))return null;
+   if(!prev)cells.set(k,{row:r,col:c,char:answer[i],entries:[entry.id],directions:new Set([entry.direction])});
+   else{prev.entries.push(entry.id);prev.directions.add(entry.direction);}
+   positions.push(k);
+  }
+  placed.push({...entry,answerNormalized:answer,positions});
+  ids.add(entry.id);directions.add(entry.direction);
+ }
+ if(directions.size!==2)return null;
+ // A word may not touch another word before/after its ends; no unexplained adjacent letters.
+ for(const entry of placed){
+  const dr=entry.direction==="down"?1:0,dc=entry.direction==="across"?1:0;
+  if(cells.has(key(entry.row-dr,entry.col-dc))||cells.has(key(entry.row+dr*entry.positions.length,entry.col+dc*entry.positions.length)))return null;
+  for(const k of entry.positions){
+   const cell=cells.get(k);
+   if(cell.entries.length===2)continue;
+   const offsets=entry.direction==="across"?[[-1,0],[1,0]]:[[0,-1],[0,1]];
+   for(const [rr,cc] of offsets)if(cells.has(key(cell.row+rr,cell.col+cc)))return null;
+  }
+ }
+ // All entries must form a single connected puzzle.
+ const reached=new Set([placed[0].id]);
+ for(let again=true;again;){
+  again=false;
+  for(const cell of cells.values()){
+   if(cell.entries.some(id=>reached.has(id))){
+    for(const id of cell.entries)if(!reached.has(id)){reached.add(id);again=true;}
+   }
+  }
+ }
+ if(reached.size!==placed.length)return null;
+ // Starting cells share a single crossword number when multiple words start there.
+ const starts=[...new Map(placed.map(e=>[key(e.row,e.col),{row:e.row,col:e.col}])).values()].sort((a,b)=>a.row-b.row||a.col-b.col);
+ const nums=new Map(starts.map((pos,i)=>[key(pos.row,pos.col),i+1]));
+ const entries=placed.map(e=>({...e,number:nums.get(key(e.row,e.col))}));
+ return {rows:data.rows,cols:data.cols,cells,entries,byId:new Map(entries.map(e=>[e.id,e])),starts:nums};
+}
+function initialState(){return {cells:{},verified:[],revealed:[],hints:0};}
+function readWord(entry,values){return entry.positions.map(k=>values[k]||"").join("");}
+function isCorrect(entry,values){return readWord(entry,values)===entry.answerNormalized;}
+function checkState(value,puzzle){
+ if(!value||typeof value!=="object"||Array.isArray(value)||!value.cells||typeof value.cells!=="object"||Array.isArray(value.cells)||!Array.isArray(value.verified)||!Array.isArray(value.revealed)||!Number.isInteger(value.hints)||value.hints<0||value.hints>DATA.settings.maxHints)return false;
+ const validIds=new Set(puzzle.entries.map(e=>e.id));
+ if(new Set(value.verified).size!==value.verified.length||value.verified.some(id=>!validIds.has(id)))return false;
+ if(new Set(value.revealed).size!==value.revealed.length||value.revealed.some(k=>!puzzle.cells.has(k)))return false;
+ if(value.revealed.length>value.hints)return false;
+ for(const [k,v] of Object.entries(value.cells))if(!puzzle.cells.has(k)||typeof v!=="string"||!/[A-Z]/.test(v)||v.length!==1||v!==letter(v))return false;
+ for(const id of value.verified)if(!isCorrect(puzzle.byId.get(id),value.cells))return false;
+ for(const k of value.revealed)if(value.cells[k]!==puzzle.cells.get(k).char)return false;
+ return true;
+}
+// End pure helpers.
+
+function announce(message,kind=""){const status=$("feedback");status.className="feedback"+(kind?" "+kind:"");status.textContent=message;}
+function getState(){return {cells:{...state.cells},verified:[...state.verified],revealed:[...state.revealed],hints:state.hints};}
+function restoreState(value){
+ if(!checkState(value,board))return false;
+ state={cells:{...value.cells},verified:[...value.verified],revealed:[...value.revealed],hints:value.hints};
+ dirty=false;render();return true;
+}
+function activeWord(){return board.byId.get(activeId)||board.entries[0];}
+function inputAt(k){return $("board").querySelector('[data-key="'+k+'"]');}
+function focusCell(k){
+ const node=inputAt(k);if(node){node.focus({preventScroll:true});node.select();}
+}
+function selectEntry(id,focus=true,preferred=null){
+ if(!board.byId.has(id))return;
+ activeId=id;render();
+ if(focus){
+  const word=activeWord();
+  const cell=preferred&&word.positions.includes(preferred)?preferred:(word.positions.find(k=>!state.cells[k])||word.positions[0]);
+  focusCell(cell);
+ }
+}
+function paintBoard(){
+ const container=$("board");container.replaceChildren();
+ container.style.gridTemplateColumns="repeat("+board.cols+",minmax(0,1fr))";
+ for(let r=0;r<board.rows;r++)for(let c=0;c<board.cols;c++){
+  const k=key(r,c),cell=board.cells.get(k);
+  if(!cell){const empty=document.createElement("span");empty.className="block";empty.setAttribute("aria-hidden","true");container.append(empty);continue;}
+  const box=document.createElement("div");box.className="cell";box.dataset.cell=k;
+  const number=board.starts.get(k);
+  if(number){const num=document.createElement("span");num.className="cell-num";num.textContent=number;num.setAttribute("aria-hidden","true");box.append(num);}
+  const field=document.createElement("input");
+  field.type="text";field.inputMode="text";field.autocomplete="off";field.autocapitalize="characters";field.spellcheck=false;field.maxLength=2;
+  field.dataset.key=k;field.setAttribute("aria-label","Linha "+(r+1)+", coluna "+(c+1)+(number?", início da pista "+number:"")+", letra para preencher.");
+  field.setAttribute("aria-describedby","keyboard-help");
+  box.append(field);container.append(box);
+ }
+}
+function clueList(){
+ const across=$("across"),down=$("down");across.replaceChildren();down.replaceChildren();
+ for(const e of board.entries){
+  const li=document.createElement("li"),button=document.createElement("button");button.type="button";button.dataset.entry=e.id;
+  const number=document.createElement("span");number.className="clue-number";number.textContent=e.number;
+  const body=document.createElement("span");body.className="clue-body";
+  const clue=document.createElement("span");clue.textContent=e.clue;
+  const size=document.createElement("small");size.textContent=e.answerNormalized.length+" letras";
+  body.append(clue,size);button.append(number,body);li.append(button);
+  (e.direction==="across"?across:down).append(li);
+ }
+}
+function render(){
+ if(disposed||!board||!state)return;
+ const solved=new Set(state.verified),word=activeWord(),active=new Set(word.positions);
+ for(const box of $("board").querySelectorAll(".cell")){
+  const k=box.dataset.cell,c=board.cells.get(k),input=box.querySelector("input");
+  const value=state.cells[k]||"";
+  if(input.value!==value)input.value=value;
+  box.classList.toggle("active",active.has(k));
+  box.classList.toggle("verified",c.entries.every(id=>solved.has(id)));
+  box.classList.toggle("revealed",state.revealed.includes(k));
+ }
+ for(const button of root.querySelectorAll("[data-entry]")){
+  const e=board.byId.get(button.dataset.entry);
+  button.classList.toggle("active",e.id===activeId);button.classList.toggle("solved",solved.has(e.id));
+  button.setAttribute("aria-current",e.id===activeId?"true":"false");
+  const small=button.querySelector(".clue-body small");
+  small.textContent=e.answerNormalized.length+" letras"+(solved.has(e.id)?" · verificada":"");
+ }
+ $("active-label").textContent="Pista "+word.number+" · "+(word.direction==="across"?"Horizontal":"Vertical");
+ $("active-clue").textContent=word.clue;
+ $("verified-count").textContent=solved.size+" / "+board.entries.length;
+ $("hints-count").textContent=String(state.hints)+" / "+DATA.settings.maxHints;
+ $("progress").setAttribute("aria-valuenow",String(solved.size));
+ $("progress-fill").style.width=(solved.size/board.entries.length*100)+"%";
+ $("hint").disabled=!ready||state.hints>=DATA.settings.maxHints||board.entries.every(e=>solved.has(e.id));
+ $("done").hidden=solved.size!==board.entries.length;
+}
+function invalidate(k){
+ const memberships=board.cells.get(k)?.entries||[];
+ state.verified=state.verified.filter(id=>!memberships.includes(id));
+}
+function setCell(k,value,force=false){
+ if(!board.cells.has(k))return false;
+ if(state.revealed.includes(k)&&!force)return false;
+ const v=letter(value);
+ if(v===state.cells[k])return false;
+ if(v)state.cells[k]=v;else delete state.cells[k];
+ invalidate(k);dirty=true;changed=true;return true;
+}
+function moveInWord(from,delta){
+ const positions=activeWord().positions,i=positions.indexOf(from);
+ if(i<0)return;
+ const next=positions[i+delta];
+ if(next)focusCell(next);
+}
+function moveArrow(k,keyName){
+ const item=board.cells.get(k);
+ if(!item)return;
+ const delta=keyName==="ArrowRight"?[0,1]:keyName==="ArrowLeft"?[0,-1]:keyName==="ArrowDown"?[1,0]:[-1,0];
+ const dir=delta[0]?"down":"across";
+ const candidate=item.entries.find(id=>board.byId.get(id).direction===dir);
+ if(candidate)activeId=candidate;
+ let r=item.row,c=item.col;
+ while(true){
+  r+=delta[0];c+=delta[1];
+  if(r<0||c<0||r>=board.rows||c>=board.cols)return;
+  if(board.cells.has(key(r,c))){render();focusCell(key(r,c));return;}
+ }
+}
+function verifyEntry(entry){
+ const text=readWord(entry,state.cells);
+ if(isCorrect(entry,state.cells)){
+  if(!state.verified.includes(entry.id))state.verified.push(entry.id);
+  return {ok:true,message:"Pista "+entry.number+" correta! "+entry.explanation};
+ }
+ state.verified=state.verified.filter(x=>x!==entry.id);
+ const count=entry.positions.filter((k,i)=>(state.cells[k]||"")===entry.answerNormalized[i]).length;
+ return {ok:false,message:"Pista "+entry.number+": "+count+" de "+entry.positions.length+" letras estão na posição correta. Reveja a definição e tente novamente."};
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ if(action.type==="select"){selectEntry(action.id);return;}
+ if(action.type==="cell"){
+  if(!setCell(action.key,action.value))return;
+  render();return;
+ }
+ if(action.type==="clear"){
+  state=initialState();dirty=false;changed=true;render();queueSave();announce("Tabuleiro limpo. Você pode preencher as palavras novamente.");return;
+ }
+ if(action.type==="reset"){
+  state=initialState();activeId=board.entries[0].id;dirty=false;changed=true;render();queueSave();announce("Jogo reiniciado. Escolha uma pista para começar.");return;
+ }
+ if(action.type==="hint"){
+  if(state.hints>=DATA.settings.maxHints){announce("Você já utilizou todas as dicas.","warn");return;}
+  const entry=activeWord(),k=entry.positions.find(key=>state.cells[key]!==board.cells.get(key).char&&!state.revealed.includes(key));
+  if(!k){announce("Esta palavra já está preenchida. Verifique-a ou selecione outra pista.");return;}
+  state.hints++;state.revealed.push(k);setCell(k,board.cells.get(k).char,true);
+  dirty=false;render();queueSave();announce("Uma letra da pista "+entry.number+" foi revelada. Agora tente completar a palavra.");return;
+ }
+ if(action.type==="check"){
+  const result=verifyEntry(activeWord());dirty=false;render();queueSave();announce(result.message,result.ok?"good":"warn");return;
+ }
+ if(action.type==="checkAll"){
+  let count=0;
+  for(const entry of board.entries)if(verifyEntry(entry).ok)count++;
+  dirty=false;render();queueSave();
+  announce(count===board.entries.length?"Parabéns! Você completou todas as palavras. As verificações são apenas resultados deste jogo.":count+" de "+board.entries.length+" palavras foram verificadas. Selecione as pistas restantes para continuar.",count===board.entries.length?"good":"warn");
+ }
+}
+function queueSave(){
+ if(!progress||!revision||disposed)return;
+ const copy=getState();
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!revision)return;
+  const original=revision.data&&typeof revision.data==="object"&&!Array.isArray(revision.data)?revision.data:{};
+  revision=await progress.save({version:revision.version,location:"games/crossword-sciences",data:{...original,[storageKey]:copy}});
+ }).catch(async()=>{
+  try{
+   revision=await progress.load();
+   const remote=revision.data?.[storageKey];
+   if(remote&&restoreState(remote))announce("O progresso foi alterado em outra janela. Carreguei a versão salva mais recente; confira as letras.","warn");
+   else announce("Não foi possível conciliar as alterações com o Moodle. Continue nesta página.","warn");
+  }catch(_){revision=null;announce("Sem sincronização de progresso. A cruzadinha continua funcionando nesta página.","warn");}
+ });
+}
+function destroy(){disposed=true;controller.abort();$("board").replaceChildren();}
+
+async function init(container,data){
+ if(!container||!(board=createBoard(data))){announce("A grade ou os cruzamentos são inválidos. Não foi possível iniciar.","warn");return;}
+ state=initialState();activeId=board.entries[0].id;paintBoard();clueList();render();
+ if(progress)try{
+  const loaded=await progress.load();
+  if(disposed)return;
+  revision=loaded;
+  if(!changed&&loaded.data?.[storageKey]&&restoreState(loaded.data[storageKey]))announce("Seu progresso anterior foi recuperado. Selecione uma pista para continuar.","good");
+  else announce("Escolha uma pista e preencha as letras. Confira cada palavra quando desejar.");
+ }catch(_){announce("O progresso não está disponível; a cruzadinha funciona normalmente no navegador.");}
+ ready=true;render();
+}
+root.addEventListener("click",event=>{
+ const btn=event.target.closest("button");
+ if(!btn||!root.contains(btn))return;
+ if(btn.dataset.entry){handleAction({type:"select",id:btn.dataset.entry});return;}
+ if(btn.id==="check-word")handleAction({type:"check"});
+ if(btn.id==="check-all")handleAction({type:"checkAll"});
+ if(btn.id==="hint")handleAction({type:"hint"});
+ if(btn.id==="clear")handleAction({type:"clear"});
+ if(btn.id==="reset")handleAction({type:"reset"});
+},{signal:controller.signal});
+root.addEventListener("focusin",event=>{
+ const field=event.target.closest("input[data-key]");
+ if(!field||!board||!state)return;
+ const cell=board.cells.get(field.dataset.key);
+ if(!cell)return;
+ if(!cell.entries.includes(activeId))activeId=cell.entries[0];
+ render();
+},{signal:controller.signal});
+root.addEventListener("input",event=>{
+ const field=event.target.closest("input[data-key]");
+ if(!field||event.isComposing||!ready)return;
+ const currentKey=field.dataset.key;
+ const v=letter(field.value);
+ handleAction({type:"cell",key:currentKey,value:v});
+ if(field.value!==v)field.value=v;
+ if(v)moveInWord(currentKey,1);
+},{signal:controller.signal});
+root.addEventListener("compositionend",event=>{
+ const field=event.target.closest("input[data-key]");
+ if(field&&ready){const value=letter(field.value);handleAction({type:"cell",key:field.dataset.key,value});field.value=value;if(value)moveInWord(field.dataset.key,1);}
+},{signal:controller.signal});
+root.addEventListener("keydown",event=>{
+ const field=event.target.closest("input[data-key]");
+ if(!field||!ready||event.isComposing)return;
+ const k=field.dataset.key;
+ if(event.key==="Backspace"){
+  event.preventDefault();
+  if(state.cells[k]&&!state.revealed.includes(k)){handleAction({type:"cell",key:k,value:""});}
+  else{const entry=activeWord(),index=entry.positions.indexOf(k);if(index>0){const previous=entry.positions[index-1];handleAction({type:"cell",key:previous,value:""});focusCell(previous);}}
+  return;
+ }
+ if(event.key==="Delete"){event.preventDefault();handleAction({type:"cell",key:k,value:""});return;}
+ if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(event.key)){event.preventDefault();moveArrow(k,event.key);return;}
+ if(event.key==="Enter"&&board.cells.get(k).entries.length===2){
+  event.preventDefault();
+  const other=board.cells.get(k).entries.find(id=>id!==activeId);
+  if(other)selectEntry(other,true,k);
+  return;
+ }
+ if(event.key==="Tab"){
+  const i=board.entries.findIndex(e=>e.id===activeId),next=i+(event.shiftKey?-1:1);
+  if(next>=0&&next<board.entries.length){event.preventDefault();selectEntry(board.entries[next].id); }
+  // At the beginning/end, let native Tab leave the grid to avoid a keyboard trap.
+ }
+},{signal:controller.signal});
+root.addEventListener("paste",event=>{
+ const field=event.target.closest("input[data-key]");
+ if(!field||!ready)return;
+ const v=normalize(event.clipboardData?.getData("text")||"").replace(/[^A-Z]/g,"");
+ if(!v)return;
+ event.preventDefault();
+ const positions=activeWord().positions;const i=positions.indexOf(field.dataset.key);
+ if(i<0)return;
+ for(let n=0;n<v.length&&i+n<positions.length;n++)handleAction({type:"cell",key:positions[i+n],value:v[n]});
+ focusCell(positions[Math.min(i+v.length,positions.length-1)]);
+},{signal:controller.signal});
+root.addEventListener("focusout",event=>{
+ if(!dirty)return;
+ const next=event.relatedTarget;
+ if(next&&$("board").contains(next))return;
+ dirty=false;queueSave();
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();
+</script>
+</body></html>
