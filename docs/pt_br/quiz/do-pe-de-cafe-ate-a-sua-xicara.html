@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Quiz ilustrado sobre cafeeiros, cerejas, pós-colheita, secagem, torra, moagem e extração, com 12 questões, ilustrações SVG originais, feedback e revisão.">
+<title>Do pé de café até a sua xícara | Quiz - Caderno de Origem</title>
+<style>
+:root{--paper:#f5f0e7;--sheet:#fffbf3;--ink:#332a31;--wine:#84364a;--wine-dark:#63263a;--rose:#ad6673;--deep:#3e293d;--blue:#3d7884;--teal:#1c6371;--sand:#e6d8c7;--rule:#d4c5b9;--muted:#625860;--gold:#b18555;--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,Consolas,"Liberation Mono",monospace;color:var(--ink);font-family:var(--sans);background:var(--paper)}
+*,*:before,*:after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:290px;background:radial-gradient(ellipse at 10% 3%,#fff5e7 0%,transparent 34%),var(--paper);line-height:1.65}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.5}
+a{color:#703b59;text-underline-offset:3px}
+a:hover{color:var(--teal)}
+:focus-visible{outline:3px solid #247c95;outline-offset:4px}
+[hidden]{display:none!important}
+.wrap{width:min(1170px,calc(100% - 44px));margin-inline:auto}
+.skip{position:absolute;top:-140px;left:14px;padding:12px;background:white;z-index:20}
+.skip:focus{top:12px}
+.kicker{font:800 .73rem/1.6 var(--mono);text-transform:uppercase;letter-spacing:.13em;color:#844154}
+.mono{font-family:var(--mono)}
+.masthead{background:#f1e8da;position:relative;overflow:hidden}
+.masthead:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 80% 13%,#e5bfc078,transparent 52%);pointer-events:none}
+.masthead .wrap{position:relative}
+.folio{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:19px 0;border-bottom:2px solid #b6998f;font:.73rem var(--mono);color:#795461;letter-spacing:.07em;text-transform:uppercase}
+.folio strong{color:#63374a}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center;min-height:360px;padding:40px 0 31px}
+.hero-title{font:normal clamp(2.7rem,5.7vw,5.8rem)/1.07 var(--serif);letter-spacing:-.052em;margin:13px 0 19px}
+.hero-title em{color:var(--wine);font-weight:400}
+.hero-lead{font-size:1.07rem;color:#62515b;max-width:625px;line-height:1.86;margin:0}
+.hero-plate{position:relative;max-width:400px;justify-self:center;width:100%}
+.hero-plate svg{display:block;width:100%;height:auto}
+.hero-plate .caption{position:absolute;right:0;bottom:0;border-top:1px solid #bd9f95;padding:6px 4px;font:.71rem var(--mono);color:#674e59;background:#f1e8daaa}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.hero-tags span{border:1px solid #bca9a0;background:#fff9eea6;padding:6px 10px;font:.77rem var(--mono);color:#704953}
+.color-band{height:10px;background:linear-gradient(90deg,#3e8493 0 23%,#b4c9bb 23% 40%,#faf4e7 40% 53%,#d8999b 53% 74%,#9b435a 74% 100%)}
+.progress-section{padding:26px 0 19px}
+.progress-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#6a5260;font:.79rem/1.7 var(--mono);margin-bottom:9px}
+.progress-track{height:10px;background:#e4d6cf;border:1px solid #cbb7ad;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#327888,#8b455b);transition:width .3s ease}
+.progress-caption{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;font:.77rem var(--mono);color:#6b5860}
+.notice{border-left:4px solid #3b7a8a;padding:12px 17px;background:#e7eeee;font-size:.88rem;color:#3e5861;line-height:1.8}
+.main-shell{padding:26px 0 62px}
+.question-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.03fr);gap:24px;align-items:start}
+.plate{margin:0;border:1px solid #d1bdb4;background:#fbf4e9;padding:18px}
+.plate-number{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #d5c1b7;padding:0 0 12px;margin-bottom:12px;font:.73rem/1.6 var(--mono);color:#885166;letter-spacing:.07em}
+.plate-picture{min-height:365px;display:grid;place-items:center}
+.plate-picture svg{width:100%;max-height:440px;height:auto;display:block}
+.plate figcaption{border-top:1px solid #d5c1b7;padding-top:12px;font-size:.81rem;color:#675e61;line-height:1.75}
+.plate-note{margin-top:10px;font:.76rem/1.65 var(--mono);color:#725e67}
+.question-card{background:var(--sheet);border:1px solid #cebdb7;padding:clamp(19px,3.2vw,35px);min-height:570px;display:flex;flex-direction:column}
+.question-index{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid #d7c5bd;font:.75rem var(--mono);color:#98556a}
+.question-card h2{font:normal clamp(1.7rem,3vw,2.55rem)/1.2 var(--serif);letter-spacing:-.028em;margin:20px 0 15px}
+.question-instruction{font:.91rem/1.77 var(--sans);color:#645a60;margin:0 0 18px}
+.answers{border:0;padding:0;margin:0;min-width:0}
+.answers legend{font:.76rem/1.65 var(--mono);color:#7d5662;letter-spacing:.045em;margin-bottom:9px}
+.options{display:grid;gap:9px}
+.option{display:flex;align-items:center;gap:12px;border:1px solid #d6c5bc;background:#fbf5ed;padding:12px 14px;cursor:pointer;min-height:59px;transition:border-color .16s,background .16s}
+.option:hover{border-color:#44798a;background:#f0f5f2}
+.option.selected{border:2px solid #356d7d;padding:11px 13px;background:#e8f1ee}
+.option input{flex:none;width:19px;height:19px;accent-color:#7c3e55}
+.option-copy{min-width:0;font-size:.91rem;line-height:1.55}
+.option-art{flex:none;width:52px;height:42px;display:grid;place-items:center}
+.option-art svg{width:50px;height:40px}
+.sequence{display:grid;gap:8px;list-style:none;padding:0;margin:0}
+.sequence-item{display:grid;grid-template-columns:29px minmax(0,1fr) auto;gap:9px;align-items:center;background:#fbf5ee;border:1px solid #d3c1b9;padding:9px 10px}
+.sequence-item .num{font:.85rem var(--mono);color:#8f4a5d}
+.sequence-item .label{font-size:.89rem;line-height:1.4}
+.order-buttons{display:flex;gap:5px}
+.order-buttons button{border:1px solid #b49a9f;color:#744259;background:white;width:33px;height:34px;display:grid;place-items:center;font-size:1.04rem}
+.order-buttons button:not(:disabled):hover{background:#e7edf0}
+.answer-help{color:#74646c;font-size:.81rem;line-height:1.75;margin:13px 0 0}
+.feedback{padding:16px 18px;margin:23px 0 0;border-left:5px solid #9f6d7d;background:#f0e6e4;color:#563c49;line-height:1.78}
+.feedback.correct{border-color:#2d727a;background:#e4f0ea;color:#2b555b}
+.feedback strong{display:block;font:700 1.05rem var(--serif);margin-bottom:7px}
+.feedback p{margin:0}
+.feedback .feedback-extra{font-size:.84rem;margin-top:8px}
+.actions{margin-top:auto;padding-top:25px;display:flex;gap:9px;flex-wrap:wrap}
+.btn{border:1px solid #71354b;padding:11px 17px;background:#7e3e55;color:#fff;font-size:.89rem;font-weight:740;min-height:46px}
+.btn:hover:not(:disabled){background:#62273d}
+.btn.secondary{background:#fff8ee;color:#74435a}
+.btn.secondary:hover:not(:disabled){background:#f1e2e1}
+.btn.teal{border-color:#2c6574;background:#2b7181}
+.btn.teal:hover:not(:disabled){background:#225869}
+.btn.next{margin-left:auto}
+.tips{margin-top:21px;background:#eae1dd;border-left:4px solid #98708a;padding:15px 20px;color:#5c505a;font-size:.88rem}
+.tips b{color:#784b60}
+.summary{max-width:1000px;margin:0 auto;background:#fffbf3;border:1px solid #cdbbb3;padding:clamp(23px,5vw,51px)}
+.summary h2{font:normal clamp(2.2rem,4.8vw,4rem)/1.13 var(--serif);letter-spacing:-.04em;margin:14px 0 20px}
+.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:22px 0}
+.stat{background:#f0e5de;border-top:4px solid #9f6277;padding:15px 18px}
+.stat:nth-child(2){border-color:#3e8290}
+.stat:nth-child(3){border-color:#9c926e}
+.stat b{font:normal 2.6rem/1.2 var(--serif);display:block;color:#6b394e}
+.stat span{display:block;font:.75rem/1.55 var(--mono);color:#625761;margin-top:7px}
+.review-list{padding:0;list-style:none;display:grid;gap:11px}
+.review-item{display:grid;grid-template-columns:1fr auto;gap:13px;align-items:center;background:#faf1e9;border:1px solid #dac6bb;padding:13px 15px}
+.review-item strong{font-size:.94rem}
+.review-item p{margin:3px 0 0;color:#665b60;font-size:.83rem}
+.review-item button{border:1px solid #bca3a3;background:#fff;padding:9px 10px;color:#79445b;font-size:.8rem}
+.references{border-top:1px solid var(--rule);padding:30px 0 44px;color:#60575e;font-size:.82rem;line-height:1.85}
+.references h2{font:normal 1.65rem var(--serif);margin:0 0 10px}
+.references p{margin:8px 0}
+.references a{overflow-wrap:anywhere}
+.motion-reduce *,.motion-reduce *:before,.motion-reduce *:after{animation:none!important;transition:none!important}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr .65fr}.question-grid{grid-template-columns:1fr}.plate-picture{min-height:230px}.plate-picture svg{max-height:360px}.question-card{min-height:0}.main-shell{padding-top:18px}}
+@media(max-width:620px){.wrap{width:min(100% - 28px,1170px)}.folio{font-size:.66rem}.hero-grid{grid-template-columns:1fr;padding:26px 0 23px;gap:15px;min-height:auto}.hero-plate{max-width:250px}.hero-title{font-size:clamp(2.5rem,11vw,4rem)}.hero-lead{font-size:.98rem}.question-grid{gap:13px}.plate{padding:12px}.plate-picture{min-height:0}.question-card{padding:19px}.btn{flex:1 1 42%;padding:11px}.btn.next{margin-left:0}.summary-stats{grid-template-columns:1fr}.review-item{grid-template-columns:1fr}.sequence-item{grid-template-columns:20px minmax(0,1fr) 76px}.order-buttons button{width:33px}.progress-section{padding-top:18px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+@media print{.actions,.progress-track,.skip{display:none!important}.question-grid{display:block}.plate,.question-card{break-inside:avoid}.hero-grid{min-height:0}}
+
+/* Caderno de Origem: direção editorial da página de referência, adaptada ao quiz. */
+:root{--paper:#f8f4e9;--sheet:#fffdf7;--ink:#39271d;--wine:#9d4328;--wine-dark:#7e321d;--rose:#9d4328;--deep:#231b17;--blue:#66795b;--teal:#4e6751;--sand:#efe6d5;--rule:#cabcaa;--muted:#665c51;--gold:#a77339;--focus:#155f87;--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,Consolas,"Liberation Mono",monospace;background:#f8f4e9;color:#39271d}
+body{background:radial-gradient(ellipse at 8% 7%,#f2e8d5,transparent 38%),#f8f4e9;line-height:1.72}
+:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+a{color:#79341f}
+.masthead{background:#eae0cd;color:var(--brown,#39271d)}
+.masthead:before{background:radial-gradient(ellipse at 67% 27%,#c6bba54d,transparent 60%)}
+.folio{border-bottom:1px solid #86745f;color:#624c3c;letter-spacing:.13em}
+.folio strong{color:#7e321d}
+.hero-grid{grid-template-columns:1.02fr .98fr;min-height:460px;padding:45px 0 45px;gap:30px}
+.masthead .kicker{color:#8c3d25}
+.hero-title{font-size:clamp(2.8rem,5.7vw,6rem);line-height:1.01;letter-spacing:-.063em;color:#39271d}
+.hero-title em{color:#9d4328;font-style:italic;font-weight:normal}
+.hero-lead{color:#544538;font-size:1.08rem;line-height:1.8}
+.hero-tags span{background:#f8f1e5;border:1px solid #bba893;color:#654433}
+.hero-plate{margin:0;max-width:490px}.hero-plate svg{display:block;width:100%;height:auto;filter:drop-shadow(10px 15px 14px #60483223)}
+.hero-plate figcaption{position:static;background:none;border:0;padding:6px 0;color:#665b51;font-size:.79rem;line-height:1.6}
+.color-band{height:14px;background:repeating-linear-gradient(90deg,#583627 0 11px,#e2b882 11px 19px,#4e6250 19px 27px)}
+.kicker,.progress-meta,.progress-caption,.question-index,.plate-number{color:#8b3f29}
+.progress-track{background:#eadfcf;border-color:#c9b49b}
+.progress-fill{background:linear-gradient(90deg,#4e6751,#9d4328)}
+.notice{background:#eee4d6;border-left:5px solid #9d4328;color:#544437}
+.plate{background:#e7e7d8;border:1px solid #b9bbaa}
+.plate-number,.plate figcaption{border-color:#c2c1ad;color:#5c5946}
+.plate-picture{background:#eee8d6}
+.plate-note{color:#6d604c}
+.question-card{background:#fffcf4;border-color:#cabcaa}
+.question-index{border-color:#d4c5b2}
+.question-card h2{font-family:Georgia,serif;color:#38291e}
+.question-instruction,.answer-help{color:#605343}
+.answers legend{color:#75412e}
+.option,.sequence-item{background:#fbf5e9;border-color:#d9ccba}
+.option:hover{background:#f3e9d7;border-color:#9d4328}
+.option.selected{border-color:#8b452c;background:#f4e5d5}
+.option input{accent-color:#8b452c}
+.option-art{width:83px;height:58px;flex:none;display:grid;place-items:center;background:#eee7d5;border:1px solid #c9bba3;border-radius:3px}
+.option-art svg{width:81px;height:56px;display:block}
+.sequence-item .num{color:#8b452c}
+.order-buttons button{background:#fff9e8;border-color:#baab95;color:#7b4027}
+.order-buttons button:not(:disabled):hover{background:#eadac5}
+.feedback{background:#f6e8d5;color:#573f2f;border-color:#a76f44}
+.feedback.correct{background:#e1e9dc;color:#3b533e;border-color:#4e6751}
+.btn{background:#833a24;border-color:#833a24;color:#fff}
+.btn:hover:not(:disabled){background:#622d1d}
+.btn.secondary{background:#fff9eb;color:#74402c;border-color:#ae927b}
+.btn.secondary:hover:not(:disabled){background:#efe0cd}
+.btn.teal{background:#4e6751;border-color:#4e6751}
+.btn.teal:hover:not(:disabled){background:#3b523f}
+.tips{background:#eee4d6;border-color:#9d4328;color:#5e4e3e}
+.tips b{color:#7c3521}
+.summary{background:#fffdf7;border-color:#c6b5a0}
+.summary h2{color:#38291e}
+.stat{background:#f1e8d9;border-color:#9d4328}
+.stat:nth-child(2){border-color:#4e6751}
+.stat:nth-child(3){border-color:#c18b5e}
+.stat b{color:#783b27}
+.review-item{background:#faf1e4;border-color:#d5c4af}
+.review-item button{background:#fff9ef;border-color:#baa18a;color:#7e3b25}
+.references{color:#5b5147;border-color:#cabcaa}.references a{color:#79341f}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr .8fr;min-height:0}}
+@media(max-width:620px){.hero-grid{grid-template-columns:1fr;min-height:0;gap:14px;padding:28px 0 24px}.hero-plate{max-width:320px}.hero-title{font-size:clamp(2.6rem,10vw,4.2rem)}.option-art{width:63px;height:49px}.option-art svg{width:61px;height:47px}.folio{font-size:.62rem}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#atividade">Ir para a questão</a>
+<header class="masthead">
+ <div class="wrap">
+  <div class="folio"><strong>CADERNO DE ORIGEM / EDIÇÃO 03</strong><span>Da planta ao preparo · Revisão interativa</span></div>
+  <div class="hero-grid">
+   <div>
+    <div class="kicker">Reportagem ilustrada · quiz de campo</div>
+    <h1 class="hero-title">Do pé de café<br>até a sua <em>xícara.</em></h1>
+    <p class="hero-lead">Do fruto escondendo duas sementes ao aroma que sai da xícara: investigue o percurso do café em 12 desafios, leia os desenhos como pistas e descubra por que cada decisão muda o resultado.</p>
+    <div class="hero-tags"><span>12 desafios</span><span>Pranchas botânicas SVG</span><span>Do campo à extração</span></div>
+   </div>
+   <figure class="hero-plate">
+    <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="coffeeHeroTitle coffeeHeroDesc" viewBox="0 0 480 400">
+     <title id="coffeeHeroTitle">Ramo de cafeeiro, cerejas maduras e uma xícara de café</title>
+     <desc id="coffeeHeroDesc">Composição vetorial original com folhas verde-escuras e três cerejas vermelhas ao lado de uma xícara com café. Representação botânica estilizada, sem escala.</desc>
+     <defs>
+      <linearGradient id="beanCup" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4d5ba"/><stop offset="1" stop-color="#bd9a78"/></linearGradient>
+      <radialGradient id="coffeeCherry"><stop stop-color="#d8774b"/><stop offset=".7" stop-color="#a33227"/><stop offset="1" stop-color="#752b23"/></radialGradient>
+     </defs>
+     <ellipse cx="269" cy="367" rx="183" ry="19" fill="#8b76632b"/>
+     <path d="M76 61Q191 118 274 235" stroke="#5e6340" stroke-width="12" stroke-linecap="round" fill="none"/>
+     <path d="M126 91Q56 23 22 73Q38 137 152 114Z" fill="#4e6751" stroke="#385444" stroke-width="4"/>
+     <path d="M131 92Q82 87 47 75M163 116Q246 35 278 96Q248 158 174 140Z" fill="#648062" stroke="#365541" stroke-width="4"/>
+     <path d="M177 125Q212 124 254 105" stroke="#b0b78c" stroke-width="3" fill="none"/>
+     <path d="M175 154Q99 132 97 209Q152 249 201 175Z" fill="#577256" stroke="#35513d" stroke-width="4"/>
+     <path d="M194 175Q159 198 130 207" stroke="#b5be92" stroke-width="3" fill="none"/>
+     <g stroke="#6d412e" stroke-width="4" fill="url(#coffeeCherry)">
+      <ellipse cx="179" cy="128" rx="28" ry="31" transform="rotate(-20 179 128)"/>
+      <ellipse cx="230" cy="162" rx="31" ry="35" transform="rotate(13 230 162)"/>
+      <ellipse cx="277" cy="207" rx="29" ry="33" transform="rotate(-16 277 207)"/>
+     </g>
+     <g fill="#d9a58b" opacity=".65"><ellipse cx="168" cy="117" rx="7" ry="13" transform="rotate(17 168 117)"/><ellipse cx="219" cy="147" rx="8" ry="15"/><ellipse cx="267" cy="194" rx="8" ry="13"/></g>
+     <path d="M246 296H412L395 356Q340 377 266 358Z" fill="url(#beanCup)" stroke="#8f654f" stroke-width="4"/>
+     <path d="M411 312Q472 302 457 342Q446 365 401 351" fill="none" stroke="#9f765b" stroke-width="13"/>
+     <ellipse cx="329" cy="297" rx="85" ry="18" fill="#f7eee0" stroke="#9f765b" stroke-width="5"/>
+     <ellipse cx="329" cy="298" rx="71" ry="12" fill="#503021"/>
+     <path d="M310 276Q294 252 317 237M346 276Q330 248 352 228" fill="none" stroke="#9c8169" stroke-width="5" stroke-linecap="round" opacity=".65"/>
+     <g font-family="Georgia,serif" fill="#5d4937"><text x="22" y="31" font-size="20">ORIGEM</text><text x="344" y="388" font-size="17">CAFÉ</text></g>
+    </svg>
+    <figcaption>Ilustração editorial original · Cafeeiro, cerejas e xícara em composição conceitual.</figcaption>
+   </figure>
+  </div>
+ </div>
+</header>
+<div class="color-band" aria-hidden="true"></div>
+<div class="wrap">
+ <section class="progress-section" aria-label="Acompanhamento do quiz">
+  <div class="progress-meta"><span id="progressStep">QUESTÃO 01 / 12</span><span id="progressDone">0 de 12 conferidas</span></div>
+  <div class="progress-track" id="progressBar" role="progressbar" aria-label="Questões conferidas" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-caption"><span id="progressTopic">Da planta ao fruto maduro</span><button class="btn secondary" type="button" id="motionToggle" aria-pressed="false">Reduzir movimentos</button></div>
+  <p class="notice">Este quiz apresenta correção formativa local: não envia respostas ao Moodle nem lança notas oficiais. As figuras e situações são didáticas, sem dados de lotes reais.</p>
+ </section>
+ <main id="atividade" class="main-shell">
+  <section id="questionScreen" class="question-grid" aria-label="Questão atual">
+   <figure class="plate">
+    <div class="plate-number"><span id="plateNum">PRANCHA 01</span><span id="plateLabel">ESTRUTURA</span></div>
+    <div id="platePicture" class="plate-picture"></div>
+    <figcaption id="plateCaption">Desenho botânico e técnico ilustrativo.</figcaption>
+    <div class="plate-note">Ilustração vetorial original · Sem representar lote ou produto real</div>
+   </figure>
+   <div class="question-card">
+    <div class="question-index"><span id="questionSection">01 / ESTRUTURA</span><span id="questionType">ESCOLHA ÚNICA</span></div>
+    <h2 id="questionTitle" tabindex="-1">Carregando a primeira questão…</h2>
+    <p id="questionInstruction" class="question-instruction"></p>
+    <div id="answerMount"></div>
+    <p class="answer-help" id="answerHelp"></p>
+    <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+    <div class="actions">
+     <button type="button" id="previousButton" class="btn secondary">Anterior</button>
+     <button type="button" id="checkButton" class="btn">Conferir resposta</button>
+     <button type="button" id="nextButton" class="btn teal next">Próxima questão →</button>
+    </div>
+   </div>
+  </section>
+  <section id="summaryScreen" class="summary" hidden aria-labelledby="summaryTitle">
+   <div class="kicker">Conclusão / revisão comentada</div>
+   <h2 id="summaryTitle" tabindex="-1">O que você descobriu sobre o caminho do café?</h2>
+   <p>Os indicadores mostram apenas esta sessão de estudo, sem lançamento acadêmico. Releia os comentários, compare os processos e revise as pranchas para consolidar as relações entre decisões e resultados.</p>
+   <div class="summary-stats">
+    <div class="stat"><b id="totalReviewed">0</b><span>QUESTÕES CONFERIDAS</span></div>
+    <div class="stat"><b id="totalMastered">0</b><span>RESPOSTAS CORRETAS AO FINAL</span></div>
+    <div class="stat"><b id="totalFirst">0</b><span>ACERTOS NA PRIMEIRA TENTATIVA</span></div>
+   </div>
+   <h3 style="font:normal 1.65rem Georgia,serif;margin:22px 0 14px">Revisitar pranchas</h3>
+   <ol id="reviewList" class="review-list"></ol>
+   <div class="actions"><button class="btn secondary" type="button" id="restartButton">Recomeçar do zero</button><button class="btn teal" type="button" id="reviewFirstButton">Rever a primeira questão</button></div>
+  </section>
+ </main>
+ <aside class="tips" aria-label="Instruções"><b>Como participar:</b> observe as pranchas de café, escolha uma ou várias alternativas quando solicitado e use as setas ↑ ↓ para ordenar as etapas. Confira para ler a explicação, siga em Anterior/Próxima e retorne para revisar ou recomeçar.</aside>
+ <section class="references" aria-labelledby="sourcesTitle">
+ <h2 id="sourcesTitle">Fontes, ilustrações e limites</h2>
+ <p>As ilustrações SVG deste quiz são originais, desenhadas para fins pedagógicos: ramo de cafeeiro, fruto e anatomia da cereja, maturação, colheita, fluxos de pós-colheita, secagem, torra, moagem, extração, proporção de preparo e sequência produtiva. Não são fotografias, retratos de plantações, microscopia ou medições reais; cor de fruto, torra, aroma e rendimento podem variar por espécie, cultivar, processo e preparo. Os exemplos numéricos de proporção servem exclusivamente ao cálculo ilustrativo.</p>
+ <p>Fontes: <a href="https://varieties.worldcoffeeresearch.org/about-the-catalog/whats-included" target="_blank" rel="noopener noreferrer">World Coffee Research - Catálogo de variedades</a>; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9376573/" target="_blank" rel="noopener noreferrer">Artigo científico em PMC sobre processamento de café</a>; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10138461/" target="_blank" rel="noopener noreferrer">Artigo científico em PMC sobre café e transformações</a>; <a href="https://sca.coffee/research/coffee-standards" target="_blank" rel="noopener noreferrer">Specialty Coffee Association - Padrões e recursos</a>. Nenhuma descrição sensorial é garantia de resultado ou de qualidade superior.</p>
+</section>
+</div>
+<script>
+(function(){
+'use strict';
+var root=document, total=12;
+var $=function(id){return root.getElementById(id);};
+var questions=[{"section":"Maturação das cerejas","type":"single","figure":"ripeness","figureTitle":"Três cerejas de cafeeiro em fases diferentes","caption":"As cores verde, alaranjada e vermelha representam apenas um cultivar cujos frutos amadurecem para vermelho; outros cultivares podem amadurecer para amarelo.","title":"Em um cafeeiro de frutos vermelhos, qual cereja é um bom candidato à colheita seletiva de frutos maduros?","instruction":"Compare as cores das três alternativas ilustradas e escolha o fruto com maturação mais avançada.","options":[["a","A · Cereja ainda verde","green"],["b","B · Cereja em transição alaranjada","turning"],["c","C · Cereja vermelha madura","red"]],"correct":"c","hint":"Para cultivares de fruto vermelho, o vermelho costuma indicar maturação mais avançada do que verde e alaranjado.","explain":"Em cultivares que amadurecem para vermelho, cerejas uniformemente vermelhas são um indicador visual útil de maturação para a colheita seletiva, embora a avaliação real envolva variedade, condições e outros critérios. Existem cultivares de frutos amarelos."},{"section":"Anatomia do fruto","type":"single","figure":"fruit","figureTitle":"Corte esquemático de uma cereja de café","caption":"O corte mostra casca, polpa, mucilagem, pergaminho e duas sementes. Camadas e proporções estão exageradas para visualização.","title":"A parte do café que normalmente é torrada e moída vem de qual estrutura?","instruction":"Não confunda a cereja inteira com as estruturas que ficam protegidas dentro do fruto.","options":[["a","Da casca externa colorida do fruto"],["b","Das sementes que ficam dentro da cereja"],["c","Somente da mucilagem que envolve o pergaminho"],["d","Das folhas que recobrem o ramo"]],"correct":"b","hint":"O que se vende como café verde, depois de beneficiado, é normalmente a semente seca.","explain":"O grão de café comercial é a semente do fruto do cafeeiro, que em geral possui duas sementes. Casca, polpa, mucilagem e pergaminho envolvem as sementes e são retirados em etapas do processamento e beneficiamento."},{"section":"Espécies cultivadas","type":"multiple","figure":"species","figureTitle":"Dois perfis botânicos no mesmo caderno","caption":"Ramos simplificados de Coffea arabica e Coffea canephora. Os desenhos não diferenciam espécies por uma característica única de folha ou fruto.","title":"Quais afirmações sobre arábica e canéfora são corretas?","instruction":"Marque as afirmações que respeitam a diversidade de cultivares, ambientes e modos de produção.","options":[["a","Coffea arabica e Coffea canephora são espécies diferentes cultivadas para café"],["b","O café comercial é obtido de sementes dos frutos"],["c","Todos os cafés arábica e canéfora têm sabor idêntico, independentemente da origem"],["d","Ambiente, genética e processamento podem influenciar características da bebida"]],"correct":["a","b","d"],"hint":"Espécie não é sinônimo de sabor fixo; há muita variabilidade em cada uma.","explain":"Arábica e canéfora são espécies distintas e suas sementes podem ser beneficiadas e usadas no preparo. Perfil sensorial e características agronômicas dependem de genética, ambiente, manejo, processamento e torra."},{"section":"Colheita seletiva","type":"multiple","figure":"harvest","figureTitle":"Um ramo com frutos de diferentes maturações","caption":"Frutos verdes, vermelhos e de transição aparecem no mesmo ramo para representar a diversidade de estágios durante uma colheita.","title":"Em um lote com cerejas em estágios diferentes, quais decisões ajudam a controlar a matéria-prima?","instruction":"Considere seleção, rastreabilidade e evitar mistura sem critério; não presuma um único método obrigatório de colheita.","options":[["a","Identificar os estágios de maturação antes de definir a colheita"],["b","Separar ou selecionar frutos de acordo com o objetivo e processo planejados"],["c","Misturar frutos deteriorados sem inspeção porque a torra sempre corrige defeitos"],["d","Registrar decisões e condições do lote para acompanhar o processamento"]],"correct":["a","b","d"],"hint":"Controle de qualidade começa antes da secagem e não pode depender da torra para esconder defeitos.","explain":"Avaliar maturação, selecionar e documentar o lote ajudam no controle da matéria-prima. Sistemas de colheita manual, seletiva ou mecanizada exigem estratégias diferentes de triagem; torra não substitui seleção e manejo sanitário."},{"section":"Pós-colheita natural","type":"single","figure":"processing","figureTitle":"Três rotas de processamento pós-colheita","caption":"Cada alternativa desenha uma forma simplificada de tratar a cereja: inteira, despolpada sem mucilagem ou despolpada com mucilagem.","title":"Qual desenho descreve o processamento natural do café?","instruction":"Observe o que permanece em torno das sementes durante a secagem.","options":[["a","A · Cereja inteira colocada para secar","natural"],["b","B · Despolpado, com mucilagem removida antes da secagem","washed"],["c","C · Despolpado com parte da mucilagem mantida para secar","honey"]],"correct":"a","hint":"No método natural, o fruto inteiro é seco antes de descascar e beneficiar.","explain":"O processamento natural mantém a cereja inteira durante a secagem. No lavado, a polpa e a mucilagem são removidas antes da secagem; no honey, parte da mucilagem permanece em torno do pergaminho. Variações práticas existem."},{"section":"Honey e lavado","type":"single","figure":"mucilage","figureTitle":"Corte de fruto e mucilagem remanescente","caption":"O desenho aproxima duas sementes e camadas simplificadas de mucilagem. Não indica uma classificação industrial padronizada de honey.","title":"O nome 'honey' significa que o produtor adicionou mel ao café?","instruction":"Considere o que permanece nas sementes depois de retirar a casca e a polpa.","options":[["a","Sim, a adição de mel define obrigatoriamente o método"],["b","Não: parte da mucilagem do fruto pode permanecer durante a secagem"],["c","Sim, a finalidade é substituir a torra por açúcar"],["d","Não: honey é apenas outro nome para bebida espresso"]],"correct":"b","hint":"O nome descreve uma condição pegajosa associada à mucilagem do próprio fruto.","explain":"No processamento honey, remove-se a casca e parte da polpa, e uma quantidade de mucilagem pode permanecer durante a secagem. O nome não significa adição de mel; resultados sensoriais dependem de diversos fatores."},{"section":"Controle da secagem","type":"multiple","figure":"drying","figureTitle":"Terreiro com cerejas distribuídas para secagem","caption":"O sol, a ventilação e as camadas de café são representados simbolicamente, sem recomendar um tempo ou uma umidade final universal.","title":"O que faz sentido monitorar durante a secagem pós-colheita?","instruction":"Selecione práticas que ajudam a reduzir desuniformidade e deterioração.","options":[["a","Condições de temperatura, ventilação e umidade"],["b","Uniformidade e movimentação adequada do material quando o processo exige"],["c","Higiene e sinais de contaminação ou fermentação indesejada"],["d","Deixar o lote sem nenhum controle porque secagem ao sol sempre é uniforme"]],"correct":["a","b","c"],"hint":"Secagem envolve movimento de água e risco de deterioração, não apenas exposição ao calor.","explain":"Controlar condições ambientais, espessura, movimentação, higiene e umidade ajuda a obter secagem mais uniforme e reduzir deterioração. O método adequado depende da infraestrutura, do lote e dos objetivos do produtor."},{"section":"Torra e transformações","type":"single","figure":"chemistry","figureTitle":"Da semente verde às reações térmicas","caption":"A prancha apresenta setas e moléculas conceituais, não um cromatograma, equação exata ou perfil real de torra.","title":"Por que a torra altera tão profundamente o aroma e a cor do café?","instruction":"Pense nas transformações que ocorrem durante o aquecimento, sem atribuir tudo a uma única reação.","options":[["a","Porque a semente vira outro tipo de planta dentro do torrador"],["b","Porque aquecimento gera várias transformações, inclusive reações de Maillard e degradações térmicas"],["c","Porque os aromas surgem somente na água de preparo, não durante a torra"],["d","Porque todos os compostos químicos do café permanecem intactos"]],"correct":"b","hint":"O calor desencadeia reações químicas e mudanças físicas na semente.","explain":"Torra modifica estrutura, cor e composição dos grãos por múltiplos processos térmicos, como reações de Maillard e outras transformações. Intensidade, perfil e matéria-prima influenciam o resultado; não há sabor garantido por uma cor."},{"section":"Perfis de torra","type":"single","figure":"roast","figureTitle":"Três estágios ilustrativos de cor de torra","caption":"Cores são convenções didáticas; a aparência sozinha não define cafeína, qualidade ou sabor da bebida.","title":"Qual alternativa ilustra uma torra visualmente mais escura?","instruction":"Observe a cor dos grãos ilustrados, sem inferir teor de cafeína ou superioridade de qualidade.","options":[["a","A · Grão marrom-claro","light"],["b","B · Grão marrom intermediário","medium"],["c","C · Grão marrom muito escuro","dark"]],"correct":"c","hint":"A tonalidade mais escura indica maior escurecimento visual no esquema.","explain":"Na ilustração, C representa a torra mais escura. É uma comparação visual, não uma classificação universal; cor não revela diretamente teor de cafeína, qualidade sensorial nem todas as condições de torra."},{"section":"Moagem e extração","type":"single","figure":"grind","figureTitle":"Partículas finas e grossas ao lado de um filtro","caption":"A figura compara tamanhos de partículas e contato com água sem quantificar resistência do leito ou tempo real de extração.","title":"Em um mesmo método de preparo, qual mudança tende a ocorrer ao moer mais fino, mantendo as demais condições?","instruction":"Considere área superficial e, em métodos percolados, o fluxo da água.","options":[["a","A área de contato diminui e a água sempre passa mais rápido"],["b","A área superficial disponível aumenta e a resistência ao fluxo pode aumentar"],["c","A torra se desfaz e o grão volta a ficar verde"],["d","O tamanho da partícula não afeta a extração em nenhum método"]],"correct":"b","hint":"Partículas menores oferecem maior área por massa e podem compactar o leito filtrante.","explain":"Moagem mais fina costuma aumentar a área de contato e pode aumentar a resistência ao fluxo em métodos percolados. O efeito final depende de moagem, receita, filtro, agitação e equipamentos; não implica automaticamente bebida melhor."},{"section":"Proporção de preparo","type":"single","figure":"ratio","figureTitle":"Balança com 18 g de café e proporção 1:16","caption":"O cálculo 18 × 16 é ilustrativo para quantidade de água adicionada em um preparo filtrado; não informa massa de bebida final nem qualidade sensorial.","title":"Uma receita filtrada usa 18 g de café na proporção de 1:16. Quantos gramas de água serão adicionados?","instruction":"Multiplique a massa de café pelo número de partes de água para cada parte de café.","options":[["a","34 g de água"],["b","180 g de água"],["c","288 g de água"],["d","360 g de água"]],"correct":"c","hint":"Cada grama de café corresponde a 16 g de água adicionada: 18 × 16.","explain":"18 g × 16 = 288 g de água adicionada. Esse valor é uma conta de preparo, não previsão de volume final, extração, força da bebida ou rendimento do café. Em espresso, massa de bebida final pode ser a medida mais relevante."},{"section":"Sequência produtiva","type":"sequence","figure":"journey","figureTitle":"Do cafeeiro ao preparo na xícara","caption":"O diagrama é um roteiro conceitual. Em produção real, escolhas, controles e processos podem variar e se sobrepor.","title":"Ordene as etapas gerais da jornada do café.","instruction":"Use os botões ↑ e ↓ para colocar as seis etapas na ordem coerente, começando pelo fruto na planta.","items":[["brew","Adicionar água para extrair a bebida"],["roast","Torrar o café verde beneficiado"],["fruit","Cultivar e colher os frutos do cafeeiro"],["grind","Moer os grãos torrados para o preparo"],["process","Selecionar e realizar o processamento pós-colheita"],["dry","Secar, estabilizar e beneficiar o lote conforme o processo"]],"correct":["fruit","process","dry","roast","grind","brew"],"hint":"Siga a passagem do fruto à semente verde, depois a transformação térmica e o preparo.","explain":"De forma simplificada: colher os frutos, processá-los, secar e beneficiar o café, torrar, moer e extrair a bebida. A ordem detalhada do descascamento/beneficiamento depende da rota pós-colheita e de outros controles de produção."}];
+var answer=Object.create(null),checked=Object.create(null),firstTry=Object.create(null),index=0,reduceMotion=false;
+function svgFrame(title,desc,body){
+ return '<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="coffeeSvgTitle coffeeSvgDesc" viewBox="0 0 540 375"><title id="coffeeSvgTitle">'+title+'</title><desc id="coffeeSvgDesc">'+desc+'</desc>'+
+ '<defs><linearGradient id="beanGrad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c48f55"/><stop offset="1" stop-color="#754329"/></linearGradient><marker id="leafArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#995036"/></marker></defs>'+
+ '<rect x="1" y="1" width="538" height="373" fill="#f9f2e3" stroke="#cbb8a0" stroke-width="2"/><rect x="17" y="17" width="506" height="318" fill="#efe5d2"/>'+
+ '<path d="M31 56H507M31 316H507" stroke="#bca791" stroke-width="1"/><text x="32" y="40" font-family="monospace" font-size="11" fill="#7e4a35">CADERNO DE ORIGEM / PRANCHA ILUSTRADA</text>'+
+ body+'<text x="32" y="353" font-family="monospace" font-size="11" fill="#816c55">ESQUEMA ORIGINAL · NÃO É UM REGISTRO DE LOTE</text></svg>';
+}
+function txt(x,y,t,sz,col){return '<text x="'+x+'" y="'+y+'" font-family="system-ui,sans-serif" font-size="'+(sz||15)+'" fill="'+(col||'#443329')+'">'+t+'</text>';}
+function bean(x,y,s,fill){
+ return '<g transform="translate('+x+' '+y+') scale('+s+')"><path d="M0 -49C-49 -45 -57 8 -32 42C-10 67 32 55 47 12C65 -28 37 -52 0 -49Z" fill="'+(fill||'url(#beanGrad)')+'" stroke="#60402e" stroke-width="3"/><path d="M4 -38C-12 -19 13 -3 -3 15C-17 30 -5 40 5 42" fill="none" stroke="#4c2a1c" stroke-width="6" stroke-linecap="round"/></g>';
+}
+function cherry(x,y,color,r){
+ return '<g><path d="M'+x+' '+(y-r)+'q-12 -23 -28 -26" stroke="#586b45" stroke-width="3" fill="none"/>'+
+ '<ellipse cx="'+x+'" cy="'+y+'" rx="'+r+'" ry="'+(r*1.13)+'" fill="'+color+'" stroke="#784334" stroke-width="3"/>'+
+ '<ellipse cx="'+(x-r*.3)+'" cy="'+(y-r*.3)+'" rx="'+(r*.23)+'" ry="'+(r*.43)+'" fill="#fff4d5" opacity=".35"/></g>';
+}
+function leaf(x,y,s,angle){
+ return '<g transform="translate('+x+' '+y+') rotate('+angle+') scale('+s+')"><path d="M0 0Q-22 -50 0 -88Q37 -46 0 0Z" fill="#577553" stroke="#38563d" stroke-width="3"/><path d="M0 -7L0 -79" stroke="#c3ce95" stroke-width="3"/></g>';
+}
+function arrow(x1,y1,x2,y2,color){return '<path d="M'+x1+' '+y1+'L'+x2+' '+y2+'" stroke="'+(color||'#995036')+'" stroke-width="5" fill="none" marker-end="url(#leafArrow)"/>';}
+function cup(x,y,s){
+ return '<g transform="translate('+x+' '+y+') scale('+s+')"><path d="M-57 -27H59L43 46Q0 64 -42 46Z" fill="#fff9e9" stroke="#966e4d" stroke-width="5"/><path d="M56 -12Q95 -26 86 14Q79 39 50 24" fill="none" stroke="#a77956" stroke-width="9"/><ellipse cx="1" cy="-28" rx="58" ry="13" fill="#fff9e9" stroke="#8d6348" stroke-width="4"/><ellipse cx="1" cy="-28" rx="47" ry="8" fill="#5b3320"/><path d="M-12 -47Q-22 -64 -8 -76M20 -48Q6 -65 19 -84" fill="none" stroke="#bba48b" stroke-width="4" opacity=".7"/></g>';
+}
+function icon(kind){
+ var c=kind==='green'?'#718b49':kind==='turning'?'#d3913c':kind==='red'?'#ac332a':null;
+ if(c)return '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 80 58"><path d="M41 20Q35 8 25 5" fill="none" stroke="#536a40" stroke-width="3"/><ellipse cx="42" cy="34" rx="19" ry="21" fill="'+c+'" stroke="#754a35" stroke-width="2"/><ellipse cx="35" cy="27" rx="4" ry="9" fill="#fff3de" opacity=".45"/></svg>';
+ if(['natural','washed','honey'].includes(kind)){
+  var body=kind==='natural'?'<circle cx="40" cy="29" r="20" fill="#a83729"/><ellipse cx="40" cy="30" rx="9" ry="13" fill="#e9cfa7" stroke="#966442"/>':
+  kind==='washed'?'<ellipse cx="40" cy="29" rx="18" ry="22" fill="#d7c398" stroke="#a27c50" stroke-width="2"/><ellipse cx="40" cy="29" rx="9" ry="15" fill="#8b6b41"/>':
+  '<ellipse cx="40" cy="29" rx="20" ry="23" fill="#d5a356" stroke="#b77a3a" stroke-width="2"/><ellipse cx="40" cy="29" rx="10" ry="15" fill="#b38d54"/>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 80 58">'+body+'</svg>';
+ }
+ if(['light','medium','dark'].includes(kind)){
+  var brown=kind==='light'?'#b7804b':kind==='medium'?'#794526':'#39231a';
+  return '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 80 58"><path d="M37 6C13 7 7 31 21 46C35 63 61 49 62 26C61 11 50 4 37 6Z" fill="'+brown+'" stroke="#553625" stroke-width="2"/><path d="M41 12Q28 26 39 39T43 51" fill="none" stroke="#2b1e18" stroke-width="4"/></svg>';
+ }
+ return '';
+}
+function art(kind){
+ var b='',rust='#9d4328',leafcolor='#4e6751',brown='#39271d',cream='#fff9e8';
+ if(kind==='ripeness'){
+  b='<path d="M52 140Q245 64 487 160" stroke="#5a6141" stroke-width="12" fill="none"/>'+
+   leaf(125,133,1.1,-62)+leaf(394,137,1.1,49)+
+   cherry(135,202,'#6b8a41',34)+cherry(270,201,'#c98839',34)+cherry(407,204,'#af332c',34)+
+   txt(111,286,'A · Verde',17)+txt(242,286,'B · Virando',17)+txt(369,286,'C · Vermelha',17);
+ }else if(kind==='fruit'){
+  b='<ellipse cx="265" cy="190" rx="120" ry="120" fill="#a93429" stroke="#7b3327" stroke-width="5"/>'+
+   '<ellipse cx="265" cy="190" rx="103" ry="103" fill="#d58c62" stroke="#8d4a32" stroke-width="3"/>'+
+   '<ellipse cx="265" cy="190" rx="85" ry="90" fill="#e4ba72"/>'+
+   '<ellipse cx="236" cy="188" rx="33" ry="71" fill="#efe2bb" stroke="#ba925e" stroke-width="5"/>'+
+   '<ellipse cx="298" cy="188" rx="33" ry="71" fill="#efe2bb" stroke="#ba925e" stroke-width="5"/>'+
+   '<ellipse cx="234" cy="190" rx="19" ry="58" fill="#ab8754"/><ellipse cx="298" cy="190" rx="19" ry="58" fill="#ab8754"/>'+
+   txt(31,122,'Casca',16)+txt(30,163,'Polpa',16)+txt(31,207,'Mucilagem',16)+txt(365,160,'Pergaminho',14)+txt(376,227,'Sementes',16)+
+   '<path d="M93 120L166 145M93 160L174 175M111 203L181 203M367 159L333 173M369 225L313 209" stroke="#79503b" fill="none" stroke-width="2"/>';
+ }else if(kind==='species'){
+  b='<rect x="42" y="84" width="218" height="198" rx="6" fill="#e1e6d4" stroke="#a4b5a0"/><rect x="282" y="84" width="218" height="198" rx="6" fill="#e1e6d4" stroke="#a4b5a0"/>'+
+   '<path d="M87 233Q140 173 199 132M327 233Q393 166 456 129" fill="none" stroke="#5b6e4d" stroke-width="7"/>'+
+   leaf(139,165,.74,-48)+leaf(199,145,.69,44)+leaf(390,169,.74,-55)+leaf(452,145,.76,49)+
+   cherry(143,205,'#a73d2d',18)+cherry(394,211,'#9e4330',19)+
+   txt(86,258,'C. arabica',18)+txt(323,258,'C. canephora',18)+txt(130,309,'Duas espécies, diversas variedades e ambientes.',14);
+ }else if(kind==='harvest'){
+  b='<path d="M73 125Q268 62 476 126" fill="none" stroke="#66724b" stroke-width="10"/>'+
+   leaf(170,117,.76,-60)+leaf(356,108,.78,56)+
+   cherry(143,210,'#6e8d43',28)+cherry(238,199,'#af382d',29)+cherry(342,206,'#c38b42',29)+cherry(432,216,'#a43a2f',29)+
+   txt(68,296,'Lote com frutos em maturações diferentes',17);
+ }else if(kind==='processing'){
+  b='<g fill="#fffaf0" stroke="#bba98f" stroke-width="2"><rect x="26" y="96" width="155" height="200" rx="8"/><rect x="194" y="96" width="155" height="200" rx="8"/><rect x="363" y="96" width="152" height="200" rx="8"/></g>'+
+   '<ellipse cx="104" cy="175" rx="46" ry="52" fill="#a6342b" stroke="#753322" stroke-width="4"/>'+
+   '<ellipse cx="104" cy="175" rx="19" ry="28" fill="#dfc59c"/>'+
+   '<ellipse cx="271" cy="175" rx="46" ry="52" fill="#d6c9a5" stroke="#a38b64" stroke-width="4"/><ellipse cx="271" cy="175" rx="20" ry="29" fill="#9f8559"/>'+
+   '<ellipse cx="437" cy="175" rx="46" ry="52" fill="#ddb37a" stroke="#b3884e" stroke-width="4"/><ellipse cx="437" cy="175" rx="19" ry="29" fill="#a08250"/>'+
+   txt(67,259,'Natural',16)+txt(230,259,'Lavado',16)+txt(398,259,'Honey',16);
+ }else if(kind==='mucilage'){
+  b='<ellipse cx="263" cy="189" rx="119" ry="119" fill="#c99553" stroke="#8f6840" stroke-width="4"/>'+
+   '<ellipse cx="263" cy="189" rx="97" ry="99" fill="#e0b96a"/>'+
+   '<ellipse cx="230" cy="184" rx="35" ry="72" fill="#ad8953" stroke="#efddb3" stroke-width="5"/>'+
+   '<ellipse cx="298" cy="184" rx="35" ry="72" fill="#ad8953" stroke="#efddb3" stroke-width="5"/>'+
+   '<path d="M178 122Q156 178 187 253M356 125Q376 195 349 251" fill="none" stroke="#e7d68d" stroke-width="13" stroke-linecap="round"/>'+
+   txt(38,111,'Mucilagem',17)+arrow(149,113,180,136)+txt(364,190,'Sementes',16)+arrow(365,197,324,192);
+ }else if(kind==='drying'){
+  b='<circle cx="454" cy="103" r="39" fill="#e8ac5f" stroke="#bc7d35" stroke-width="4"/>'+
+   '<g stroke="#cf9d50" stroke-width="3"><path d="M454 54V41M454 150V167M405 103H389M504 103H518M418 65l-12-12M488 143l12 12"/></g>'+
+   '<path d="M45 222H492V283H45Z" fill="#bda17a" stroke="#8d7050" stroke-width="4"/>'+
+   '<g fill="#a3442d" stroke="#723c2a" stroke-width="1"><ellipse cx="83" cy="243" rx="16" ry="9"/><ellipse cx="140" cy="246" rx="16" ry="9"/><ellipse cx="192" cy="243" rx="16" ry="9"/><ellipse cx="249" cy="247" rx="16" ry="9"/><ellipse cx="302" cy="245" rx="16" ry="9"/><ellipse cx="360" cy="242" rx="16" ry="9"/><ellipse cx="425" cy="246" rx="16" ry="9"/></g>'+
+   txt(57,121,'Camada distribuída',18)+txt(57,152,'Ventilação / controle',16)+
+   '<path d="M109 173q25-17 50 0t50 0m35 0q25-17 50 0" stroke="#759484" stroke-width="5" fill="none"/>';
+ }else if(kind==='chemistry'){
+  b=bean(134,191,1.65,'#96a17d')+bean(398,191,1.65,'#71442b')+
+   '<path d="M221 190H321" stroke="'+rust+'" stroke-width="8" marker-end="url(#leafArrow)"/>'+
+   '<g fill="#b47c55"><circle cx="276" cy="131" r="8"/><circle cx="304" cy="246" r="6"/><circle cx="274" cy="260" r="6"/></g>'+
+   txt(79,293,'Café verde',17)+txt(357,293,'Torrado',17)+txt(227,116,'CALOR',18)+txt(225,314,'Transformações',14);
+ }else if(kind==='roast'){
+  b=bean(106,193,1.37,'#b77c45')+bean(268,193,1.37,'#7b4728')+bean(427,193,1.37,'#3d241b')+
+   txt(68,288,'A · Clara',17)+txt(234,288,'B · Média',17)+txt(391,288,'C · Escura',17);
+ }else if(kind==='grind'){
+  b='<g fill="#87613f"><circle cx="92" cy="132" r="20"/><circle cx="139" cy="181" r="19"/><circle cx="87" cy="232" r="18"/></g>'+
+   '<g fill="#906c48"><circle cx="304" cy="130" r="7"/><circle cx="322" cy="149" r="5"/><circle cx="289" cy="164" r="7"/><circle cx="348" cy="184" r="6"/><circle cx="305" cy="208" r="5"/><circle cx="337" cy="236" r="6"/><circle cx="278" cy="244" r="7"/></g>'+
+   '<path d="M185 180H255" stroke="'+rust+'" stroke-width="7" marker-end="url(#leafArrow)"/>'+
+   txt(65,289,'Grossa',18)+txt(291,289,'Fina',18)+
+   '<path d="M413 139H493L474 235H431Z" fill="#e4d3b9" stroke="#7f684f" stroke-width="4"/><path d="M415 145L493 145" stroke="#8d6b49" stroke-width="6"/>';
+ }else if(kind==='ratio'){
+  b='<rect x="65" y="171" width="167" height="80" rx="10" fill="#dbc7a8" stroke="#9b8063" stroke-width="4"/>'+
+   '<rect x="83" y="188" width="130" height="45" rx="5" fill="#fff9e5"/>'+txt(106,218,'18 g',30)+
+   bean(149,130,.55,'#765034')+
+   '<path d="M260 211H341" stroke="'+rust+'" stroke-width="7" marker-end="url(#leafArrow)"/>'+
+   '<path d="M405 118Q388 149 382 177Q379 210 410 223Q441 212 438 181Q432 149 405 118Z" fill="#87b5bf" stroke="#4c8797" stroke-width="4"/>'+
+   txt(361,267,'1 : 16',30)+txt(67,290,'Café moído',17)+txt(349,299,'Água adicionada',15);
+ }else if(kind==='journey'){
+  b='<path d="M80 166H456" stroke="#ab8161" stroke-width="6" stroke-dasharray="8 10"/>'+
+   '<g fill="#f5e7d3" stroke="#a18c70" stroke-width="3"><circle cx="78" cy="166" r="34"/><circle cx="173" cy="166" r="34"/><circle cx="268" cy="166" r="34"/><circle cx="361" cy="166" r="34"/><circle cx="456" cy="166" r="34"/></g>'+
+   cherry(78,166,'#a83d2d',15)+bean(173,167,.35,'#c6a675')+bean(267,166,.35,'#8c5b3e')+bean(360,166,.35,'#4d2c1f')+cup(453,169,.33)+
+   txt(47,234,'Fruto',14)+txt(137,234,'Secagem',14)+txt(246,234,'Torra',14)+txt(334,234,'Moagem',14)+txt(431,234,'Bebida',14)+
+   txt(94,284,'O que acontece em cada transformação?',17);
+ }
+ return svgFrame(questions[index].figureTitle,questions[index].caption,b);
+}
+function chosen(q){
+ if(q.type==='sequence'){return (answer[index]||q.items.map(function(x){return x[0];})).slice();}
+ return q.type==='multiple'?(answer[index]||[]).slice():(answer[index]||'');
+}
+function equal(a,b){
+ if(Array.isArray(a)&&Array.isArray(b)){
+  if(a.length!==b.length)return false;
+  return a.slice().sort().join('|')===b.slice().sort().join('|');
+ }
+ return a===b;
+}
+function correctCount(){return questions.filter(function(q,i){return checked[i]&&checked[i].ok;}).length;}
+function reviewedCount(){return Object.keys(checked).length;}
+function updateProgress(){
+ var done=reviewedCount();
+ $('progressStep').textContent='QUESTÃO '+String(index+1).padStart(2,'0')+' / '+total;
+ $('progressDone').textContent=done+' de '+total+' conferidas';
+ $('progressFill').style.width=(done*100/total)+'%';
+ $('progressBar').setAttribute('aria-valuenow',String(done));
+ $('progressTopic').textContent=questions[index].section;
+}
+function updateSelections(){
+ Array.prototype.forEach.call($('answerMount').querySelectorAll('.option'),function(el){el.classList.toggle('selected',!!el.querySelector('input').checked);});
+}
+function render(focus){
+ var q=questions[index],isSequence=q.type==='sequence';
+ $('summaryScreen').hidden=true;$('questionScreen').hidden=false;
+ $('plateNum').textContent='PRANCHA '+String(index+1).padStart(2,'0');
+ $('plateLabel').textContent=q.section.toUpperCase();
+ $('platePicture').innerHTML=art(q.figure);
+ $('plateCaption').textContent=q.caption;
+ $('questionSection').textContent=String(index+1).padStart(2,'0')+' / '+q.section.toUpperCase();
+ $('questionType').textContent=isSequence?'ORDENAÇÃO':q.type==='multiple'?'MÚLTIPLA SELEÇÃO':'ESCOLHA ÚNICA';
+ $('questionTitle').textContent=q.title;
+ $('questionInstruction').textContent=q.instruction;
+ $('answerHelp').textContent=isSequence?'Use ↑ e ↓ para mover cada etapa.':q.type==='multiple'?'Marque uma ou mais alternativas antes de conferir.':'Escolha uma única alternativa e confira.';
+ var mount=$('answerMount');mount.replaceChildren();
+ if(isSequence){
+  var ul=document.createElement('ol');ul.className='sequence';ul.setAttribute('aria-label','Etapas em ordem editável');
+  var current=chosen(q);
+  current.forEach(function(id,j){
+   var li=document.createElement('li');li.className='sequence-item';
+   var n=document.createElement('span');n.className='num';n.textContent=String(j+1).padStart(2,'0');
+   var lab=document.createElement('span');lab.className='label';lab.textContent=q.items.find(function(it){return it[0]===id;})[1];
+   var group=document.createElement('span');group.className='order-buttons';
+   [-1,1].forEach(function(delta){
+    var b=document.createElement('button');b.type='button';b.textContent=delta<0?'↑':'↓';b.disabled=delta<0?j===0:j===current.length-1;
+    b.dataset.position=String(j);b.dataset.delta=String(delta);
+    b.setAttribute('aria-label',(delta<0?'Subir: ':'Descer: ')+lab.textContent);
+    group.appendChild(b);
+   });
+   li.appendChild(n);li.appendChild(lab);li.appendChild(group);ul.appendChild(li);
+  });mount.appendChild(ul);
+ }else{
+  var field=document.createElement('fieldset');field.className='answers';
+  var legend=document.createElement('legend');legend.textContent=q.type==='multiple'?'Selecione todas as respostas corretas':'Escolha a resposta';field.appendChild(legend);
+  var opts=document.createElement('div');opts.className='options';
+  q.options.forEach(function(opt){
+   var lab=document.createElement('label');lab.className='option';
+   var inp=document.createElement('input');inp.type=q.type==='multiple'?'checkbox':'radio';inp.name='q'+index;inp.value=opt[0];
+   inp.checked=q.type==='multiple'?chosen(q).indexOf(opt[0])!==-1:chosen(q)===opt[0];
+   var label=document.createElement('span');label.className='option-copy';label.textContent=opt[1];
+   lab.appendChild(inp);if(opt[2]){var artwork=document.createElement('span');artwork.className='option-art';artwork.innerHTML=icon(opt[2]);lab.appendChild(artwork);}lab.appendChild(label);opts.appendChild(lab);
+  });field.appendChild(opts);mount.appendChild(field);updateSelections();
+ }
+ var state=checked[index];var fb=$('feedback');
+ fb.hidden=!state;fb.className='feedback'+(state&&state.ok?' correct':'');
+ if(state){
+  fb.replaceChildren();
+  var strong=document.createElement('strong');strong.textContent=state.ok?'Correto: você identificou a relação essencial.':'Ainda não. Examine novamente a prancha.';
+  var detail=document.createElement('p');detail.textContent=state.ok?q.explain:q.hint+' '+q.explain;
+  fb.appendChild(strong);fb.appendChild(detail);
+  var small=document.createElement('p');small.className='feedback-extra';small.textContent=state.ok?'Resposta conferida. Você pode avançar ou voltar para revisar.':'Você pode alterar a resposta e conferir novamente, ou avançar e revisar depois.';
+  fb.appendChild(small);
+ }
+ $('previousButton').disabled=index===0;
+ $('checkButton').textContent=state?'Tentar novamente':'Conferir resposta';
+ $('nextButton').disabled=!state;
+ $('nextButton').textContent=index===total-1?'Ver resultado →':'Próxima questão →';
+ updateProgress();
+ if(focus){$('questionTitle').focus();$('questionScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});}
+}
+function invalidate(){if(checked[index])delete checked[index];$('feedback').hidden=true;$('checkButton').textContent='Conferir resposta';$('nextButton').disabled=true;updateProgress();}
+$('answerMount').addEventListener('change',function(e){
+ var input=e.target;
+ if(!input.matches('input'))return;
+ var q=questions[index];
+ if(q.type==='multiple'){answer[index]=Array.prototype.map.call($('answerMount').querySelectorAll('input:checked'),function(it){return it.value;});}
+ else{answer[index]=input.value;}
+ invalidate();updateSelections();
+});
+$('answerMount').addEventListener('click',function(e){
+ var b=e.target.closest('button[data-position]');if(!b)return;
+ var q=questions[index],current=chosen(q);
+ var pos=Number(b.dataset.position),next=pos+Number(b.dataset.delta);
+ if(next<0||next>=current.length)return;
+ var temp=current[pos];current[pos]=current[next];current[next]=temp;answer[index]=current;
+ invalidate();render(false);
+ var selector='button[data-position="'+next+'"][data-delta="'+b.dataset.delta+'"]';
+ var focusButton=$('answerMount').querySelector(selector);if(focusButton&&!focusButton.disabled)focusButton.focus();
+});
+$('checkButton').addEventListener('click',function(){
+ if(checked[index]){invalidate();$('questionTitle').focus();return;}
+ var q=questions[index],value=chosen(q),missing=q.type==='sequence'?false:q.type==='multiple'?value.length===0:!value;
+ if(missing){$('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Selecione uma resposta antes de conferir.';return;}
+ var ok=equal(value,q.correct);
+ if(firstTry[index]===undefined)firstTry[index]=ok;
+ checked[index]={ok:ok};
+ render(false);
+});
+$('previousButton').addEventListener('click',function(){if(index>0){index--;render(true);}});
+$('nextButton').addEventListener('click',function(){
+ if(!checked[index])return;
+ if(index===total-1){showSummary();return;}
+ index++;render(true);
+});
+function showSummary(){
+ $('questionScreen').hidden=true;$('summaryScreen').hidden=false;
+ $('progressStep').textContent='REVISÃO CONCLUÍDA';
+ $('progressTopic').textContent='Da lavoura à xícara · Síntese';
+ $('totalReviewed').textContent=String(reviewedCount())+' / '+total;
+ $('totalMastered').textContent=String(correctCount())+' / '+total;
+ $('totalFirst').textContent=String(Object.keys(firstTry).filter(function(k){return firstTry[k]===true;}).length)+' / '+total;
+ var list=$('reviewList');list.replaceChildren();
+ questions.forEach(function(q,i){
+  var li=document.createElement('li');li.className='review-item';
+  var block=document.createElement('div');
+  var strong=document.createElement('strong');strong.textContent=String(i+1).padStart(2,'0')+'. '+q.section;
+  var p=document.createElement('p');p.textContent=checked[i]?(checked[i].ok?'Correta. ':'A revisar. ')+q.explain:'Ainda não conferida. '+q.explain;
+  block.appendChild(strong);block.appendChild(p);
+  var b=document.createElement('button');b.type='button';b.textContent='Rever prancha';b.dataset.review=String(i);
+  li.appendChild(block);li.appendChild(b);list.appendChild(li);
+ });
+ $('summaryTitle').focus();$('summaryScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});
+}
+$('reviewList').addEventListener('click',function(e){var b=e.target.closest('button[data-review]');if(!b)return;index=Number(b.dataset.review);render(true);});
+$('restartButton').addEventListener('click',function(){answer=Object.create(null);checked=Object.create(null);firstTry=Object.create(null);index=0;render(true);});
+$('reviewFirstButton').addEventListener('click',function(){index=0;render(true);});
+$('motionToggle').addEventListener('click',function(){reduceMotion=!reduceMotion;document.body.classList.toggle('motion-reduce',reduceMotion);this.setAttribute('aria-pressed',String(reduceMotion));this.textContent=reduceMotion?'Restaurar movimentos':'Reduzir movimentos';});
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){reduceMotion=true;document.body.classList.add('motion-reduce');$('motionToggle').setAttribute('aria-pressed','true');$('motionToggle').textContent='Restaurar movimentos';}
+if(questions.length!==total){throw new Error('Total de questões inconsistente');}
+render(false);
+})();
+</script>
+</body>
+</html>
