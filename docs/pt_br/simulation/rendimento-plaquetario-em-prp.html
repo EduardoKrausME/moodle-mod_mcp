@@ -121,9 +121,8 @@
                 </div>
             </div>
             <p id="error" class="error" role="alert" hidden>Informe valores válidos.</p>
-            <div class="actions"><button type="button" class="btn primary" id="save">Salvar cenário no Moodle</button><button type="button" class="btn" id="restore">Retornar aos valores iniciais</button></div>
-            <p class="status" id="state" role="status" aria-live="polite">Consultando o progresso individual...</p>
-            <button type="button" id="retry" class="btn" hidden>Tentar novamente</button>
+            <div class="actions"><button type="button" class="btn" id="restore">Retornar aos valores iniciais</button></div>
+            <p class="status" id="state" role="status" aria-live="polite">Simulação pronta. Os parâmetros permanecem somente nesta página.</p>
         </section>
         <section class="results panel" aria-labelledby="results-heading">
             <h2 class="section-title" id="results-heading">Resultados calculados</h2>
@@ -168,8 +167,8 @@
             </ol>
         </details>
     </section>
-    <p class="warning"><strong>Aviso educacional:</strong> esta é uma simulação aritmética, não um protocolo de processamento de sangue nem ferramenta para decisões clínicas. Maior concentração ou recuperação não implica, isoladamente, maior benefício, segurança ou qualidade de um PRP. Salvar o cenário registra somente os parâmetros individuais de aprendizagem, sem nota ou conclusão automática.</p>
-    <p class="footer">Atividade interativa · Sem dependências externas de JavaScript. Os parâmetros não são enviados a serviços externos; o salvamento, quando solicitado, utiliza o SDK autenticado do Moodle.</p>
+    <p class="warning"><strong>Aviso educacional:</strong> esta é uma simulação aritmética, não um protocolo de processamento de sangue nem ferramenta para decisões clínicas. Maior concentração ou recuperação não implica, isoladamente, maior benefício, segurança ou qualidade de um PRP. Os parâmetros usados na simulação permanecem somente nesta página, sem alterar notas ou conclusão acadêmica.</p>
+    <p class="footer">Atividade interativa · Sem dependências externas de JavaScript. Os parâmetros não são enviados ao Moodle nem a outros serviços.</p>
 </main>
 <script>
     (function(){
@@ -179,15 +178,12 @@
         const bounds={v:{min:10,max:120},c:{min:100,max:450},f:{min:1,max:20},r:{min:0,max:100}};
         const keys=["v","c","f","r"];
         const $=id=>root.querySelector("#"+id);
-        const sdk=window.MoodleMCP&&window.MoodleMCP.progress;
         const format=(n,d=2)=>new Intl.NumberFormat("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d}).format(n);
-        const safeObject=x=>x&&typeof x==="object"&&!Array.isArray(x)?x:{};
-        let snapshot=null,busy=false,pending=null,chosen="base";
+        let chosen="base";
         function get(){const out={};keys.forEach(k=>{const raw=$(k+"-num").value;out[k]=raw.trim()===""?NaN:Number(raw);});return out;}
         function validValues(x){return keys.every(k=>Number.isFinite(x[k])&&x[k]>=bounds[k].min&&x[k]<=bounds[k].max)&&x.f<=x.v;}
         function calc(x){const initial=x.v*x.c/1000;const recovered=initial*x.r/100;const finalConcentration=recovered*1000/x.f;return {initial:initial,recovered:recovered,lost:initial-recovered,finalConcentration:finalConcentration,factor:finalConcentration/x.c};}
         function setState(msg,type){const el=$("state");el.textContent=msg;el.className="status"+(type?" "+type:"");}
-        function hideRetry(){$("retry").hidden=true;}
         function presetUI(){root.querySelectorAll("[data-preset]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.preset===chosen)));}
         function resetFields(values){keys.forEach(k=>{$(k+"-num").value=String(values[k]);$(k+"-range").value=String(values[k]);});}
         function render(){
@@ -195,10 +191,6 @@
             keys.forEach(k=>$(k+"-num").setAttribute("aria-invalid",String(!Number.isFinite(x[k])||x[k]<bounds[k].min||x[k]>bounds[k].max||(k==="f"&&Number.isFinite(x.v)&&x.f>x.v))));
             $("error").hidden=ok;
             $("error").textContent=ok?"":(!keys.every(k=>Number.isFinite(x[k])&&x[k]>=bounds[k].min&&x[k]<=bounds[k].max)?"Confira os limites de todos os campos e preencha os valores numéricos.":"O volume final de PRP não pode exceder o volume sanguíneo processado neste modelo.");
-            $("save").disabled=!ok||busy||!snapshot;
-            $("restore").disabled=busy;
-            root.querySelectorAll("[data-preset]").forEach(b=>b.disabled=busy);
-            keys.forEach(k=>$(k+"-range").disabled=busy);
             presetUI();
             if(!ok){["initial","recovered","final-count","factor","lost-count","base-label","final-label","recover-percent"].forEach(id=>$(id).textContent="-");["recover-bar","lost-bar","base-bar","final-bar"].forEach(id=>$(id).style.width="0%");$("interpretation").textContent="Corrija os campos para ver resultados coerentes.";return;}
             const y=calc(x);
@@ -219,38 +211,14 @@
             $("concentration-chart").setAttribute("aria-label","Contagem inicial "+format(x.c,0)+" milhares por microlitro; contagem final "+format(y.finalConcentration,1)+" milhares por microlitro; fator "+format(y.factor)+" vezes.");
             $("interpretation").textContent=(y.factor<1?"Neste cenário, a concentração calculada é inferior à inicial; nem toda preparação resultante constitui enriquecimento plaquetário.":y.factor===1?"Neste cenário, a concentração calculada é igual à inicial.":"Um fator maior não significa, por si só, maior recuperação ou benefício clínico.")+" Observe que o número recuperado depende do sangue inicial e do percentual de recuperação, mas não do volume final.";
         }
-        function changed(){pending=null;hideRetry();chosen="custom";render();setState("Alterações locais não salvas. Os cálculos estão atualizados, mas o Moodle ainda não registrou este cenário.","warn");}
+        function changed(){chosen="custom";render();setState("Parâmetros atualizados. Os cálculos permanecem somente nesta página.");}
         keys.forEach(k=>{
             $(k+"-range").addEventListener("input",()=>{$(k+"-num").value=$(k+"-range").value;changed();});
             $(k+"-num").addEventListener("input",()=>{const val=Number($(k+"-num").value);if($(k+"-num").value.trim()!==""&&Number.isFinite(val)&&val>=bounds[k].min&&val<=bounds[k].max)$(k+"-range").value=String(val);changed();});
         });
-        root.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click",()=>{if(busy)return;const p=presets.find(s=>s.id===b.dataset.preset);if(!p)return;chosen=p.id;pending=null;hideRetry();resetFields(p);render();setState("Cenário didático carregado. Ajuste os parâmetros ou salve explicitamente no Moodle.","warn");}));
-        $("restore").addEventListener("click",()=>{if(busy)return;const p=presets[0];chosen=p.id;pending=null;hideRetry();resetFields(p);render();setState("Valores iniciais restaurados localmente; não salvos no Moodle.","warn");});
-        async function saveScenario(model){if(busy||!snapshot||!validValues(model.values))return;busy=true;pending=model;render();hideRetry();setState("Salvando os parâmetros no Moodle...");
-            const current=snapshot;
-            try{
-                const saved=await sdk.save({
-                    version:current.version,
-                    location:"simulador-rendimento-prp",
-                    data:Object.assign({},safeObject(current.data),{simulator36:{saved:true,scenario:model.scenario}}),
-                    userdata:Object.assign({},safeObject(current.userdata),{simulator36:{schema:1,values:model.values,scenario:model.scenario,updatedAt:new Date().toISOString()}})
-                });
-                snapshot=saved;pending=null;busy=false;render();setState("Cenário salvo no progresso individual do Moodle.","ok");
-            }catch(err){busy=false;render();const message=String(err&&err.message||err).toLowerCase();const conflict=message.includes("conflict");setState(conflict?"O progresso foi alterado em outra aba. Recarregue antes de salvar novamente.":"Falha ao salvar. Os valores continuam na tela, mas não foram registrados no Moodle.","err");const retry=$("retry");retry.hidden=false;retry.textContent=conflict?"Recarregar progresso":"Tentar salvar novamente";retry.onclick=conflict?load:()=>{if(pending)saveScenario(pending);};}
-        }
-        $("save").addEventListener("click",()=>{const values=get();if(!validValues(values)||busy||!snapshot)return;saveScenario({values:values,scenario:chosen});});
-        async function load(){
-            if(busy)return;busy=true;render();hideRetry();setState("Consultando o progresso individual no Moodle...");
-            if(!sdk||typeof sdk.load!=="function"||typeof sdk.save!=="function"){snapshot=null;busy=false;render();setState("SDK de progresso indisponível. O simulador funciona, mas nenhum cenário poderá ser salvo fora do Moodle.","err");return;}
-            try{
-                const result=await sdk.load();snapshot=result;
-                const prior=safeObject(safeObject(result.userdata).simulator36);
-                if(prior.schema===1&&validValues(safeObject(prior.values))){resetFields(prior.values);chosen=presets.some(p=>p.id===prior.scenario)?prior.scenario:"custom";setState("Cenário individual salvo anteriormente foi recuperado.","ok");}
-                else{chosen="base";setState("Simulador pronto. Os valores iniciais são exemplos; salve um cenário quando desejar.","ok");}
-                busy=false;pending=null;render();
-            }catch(err){snapshot=null;busy=false;render();const reason=String(err&&err.message||err||"erro desconhecido").slice(0,120);console.error("[mod_mcp] progress.load:",reason);setState("Não foi possível carregar o armazenamento autenticado ("+reason+"). Os cálculos funcionam, mas o salvamento não está disponível.","err");const retry=$("retry");retry.hidden=false;retry.textContent="Conectar ao Moodle novamente";retry.onclick=load;}
-        }
-        render();load();
+        root.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click",()=>{const p=presets.find(s=>s.id===b.dataset.preset);if(!p)return;chosen=p.id;resetFields(p);render();setState("Cenário didático selecionado. Os valores permanecem somente nesta página.");}));
+        $("restore").addEventListener("click",()=>{const p=presets[0];chosen=p.id;resetFields(p);render();setState("Valores iniciais restaurados. Nenhum dado foi consultado ou salvo no Moodle.");});
+        render();
     })();
 </script>
 </body>
