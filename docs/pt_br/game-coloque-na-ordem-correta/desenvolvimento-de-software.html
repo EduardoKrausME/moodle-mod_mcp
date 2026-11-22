@@ -243,7 +243,7 @@ function handleAction(action){
   if(first<0)message("Sua sequência parece correta. Pressione Conferir sequência.");
   else{
    const step=data.steps.find(s=>s.id===state.order[first]);
-   message("Dica: observe a etapa “"+step.label+"” na posição "+(first+1)+". Compare o que precisa acontecer antes dela.","warning");
+   message("Dica: observe a etapa \""+step.label+"\" na posição "+(first+1)+". Compare o que precisa acontecer antes dela.","warning");
   }
  }else if(action.type==="undo"){
   if(!history.length||state.finished)return;

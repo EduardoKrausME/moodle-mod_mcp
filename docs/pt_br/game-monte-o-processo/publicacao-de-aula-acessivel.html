@@ -270,7 +270,7 @@ function render(){
  const hints=$("hints");hints.replaceChildren();
  for(let i=0;i<state.hints;i++)hints.append(el("li","",DATA.hints[i]));
  $("replace-panel").hidden=!replacement;
- if(replacement)$("replace-text").textContent="Substituir a saída "+branchLabel(replacement.branch)+" de “"+label(replacement.from)+"”, hoje ligada a “"+label(replacement.oldTo)+"”, para “"+label(replacement.to)+"”? As outras ligações serão preservadas.";
+ if(replacement)$("replace-text").textContent="Substituir a saída "+branchLabel(replacement.branch)+" de \""+label(replacement.from)+"\", hoje ligada a \""+label(replacement.oldTo)+"\", para \""+label(replacement.to)+"\"? As outras ligações serão preservadas.";
  $("success").hidden=!state.complete;
  if(state.complete)$("order-result").textContent=state.edges.find(e=>e.from==="start")?.to==="materials"?"Ordem aceita: materiais antes de estrutura.":"Ordem aceita: estrutura antes de materiais.";
  scheduleLines();focusKey(focus);

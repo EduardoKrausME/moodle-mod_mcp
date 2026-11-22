@@ -588,7 +588,7 @@ article{overflow:hidden}
     </figure>
     <div class="narrative">
       <p>O sabor envolve paladar, olfato e sensação tátil. A <strong>acidez</strong> sensorial pode lembrar frutas; a <strong>doçura</strong> percebida não corresponde necessariamente a uma grande quantidade de açúcar na bebida; o <strong>corpo</strong> descreve sensações de textura e peso na boca.</p>
-      <p>Uma nota descrita como “chocolate” ou “frutas vermelhas” não prova a presença do ingrediente. É uma linguagem comparativa que depende de repertório, contexto, concentração e percepção individual. Degustações comparativas ajudam mais do que decorar listas de aromas.</p>
+      <p>Uma nota descrita como "chocolate" ou "frutas vermelhas" não prova a presença do ingrediente. É uma linguagem comparativa que depende de repertório, contexto, concentração e percepção individual. Degustações comparativas ajudam mais do que decorar listas de aromas.</p>
       <p>A avaliação sensorial precisa considerar preparo padronizado, temperatura de consumo, limpeza de equipamentos e ausência de defeitos. Também vale perguntar de onde veio o lote, quem o produziu e quais processos foram utilizados: qualidade não existe desconectada da cadeia produtiva.</p>
     </div>
   </div>
@@ -714,7 +714,7 @@ function updateBrew(){
   document.getElementById("methodHelp").textContent=descriptions[method.value];
   var valid=dose.value.trim()!==""&&Number.isFinite(d)&&d>=1&&d<=100;
   document.getElementById("doseError").textContent=valid?"":"Informe uma dose válida entre 1 e 100 g.";
-  document.getElementById("waterOut").textContent=valid?(d*r).toLocaleString("pt-BR",{maximumFractionDigits:1})+" g":"—";
+  document.getElementById("waterOut").textContent=valid?(d*r).toLocaleString("pt-BR",{maximumFractionDigits:1})+" g":"-";
   document.getElementById("ratioDescription").textContent=valid?d.toLocaleString("pt-BR",{maximumFractionDigits:1})+" g de café × "+r+" = "+(d*r).toLocaleString("pt-BR",{maximumFractionDigits:1})+" g de água adicionada.":"O cálculo será mostrado após a correção da dose.";
 }
 [dose,ratio,method].forEach(function(el){el.addEventListener("input",updateBrew);});
