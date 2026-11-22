@@ -115,8 +115,8 @@ final class activity {
         // Initialise the iframe SDK before any authored JavaScript.
         $content = $revision ? $revision->content : "";
         if ($revision) {
-            $src = (new moodle_url("/mod/mcp/sdk.js"))->out(false);
-            $bootstrap = '<script src="' . s($src) . '"></script>';
+            $src = new moodle_url("/mod/mcp/sdk.js");
+            $bootstrap = '<script src="' . $src->out(false) . '"></script>';
             $content = preg_replace('/(<head\b[^>]*>)/i', '$1' . $bootstrap, $content, 1, $count);
             if (!$count) {
                 $content = $bootstrap . $content;
