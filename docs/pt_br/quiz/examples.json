@@ -3,5 +3,24 @@
   "category": "quiz",
   "title": "Quiz",
   "description": "Exercícios demonstrativos com feedback local, sem nota Moodle.",
-  "examples": []
+  "examples": [
+    {
+      "id": "uma-viagem-por-dentro-do-coracao-humano",
+      "title": "O coração em 12 desafios",
+      "description": "Atlas em formato de quiz sobre anatomia cardíaca, câmaras, valvas, circulação, ECG, pressões e prevenção.",
+      "howItWorks": "Uma questão por vez: observe pranchas SVG autorais, selecione respostas, ordene o fluxo sistêmico e receba feedback com explicações e revisão.",
+      "subtype": "Atlas médico · quiz ilustrado",
+      "features": [
+        "12 questões ilustradas",
+        "SVGs anatômicos originais",
+        "Escolhas únicas e múltiplas",
+        "Ordenação por botões",
+        "Feedback e revisão",
+        "Sem nota Moodle"
+      ],
+      "minutes": 20,
+      "path": "quiz/uma-viagem-por-dentro-do-coracao-humano.html",
+      "prompt": "Crie um quiz educativo HTML independente para o mod_mcp com profundidade pedagógica, identidade visual autoral, imagens e pranchas SVG acessíveis e feedback tão completos quanto o exemplo \"O coração em 12 desafios\". Use-o apenas como referência de qualidade, sem copiar o assunto, o layout ou as perguntas.\n\nNa sua PRIMEIRA resposta, ANTES de produzir perguntas, HTML, CSS, JavaScript, imagens, ilustrações ou chamar ferramentas de gravação, pergunte EXATAMENTE: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" AGUARDE a resposta do professor. Não presuma que o assunto será coração humano e não gere arquivos nem publique nada antes da resposta.\n\nDepois, se o objetivo cognitivo não estiver claro, pergunte brevemente qual nível de aprendizagem deseja trabalhar, em linguagem simples: compreender conceitos, aplicar conhecimentos, analisar relações e causas, avaliar decisões ou criar soluções. Explique cada opção em uma frase breve, sem repetir perguntas respondidas.\n\nCrie um conjunto adequado de questões progressivas, com alternativas plausíveis e comentários fundamentados, contemplando escolhas únicas, múltiplas e, se fizer sentido, ordenação e associação. Varie os desafios com situações concretas, roteiros, ilustrações conceituais e interpretação de figuras. Ofereça avanço e retorno entre perguntas, feedback por tentativa, possibilidade de rever respostas, reinício, indicador de progresso e revisão final. Não destaque visualmente o gabarito antes da resposta.\n\nCrie uma identidade visual exclusiva para o tema escolhido, mas mantenha acabamento gráfico rigoroso: tipografia, cores coerentes, figuras de apoio, diagramas SVG originais e desenhos para o enunciado e, quando útil, para as alternativas. Use title, desc, legendas e descrição textual equivalente para cada ilustração e declare quais imagens foram utilizadas, sua autoria, procedência e limites. Fontes científicas ou históricas devem ser verificáveis; diferencie fatos, hipóteses e simulações didáticas.\n\nEntregue um HTML completo, independente, responsivo e acessível para iframe isolado, sem CDN obrigatório, menu institucional ou rodapé Moodle. Garanta navegação por teclado, botões nativos, foco visível, labels, aria-live, contraste, adaptação para toque e prefers-reduced-motion. Não utilize localStorage, não colete dados pessoais e não invente valores ou diagnósticos.\n\nEste catálogo contém demonstrações formativas corrigidas localmente por JavaScript, sem nota oficial Moodle; declare isso ao aluno. Se o professor solicitar um quiz oficial, use somente as APIs reais de .chatgpt/API.md, com as respostas corretas armazenadas no JSON privado da atividade e correção no servidor, nunca gabarito em HTML. Não use sdk.load. Com ChatGPT ou Claude (usando o protocolo MCP), respeite rascunho, prévia, revisão, confirmação e publicação explícita, sem gravar antes da resposta e autorização do professor."
+    }
+  ]
 }
