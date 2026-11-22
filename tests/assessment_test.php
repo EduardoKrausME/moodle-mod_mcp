@@ -29,7 +29,9 @@ use mod_mcp\content\metadata;
 use mod_mcp\content\service as content_service;
 use mod_mcp\question\attempts;
 
-/** JSON assessment never uses Question Engine.
+/**
+ * Tests JSON assessments without using the Question Engine.
+ *
  * @covers \mod_mcp\question\attempts
  * @package mod_mcp
  */

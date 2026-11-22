@@ -67,9 +67,12 @@ final class backup_restore_test extends advanced_testcase {
                 "answer" => "b", "points" => 1]],
         ]);
 
-        $html = '<h2>Content for backup</h2>';
-        $revisionid = service::save((int)$module->id, $html, (int)$USER->id, 0);
-        $DB->set_field('mcp', 'publishedrevision', $revisionid, ['id' => $module->id]);
+        // Preserve the published version even when a newer unpublished draft exists.
+        $publishedhtml = '<h2>Published content for backup</h2>';
+        $publishedrevision = service::save((int)$module->id, $publishedhtml, (int)$USER->id, 0);
+        $DB->set_field('mcp', 'publishedrevision', $publishedrevision, ['id' => $module->id]);
+        $drafthtml = '<h2>Unpublished draft for backup</h2>';
+        $draftrevision = service::save((int)$module->id, $drafthtml, (int)$USER->id, $publishedrevision);
 
         $bytes = 'MCP file area regression test';
         $fs = get_file_storage();
@@ -100,11 +103,16 @@ final class backup_restore_test extends advanced_testcase {
         $this->assertCount(2, $instances);
         $copy = end($instances);
         $this->assertNotEquals($module->id, $copy->id);
-        $this->assertNotEquals($revisionid, $copy->publishedrevision);
+        $this->assertNotEquals($publishedrevision, $copy->publishedrevision);
+        $this->assertNotEquals($draftrevision, $copy->draftrevision);
         $this->assertSame("quiz", $copy->activitytype);
         $this->assertSame("random", json_decode($copy->informationjson, true)["selection"]);
-        $this->assertSame((int)$copy->draftrevision, (int)$copy->publishedrevision);
-        $this->assertSame($html, service::get((int)$copy->id, (int)$copy->publishedrevision)->content);
+        $this->assertCount(2, $DB->get_records('mcp_revisions', ['mcpid' => $copy->id]));
+        $this->assertNotSame((int)$copy->draftrevision, (int)$copy->publishedrevision);
+        $this->assertSame($publishedhtml,
+            service::get((int)$copy->id, (int)$copy->publishedrevision)->content);
+        $this->assertSame($drafthtml,
+            service::get((int)$copy->id, (int)$copy->draftrevision)->content);
 
         $copycm = get_coursemodule_from_instance('mcp', $copy->id, $course->id, false, MUST_EXIST);
         $copycontext = context_module::instance($copycm->id);

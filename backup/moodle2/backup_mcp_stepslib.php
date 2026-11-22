@@ -38,7 +38,14 @@ class backup_mcp_activity_structure_step extends backup_activity_structure_step 
         $revisions = new backup_nested_element("revisions");
         $revision = new backup_nested_element("revision", ["id"],
             ["content", "sha256", "createdby", "timecreated"]);
+        // Include the full immutable revision history under the activity instance.
+        $mcp->add_child($revisions);
+        $revisions->add_child($revision);
+
+        $mcp->set_source_table("mcp", ["id" => backup::VAR_ACTIVITYID]);
+        $revision->set_source_table("mcp_revisions", ["mcpid" => backup::VAR_PARENTID], "id ASC");
         $revision->annotate_ids("user", "createdby");
+
         // Assets use itemid 0 in Moodle File API, not an element named "0" in the backup XML.
         $mcp->annotate_files("mod_mcp", "assets", null);
         return $this->prepare_activity_structure($mcp);
