@@ -1,8 +1,8 @@
 # Interactive Experience for Moodle (mod_mcp)
 
-Interactive Experience (Experiência Interativa) is a Moodle activity for creating pages, exercises and simulations with HTML, CSS and JavaScript, native question-bank grading and ChatGPT/Claude authoring through local_mcp.
+Interactive Experience (Experiência Interativa) is a Moodle activity for creating pages, exercises and simulations with HTML, CSS and JavaScript, server-side grading from self-contained JSON questions and ChatGPT/Claude authoring through local_mcp.
 
-Compatible with Moodle 4.5 LTS and 5.x. Install this repository at mod/mcp and upgrade Moodle. local_mcp is required for authoring over MCP, but students do not need ChatGPT, Claude or an MCP connection.
+Compatible with Moodle 4.5 LTS and 5.x. Install this repository at mod/mcp on a clean installation; there is no database upgrade path from the former Question Bank design. local_mcp is required for authoring over MCP, but students do not need ChatGPT, Claude or an MCP connection.
 
 ## Activity lifecycle
 
@@ -142,8 +142,8 @@ Available APIs:
 - `progress.load()`, `progress.save({version, location, data})` with optimistic locking;
 - `progress.getStatus()`, `progress.saveStatus({version, location, percent, currentstep, totalsteps})` for structured per-user reading progress;
 - `attempt.get()`, `attempt.start()`, `attempt.finish()`;
-- `questions.get()`, `questions.submit(responses, finish)` for simple native question
-  types. Returned question markup comes from the Moodle Question Engine, never from authored HTML.
+- `questions.get()`, `questions.submit(responses, finish)` for supported JSON question
+  types. Correct answers remain in server-owned JSON and are never returned to authored HTML.
   Complex question types may require the original trusted Moodle assessment form;
 - `tracking.record({type, action, object, result})` with a limit of 2,000 events per
   student/activity, and `tracking.summary()` restricted to teachers who can manage the activity.
@@ -154,7 +154,7 @@ native view/grade completion conditions are never bypassed. A graded attempt mus
 finished before interactive completion is accepted.
 
 Progress is revision-aware, belongs exclusively to the logged-in user, and is capped
-at 12 KiB of JSON. The optional xAPI-inspired telemetry is *not* a grading or evidence
+at 12 KiB of generic state JSON, with student `userdata` limited separately to 128 KiB. The optional xAPI-inspired telemetry is *not* a grading or evidence
 system. Author-supplied JSON is untrusted and never updates the Moodle gradebook.
 
 Neither student progress nor tracking events are copied by course backup/restore.

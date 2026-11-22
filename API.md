@@ -91,8 +91,8 @@ only storage for a student's progress. Old content using generic
 `progress.save({version, location, data})` replaces the generic `data` object,
 whereas `progress.saveStatus(...)` merges its reserved status record into the
 current generic data while enforcing the same version check. Do not write the
-reserved `_modmcpstatus` property directly. The full JSON state is limited to
-12 KiB. Invalid values and conflicting versions reject the Promise.
+reserved `_modmcpstatus` property directly. The generic `data` state is limited to 12 KiB, and the separate `userdata`
+object is limited to 128 KiB. Invalid values and conflicting versions reject the Promise.
 
 ### JSON metadata, quiz selection and privacy
 
