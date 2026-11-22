@@ -14,7 +14,8 @@
       "features": [
         "FLASHCARDS",
         "HTML independente"
-      ]
+      ],
+      "prompt": "Crie uma atividade do formato \"Flashcards de revisão\" para mod_mcp, mantendo a experiência do exemplo \"Flashcards de revisão\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: flashcards em que o aluno revela uma explicação e avança ou retorna entre cartões.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "mapa-mental-exploravel",
@@ -26,7 +27,8 @@
       "features": [
         "MAPA MENTAL",
         "HTML independente"
-      ]
+      ],
+      "prompt": "Crie uma atividade do formato \"Mapa mental explorável\" para mod_mcp, mantendo a experiência do exemplo \"Mapa mental explorável\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: mapa mental explorável com ramos que expandem para mostrar conteúdo.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "roteiro-de-estudo-personalizado",
@@ -38,7 +40,8 @@
       "features": [
         "TRILHA DE ESTUDOS",
         "HTML independente"
-      ]
+      ],
+      "prompt": "Crie uma atividade do formato \"Roteiro de estudo personalizado\" para mod_mcp, mantendo a experiência do exemplo \"Roteiro de estudo personalizado\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: roteiro adaptativo que oferece percursos distintos a partir do objetivo escolhido.\n\nA escolha do aluno influencia a trilha apresentada sem alegar personalização automática baseada em dados do Moodle não disponíveis.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "votacao-rapida",
@@ -50,7 +53,8 @@
       "features": [
         "ENQUETE",
         "HTML independente"
-      ]
+      ],
+      "prompt": "Crie uma atividade do formato \"Votação rápida\" para mod_mcp, mantendo a experiência do exemplo \"Votação rápida\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: votação demonstrativa de opção única com indicação de seleção e retorno.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "comparador-de-tecnicas",
@@ -62,7 +66,8 @@
       "features": [
         "COMPARADOR",
         "HTML independente"
-      ]
+      ],
+      "prompt": "Crie uma atividade do formato \"Comparador de técnicas\" para mod_mcp, mantendo a experiência do exemplo \"Comparador de técnicas\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: comparador interativo de alternativas, exibindo vantagens, limitações e situações de uso.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     }
   ]
 }

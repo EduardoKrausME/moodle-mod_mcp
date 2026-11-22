@@ -31,3 +31,11 @@ Os arquivos `games/*.html` foram migrados para suas pastas específicas. A pasta
 Na raiz do repositório, execute `python3 -m http.server 8000 -d docs` e abra `http://localhost:8000/pt_br/`. Não abra `index.html` usando `file://`, pois os navegadores restringem `fetch()` de JSON local.
 
 Não repita cabeçalho, rodapé institucional, nome do curso ou dados técnicos do Moodle dentro dos exemplos: o plugin já fornece essas informações no contêiner que hospeda a atividade.
+
+## Prompts para recriar os exemplos
+
+Todos os registros nos JSONs de categorias têm o campo obrigatório `prompt`. Para jogos, mantenha o mesmo texto tanto em `games/examples.json` quanto em `game-<modalidade>/examples.json`, inclusive quando houver vários exemplos na mesma pasta.
+
+O prompt conserva a **mecânica do exemplo**, não o assunto: na primeira resposta, ChatGPT ou Claude deve perguntar ao professor **"Qual tipo de conteúdo você deseja trabalhar nesta atividade?"** e aguardar a resposta antes de gerar HTML, CSS, JavaScript ou salvar material. Depois adapta os elementos pedagógicos ao tema escolhido, pergunta somente os detalhes necessários e entrega um HTML de atividade independente, sem menus ou rodapé institucional. O professor pode usar o HTML para copiar e colar no gerenciador, sem conexão MCP, ou usar as APIs de autoria realmente disponíveis.
+
+Na galeria, **Copiar comando** aparece nos cards e no diálogo de prévia; **Ver comando** mostra o texto antes de copiá-lo. O comando é tratado como texto, nunca executado na página.

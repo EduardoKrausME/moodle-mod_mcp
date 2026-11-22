@@ -46,7 +46,8 @@
           "howItWorks",
           "path",
           "minutes",
-          "features"
+          "features",
+          "prompt"
         ],
         "additionalProperties": false,
         "properties": {
@@ -82,6 +83,10 @@
           },
           "subtype": {
             "type": "string"
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 100
           }
         }
       }

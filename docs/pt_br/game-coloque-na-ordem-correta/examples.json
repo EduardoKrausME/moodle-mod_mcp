@@ -15,7 +15,8 @@
         "Reordenação"
       ],
       "minutes": 5,
-      "path": "game-coloque-na-ordem-correta/resolucao-de-problemas.html"
+      "path": "game-coloque-na-ordem-correta/resolucao-de-problemas.html",
+      "prompt": "Crie uma atividade do formato \"Ordenação\" para mod_mcp, mantendo a experiência do exemplo \"Ordenar a sequência\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: jogo de ordenar a sequência: blocos embaralhados com ordenação por arraste ou botões de mover, validação da ordem e feedback.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "coloque-na-ordem-correta",
@@ -29,7 +30,8 @@
         "Feedback sob demanda"
       ],
       "minutes": 6,
-      "path": "game-coloque-na-ordem-correta/desenvolvimento-de-software.html"
+      "path": "game-coloque-na-ordem-correta/desenvolvimento-de-software.html",
+      "prompt": "Crie uma atividade do tipo \"Coloque na ordem correta\" para o mod_mcp. Use a mecânica demonstrada, mas não reutilize automaticamente o assunto do exemplo.\n\nNa sua PRIMEIRA resposta, antes de criar qualquer conteúdo ou chamar ferramentas de escrita, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta. Não reutilize automaticamente o conteúdo mostrado no exemplo.\n\nComo mecânica, apresente passos embaralhados para o estudante reorganizar por arraste ou por botões acessíveis de subir e descer, valide a sequência correta e mostre feedback formativo, progresso, reinício e a possibilidade de tentar novamente.\n\nDepois da resposta, adapte todos os textos e etapas ao conteúdo escolhido. Se necessário, pergunte o número de etapas, a dificuldade desejada e os critérios de correção. Construa uma atividade HTML completa com CSS e JavaScript internos, responsiva e acessível por teclado, mouse e toque, sem bibliotecas remotas, menu, cabeçalho institucional, rodapé ou metadados técnicos do Moodle. Não atribua notas oficiais no navegador; use somente APIs documentadas do Mod MCP, com aprovação antes de publicar. Sem conexão MCP, entregue o HTML para copiar e colar no gerenciador."
     }
   ]
 }

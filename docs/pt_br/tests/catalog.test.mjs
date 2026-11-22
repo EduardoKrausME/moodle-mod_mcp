@@ -1,5 +1,5 @@
 /**
- * Static gallery checks. Run: node --test docs/pt-BR/tests/catalog.test.mjs
+ * Static gallery checks. Run: node --test docs/pt_br/tests/catalog.test.mjs
  * No third-party dependencies are required.
  */
 import test from 'node:test';
@@ -40,6 +40,9 @@ test('cada manifesto tem HTML próprio, identificadores únicos e descrição',a
    }
    assert.match(e.path,allowPath);
    assert.ok(e.title&&e.description&&e.howItWorks);
+   assert.equal(typeof e.prompt,'string','Prompt ausente: '+e.path);
+   assert.ok(e.prompt.includes('Qual tipo de conteúdo você deseja trabalhar'),'Prompt não pergunta conteúdo ao professor: '+e.path);
+   assert.ok(e.prompt.includes('Aguarde a resposta'),'Prompt deve aguardar professor: '+e.path);
    assert.ok(Number.isInteger(e.minutes)&&e.minutes>0);
    assert.ok(Array.isArray(e.features)&&e.features.length>0);
    if(category.id==='games')assert.ok(e.subtype);
@@ -73,6 +76,9 @@ test('o site oferece navegação por JSON, isolamento dos iframes e versão redu
  assert.match(js,/IntersectionObserver/);
  assert.match(js,/preview-scale/);
  assert.match(js,/new Option/);
+ assert.match(js,/copyPromptFromCard/);
+ assert.match(html,/id="copy-prompt"/);
+ assert.match(html,/id="toggle-prompt"/);
  assert.doesNotThrow(()=>new Script(js,{filename:'app.js'}));
 });
 

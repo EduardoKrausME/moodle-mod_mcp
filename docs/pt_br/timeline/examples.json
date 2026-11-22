@@ -14,7 +14,8 @@
         "Marcos navegáveis"
       ],
       "minutes": 5,
-      "path": "timeline/da-rede-de-pesquisa-a-web-moderna.html"
+      "path": "timeline/da-rede-de-pesquisa-a-web-moderna.html",
+      "prompt": "Crie uma atividade do formato \"Da rede de pesquisa à Web moderna\" para mod_mcp, mantendo a experiência do exemplo \"Da rede de pesquisa à Web moderna\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: linha do tempo histórica com marcos datados e detalhes selecionáveis.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "da-ideia-a-entrega",
@@ -26,7 +27,8 @@
         "Marcos navegáveis"
       ],
       "minutes": 5,
-      "path": "timeline/da-ideia-a-entrega.html"
+      "path": "timeline/da-ideia-a-entrega.html",
+      "prompt": "Crie uma atividade do formato \"Da ideia à entrega\" para mod_mcp, mantendo a experiência do exemplo \"Da ideia à entrega\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: linha do tempo de etapas de processo, desde o planejamento até a entrega.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "transformacoes-na-natureza",
@@ -38,7 +40,8 @@
         "Marcos navegáveis"
       ],
       "minutes": 5,
-      "path": "timeline/transformacoes-na-natureza.html"
+      "path": "timeline/transformacoes-na-natureza.html",
+      "prompt": "Crie uma atividade do formato \"Transformações na natureza\" para mod_mcp, mantendo a experiência do exemplo \"Transformações na natureza\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: linha do tempo ou ciclo ilustrativo de processos e suas transformações.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "do-acesso-a-conclusao",
@@ -50,7 +53,8 @@
         "Marcos navegáveis"
       ],
       "minutes": 5,
-      "path": "timeline/do-acesso-a-conclusao.html"
+      "path": "timeline/do-acesso-a-conclusao.html",
+      "prompt": "Crie uma atividade do formato \"Do acesso à conclusão\" para mod_mcp, mantendo a experiência do exemplo \"Do acesso à conclusão\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: linha do tempo de jornada do participante com etapas sequenciais.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "como-surge-uma-descoberta",
@@ -62,7 +66,8 @@
         "Marcos navegáveis"
       ],
       "minutes": 5,
-      "path": "timeline/como-surge-uma-descoberta.html"
+      "path": "timeline/como-surge-uma-descoberta.html",
+      "prompt": "Crie uma atividade do formato \"Como surge uma descoberta\" para mod_mcp, mantendo a experiência do exemplo \"Como surge uma descoberta\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: linha do tempo de metodologia e investigação, da pergunta à comunicação.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "do-preparo-a-colheita",
@@ -74,7 +79,8 @@
         "Marcos navegáveis"
       ],
       "minutes": 5,
-      "path": "timeline/do-preparo-a-colheita.html"
+      "path": "timeline/do-preparo-a-colheita.html",
+      "prompt": "Crie uma atividade do formato \"Do preparo à colheita\" para mod_mcp, mantendo a experiência do exemplo \"Do preparo à colheita\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: linha do tempo de etapas práticas em uma cadeia de produção.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     }
   ]
 }

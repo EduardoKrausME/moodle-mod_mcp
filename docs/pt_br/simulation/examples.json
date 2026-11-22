@@ -14,7 +14,8 @@
       "features": [
         "Parâmetros ajustáveis",
         "HTML independente"
-      ]
+      ],
+      "prompt": "Crie uma atividade do formato \"Planejamento de orçamento\" para mod_mcp, mantendo a experiência do exemplo \"Planejamento de orçamento\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: simulação de orçamento com controles de receitas e despesas, cálculo de saldo e explicação das premissas.\n\nMostre fórmula, unidades, limites de entrada e as premissas; não confunda simulação com recomendação financeira.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "estimativa-de-energia-solar",
@@ -26,7 +27,8 @@
       "features": [
         "Parâmetros ajustáveis",
         "HTML independente"
-      ]
+      ],
+      "prompt": "Crie uma atividade do formato \"Estimativa de energia solar\" para mod_mcp, mantendo a experiência do exemplo \"Estimativa de energia solar\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: simulação de produção energética com parâmetros ajustáveis, cálculo detalhado e limitações do modelo.\n\nDescreva simplificações do modelo e não invente dados ambientais ou números técnicos do material de referência.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "consumo-de-agua",
@@ -38,7 +40,8 @@
       "features": [
         "Parâmetros ajustáveis",
         "HTML independente"
-      ]
+      ],
+      "prompt": "Crie uma atividade do formato \"Consumo de água\" para mod_mcp, mantendo a experiência do exemplo \"Consumo de água\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: simulação de consumo com quantidade de pessoas, consumo individual e período.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "capacidade-de-equipe",
@@ -50,7 +53,8 @@
       "features": [
         "Parâmetros ajustáveis",
         "HTML independente"
-      ]
+      ],
+      "prompt": "Crie uma atividade do formato \"Capacidade de equipe\" para mod_mcp, mantendo a experiência do exemplo \"Capacidade de equipe\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: simulação de capacidade operacional com demanda, tempo médio e equipe disponível.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "horas-de-estudo",
@@ -62,7 +66,8 @@
       "features": [
         "Parâmetros ajustáveis",
         "HTML independente"
-      ]
+      ],
+      "prompt": "Crie uma atividade do formato \"Horas de estudo\" para mod_mcp, mantendo a experiência do exemplo \"Horas de estudo\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: simulação de planejamento de estudos com sessões, duração e tempo semanal.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     },
     {
       "id": "previsao-de-participantes",
@@ -74,7 +79,8 @@
       "features": [
         "Parâmetros ajustáveis",
         "HTML independente"
-      ]
+      ],
+      "prompt": "Crie uma atividade do formato \"Previsão de participantes\" para mod_mcp, mantendo a experiência do exemplo \"Previsão de participantes\" apenas como referência de funcionamento, não como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, questões, dados ou chamar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta; nunca reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, use os materiais fornecidos (sem inventar informações) e faça apenas as perguntas adicionais indispensáveis para definir quantidade de itens, nível de aprendizagem e critérios de sucesso. Preserve a mecânica indicada, mas produza textos, perguntas, pistas, respostas e exemplos originais adequados ao conteúdo escolhido.\n\nMecânica a reproduzir: simulação de presença estimada com capacidade e percentual de ausência.\n\nEntregue uma atividade HTML completa e funcional, com CSS e JavaScript próprios, responsiva, acessível por teclado e toque, feedback explicativo, estado reiniciável e suporte a movimento reduzido, sem bibliotecas remotas. Renderize apenas o conteúdo pedagógico: não inclua menu, cabeçalho institucional, identificação do Moodle, rodapé nem navegação externa. Não coloque tokens, credenciais nem notas oficiais no JavaScript; se precisar de persistência, utilize somente o SDK MoodleMCP realmente disponível. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, siga as APIs reais e o fluxo de rascunho, prévia, aprovação e publicação explícita."
     }
   ]
 }
