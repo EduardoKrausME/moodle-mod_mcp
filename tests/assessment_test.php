@@ -53,6 +53,7 @@ final class assessment_test extends advanced_testcase {
 
     public function test_nullable_activity_information(): void {
         $this->assertNull(metadata::validate(null, null));
+        $this->assertSame("{}", metadata::validate("custom", []));
         $this->assertNotNull(metadata::validate("survey", ["questions" => [
             ["id" => "s1", "text" => "Satisfied?"]]]));
     }

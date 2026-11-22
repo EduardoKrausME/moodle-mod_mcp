@@ -31,10 +31,11 @@ final class metadata {
                 throw new moodle_exception("invaliddata");
             }
         }
-        if (!is_array($information) || array_is_list($information)) {
+        if (!is_array($information) || ($information !== [] && array_is_list($information))) {
             throw new moodle_exception("invaliddata");
         }
-        $json = json_encode($information, JSON_INVALID_UTF8_SUBSTITUTE | JSON_UNESCAPED_UNICODE);
+        $json = $information === [] ? "{}" :
+            json_encode($information, JSON_INVALID_UTF8_SUBSTITUTE | JSON_UNESCAPED_UNICODE);
         if ($json === false || strlen($json) > 1048576) {
             throw new moodle_exception("invaliddata");
         }
