@@ -41,6 +41,18 @@ Usar `activitytype="reveal_image"` e adaptar o objeto de `informationjson` quand
 3. Comparar tentativa de resposta com answer e aliases normalizados; revelar blocos no máximo definido.
 4. Permitir alternativa sem imagem com dicas descritivas equivalentes.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Revelação determinística:** embaralhar e salvar a sequência dos blocos no começo; novo render ou retorno à atividade não altera quais partes já foram descobertas.
+2. **Uma ação, uma revelação:** cada acionamento de Revelar mais abre no máximo `revealPerHint` blocos ainda ocultos; ignorar cliques repetidos enquanto atualização está pendente.
+3. **Limites:** não abrir mais blocos que os restantes; após imagem totalmente visível, desativar botão de revelar e informar se ainda há tentativa de adivinhação.
+4. **Tentativas de resposta:** comparar resposta completa com `answer` e `aliases`; envio vazio/repetido não pode consumir tentativas adicionais sem informação ao aluno.
+5. **Encerrar cedo:** se o aluno acertar antes da revelação completa, concluir rodada sem forçar abrir todas as peças primeiro; a imagem completa pode ser mostrada somente após conclusão.
+6. **Acessibilidade:** fornecer dicas descritivas progressivas e opção textual equivalente; desfoque e mosaico não devem ser a única forma de resolver.
+7. **Testes:** última peça parcial, `revealPerHint` maior que restantes, clique duplo, zoom/resize, resposta antecipada e retomar com blocos abertos.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

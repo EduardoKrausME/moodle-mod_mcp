@@ -50,6 +50,18 @@ Usar `activitytype="quiz_battle"` e adaptar o objeto de `informationjson` quando
 3. Controlar resposta única por rodada, atualizar placar determinístico e avançar mediante feedback.
 4. Em eventual competição real, exigir serviço no servidor para ranking, relógio e antifraude.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Rodada única e atômica:** aceitar somente a primeira confirmação válida por questão; impedir eventos de clique duplo e de temporizador de atribuir dois resultados à mesma rodada.
+2. **Relógio explícito:** quando cronometrado, usar contagem monotônica enquanto página estiver ativa, aplicar expiração somente uma vez e informar se pausa/aba oculta congela ou continua o relógio.
+3. **Modo sem limite:** disponibilizar alternativa sem cronômetro e sem prejuízo de aprendizagem para quem precisa de mais tempo; não tratar tempo do cliente como prova de competição válida.
+4. **Combo consistente:** definir se erro zera sequência e como pontos são computados; recalcular a pontuação do histórico de respostas após retomada, não somar novamente ao redesenhar.
+5. **Feedback antes da próxima:** mostrar explicação e placar atualizado, com botão Próximo; em modo de batalha rápida, avançar automaticamente somente após tempo suficiente e com alternativa manual.
+6. **Desafio concluído:** ao acabar as rodadas, encerrar entrada e mostrar placar final, respostas e Reiniciar; nunca gerar nova questão aleatória no re-render.
+7. **Testes:** resposta no instante da expiração, toque duplo, pausa/retorno, rodada final, empate, combo e modo sem tempo.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

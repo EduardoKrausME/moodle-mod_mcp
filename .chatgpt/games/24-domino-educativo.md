@@ -55,6 +55,19 @@ Usar `activitytype="domino"` e adaptar o objeto de `informationjson` quando o fl
 3. Permitir virar peça quando configurado, reordenar ou retirar última peça, garantindo que nenhuma seja usada duas vezes.
 4. Para dominó não linear, declarar grafo de encaixes válidos e não assumir apenas uma solução.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Duas extremidades:** oferecer ação explícita de encaixar na esquerda ou direita da cadeia; conferir apenas a ponta correspondente, sem teletransportar peça ao meio.
+2. **Virar peça:** quando `allowFlip=true`, girar a orientação esquerda/direita antes de encaixar, sem modificar os IDs de conteúdo; quando desabilitado, rejeitar orientações inválidas.
+3. **Peças ocupadas são únicas:** a peça selecionada desaparece do estoque somente após encaixe válido, e não pode ser colocada duas vezes; clique repetido é ignorado.
+4. **Rejeição recuperável:** encaixe incompatível deixa a peça no estoque e a cadeia intacta, com explicação; soltar fora cancela, sem consumir tentativa por acidente.
+5. **Desfazer encaixe:** retirar última peça (ou peça autorizada pela regra) devolve-a ao estoque na orientação correta; não desfazer automaticamente outras associações.
+6. **Várias sequências:** quando diferentes ordens de peças formam cadeias válidas, validar pelo encaixe sem exigir ordem exata de IDs, exceto quando definida por objetivos.
+7. **Acessibilidade:** selecionar peça, Girar e Encaixar à esquerda/direita por botões e teclado; peças com duas metades devem anunciar ambas.
+8. **Testes:** virar, escolher extremidade oposta, peça inválida, cadeia com correspondências repetidas, remover última peça e toque duplo.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

@@ -48,6 +48,18 @@ Usar `activitytype="find_error"` e adaptar o objeto de `informationjson` quando 
 3. Verificar se lineId/regionId pertence ao conjunto de erros esperados; permitir múltiplos achados quando declarados.
 4. Mostrar o trecho corrigido só depois da tentativa ou após conclusão.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Seleção reversível:** antes de confirmar, clicar novamente numa linha/trecho pode desmarcá-lo e escolher outra região, sem acumular erros de tentativa.
+2. **Uma ocorrência, um achado:** cada `error.id` conta no máximo uma vez; várias seleções do mesmo erro ou uma região sobreposta não podem aumentar o contador indevidamente.
+3. **Trechos de código são texto:** escapar código com `textContent`, preservando quebras de linha e caracteres especiais; nunca executar HTML/JS fornecido como exemplo de erro.
+4. **Vários erros:** se a fase contém mais de um problema, manter achados anteriores, permitir novos trechos e encerrar somente quando todos os IDs esperados forem encontrados ou quando for solicitado verificar.
+5. **Seleção por linha ou intervalo:** em modo `line`, ativar botão de linha. Em modo `range`, mapear posições a deslocamentos estáveis do texto, sem depender de seleção visual perdida por re-render.
+6. **Feedback sem spoilers:** explicar falha localizada após acerto e mostrar código corrigido apenas no momento configurado; seleção incorreta não revela todos os outros erros.
+7. **Testes:** mesmo erro duas vezes, selecionar/desmarcar, mais de um erro por linha, HTML perigoso, zoom de código e teclado.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

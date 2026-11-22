@@ -58,6 +58,19 @@ Usar `activitytype="process_builder"` e adaptar o objeto de `informationjson` qu
 3. Validar edges contra requiredEdges, proibir conexões a nós ausentes e ciclos se a atividade exigir DAG.
 4. Para fluxos com condições, adicionar rótulos true/false nas arestas em vez de uma sequência única.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Conexões por IDs:** criar ligação escolhendo bloco origem e destino; não depender de proximidade visual para definir aresta lógica.
+2. **Não duplicar aresta:** conectar A->B duas vezes não duplica ligação nem pontuação; permitir remover uma conexão individual sem destruir outras.
+3. **Trocar destinos:** conexão existente pode ser substituída/removida antes de confirmar; não sobrescrever silenciosamente outro arco, sobretudo quando há saídas com rótulos sim/não.
+4. **Validação de grafo:** rejeitar laço/ciclo quando modelo exige grafo acíclico, nós inexistentes, saídas sem destino e desconexões que violam regras de início/fim.
+5. **Ordem visual não é lógica:** arrastar um bloco para reposicionar não altera conexões; zoom e layout responsivo apenas redesenham arestas.
+6. **Diferentes fluxos válidos:** aceitar grafos equivalentes quando não existe ordem única, respeitando precedências/ramificações declaradas; comparar arestas e rótulos, não coordenadas.
+7. **Alternativa teclado:** formulário acessível 'Conectar bloco X a bloco Y' e lista de ligações com Remover, junto ao fluxograma visual.
+8. **Testes:** conexão duplicada, trocar destino, ciclo, dois ramos, zoom, bloco sem conexão e desfazer ligação.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

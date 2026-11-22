@@ -50,6 +50,18 @@ Usar `activitytype="bingo"` e adaptar o objeto de `informationjson` quando o flu
 3. Permitir marcar apenas itens efetivamente chamados, checando correspondência por ID.
 4. Detectar vitória pela regra configurada (linha, coluna, diagonal ou cartela cheia) em vez de assumir qualquer linha.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Cartela estável:** sortear as células uma vez por aluno/rodada e guardar ordem/seed; atualizar tela ou voltar à atividade não pode trocar respostas de lugar.
+2. **Chamada não repetida:** embaralhar a fila de pistas sem repetir IDs e exibir histórico; não gerar novas chamadas ao re-renderizar.
+3. **Marcação condicionada:** permitir marcar/desmarcar casa apenas depois que a pista correspondente tiver sido chamada, salvo regra alternativa explícita; clique na casa errada não deve marcar outra por proximidade.
+4. **Vitória real:** verificar linha, coluna, diagonal ou cartela cheia conforme `win`, exigindo todas as casas marcadas e efetivamente chamadas; não aceitar vitória por padrão visual incompleto.
+5. **Casa livre:** quando habilitada, marcar automaticamente e não exigir chamada; tamanho da cartela, pool e regra de centro devem ser coerentes.
+6. **Sem simultaneidade implícita:** uma partida individual/offline não deve fingir sincronização com outras cartelas ou sorteador remoto.
+7. **Testes:** marcar/desmarcar, chamada repetida, diagonal, casa livre, cartela pequena e retomar jogo no meio.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

@@ -50,6 +50,18 @@ Usar `activitytype="target_click"` e adaptar o objeto de `informationjson` quand
 3. Registrar cada alvo apenas uma vez, acerto/erro de acordo com valid e completar quando todos os válidos forem selecionados.
 4. Em modo animado, limitar velocidade, evitar alvos fora da viewport e oferecer modo parado equivalente.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Um alvo, uma interação:** primeiro toque/tecla em ID ativo registra acerto ou erro e desativa aquele alvo; eventos repetidos não somam pontos ou tentativas.
+2. **Critério explícito:** alvos válidos são os identificados por `valid`; ao concluir, exigir seleção de todos os válidos e aplicar limite de erros apenas se configurado.
+3. **Mover ou não mover:** modo estático é o padrão; em modo animado, movimento não pode mudar IDs ou permitir que alvo saia da área visível.
+4. **Pausa e redução de movimento:** permitir pausar/reiniciar animação, respeitar `prefers-reduced-motion` e oferecer modo estático equivalente com mesma verificação.
+5. **Toque responsivo:** usar botões de tamanho apropriado, z-index previsível e prevenção contra sobreposição; toque fora não conta erro se nenhum alvo foi ativado.
+6. **Sem velocidade obrigatória:** cronômetro opcional não pode ser única forma de vencer quando houver necessidade de acessibilidade.
+7. **Testes:** toque duplo, alvo em movimento, alvo sobreposto, pausa, orientação mobile, final com todos os válidos e modo teclado.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

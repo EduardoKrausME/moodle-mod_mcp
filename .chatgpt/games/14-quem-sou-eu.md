@@ -44,6 +44,17 @@ Usar `activitytype="who_am_i"` e adaptar o objeto de `informationjson` quando o 
 3. Pontuar ludicamente conforme dicas consumidas, sem apresentar métrica como nota Moodle.
 4. Encerrar quando acertar, esgotar tentativas ou revelar todas as pistas; fornecer opção de desistir.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Dicas uma por vez:** começar pela primeira dica; o botão Revelar dica acrescenta exatamente uma nova pista e nunca esconde as anteriores.
+2. **Tentativas registradas:** enviar resposta vazia não deve consumir tentativa. Repetir exatamente o mesmo palpite normalizado não consome nova tentativa, mas mostra aviso para tentar outra opção.
+3. **Respostas aceitas:** normalizar espaços e maiúsculas e comparar `answer`/`aliases`; não aceitar respostas parecidas que não constem da lista de alternativas válidas.
+4. **Progressão explícita:** acertar encerra rodada, mas resposta errada não deve revelar dica automaticamente a menos que a regra configure essa ação; o aluno pode pedir a próxima pista.
+5. **Encerramento:** declarar se o jogo acaba ao esgotar palpites, pistas ou por desistência. Depois de encerrar, revelar resposta e justificativa sem permitir pontuação extra.
+6. **Testes:** resposta vazia, repetida, sinônimo, última pista, palpite correto na primeira dica e reiniciar rodada.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

@@ -58,6 +58,18 @@ Usar `activitytype="memory"` e adaptar o objeto de `informationjson` quando o fl
 3. Permitir no máximo duas cartas abertas, bloquear entradas somente durante a comparação e ignorar toque duplicado na mesma carta.
 4. Comparar pairId, registrar tentativas, manter pares encontrados expostos e encerrar quando todos estiverem completos.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Duas cartas, não três:** permitir abrir uma primeira e uma segunda carta diferente. Enquanto o par está sendo comparado, bloquear novas viradas e ignorar cliques repetidos nas mesmas cartas; não criar tentativas extras por duplo toque.
+2. **Par correto:** comparar pelo ID do par, não pelo texto/imagem. As duas cartas ficam reveladas, deixam de ser clicáveis e contam uma única vez como acerto.
+3. **Par incorreto:** mostrar ambas por um intervalo configurável (padrão de 900 ms), depois fechá-las juntas. Se a atividade for pausada ou destruída nesse intervalo, cancelar o timer e restaurar um estado coerente.
+4. **Recomeçar sem armadilhas:** embaralhar uma vez, salvar a ordem e garantir que reiniciar limpa pares, contador e timers; não apagar o estado de outra tentativa por simples resize.
+5. **Concluir somente uma vez:** encerrar ao encontrar todos os pares; impedir novas tentativas ou eventos duplicados após conclusão, mantendo o tabuleiro consultável.
+6. **Alternativa acessível:** abrir a carta com Enter/Espaço; anunciar ordinal, estado e resultado sem ler o conteúdo secreto antes da virada. Após esconder um par incorreto, manter o foco em uma carta utilizável.
+7. **Testes de interação:** três cliques rápidos, clique duplo no mesmo cartão, sair da aba durante o timer, restaurar partida com uma carta temporariamente aberta e conclusão após último par.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

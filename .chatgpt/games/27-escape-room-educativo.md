@@ -58,6 +58,19 @@ Usar `activitytype="escape_room"` e adaptar o objeto de `informationjson` quando
 3. Renderizar uma sala por vez, lista de pistas, inventário e formulário de resposta; não depender de clicar em pixels pequenos.
 4. Guardar flags de cadeados abertos e inventário; evitar repetir recompensas e proteger de transições sem requisito.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Inventário consistente:** pista coletada vira um item único com ID; tocar novamente no mesmo objeto não adiciona cópias nem concede pontos extras.
+2. **Cadeado e requisito:** abrir porta exige resposta ou item correto e todas as dependências declaradas; tentativa incorreta mantém porta fechada e não consome item indevidamente.
+3. **Pistas reabríveis:** aluno pode reler qualquer dica já descoberta e voltar a salas previamente acessadas sem zerar o progresso.
+4. **Objetos consumíveis:** se determinado objeto for gasto ao usar, isso deve constar explicitamente da configuração; por padrão, pistas permanecem no inventário.
+5. **Transições seguras:** trocar de sala não pode saltar porta bloqueada; validar `unlocks`, salas existentes e existência de caminho solucionável até final.
+6. **Dicas para bloqueio:** oferecer pistas progressivas e opção de retomar enigmas sem reiniciar toda a missão; tentativas limite apenas quando declarado.
+7. **Alternativa não visual:** lista textual completa de sala, objetos, inventário, portas e comandos acessíveis por teclado.
+8. **Testes:** objeto duplicado, tentativa errada, porta já aberta, sala inacessível, voltar à sala anterior e recuperar sessão.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

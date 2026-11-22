@@ -40,6 +40,19 @@ Usar `activitytype="jigsaw"` e adaptar o objeto de `informationjson` quando o fl
 3. Permitir selecionar duas peças para trocar, ou arrastar uma até outra; comparar índice de peça e índice de casa após cada jogada.
 4. Oferecer referência da imagem completa e implementar um modo futuro de peças irregulares separado do motor de grade.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Interação por troca:** em modo `swap`, selecionar peça A e peça B troca posições, mesmo que ambas estejam ocupadas; não apagar, clonar nem deslocar peças para fora da grade.
+2. **Modo de peça fixa:** fixar peças já corretas somente se uma configuração explícita habilitar o bloqueio. Peças fixadas devem comunicar seu estado e não aceitar troca; por padrão, permitir mover qualquer peça enquanto não concluir.
+3. **Arraste sem perda:** liberar ponteiro fora de peça válida ou receber `pointercancel` desfaz a seleção transitória e deixa o tabuleiro como estava.
+4. **Fonte única:** manter permutação dos IDs de peças como estado da partida; nunca inferir a posição lógica pelo `transform` CSS ou pelas coordenadas visuais.
+5. **Imagem proporcional:** manter tamanho e recortes corretos em orientação retrato/paisagem e com zoom; não redefinir a permutação no `resize`.
+6. **Conclusão e reinício:** verificar todos os índices após cada troca; ao concluir, impedir nova movimentação acidental, mostrar imagem montada e oferecer Reiniciar com confirmação se necessário.
+7. **Alternativa teclado:** selecionar duas peças por Enter/Espaço ou abrir controle 'Trocar com posição N'; mover foco para posição previsível após troca.
+8. **Testes:** troca entre peças ocupadas, peça fixa, toque fora, tabuleiro já resolvido ao embaralhar, rotacionar celular e restaurar permutação.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

@@ -49,6 +49,18 @@ Usar `activitytype="image_hotspots"` e adaptar o objeto de `informationjson` qua
 3. Usar associação por IDs para checar o rótulo escolhido; nunca usar apenas comparação textual por proximidade.
 4. Evitar sobreposição de alvos e oferecer zoom com preservação do mapeamento.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Posições invariantes:** hotspots usam coordenadas normalizadas da imagem útil, corrigidas por `object-fit`, zoom e deslocamento; redimensionar não pode mudar o alvo lógico.
+2. **Associação corrigível:** rótulo já posicionado pode ser selecionado e movido para outro hotspot antes da confirmação; remover associação libera rótulo e destino sem apagar acertos de outros itens.
+3. **Sem sobrepor rótulos:** os textos podem ficar fora da imagem com linhas de ligação; pontos próximos precisam permitir seleção individual e foco sem obstruir uns aos outros.
+4. **Destino ocupado:** não sobrescrever silenciosamente uma etiqueta existente; exigir troca explícita ou rejeitar a ação devolvendo a etiqueta à origem.
+5. **Verificação por IDs:** não inferir acerto por coordenadas aproximadas da etiqueta ou por similaridade textual; comparar associação hotspot/rótulo.
+6. **Acessibilidade equivalente:** permitir escolher rótulo e ponto em listas numeradas por teclado; descrições dos pontos devem ser fornecidas sem revelar antecipadamente respostas.
+7. **Testes:** imagem reduzida, zoom, dois pontos próximos, rótulo substituído, deslocamento após rolagem e touchscreen.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

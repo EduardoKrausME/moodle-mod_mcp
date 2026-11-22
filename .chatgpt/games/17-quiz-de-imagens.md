@@ -50,6 +50,18 @@ Usar `activitytype="image_quiz"` e adaptar o objeto de `informationjson` quando 
 3. Comparar correctId somente para feedback lúdico; para nota confiável integrar mecanismo de avaliação validado no servidor.
 4. Permitir modo inverso: pergunta textual e várias imagens, sem alterar formato de resposta.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Seleção e confirmação:** quando houver botão Confirmar, permitir trocar a alternativa marcada antes de enviar. Após confirmação, registrar uma única resposta por questão e bloquear novos envios até Próximo.
+2. **Sem salto em toque duplo:** um duplo clique em alternativa ou confirmação não pode pular questão, atualizar pontos duas vezes ou esconder feedback.
+3. **Imagem estável:** não trocar o recurso, embaralhar opções ou reiniciar seleção ao terminar o carregamento da imagem; reservar área para evitar deslocamento do alvo de toque.
+4. **Feedback legível:** apresentar comentário e resposta correta conforme modo de estudo configurado, aguardando Próximo em vez de avançar automaticamente durante leitura.
+5. **Imagem ausente:** exibir texto alternativo e aviso; não considerar incorreta uma tentativa por falha de carregamento de recurso pedagógico essencial.
+6. **Retomada:** guardar ID da pergunta, ordem das alternativas e resposta; voltar a uma questão respondida só para revisão, a menos que tentativas extras estejam habilitadas.
+7. **Testes:** resposta alterada antes de confirmar, toque duplo, imagem indisponível, texto alternativo, voltar/avançar e reabrir durante feedback.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

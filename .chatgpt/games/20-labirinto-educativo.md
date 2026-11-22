@@ -54,6 +54,19 @@ Usar `activitytype="maze"` e adaptar o objeto de `informationjson` quando o flux
 3. Se uma casa possui desafio, pausar movimento, mostrar modal acessível e só liberar mediante regra definida.
 4. Manter câmera, animação e lógica separadas; nunca inferir vitória por simples proximidade visual.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Movimento por célula:** cada comando move exatamente uma célula ortogonal permitida; parede, borda ou diagonal são bloqueadas sem deslocar o jogador nem contabilizar avanço válido.
+2. **Uma tecla por passo:** para teclado e controles touch, definir repetição com intervalo controlado ou um passo por acionamento; ignorar comandos sobrepostos enquanto uma transição está em curso.
+3. **Portas e desafios:** ao entrar em casa com desafio não resolvido, interromper progressão e exibir pergunta; só marcar a passagem como liberada após a condição definida, com feedback sobre tentativa errada.
+4. **Volta após erro:** erro na pergunta não pode teleportar o aluno ou mover para dentro da parede; permanecer na casa de origem ou no portal bloqueado conforme regra explícita e consistente.
+5. **Persistir estado discreto:** registrar posição, desafios concluídos e portas liberadas; ao retomar, validar posição transitável e não repetir recompensa de desafio já resolvido.
+6. **Mapa solvável:** validar se início e fim são alcançáveis respeitando as portas e respostas; não gerar labirinto sem saída obrigatória.
+7. **Comandos acessíveis:** setas e botões direcionais nomeados; controles não devem capturar setas quando foco estiver em campos de resposta de um desafio.
+8. **Testes:** parede, limite, pressionar direções rapidamente, pergunta errada, portal liberado, retorno de sessão e celular em paisagem.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

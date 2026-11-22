@@ -54,6 +54,19 @@ Usar `activitytype="sentence_order"` e adaptar o objeto de `informationjson` qua
 3. Validar permutação contra uma ou mais acceptedOrders explícitas; preservar alternativas gramaticais corretas.
 4. Fornecer botão para remover da frase e devolver ao banco de palavras.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Mover sem duplicar:** selecionar uma palavra coloca sua ocorrência (ID) na frase e remove aquela ocorrência do banco; clicar novamente num chip da frase o devolve ao banco sem criar cópia.
+2. **Palavras repetidas:** duas ocorrências de texto idêntico devem ter IDs independentes; a frase é validada pela ordem de IDs ou pelos grupos de equivalência explicitamente permitidos.
+3. **Reordenar frase pronta:** arrastar um chip para posição ocupada insere-o e desloca os demais, sem substituir o chip de destino. Também fornecer botões Mover à esquerda/direita.
+4. **Corrigir sem reiniciar:** aluno pode trocar ordem, remover e recolocar qualquer chip antes de confirmar; uma frase montada mas incorreta continua editável quando tentativas restantes permitirem.
+5. **Pontuação e espaços:** compor apresentação com espaços e pontuação adequados; não comparar texto apenas por `join('')`, que poderia aceitar palavras coladas ou ignorar sinais.
+6. **Respostas equivalentes:** permitir múltiplas ordens registradas em `acceptedOrders`; evitar reprovar frases gramaticalmente válidas por impor uma única sequência quando houver alternativas.
+7. **Foco:** após inserir ou remover palavra, preservar o foco em controle equivalente; anunciar ordem atual sem roubar o foco do usuário.
+8. **Testes:** palavra repetida, arrastar sobre chip ocupado, trocar primeira/última, remover, corrigir após erro, pontuação e teclado.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

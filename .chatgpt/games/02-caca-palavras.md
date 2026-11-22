@@ -50,6 +50,18 @@ Usar `activitytype="word_search"` e adaptar o objeto de `informationjson` quando
 3. Preencher espaços vazios com letras aleatórias; persistir grade e posições para a sessão não mudar ao retomar.
 4. Traduzir gesto de início/fim em sequência de células; validar alinhamento e comparar palavra e orientação reversa quando habilitada.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Trajeto contínuo:** ao arrastar, selecionar apenas células alinhadas horizontalmente, verticalmente ou diagonalmente de acordo com `directions`; não aceitar zigue-zague nem saltos entre células.
+2. **Início/fim e cancelamento:** usar Pointer Events com `setPointerCapture` quando aplicável, converter movimento em células e finalizar no `pointerup`; em `pointercancel`/saída interrompida, limpar somente a seleção provisória.
+3. **Ordem reversa explícita:** aceitar a palavra ao contrário apenas se a configuração permitir; verificar a sequência e as coordenadas contra as posições efetivamente geradas, não somente contra texto coincidente ao acaso.
+4. **Palavras já encontradas:** manter seleção e destaque ao iniciar novo gesto, nunca somar a mesma palavra duas vezes; permitir sobreposição em letras comuns sem apagar destaques anteriores.
+5. **Toque e teclado:** oferecer modo 'escolher primeira célula + última célula' para quem não arrasta. Setas navegam, Enter/Espaço confirmam pontos e Escape cancela a seleção atual.
+6. **Feedback ao soltar:** seleção inválida limpa seu realce transitório sem apagar progresso; seleção correta permanece marcada e atualiza lista, contador e estado salvo.
+7. **Teste de borda:** gesto diagonal, dedo solto fora, duas palavras sobrepostas, seleção reversa habilitada/desabilitada, toque em palavra pronta e rolagem em telas pequenas.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

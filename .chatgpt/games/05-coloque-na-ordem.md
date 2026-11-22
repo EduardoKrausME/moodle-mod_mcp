@@ -45,6 +45,18 @@ Usar `activitytype="sequence"` e adaptar o objeto de `informationjson` quando o 
 3. Após confirmação ou a cada movimento, comparar a permutação atual com a ordem canônica.
 4. Em variantes de ordem parcial, modelar predecessores obrigatórios em vez de uma única sequência correta.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Mover por inserção:** soltar cartão na posição N deve inserir ali o cartão selecionado, deslocando os demais uma posição, sem substituir ou apagar o cartão que ocupava o destino.
+2. **Reordenar a qualquer momento:** item já posicionado pode ser movido novamente antes de finalizar; incluir opções de mover uma posição para cima/baixo e, quando útil, ir para posição escolhida.
+3. **Soltar fora:** não alterar sequência nem contador; cancelar gesto elimina apenas destaque temporário de drop.
+4. **Confirmação clara:** não concluir automaticamente ao coincidir com uma solução durante uma manipulação ainda em andamento; validar após confirmação ou no fim de uma ação estável, conforme opção explicitada na tela.
+5. **Ordens equivalentes:** quando houver mais de uma sequência válida, listar alternativas aceitas ou dependências; não reprovar ordens que satisfazem precedências permitidas.
+6. **Foco e persistência:** mover cartão não deve perder foco e a sequência deve ser armazenada por IDs estáveis, não por índices antigos.
+7. **Testes:** mover primeira para última, reordenar item intermediário, cancelar arraste, repetir mesmo movimento, solução parcial válida e teclado somente.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

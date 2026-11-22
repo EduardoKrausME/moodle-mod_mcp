@@ -2,6 +2,8 @@
 
 Esta pasta contém **30 especificações de jogos** que o ChatGPT ou Claude pode gerar para uma atividade `mod_mcp`. Cada arquivo descreve a dinâmica e a construção de um jogo, sem afirmar que seu motor JavaScript já está instalado no plugin.
 
+**Contrato obrigatório de interações:** consultar [RULES.md](RULES.md) e a seção de regras do jogo escolhido antes de gerar HTML ou implementar um motor. O gerador deve executar os cenários de teste ali descritos.
+
 ## Uso no fluxo atual
 
 1. O professor solicita um jogo e informa conteúdo, público, objetivos, critérios de sucesso e recursos de imagem.

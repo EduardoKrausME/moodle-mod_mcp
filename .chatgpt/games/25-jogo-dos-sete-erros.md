@@ -51,6 +51,19 @@ Usar `activitytype="seven_errors"` e adaptar o objeto de `informationjson` quand
 3. Calcular toque relativo à imagem, identificar região e marcar apenas uma vez; oferecer zoom e lista de erros descobertos.
 4. Diferenciar de 'encontre as diferenças': aqui pode haver apenas uma imagem com situações incorretas.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Sete erros reais:** validar exatamente sete IDs únicos e sete regiões coerentes antes de publicar; não aceitar configuração com menos ou mais erros silenciosamente.
+2. **Uma região por acerto:** tocar uma área encontrada novamente não altera pontuação, tempo nem quantidade de erros descobertos; marcar a área persistentemente.
+3. **Coordenadas normalizadas:** converter toque e zoom para o espaço real da imagem; não aceitar margem vazia de `object-fit` e não deslocar regiões depois de redimensionar.
+4. **Sobreposição:** em zonas próximas escolher a região não encontrada mais próxima; um toque nunca conclui dois erros simultaneamente.
+5. **Dicas graduais:** solicitar dica deve realçar discretamente um setor ainda não encontrado, sem automaticamente registrar o erro como descoberto; guardar dicas usadas.
+6. **Sem dependência visual exclusiva:** permitir selecionar regiões descritas em uma lista por setores/objetos, mantendo a mesma verificação lógica.
+7. **Conclusão:** apenas após os sete IDs identificados, oferecer resumo de cada falha e sua explicação; toque posterior não altera resultado.
+8. **Testes:** 6/8 erros inválidos, toque duplicado, clique fora, zoom, duas regiões próximas, dica e conclusão no sétimo.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

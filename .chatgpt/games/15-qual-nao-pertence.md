@@ -54,6 +54,17 @@ Usar `activitytype="odd_one_out"` e adaptar o objeto de `informationjson` quando
 3. Registrar uma única resposta por rodada, comparar com oddId e avançar após feedback.
 4. Permitir rodada textual ou visual com a mesma lógica.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Critério inequívoco:** cada rodada exige um enunciado que determine um único `oddId`; revisar conjuntos ambíguos antes de gerar a atividade.
+2. **Seleção corrigível:** tocar outro cartão antes da confirmação substitui a seleção anterior; um toque no cartão selecionado pode desmarcá-lo, sem contabilizar tentativa.
+3. **Confirmar uma vez:** só validar e pontuar após confirmação explícita; duplo clique em Confirmar não gera duas tentativas nem avança duas rodadas.
+4. **Opções estáveis:** embaralhar uma única vez por rodada e preservar ordem; não mudar cartões ao apresentar feedback ou redimensionar.
+5. **Explicação contextual:** após confirmar, mostrar o critério comum dos itens e a razão da exceção. Se houver imagens, cada cartão precisa de texto alternativo ou legenda significativa.
+6. **Testes:** trocar seleção, opção sem marcação, clique repetido, quatro imagens semelhantes, critério ambíguo e retomada.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

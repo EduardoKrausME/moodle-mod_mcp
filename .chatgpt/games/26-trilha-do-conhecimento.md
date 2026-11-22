@@ -60,6 +60,19 @@ Usar `activitytype="knowledge_path"` e adaptar o objeto de `informationjson` qua
 3. Aplicar a regra de avanço após resolução da casa e registrar visita; se houver sorteio/dado, gerar e persistir o resultado.
 4. Separar animação do tabuleiro da navegação lógica; limitar número de movimentos e provide reset.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Mover conforme regra:** avançar somente quando o nó atual foi resolvido e `rule` permite a transição; bloquear clique direto em casas não alcançadas.
+2. **Falha controlada:** ao errar um desafio, permanecer na casa ou recuar apenas se a política estiver declarada; nunca aplicar punição aleatória invisível.
+3. **Ramos e escolhas:** se o nó possui vários destinos, pedir escolha de caminho ou sorteio explícito; não avançar silenciosamente para primeiro `next`.
+4. **Sorteio estável:** se houver dado ou sorteio, registrar o resultado antes de animar e reproduzi-lo na retomada; ignorar acionamento repetido enquanto animação ocorre.
+5. **Voltar e revisar:** permitir consultar casas visitadas sem reabrir recompensas ou contar desafios duas vezes; voltar para mudar caminho exige regra própria.
+6. **Fim alcançável:** validar grafo e limites de loops, incluindo chegada alcançável; interromper o jogo somente em nó final autorizado.
+7. **Alternativa textual:** lista de casas com estado desbloqueada/bloqueada e ação por teclado, sem depender de ilustração do tabuleiro.
+8. **Testes:** salto para casa bloqueada, erro, bifurcação, dado repetido, ciclo, retomar e chegada.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

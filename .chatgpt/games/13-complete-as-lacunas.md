@@ -55,6 +55,18 @@ Usar `activitytype="fill_blanks"` e adaptar o objeto de `informationjson` quando
 3. Comparar respostas normalizadas (espaço, caixa e acento conforme configuração), permitindo sinônimos explicitamente listados.
 4. Rejeitar lacunas desconhecidas, opções inexistentes e respostas vazias quando obrigatórias.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Campo preenchido é editável:** digitar numa lacuna com conteúdo deve editar/substituir de forma normal. No modo de palavra selecionada, escolher outro termo substitui o antigo, sem exigir limpar toda a frase.
+2. **Banco de palavras consistente:** no modo sem reutilização, escolher termo remove a ocorrência escolhida do banco e devolver/substituir libera a ocorrência antiga. Repetições recebem IDs próprios, não são tratadas como o mesmo item.
+3. **Avanço automático controlado:** depois de selecionar uma opção completa, avançar para a próxima lacuna não preenchida, se houver; não saltar por cima de uma lacuna quando o usuário a selecionou para corrigir. Em digitação livre, não avançar a cada letra.
+4. **Desfazer e remover:** oferecer botão de limpar a lacuna e devolver token ao banco quando aplicável; permitir reorganizar até confirmar a resposta final.
+5. **Sinônimos, acentos e espaços:** comparar contra a lista de respostas aceitas da lacuna, normalizando apenas conforme configuração explícita; nunca aceitar texto parcialmente igual por acidente.
+6. **Colagem:** no campo livre, colar preenche somente a lacuna focada e respeita seu limite de texto; não espalhar em campos vizinhos sem opção visível.
+7. **Testes:** trocar palavra já colocada, termo repetido, lacuna de texto livre, acento, avançar entre lacunas e retorno de item ao banco.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

@@ -57,6 +57,18 @@ Usar `activitytype="categorize"` e adaptar o objeto de `informationjson` quando 
 3. Se a atividade permite múltiplas categorias, armazenar conjunto de destinos por item; se não, apenas um.
 4. Validar associações de conjuntos, tolerando ordem indiferente, e opcionalmente bloquear acertos.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Mover sem duplicar:** em modo de categoria única, cada item pertence a zero ou uma categoria. Mudar de destino remove-o atomicamente da categoria anterior e o coloca na nova.
+2. **Múltiplas categorias:** quando `allowMultiCategory=true`, o mesmo item pode ser associado a mais de uma categoria somente se o conteúdo declarar essa possibilidade; o conjunto não pode ter destinos duplicados.
+3. **Desfazer/remover:** permitir retirar um item da categoria e devolvê-lo à lista de disponíveis enquanto a resposta não estiver definitiva.
+4. **Capacidade e ordenação:** categorias aceitam múltiplos itens salvo limite explícito; deslocar item dentro da coluna não deve alterar sua classificação ou pontuar erro.
+5. **Erro não destrutivo:** em modo de validação imediata, opção incorreta retorna item à posição anterior com explicação; em modo de correção final, manter posição provisória e marcar revisão sem travar.
+6. **Interação alternativa:** arraste e operação selecionar item + selecionar categoria devem produzir o mesmo estado, inclusive no teclado.
+7. **Testes:** item movido entre categorias, duas categorias corretas, desfazer, item repetido, destino vazio e arraste cancelado.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

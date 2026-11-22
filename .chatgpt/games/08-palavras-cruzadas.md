@@ -49,6 +49,8 @@ Usar `activitytype="crossword"` e adaptar o objeto de `informationjson` quando o
 
 ## Regras obrigatórias da digitação e do foco
 
+Aplicar também as [regras globais de interação](RULES.md); as regras específicas abaixo têm prioridade quando definirem comportamento diferente.
+
 Estas regras fazem parte do funcionamento mínimo do jogo gerado. Um teclado de palavras cruzadas deve parecer natural: o aluno não precisa apagar a letra anterior para corrigir uma resposta.
 
 1. **Substituir sempre a letra existente.** Quando uma célula tem uma letra e recebe outra letra pelo teclado físico ou virtual, a nova letra substitui imediatamente a anterior, mesmo que o cursor não esteja com o caractere selecionado. Nunca concatenar, ignorar a digitação por causa do `maxlength=1` nem exigir Backspace antes da troca. Cada célula guarda apenas um caractere válido.

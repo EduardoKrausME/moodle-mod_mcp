@@ -45,6 +45,17 @@ Usar `activitytype="true_false"` e adaptar o objeto de `informationjson` quando 
 3. Comparar resposta com correct e mostrar feedback; avançar somente após confirmar leitura ou usar botão Próximo.
 4. Calcular desempenho formativo local; não confundir com nota oficial.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Resposta única por rodada:** ao escolher Verdadeiro ou Falso, registrar uma única resposta; clique duplo não pontua duas vezes nem pula questão.
+2. **Feedback antes de avançar:** apresentar explicação e botão Próximo; não desaparecer com a questão antes que o aluno possa ler ou ouvir o feedback.
+3. **Correção antes da confirmação:** se a atividade oferecer botão Confirmar, permitir mudar escolha até confirmar. Depois disso, bloquear alteração da resposta registrada, salvo revisão explicitamente habilitada.
+4. **Voltar é revisão:** navegar para questão anterior deve mostrar a resposta salva e sua explicação, sem duplicar tentativas ou pontuação.
+5. **Limites de tempo:** não impor tempo em atividade simples; se houver modo cronometrado, oferecer alternativa sem tempo para acessibilidade e declarar o comportamento de expiração.
+6. **Testes:** toque repetido, troca de seleção antes de confirmar, Voltar/Próximo, último item, anúncio do feedback e salvar antes da transição.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

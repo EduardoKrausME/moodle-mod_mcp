@@ -59,6 +59,19 @@ Usar `activitytype="branching_story"` e adaptar o objeto de `informationjson` qu
 3. Guardar caminho completo como pares cena/escolha e suportar retomar em qualquer cena válida.
 4. Se o professor desejar pontuação, usar rubrica por decisão; evitar tratar um único final como resposta correta quando existem consequências abertas.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Decisão única por visita:** escolher uma opção leva somente ao `next` correspondente; clique duplo não visita duas cenas nem registra escolhas duplicadas.
+2. **Histórico reconstruível:** armazenar sequencialmente cena, escolha e destino; ao retomar, renderizar cena atual e consequências sem executar novamente efeitos de escolhas anteriores.
+3. **Voltar com política explícita:** quando permitido, voltar até decisão anterior restaura o ponto do caminho e invalida somente escolhas descendentes reescritas, sem misturar dois ramos incompatíveis.
+4. **Ciclos sob controle:** limitar repetições de cenas ou exigir condição de saída; gerar cenário com ao menos um final alcançável e evitar loop sem término.
+5. **Finais múltiplos:** não classificar automaticamente como erro qualquer final diferente de `success`; explicar as consequências, critérios e possibilidades pedagógicas.
+6. **Reiniciar uma história:** começar novo percurso zera escolhas desta tentativa, mas não modifica histórico de outra tentativa armazenada.
+7. **Navegação acessível:** texto completo da cena, botões por escolha, foco previsível após mudança e opção de revisar decisões passadas.
+8. **Testes:** duas escolhas rápidas, voltar e mudar de ramo, história cíclica, final sem opções, retomar e múltiplos finais válidos.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

@@ -39,6 +39,18 @@ Usar `activitytype="word_guess"` e adaptar o objeto de `informationjson` quando 
 3. Revelar todas as ocorrências da letra correta, contar erro só para letra inédita e finalizar por acerto ou limite.
 4. Caso use várias rodadas, manter índice da rodada atual e pontuação apenas lúdica.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Letra tentada uma só vez:** escolher novamente uma letra já tentada não consome erro adicional, não avança rodada e não altera placar; indicar visualmente que já foi utilizada.
+2. **Todas as ocorrências:** ao acertar uma letra, revelar todas as posições correspondentes, sem contabilizar múltiplos acertos independentes.
+3. **Maiúsculas, acentos e sinais:** normalizar comparação conforme idioma, preservando apresentação original. Espaços, hífens e pontuação fixos não devem pedir tentativas.
+4. **Palavra inteira:** no modo de resposta completa, comparar com palavra e sinônimos permitidos, aplicando regra declarada de erro por palpite errado; não misturar palpite de palavra com tecla isolada.
+5. **Limites:** não aceitar novas tentativas depois de adivinhar ou atingir `maxErrors`; mostrar explicação e solução no encerramento, e permitir reiniciar outra rodada separadamente.
+6. **Entrada física/virtual:** teclas rápidas não podem registrar o mesmo caractere duas vezes; campo de resposta completa deve permitir edição normal, Backspace e colagem.
+7. **Testes:** palavra com letras repetidas, acentos, separadores, letras já escolhidas, tentativa final correta e digitação por teclado móvel.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

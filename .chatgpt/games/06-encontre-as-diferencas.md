@@ -49,6 +49,19 @@ Usar `activitytype="spot_difference"` e adaptar o objeto de `informationjson` qu
 3. Contar uma diferença apenas uma vez por ID, em qualquer uma das imagens, e desenhar marcações sincronizadas.
 4. Criar modo alternado para telas pequenas e tolerância mínima de toque sem aceitar cliques muito distantes.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Coordenadas responsivas:** detectar toques em coordenadas normalizadas dentro da imagem real, descontando margem de `object-fit: contain`; não contar um clique no espaço vazio como diferença.
+2. **Toque nas duas imagens:** aceitar a região correspondente em qualquer imagem, marcando o mesmo ID nas duas; cada diferença só pode ser encontrada uma vez.
+3. **Zonas sobrepostas:** se duas áreas aceitarem o mesmo ponto, escolher a região mais próxima ainda não encontrada ou pedir desambiguação; não marcar duas diferenças no mesmo toque.
+4. **Toque impreciso:** aplicar raio de tolerância suficiente para touch, sem expandir zonas a ponto de aceitar qualquer toque; usar ampliação quando necessário.
+5. **Zoom/alternância:** preservar pontos e marcações após zoom, rolagem, redimensionamento e alternância para layout de uma imagem por vez.
+6. **Erros e dicas:** toque fora de zona não altera achados; só contar tentativa errada quando essa regra estiver visível. Dica revela uma região não encontrada apenas sob comando explícito.
+7. **Acessibilidade:** alternativa por setores numerados com descrições acessíveis e escolha por teclado, sem exigir inspeção puramente visual.
+8. **Testes:** duplo toque, clique em margem, hotspots sobrepostos, orientação mobile, imagem cortada e descoberta da última região.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

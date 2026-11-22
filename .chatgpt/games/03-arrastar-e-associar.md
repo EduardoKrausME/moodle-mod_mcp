@@ -54,6 +54,19 @@ Usar `activitytype="drag_match"` e adaptar o objeto de `informationjson` quando 
 3. Calcular posição pelo destino no release, ativar destaque visual do alvo e cancelar corretamente quando soltar fora.
 4. Comparar IDs, fixar associação válida ou permitir tentar novamente; suportar desfazer e reiniciar conforme configuração.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e fazem parte dos critérios de aceitação. O gerador deve implementá-las e testá-las, não apenas mencioná-las na descrição do jogo.
+
+1. **Dois caminhos equivalentes:** o aluno pode arrastar por Pointer Events ou selecionar o item e depois tocar no destino. Ambos passam pela mesma função de validação e devem ter o mesmo resultado.
+2. **Alvo ocupado:** em associação um-para-um, soltar item sobre alvo ocupado não pode sobrescrever silenciosamente; permitir troca explícita quando configurada ou rejeitar com aviso e manter ambos nos lugares anteriores.
+3. **Soltar fora ou cancelar:** restaurar origem sem criar associação nem pontuar erro; `pointercancel` e perda de foco interrompem o arraste sem peça presa no cursor.
+4. **Erro recuperável:** se o destino não corresponde ao `targetId`, explicar o erro e devolver a peça; não fixar item errado nem torná-lo impossível de corrigir. Caso exista opção de tentativas limitadas, declarar a regra ao aluno.
+5. **Trocar e desfazer:** uma associação provisória pode ser removida e refeita; quando o jogo trava acertos imediatamente, bloqueio deve ser explícito e o botão Desfazer respeita a configuração.
+6. **Capacidade dos destinos:** validar modo um-para-um ou um-para-muitos; não permitir duplicar indevidamente a mesma peça nem perder itens ao reorganizar.
+7. **Foco e mobile:** ao confirmar ou cancelar a movimentação, devolver foco ao item ou destino pertinente; fornecer feedback textual para leitor de tela e alvos grandes.
+8. **Testes:** peça solta fora, cancelamento durante toque, alvo ocupado, tentativa incorreta, troca permitida/proibida, múltiplas origens e interação só com teclado.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface

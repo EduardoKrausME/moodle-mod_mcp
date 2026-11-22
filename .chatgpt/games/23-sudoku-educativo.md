@@ -65,6 +65,19 @@ Usar `activitytype="sudoku"` e adaptar o objeto de `informationjson` quando o fl
 3. Para puzzles gerados, resolver por backtracking e garantir unicidade quando essa promessa for feita.
 4. Diferenciar verificação local de regras e verificação da solução inteira; não exigir solução única se o enunciado não a assegura.
 
+## Regras obrigatórias de interação
+
+Estas regras complementam as regras globais de [RULES.md](RULES.md) e devem ser implementadas e testadas pelo código gerado, não apenas descritas.
+
+1. **Substituir número imediatamente:** ao digitar um símbolo válido numa casa editável já preenchida, sobrescrever o valor anterior; não concatenar, exigir apagar antes ou avançar de forma inesperada.
+2. **Casas iniciais bloqueadas:** valores de `givens` são somente leitura. Clique, digitação, colagem ou limpeza não podem alterar uma casa fixa; distingui-la visualmente e em rótulo acessível.
+3. **Limpeza e anotações:** Backspace/Delete removem o valor apenas de célula editável; quando modo anotações está ativo, seleção alterna a anotação sem trocar o valor definitivo.
+4. **Conflitos claros:** após edição, identificar conflitos da mesma linha, coluna e caixa; realçar todas as casas envolvidas e explicar textualmente, sem marcar como 'erro contra gabarito' quando a regra só detecta duplicação.
+5. **Navegação:** setas movem seleção entre casas, respeitando bordas, sem alterar símbolos. Teclado numérico touch e físico acionam mesma função; não roubar Tab/Shift+Tab.
+6. **Desfazer/refazer:** guardar alterações em pilha limitada; desfazer restaura valor e anotações sem afetar casas fixas; reiniciar preserva apenas os dados iniciais.
+7. **Solução válida:** verificar preenchimento completo e ausência de violações; se a atividade exigir solução única, validar unicidade por solver antes de disponibilizar o tabuleiro.
+8. **Testes:** casa fixa, substituição, Backspace, conflito múltiplo, notas, undo/redo, setas, grade inválida e mobile.
+
 Estruturar o código em `validate(data)`, `init(root, data)`, `render(state)`, `handleAction(action)`, `getState()`, `restoreState(state)` e `destroy()`. Validar o JSON antes de montar a tela, gerar todos os nós com APIs DOM seguras e separar as regras do jogo da animação. `destroy()` deve cancelar listeners, animações e timers remanescentes. O jogo não pode acessar o DOM do Moodle por fora do iframe.
 
 ## Feedback e interface
