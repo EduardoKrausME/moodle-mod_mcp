@@ -34,10 +34,48 @@ use stdClass;
  */
 final class activity {
     /**
+     * Supported ChatGPT/Claude authoring modes. These modes guide content generation;
+     * all modes share the same HTML revision, sandbox and publication lifecycle.
+     *
+     * @return array<string, array{label: string, prompt: string}>
+     */
+    public static function prompt_types(): array {
+        return [
+            "interactive" => ["label" => "promptselectinteractive", "prompt" => "promptquiz"],
+            "page" => ["label" => "promptselectpage", "prompt" => "promptpage"],
+            "survey" => ["label" => "promptselectsurvey", "prompt" => "promptsurvey"],
+            "timeline" => ["label" => "promptselecttimeline", "prompt" => "prompttimeline"],
+            "case" => ["label" => "promptselectcase", "prompt" => "promptcase"],
+            "simulation" => ["label" => "promptselectsimulation", "prompt" => "promptsimulation"],
+            "custom" => ["label" => "promptselectcustom", "prompt" => "promptcustom"],
+        ];
+    }
+
+    /**
+     * Build the localized selector displayed on empty and management pages.
+     */
+    public static function prompt_options(stdClass $mcp, stdClass $cm): array {
+        $options = [];
+        foreach (self::prompt_types() as $type => $configuration) {
+            $options[] = [
+                "type" => $type,
+                "label" => get_string($configuration["label"], "mcp"),
+                "prompt" => self::prompt($mcp, $cm, $type),
+            ];
+        }
+        return $options;
+    }
+
+    /**
      * Build the introductory prompt for an empty MCP activity.
      */
     public static function prompt(stdClass $mcp, stdClass $cm, string $type = "interactive"): string {
         global $CFG, $PAGE;
+
+        $types = self::prompt_types();
+        if (!isset($types[$type])) {
+            throw new coding_exception("Unsupported mod_mcp authoring prompt type: " . $type);
+        }
 
         $args = (object)[
             "wwwroot" => $CFG->wwwroot,
@@ -46,7 +84,10 @@ final class activity {
             "name" => $mcp->name,
             "url" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id]))->out(false),
         ];
-        $prompt = get_string($type === "page" ? "promptpage" : "promptquiz", "mcp", $args);
+        $prompt = get_string($types[$type]["prompt"], "mcp", $args);
+        if (!in_array($type, ["interactive", "page"], true)) {
+            $prompt .= " " . get_string("promptpublishinstructions", "mcp");
+        }
         $apireference = get_string("promptapireference", "mcp",
             "https://github.com/EduardoKrausME/moodle-mod_mcp/blob/master/API.md");
         return get_string("promptinstructions", "mcp") . " " .
@@ -153,6 +194,7 @@ final class activity {
             "canmanage" => $canmanage,
             "prompt" => self::prompt($mcp, $cm),
             "promptpage" => self::prompt($mcp, $cm, "page"),
+            "promptoptions" => self::prompt_options($mcp, $cm),
             "cmid" => (int)$cm->id,
             "hasconnection" => $hasconnection,
             "connectionurl" => (new moodle_url("/local/mcp/new_connection.php"))->out(false),
