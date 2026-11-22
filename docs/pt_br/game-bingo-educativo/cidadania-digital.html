@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bingo educativo - Cidadania digital</title>
+<style>
+:root{font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--bg:#f4f5fc;--ink:#27334d;--muted:#66738b;--border:#dee4f0;--panel:#fff;--violet:#5b49c7;--violet-dark:#4836ac;--soft:#eeebff;--green:#138463;--green-soft:#e2f6ed;--warn:#945c27;--warn-soft:#fff1df;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit}
+:focus-visible{outline:3px solid #efaf44!important;outline-offset:3px!important}
+main{max-width:1160px;margin:auto;padding:32px 21px 45px}
+.eyebrow{font-size:11px;color:var(--violet);font-weight:850;letter-spacing:1.4px;text-transform:uppercase;margin:0 0 9px}
+h1{font-size:clamp(27px,3.9vw,39px);line-height:1.17;letter-spacing:-.8px;margin:0 0 11px}
+.intro{max-width:920px;font-size:14px;color:var(--muted);margin:0 0 20px}
+.stats{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+.stat{padding:9px 14px;border:1px solid var(--border);background:var(--panel);border-radius:11px;min-width:110px}
+.stat small{display:block;color:var(--muted);font-size:11px}.stat strong{font-size:19px;font-variant-numeric:tabular-nums}
+.stats .note{margin-left:auto;font-size:12px;color:var(--muted)}
+.progress{height:9px;background:#e1e6f3;border-radius:20px;overflow:hidden;margin-bottom:18px}
+.progress span{display:block;height:100%;width:0;background:#38b58e;transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(285px,.85fr);gap:16px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:17px;padding:18px;min-width:0;box-shadow:0 8px 25px #2432550a}
+.panel h2{font-size:17px;margin:0 0 10px}
+.panel p{font-size:12px;color:var(--muted)}
+.panel-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.panel-top h2{margin:0}.tag{background:var(--soft);color:var(--violet);font-size:11px;font-weight:780;padding:7px 11px;border-radius:99px}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.board button{border:1px solid #ced5e6;background:#fbfbff;color:#31405e;border-radius:11px;padding:9px 5px;min-height:91px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;cursor:pointer;font-weight:760;font-size:clamp(11px,1.3vw,14px);line-height:1.3;text-align:center;overflow-wrap:anywhere;position:relative}
+.board button small{font-size:10px;display:block;color:#8691a8;font-weight:780}
+.board button:hover:not(:disabled){border-color:#8573d6;background:#f4efff}
+.board button.called:not(.marked){background:#f2efff;border-color:#8e80d7}
+.board button.marked{background:#dcf5e7;border-color:#5eb691;color:#116c51;box-shadow:inset 0 0 0 1px #62b793}
+.board button.winning{outline:3px solid #18a97f;outline-offset:-3px}
+.board button:disabled{opacity:1;cursor:default}
+.board button.marked small{color:#397c63}
+.underboard{margin-top:15px;display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--violet);background:var(--violet);color:white;border-radius:10px;padding:11px 15px;font-size:12px;font-weight:800;cursor:pointer}
+.btn:hover:not(:disabled){background:var(--violet-dark)}
+.btn.secondary{color:var(--violet);background:var(--panel)}
+.btn.secondary:hover:not(:disabled){background:#f2efff}
+.btn:disabled{opacity:.44;cursor:not-allowed}
+.clue{background:var(--soft);border-radius:12px;padding:18px;margin-bottom:12px}
+.clue small{color:var(--violet);text-transform:uppercase;letter-spacing:.5px;font-size:11px;font-weight:810}
+.clue strong{display:block;font-size:clamp(15px,1.8vw,19px);line-height:1.5;margin:8px 0 0}
+.clue.empty strong{color:#677290}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.guidance{padding:12px;background:#f9faff;border-radius:11px;border:1px solid var(--border);margin-top:16px}
+.guidance h3{font-size:13px;margin:0 0 7px}.guidance p{font-size:12px;line-height:1.6;margin:0}
+.history{border-top:1px solid var(--border);margin-top:18px;padding-top:15px}
+.history h3{font-size:14px;margin:0 0 8px}.history ol{margin:0;padding:0;list-style:none;display:grid;gap:7px;max-height:380px;overflow:auto}
+.history li{padding:11px 12px;background:#fafbff;border:1px solid var(--border);border-radius:10px}
+.history li strong{display:block;font-size:12px}.history li p{font-size:12px;margin:4px 0}.history li small{font-size:11px;color:var(--muted)}
+.history li.current{background:#f0ecff;border-color:#a39be3}
+.feedback{margin-top:16px;min-height:53px;background:#e9effc;color:#415478;border-radius:11px;padding:14px 16px;font-size:13px}
+.feedback.success{background:var(--green-soft);color:var(--green)}.feedback.warn{background:var(--warn-soft);color:var(--warn)}
+.victory{margin-top:15px;border:1px solid #9ccfb6;background:var(--green-soft);color:var(--green);border-radius:13px;padding:16px}
+.victory strong{display:block;font-size:19px}.victory p{font-size:12px;color:inherit;margin:5px 0 0}
+.smallnote{color:var(--muted);font-size:11px;margin:14px 0 0}
+[hidden]{display:none!important}
+@media(max-width:870px){.layout{grid-template-columns:minmax(0,1fr)}.board button{min-height:80px;font-size:clamp(12px,2.5vw,15px)}}
+@media(max-width:520px){main{padding:24px 12px 34px}.panel{padding:12px}.board{gap:5px}.board button{min-height:70px;padding:6px 3px;font-size:clamp(10px,2.7vw,12px)}.board button small{font-size:9px}.stats .note{margin:0}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#171c2e;--ink:#e8ecf8;--muted:#b9c4dc;--border:#3e4863;--panel:#262e43;--violet:#bbafff;--violet-dark:#9282ec;--soft:#373451;--green:#a2ecd0;--green-soft:#254637;--warn:#f2c49a;--warn-soft:#4e382d}.board button{background:#2d374f;color:#edf1fc;border-color:#56627b}.board button small{color:#b7c1d5}.board button.called:not(.marked){background:#3d3957;border-color:#8c79c2}.board button.marked{background:#295943;border-color:#60a781;color:#cefee8}.board button.marked small{color:#bce9cc}.board button.winning{outline-color:#a2ecd0}.btn.secondary{background:var(--panel)}.btn.secondary:hover:not(:disabled){background:#353451}.clue.empty strong{color:#c1c6da}.guidance,.history li{background:#2c354b}.history li.current{background:#3b3856}.feedback{background:#303c55;color:#d9e3f9}.feedback.success{background:var(--green-soft);color:var(--green)}.feedback.warn{background:var(--warn-soft);color:var(--warn)}.victory{border-color:#5f9378}}
+</style></head>
+<body>
+<main id="activity">
+ <p class="eyebrow">Jogo 11 · Reconhecimento de conceitos</p>
+ <h1>Bingo da cidadania digital</h1>
+ <p class="intro">Sua cartela tem 16 conceitos relacionados ao uso responsável e seguro da internet. Sorteie uma definição, encontre a resposta correspondente na cartela e marque-a; caso o termo não esteja nela, escolha “Não está na cartela”. Complete uma linha, coluna ou diagonal para fazer bingo.</p>
+ <div class="stats">
+  <div class="stat"><small>Pistas sorteadas</small><strong id="called-count">0 / 22</strong></div>
+  <div class="stat"><small>Casas marcadas</small><strong id="marked-count">0 / 16</strong></div>
+  <div class="stat"><small>Erros</small><strong id="errors-count">0</strong></div>
+  <span class="note">Sem tempo limite. Cada pista aparece uma única vez em cada partida.</span>
+ </div>
+ <div id="progress" class="progress" role="progressbar" aria-label="Casas marcadas" aria-valuemin="0" aria-valuemax="16" aria-valuenow="0"><span id="progress-fill"></span></div>
+ <div class="layout">
+  <section class="panel" aria-labelledby="board-title">
+   <div class="panel-top"><h2 id="board-title">Sua cartela</h2><span class="tag" id="card-no">Cartela 1</span></div>
+   <div id="board" class="board" role="group" aria-label="Cartela de bingo com quatro linhas e quatro colunas"></div>
+   <p class="smallnote">Toque na resposta da pista atual, ou utilize Tab e Enter/Espaço no teclado. As setas movimentam o foco pelas casas. Não é possível marcar respostas ainda não sorteadas.</p>
+   <div class="underboard"><button class="btn secondary" type="button" id="restart" disabled>Recomeçar mesma cartela</button><button class="btn secondary" type="button" id="new-card" disabled>Gerar outra cartela</button></div>
+  </section>
+  <section class="panel" aria-labelledby="draw-title">
+   <h2 id="draw-title">Sorteio de definições</h2>
+   <div class="clue">
+    <small id="clue-index">Próxima pista</small>
+    <strong id="clue-text" tabindex="-1" aria-live="polite">Preparando a partida...</strong>
+   </div>
+   <div class="controls">
+    <button class="btn" id="draw" type="button" disabled>Sortear próxima pista</button>
+    <button class="btn secondary" id="skip" type="button" disabled>Não está na cartela</button>
+   </div>
+   <div class="guidance"><h3>Como funciona</h3><p>Para cada definição, marque o conceito exato que foi chamado. Se a resposta não aparecer entre os 16 termos da sua cartela, informe isso e prossiga. Os erros não encerram a partida; o jogo apresenta a explicação depois de cada acerto.</p></div>
+   <section class="history" aria-labelledby="history-title"><h3 id="history-title">Histórico de pistas</h3><ol id="history" aria-label="Pistas sorteadas e respondidas"></ol></section>
+  </section>
+ </div>
+ <div class="feedback" id="feedback" role="status" aria-live="polite" aria-atomic="true">Preparando a cartela...</div>
+ <div id="finished" class="victory" role="status" tabindex="-1" hidden><strong>BINGO! Você completou uma combinação.</strong><p>Parabéns pelo reconhecimento dos conceitos de cidadania digital. Esta conquista é apenas lúdica e não representa nota nem conclusão acadêmica do Moodle.</p></div>
+ <p class="smallnote">As definições e os termos estão incorporados ao HTML. Não são utilizadas imagens, serviços externos, notas oficiais ou o banco de questões do Moodle.</p>
+</main>
+<script>(function bingoApp(){
+"use strict";
+const CONFIG={"type":"bingo","title":"Bingo de cidadania digital","settings":{"size":4,"win":"row_column_diagonal","seed":"cidadania-digital-2026","freeCenter":false},"entries":[{"id":"senha","label":"Senha forte","clue":"Combinação longa, única e difícil de adivinhar, usada para proteger uma conta.","explanation":"Uma senha forte e exclusiva dificulta o acesso não autorizado; um gerenciador de senhas pode ajudar."},{"id":"mfa","label":"Autenticação em dois fatores","clue":"Camada extra de verificação além da senha para entrar em uma conta.","explanation":"A verificação adicional reduz o risco de invasão quando uma senha é descoberta."},{"id":"phishing","label":"Phishing","clue":"Golpe que usa mensagens ou páginas falsas para induzir alguém a fornecer dados.","explanation":"Golpistas imitam remetentes e serviços legítimos; desconfie de solicitações inesperadas."},{"id":"backup","label":"Cópia de segurança","clue":"Versão extra dos arquivos, guardada para permitir recuperação após perda ou falha.","explanation":"Cópias de segurança ajudam na recuperação de dados após exclusões, danos ou ataques."},{"id":"privacidade","label":"Privacidade","clue":"Direito e capacidade de controlar a exposição e o uso de informações pessoais.","explanation":"Antes de compartilhar, avalie quem pode acessar os dados e por quanto tempo."},{"id":"antivirus","label":"Antivírus","clue":"Programa que ajuda a detectar e bloquear softwares maliciosos.","explanation":"Ferramentas antimalware reduzem riscos, mas não substituem atualizações e hábitos seguros."},{"id":"navegador","label":"Navegador","clue":"Aplicativo usado para abrir e interagir com páginas da internet.","explanation":"Navegadores interpretam conteúdo web e disponibilizam recursos de segurança e acessibilidade."},{"id":"link","label":"Link","clue":"Elemento clicável que leva a outra página, documento ou recurso digital.","explanation":"Verifique o destino de links suspeitos antes de abrir."},{"id":"https","label":"HTTPS","clue":"Protocolo que protege a comunicação entre navegador e site usando criptografia.","explanation":"HTTPS cifra dados em trânsito, mas não garante que um site seja confiável."},{"id":"cookies","label":"Cookies","clue":"Pequenos dados gravados pelo navegador para manter preferências ou sessões.","explanation":"Cookies podem facilitar autenticação e personalização; alguns são usados para rastreamento."},{"id":"licenca","label":"Licença de uso","clue":"Conjunto de condições que define como uma obra ou programa pode ser utilizado.","explanation":"Verifique a licença antes de copiar, adaptar ou redistribuir materiais."},{"id":"fonte","label":"Fonte confiável","clue":"Origem de informação cuja autoria, evidências e contexto podem ser verificados.","explanation":"Confirmar autor, data, evidências e outras fontes ajuda a avaliar a confiabilidade."},{"id":"desinformacao","label":"Desinformação","clue":"Informação falsa ou enganosa divulgada deliberadamente para induzir ao erro.","explanation":"Investigar a origem e comparar evidências são medidas contra desinformação."},{"id":"pegada","label":"Pegada digital","clue":"Conjunto de registros e rastros deixados pelas ações de uma pessoa na rede.","explanation":"Publicações, pesquisas e interações podem deixar rastros duradouros."},{"id":"nuvem","label":"Armazenamento em nuvem","clue":"Serviço que guarda arquivos em servidores acessíveis por conexão de rede.","explanation":"A nuvem permite sincronizar arquivos, mas exige cuidado com permissões e acesso."},{"id":"atualizacao","label":"Atualização de software","clue":"Instalação de uma versão mais recente que pode corrigir vulnerabilidades.","explanation":"Atualizações frequentes ajudam a fechar falhas conhecidas de segurança."},{"id":"ciberbullying","label":"Cyberbullying","clue":"Prática repetida de intimidação ou humilhação com uso de meios digitais.","explanation":"É importante denunciar abusos, preservar evidências e apoiar a pessoa atingida."},{"id":"acessibilidade","label":"Acessibilidade digital","clue":"Conjunto de práticas para que pessoas com diferentes capacidades usem tecnologias.","explanation":"Textos alternativos, contraste e navegação por teclado ajudam a remover barreiras."},{"id":"criptografia","label":"Criptografia","clue":"Técnica que transforma dados para protegê-los contra leitura sem autorização.","explanation":"Criptografia protege a confidencialidade dos dados quando implementada corretamente."},{"id":"permissao","label":"Permissão de aplicativo","clue":"Autorização solicitada por um app para usar recursos como câmera ou localização.","explanation":"Conceda apenas acessos necessários e revise-os periodicamente."},{"id":"dominio","label":"Nome de domínio","clue":"Endereço legível que identifica um site, como exemplo.org.","explanation":"Domínios são nomes associados a recursos de rede; golpistas podem usar grafias parecidas."},{"id":"download","label":"Download","clue":"Transferência de um arquivo de um serviço remoto para seu dispositivo.","explanation":"Baixe arquivos apenas de origens confiáveis e confira eventuais alertas de segurança."}]};
+const root=document.getElementById("activity");
+const $=id=>document.getElementById(id);
+const controller=new AbortController();
+const sdk=window.MoodleMCP?.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const progressKey="bingoCidadaniaDigitalV1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,saveQueue=Promise.resolve();
+
+// Pure game rules, also covered by node:test.
+function validate(data){
+ if(!data||data.type!=="bingo"||!data.settings||!Number.isInteger(data.settings.size)||data.settings.size<3||data.settings.size>5||!["row_column_diagonal","row","column","diagonal","full_card"].includes(data.settings.win)||typeof data.settings.seed!=="string"||!data.settings.seed.trim()||typeof data.settings.freeCenter!=="boolean"||!Array.isArray(data.entries))return false;
+ if(data.settings.freeCenter&&data.settings.size%2===0)return false;
+ const count=data.settings.size**2-(data.settings.freeCenter?1:0);
+ if(data.entries.length<count||data.entries.length>100)return false;
+ const ids=new Set(),labels=new Set();
+ for(const item of data.entries){
+  if(!item||typeof item.id!=="string"||!/^[a-z0-9-]+$/.test(item.id)||ids.has(item.id)||typeof item.label!=="string"||!item.label.trim()||labels.has(item.label.toLocaleLowerCase("pt-BR"))||typeof item.clue!=="string"||!item.clue.trim()||typeof item.explanation!=="string"||!item.explanation.trim())return false;
+  ids.add(item.id);labels.add(item.label.toLocaleLowerCase("pt-BR"));
+ }
+ return true;
+}
+function hashSeed(value){
+ let h=2166136261;for(let i=0;i<value.length;i++){h^=value.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;
+}
+function shuffled(values,seed){
+ let x=hashSeed(seed)||1;const result=[...values];
+ function rand(){x^=x<<13;x^=x>>>17;x^=x<<5;return(x>>>0)/4294967296;}
+ for(let i=result.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[result[i],result[j]]=[result[j],result[i]];}
+ return result;
+}
+function makeCard(data,cardNo){
+ const {size,seed,freeCenter}=data.settings,n=size*size,slots=n-(freeCenter?1:0);
+ const picked=shuffled(data.entries.map(x=>x.id),seed+"/card/"+cardNo).slice(0,slots),result=[];
+ let j=0;for(let i=0;i<n;i++)result.push(freeCenter&&size%2===1&&i===Math.floor(n/2)?null:picked[j++]);
+ return result;
+}
+function drawOrder(data,cardNo){return shuffled(data.entries.map(e=>e.id),data.settings.seed+"/calls/"+cardNo);}
+function winPatterns(size,rule){
+ const patterns=[];
+ if(["row","row_column_diagonal"].includes(rule))for(let r=0;r<size;r++)patterns.push(Array.from({length:size},(_,c)=>r*size+c));
+ if(["column","row_column_diagonal"].includes(rule))for(let c=0;c<size;c++)patterns.push(Array.from({length:size},(_,r)=>r*size+c));
+ if(["diagonal","row_column_diagonal"].includes(rule)){
+  patterns.push(Array.from({length:size},(_,i)=>i*size+i));
+  patterns.push(Array.from({length:size},(_,i)=>i*size+(size-i-1)));
+ }
+ if(rule==="full_card")patterns.push(Array.from({length:size*size},(_,i)=>i));
+ return patterns;
+}
+function completedLines(state,data){
+ const marked=new Set(state.marked);
+ return winPatterns(data.settings.size,data.settings.win).filter(indices=>indices.every(index=>state.card[index]===null||marked.has(state.card[index])));
+}
+function initialState(data,cardNo=0){
+ return {cardNo,card:makeCard(data,cardNo),order:drawOrder(data,cardNo),called:[],resolved:[],marked:[],errors:0,won:false};
+}
+function pendingClue(s){return s.called.length>s.resolved.length?s.called[s.resolved.length]:null;}
+function validState(s,data){
+ if(!s||!Number.isInteger(s.cardNo)||s.cardNo<0||s.cardNo>9999||!Array.isArray(s.card)||!Array.isArray(s.order)||!Array.isArray(s.called)||!Array.isArray(s.resolved)||!Array.isArray(s.marked)||!Number.isInteger(s.errors)||s.errors<0||s.errors>100000||typeof s.won!=="boolean")return false;
+ const {size,freeCenter}=data.settings,ids=new Set(data.entries.map(e=>e.id));
+ const expected=makeCard(data,s.cardNo),order=drawOrder(data,s.cardNo);
+ if(s.card.length!==size*size||s.card.some((id,i)=>id!==expected[i])||s.order.length!==order.length||s.order.some((id,i)=>id!==order[i]))return false;
+ if(s.called.length>order.length||s.called.some((id,i)=>id!==order[i]))return false;
+ if(s.resolved.length>s.called.length||s.resolved.length<s.called.length-1||s.resolved.some((id,i)=>id!==s.called[i]))return false;
+ if(s.marked.length>s.resolved.length||new Set(s.marked).size!==s.marked.length||s.marked.some(id=>!ids.has(id)||!s.card.includes(id)||!s.resolved.includes(id)))return false;
+ // A resolved clue on the card must always be marked; one outside the card is skipped.
+ const expectedMarks=s.resolved.filter(id=>s.card.includes(id));
+ if(s.marked.length!==expectedMarks.length||s.marked.some((id,i)=>id!==expectedMarks[i]))return false;
+ if(s.card.filter(id=>id===null).length!==(freeCenter?1:0))return false;
+ const hasWin=completedLines(s,data).length>0;
+ if(s.won!==hasWin||(s.won&&s.resolved.length!==s.called.length))return false;
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(data,s.cardNo),changed:true,type:"neutral",message:"Cartela reiniciada, mantendo o mesmo sorteio."};
+ if(action?.type==="newCard"){
+  const nextNo=(s.cardNo+1)%10000;
+  return {state:initialState(data,nextNo),changed:true,type:"neutral",message:"Nova cartela gerada. O sorteio de pistas foi reiniciado."};
+ }
+ if(!validState(s,data))return {state:s,changed:false,type:"warn",message:"O estado da cartela é inválido."};
+ if(s.won)return {state:s,changed:false,type:"neutral",message:"Bingo concluído. Gere outra cartela ou recomece."};
+ const current=pendingClue(s),entryById=new Map(data.entries.map(e=>[e.id,e]));
+ if(action?.type==="draw"){
+  if(current)return {state:s,changed:false,type:"warn",message:"Resolva a pista atual antes de sortear outra."};
+  if(s.called.length===s.order.length)return {state:s,changed:false,type:"warn",message:"Todas as pistas já foram sorteadas."};
+  const id=s.order[s.called.length];
+  return {state:{...s,called:[...s.called,id]},changed:true,type:"neutral",message:"Pista "+(s.called.length+1)+": "+entryById.get(id).clue};
+ }
+ if(action?.type==="mark"){
+  const id=action.id;
+  if(!current)return {state:s,changed:false,type:"warn",message:"Sorteie uma pista antes de marcar."};
+  if(!s.card.includes(id))return {state:s,changed:false,type:"warn",message:"Esta casa não pertence à cartela."};
+  if(id!==current){
+   return {state:{...s,errors:s.errors+1},changed:true,type:"warn",message:"Essa resposta não corresponde à pista sorteada. Leia a definição e tente novamente."};
+  }
+  if(s.marked.includes(id))return {state:s,changed:false,type:"neutral",message:"Esta casa já foi marcada."};
+  const next={...s,resolved:[...s.resolved,current],marked:[...s.marked,id]};
+  next.won=completedLines(next,data).length>0;
+  const item=entryById.get(id);
+  return {state:next,changed:true,type:"success",message:"Correto: "+item.label+". "+item.explanation+(next.won?" BINGO! Você completou uma combinação válida.":"")};
+ }
+ if(action?.type==="skip"){
+  if(!current)return {state:s,changed:false,type:"warn",message:"Não há pista atual para conferir."};
+  if(s.card.includes(current))return {state:{...s,errors:s.errors+1},changed:true,type:"warn",message:"A resposta está na sua cartela. Procure o conceito correspondente e marque-o."};
+  const item=entryById.get(current);
+  return {state:{...s,resolved:[...s.resolved,current]},changed:true,type:"success",message:"Isso mesmo! "+item.label+" não está na sua cartela. "+item.explanation};
+ }
+ return {state:s,changed:false,type:"neutral",message:"Sorteie uma pista para continuar."};
+}
+// End pure game rules.
+
+function el(tag,cls,content){const node=document.createElement(tag);if(cls)node.className=cls;if(content!==undefined)node.textContent=content;return node;}
+function feedback(message,kind=""){const n=$("feedback");n.className="feedback"+(kind?" "+kind:"");n.textContent=message;}
+function getState(){return {...state,card:[...state.card],order:[...state.order],called:[...state.called],resolved:[...state.resolved],marked:[...state.marked]};}
+function restoreState(snapshot){if(!validState(snapshot,CONFIG))return false;state={...snapshot,card:[...snapshot.card],order:[...snapshot.order],called:[...snapshot.called],resolved:[...snapshot.resolved],marked:[...snapshot.marked]};render();return true;}
+function getEntry(id){return CONFIG.entries.find(e=>e.id===id);}
+function renderHistory(){
+ const ol=$("history");ol.replaceChildren();
+ if(!state.called.length){ol.append(el("li","", "Nenhuma pista sorteada até agora."));return;}
+ for(let i=state.called.length-1;i>=0;i--){
+  const id=state.called[i],item=getEntry(id),isPending=i===state.resolved.length;
+  const li=el("li",isPending?"current":"");
+  li.append(el("strong","", "Pista "+(i+1)+(isPending?" · atual":" · respondida")));
+  li.append(el("p","",item.clue));
+  if(!isPending){const onCard=state.card.includes(id);li.append(el("small","",(onCard?"Marcada na cartela: ":"Fora da cartela: ")+item.label+". "+item.explanation));}
+  ol.append(li);
+ }
+}
+function render(){
+ if(disposed||!state)return;
+ const pending=pendingClue(state),called=new Set(state.called),marked=new Set(state.marked),lines=completedLines(state,CONFIG);
+ const winners=new Set(lines.flatMap(x=>x));
+ $("card-no").textContent="Cartela "+(state.cardNo+1);
+ $("called-count").textContent=state.called.length+" / "+CONFIG.entries.length;
+ $("marked-count").textContent=state.marked.length+" / "+state.card.filter(Boolean).length;
+ $("errors-count").textContent=String(state.errors);
+ $("progress").setAttribute("aria-valuenow",String(state.marked.length));
+ $("progress-fill").style.width=state.marked.length/state.card.filter(Boolean).length*100+"%";
+ $("clue-index").textContent=pending?"Pista "+state.called.length+" de "+CONFIG.entries.length:"Próxima pista";
+ $("clue-text").textContent=pending?getEntry(pending).clue:state.won?"Você completou o bingo!":"Sorteie uma pista para começar ou continuar.";
+ $("draw").disabled=!ready||!!pending||state.won||state.called.length===CONFIG.entries.length;
+ $("skip").disabled=!ready||!pending||state.won;
+ $("restart").disabled=!ready;
+ $("new-card").disabled=!ready;
+ $("finished").hidden=!state.won;
+ const board=$("board");
+ const focusElement=document.activeElement;
+ const focusIndex=focusElement&&board.contains(focusElement)?focusElement.dataset?.index:null;
+ board.replaceChildren();
+ const size=CONFIG.settings.size;
+ for(let i=0;i<state.card.length;i++){
+  const id=state.card[i],r=Math.floor(i/size),c=i%size;
+  const button=el("button","cell");button.type="button";button.dataset.index=i;
+  if(id===null){
+   button.classList.add("marked");button.textContent="Casa livre";button.disabled=true;button.setAttribute("aria-label","Linha "+(r+1)+", coluna "+(c+1)+", casa livre.");
+  }else{
+   const item=getEntry(id);
+   button.dataset.id=id;
+   button.append(el("span","",item.label),el("small","",marked.has(id)?"✓ Marcado":called.has(id)?"Pista sorteada":"Aguardando"));
+   button.setAttribute("aria-label","Linha "+(r+1)+", coluna "+(c+1)+": "+item.label+". "+(marked.has(id)?"Marcado":called.has(id)?"Já foi sorteado":"Ainda não sorteado"));
+   button.setAttribute("aria-pressed",String(marked.has(id)));
+   if(called.has(id))button.classList.add("called");
+   if(marked.has(id))button.classList.add("marked");
+   if(winners.has(i))button.classList.add("winning");
+   button.disabled=!ready||state.won||marked.has(id);
+  }
+  board.append(button);
+ }
+ renderHistory();
+ if(focusIndex!==null&&focusIndex!==undefined){
+  const replacement=board.querySelector('[data-index="'+focusIndex+'"]');
+  if(replacement&&!replacement.disabled)replacement.focus({preventScroll:true});
+  else if(state.won)$("finished").focus({preventScroll:true});
+  else if(!$("draw").disabled)$("draw").focus({preventScroll:true});
+ }
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState();
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote)return;
+  const other=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  remote=await progress.save({version:remote.version,location:"games/bingo-cidadania-digital",data:{...other,[progressKey]:snapshot}});
+ }).catch(async()=>{
+  if(disposed)return;
+  try{
+   remote=await progress.load();
+   if(remote.data?.[progressKey]&&restoreState(remote.data[progressKey]))feedback("O progresso mudou em outra janela. Recuperei a versão salva mais recente.","warn");
+   else feedback("Não foi possível conciliar o progresso; continue nesta página.","warn");
+  }catch(_){remote=null;feedback("Salvamento indisponível. A cartela continua funcionando nesta página.","warn");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const outcome=transition(state,action,CONFIG);
+ if(!outcome.changed){feedback(outcome.message,outcome.type);return;}
+ state=outcome.state;modified=true;render();save();feedback(outcome.message,outcome.type);
+ if(action.type==="draw")$("clue-text").focus({preventScroll:true});
+}
+function destroy(){disposed=true;controller.abort();}
+async function init(root,data){
+ if(!root||!validate(data)){feedback("Os itens ou a configuração do bingo são inválidos.","warn");return;}
+ state=initialState(data);render();
+ if(progress)try{
+  const current=await progress.load();if(disposed)return;remote=current;
+  if(!modified&&current.data?.[progressKey]&&restoreState(current.data[progressKey]))feedback("Cartela e sorteio recuperados. Continue de onde parou.","success");
+  else feedback("Cartela preparada. Sorteie a primeira definição para começar.");
+ }catch(_){feedback("O progresso do Moodle está indisponível, mas você pode jogar normalmente.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",event=>{
+ const button=event.target.closest("button");
+ if(!button||!root.contains(button))return;
+ if(button.dataset.id){handleAction({type:"mark",id:button.dataset.id});return;}
+ if(button.id==="draw")handleAction({type:"draw"});
+ if(button.id==="skip")handleAction({type:"skip"});
+ if(button.id==="restart")handleAction({type:"restart"});
+ if(button.id==="new-card")handleAction({type:"newCard"});
+},{signal:controller.signal});
+root.addEventListener("keydown",event=>{
+ const cell=event.target.closest("button.cell");
+ if(!cell||!["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(event.key))return;
+ event.preventDefault();
+ const step=event.key==="ArrowLeft"?-1:event.key==="ArrowRight"?1:event.key==="ArrowUp"?-CONFIG.settings.size:CONFIG.settings.size;
+ const destination=Number(cell.dataset.index)+step;
+ if(destination>=0&&destination<state.card.length){
+  const next=$("board").querySelector('[data-index="'+destination+'"]');
+  if(next)next.focus({preventScroll:true});
+ }
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,CONFIG);
+})();</script>
+</body></html>

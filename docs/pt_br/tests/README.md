@@ -53,3 +53,11 @@ node --test docs/pt_br/tests/image-hotspots.test.mjs
 ```
 
 O teste cobre validação de coordenadas, identificação por IDs, seleção errada e repetida, duas formas de interação, zoom proporcional, descrição textual acessível e sincronização entre os dois JSONs.
+
+Para o jogo 11 (Bingo educativo de Cidadania digital), execute:
+
+```bash
+node --test docs/pt_br/tests/bingo.test.mjs
+```
+
+O teste cobre pool insuficiente, cartelas com seed estável, sorteio sem repetição, resposta por ID, ausência de item na cartela, vitória por linha/coluna/diagonal, restauração de estado, novas cartelas, acessibilidade e sincronização dos JSONs.
