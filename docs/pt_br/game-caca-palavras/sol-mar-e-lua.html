@@ -1,5 +1,17 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Caça-palavras</title><style>
 :root{font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:#263452;background:#eff9ff;--accent:#3182b0}*{box-sizing:border-box}body{margin:0;padding:39px 36px 52px}main{max-width:875px;margin:auto}.eyebrow{font-size:11px;text-transform:uppercase;color:var(--accent);font-weight:820;letter-spacing:1.8px}h1{font-size:38px;line-height:1.12;margin:9px 0 13px;letter-spacing:-1px}h2{font-size:21px}header p{color:#67748d;max-width:650px;font-size:15px}.panel{background:white;border:1px solid #e0e4f1;border-radius:18px;padding:27px;margin-top:26px;box-shadow:0 10px 30px #2d39610a}.small{color:#78839a;font-size:13px}.btn{font:inherit;font-size:14px;font-weight:730;background:var(--accent);border:1px solid var(--accent);color:white;border-radius:10px;padding:11px 15px;cursor:pointer}.btn.alt{color:var(--accent);background:#fff}.btn:disabled{opacity:.4;cursor:not-allowed}.status{margin:17px 0 0;color:#52617c;font-weight:660;min-height:20px}.status.good{color:#1b8565}.status.warn{color:#a56326}.grid{display:grid;gap:12px}.twocol{grid-template-columns:repeat(2,minmax(0,1fr))}.threecol{grid-template-columns:repeat(3,minmax(0,1fr))}.card-btn{background:#fff;border:1px solid #dce1ee;border-radius:12px;min-height:70px;padding:16px;font:inherit;font-size:16px;font-weight:740;color:#384765;cursor:pointer}.card-btn:hover,.card-btn.selected{border-color:var(--accent);background:#f0effe}.card-btn.matched{background:#e6f7ef;border-color:#85c8ac;color:#26795b}.actions{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}.smallbtn{border:1px solid #dbe0eb;background:white;border-radius:7px;color:var(--accent);padding:6px 11px;font:inherit;cursor:pointer}.game-grid{display:grid;gap:5px;width:max-content;max-width:100%}.word-grid{grid-template-columns:repeat(8,40px)}.letter{border:1px solid #d7ddeb;width:40px;height:40px;border-radius:7px;background:#fff;font:inherit;font-weight:780;color:#384662;cursor:pointer}.letter.selected{background:#e4dfff;border-color:var(--accent)}.letter.found{background:#d3f4e4;border-color:#39aa82}.tiles{grid-template-columns:repeat(3,90px);background:#e5e5f4;padding:8px;border-radius:12px}.tile{width:90px;height:90px;border:0;background:var(--accent);color:white;font-size:25px;font-weight:800;border-radius:9px;cursor:pointer}.tile.empty{background:transparent}.bucket{min-height:95px;border:2px dashed #bfc5de;padding:13px;border-radius:11px}.bucket h3{margin:0 0 8px;font-size:14px}.terms{display:flex;flex-wrap:wrap;gap:8px}.term{border:1px solid #d6dbea;background:#fff;padding:10px 13px;border-radius:8px;cursor:grab;font:inherit;font-weight:670}.term.selected{outline:2px solid var(--accent)}.term.placed{background:#e0f7ed;border-color:#6ac09d}.crossword{display:grid;grid-template-columns:repeat(5,46px);gap:3px;width:max-content;background:#1d2741;padding:6px;border-radius:10px}.crossword input{width:46px;height:46px;border:0;border-radius:4px;text-align:center;font-size:20px;font-weight:800;text-transform:uppercase;color:#26344e}.crossword .empty{background:#26324f}.kbd{display:flex;gap:7px;flex-wrap:wrap;max-width:520px}.kbd button{width:43px;height:42px;border:1px solid #dce1ed;border-radius:8px;background:#fff;font:inherit;font-weight:700;color:#394865;cursor:pointer}.kbd button:disabled{background:#edf0f7;opacity:.45}.blank{font-size:31px;letter-spacing:10px;font-weight:800;overflow-wrap:anywhere}.pair-row{display:flex;gap:15px;align-items:center;margin:10px 0;padding:9px;background:#f8f9fc;border-radius:11px}.pair-row b{font-size:27px;width:46px;text-align:center}.pair-row select{flex:1;padding:11px;border-radius:8px;border:1px solid #d8ddeb;background:#fff;font:inherit;max-width:90%}.ordered{display:grid;gap:9px}.ordered-row{display:flex;align-items:center;gap:12px;border:1px solid #dfe3ee;border-radius:11px;padding:12px 14px}.ordered-row span{flex:1}.scene-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.scene{position:relative;border:1px solid #dce3ee;border-radius:12px;overflow:hidden}.scene svg{width:100%;height:auto;display:block}.hotspot{position:absolute;background:transparent;border:2px solid transparent;border-radius:50%;width:19%;height:24%;transform:translate(-50%,-50%);cursor:pointer}.hotspot.found{border-color:#2fa87f;background:#21a57b33}.bingo{display:grid;grid-template-columns:repeat(4,64px);gap:5px}.bingo button{border:1px solid #dce0ed;border-radius:9px;width:64px;height:64px;background:#fff;color:#3e4a65;font:inherit;font-size:21px;font-weight:800;cursor:pointer}.bingo button.marked{background:#d8f4e9;border-color:#58ba93;color:#1e7a59}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #9d8df0;outline-offset:2px}@media(max-width:650px){body{padding:24px 16px}.panel{padding:18px}h1{font-size:29px}.twocol,.scene-grid{grid-template-columns:1fr}.word-grid{grid-template-columns:repeat(8,31px)}.letter{width:31px;height:31px}.tiles{grid-template-columns:repeat(3,72px)}.tile{width:72px;height:72px}.crossword{grid-template-columns:repeat(5,39px)}.crossword input{width:39px;height:39px}.bingo{grid-template-columns:repeat(4,52px)}.bingo button{width:52px;height:52px}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* O tabuleiro ocupa a largura útil do iframe e mantém células quadradas. */
+.search-page main{width:100%;max-width:none}
+.search-page .panel{margin-top:20px}
+.search-page .word-grid{width:100%;max-width:none;grid-template-columns:repeat(var(--word-cols,8),minmax(0,1fr));gap:4px;touch-action:none;user-select:none;-webkit-user-select:none}
+.search-page .word-grid .letter{width:100%;height:auto;aspect-ratio:1;min-width:0;padding:0;line-height:1;font-size:clamp(13px,1.5vw,21px);touch-action:none}
+.search-page .word-grid .letter.selected{background:#d8eafc;border-color:#2478ad;box-shadow:inset 0 0 0 1px #2478ad}
+.search-page .word-grid .letter.found{background:#c6f1df;border-color:#258765;color:#176447}
+.search-page .word-grid .letter.found.selected{outline:2px solid #2674ac;outline-offset:-3px}
+.search-page #word-instruction{color:#3e5474;font-size:14px;min-height:24px}
+.search-page #found-list{font-size:14px;font-weight:650;color:#52617c}
+@media(max-width:650px){.search-page .word-grid{gap:3px}.search-page .word-grid .letter{font-size:clamp(14px,4vw,19px)}}
 </style></head><body><main><header><span class="eyebrow">GAME EDUCATIVO · Caça-palavras</span><h1>Caça-palavras</h1><p>Encontre palavras escondidas em uma grade de letras.</p></header><div id="game"></div></main><script>(function gameEngine(c){
 const root=document.getElementById("game");let state={};
 const escape=s=>{const a=document.createElement("div");a.textContent=String(s);return a.innerHTML;};
@@ -15,9 +27,171 @@ function memory(){
  else setTimeout(()=>{for(const k of shown){const x=root.querySelector(`[data-i="${k}"]`);if(x){x.textContent="?";x.classList.remove("selected");}}shown=[];busy=false;status("Tente outra combinação.");},750);
  });}
 function search(){
- const rows=["SOLQWERT","HJKMARPL","LUABCDXY","QWERASDF","ZXCVBNML","RTPASIOD","NBECDTRU","WQAPTRES"],words=["SOL","MAR","LUA"];let from=null,found=new Set(),hits=new Set();
- panel(`<h2>Localize SOL, MAR e LUA</h2><p class="small">Clique na primeira e na última letra de uma palavra horizontal ou vertical.</p><div class="game-grid word-grid">${rows.join("").split("").map((v,i)=>`<button class="letter" data-i="${i}" aria-label="Linha ${Math.floor(i/8)+1}, coluna ${i%8+1}, letra ${v}">${v}</button>`).join("")}</div><p id="found-list" class="small"></p>`);
- root.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const end=+b.dataset.i;if(from===null){from=end;b.classList.add("selected");return;}const r0=Math.floor(from/8),c0=from%8,r1=Math.floor(end/8),c1=end%8;const dirR=Math.sign(r1-r0),dirC=Math.sign(c1-c0);let indices=[];if(r0===r1||c0===c1){const steps=Math.max(Math.abs(r1-r0),Math.abs(c1-c0));for(let j=0;j<=steps;j++)indices.push((r0+j*dirR)*8+c0+j*dirC);}const word=indices.map(k=>rows[Math.floor(k/8)][k%8]).join("");const target=words.find(w=>w===word||w===word.split("").reverse().join(""));root.querySelectorAll(".letter.selected").forEach(x=>x.classList.remove("selected"));from=null;if(target){found.add(target);indices.forEach(k=>hits.add(k));root.querySelectorAll(".letter").forEach(x=>x.classList.toggle("found",hits.has(+x.dataset.i)));root.querySelector("#found-list").textContent="Encontradas: "+[...found].join(", ");status(found.size===words.length?"Você encontrou todas as palavras!":"Boa! Continue procurando.",true);}else status("Selecione uma sequência que forme uma das palavras.");});
+ // As dimensões seguem a largura real do iframe, não uma quantidade fixa de letras.
+ document.body.classList.add("search-page");
+ const words=[
+  {id:"sol",text:"SOL",dr:0,dc:1},
+  {id:"mar",text:"MAR",dr:1,dc:0},
+  {id:"lua",text:"LUA",dr:1,dc:1}
+ ];
+ const alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+ const instructionInitial="Clique na primeira letra da palavra ou arraste pelas letras.";
+ const instructionLast="Clique agora na última letra da palavra.";
+ let cols=0,rows=0,matrix=[],positions=new Map(),found=new Set(),from=null,drag=null;
+ panel('<h2>Localize SOL, MAR e LUA</h2>'+
+  '<p class="small">Encontre as palavras na horizontal, vertical ou diagonal. Você pode clicar na primeira e na última letra ou arrastar o mouse ou o dedo sobre elas.</p>'+
+  '<p class="small" id="word-instruction" aria-live="polite">'+instructionInitial+'</p>'+
+  '<div class="game-grid word-grid" id="word-grid" role="group" aria-label="Tabuleiro de caça-palavras" aria-describedby="word-instruction"></div>'+
+  '<p id="found-list" class="small"></p>'+
+  '<div class="actions"><button class="btn alt" id="reset">Novo tabuleiro</button><button class="btn alt" id="cancel-selection">Cancelar seleção</button></div>');
+ const grid=root.querySelector("#word-grid");
+ const instruction=root.querySelector("#word-instruction");
+ const foundList=root.querySelector("#found-list");
+ function sizes(){
+  const width=grid.getBoundingClientRect().width;
+  if(!width)return null;
+  const gap=parseFloat(getComputedStyle(grid).columnGap)||4;
+  const cellTarget=width<700?36:42;
+  const nextCols=Math.max(6,Math.min(60,Math.floor((width+gap)/(cellTarget+gap))));
+  const cellSize=(width-gap*(nextCols-1))/nextCols;
+  const remaining=Math.max(410,window.innerHeight-grid.getBoundingClientRect().top+40);
+  const nextRows=Math.max(12,Math.min(22,Math.ceil(remaining/(cellSize+gap))));
+  return {cols:nextCols,rows:nextRows};
+ }
+ function build(){
+  matrix=Array(rows*cols).fill("");
+  positions=new Map();
+  for(const word of words){
+   let placed=false;
+   for(const first of shuffle(Array.from({length:rows*cols},(_,i)=>i))){
+    const r=Math.floor(first/cols),c=first%cols;
+    if(r+(word.text.length-1)*word.dr>=rows||c+(word.text.length-1)*word.dc>=cols)continue;
+    const cells=Array.from({length:word.text.length},(_,i)=>(r+i*word.dr)*cols+c+i*word.dc);
+    if(cells.some((cell,i)=>matrix[cell]!==""&&matrix[cell]!==word.text[i]))continue;
+    cells.forEach((cell,i)=>{matrix[cell]=word.text[i];});
+    positions.set(word.id,cells);placed=true;break;
+   }
+   if(!placed){status("Não foi possível encaixar todas as palavras. Use Novo tabuleiro.");return;}
+  }
+  matrix=matrix.map(letter=>letter||alphabet[Math.floor(Math.random()*alphabet.length)]);
+  const focused=grid.contains(document.activeElement)?Number(document.activeElement.dataset.i):-1;
+  grid.style.setProperty("--word-cols",String(cols));
+  grid.innerHTML=matrix.map((letter,i)=>{
+   const label="Linha "+(Math.floor(i/cols)+1)+", coluna "+(i%cols+1)+", letra "+letter;
+   return '<button type="button" class="letter" data-i="'+i+'" data-label="'+label+'" aria-label="'+label+'" aria-pressed="false">'+letter+'</button>';
+  }).join("");
+  drawHighlights();
+  if(focused>=0){const button=grid.querySelector('[data-i="'+Math.min(focused,matrix.length-1)+'"]');if(button)button.focus({preventScroll:true});}
+ }
+ function getPath(start,end){
+  const r0=Math.floor(start/cols),c0=start%cols,r1=Math.floor(end/cols),c1=end%cols;
+  const rd=r1-r0,cd=c1-c0;
+  if(start===end||!(rd===0||cd===0||Math.abs(rd)===Math.abs(cd)))return [];
+  const dr=Math.sign(rd),dc=Math.sign(cd),length=Math.max(Math.abs(rd),Math.abs(cd));
+  return Array.from({length:length+1},(_,i)=>(r0+i*dr)*cols+c0+i*dc);
+ }
+ function equalPath(a,b){
+  return a.length===b.length&&(a.every((v,i)=>v===b[i])||a.every((v,i)=>v===b[b.length-1-i]));
+ }
+ function drawHighlights(preview=[]){
+  const hits=new Set();
+  for(const id of found){for(const cell of positions.get(id)||[])hits.add(cell);}
+  const active=new Set(preview);
+  if(from!==null)active.add(from);
+  for(const button of grid.children){
+   const i=Number(button.dataset.i),isFound=hits.has(i),selected=active.has(i);
+   button.classList.toggle("found",isFound);
+   button.classList.toggle("selected",selected);
+   button.setAttribute("aria-pressed",selected?"true":"false");
+   button.setAttribute("aria-label",button.dataset.label+(isFound?", palavra encontrada":""));
+  }
+  const foundNames=words.filter(w=>found.has(w.id)).map(w=>w.text);
+  foundList.textContent="Encontradas: "+(foundNames.join(", ")||"nenhuma")+" ("+found.size+" de "+words.length+").";
+ }
+ function cancel(){
+  from=null;drag=null;instruction.textContent=instructionInitial;drawHighlights();
+ }
+ function check(start,end){
+  const path=getPath(start,end);
+  const match=words.find(w=>equalPath(path,positions.get(w.id)||[]));
+  cancel();
+  if(!match){status("Esse trecho não corresponde a uma das palavras. Tente outra combinação.");return;}
+  if(found.has(match.id)){status(match.text+" já foi encontrada. Procure outra palavra.",true);return;}
+  found.add(match.id);drawHighlights();
+  status(found.size===words.length?"Parabéns! Você encontrou SOL, MAR e LUA!":match.text+" encontrada! Continue procurando.",true);
+ }
+ function choose(i){
+  if(from===null){from=i;instruction.textContent=instructionLast;drawHighlights();return;}
+  if(from===i){instruction.textContent=instructionLast;return;}
+  check(from,i);
+ }
+ function indexAt(x,y){
+  const rect=grid.getBoundingClientRect();
+  if(x<rect.left||x>=rect.right||y<rect.top||y>=rect.bottom)return null;
+  const col=Math.min(cols-1,Math.floor((x-rect.left)*cols/rect.width));
+  const row=Math.min(rows-1,Math.floor((y-rect.top)*rows/rect.height));
+  return row*cols+col;
+ }
+ grid.addEventListener("pointerdown",e=>{
+  if(!e.isPrimary||e.button!==0)return;
+  const button=e.target.closest(".letter");
+  if(!button||!grid.contains(button))return;
+  const i=Number(button.dataset.i);
+  drag={pointerId:e.pointerId,start:i,moved:false};
+  if(grid.setPointerCapture)grid.setPointerCapture(e.pointerId);
+  drawHighlights([i]);
+ });
+ grid.addEventListener("pointermove",e=>{
+  if(!drag||drag.pointerId!==e.pointerId)return;
+  const i=indexAt(e.clientX,e.clientY);
+  if(i===null){drawHighlights([drag.start]);return;}
+  if(i!==drag.start)drag.moved=true;
+  const path=getPath(drag.start,i);
+  drawHighlights(path.length?path:[drag.start]);
+ });
+ grid.addEventListener("pointerup",e=>{
+  if(!drag||drag.pointerId!==e.pointerId)return;
+  const current=drag;drag=null;
+  const end=indexAt(e.clientX,e.clientY);
+  if(grid.hasPointerCapture&&grid.hasPointerCapture(e.pointerId))grid.releasePointerCapture(e.pointerId);
+  if(end===null){drawHighlights();return;}
+  if(current.moved&&end!==current.start){from=null;check(current.start,end);}
+  else choose(end);
+ });
+ grid.addEventListener("pointercancel",e=>{
+  if(drag&&drag.pointerId===e.pointerId){drag=null;drawHighlights();}
+ });
+ // Click sem Pointer Events: teclado, tecnologias assistivas e acionamento programático.
+ // O click sintetizado pelo mouse/toque (detail > 0) não seleciona duas vezes.
+ grid.addEventListener("click",e=>{
+  if(e.detail!==0)return;
+  const button=e.target.closest(".letter");
+  if(button&&grid.contains(button))choose(Number(button.dataset.i));
+ });
+ grid.addEventListener("keydown",e=>{
+  const button=e.target.closest(".letter");
+  if(!button)return;
+  if(e.key==="Escape"){if(from!==null){e.preventDefault();cancel();status("Seleção cancelada.");}return;}
+  const step={"ArrowRight":1,"ArrowLeft":-1,"ArrowDown":cols,"ArrowUp":-cols}[e.key];
+  if(step===undefined)return;
+  const i=Number(button.dataset.i),next=i+step;
+  if(next<0||next>=matrix.length)return;
+  if(step===1&&i%cols===cols-1||step===-1&&i%cols===0)return;
+  e.preventDefault();
+  const target=grid.querySelector('[data-i="'+next+'"]');
+  if(target)target.focus();
+ });
+ root.querySelector("#cancel-selection").onclick=()=>{cancel();status("Seleção cancelada.");};
+ root.querySelector("#reset").onclick=()=>{found.clear();cancel();build();status("Novo tabuleiro. Encontre SOL, MAR e LUA.");};
+ function fit(){
+  const next=sizes();
+  if(!next||next.cols===cols&&next.rows===rows)return;
+  cols=next.cols;rows=next.rows;cancel();build();
+  if(found.size)status("Tabuleiro adaptado ao tamanho da tela. Seus acertos foram mantidos.",true);
+ }
+ fit();
+ window.addEventListener("resize",fit,{passive:true});
+ if(typeof ResizeObserver!=="undefined"){const observer=new ResizeObserver(fit);observer.observe(grid);}
 }
 function puzzle(){
  let tiles=[1,2,3,4,5,6,7,8,0],moves=0;for(let k=0;k<42;k++){const at=tiles.indexOf(0),r=Math.floor(at/3),col=at%3,choices=[r>0?at-3:-1,r<2?at+3:-1,col>0?at-1:-1,col<2?at+1:-1].filter(x=>x>=0);const next=choices[Math.floor(Math.random()*choices.length)];[tiles[at],tiles[next]]=[tiles[next],tiles[at]];}
