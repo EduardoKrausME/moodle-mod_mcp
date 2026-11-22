@@ -59,6 +59,7 @@ $data = [
     "draftcontent" => $draft ? $draft->content : "",
     "prompt" => activity::prompt($mcp, $cm),
     "promptpage" => activity::prompt($mcp, $cm, "page"),
+    "promptoptions" => activity::prompt_options($mcp, $cm),
     "previewurl" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id, "preview" => 1]))->out(false),
     "actionurl" => (new moodle_url("/mod/mcp/manage.php"))->out(false),
     "canpublish" => !empty($mcp->draftrevision),
