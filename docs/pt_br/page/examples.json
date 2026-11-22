@@ -5,6 +5,26 @@
   "description": "Aulas editoriais ilustradas, aprofundadas e interativas, com identidade visual própria para cada assunto.",
   "examples": [
     {
+      "id": "uma-viagem-por-dentro-do-coracao-humano",
+      "title": "Uma viagem por dentro do coração humano",
+      "description": "Atlas anatômico interativo para explorar as quatro câmaras, valvas, vasos, circulação pulmonar e sistêmica, ciclo cardíaco, condução elétrica e saúde cardiovascular.",
+      "howItWorks": "Investigue 14 estruturas por marcadores e lista acessível, acompanhe três percursos de circulação, avance por cinco fases do ciclo cardíaco e pelas vias elétricas, calcule o débito hipotético e responda seis questões explicativas.",
+      "subtype": "Atlas médico ilustrado e laboratório de fisiologia conceitual",
+      "features": [
+        "8 SVGs originais com acessibilidade",
+        "14 estruturas anatômicas selecionáveis",
+        "Circulação pulmonar e sistêmica",
+        "Fases valvares e ciclo cardíaco",
+        "Condução elétrica explorável",
+        "Laboratório de débito cardíaco",
+        "Prevenção cardiovascular e limites",
+        "6 questões com feedback"
+      ],
+      "minutes": 35,
+      "path": "page/uma-viagem-por-dentro-do-coracao-humano.html",
+      "prompt": "Crie uma página educativa HTML independente para o mod_mcp com a qualidade de pesquisa, anatomia interativa, roteiro pedagógico e originalidade visual de 'Uma viagem por dentro do coração humano', usando-a SOMENTE como referência de profundidade e não como assunto obrigatório ou template reutilizável.\n\nNa sua PRIMEIRA resposta, ANTES de produzir textos, HTML, CSS, JavaScript, ilustrações, imagens, questões, atividades ou chamar ferramentas de gravação, pergunte exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" AGUARDE a resposta do professor. Não presuma que o tema será coração humano, não gere arquivo e não publique nada antes da resposta.\n\nDepois, se o objetivo cognitivo não estiver suficientemente claro, pergunte brevemente qual nível de aprendizagem deseja trabalhar, em linguagem simples: compreender conceitos; aplicar conhecimentos; analisar relações e causas; avaliar decisões e evidências; ou criar soluções. Explique cada opção em uma única frase breve. Considere idade, objetivos, contexto, necessidades de acessibilidade e materiais fornecidos, sem repetir perguntas respondidas.\n\nProduza conteúdo completo, fundamentado em fontes científicas verificáveis, com problema motivador, estrutura e função, mecanismos, relações entre partes, experimentos ou atividades conceituais, aplicações e consequências, distinções importantes e feedback das avaliações. Quando o assunto envolver saúde, não ofereça diagnóstico, não invente informações de pacientes, parâmetros clínicos, probabilidades ou valores de referência. Diferencie fato documentado, hipótese, ilustração idealizada, dado medido e analogia.\n\nDesenvolva um layout EXCLUSIVO para o tema do professor, jamais copiando atlas, cores, composição, desenhos, personagens ou exercícios de outra página. Crie ilustrações SVG originais com title, desc, legendas e alternativas textuais. Declare explicitamente as imagens utilizadas, autoria, procedência e limites científicos. Não reproduza imagens clínicas reais sem fonte, consentimento e permissões adequadas. Os materiais devem apresentar apenas a atividade, sem menus institucionais, cabeçalho do site ou rodapé Moodle.\n\nCrie interações alinhadas ao assunto selecionado, por exemplo exploração de partes de um sistema por pontos e lista acessível, percurso de processos interligados e não linear quando apropriado, comparação entre ciclos ou estados, explicações sobre gradientes ou mecanismos, controles para observar fórmulas transparentes e hipóteses documentadas, escolhas com feedback e revisão formativa. Distinga simultaneidade real da sequência didática de uma narrativa. Ofereça botões para avançar, retroceder, reiniciar e pausar animações, respeitando prefers-reduced-motion.\n\nEntregue um único HTML autônomo, funcional e responsivo para iframe isolado, com CSS e JavaScript internos e nenhuma dependência obrigatória de CDN. Garanta teclado, toque, foco visível, labels, descrições SVG, contraste, mensagens anunciadas por aria-live e controles equivalentes em texto. Não use localStorage para respostas de alunos, não colete dados pessoais e não atribua notas oficiais diretamente por JavaScript.\n\nSem conexão com ChatGPT ou Claude (usando o protocolo MCP), entregue o HTML completo pronto para copiar e colar no gerenciador. Com conexão, utilize exclusivamente APIs reais do mod_mcp/local_mcp e respeite rascunho, prévia, revisão, aprovação e publicação explícita. Não grave nem publique nada sem resposta e autorização do professor."
+    },
+    {
       "id": "como-nasce-uma-tempestade",
       "title": "Como nasce uma tempestade?",
       "description": "Uma expedição visual pela convecção, pelo crescimento das nuvens cumulonimbus, pelos raios e pelos cuidados durante tempestades.",
