@@ -45,6 +45,9 @@ p{margin-bottom:1.24em}
 .hero-art svg{width:100%;height:auto;display:block;filter:drop-shadow(10px 15px 20px #401b1c4f)}
 .hero-art figcaption{font-size:.77rem;color:#ffdcba;margin-top:9px}
 .hero .sky-clouds{animation:drift 14s ease-in-out infinite alternate}
+.hero-art.is-paused .sky-clouds{animation-play-state:paused}
+.motion-control{margin:10px 0 0;padding:9px 15px;background:#fff6e217;color:#ffead3;border:1px solid #eed2b1;cursor:pointer}
+.motion-control:hover{background:#fff6e233}
 @keyframes drift{from{transform:translateX(-7px)}to{transform:translateX(9px)}}
 .mosaic-rule{height:17px;background-color:#e5c899;background-image:linear-gradient(45deg,#874a38 25%,transparent 25%),linear-gradient(-45deg,#874a38 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#874a38 75%),linear-gradient(-45deg,transparent 75%,#874a38 75%);background-position:0 0,0 9px,9px -9px,-9px 0;background-size:18px 18px}
 .preface{padding:91px 0 83px;display:grid;grid-template-columns:216px 1fr;gap:57px}
@@ -291,6 +294,7 @@ p{margin-bottom:1.24em}
      <g fill="none" stroke="#784a3b" stroke-width="6"><path d="M10 415 Q149 387 280 419"/><path d="M10 425 Q145 398 280 429"/></g>
     </svg>
     <figcaption>Figura 1. Panorama SVG original e artístico da Roma do século II; combina formas arquitetônicas documentadas, mas não representa uma vista real específica.</figcaption>
+    <button id="pauseMovement" class="motion-control" type="button" aria-pressed="false">Pausar movimento das nuvens</button>
    </figure>
   </div>
  </div>
@@ -714,7 +718,7 @@ p{margin-bottom:1.24em}
 <section class="sources wrap" aria-labelledby="sourcesTitle">
  <h2 id="sourcesTitle">Fontes históricas e transparência das imagens</h2>
  <p>Sete ilustrações SVG produzidas especialmente para esta atividade, sem imagens externas: panorama urbano, mapa didático, cena de rua, comparação de moradias, diagrama de instituições, vitrine de artefatos e corte das termas. Nenhum SVG reproduz um objeto de museu específico ou uma planta arqueológica precisa. Personagens, horários relativos, diálogos e situações individuais são ficcionais e identificados como tal.</p>
- <p>Referências de consulta e leitura adicional: <a href="https://openstax.org/books/world-history-volume-1/pages/7-1-the-daily-life-of-a-roman-family" target="_blank" rel="noopener noreferrer">OpenStax: The Daily Life of a Roman Family</a>; <a href="https://openstax.org/books/world-history-volume-1/pages/7-2-slavery-in-the-roman-empire" target="_blank" rel="noopener noreferrer">OpenStax: Slavery in the Roman Empire</a>; <a href="https://openstax.org/books/world-history-volume-1/pages/7-3-the-roman-economy-trade-taxes-and-conquest" target="_blank" rel="noopener noreferrer">OpenStax: Trade and economy</a>; <a href="https://www.metmuseum.org/toah/hd/hous/hd_hous.htm" target="_blank" rel="noopener noreferrer">Metropolitan Museum of Art: Roman Housing</a>; <a href="https://www.english-heritage.org.uk/learn/story-of-england/romans/roman-bathing/" target="_blank" rel="noopener noreferrer">English Heritage: Roman Bathing</a>; <a href="https://www.open.edu/openlearn/history-the-arts/hadrians-rome/content-section-2.2" target="_blank" rel="noopener noreferrer">Open University: Temple of Venus and Rome and Hadrianic chronology</a>.</p>
+ <p>Referências de consulta e leitura adicional: <a href="https://openstax.org/books/world-history-volume-1/pages/7-1-the-daily-life-of-a-roman-family" target="_blank" rel="noopener noreferrer">OpenStax: The Daily Life of a Roman Family</a>; <a href="https://openstax.org/books/world-history-volume-1/pages/7-2-slavery-in-the-roman-empire" target="_blank" rel="noopener noreferrer">OpenStax: Slavery in the Roman Empire</a>; <a href="https://openstax.org/books/world-history-volume-1/pages/7-3-the-roman-economy-trade-taxes-and-conquest" target="_blank" rel="noopener noreferrer">OpenStax: Trade and economy</a>; <a href="https://www.metmuseum.org/essays/roman-housing" target="_blank" rel="noopener noreferrer">Metropolitan Museum of Art: Roman Housing</a>; <a href="https://www.english-heritage.org.uk/learn/story-of-england/romans/roman-bathing/" target="_blank" rel="noopener noreferrer">English Heritage: Roman Bathing</a>; <a href="https://www.open.edu/openlearn/history-the-arts/hadrians-rome/content-section-2.2" target="_blank" rel="noopener noreferrer">Open University: Temple of Venus and Rome and Hadrianic chronology</a>.</p>
 </section>
 </main>
 <script>
@@ -722,6 +726,13 @@ p{margin-bottom:1.24em}
  "use strict";
  var d=document;
  var el=function(id){return d.getElementById(id);};
+ var motionPause=d.getElementById("pauseMovement");
+ motionPause.addEventListener("click",function(){
+  var paused=motionPause.getAttribute("aria-pressed")!=="true";
+  motionPause.setAttribute("aria-pressed",String(paused));
+  motionPause.textContent=paused?"Retomar movimento das nuvens":"Pausar movimento das nuvens";
+  d.querySelector(".hero-art").classList.toggle("is-paused",paused);
+ });
  var locations={
  subura:{label:"Ponto 01 · Moradia popular",name:"Ruas e moradias multifamiliares",text:"Na região urbana lembrada pelo nome Subura, diversos tipos de comércio e habitação faziam parte da vida cotidiana. Edifícios de apartamentos podiam abrigar moradores com recursos desiguais. A cena não apresenta a posição exata de uma insula em 125 d.C.",source:"Base histórica: arqueologia da habitação romana e literatura sobre a cidade; marcação e desenho são interpretativos."},
  forum:{label:"Ponto 02 · Espaço cívico",name:"Fórum Romano",text:"A praça monumental reúne edifícios religiosos, espaços de administração, tribunais, memória pública e circulação de pessoas. Não se deve confundir esse espaço cívico com a sede de uma democracia moderna: no século II d.C., o poder imperial era decisivo.",source:"Base histórica: vestígios arquitetônicos do fórum e estudos das instituições romanas. A distribuição do mapa é apenas ilustrativa."},
