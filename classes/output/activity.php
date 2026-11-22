@@ -24,6 +24,7 @@
 
 namespace mod_mcp\output;
 
+use context_module;
 use coding_exception;
 use mod_mcp\content\service;
 use moodle_url;
@@ -151,20 +152,14 @@ final class activity {
     }
 
     /**
-     * Inject the trusted SDK into iframe HTML without changing the stored revision.
-     *
-     * An inline bootstrap does not depend on a separate network request from
-     * the sandboxed srcdoc document.
+     * Load the trusted SDK by URL before authored scripts without changing the stored revision.
      *
      * @param string $content Stored activity HTML.
-     * @return string HTML with the SDK injected before authored scripts.
+     * @return string HTML with a trusted SDK script reference.
      */
     public static function inject_sdk(string $content): string {
-        $sdk = file_get_contents(__DIR__ . "/../../sdk.js");
-        if ($sdk === false) {
-            throw new coding_exception("Cannot read the mod_mcp sandbox SDK");
-        }
-        $bootstrap = "<script>{$sdk}</script>";
+        $sdkurl = (new moodle_url("/mod/mcp/sdk.js"))->out(false);
+        $bootstrap = '<script src="' . s($sdkurl) . '"></script>';
         $bootstrap .= "<style>:root{background:transparent!important;}html,body{background:transparent!important;}</style>";
 
         // Preserve the doctype even if the document has no head element.
@@ -184,14 +179,16 @@ final class activity {
         global $USER;
         $revisionid = $preview && $canmanage ? (int)$mcp->draftrevision : (int)$mcp->publishedrevision;
         $revision = service::get((int)$mcp->id, $revisionid);
-        // Embed the trusted SDK at render time, before authored scripts.
-        // An external script can be unavailable inside an isolated srcdoc iframe.
-        $content = $revision ? self::inject_sdk($revision->content) : "";
+        // The HTML is served only through the authorized, sandboxed pluginfile endpoint.
+        $urlcontent = $revision ? moodle_url::make_pluginfile_url(
+            context_module::instance((int)$cm->id)->id, "mod_mcp", "content",
+            $revisionid, "/", "index.html"
+        )->out(false) : "";
         $hasconnection = $canmanage && !$revision && self::has_active_connection((int)$USER->id);
         return [
             "name" => format_string($mcp->name),
             "hascontent" => $revision !== null,
-            "content" => $content,
+            "url_content" => $urlcontent,
             "canmanage" => $canmanage,
             "prompt" => self::prompt($mcp, $cm),
             "promptpage" => self::prompt($mcp, $cm, "page"),

@@ -100,6 +100,19 @@ final class service {
     }
 
     /**
+     * Allow only the current published revision or a manager's current draft.
+     *
+     * An arbitrary historical revision must never become visible by guessing its URL.
+     */
+    public static function can_access_revision(stdClass $activity, int $revisionid, bool $canmanage): bool {
+        if ($revisionid <= 0) {
+            return false;
+        }
+        return $revisionid === (int)$activity->publishedrevision ||
+            ($canmanage && $revisionid === (int)$activity->draftrevision);
+    }
+
+    /**
      * Publish the draft only after its content and attached questions are valid.
      */
     public static function publish(int $mcpid, int $expectedrevision): void {

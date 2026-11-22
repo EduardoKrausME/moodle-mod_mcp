@@ -207,11 +207,41 @@ function mcp_update_grades($mcp, $userid = 0, $nullifnone = true) {
  */
 function mcp_pluginfile($course, $cm, $context, $filearea, $args,
         $forcedownload, array $options = []) {
-    if ($context->contextlevel !== CONTEXT_MODULE || $filearea !== "assets") {
+    global $DB;
+
+    if ($context->contextlevel !== CONTEXT_MODULE || !in_array($filearea, ["assets", "content"], true)) {
         return false;
     }
     require_login($course, true, $cm);
     require_capability("mod/mcp:view", $context);
+
+    if ($filearea === "content") {
+        // This virtual file does not exist in file storage: the immutable revision is in the database.
+        if (count($args) !== 2 || !ctype_digit((string)$args[0]) ||
+                (int)$args[0] <= 0 || $args[1] !== "index.html") {
+            return false;
+        }
+        $revisionid = (int)$args[0];
+        $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
+        $canmanage = has_capability("mod/mcp:manage", $context);
+        if (!\mod_mcp\content\service::can_access_revision($mcp, $revisionid, $canmanage)) {
+            return false;
+        }
+        $revision = \mod_mcp\content\service::get((int)$mcp->id, $revisionid);
+        if (!$revision) {
+            return false;
+        }
+
+        // A URL can be opened outside the iframe. Enforce an opaque origin even on direct navigation.
+        // Never combine allow-scripts with allow-same-origin for authored HTML.
+        header("Content-Security-Policy: sandbox allow-scripts");
+        header("X-Content-Type-Options: nosniff");
+        header("Referrer-Policy: no-referrer");
+        $html = \mod_mcp\output\activity::inject_sdk($revision->content);
+        send_file($html, "index.html", 0, 0, true, false, "text/html; charset=utf-8");
+        return;
+    }
+
     $itemid = (int)array_shift($args);
     $filename = array_pop($args);
     $filepath = $args ? "/" . implode("/", $args) . "/" : "/";

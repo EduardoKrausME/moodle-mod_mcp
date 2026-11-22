@@ -25,6 +25,8 @@
 namespace mod_mcp;
 
 use advanced_testcase;
+use context_module;
+use mod_mcp\content\service;
 use mod_mcp\output\activity;
 use moodle_url;
 
@@ -35,33 +37,64 @@ use moodle_url;
  */
 final class output_activity_test extends advanced_testcase {
     /**
-     * Runtime SDK injection must be inline and precede authored JavaScript.
+     * SDK loads by URL before authored JavaScript without inlining its source.
      */
-    public function test_sdk_is_embedded_before_authored_scripts(): void {
+    public function test_sdk_is_loaded_by_url_before_authored_scripts(): void {
         $html = '<!doctype html><html><head><script>window.authored = true;</script></head><body>Hi</body></html>';
         $result = activity::inject_sdk($html);
 
-        $sdkposition = strpos($result, 'Object.defineProperty(window, "MoodleMCP"');
+        $sdkurl = (new moodle_url("/mod/mcp/sdk.js"))->out(false);
+        $script = '<script src="' . s($sdkurl) . '"></script>';
+        $sdkposition = strpos($result, $script);
         $authoredposition = strpos($result, "window.authored = true;");
         $this->assertNotFalse($sdkposition);
         $this->assertNotFalse($authoredposition);
         $this->assertLessThan($authoredposition, $sdkposition);
         $this->assertSame(0, strpos($result, "<!doctype html>"));
-        $this->assertStringNotContainsString('src="/mod/mcp/sdk.js"', $result);
-        $this->assertStringContainsString('type: "resize"', $result);
-        $this->assertSame(1, substr_count($result, 'Object.defineProperty(window, "MoodleMCP"'));
+        $this->assertSame(1, substr_count($result, $script));
+        $this->assertStringNotContainsString('Object.defineProperty(window, "MoodleMCP"', $result);
         $this->assertStringContainsString('<script>window.authored = true;</script>', $result);
     }
 
     /**
-     * Keep a missing-head document's doctype when injecting the SDK.
+     * Missing-head documents keep their doctype and load the SDK before the body.
      */
-    public function test_sdk_injection_without_head_preserves_doctype(): void {
+    public function test_sdk_url_injection_without_head_preserves_doctype(): void {
         $html = '<!doctype html><html lang="pt-BR"><body><p>Test</p></body></html>';
         $result = activity::inject_sdk($html);
         $this->assertSame(0, strpos($result, "<!doctype html>"));
-        $this->assertLessThan(strpos($result, "<body>"), strpos($result, "MoodleMCP"));
-        $this->assertSame(1, substr_count($result, 'Object.defineProperty(window, "MoodleMCP"'));
+        $this->assertLessThan(strpos($result, "<body>"), strpos($result, "<script src="));
+        $this->assertSame(1, substr_count($result, (new moodle_url("/mod/mcp/sdk.js"))->out(false)));
+    }
+
+    /**
+     * The iframe URL points to the immutable revision without embedding its HTML in the page.
+     */
+    public function test_page_provides_revision_pluginfile_url(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        $module = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id]);
+        $cm = get_coursemodule_from_instance("mcp", $module->id);
+        $html = "<!doctype html><html><body>Isolated content</body></html>";
+        $revisionid = service::save((int)$module->id, $html, 2);
+        $module = $DB->get_record("mcp", ["id" => $module->id], "*", MUST_EXIST);
+
+        $preview = activity::page($module, $cm, true, true);
+        $expectedurl = moodle_url::make_pluginfile_url(
+            context_module::instance((int)$cm->id)->id, "mod_mcp", "content",
+            $revisionid, "/", "index.html"
+        )->out(false);
+        $this->assertTrue($preview["hascontent"]);
+        $this->assertSame($expectedurl, $preview["url_content"]);
+        $this->assertArrayNotHasKey("content", $preview);
+        $this->assertSame($html, service::get((int)$module->id, $revisionid)->content);
+
+        $DB->set_field("mcp", "publishedrevision", $revisionid, ["id" => $module->id]);
+        $module->publishedrevision = $revisionid;
+        $published = activity::page($module, $cm, false, false);
+        $this->assertTrue($published["hascontent"]);
+        $this->assertSame($expectedurl, $published["url_content"]);
     }
 
     /**
