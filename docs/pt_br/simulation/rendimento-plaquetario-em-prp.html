@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>Simulação Interativa | Rendimento Plaquetário em PRP</title>
+    <style>
+        :root{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#173b47;background:#f1f6f7;line-height:1.5}
+        *{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.56}
+        button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #efac3a;outline-offset:3px}
+        [hidden]{display:none!important}
+        .wrap{max-width:1110px;margin:0 auto;padding:16px 18px 68px}
+        .hero{position:relative;overflow:hidden;background:linear-gradient(110deg,#06374a,#087179 74%,#2b9c88);color:#fff;padding:clamp(27px,5vw,49px);border-radius:25px;margin-bottom:18px}
+        .hero:after{position:absolute;right:-60px;top:-100px;width:240px;height:240px;border:36px solid #ffffff12;border-radius:50%;content:"";pointer-events:none}
+        .eyebrow{font-size:.78rem;text-transform:uppercase;letter-spacing:.13em;color:#b7eddb;font-weight:780;margin:0 0 9px}
+        h1{font-size:clamp(1.85rem,4.7vw,3.3rem);line-height:1.16;margin:0 0 13px;max-width:760px}
+        .hero p{max-width:780px;color:#e4f5f2;margin:0}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:19px}
+        .chips span{font-size:.81rem;border:1px solid #ffffff74;border-radius:99px;padding:5px 12px;background:#ffffff14}
+        .panel{border:1px solid #d7e5e8;background:#fff;border-radius:19px;box-shadow:0 8px 25px #1544530a}
+        .scenarios{padding:21px 24px;margin-bottom:18px}
+        .section-title{font-size:1.24rem;color:#194650;margin:0 0 7px}
+        .muted{color:#5c737b;font-size:.93rem;margin:0 0 13px}
+        .presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+        .preset{border:1px solid #c9dde0;background:#f7fbfb;border-radius:11px;text-align:left;padding:12px;color:#22525d;min-height:84px}
+        .preset strong{display:block;font-size:.91rem}.preset small{display:block;color:#61777c;font-size:.79rem;margin-top:4px}
+        .preset[aria-pressed=true]{background:#e3f5ee;border:2px solid #14927d;padding:11px}
+        .layout{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:18px;align-items:start}
+        .settings{padding:25px}.results{padding:24px}
+        .fields{display:grid;gap:19px}
+        .field{padding:16px 17px;background:#f8fbfb;border:1px solid #e0ebed;border-radius:13px}
+        .field label{font-weight:760;font-size:.94rem;color:#24515b;display:block;margin-bottom:5px}
+        .field .desc{font-size:.82rem;color:#657b81;margin:0 0 12px}
+        .input-pair{display:grid;grid-template-columns:minmax(0,1fr) 108px;gap:13px;align-items:center}
+        input[type=range]{width:100%;accent-color:#07877e;cursor:pointer}
+        input[type=number]{border-radius:10px;border:1px solid #a7c5ca;width:100%;padding:10px 7px;color:#1c4d59;text-align:center;background:#fff}
+        input[aria-invalid=true]{border:2px solid #b34040;background:#fff7f6}
+        .field .limits{font-size:.76rem;color:#70868c;margin-top:8px}
+        .error{border-left:4px solid #b33f3f;background:#fff1f0;color:#8b2929;padding:12px 15px;border-radius:8px;font-size:.88rem;margin:14px 0}
+        .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}
+        .btn{border-radius:11px;padding:11px 15px;border:1px solid #bbd2d5;background:#fff;font-weight:760;color:#145460}
+        .btn.primary{background:#09747a;color:white;border-color:#09747a}
+        .btn.primary:hover:not(:disabled){background:#085c61}
+        .status{margin:13px 0 0;font-size:.88rem;color:#496b72;min-height:20px}
+        .status.ok{color:#157358}.status.warn{color:#9c4f19}.status.err{color:#9a3030}
+        .metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:15px 0 21px}
+        .metric{background:#f3f9f9;border:1px solid #dae9ea;border-radius:13px;padding:16px 13px}
+        .metric .label{display:block;font-weight:740;color:#4f6b72;font-size:.82rem;line-height:1.3;min-height:38px}
+        .metric output{display:block;font-size:clamp(1.34rem,2.4vw,1.72rem);font-weight:850;color:#0e5d67;font-variant-numeric:tabular-nums;line-height:1.25;margin:7px 0 2px}
+        .metric .unit{display:block;font-size:.76rem;color:#6a8087}
+        .illustration{border:1px solid #dfebeb;padding:16px 17px;border-radius:14px;margin:14px 0}
+        .illustration h3{font-size:.97rem;color:#1d4b57;margin:0 0 12px}
+        .bar-label{display:flex;justify-content:space-between;gap:8px;margin:12px 0 5px;font-size:.81rem;color:#405e67}
+        .bar-track{background:#e2edee;border-radius:50px;height:18px;overflow:hidden;display:flex}
+        .bar-fill{height:100%;min-width:0;transition:width .28s}
+        .bar-fill.recovered{background:#168978}.bar-fill.lost{background:#d7ae56}
+        .bar-fill.initial{background:#8bb8c0}.bar-fill.final{background:#168978}
+        .legend{font-size:.81rem;color:#5a7078;margin:8px 0 0}
+        .legend span{display:inline-block;width:10px;height:10px;margin:0 5px 0 12px;border-radius:3px;background:#168978}
+        .legend span:first-child{margin-left:0}.legend span.lost{background:#d7ae56}
+        .note{background:#e9f6f1;border-left:4px solid #14927b;padding:13px 16px;border-radius:9px;color:#23564c;font-size:.88rem;margin:15px 0 0}
+        .formulas{padding:22px 25px;margin-top:18px}
+        .formulas details summary{cursor:pointer;font-weight:820;color:#135d67}
+        .formulas .math{padding:12px 15px;background:#f4f8f8;border-radius:10px;color:#234d59;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.87rem;margin:11px 0;overflow-wrap:anywhere}
+        .formulas p{font-size:.9rem;color:#516e75}
+        .formulas ol{padding-left:20px}
+        .source-list a{color:#086c79;overflow-wrap:anywhere}
+        .warning{border-radius:12px;border:1px solid #e3cfa2;border-left:4px solid #c99635;background:#fffaec;padding:16px 19px;margin-top:18px;color:#614d2a;font-size:.9rem}
+        .footer{font-size:.84rem;color:#687e84;margin:20px 0}
+        @media(max-width:780px){.layout{grid-template-columns:1fr}.presets{grid-template-columns:1fr 1fr}.settings,.results{padding:19px}.wrap{padding:10px 11px 43px}.hero{border-radius:18px;padding:28px 22px}}
+        @media(max-width:420px){.presets{grid-template-columns:1fr}.preset{min-height:auto}.input-pair{grid-template-columns:minmax(0,1fr) 92px}.metric-grid{gap:7px}.metric{padding:13px 9px}.metric .label{min-height:48px}}
+        @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+    </style>
+</head>
+<body>
+<main class="wrap" id="simulator36">
+    <header class="hero">
+        <p class="eyebrow">Hematologia regenerativa · Modelo quantitativo</p>
+        <h1>Simulação do rendimento plaquetário em PRP</h1>
+        <p>Ajuste quatro parâmetros e observe como o número de plaquetas recuperadas, a concentração do preparado e o fator de enriquecimento se relacionam. Os números representam um modelo matemático educacional.</p>
+        <div class="chips"><span>4 parâmetros ajustáveis</span><span>Cálculos instantâneos</span><span>Sem nota</span></div>
+    </header>
+    <section class="scenarios panel" aria-labelledby="scenarios-heading">
+        <h2 class="section-title" id="scenarios-heading">Explore cenários didáticos</h2>
+        <p class="muted">Os valores são hipotéticos. Compare especialmente o mesmo número de plaquetas em volumes finais diferentes.</p>
+        <div class="presets" id="presets" role="group" aria-label="Cenários de simulação">
+            <button type="button" class="preset" data-preset="base" aria-pressed="true"><strong>1. Referência</strong><small>Valores iniciais do exercício</small></button>
+            <button type="button" class="preset" data-preset="volume" aria-pressed="false"><strong>2. Menor volume</strong><small>Mesmo total de plaquetas recuperadas</small></button>
+            <button type="button" class="preset" data-preset="loss" aria-pressed="false"><strong>3. Menor recuperação</strong><small>Mais perdas, mesmo volume final</small></button>
+            <button type="button" class="preset" data-preset="high" aria-pressed="false"><strong>4. Maior entrada</strong><small>Mais volume e maior contagem inicial</small></button>
+        </div>
+    </section>
+    <div class="layout">
+        <section class="settings panel" aria-labelledby="params-heading">
+            <h2 class="section-title" id="params-heading">Defina os parâmetros</h2>
+            <p class="muted">Arraste o controle ou digite um valor; os dois campos permanecem sincronizados. Não existem parâmetros de centrifugação nem instruções laboratoriais nesta atividade.</p>
+            <div class="fields">
+                <div class="field">
+                    <label for="v-num">Volume sanguíneo processado (mL)</label>
+                    <p class="desc" id="v-desc">Volume total considerado no modelo.</p>
+                    <div class="input-pair"><input type="range" id="v-range" min="10" max="120" step="1" value="40" aria-label="Ajustar volume sanguíneo processado"><input type="number" id="v-num" min="10" max="120" step="1" value="40" inputmode="decimal" aria-describedby="v-desc"></div>
+                    <div class="limits">De 10 a 120 mL</div>
+                </div>
+                <div class="field">
+                    <label for="c-num">Plaquetas no sangue inicial (milhares/µL)</label>
+                    <p class="desc" id="c-desc">Contagem inicial em milhares de plaquetas por microlitro: 240 equivale a 240.000 plaquetas/µL.</p>
+                    <div class="input-pair"><input type="range" id="c-range" min="100" max="450" step="5" value="240" aria-label="Ajustar contagem plaquetária inicial"><input type="number" id="c-num" min="100" max="450" step="5" value="240" inputmode="decimal" aria-describedby="c-desc"></div>
+                    <div class="limits">De 100 a 450 milhares/µL</div>
+                </div>
+                <div class="field">
+                    <label for="f-num">Volume final de PRP (mL)</label>
+                    <p class="desc" id="f-desc">Volume do preparado final, sem supor que todo o plasma seja recuperado.</p>
+                    <div class="input-pair"><input type="range" id="f-range" min="1" max="20" step="0.5" value="6" aria-label="Ajustar volume final de PRP"><input type="number" id="f-num" min="1" max="20" step="0.5" value="6" inputmode="decimal" aria-describedby="f-desc"></div>
+                    <div class="limits">De 1 a 20 mL; não deve superar o volume de sangue informado</div>
+                </div>
+                <div class="field">
+                    <label for="r-num">Recuperação de plaquetas (%)</label>
+                    <p class="desc" id="r-desc">Porcentagem das plaquetas iniciais presente no produto final; é um parâmetro, não o resultado de um equipamento real.</p>
+                    <div class="input-pair"><input type="range" id="r-range" min="0" max="100" step="1" value="65" aria-label="Ajustar percentual de recuperação"><input type="number" id="r-num" min="0" max="100" step="1" value="65" inputmode="decimal" aria-describedby="r-desc"></div>
+                    <div class="limits">De 0% a 100%; não representa garantia de desempenho</div>
+                </div>
+            </div>
+            <p id="error" class="error" role="alert" hidden>Informe valores válidos.</p>
+            <div class="actions"><button type="button" class="btn primary" id="save">Salvar cenário no Moodle</button><button type="button" class="btn" id="restore">Retornar aos valores iniciais</button></div>
+            <p class="status" id="state" role="status" aria-live="polite">Consultando o progresso individual...</p>
+            <button type="button" id="retry" class="btn" hidden>Tentar novamente</button>
+        </section>
+        <section class="results panel" aria-labelledby="results-heading">
+            <h2 class="section-title" id="results-heading">Resultados calculados</h2>
+            <p class="muted">Os indicadores se atualizam ao alterar os parâmetros; não representam medições laboratoriais.</p>
+            <div class="metric-grid">
+                <div class="metric"><span class="label">Plaquetas iniciais</span><output id="initial">9,60</output><span class="unit">bilhões de plaquetas</span></div>
+                <div class="metric"><span class="label">Plaquetas recuperadas</span><output id="recovered">6,24</output><span class="unit">bilhões de plaquetas</span></div>
+                <div class="metric"><span class="label">Concentração final</span><output id="final-count">1.040,0</output><span class="unit">milhares de plaquetas/µL</span></div>
+                <div class="metric"><span class="label">Fator de concentração</span><output id="factor">4,33×</output><span class="unit">vezes a contagem inicial</span></div>
+            </div>
+            <div class="illustration" id="recovery-chart" role="img" aria-label="Representação da porcentagem de plaquetas recuperadas e não recuperadas">
+                <h3>Balanço de plaquetas</h3>
+                <div class="bar-label"><span>Recuperadas</span><strong id="recover-percent">65%</strong></div>
+                <div class="bar-track"><div class="bar-fill recovered" id="recover-bar" style="width:65%"></div><div class="bar-fill lost" id="lost-bar" style="width:35%"></div></div>
+                <p class="legend"><span></span>Recuperadas <span class="lost"></span>Não recuperadas</p>
+                <p id="lost-count" class="muted" style="margin-top:9px">3,36 bilhões não recuperadas neste modelo.</p>
+            </div>
+            <div class="illustration" id="concentration-chart" role="img" aria-label="Comparação entre concentração inicial e final">
+                <h3>Concentração inicial × final</h3>
+                <div class="bar-label"><span>Sangue inicial</span><strong id="base-label">240 mil/µL</strong></div>
+                <div class="bar-track"><div class="bar-fill initial" id="base-bar" style="width:23.1%"></div></div>
+                <div class="bar-label"><span>PRP calculado</span><strong id="final-label">1.040 mil/µL</strong></div>
+                <div class="bar-track"><div class="bar-fill final" id="final-bar" style="width:100%"></div></div>
+            </div>
+            <p class="note" id="interpretation">O fator de concentração não mede a recuperação: uma diminuição de volume pode aumentar a concentração sem aumentar a quantidade total recuperada.</p>
+        </section>
+    </div>
+    <section class="formulas panel">
+        <details>
+            <summary>Ver as fórmulas, as unidades e as hipóteses do modelo</summary>
+            <p>Considere Vₛ em mL de sangue, Cₛ em milhares de plaquetas/µL, Vₚ em mL de PRP e R como porcentagem de recuperação. Como 1 mL = 1.000 µL, cada resultado abaixo respeita as unidades indicadas:</p>
+            <div class="math">N inicial (bilhões) = Vₛ (mL) × Cₛ (mil/µL) ÷ 1.000</div>
+            <div class="math">N recuperada (bilhões) = N inicial × (R ÷ 100)</div>
+            <div class="math">C final (mil/µL) = N recuperada (bilhões) × 1.000 ÷ Vₚ (mL)</div>
+            <div class="math">Fator (×) = C final (mil/µL) ÷ Cₛ (mil/µL)</div>
+            <p>O modelo presume contagem uniforme de plaquetas no volume processado e que o percentual R já incorpora as perdas. Ele não prevê composição de leucócitos ou hemácias, integridade/ativação plaquetária, anticoagulantes, variabilidade de equipamentos, segurança ou eficácia clínica. Em situações extremas, números matematicamente possíveis podem não corresponder a um produto viável.</p>
+            <h3>Para aprofundar</h3>
+            <ol class="source-list">
+                <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8664176/" target="_blank" rel="noopener noreferrer">Recomendações da força-tarefa IADVL para preparação de PRP</a> - definição de rendimento/eficiência baseada em volume e concentração.</li>
+                <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10016811/" target="_blank" rel="noopener noreferrer">PRPCalc2: aplicação para cálculos de preparação de PRP</a> - rendimento, volume e estimativa de dose.</li>
+                <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5117023/" target="_blank" rel="noopener noreferrer">Classificação DEPA para padronização do PRP</a> - diferencia dose, eficiência, pureza e ativação.</li>
+            </ol>
+        </details>
+    </section>
+    <p class="warning"><strong>Aviso educacional:</strong> esta é uma simulação aritmética, não um protocolo de processamento de sangue nem ferramenta para decisões clínicas. Maior concentração ou recuperação não implica, isoladamente, maior benefício, segurança ou qualidade de um PRP. Salvar o cenário registra somente os parâmetros individuais de aprendizagem, sem nota ou conclusão automática.</p>
+    <p class="footer">Atividade interativa · Sem dependências externas de JavaScript. Os parâmetros não são enviados a serviços externos; o salvamento, quando solicitado, utiliza o SDK autenticado do Moodle.</p>
+</main>
+<script>
+    (function(){
+        "use strict";
+        const root=document.getElementById("simulator36");if(!root)return;
+        const presets=[{"id":"base","name":"Referência","v":40,"c":240,"f":6,"r":65},{"id":"volume","name":"Mesmo total, menor volume","v":40,"c":240,"f":3,"r":65},{"id":"loss","name":"Menor recuperação","v":40,"c":240,"f":6,"r":40},{"id":"high","name":"Maior entrada","v":60,"c":300,"f":8,"r":70}];
+        const bounds={v:{min:10,max:120},c:{min:100,max:450},f:{min:1,max:20},r:{min:0,max:100}};
+        const keys=["v","c","f","r"];
+        const $=id=>root.querySelector("#"+id);
+        const sdk=window.MoodleMCP&&window.MoodleMCP.progress;
+        const format=(n,d=2)=>new Intl.NumberFormat("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d}).format(n);
+        const safeObject=x=>x&&typeof x==="object"&&!Array.isArray(x)?x:{};
+        let snapshot=null,busy=false,pending=null,chosen="base";
+        function get(){const out={};keys.forEach(k=>{const raw=$(k+"-num").value;out[k]=raw.trim()===""?NaN:Number(raw);});return out;}
+        function validValues(x){return keys.every(k=>Number.isFinite(x[k])&&x[k]>=bounds[k].min&&x[k]<=bounds[k].max)&&x.f<=x.v;}
+        function calc(x){const initial=x.v*x.c/1000;const recovered=initial*x.r/100;const finalConcentration=recovered*1000/x.f;return {initial:initial,recovered:recovered,lost:initial-recovered,finalConcentration:finalConcentration,factor:finalConcentration/x.c};}
+        function setState(msg,type){const el=$("state");el.textContent=msg;el.className="status"+(type?" "+type:"");}
+        function hideRetry(){$("retry").hidden=true;}
+        function presetUI(){root.querySelectorAll("[data-preset]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.preset===chosen)));}
+        function resetFields(values){keys.forEach(k=>{$(k+"-num").value=String(values[k]);$(k+"-range").value=String(values[k]);});}
+        function render(){
+            const x=get();const ok=validValues(x);
+            keys.forEach(k=>$(k+"-num").setAttribute("aria-invalid",String(!Number.isFinite(x[k])||x[k]<bounds[k].min||x[k]>bounds[k].max||(k==="f"&&Number.isFinite(x.v)&&x.f>x.v))));
+            $("error").hidden=ok;
+            $("error").textContent=ok?"":(!keys.every(k=>Number.isFinite(x[k])&&x[k]>=bounds[k].min&&x[k]<=bounds[k].max)?"Confira os limites de todos os campos e preencha os valores numéricos.":"O volume final de PRP não pode exceder o volume sanguíneo processado neste modelo.");
+            $("save").disabled=!ok||busy||!snapshot;
+            $("restore").disabled=busy;
+            root.querySelectorAll("[data-preset]").forEach(b=>b.disabled=busy);
+            keys.forEach(k=>$(k+"-range").disabled=busy);
+            presetUI();
+            if(!ok){["initial","recovered","final-count","factor","lost-count","base-label","final-label","recover-percent"].forEach(id=>$(id).textContent="-");["recover-bar","lost-bar","base-bar","final-bar"].forEach(id=>$(id).style.width="0%");$("interpretation").textContent="Corrija os campos para ver resultados coerentes.";return;}
+            const y=calc(x);
+            $("initial").textContent=format(y.initial);
+            $("recovered").textContent=format(y.recovered);
+            $("final-count").textContent=format(y.finalConcentration,1);
+            $("factor").textContent=format(y.factor)+"×";
+            $("lost-count").textContent=format(y.lost)+" bilhões de plaquetas não recuperadas neste modelo.";
+            $("recover-percent").textContent=format(x.r,0)+"%";
+            $("recover-bar").style.width=x.r+"%";
+            $("lost-bar").style.width=(100-x.r)+"%";
+            const max=Math.max(x.c,y.finalConcentration,1);
+            $("base-bar").style.width=(x.c/max*100)+"%";
+            $("final-bar").style.width=(y.finalConcentration/max*100)+"%";
+            $("base-label").textContent=format(x.c,0)+" mil/µL";
+            $("final-label").textContent=format(y.finalConcentration,1)+" mil/µL";
+            $("recovery-chart").setAttribute("aria-label",format(x.r,0)+" por cento de recuperação; "+format(100-x.r,0)+" por cento de plaquetas não recuperadas.");
+            $("concentration-chart").setAttribute("aria-label","Contagem inicial "+format(x.c,0)+" milhares por microlitro; contagem final "+format(y.finalConcentration,1)+" milhares por microlitro; fator "+format(y.factor)+" vezes.");
+            $("interpretation").textContent=(y.factor<1?"Neste cenário, a concentração calculada é inferior à inicial; nem toda preparação resultante constitui enriquecimento plaquetário.":y.factor===1?"Neste cenário, a concentração calculada é igual à inicial.":"Um fator maior não significa, por si só, maior recuperação ou benefício clínico.")+" Observe que o número recuperado depende do sangue inicial e do percentual de recuperação, mas não do volume final.";
+        }
+        function changed(){pending=null;hideRetry();chosen="custom";render();setState("Alterações locais não salvas. Os cálculos estão atualizados, mas o Moodle ainda não registrou este cenário.","warn");}
+        keys.forEach(k=>{
+            $(k+"-range").addEventListener("input",()=>{$(k+"-num").value=$(k+"-range").value;changed();});
+            $(k+"-num").addEventListener("input",()=>{const val=Number($(k+"-num").value);if($(k+"-num").value.trim()!==""&&Number.isFinite(val)&&val>=bounds[k].min&&val<=bounds[k].max)$(k+"-range").value=String(val);changed();});
+        });
+        root.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click",()=>{if(busy)return;const p=presets.find(s=>s.id===b.dataset.preset);if(!p)return;chosen=p.id;pending=null;hideRetry();resetFields(p);render();setState("Cenário didático carregado. Ajuste os parâmetros ou salve explicitamente no Moodle.","warn");}));
+        $("restore").addEventListener("click",()=>{if(busy)return;const p=presets[0];chosen=p.id;pending=null;hideRetry();resetFields(p);render();setState("Valores iniciais restaurados localmente; não salvos no Moodle.","warn");});
+        async function saveScenario(model){if(busy||!snapshot||!validValues(model.values))return;busy=true;pending=model;render();hideRetry();setState("Salvando os parâmetros no Moodle...");
+            const current=snapshot;
+            try{
+                const saved=await sdk.save({
+                    version:current.version,
+                    location:"simulador-rendimento-prp",
+                    data:Object.assign({},safeObject(current.data),{simulator36:{saved:true,scenario:model.scenario}}),
+                    userdata:Object.assign({},safeObject(current.userdata),{simulator36:{schema:1,values:model.values,scenario:model.scenario,updatedAt:new Date().toISOString()}})
+                });
+                snapshot=saved;pending=null;busy=false;render();setState("Cenário salvo no progresso individual do Moodle.","ok");
+            }catch(err){busy=false;render();const message=String(err&&err.message||err).toLowerCase();const conflict=message.includes("conflict");setState(conflict?"O progresso foi alterado em outra aba. Recarregue antes de salvar novamente.":"Falha ao salvar. Os valores continuam na tela, mas não foram registrados no Moodle.","err");const retry=$("retry");retry.hidden=false;retry.textContent=conflict?"Recarregar progresso":"Tentar salvar novamente";retry.onclick=conflict?load:()=>{if(pending)saveScenario(pending);};}
+        }
+        $("save").addEventListener("click",()=>{const values=get();if(!validValues(values)||busy||!snapshot)return;saveScenario({values:values,scenario:chosen});});
+        async function load(){
+            if(busy)return;busy=true;render();hideRetry();setState("Consultando o progresso individual no Moodle...");
+            if(!sdk||typeof sdk.load!=="function"||typeof sdk.save!=="function"){snapshot=null;busy=false;render();setState("SDK de progresso indisponível. O simulador funciona, mas nenhum cenário poderá ser salvo fora do Moodle.","err");return;}
+            try{
+                const result=await sdk.load();snapshot=result;
+                const prior=safeObject(safeObject(result.userdata).simulator36);
+                if(prior.schema===1&&validValues(safeObject(prior.values))){resetFields(prior.values);chosen=presets.some(p=>p.id===prior.scenario)?prior.scenario:"custom";setState("Cenário individual salvo anteriormente foi recuperado.","ok");}
+                else{chosen="base";setState("Simulador pronto. Os valores iniciais são exemplos; salve um cenário quando desejar.","ok");}
+                busy=false;pending=null;render();
+            }catch(err){snapshot=null;busy=false;render();setState("Não foi possível carregar o armazenamento autenticado. Os cálculos funcionam, mas o salvamento não está disponível.","err");const retry=$("retry");retry.hidden=false;retry.textContent="Conectar ao Moodle novamente";retry.onclick=load;}
+        }
+        render();load();
+    })();
+</script>
+</body>
+</html>
