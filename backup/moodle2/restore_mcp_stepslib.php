@@ -89,6 +89,14 @@ class restore_mcp_activity_structure_step extends restore_activity_structure_ste
             "draftrevision" => (int)$this->get_mappingid("mcp_revision", $this->olddraft, 0),
             "publishedrevision" => (int)$this->get_mappingid("mcp_revision", $this->oldpublished, 0),
         ]);
+        // Content-only backups sometimes lack an explicit activity context mapping.
+        // Both context IDs are known after apply_activity_instance.
+        $oldcontextid = (int)$this->get_task()->get_old_contextid();
+        $newcontextid = (int)$this->get_task()->get_contextid();
+        if ($oldcontextid && $newcontextid &&
+                !$this->get_mapping("context", $oldcontextid)) {
+            $this->set_mapping("context", $oldcontextid, $newcontextid);
+        }
         $this->add_related_files("mod_mcp", "assets", null);
     }
 }
