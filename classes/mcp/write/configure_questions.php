@@ -18,6 +18,7 @@
  * Confirmed MCP configuration of server-side native question selection.
  *
  * @package mod_mcp
+ * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_mcp\mcp\write;
@@ -31,18 +32,38 @@ use moodle_exception;
  * The plugin is discovered by local_mcp through the mod_mcp provider.
  */
 final class configure_questions extends activity_tool {
+    /**
+     * Return the MCP tool name.
+     *
+     * @return string Tool name.
+     */
     public function get_name(): string {
         return "mcp_configure_questions";
     }
 
+    /**
+     * Return the human-readable title.
+     *
+     * @return string Tool title.
+     */
     public function get_title(): string {
         return "MCP activity: configure native question selection";
     }
 
+    /**
+     * Describe the confirmed operation.
+     *
+     * @return string Tool description.
+     */
     public function get_description(): string {
         return "Set all or random-subset selection and optional order shuffle, with a revision fingerprint; never publish.";
     }
 
+    /**
+     * Declare the required settings and optimistic-concurrency fingerprint.
+     *
+     * @return array JSON schema.
+     */
     public function get_input_schema(): array {
         return $this->object_schema([
             "cmid" => ["type" => "integer", "minimum" => 1],
@@ -55,6 +76,9 @@ final class configure_questions extends activity_tool {
 
     /**
      * Apply validation before previews and writes.
+     *
+     * @param array $arguments User-supplied options and fingerprint.
+     * @return array Validated settings.
      */
     private function proposed(array $arguments): array {
         $mcp = $this->activity($arguments);
@@ -76,10 +100,24 @@ final class configure_questions extends activity_tool {
             "expectedhash" => $hash];
     }
 
+    /**
+     * Preview a configuration update without persisting changes.
+     *
+     * @param array $arguments Requested configuration.
+     * @param authenticated_identity $identity Connected Moodle user.
+     * @return array Safe preview without academic records.
+     */
     public function preview(array $arguments, authenticated_identity $identity): array {
         return $this->proposed($arguments) + ["published" => false];
     }
 
+    /**
+     * Persist only the settings after explicit MCP confirmation.
+     *
+     * @param array $arguments Confirmed configuration.
+     * @param authenticated_identity $identity Connected Moodle user.
+     * @return array Stored settings.
+     */
     public function execute(array $arguments, authenticated_identity $identity): array {
         global $DB;
         $this->resolve_context($arguments);

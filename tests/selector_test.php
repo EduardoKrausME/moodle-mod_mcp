@@ -18,6 +18,7 @@
  * Native question subset and ordering tests.
  *
  * @package mod_mcp
+ * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_mcp;
@@ -27,7 +28,18 @@ use mod_mcp\question\selector;
 use mod_mcp\question\configuration;
 use moodle_exception;
 
+/**
+ * Verify server-side random selection without grading in the browser.
+ *
+ * @covers \mod_mcp\question\selector
+ * @covers \mod_mcp\question\configuration
+ */
 final class selector_test extends advanced_testcase {
+    /**
+     * Build a fixed pool of distinct native-like question slot references.
+     *
+     * @return array Test slot records.
+     */
     private function slots(): array {
         return array_map(static fn($i) => (object)["slot" => $i, "questionid" => 100 + $i],
             range(1, 10));

@@ -18,6 +18,7 @@
  * Select server-owned questions for a single attempt.
  *
  * @package mod_mcp
+ * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_mcp\question;
