@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Uma investigação jornalística educativa sobre desinformação: dossiê ficcional, fontes, manchetes, imagens fora de contexto, provas, circulação e compartilhamento responsável.">
+<title>A anatomia de uma notícia falsa | Dossiê 06</title>
+<style>
+:root{--ink:#242a29;--muted:#5c6260;--paper:#f6f3ea;--white:#fffcf4;--cream:#e9dfcc;--rust:#aa4531;--rust2:#783326;--yellow:#efd68c;--line:#c9c6bb;--green:#315e52;--navy:#29373a;--code:"SFMono-Regular",Consolas,monospace;--display:Georgia,"Times New Roman",serif;--body:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper);font-family:var(--body)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:290px;line-height:1.73;background:radial-gradient(ellipse at 83% 4%,#f3e0be 0,transparent 37%),var(--paper)}
+h1,h2,h3,blockquote,figure,p{margin-top:0}
+h1,h2,h3{line-height:1.15}
+h2{font:700 clamp(2rem,4vw,4.05rem)/1.09 var(--display);letter-spacing:-.042em}
+h3{font:700 1.55rem/1.25 var(--display)}
+p{margin-bottom:1.15em}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.51;cursor:default}
+:focus-visible{outline:3px solid #1b6697;outline-offset:3px}
+a{color:#863f2d;text-underline-offset:3px}
+a:hover{color:#303c3b}
+[hidden]{display:none!important}
+.container{width:min(1220px,calc(100% - 46px));margin-inline:auto}
+.skip{position:absolute;top:-100px;left:14px;background:white;padding:11px 17px;color:#152b31;z-index:80}
+.skip:focus{top:12px}
+.kicker{font:800 .77rem/1.4 var(--code);letter-spacing:.11em;text-transform:uppercase}
+.stamp{display:inline-block;border:2px solid currentColor;padding:7px 11px;transform:rotate(-3deg);font:850 .76rem/1.1 var(--code);letter-spacing:.05em;text-transform:uppercase}
+.fiction{background:#f5e1cc;color:#693024;display:inline-flex;gap:8px;align-items:center;border:1px solid #9d5948;padding:8px 11px;font:800 .73rem var(--code);text-transform:uppercase}
+.fiction:before{content:"";height:8px;width:8px;background:#9d4331;border-radius:50%;flex:none}
+.cover{background:#262b29;color:#fff9e9;position:relative;isolation:isolate;overflow:hidden}
+.cover:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,#232b2a 4%,#47514b 72%,#26302d),radial-gradient(circle at 78% 50%,#c79e57,transparent 50%)}
+.cover:after{content:"";position:absolute;inset:0;z-index:-1;opacity:.08;background:repeating-linear-gradient(90deg,transparent 0 31px,#fff 31px 32px)}
+.cover-meta{display:flex;justify-content:space-between;align-items:center;gap:14px;border-bottom:1px solid #d3c7ac77;padding:22px 0}
+.cover-meta .micro{font:700 .76rem var(--code);letter-spacing:.19em}
+.cover-body{display:grid;grid-template-columns:1.02fr .98fr;gap:19px;align-items:center;padding:63px 0 75px;min-height:550px}
+.cover h1{font:700 clamp(3.3rem,6.65vw,6.45rem)/.99 var(--display);letter-spacing:-.071em;max-width:700px;margin:22px 0 29px}
+.cover h1 em{color:#e7d39a;font-weight:400}
+.cover .lead{max-width:550px;font-size:1.12rem;color:#e2e3d6;line-height:1.86}
+.cover .banner{display:flex;flex-wrap:wrap;gap:11px;margin:30px 0 0}
+.cover .banner span{border:1px solid #9ca89b;padding:8px 10px;color:#d9e4d8;font:.74rem var(--code)}
+.cover-figure{margin:0;transform:rotate(2deg);max-width:670px}
+.cover-figure svg{width:100%;height:auto;display:block;filter:drop-shadow(11px 17px 17px #0008)}
+.cover-figure figcaption{font-size:.8rem;color:#d3d5cd;margin-top:9px}
+.cutline{height:12px;background:repeating-linear-gradient(90deg,#a34933 0 22px,#e3c787 22px 33px,#3b5550 33px 51px)}
+.intro{display:grid;grid-template-columns:235px 1fr;gap:46px;padding:90px 0 82px}
+.intro>.side{border-right:1px solid var(--line);padding-right:25px}
+.intro>.side strong{display:block;font:5rem/.88 var(--display);color:#baad94;letter-spacing:-.1em;margin-bottom:19px}
+.intro h2{margin:12px 0 23px}
+.intro p{max-width:810px;color:#514b43;font-size:1.06rem;line-height:1.93}
+.intro .lede{font:1.55rem/1.54 var(--display);color:#2e3731}
+.accent-line{border-left:5px solid var(--rust);padding:16px 21px;background:#eadbc8;color:#493c32;margin-top:25px}
+.section{padding:87px 0;border-top:1px solid var(--line)}
+.section-head{display:grid;grid-template-columns:205px 1fr;gap:40px;margin-bottom:39px}
+.section-head h2{max-width:880px;margin:0 0 18px}
+.section-head p{max-width:770px;color:#574d45;font-size:1.08rem;line-height:1.8;margin:0}
+.section-head .kicker{color:#924532;padding-top:10px}
+.definitions{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.definition{padding:25px;background:#fffaf0;border:1px solid #cec2ae;min-height:305px}
+.definition:before{content:"";display:block;height:5px;background:#a54d37;margin:-25px -25px 24px}
+.definition:nth-child(2):before{background:#325b53}
+.definition:nth-child(3):before{background:#b18b4f}
+.definition .english{font:.8rem var(--code);color:#76594d}
+.definition h3{margin:11px 0 15px}
+.definition p{font-size:.97rem;color:#554e46;margin:0}
+.definitions-foot{max-width:810px;margin-top:30px;font-size:1rem;color:#514b42}
+.case{background:#ede6d8;padding:84px 0 88px;border-top:1px solid #c6b99f}
+.case .kicker{color:#8e3f30}
+.case .section-head{margin-bottom:28px}
+.case-grid{display:grid;grid-template-columns:.99fr 1.01fr;gap:34px;align-items:start}
+.case-story{background:#fffbf2;border:1px solid #c7b6a1;padding:30px;box-shadow:8px 8px 0 #b8a58b6b;transform:rotate(-.6deg)}
+.case-story .spread-caption{font:.77rem var(--code);color:#765e51}
+.case-story h3{font:700 clamp(2.1rem,3vw,3rem)/1.05 var(--display);letter-spacing:-.04em;color:#8c3429;margin:18px 0 16px}
+.case-story .poster{background:#efdfc5;border:1px solid #cbb597;padding:12px;margin:21px 0}
+.case-story svg{width:100%;height:auto;display:block}
+.case-story .poster figcaption{font:.81rem var(--code);color:#735947;margin-top:8px}
+.case-story p{color:#4f483f}
+.case-story .smallnote{font-size:.84rem;line-height:1.6}
+.case-doc{background:#303834;padding:29px;color:#f6f0de}
+.case-doc h3{color:#fff2df}
+.case-doc .badge-doc{display:inline-block;padding:8px 10px;background:#dfcc9b;color:#362e2a;font:750 .75rem var(--code);margin:9px 0 17px}
+.case-doc p{color:#e4e6d9}
+.case-doc .document{background:#fbf6e8;padding:22px 24px;color:#302f28;border:1px solid #d3c4a9}
+.case-doc .document h4{font:750 1rem var(--code);margin:0 0 15px}
+.case-doc .document p{color:#4c4439;font-size:.95rem}
+.case-doc .document .signed{display:block;font:.78rem var(--code);border-top:1px solid #bfa98a;padding-top:12px;color:#655247}
+.case-doc .document .highlight{background:#fae8a5;padding:1px 3px}
+.case-doc .case-warning{font-size:.84rem;margin-top:18px;color:#e0d7c9}
+.headlines{padding:85px 0;background:#f8f5e9}
+.headline-compare{display:grid;grid-template-columns:1fr 1fr;gap:25px}
+.headline-controls{display:grid;gap:10px;align-content:start}
+.headline-btn{display:flex;gap:15px;align-items:center;text-align:left;padding:18px 20px;background:#f5ead7;border:1px solid #baa994;color:#47392e}
+.headline-btn[aria-pressed="true"]{background:#324943;color:#fffaf0;border-color:#324943}
+.headline-btn .n{font:1.7rem var(--display);width:37px;flex:none}
+.headline-btn strong{display:block;font-size:.96rem}
+.headline-btn small{display:block;font-size:.82rem;line-height:1.6;margin-top:4px}
+.newspaper{border-top:9px double #272e2d;border-bottom:5px solid #323935;padding:24px;background:#fffcf2;min-height:385px;position:relative}
+.newspaper:after{content:"";position:absolute;top:6px;right:8px;width:32px;height:32px;border-top:1px solid #d8c7a8;border-right:1px solid #d8c7a8}
+.newspaper .masthead{font:700 1.4rem var(--display);text-align:center;border-bottom:1px solid #bcb3a2;padding-bottom:12px;color:#36372f}
+.newspaper .paper-kicker{font:.75rem var(--code);text-align:center;color:#6f5a4d;margin:16px 0 11px}
+.newspaper h3{font:700 clamp(1.9rem,2.8vw,2.75rem)/1.09 var(--display);margin:12px 0 16px}
+.newspaper .paper-lede{color:#5d5147;line-height:1.76}
+.newspaper .paper-note{border-left:4px solid #a84e35;padding:12px 15px;background:#f0e5d3;color:#4a4036;font-size:.89rem}
+.headline-foot{max-width:830px;margin-top:28px;line-height:1.9;color:#4d453e}
+.evidence-area{background:#2f3b39;color:#f3efe1;padding:85px 0 95px}
+.evidence-area .kicker{color:#e8cf8e}
+.evidence-area h2{color:#fbf7e8}
+.evidence-area .section-head p{color:#d1dfd7}
+.evidence-layout{display:grid;grid-template-columns:1.12fr .88fr;gap:22px}
+.cork{padding:29px 25px;border:10px solid #a17a54;background:repeating-linear-gradient(5deg,#bc9b73 0 20px,#b08b65 20px 22px);box-shadow:inset 0 0 45px #51341c40;display:grid;grid-template-columns:repeat(2,1fr);gap:17px;align-content:start}
+.clue{position:relative;padding:21px 19px 25px;min-height:178px;border:1px solid #c4baa7;background:#fffbef;color:#40342e;text-align:left;box-shadow:4px 7px 0 #4d392a30}
+.clue:nth-child(2n){transform:rotate(1.2deg)}
+.clue:nth-child(3n){transform:rotate(-1deg);background:#f8efdc}
+.clue:before{content:"";position:absolute;top:8px;left:calc(50% - 5px);width:10px;height:10px;border-radius:50%;background:#8e372f;box-shadow:0 2px 0 #532d28}
+.clue[aria-pressed="true"]{outline:3px solid #356457;outline-offset:-3px;box-shadow:4px 7px 0 #d6e9bb6b}
+.clue .e-id{font:750 .72rem var(--code);color:#8e392e}
+.clue strong{display:block;font:700 1.38rem/1.23 var(--display);margin:13px 0 7px}
+.clue small{display:block;font-size:.84rem;line-height:1.55;color:#635246}
+.evidence-panel{padding:30px 27px;background:#f6f0e0;color:#352e28;border:1px solid #decbab}
+.evidence-panel .e-progress{font:750 .75rem var(--code);color:#7c4536}
+.evidence-panel h3{font-size:2rem;margin:12px 0 14px}
+.evidence-panel .e-content{line-height:1.88;color:#514439;min-height:150px}
+.evidence-panel .interpret{border-left:4px solid #54756b;padding:15px 17px;background:#e7e4d4;font-size:.91rem;color:#3a4d43;margin-top:16px}
+.evidence-panel .interpret strong{display:block;margin-bottom:6px}
+.evidence-panel .collection{font:.77rem var(--code);color:#705748;margin:23px 0 0}
+.evidence-panel .progress{height:10px;background:#cbbca5;margin-top:11px;overflow:hidden}
+.evidence-panel .progress span{display:block;height:100%;width:0;background:#5c796a;transition:width .2s}
+.evidence-tip{margin-top:28px;font-size:.89rem;color:#d9ded2;max-width:910px;line-height:1.83}
+.image-context{padding:91px 0;background:#e6e4d7}
+.photo-layout{display:grid;grid-template-columns:1.09fr .91fr;gap:38px;align-items:start}
+.photo-figure{margin:0;padding:15px;background:#fffaf0;border:1px solid #c4b7a2;box-shadow:9px 10px 0 #b2aa9980}
+.photo-view{background:#d9e0db;position:relative;overflow:hidden}
+.photo-view svg{width:100%;height:auto;display:block}
+.photo-view .image-crop{opacity:1;transition:opacity .3s}
+.photo-view .image-full{opacity:0;transition:opacity .3s}
+.photo-view[data-view="original"] .image-crop{opacity:0}
+.photo-view[data-view="original"] .image-full{opacity:1}
+.photo-figure figcaption{font-size:.84rem;color:#665c4e;margin-top:14px;line-height:1.7}
+.photo-side h3{font-size:2.25rem}
+.photo-side p{color:#535249;line-height:1.85}
+.photo-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+.photo-actions button,.action{background:#395f54;color:#fffdf4;border:1px solid #315448;padding:11px 18px;font-weight:750}
+.photo-actions button[aria-pressed="true"]{background:#a14735;border-color:#a14735}
+.photo-actions button:hover,.action:hover{background:#294c41}
+.photo-meta{padding:18px;background:#f7f2e8;border-left:5px solid #a44834;min-height:120px;color:#4c4139}
+.photo-meta strong{display:block;margin-bottom:5px}
+.photo-meta p{margin:0;font-size:.93rem}
+.photo-side .foot{font-size:.84rem;color:#5b554c;margin-top:18px}
+.method{padding:85px 0;background:#fffaf1}
+.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:36px}
+.method-card{border-top:5px solid #46675c;padding:24px 21px 20px;background:#f0e9dc;min-height:290px}
+.method-card:nth-child(2){border-color:#b65e47}
+.method-card:nth-child(3){border-color:#b08a48}
+.method-card:nth-child(4){border-color:#66727b}
+.method-card .num{font:2.8rem var(--display);color:#ab937d}
+.method-card h3{font-size:1.4rem;margin:12px 0}
+.method-card p{font-size:.91rem;color:#514941;line-height:1.73}
+.method-warning{max-width:900px;margin-top:30px;padding:19px 23px;border-left:5px solid #a24a3b;background:#eaddc9;color:#51443d}
+.verdict{background:#ede6d8;padding:87px 0}
+.verdict-layout{display:grid;grid-template-columns:.96fr 1.04fr;gap:27px}
+.claim-list{display:grid;gap:12px;align-content:start}
+.claim-btn{padding:20px;background:#fff9eb;border:2px solid #c3b39a;color:#3c352e;text-align:left}
+.claim-btn[aria-pressed="true"]{border-color:#a74a36;background:#f5dfc8}
+.claim-btn .num{font:.78rem var(--code);color:#91432d}
+.claim-btn strong{display:block;font:700 1.35rem/1.4 var(--display);margin-top:9px}
+.claim-btn small{font-size:.86rem;color:#655243;display:block;margin-top:8px}
+.claim-work{padding:28px;background:#293b39;color:#f4f0e5}
+.claim-work h3{font-size:1.9rem;margin:13px 0}
+.claim-work p{color:#dbe5de;line-height:1.81}
+.claim-work .options{display:grid;gap:10px;margin:22px 0 12px}
+.claim-work .options button{padding:12px 14px;text-align:left;border:1px solid #8fa89c;background:#345049;color:#fff9ec}
+.claim-work .options button[aria-pressed="true"]{background:#eee1be;color:#29342d;border-color:#eee1be;font-weight:800}
+.claim-feedback{padding:15px 19px;background:#182f2e;border-left:4px solid #dec88c;color:#f2e8d6;line-height:1.75;min-height:97px;margin-top:16px}
+.claim-counter{font:.8rem var(--code);color:#e3cb9b}
+.distribution{padding:87px 0;background:#2a3435;color:#f6f4eb}
+.distribution .kicker{color:#e9cf93}
+.distribution h2{color:#fffaf1}
+.distribution .section-head p{color:#d7e0dc}
+.flow-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:37px;align-items:center}
+.flow-figure{margin:0;padding:18px;border:1px solid #627b78;background:#182b2d}
+.flow-figure svg{width:100%;height:auto;display:block}
+.flow-figure .path{stroke-dasharray:9 14;animation:circulate 7s linear infinite}
+.flow-figure.is-paused .path{animation-play-state:paused}
+@keyframes circulate{to{stroke-dashoffset:-115}}
+.flow-figure figcaption{font-size:.81rem;color:#d2dfd7;margin-top:14px}
+.flow-aside p{color:#dfdfd6;line-height:1.85}
+.flow-aside .action{background:#9a4433;border-color:#9a4433}
+.flow-aside .action:hover{background:#773527}
+.choice-grid{display:grid;gap:9px;margin:20px 0}
+.choice-grid button{padding:13px 15px;text-align:left;background:#344746;color:#f1f2e9;border:1px solid #8fa59f}
+.choice-grid button[aria-pressed="true"]{background:#e8d8ac;color:#2e3430;border-color:#e8d8ac;font-weight:760}
+.choice-explained{border-left:4px solid #e4c18a;padding:15px 18px;background:#354746;min-height:110px;color:#f7efdc}
+.movement{margin-top:21px;padding:9px 13px;border:1px solid #a9beb3;background:transparent;color:#f4f5ed}
+.movement:hover{background:#4b645c}
+.propagation{padding:84px 0;background:#f6f1e7}
+.propagation-grid{display:grid;grid-template-columns:1fr 1fr;gap:38px}
+.propagation-grid p{color:#4e4942;line-height:1.91}
+.propagation .subsection{margin-top:35px}
+.propagation .subsection h3{font-size:1.75rem}
+.propagation .subsection ul{padding-left:21px;line-height:1.9;color:#4f473e}
+.share-check{padding:85px 0;background:#e0e5dc}
+.share-grid{display:grid;grid-template-columns:1fr .89fr;gap:37px;align-items:start}
+.share-grid h2{max-width:690px}
+.share-grid p{color:#3d514d;line-height:1.84}
+.checklist{border:1px solid #8aa79a;background:#f5f7ef;padding:27px}
+.checklist h3{font-size:1.75rem;margin-bottom:13px}
+.checkline{display:flex;gap:13px;margin:14px 0;align-items:flex-start;padding-bottom:13px;border-bottom:1px solid #c1d0c3;cursor:pointer}
+.checkline input{flex:none;margin-top:7px;accent-color:#2b665b;width:19px;height:19px}
+.checkline span{font-size:.94rem;line-height:1.65}
+.checkline strong{display:block}
+.check-result{margin-top:19px;padding:16px 18px;background:#dbe8d9;border-left:4px solid #336e61;min-height:93px;color:#254f45}
+.checklist button{margin-top:15px}
+.review{background:#f7f5ed;padding:87px 0}
+.review-grid{display:grid;grid-template-columns:.68fr 1.32fr;gap:55px}
+.question{border:0;margin:0 0 24px;padding:0 0 24px;border-bottom:1px solid #c6c6bb}
+.question legend{font-weight:800;line-height:1.58;margin-bottom:15px;padding:0;width:100%}
+.question label{display:flex;gap:11px;margin:9px 0;padding:11px 14px;background:#fffdf5;border:1px solid #cbc7b7;cursor:pointer}
+.question label:has(input:checked){background:#e8ece1;border-color:#538174}
+.question input{flex:none;margin-top:6px;accent-color:#347161}
+.question-feedback{font-size:.9rem;color:#3e5f55;min-height:1.4em;margin:11px 0 0}
+.review-actions{display:flex;flex-wrap:wrap;gap:11px}
+.review-actions button{padding:12px 17px;border:1px solid #4b6f61;background:#355e52;color:#fff;font-weight:800}
+.review-actions button:hover{background:#244c41}
+.review-actions button.alt{background:transparent;color:#345a51}
+.review-result{font:1.4rem/1.45 var(--display);margin-top:20px}
+.ending{padding:60px 0 66px;background:#344540;color:#f8f8ed}
+.ending h2{color:#f9f8eb;max-width:970px}
+.ending p{color:#d8e8d9;max-width:810px;font-size:1.07rem;line-height:1.86}
+.sources{padding:48px 0 80px;color:#524f47}
+.sources h2{font-size:1.5rem}
+.sources p{font-size:.9rem;line-height:1.81}
+.sources a{overflow-wrap:anywhere}
+@media(max-width:990px){.cover-body,.intro,.section-head,.case-grid,.headline-compare,.evidence-layout,.photo-layout,.verdict-layout,.flow-layout,.propagation-grid,.share-grid,.review-grid{grid-template-columns:1fr}.cover-body{padding:49px 0}.cover-figure{max-width:780px}.intro{gap:12px}.intro>.side{border-right:0}.intro>.side strong{font-size:3.7rem}.section-head{gap:11px}.method-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:660px){.container{width:calc(100% - 28px)}.cover-meta{font-size:.66rem;flex-wrap:wrap}.cover h1{font-size:clamp(3.2rem,11.8vw,5rem)}.cover-body{padding:42px 0}.intro,.section,.headlines,.evidence-area,.image-context,.method,.verdict,.distribution,.propagation,.share-check,.review{padding:58px 0}.definitions,.method-grid{grid-template-columns:1fr}.definition{min-height:0}.case-doc,.case-story,.evidence-panel,.claim-work{padding:21px}.cork{gap:10px;padding:18px 14px;border-width:7px}.clue{padding:19px 12px;min-height:188px}.clue strong{font-size:1.15rem}.flow-figure{padding:8px}.headline-btn{padding:14px}.newspaper{min-height:0}.cover-figure{transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.flow-figure .path{stroke-dasharray:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para a investigação</a>
+<main id="conteudo">
+<section class="cover" aria-labelledby="title">
+ <div class="container">
+  <div class="cover-meta"><span class="micro">DOSSIÊ Nº 06 / LABORATÓRIO DE VERIFICAÇÃO</span><span class="stamp">Material educativo / fictício</span></div>
+  <div class="cover-body">
+   <div>
+    <span class="kicker" style="color:#efd795">Jornalismo • evidências • contexto</span>
+    <h1 id="title">A anatomia de uma <em>notícia falsa.</em></h1>
+    <p class="lead">Uma manchete que parece urgente, uma imagem que parece provar tudo e uma fonte que ninguém consegue identificar. Antes de acreditar — ou desmentir por impulso — abra o dossiê e reconstrua o caminho das evidências.</p>
+    <div class="banner"><span>Autoria</span><span>Datas e contexto</span><span>Fontes</span><span>Imagens</span><span>Correções</span></div>
+   </div>
+   <figure class="cover-figure">
+    <svg viewBox="0 0 680 610" role="img" aria-labelledby="hero-svg-title hero-svg-desc">
+     <title id="hero-svg-title">Mesa de investigação jornalística, com documentos e lupa</title>
+     <desc id="hero-svg-desc">Colagem vetorial autoral de papéis sobrepostos, fotografia ilustrativa, anotações em vermelho, carimbo de conteúdo fictício e lupa examinando uma notícia. Nenhum documento reproduz caso real.</desc>
+     <rect x="22" y="29" width="623" height="554" rx="11" fill="#c8b99f" stroke="#9e8d75" stroke-width="11"/>
+     <path d="M37 45 H631 V565 H37Z" fill="#ebe3d3" stroke="#b6a78e" stroke-width="3"/>
+     <g transform="translate(71 66) rotate(-7 190 220)">
+      <rect x="0" y="0" width="365" height="440" fill="#fdfbf1" stroke="#8b8171" stroke-width="3"/>
+      <text x="25" y="38" font-size="20" font-family="Georgia,serif" fill="#373b36" font-weight="700">ARQUIVO DE REDAÇÃO</text>
+      <path d="M25 49 H336" stroke="#363b37" stroke-width="4"/>
+      <text x="25" y="94" font-size="29" font-family="Georgia,serif" fill="#743a2c" font-weight="700">QUE DIZ A</text>
+      <text x="25" y="129" font-size="29" font-family="Georgia,serif" fill="#743a2c" font-weight="700">EVIDÊNCIA?</text>
+      <g fill="#91958e"><rect x="25" y="162" width="311" height="7"/><rect x="25" y="184" width="288" height="7"/><rect x="25" y="206" width="303" height="7"/><rect x="25" y="228" width="256" height="7"/><rect x="25" y="269" width="310" height="7"/><rect x="25" y="291" width="292" height="7"/><rect x="25" y="313" width="311" height="7"/></g>
+      <path d="M16 259 H338 M17 341 H338" stroke="#ac523c" stroke-width="6" opacity=".83"/>
+      <rect x="26" y="363" width="190" height="38" fill="#e9d4bc"/><text x="38" y="389" fill="#833c2d" font-size="21" font-family="monospace">CHECK SOURCE</text>
+     </g>
+     <g transform="translate(346 141) rotate(10 138 171)">
+      <rect x="0" y="0" width="279" height="352" fill="#fff8ea" stroke="#8a7660" stroke-width="5"/>
+      <rect x="19" y="19" width="241" height="191" fill="#a6b9af"/>
+      <rect x="19" y="156" width="241" height="54" fill="#788a82"/>
+      <path d="M43 158 Q88 129 147 152 T253 148 V210 H20 V157Z" fill="#61796f"/>
+      <path d="M49 123 H227" stroke="#50655d" stroke-width="6"/>
+      <rect x="66" y="74" width="128" height="90" fill="#d2b28d" stroke="#826751" stroke-width="5"/>
+      <path d="M73 86 H187 M73 106 H187 M73 127 H187" stroke="#8c6f54" stroke-width="6"/>
+      <text x="28" y="241" font-family="monospace" font-size="16" fill="#554a40">DATA? LOCAL? AUTOR?</text>
+      <path d="M26 257 H253" stroke="#b74836" stroke-width="6"/>
+      <text x="34" y="296" font-family="Georgia,serif" font-size="26" fill="#9a4131" font-weight="700">NÃO CONCLUA</text>
+      <text x="58" y="325" font-family="Georgia,serif" font-size="24" fill="#9a4131">ANTES DE CHECAR</text>
+     </g>
+     <g fill="none" stroke="#5c6158" stroke-width="15">
+      <circle cx="432" cy="195" r="75" fill="#f2e4bc77"/><path d="M483 244 L572 327" stroke-width="25" stroke-linecap="round"/>
+     </g>
+     <g fill="#a44d38" font-family="monospace" font-size="22" font-weight="800" transform="translate(72 510) rotate(-6)"><text x="0" y="0">TUDO FICTÍCIO</text></g>
+    </svg>
+    <figcaption>Ilustração SVG original: documentos, fotografias e anotações do laboratório são todos inventados.</figcaption>
+   </figure>
+  </div>
+ </div>
+ <div class="cutline" aria-hidden="true"></div>
+</section>
+
+<section class="intro container" aria-labelledby="intro">
+ <div class="side"><strong>01</strong><span class="kicker">Antes do clique</span></div>
+ <div>
+  <h2 id="intro">Nem toda informação errada nasce de uma mentira deliberada.</h2>
+  <p class="lede">O termo “notícia falsa” junta fenômenos que precisam ser separados para que a investigação faça sentido.</p>
+  <p>Uma afirmação pode estar simplesmente incorreta, pode ter sido fabricada para enganar ou pode conter um fato real apresentado com contexto distorcido. Também existe o caso de uma notícia verdadeira prejudicar alguém ao divulgar material privado sem justificativa de interesse público. Um bom processo de verificação examina <strong>o conteúdo, o contexto, a origem e a evidência</strong>, sem concluir automaticamente que toda pessoa que compartilhou algo sabia que era enganoso.</p>
+  <p>Outro cuidado: nem toda informação que contraria nossa opinião é falsa, e uma publicação emocional não é necessariamente incorreta. Sinais de alerta ajudam a decidir o que investigar, mas não substituem documentos, métodos verificáveis e confirmação independente.</p>
+  <div class="accent-line"><strong>Regra da investigação:</strong> a ausência de prova para uma alegação não demonstra, por si só, sua falsidade; em muitos casos a classificação responsável será “não há informação suficiente”.</div>
+ </div>
+</section>
+
+<section class="section container" aria-labelledby="types">
+ <div class="section-head"><span class="kicker">02 / Vocabulário crítico</span><div><h2 id="types">Três problemas diferentes de informação.</h2><p>Os termos abaixo seguem distinções comuns na literatura de desordem informacional, mas a intenção de enganar geralmente é difícil de demonstrar sem dados adicionais.</p></div></div>
+ <div class="definitions">
+  <article class="definition"><span class="english">MISINFORMATION</span><h3>Informação incorreta</h3><p>Conteúdo falso ou inexato divulgado sem evidência de intenção deliberada de enganar. Exemplo <strong>fictício</strong>: alguém entende errado a mudança de uma data e repassa a versão equivocada acreditando que ela é verdadeira.</p></article>
+  <article class="definition"><span class="english">DISINFORMATION</span><h3>Desinformação deliberada</h3><p>Conteúdo falso ou enganoso produzido ou distribuído intencionalmente para induzir erro. A intenção precisa de suporte factual; não é legítimo atribuí-la só porque a publicação está incorreta.</p></article>
+  <article class="definition"><span class="english">MALINFORMATION</span><h3>Uso danoso de informação verdadeira</h3><p>Informação autêntica usada para causar dano, como expor detalhes privados fora de interesse público justificável. Nem toda crítica verdadeira é um exemplo dessa categoria.</p></article>
+ </div>
+ <p class="definitions-foot">Manipulação pode surgir por fabricação total, edição de imagem, montagem, falsa atribuição, reaproveitamento de conteúdo antigo ou corte de contexto. Para descrever um caso, é melhor identificar <em>o mecanismo demonstrável</em> do que distribuir rótulos antes de investigar.</p>
+</section>
+
+<section class="case" aria-labelledby="caseTitle">
+ <div class="container">
+  <div class="section-head"><span class="kicker">03 / Caso central · FICÇÃO</span><div><h2 id="caseTitle">O boato da biblioteca que “acabou”.</h2><p>A cidade de Vila Prismática, a Biblioteca Viajante, os comunicados e as postagens são inteiramente inventados para este exercício. Não se referem a prefeitura, serviço ou acontecimento real.</p></div></div>
+  <div class="case-grid">
+   <article class="case-story" aria-label="Postagem fictícia a ser investigada">
+    <span class="fiction">Captura simulada de postagem</span>
+    <div class="spread-caption" style="margin-top:18px">REDE FICTÍCIA / PERFIL NÃO IDENTIFICADO / DIA 13</div>
+    <h3>“ACABARAM COM A BIBLIOTECA VIAJANTE! Nenhum bairro terá mais livros!”</h3>
+    <p>O texto afirma que o projeto foi encerrado permanentemente e usa uma imagem de um veículo parado como suposta comprovação. Não apresenta o documento original, o nome da pessoa responsável ou uma data de verificação.</p>
+    <figure class="poster">
+     <svg viewBox="0 0 580 290" role="img" aria-labelledby="postimg-title postimg-desc">
+      <title id="postimg-title">Imagem fictícia de uma biblioteca itinerante estacionada</title>
+      <desc id="postimg-desc">Desenho vetorial de um veículo bege e vermelho parado diante de uma oficina com a porta fechada. O recorte da postagem oculta uma faixa que identifica manutenção programada.</desc>
+      <rect width="580" height="290" fill="#b5c6c0"/>
+      <rect y="193" width="580" height="97" fill="#91958a"/>
+      <rect x="39" y="23" width="508" height="181" fill="#dac2a5" stroke="#94745e" stroke-width="6"/>
+      <path d="M42 104 H545" stroke="#a68468" stroke-width="5"/>
+      <rect x="63" y="113" width="461" height="86" fill="#718b86"/>
+      <g transform="translate(70 133)">
+       <rect x="4" y="16" width="407" height="111" rx="15" fill="#e7d1b4" stroke="#8d4b3a" stroke-width="5"/>
+       <path d="M8 75 H409" stroke="#a14b37" stroke-width="18"/>
+       <rect x="264" y="28" width="108" height="43" fill="#6d9c9d"/>
+       <rect x="16" y="32" width="107" height="44" fill="#739b9a"/>
+       <rect x="155" y="30" width="91" height="69" fill="#e4bf8f" stroke="#b16d47" stroke-width="4"/>
+       <g fill="#292f30"><circle cx="86" cy="132" r="26"/><circle cx="334" cy="132" r="26"/></g>
+       <g fill="#b8b0a1"><circle cx="86" cy="132" r="10"/><circle cx="334" cy="132" r="10"/></g>
+       <text x="130" y="113" font-family="Georgia,serif" font-size="20" fill="#5d3731">Livros para todos</text>
+      </g>
+      <rect x="0" y="0" width="580" height="290" fill="none" stroke="#f6efdf" stroke-width="13"/>
+     </svg>
+     <figcaption>Figura 2. Imagem ilustrativa original e fictícia. A fotografia não existe; a arte simula o tipo de recorte capaz de esconder contexto.</figcaption>
+    </figure>
+    <p class="smallnote"><strong>O problema da postagem:</strong> uma imagem isolada mostra um veículo estacionado, mas não prova que uma política pública foi cancelada para sempre.</p>
+   </article>
+   <div class="case-doc">
+    <span class="kicker" style="color:#ecd49f">Arquivo de referência · FICÇÃO</span>
+    <h3>Uma peça do quebra-cabeça</h3>
+    <p>Durante a checagem, encontramos o aviso abaixo, criado somente para a atividade. Compare a frase da postagem com o que o documento <em>realmente diz dentro do caso simulado</em>.</p>
+    <div class="document">
+      <h4>VILA PRISMÁTICA · AVISO DEMONSTRATIVO Nº 04</h4>
+      <p>O atendimento da Biblioteca Viajante previsto para o <strong>Bairro Cedro no dia 14</strong> será <span class="highlight">transferido para o dia 17</span> por revisão do veículo.</p>
+      <p>As visitas dos demais bairros <strong>seguem na agenda</strong>. A atualização do calendário será disponibilizada no quadro de horários do projeto.</p>
+      <span class="signed">DOCUMENTO INVENTADO PARA AULA · DIA 12 · SEM ASSINATURA REAL</span>
+    </div>
+    <p class="case-warning">Não se trata de fonte oficial verdadeira. A análise funciona porque o exercício fornece peças coerentes de um universo fictício fechado; no mundo real seria necessário verificar autenticidade e independência das fontes.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="headlines" aria-labelledby="headlinesTitle">
+ <div class="container">
+  <div class="section-head"><span class="kicker">04 / Laboratório de manchetes</span><div><h2 id="headlinesTitle">A mesma ocorrência, três enquadramentos.</h2><p>Escolha uma manchete e observe como ela altera a impressão inicial do leitor. O caso e todas as versões continuam fictícios.</p></div></div>
+  <div class="headline-compare">
+   <div class="headline-controls" role="group" aria-label="Compare maneiras de apresentar a mudança na biblioteca">
+    <button class="headline-btn" type="button" data-headline="alarm" aria-pressed="true"><span class="n">A</span><span><strong>Apelo à urgência e ao medo</strong><small>Transforma um adiamento local em encerramento de todo o serviço.</small></span></button>
+    <button class="headline-btn" type="button" data-headline="precise" aria-pressed="false"><span class="n">B</span><span><strong>Descrição precisa do ocorrido</strong><small>Mostra local, natureza e nova data do atendimento.</small></span></button>
+    <button class="headline-btn" type="button" data-headline="question" aria-pressed="false"><span class="n">C</span><span><strong>Pergunta que insinua sem provar</strong><small>Usa interrogação para induzir conclusão sem evidência suficiente.</small></span></button>
+   </div>
+   <div class="newspaper" aria-live="polite" aria-atomic="true">
+     <div class="masthead">O OBSERVADOR · EDIÇÃO FICTÍCIA</div>
+     <div class="paper-kicker" id="headlineType">EXEMPLO DE ENQUADRAMENTO ENGANOSO</div>
+     <h3 id="headlineText">“Biblioteca Viajante acabou! Bairros perdem acesso aos livros.”</h3>
+     <p class="paper-lede" id="headlineLead">A frase extrapola um comunicado local e apresenta o encerramento como fato, apesar de o documento fornecido tratar apenas de uma alteração pontual de data.</p>
+     <div class="paper-note" id="headlineCritique">Sinal: generalização indevida, certeza não sustentada e apelo emocional. Chamar atenção não prova intenção individual de enganar.</div>
+   </div>
+  </div>
+  <p class="headline-foot">Uma manchete responsável precisa corresponder à evidência disponível. Até uma pergunta pode induzir o leitor ao erro quando sugere como plausível algo sem fundamento. O jornalismo pode ser claro, impactante e crítico sem aumentar o alcance factual de um documento.</p>
+ </div>
+</section>
+
+<section class="evidence-area" aria-labelledby="dossierTitle">
+ <div class="container">
+  <div class="section-head"><span class="kicker">05 / Quadro de provas</span><div><h2 id="dossierTitle">Abra cada documento antes de concluir.</h2><p>São seis pistas construídas para o exercício. Algumas ajudam a verificar a alegação, outras apenas mostram o que não é possível concluir. A contagem acompanha documentos examinados, não notas.</p></div></div>
+  <div class="evidence-layout">
+   <div class="cork" role="group" aria-label="Documentos fictícios investigáveis">
+    <button type="button" class="clue" data-clue="post" aria-pressed="false"><span class="e-id">P-01 / CIRCULAÇÃO</span><strong>Postagem viral</strong><small>Qual é a alegação exata? Há autoria e fonte originais?</small></button>
+    <button type="button" class="clue" data-clue="notice" aria-pressed="false"><span class="e-id">P-02 / DOCUMENTO</span><strong>Aviso nº 04</strong><small>O texto fala em encerramento ou mudança de data?</small></button>
+    <button type="button" class="clue" data-clue="schedule" aria-pressed="false"><span class="e-id">P-03 / AGENDA</span><strong>Calendário do projeto</strong><small>O que permanece previsto para outros bairros?</small></button>
+    <button type="button" class="clue" data-clue="photo" aria-pressed="false"><span class="e-id">P-04 / IMAGEM</span><strong>Veículo estacionado</strong><small>Qual era o contexto anterior do mesmo desenho?</small></button>
+    <button type="button" class="clue" data-clue="audio" aria-pressed="false"><span class="e-id">P-05 / BOATO</span><strong>Áudio anônimo</strong><small>Relato sem responsável pode comprovar extinção?</small></button>
+    <button type="button" class="clue" data-clue="correction" aria-pressed="false"><span class="e-id">P-06 / RETIFICAÇÃO</span><strong>Nota de esclarecimento</strong><small>Que tipo de correção é possível fundamentar?</small></button>
+   </div>
+   <div class="evidence-panel">
+    <span class="e-progress" id="clueCounter">0 de 6 documentos examinados</span>
+    <h3 id="clueTitle">Selecione a primeira pista</h3>
+    <div class="e-content" id="clueBody" aria-live="polite" aria-atomic="true">Leia os documentos na ordem que preferir. Para cada pista, pergunte: de onde vem, o que demonstra, como poderia ser confirmada e qual inferência ainda seria excessiva?</div>
+    <div class="interpret"><strong>Conclusão permitida nesta etapa</strong><span id="clueReason">Nenhuma prova foi examinada neste painel. Evite tirar conclusões antes de confrontar fontes diferentes.</span></div>
+    <p class="collection" id="clueCollection">PROGRESSO DA LEITURA · 0%</p>
+    <div class="progress" role="progressbar" aria-label="Documentos fictícios examinados" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0" id="clueProgress"><span id="clueBar"></span></div>
+    <button type="button" class="action" style="margin-top:23px" id="resetClues">Reiniciar investigação</button>
+   </div>
+  </div>
+  <p class="evidence-tip">Uma fonte primária pode conter erros; uma publicação institucional não é automaticamente infalível. No mundo real, verifique a autenticidade dos documentos, procure versões arquivadas, compare fontes independentes e registre correções. Este dossiê é um exercício fechado com evidências inventadas e previamente definidas.</p>
+ </div>
+</section>
+
+<section class="image-context" aria-labelledby="imageTitle">
+ <div class="container">
+  <div class="section-head"><span class="kicker">06 / Oficina de imagens</span><div><h2 id="imageTitle">Uma imagem verdadeira também pode sustentar uma legenda enganosa.</h2><p>Nesta simulação, a imagem é um SVG desenhado para a aula. Compare o recorte publicado com o enquadramento completo e observe o que mudou na interpretação.</p></div></div>
+  <div class="photo-layout">
+   <figure class="photo-figure">
+    <div class="photo-view" id="photoView" data-view="crop">
+     <svg viewBox="0 0 650 450" role="img" aria-labelledby="photo-svg-title photo-svg-desc">
+      <title id="photo-svg-title">Comparação do recorte de uma imagem com sua versão completa</title>
+      <desc id="photo-svg-desc">Uma oficina fictícia abriga um veículo de biblioteca itinerante. No recorte, o aviso de revisão programada está escondido. Ao selecionar versão completa, aparece a placa de manutenção e o contexto ilustrado.</desc>
+      <rect width="650" height="450" fill="#bccac3"/>
+      <rect y="300" width="650" height="150" fill="#a8a89d"/>
+      <rect x="52" y="48" width="550" height="257" fill="#e4d3b6" stroke="#9e8669" stroke-width="9"/>
+      <rect x="87" y="103" width="472" height="188" fill="#6f8985"/>
+      <g class="image-full">
+       <rect x="172" y="61" width="309" height="65" rx="5" fill="#f4e4b9" stroke="#a15840" stroke-width="5"/>
+       <text x="327" y="89" font-family="monospace" font-size="21" text-anchor="middle" fill="#753c31" font-weight="800">REVISÃO PROGRAMADA</text>
+       <text x="327" y="114" font-family="monospace" font-size="14" text-anchor="middle" fill="#753c31">VEÍCULO DE BIBLIOTECA</text>
+      </g>
+      <g transform="translate(71 178)">
+       <rect x="4" y="18" width="472" height="128" rx="20" fill="#e9d8b9" stroke="#9b4e3d" stroke-width="7"/>
+       <path d="M7 82 H474" stroke="#9e4c3b" stroke-width="22"/>
+       <rect x="35" y="33" width="115" height="53" fill="#79a2a1"/>
+       <rect x="300" y="33" width="122" height="53" fill="#79a2a1"/>
+       <rect x="180" y="35" width="93" height="68" fill="#e9ca9e" stroke="#a37351" stroke-width="5"/>
+       <text x="192" y="121" font-family="Georgia,serif" font-size="21" fill="#654338">Biblioteca Viajante</text>
+       <g fill="#282f31"><circle cx="107" cy="147" r="31"/><circle cx="377" cy="147" r="31"/></g>
+       <g fill="#b6aa9b"><circle cx="107" cy="147" r="13"/><circle cx="377" cy="147" r="13"/></g>
+      </g>
+      <g class="image-full">
+       <g fill="#395a52"><rect x="33" y="336" width="117" height="40"/><rect x="495" y="329" width="132" height="54"/></g>
+       <text x="38" y="363" font-size="15" font-family="monospace" fill="#f7f5e2">OFICINA</text>
+       <text x="510" y="360" font-size="13" font-family="monospace" fill="#e8f3e5">DIA 08 · FICÇÃO</text>
+       <path d="M85 399 H565" stroke="#64786e" stroke-width="7"/>
+      </g>
+      <g class="image-crop">
+       <rect x="0" y="0" width="650" height="156" fill="#e3e3d6e0"/>
+       <text x="325" y="65" text-anchor="middle" font-family="Georgia,serif" font-size="35" font-weight="700" fill="#963f31">“Acabou o serviço?”</text>
+       <text x="325" y="100" text-anchor="middle" font-family="monospace" font-size="17" fill="#79594a">LEGENDA FICTÍCIA / SEM FONTE</text>
+       <rect x="0" y="392" width="650" height="58" fill="#e3e3d6de"/>
+       <text x="325" y="426" text-anchor="middle" font-family="monospace" font-size="18" fill="#734b41">Contexto original omitido</text>
+      </g>
+     </svg>
+    </div>
+    <figcaption>Figura 3. O desenho e ambas as versões são fictícios e produzidos nesta aula. O controle ilustra manipulação por legenda e ocultação de contexto; não busca imagens na internet.</figcaption>
+   </figure>
+   <div class="photo-side">
+    <span class="kicker">Investigação de imagem</span>
+    <h3>O que ficou fora do enquadramento?</h3>
+    <p>Imagens antigas, recortadas ou publicadas com legendas novas podem parecer prova de fatos que elas não mostram. A primeira tarefa é buscar a fonte original, o momento da captura, a localização e outras publicações da mesma imagem.</p>
+    <div class="photo-actions" role="group" aria-label="Escolha versão da imagem">
+     <button type="button" data-view="crop" aria-pressed="true">Recorte compartilhado</button>
+     <button type="button" data-view="original" aria-pressed="false">Ver contexto completo</button>
+    </div>
+    <div class="photo-meta" id="photoMeta" role="status" aria-live="polite" aria-atomic="true"><strong>Versão recortada / FICTÍCIA</strong><p>Uma legenda sugere encerramento, mas a imagem não mostra decisão administrativa nem continuidade do serviço. A ausência da placa de revisão deixa um contexto importante de fora.</p></div>
+    <p class="foot">No mundo real, faça busca reversa para encontrar aparições anteriores, compare enquadramentos e verifique data, lugar e procedência. Metadados podem faltar ou ser alterados; nenhuma ferramenta isolada fornece certeza absoluta.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="method" aria-labelledby="methodTitle">
+ <div class="container">
+  <div class="section-head"><span class="kicker">07 / Método de verificação</span><div><h2 id="methodTitle">Quatro movimentos de uma boa checagem.</h2><p>Além de ler o conteúdo, investigue quem o publicou, procure a evidência original e confirme o contexto em fontes independentes. Uma única publicação não deve ser o juiz exclusivo de sua própria credibilidade.</p></div></div>
+  <div class="method-grid">
+   <article class="method-card"><span class="num">01</span><h3>Identifique a alegação</h3><p>Separe afirmação verificável de opinião, humor, previsão e interpretação. Aqui a frase verificável é “o serviço inteiro foi encerrado permanentemente”. Não troque a frase por uma versão mais fácil de refutar.</p></article>
+   <article class="method-card"><span class="num">02</span><h3>Saia da publicação</h3><p>Investigue lateralmente: busque informações sobre quem publica, histórico de correções, organização, financiamento e cobertura independente. Um logotipo, aparência profissional ou domínio parecido não bastam.</p></article>
+   <article class="method-card"><span class="num">03</span><h3>Encontre o original</h3><p>Verifique documento integral, dados, data, autoria, imagens anteriores e versões arquivadas. Distingua uma fonte que acompanhou o evento de alguém que apenas copiou outra postagem.</p></article>
+   <article class="method-card"><span class="num">04</span><h3>Redija conclusão limitada</h3><p>Diga exatamente o que as evidências mostram, qual parte permanece desconhecida e como corrigir um erro. Se a intenção do autor não puder ser demonstrada, não a invente.</p></article>
+  </div>
+  <div class="method-warning"><strong>Importante:</strong> um verificador também erra. Transparência de método, fontes rastreáveis, imparcialidade na seleção e política de correções são valores centrais de iniciativas profissionais de checagem, não certificados de infalibilidade.</div>
+ </div>
+</section>
+
+<section class="verdict" aria-labelledby="verdictTitle">
+ <div class="container">
+  <div class="section-head"><span class="kicker">08 / Mesa do editor</span><div><h2 id="verdictTitle">Que conclusão cada alegação permite?</h2><p>Não confunda a falsidade de uma afirmação com o estado mental de quem a publicou. Selecione cada frase, escolha uma classificação e compare com as evidências fornecidas pelo dossiê fictício.</p></div></div>
+  <div class="verdict-layout">
+   <div class="claim-list" role="group" aria-label="Selecione uma alegação do caso fictício">
+    <button type="button" class="claim-btn" data-claim="shutdown" aria-pressed="true"><span class="num">AFIRMAÇÃO 01</span><strong>“A biblioteca itinerante foi encerrada para sempre.”</strong><small>Confrontar com o aviso e a agenda fictícios.</small></button>
+    <button type="button" class="claim-btn" data-claim="postpone" aria-pressed="false"><span class="num">AFIRMAÇÃO 02</span><strong>“A visita ao Bairro Cedro foi transferida do dia 14 para 17.”</strong><small>Confrontar com documento primário fictício.</small></button>
+    <button type="button" class="claim-btn" data-claim="intent" aria-pressed="false"><span class="num">AFIRMAÇÃO 03</span><strong>“Quem publicou sabia que a frase estava errada.”</strong><small>Exige evidência sobre intenção, não só sobre conteúdo.</small></button>
+   </div>
+   <div class="claim-work">
+    <span class="kicker" style="color:#ead2a0" id="claimIndex">ALEGAÇÃO 01 / 03</span>
+    <h3 id="claimTitle">Encerramento permanente</h3>
+    <p id="claimPrompt">O comunicado fala em adiamento de uma visita e manutenção da agenda dos outros bairros. Como isso se relaciona à afirmação de encerramento completo?</p>
+    <div class="options" role="group" aria-label="Classifique a alegação selecionada">
+     <button type="button" class="verdict-choice" data-verdict="support" aria-pressed="false">Sustentada pela evidência do exercício</button>
+     <button type="button" class="verdict-choice" data-verdict="contradict" aria-pressed="false">Contradita pela evidência do exercício</button>
+     <button type="button" class="verdict-choice" data-verdict="unknown" aria-pressed="false">Informação insuficiente para concluir</button>
+    </div>
+    <div class="claim-feedback" id="claimFeedback" role="status" aria-live="polite" aria-atomic="true">Escolha uma classificação. O objetivo é justificar a conclusão com evidências, não adivinhar uma intenção.</div>
+    <p class="claim-counter" id="claimCounter">0 de 3 alegações examinadas</p>
+    <button type="button" class="action" id="resetClaims">Recomeçar as classificações</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="distribution" aria-labelledby="spreadTitle">
+ <div class="container">
+  <div class="section-head"><span class="kicker">09 / Circulação e plataformas</span><div><h2 id="spreadTitle">Por que uma mensagem pode circular antes de ser verificada?</h2><p>Interações, recomendações e escolhas de compartilhamento influenciam o alcance. O desenho abaixo é um diagrama lógico original, sem medir nenhuma plataforma ou afirmar que todo algoritmo prioriza desinformação.</p></div></div>
+  <div class="flow-layout">
+   <figure class="flow-figure" id="flowFigure">
+    <svg viewBox="0 0 690 440" role="img" aria-labelledby="flow-svg-title flow-svg-desc">
+     <title id="flow-svg-title">Diagrama conceitual da circulação de uma postagem</title>
+     <desc id="flow-svg-desc">Uma postagem no centro se conecta por setas tracejadas a uma pessoa que compartilha, uma recomendação algorítmica, grupos e leitores finais. As setas em movimento são decorativas e podem ser pausadas.</desc>
+     <rect width="690" height="440" fill="#182b2d"/>
+     <g class="path" fill="none" stroke="#cdbd7d" stroke-width="5" stroke-linecap="round">
+      <path d="M344 220 Q233 145 140 130"/><path d="M347 220 Q453 125 558 111"/>
+      <path d="M344 220 Q252 321 140 355"/><path d="M344 220 Q461 333 561 339"/>
+      <path d="M142 135 Q179 68 305 67"/><path d="M555 115 Q481 48 386 66"/>
+     </g>
+     <g fill="#385a58" stroke="#90b5a8" stroke-width="4">
+      <circle cx="345" cy="220" r="77"/><rect x="28" y="73" width="225" height="93" rx="10"/><rect x="442" y="61" width="227" height="94" rx="10"/>
+      <rect x="23" y="304" width="235" height="93" rx="10"/><rect x="438" y="300" width="230" height="93" rx="10"/>
+     </g>
+     <g text-anchor="middle" fill="#f3e9d2" font-family="Segoe UI,Arial,sans-serif" font-weight="700" font-size="20">
+      <text x="345" y="213">POSTAGEM</text><text x="345" y="241">ORIGINAL</text>
+      <text x="141" y="110">Compartilhamento</text><text x="141" y="138" font-size="17">de uma pessoa</text>
+      <text x="555" y="99">Recomendação</text><text x="555" y="129" font-size="17">da plataforma</text>
+      <text x="141" y="339">Grupos e redes</text><text x="141" y="365" font-size="17">de contatos</text>
+      <text x="552" y="335">Novos leitores</text><text x="552" y="364" font-size="17">e respostas</text>
+     </g>
+    </svg>
+    <figcaption>Figura 4. Rede hipotética em SVG. O desenho representa relações possíveis, não dados empíricos de viralização nem uma fórmula de recomendação.</figcaption>
+   </figure>
+   <div class="flow-aside">
+    <h3 style="font-size:2rem;color:#f1e2c8">Sua decisão também faz parte do percurso.</h3>
+    <p>Modelos de recomendação variam entre plataformas, por produto e ao longo do tempo. Interações, preferências inferidas, redes sociais e características do conteúdo podem influenciar exposição. Uma postagem muito vista não se torna verdadeira por repetição; tampouco é correto supor que cada compartilhamento tenha sido motivado por engano.</p>
+    <p>Na simulação abaixo, você recebeu a manchete fictícia. Escolha uma reação e leia a consequência provável, sem números de alcance inventados.</p>
+    <div class="choice-grid" role="group" aria-label="O que fazer ao receber uma postagem não verificada">
+     <button type="button" data-spread="forward" aria-pressed="false">Repassar imediatamente</button>
+     <button type="button" data-spread="pause" aria-pressed="false">Pausar e não ampliar a postagem</button>
+     <button type="button" data-spread="verify" aria-pressed="true">Verificar primeiro, corrigir depois</button>
+    </div>
+    <div class="choice-explained" id="spreadFeedback" role="status" aria-live="polite" aria-atomic="true">Verificar antes de compartilhar oferece oportunidade de confrontar a mensagem com o aviso e a agenda do cenário. Se alguém já recebeu a alegação, uma correção clara e contextualizada pode ser mais útil do que reproduzir a manchete sem explicação.</div>
+    <button type="button" class="movement" id="pauseMovement" aria-pressed="false">Pausar animação do diagrama</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="propagation" aria-labelledby="literacyTitle">
+ <div class="container">
+  <div class="section-head"><span class="kicker">10 / A rede além da manchete</span><div><h2 id="literacyTitle">Contexto, autoria, edição e correções.</h2><p>Uma investigação completa também envolve fatores que uma captura de tela costuma esconder. Métodos mudam quando o assunto envolve saúde, ciência, dados, política, privacidade ou material produzido por ferramentas de IA.</p></div></div>
+  <div class="propagation-grid">
+   <div>
+    <h3>Quem publica, e por quê?</h3><p>Procure autoria verificável, data de publicação, histórico de correções, organização responsável e independência editorial. Leia além da página investigada: outras fontes confiáveis podem esclarecer a trajetória de quem publica. O design profissional do site e a quantidade de seguidores não são substitutos de evidência.</p>
+    <h3>Qual é o contexto temporal?</h3><p>Conteúdo antigo republicado como atual pode mudar completamente o significado de uma fotografia, mapa ou estatística. Compare a data do fato, a data da captura e a data do compartilhamento; confira se uma fala foi recortada e se a versão integral foi alterada depois.</p>
+   </div>
+   <div>
+    <h3>Imagens, vídeos e conteúdo sintético</h3><p>Ferramentas generativas e editores tradicionais podem produzir montagens convincentes, enquanto imagens autênticas podem ser usadas com legendas falsas. Artefatos visuais, marca-d'água e classificadores de IA podem dar pistas, mas não fornecem diagnóstico conclusivo. Busque origem, evidência independente e contexto observável.</p>
+    <h3>Quando corrigir, como corrigir?</h3><p>Mostre claramente qual afirmação mudou, cite fontes e registre o que ainda não foi apurado. Uma boa correção não depende de humilhar a pessoa que compartilhou: trabalha com evidências e evita repetir desnecessariamente o conteúdo enganoso em destaque.</p>
+   </div>
+  </div>
+  <div class="subsection"><h3>Uma rotina reproduzível de checagem</h3><ul>
+    <li>Registre a <strong>afirmação exata</strong> e o endereço ou captura que será checado, sem ampliar dados pessoais.</li>
+    <li>Encontre o <strong>documento, o estudo ou a imagem original</strong>, com data e contexto, e examine suas limitações.</li>
+    <li>Compare fontes <strong>independentes</strong> e verifique se elas realmente sustentam a mesma conclusão.</li>
+    <li>Descreva o resultado com precisão: sustentado, contradito, misto ou ainda insuficiente, conforme o método e os dados disponíveis.</li>
+    <li>Documente a metodologia e esteja preparado para <strong>corrigir a própria checagem</strong> diante de novas evidências.</li>
+   </ul></div>
+ </div>
+</section>
+
+<section class="share-check" aria-labelledby="shareTitle">
+ <div class="container">
+  <div class="share-grid">
+   <div>
+    <span class="kicker">11 / Antes de compartilhar</span><h2 id="shareTitle">Um bom hábito custa menos que um boato.</h2>
+    <p>Esta lista não é uma certificação de que a publicação seja verdadeira. Ela serve para interromper o compartilhamento impulsivo e organizar uma verificação mínima antes de ampliar o alcance de uma afirmação importante.</p>
+    <p>Marque o que você conseguiu conferir <strong>de fato</strong>, não o que parece provável. Sem acesso à fonte original, a resposta responsável muitas vezes é “não sei ainda”.</p>
+    <div class="accent-line">Mesmo que todas as caixas sejam marcadas, revise a qualidade das evidências. Uma cadeia de perfis que copiam uns aos outros não equivale a várias confirmações independentes.</div>
+   </div>
+   <div class="checklist">
+    <h3>Minha revisão antes do envio</h3>
+    <div role="group" aria-label="Checklist voluntário de verificação">
+     <label class="checkline"><input type="checkbox" data-check="source"><span><strong>Encontrei quem publicou originalmente.</strong> Conferi autoria, data e responsabilidade editorial.</span></label>
+     <label class="checkline"><input type="checkbox" data-check="evidence"><span><strong>Localizei o material de origem.</strong> Não me apoiei apenas em captura recortada ou áudio anônimo.</span></label>
+     <label class="checkline"><input type="checkbox" data-check="context"><span><strong>Validei o contexto.</strong> Comparei lugar, período, afirmação exata e limites das fontes.</span></label>
+     <label class="checkline"><input type="checkbox" data-check="independent"><span><strong>Procurei confirmação independente.</strong> Não confundi republicações da mesma origem com provas diferentes.</span></label>
+     <label class="checkline"><input type="checkbox" data-check="privacy"><span><strong>Avaliei danos e privacidade.</strong> Não vou expor dados pessoais nem ampliar uma acusação sem necessidade.</span></label>
+    </div>
+    <div class="check-result" id="checkResult" role="status" aria-live="polite" aria-atomic="true">0 de 5 pontos revisados. Se não conseguiu verificar uma informação relevante, evite apresentá-la como fato.</div>
+    <button type="button" class="action" id="resetChecklist">Limpar lista</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="review" aria-labelledby="reviewTitle">
+ <div class="container">
+  <div class="section-head"><span class="kicker">12 / Prova de raciocínio</span><div><h2 id="reviewTitle">Você consegue justificar sua conclusão?</h2><p>Quatro situações aplicadas para diferenciar informação enganosa, falta de evidência e intenção. A pontuação é formativa, não vale como nota oficial no Moodle.</p></div></div>
+  <div class="review-grid">
+   <aside>
+    <h3>Um editor não deve ter pressa de concluir.</h3>
+    <p>Uma publicação não vira falsa só por parecer estranha; outra não vira verdadeira porque recebeu milhares de compartilhamentos. É preciso fazer a afirmação conversar com a evidência.</p>
+    <p>Se alguma questão estiver difícil, retorne ao quadro de pistas e à atividade de manchetes. A habilidade que importa aqui não é acertar por intuição, mas explicar <em>por que</em> a conclusão cabe — ou não cabe — nos dados.</p>
+   </aside>
+   <form id="reviewForm" novalidate>
+    <fieldset class="question" data-answer="b" data-explain="O documento do caso fictício afirma que uma única visita foi adiada e as demais continuam; isso contradiz a alegação de encerramento definitivo de todo o projeto.">
+     <legend>1. No caso fictício, qual é o problema central da postagem “a biblioteca foi encerrada para sempre”?</legend>
+     <label><input type="radio" name="q1" value="a"> A frase é verdadeira porque há uma imagem de veículo parado.</label>
+     <label><input type="radio" name="q1" value="b"> A frase generaliza um adiamento local e contradiz o aviso fornecido.</label>
+     <label><input type="radio" name="q1" value="c"> A ausência de autoria prova automaticamente que houve intenção deliberada.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="c" data-explain="Buscar aparições anteriores e a fonte original ajuda a localizar data e contexto; uma fotografia autêntica pode ser usada em narrativa falsa.">
+     <legend>2. Uma fotografia real reaparece anos depois com uma nova legenda. Qual é a melhor primeira investigação?</legend>
+     <label><input type="radio" name="q2" value="a"> Confiar na legenda porque a imagem é autêntica.</label>
+     <label><input type="radio" name="q2" value="b"> Usar apenas um detector de IA como prova absoluta.</label>
+     <label><input type="radio" name="q2" value="c"> Procurar usos anteriores, data, local e publicação original.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="a" data-explain="A intenção de enganar não é automaticamente demonstrada pela falsidade de uma mensagem. São questões diferentes que exigem evidências distintas.">
+     <legend>3. A investigação demonstra que uma afirmação era incorreta, mas não encontra prova de intenção. O que concluir sobre o autor?</legend>
+     <label><input type="radio" name="q3" value="a"> Não há dados suficientes para atribuir intenção deliberada.</label>
+     <label><input type="radio" name="q3" value="b"> Sabia que era falso, necessariamente.</label>
+     <label><input type="radio" name="q3" value="c"> A incorreção não pode ser demonstrada sem saber a intenção.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="b" data-explain="Diferentes páginas podem reproduzir o mesmo texto; a leitura lateral exige avaliar independência, procedência e evidências efetivas, não contar cópias.">
+     <legend>4. Dez sites repetem a mesma notícia, todos baseados numa única postagem sem documento original. Qual interpretação é adequada?</legend>
+     <label><input type="radio" name="q4" value="a"> Dez repetições equivalem a dez provas independentes.</label>
+     <label><input type="radio" name="q4" value="b"> É preciso investigar a origem e buscar confirmações realmente independentes.</label>
+     <label><input type="radio" name="q4" value="c"> A quantidade de cópias prova que a alegação é falsa.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <div class="review-actions"><button id="gradeReview" type="button">Corrigir e explicar</button><button type="reset" class="alt">Refazer</button></div>
+    <p class="review-result" id="reviewResult" role="status" aria-live="polite"></p>
+   </form>
+  </div>
+ </div>
+</section>
+
+<section class="ending">
+ <div class="container"><span class="kicker" style="color:#f3d7a2">FECHAMENTO DO DOSSIÊ</span><h2>O melhor desmentido começa com uma pergunta bem formulada.</h2>
+  <p>É possível checar alegações com rigor sem concluir mais do que os documentos permitem. Identificar o que foi dito, encontrar a fonte, contextualizar imagens, buscar confirmação independente e assumir as lacunas produz uma atitude investigativa mais útil que simplesmente colecionar selos de “verdadeiro” e “falso”.</p>
+ </div>
+</section>
+
+<section class="sources container" aria-labelledby="sourcesTitle">
+ <h2 id="sourcesTitle">Referências e transparência metodológica</h2>
+ <p>Esta página contém quatro cenas/diagramas SVG originais: mesa de investigação, postagem fictícia com veículo, comparação de imagem contextualizada e diagrama de circulação. Todos os documentos, datas internas, nomes de cidade, agenda, personagens e postagens são inventados. Nenhum serviço ou instituição real é acusado; os elementos fictícios não podem ser usados como evidência fora da atividade.</p>
+ <p>Leituras de apoio verificáveis: <a href="https://www.unesco.org/en/articles/journalism-fake-news-disinformation" target="_blank" rel="noopener noreferrer">UNESCO: Journalism, Fake News &amp; Disinformation</a>; <a href="https://www.unesco.org/mil4teachers/en/module4" target="_blank" rel="noopener noreferrer">UNESCO: Media and Information Literacy, módulo 4</a>; <a href="https://ifcncodeofprinciples.poynter.org/the-commitments" target="_blank" rel="noopener noreferrer">International Fact-Checking Network: princípios de transparência, fontes e correções</a>; <a href="https://ucmethod.org/concept/lateral-reading/" target="_blank" rel="noopener noreferrer">Civic Online Reasoning: leitura lateral</a>; <a href="https://firstdraftnews.org/long-form-article/verifying-online-information/" target="_blank" rel="noopener noreferrer">First Draft: verificação de informação visual</a>.</p>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+var d=document,byId=function(s){return d.getElementById(s);};
+function press(buttons,selected,key){
+ buttons.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset[key]===selected));});
+}
+var headlines={
+ alarm:{kind:"EXEMPLO DE ENQUADRAMENTO ENGANOSO",title:"“Biblioteca Viajante acabou! Bairros perdem acesso aos livros.”",lead:"A frase extrapola um comunicado local e apresenta o encerramento como fato, apesar de o documento fornecido tratar apenas de uma alteração pontual de data.",crit:"Sinal: generalização indevida, certeza não sustentada e apelo emocional. Chamar atenção não prova intenção individual de enganar."},
+ precise:{kind:"EXEMPLO DE MANCHETE CONTEXTUALIZADA",title:"“Visita da Biblioteca Viajante ao Bairro Cedro muda do dia 14 para o dia 17.”",lead:"A manchete se limita ao escopo do aviso fictício. Outras visitas seguem previstas, conforme a agenda construída para o exercício.",crit:"Ponto positivo: identifica lugar, mudança e novo dia. Em uma investigação real, a redação ainda precisaria verificar a autenticidade do documento."},
+ question:{kind:"EXEMPLO DE INSINUAÇÃO NÃO DEMONSTRADA",title:"“O adiamento seria o começo do fim de todas as bibliotecas móveis?”",lead:"Uma pergunta pode parecer cuidadosa, mas sugere uma ligação sem apresentar dados que justifiquem a hipótese de encerramento amplo.",crit:"Sinal: pergunta especulativa capaz de induzir uma conclusão não apoiada. Uma interrogação não dispensa evidência e contexto."}
+};
+var headlineButtons=Array.prototype.slice.call(d.querySelectorAll("[data-headline]"));
+headlineButtons.forEach(function(b){b.addEventListener("click",function(){
+ var key=b.dataset.headline,h=headlines[key];press(headlineButtons,key,"headline");
+ byId("headlineType").textContent=h.kind;byId("headlineText").textContent=h.title;
+ byId("headlineLead").textContent=h.lead;byId("headlineCritique").textContent=h.crit;
+});});
+var clues={
+ post:{title:"Postagem sem identificação verificável",text:"A publicação fictícia do dia 13 diz que o serviço foi extinto permanentemente. Ela não indica qual decisão teria encerrado o projeto, qual órgão a tomou nem apresenta documentação original. Reações e compartilhamentos não corrigem essa falta.",reason:"Evidência de que a alegação circulou, não de que seja verdadeira. O texto é a afirmação a testar, não uma prova independente."},
+ notice:{title:"Comunicado demonstrativo Nº 04",text:"O aviso fictício do dia 12 transfere somente o atendimento do Bairro Cedro, do dia 14 para o 17, durante revisão do veículo. Afirma que os demais bairros mantêm visitas previstas. Dentro do universo simulado, contradiz o encerramento geral.",reason:"Forte peça documental dentro do caso fechado, mas um verificador real precisaria checar o site emissor, a autoria, a integridade e eventuais atualizações."},
+ schedule:{title:"Agenda de circulação do serviço",text:"O calendário fictício prevê Bairro das Pontes no dia 15, Bairro das Árvores no dia 16 e Bairro Cedro no dia 17. O exercício define que essas entradas foram fornecidas junto ao aviso, sem alegar que qualquer serviço verdadeiro exista.",reason:"A agenda é coerente com a continuidade das visitas; confrontar fontes e versões é mais sólido que concluir pela aparência de uma foto."},
+ photo:{title:"Imagem do veículo na oficina",text:"O mesmo desenho de veículo aparece com placa de revisão quando o enquadramento é ampliado. A legenda viral eliminou o aviso, mas nem mesmo a imagem completa demonstra sozinha se o serviço público permanece ou foi extinto.",reason:"Imagem e legenda devem ser avaliadas separadamente. A procedência e o contexto ajudam; a situação administrativa ainda pede documentos."},
+ audio:{title:"Áudio sem autoria identificável",text:"Uma mensagem inventada atribui o fechamento a uma pessoa não identificada, mas não fornece cargo, gravação original, documento nem contexto. Não sabemos a origem e tampouco podemos concluir que houve má-fé.",reason:"O áudio é pista para buscar mais informações, não confirmação independente. Não invente identidade, intenção ou autoridade."},
+ correction:{title:"Proposta de retificação responsável",text:"Uma correção fictícia poderia esclarecer: 'Não há encerramento geral no material fornecido; o atendimento do Bairro Cedro passou do dia 14 para 17, e as demais rotas seguem previstas'. Isso não transforma o comunicado inventado em documento real.",reason:"A correção informa exatamente o alcance das evidências e evita repetir a manchete alarmista como verdade. Deve ser revisada se surgirem novas provas."}
+};
+var opened={};
+var clueButtons=Array.prototype.slice.call(d.querySelectorAll("[data-clue]"));
+function showClue(key){
+ var v=clues[key];if(!v)return;
+ opened[key]=true;
+ byId("clueTitle").textContent=v.title;byId("clueBody").textContent=v.text;
+ byId("clueReason").textContent=v.reason;
+ press(clueButtons,key,"clue");
+ var n=Object.keys(opened).length;
+ byId("clueCounter").textContent=n+" de 6 documentos examinados";
+ byId("clueProgress").setAttribute("aria-valuenow",String(n));
+ byId("clueBar").style.width=(n/6*100)+"%";
+ byId("clueCollection").textContent="PROGRESSO DA LEITURA · "+Math.round(n/6*100)+"%";
+}
+clueButtons.forEach(function(b){b.addEventListener("click",function(){showClue(b.dataset.clue);});});
+byId("resetClues").addEventListener("click",function(){
+ opened={};clueButtons.forEach(function(b){b.setAttribute("aria-pressed","false");});
+ byId("clueTitle").textContent="Selecione a primeira pista";
+ byId("clueBody").textContent="Leia os documentos na ordem que preferir. Para cada pista, pergunte: de onde vem, o que demonstra, como poderia ser confirmada e qual inferência ainda seria excessiva?";
+ byId("clueReason").textContent="Nenhuma prova foi examinada neste painel. Evite tirar conclusões antes de confrontar fontes diferentes.";
+ byId("clueCounter").textContent="0 de 6 documentos examinados";
+ byId("clueProgress").setAttribute("aria-valuenow","0");
+ byId("clueBar").style.width="0%";
+ byId("clueCollection").textContent="PROGRESSO DA LEITURA · 0%";
+});
+var photoTexts={
+ crop:{title:"Versão recortada / FICTÍCIA",text:"Uma legenda sugere encerramento, mas a imagem não mostra decisão administrativa nem continuidade do serviço. A ausência da placa de revisão deixa um contexto importante de fora."},
+ original:{title:"Contexto completo / FICTÍCIO",text:"A ilustração completa mostra uma placa de revisão programada na oficina, com data fictícia anterior à postagem. O veículo parado não comprova encerramento geral; é preciso comparar com o aviso e a agenda."}
+};
+var photoButtons=Array.prototype.slice.call(d.querySelectorAll("[data-view]"));
+photoButtons.forEach(function(b){b.addEventListener("click",function(){
+ var key=b.dataset.view;
+ byId("photoView").dataset.view=key;
+ press(photoButtons,key,"view");
+ var text=photoTexts[key],meta=byId("photoMeta");meta.replaceChildren();
+ var strong=d.createElement("strong");strong.textContent=text.title;
+ var p=d.createElement("p");p.textContent=text.text;
+ meta.appendChild(strong);meta.appendChild(p);
+});});
+var claims={
+ shutdown:{title:"Encerramento permanente",prompt:"O comunicado fala em adiamento de uma visita e manutenção da agenda dos outros bairros. Como isso se relaciona à afirmação de encerramento completo?",right:"contradict",detail:"Dentro deste caso fechado, a alegação é contradita pelo aviso e pela agenda criados para a atividade. Isso não permite saber a intenção de quem a publicou."},
+ postpone:{title:"Adiamento da visita ao Bairro Cedro",prompt:"A frase informa que o atendimento do Bairro Cedro passou do dia 14 para o dia 17. O aviso fictício apresentado anteriormente confirma essa alteração?",right:"support",detail:"Sim: o aviso e a agenda fictícios sustentam essa informação específica. Em um caso real seria indispensável autenticar as peças e confirmar se houve nova mudança."},
+ intent:{title:"A intenção de quem publicou",prompt:"A postagem está errada no contexto do exercício. Há alguma prova de que a pessoa que compartilhou conhecia o aviso e quis enganar os leitores?",right:"unknown",detail:"Não há evidência sobre intenção, conhecimento prévio ou motivação do autor. Falsidade da afirmação e intenção de enganar exigem avaliações separadas."}
+};
+var claimKeys=["shutdown","postpone","intent"],claimSelected="shutdown",claimAnswers={};
+var claimButtons=Array.prototype.slice.call(d.querySelectorAll("[data-claim]"));
+var verdictButtons=Array.prototype.slice.call(d.querySelectorAll("[data-verdict]"));
+function showClaim(){
+ var c=claims[claimSelected];
+ byId("claimIndex").textContent="ALEGAÇÃO "+String(claimKeys.indexOf(claimSelected)+1).padStart(2,"0")+" / 03";
+ byId("claimTitle").textContent=c.title;byId("claimPrompt").textContent=c.prompt;
+ press(claimButtons,claimSelected,"claim");
+ var answered=claimAnswers[claimSelected];
+ verdictButtons.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.verdict===answered));});
+ byId("claimFeedback").textContent=answered
+  ?(answered===c.right?"Classificação adequada. ":"Esta conclusão não é sustentada. ")+c.detail
+  :"Escolha uma classificação. O objetivo é justificar a conclusão com evidências, não adivinhar uma intenção.";
+ byId("claimCounter").textContent=Object.keys(claimAnswers).length+" de 3 alegações examinadas";
+}
+claimButtons.forEach(function(b){b.addEventListener("click",function(){claimSelected=b.dataset.claim;showClaim();});});
+verdictButtons.forEach(function(b){b.addEventListener("click",function(){claimAnswers[claimSelected]=b.dataset.verdict;showClaim();});});
+byId("resetClaims").addEventListener("click",function(){claimAnswers={};claimSelected="shutdown";showClaim();});
+showClaim();
+var spreadButtons=Array.prototype.slice.call(d.querySelectorAll("[data-spread]"));
+var spread={
+ forward:"Repassar sem verificar pode ampliar a visibilidade da alegação enganosa entre contatos e grupos. Isso não permite quantificar seu alcance nem pressupor a intenção de quem compartilha. Uma postagem repetida não fica mais verdadeira.",
+ pause:"Interromper o repasse evita acrescentar sua participação imediata à circulação. Se o tema for importante, você pode voltar à investigação antes de formar uma opinião definitiva.",
+ verify:"Verificar antes de compartilhar oferece oportunidade de confrontar a mensagem com o aviso e a agenda do cenário. Se alguém já recebeu a alegação, uma correção clara e contextualizada pode ser mais útil do que reproduzir a manchete sem explicação."
+};
+spreadButtons.forEach(function(b){b.addEventListener("click",function(){press(spreadButtons,b.dataset.spread,"spread");byId("spreadFeedback").textContent=spread[b.dataset.spread];});});
+byId("pauseMovement").addEventListener("click",function(){
+ var pressed=byId("pauseMovement").getAttribute("aria-pressed")==="true";
+ var newValue=!pressed;
+ byId("pauseMovement").setAttribute("aria-pressed",String(newValue));
+ byId("pauseMovement").textContent=newValue?"Retomar animação do diagrama":"Pausar animação do diagrama";
+ byId("flowFigure").classList.toggle("is-paused",newValue);
+});
+var checks=Array.prototype.slice.call(d.querySelectorAll("[data-check]"));
+function updateChecks(){
+ var n=checks.filter(function(c){return c.checked;}).length;
+ byId("checkResult").textContent=n+" de 5 pontos revisados. "+(n===5
+  ?"Você examinou todas as etapas. Isso não garante veracidade: avalie a qualidade das fontes e a conclusão antes de compartilhar."
+  :"Se não conseguiu verificar uma informação relevante, evite apresentá-la como fato.");
+}
+checks.forEach(function(c){c.addEventListener("change",updateChecks);});
+byId("resetChecklist").addEventListener("click",function(){checks.forEach(function(c){c.checked=false;});updateChecks();});
+updateChecks();
+var review=byId("reviewForm"),reviewResult=byId("reviewResult");
+byId("gradeReview").addEventListener("click",function(){
+ var score=0,answered=0,qs=Array.prototype.slice.call(review.querySelectorAll(".question"));
+ qs.forEach(function(q){
+  var selected=q.querySelector("input:checked"),fb=q.querySelector(".question-feedback");
+  if(!selected){fb.textContent="Selecione uma alternativa para conferir.";return;}
+  answered++;var correct=selected.value===q.dataset.answer;if(correct)score++;
+  fb.textContent=(correct?"Correto. ":"Reavalie a evidência. ")+q.dataset.explain;
+ });
+ reviewResult.textContent=answered<qs.length
+  ?"Você respondeu "+answered+" de "+qs.length+" questões. Acertos até agora: "+score+"."
+  :score+" de "+qs.length+" respostas corretas. "+(score===qs.length?"Você conseguiu separar alegações, provas e limites.":"Leia o feedback para revisar as inferências.");
+});
+review.addEventListener("reset",function(){review.querySelectorAll(".question-feedback").forEach(function(x){x.textContent="";});reviewResult.textContent="";});
+}());
+</script>
+</body>
+</html>
