@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Monte o processo - Triagem de um incidente digital</title><style>
+:root{color-scheme:light;--bg:#edf0fa;--card:#fff;--ink:#293456;--muted:#596781;--line:#c9d2ec;--main:#3b518d;--soft:#e7eafa;--green:#166d51;--pale:#e3f6ed;--warn:#996323;--warnbg:#fff2d9;--bad:#a34339;--badbg:#ffede9;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0}button,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.52;cursor:not-allowed}button:focus-visible,select:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #e59f30;outline-offset:3px}main{max-width:1230px;margin:auto;padding:26px 16px 44px}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(28px,4vw,42px);line-height:1.15;letter-spacing:-.7px;margin-bottom:11px}h2{font-size:20px;margin-bottom:10px}h3{font-size:16px;margin-bottom:10px}p{line-height:1.6}.kicker{color:var(--main);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:850;margin-bottom:6px}.sub{font-size:12px;color:var(--muted)}.small{font-size:11px;color:var(--muted)}.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;align-items:center;background:linear-gradient(115deg,var(--card),var(--soft));border:1px solid var(--line);border-radius:19px;padding:23px}.hero .lead{font-size:14px;color:var(--muted)}.hero svg{width:100%;height:auto;display:block}.stats{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0 12px}.stat{border:1px solid var(--line);background:var(--card);border-radius:11px;padding:8px 13px;min-width:123px}.stat small{display:block;font-size:11px;color:var(--muted)}.stat strong{font-size:20px;font-variant-numeric:tabular-nums}.progress{height:9px;background:#ccdde5;border-radius:20px;overflow:hidden;margin-bottom:18px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#459cc9,#34a582);transition:width .2s}.layout{display:grid;grid-template-columns:minmax(0,1.32fr) minmax(300px,.78fr);gap:16px;align-items:start}.column{display:grid;gap:16px;min-width:0}.panel{background:var(--card);border:1px solid var(--line);border-radius:17px;min-width:0;padding:18px;box-shadow:0 10px 25px #23465b10}.flex{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.button{min-height:44px;border-radius:10px;border:1px solid var(--main);padding:9px 13px;font-size:12px;font-weight:770;background:var(--main);color:#fff}.button.secondary{background:var(--card);color:var(--main)}.button.warn{background:var(--warnbg);border-color:#d6af73;color:var(--warn)}.button.good{background:var(--green);border-color:var(--green)}.button.danger{background:var(--card);border-color:#cca197;color:var(--bad)}.button:hover:not(:disabled){filter:brightness(.92)}.pill{font-size:11px;font-weight:790;color:var(--main);background:var(--soft);padding:5px 9px;border-radius:20px}.stage-scroll{overflow-x:auto;max-width:100%;overscroll-behavior-x:contain;margin:13px 0 11px;border:1px solid var(--line);border-radius:13px;padding:14px 10px;background:radial-gradient(circle at 1px 1px,#c2d4dd 1px,transparent 0) 0 0/18px 18px,#f5f9fb}.stage{position:relative;isolation:isolate;min-width:0}.wires{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:visible}.nodes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;position:relative;z-index:1}.node{border:2px solid #aec8d8;border-radius:12px;background:var(--card);min-width:0;padding:10px;display:flex;flex-direction:column;gap:4px;min-height:calc(150px * var(--zoom,1));font-size:calc(12px * var(--zoom,1))}.node.decision{background:#fff9e9;border-color:#cdaa69}.node.start{background:#f0fcf4;border-color:#7ab79b}.node.end{background:#f2f7fc}.node.selected-from{outline:3px solid #599bd5;outline-offset:2px}.node.selected-to{outline:3px solid #4bab8b;outline-offset:2px}.node.drop-target{outline:3px dashed #d18c35;outline-offset:3px}.kind{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:800}.node-title{font-size:calc(12px * var(--zoom,1));font-weight:820;line-height:1.3}.description{font-size:calc(10px * var(--zoom,1));color:var(--muted);line-height:1.4;flex:1}.symbol{font-size:18px;color:var(--main)}.tools{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}.tiny{border:1px solid var(--line);border-radius:7px;padding:6px 7px;min-height:32px;background:var(--card);color:var(--ink);font-size:10px;font-weight:750}.tiny[aria-pressed=true]{background:var(--soft);border-color:var(--main)}.drag-handle{touch-action:none;user-select:none;cursor:grab}.drag-handle:active{cursor:grabbing}.divider{border-top:1px solid var(--line);margin-top:16px;padding-top:15px}.edge-list{list-style:none;margin:10px 0;padding:0;display:grid;gap:7px}.edge{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f3f8fb;border:1px solid var(--line);border-radius:9px;padding:9px}.edge strong{display:block;font-size:12px}.edge small{font-size:11px;color:var(--muted)}.edge .tiny{flex:0 0 auto}.form-fields{display:grid;gap:11px}label{font-size:12px;font-weight:800;display:block;margin-bottom:4px}select{width:100%;min-height:44px;padding:9px 10px;font-size:13px;border:2px solid #9ab9c9;border-radius:9px;background:var(--card);color:var(--ink)}.feedback{margin-top:13px;min-height:74px;background:var(--soft);border:1px solid #b4d2e0;padding:13px;border-radius:10px;font-size:13px;line-height:1.6}.feedback strong{display:block;margin-bottom:4px}.feedback.good{background:var(--pale);border-color:#92c2a5}.feedback.bad{background:var(--badbg);border-color:#deb0a7}.feedback.warn{background:var(--warnbg);border-color:#dfc08d}.hint-list{padding-left:23px;font-size:12px}.hint-list li{margin-bottom:8px}.confirm{background:var(--warnbg);border:1px solid #d9b98b;border-radius:11px;padding:13px;margin-top:12px;font-size:12px}.result{background:var(--pale);border:1px solid #9dc8ac;border-radius:12px;padding:14px;margin-top:12px}.result p{font-size:12px}.result h3{color:var(--green)}.error{border:2px solid var(--bad);border-radius:12px;background:var(--badbg);padding:15px;color:var(--bad)}[hidden]{display:none!important}
+@media(max-width:990px){.layout{grid-template-columns:1fr}.hero{grid-template-columns:1fr 240px}}
+@media(max-width:650px){main{padding:12px 9px 28px}.hero{grid-template-columns:1fr;padding:15px}.hero svg{max-height:170px}.panel{padding:13px}.nodes{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.node{padding:8px;min-height:calc(150px * var(--zoom,1))}.stat{min-width:105px}.flex .button{flex-grow:1}}
+@media(max-width:390px){.nodes{grid-template-columns:1fr}.node{min-height:0}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(prefers-contrast:more){.node,.button,.tiny,.edge{border-width:3px}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#172b39;--card:#253e4c;--ink:#ebf6ff;--muted:#c4d4df;--line:#577486;--main:#b4dfff;--soft:#345267;--green:#b4eed1;--pale:#30523f;--warn:#f9d79e;--warnbg:#55452f;--bad:#ffb7aa;--badbg:#543b36}.hero{background:linear-gradient(115deg,#253e4c,#325064)}.stage-scroll{background:radial-gradient(circle at 1px 1px,#577284 1px,transparent 0) 0 0/18px 18px,#203647}.node{background:#294756;border-color:#688b9e}.node.decision{background:#4b412f}.node.start{background:#305445}.node.end{background:#2c485a}.edge{background:#2d4a5d}.tiny{background:#294758;color:var(--ink)}.button{background:var(--main);color:#153e54}.button.secondary,.button.danger{background:var(--card);color:var(--main)}.button.danger{color:var(--bad)}.button.good{background:#b4eed1;color:#173d2a}.button.warn{background:var(--warnbg);color:var(--warn)}select{background:#1f3846;color:var(--ink);border-color:#86a8ba}.feedback{background:var(--soft)}.feedback.good{background:var(--pale)}.feedback.bad{background:var(--badbg)}.feedback.warn{background:var(--warnbg)}.result{background:var(--pale)}.confirm{background:var(--warnbg)}}
+</style></head><body><main id="activity">
+<section class="hero"><div><p class="kicker">Jogo 28 · Construção de processos</p><h1>Monte o processo: triagem de um alerta digital</h1>
+<p class="lead">Conecte nove blocos para montar a triagem inicial de um alerta de segurança digital. Registar os fatos e preservar evidências são etapas independentes neste exercício; a decisão tem saídas Sim e Não, com contenção autorizada somente quando há indícios de incidente.</p>
+<p class="small">Sem cronômetro nem nota oficial. Arrastar cartões ou ampliar a tela muda apenas o desenho, não as relações entre os blocos.</p></div><div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 300" role="img" aria-labelledby="art-title art-desc">
+<title id="art-title">Painel ilustrado de triagem de um alerta digital</title>
+<desc id="art-desc">Ilustração vetorial original, somente contextual: uma tela de análise com sinal de alerta e escudo, uma decisão em losango com saídas Sim e Não e um cartão de relatório ao final. O fluxograma que o estudante monta está disponível em blocos e controles textuais separados.</desc>
+<defs>
+<linearGradient id="triage-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4e9ff"/><stop offset="1" stop-color="#e8f7f1"/></linearGradient>
+<linearGradient id="triage-screen" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#334b88"/><stop offset="1" stop-color="#1d335e"/></linearGradient>
+</defs>
+<rect width="650" height="300" rx="20" fill="url(#triage-bg)"/>
+<path d="M0 263Q120 233 230 264T450 255T650 251V300H0Z" fill="#c7d7ea"/>
+<rect x="34" y="49" width="326" height="199" rx="15" fill="url(#triage-screen)" stroke="#24395f" stroke-width="5"/>
+<rect x="48" y="64" width="298" height="170" rx="8" fill="#edf4ff"/>
+<rect x="48" y="64" width="298" height="30" rx="7" fill="#526da8"/>
+<circle cx="65" cy="79" r="5" fill="#ffe49b"/><circle cx="81" cy="79" r="5" fill="#c0e0f3"/>
+<text x="200" y="84" font-size="12" font-family="sans-serif" font-weight="bold" text-anchor="middle" fill="#fff">CENTRO DE TRIAGEM</text>
+<path d="M75 126H184M75 149H163M75 171H178M75 193H153" fill="none" stroke="#9ab3ce" stroke-width="8" stroke-linecap="round"/>
+<path d="M270 113L311 128V159Q308 191 270 211Q232 191 229 159V128Z" fill="#d4f2e5" stroke="#4d9b83" stroke-width="6"/>
+<path d="M252 159l14 14 26-34" fill="none" stroke="#28775e" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="201" cy="138" r="17" fill="#f2bb68"/><path d="M201 126v17" stroke="#744f2a" stroke-width="5" stroke-linecap="round"/><circle cx="201" cy="150" r="3" fill="#744f2a"/>
+<path d="M15 252H380L394 268H3Z" fill="#8899b9" stroke="#586c92" stroke-width="4"/>
+<path d="M375 104H416M408 94l11 10-11 10" stroke="#6f76a5" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M487 38L548 105L487 172L426 105Z" fill="#fff6dd" stroke="#bd9250" stroke-width="6"/>
+<text x="487" y="104" text-anchor="middle" font-size="23" fill="#855d2b" font-family="sans-serif" font-weight="bold">?</text>
+<text x="487" y="123" text-anchor="middle" font-size="12" fill="#855d2b" font-family="sans-serif">DECIDIR</text>
+<path d="M548 105H600V200M487 173V199" stroke="#526e9c" stroke-width="5" fill="none"/>
+<path d="M590 190l10 12 10-12M477 189l10 12 10-12" stroke="#526e9c" stroke-width="5" fill="none"/>
+<text x="568" y="93" font-size="14" fill="#405b86" font-family="sans-serif" font-weight="bold">Sim</text>
+<text x="497" y="191" font-size="14" fill="#805d33" font-family="sans-serif" font-weight="bold">Não</text>
+<rect x="420" y="212" width="216" height="64" rx="11" fill="#467c7d" stroke="#2d6068" stroke-width="5"/>
+<path d="M444 228h29v34h-29z" fill="#d7efe6"/><path d="M449 239h19M449 247h16M449 255h14" stroke="#5a9295" stroke-width="3"/>
+<text x="552" y="242" text-anchor="middle" font-size="15" fill="#fff" font-family="sans-serif" font-weight="bold">REGISTRAR</text>
+<text x="552" y="260" text-anchor="middle" font-size="12" fill="#e1f4ee" font-family="sans-serif">Encaminhar</text>
+</svg><p class="small">Ilustração SVG vetorial original de um painel de triagem, decisão e relatório, incorporada ao HTML. Sem fotografias, bibliotecas ou imagens externas.</p></div></section>
+<div class="stats"><div class="stat"><small>Ligações criadas</small><strong id="n-edges">0 / 9</strong></div><div class="stat"><small>Verificações</small><strong id="n-checks">0</strong></div><div class="stat"><small>Dicas</small><strong id="n-hints">0 / 3</strong></div><div class="stat"><small>Estado</small><strong id="state-label" style="font-size:15px">Em construção</strong></div></div>
+<div class="progress" id="progress" role="progressbar" aria-label="Quantidade de ligações, não correção" aria-valuemin="0" aria-valuemax="9" aria-valuenow="0"><span id="progress-fill"></span></div>
+<div class="layout"><section class="panel">
+<div class="flex between"><h2>Blocos do processo</h2><div class="flex"><span class="pill" id="zoom-label">Zoom 100%</span><button class="button secondary" id="zoom-out" type="button">Reduzir zoom</button><button class="button secondary" id="zoom-in" type="button">Ampliar zoom</button></div></div>
+<p class="sub">Clique em Origem e Destino de cada bloco ou use o formulário ao lado. Para reorganizar somente a representação visual, arraste a alça ou use Subir e Descer. O sistema de ligações usa IDs, não pixels.</p>
+<div class="stage-scroll"><div id="stage" class="stage"><svg id="wires" class="wires" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg><div id="nodes" class="nodes" role="list" aria-label="Blocos com controles de conexão e reorganização"></div></div></div>
+<p class="small">As linhas e os rótulos das condições também estão representados na lista textual a seguir.</p>
+<h3 class="divider">Ligações atuais</h3><ol id="edge-list" class="edge-list" aria-label="Ligações com ações individuais de remoção"></ol>
+</section><div class="column">
+<section class="panel"><h2>Editor de ligações</h2><p class="sub">Selecione De, Ramo e Para. Uma ligação somente é criada quando você clica em Conectar.</p>
+<div class="form-fields">
+<div><label for="from">De qual bloco?</label><select id="from"></select></div>
+<div><label for="branch">Qual ramo?</label><select id="branch"></select></div>
+<div><label for="to">Para qual bloco?</label><select id="to"></select></div>
+</div><div class="flex" style="margin-top:13px"><button id="connect" class="button" type="button">Conectar blocos</button><button id="clear" class="button secondary" type="button">Limpar seleção</button></div>
+<div id="replace-panel" class="confirm" role="group" aria-label="Confirmar substituição de destino" hidden><p id="replace-text"></p><div class="flex"><button id="replace-yes" class="button warn" type="button">Confirmar troca</button><button id="replace-no" class="button secondary" type="button">Cancelar</button></div></div>
+<p class="small">Se o ramo de origem já está ocupado, o destino antigo não será substituído sem sua confirmação.</p>
+<div class="feedback" id="feedback" role="status" aria-live="polite" aria-atomic="true"><strong id="feedback-head">Orientação</strong><span id="feedback-text">Selecione uma origem e um destino para criar a primeira ligação.</span></div>
+</section>
+<section class="panel"><h2>Verificar o fluxo</h2><p class="sub">Registrar fatos e preservar evidências são etapas independentes neste exercício e podem trocar de posição. Sim leva à contenção autorizada; Não vai direto à documentação, mantendo a mesma convergência.</p>
+<div class="flex"><button id="check" class="button good" type="button">Verificar processo</button><button id="hint" class="button warn" type="button">Pedir dica</button></div>
+<ol id="hints" class="hint-list" aria-label="Dicas utilizadas"></ol>
+<div id="success" class="result" hidden><h3>Fluxo construído!</h3><p>O processo está completo, sem ciclos, com as saídas Sim e Não corretamente conectadas e convergentes no registro da avaliação. Ambas as ordens das tarefas preparatórias são aceitas.</p><p id="order-result"></p><p class="small">Conquista formativa, sem nota ou conclusão acadêmica oficial.</p></div>
+<div class="flex" style="margin-top:14px"><button id="reset" class="button danger" type="button">Recomeçar montagem</button></div>
+<div id="reset-panel" class="confirm" role="group" aria-label="Confirmar reinício" hidden><p>Recomeçar apaga as conexões, a ordem visual, as dicas e as verificações. Confirmar?</p><div class="flex"><button id="reset-yes" class="button danger" type="button">Confirmar reinício</button><button id="reset-no" class="button secondary" type="button">Cancelar</button></div></div>
+<p class="small">O HTML é independente; somente o SDK MoodleMCP, quando disponível, permite sincronizar o progresso. Não envie pontuação acadêmica pelo navegador.</p>
+</section></div></div></main><script>(function processBuilder(){
+"use strict";
+const DATA={"type":"process_builder","title":"Monte o processo - Triagem de um incidente de segurança digital","blocks":[{"id":"start","label":"Receber alerta de segurança","kind":"start","short":"Início","description":"Receba um relato de atividade suspeita ou comportamento anormal em um sistema.","symbol":"◎"},{"id":"registro","label":"Registrar os fatos relatados","kind":"action","short":"Registro","description":"Anote hora, origem do relato, sistema afetado e sintomas observados, sem expor dados desnecessários.","symbol":"▤"},{"id":"evidencias","label":"Preservar evidências disponíveis","kind":"action","short":"Evidências","description":"Guarde registros relevantes por meios autorizados, preservando integridade e rastreabilidade.","symbol":"◈"},{"id":"decisao","label":"Há indícios de incidente?","kind":"decision","short":"Decisão","description":"Avalie os indicadores disponíveis segundo os critérios da organização; escolha Sim ou Não.","symbol":"◇"},{"id":"conter","label":"Aplicar contenção autorizada","kind":"action","short":"Contenção","description":"Caso haja indícios, a equipe competente aplica medidas proporcionais e registra suas ações.","symbol":"⊘"},{"id":"documentar","label":"Documentar a avaliação","kind":"action","short":"Relatório","description":"Registre a decisão, suas justificativas e as medidas tomadas, mesmo se não houver confirmação.","symbol":"▣"},{"id":"comunicar","label":"Comunicar os responsáveis","kind":"action","short":"Comunicação","description":"Encaminhe as informações para a equipe designada pelos canais internos previstos.","symbol":"✉"},{"id":"verificar","label":"Conferir próximos passos","kind":"action","short":"Acompanhamento","description":"Verifique se os registros estão completos e se há encaminhamentos ou monitoramento pendentes.","symbol":"✓"},{"id":"end","label":"Encerrar a triagem inicial","kind":"end","short":"Fim","description":"Conclua o fluxo da triagem sem confundir encerramento administrativo com eliminação do risco.","symbol":"★"}],"requiredEdges":[["start","registro","next"],["registro","evidencias","next"],["evidencias","decisao","next"],["decisao","conter","sim"],["decisao","documentar","nao"],["conter","documentar","next"],["documentar","comunicar","next"],["comunicar","verificar","next"],["verificar","end","next"]],"validGraphs":[[["start","registro","next"],["registro","evidencias","next"],["evidencias","decisao","next"],["decisao","conter","sim"],["decisao","documentar","nao"],["conter","documentar","next"],["documentar","comunicar","next"],["comunicar","verificar","next"],["verificar","end","next"]],[["start","evidencias","next"],["evidencias","registro","next"],["registro","decisao","next"],["decisao","conter","sim"],["decisao","documentar","nao"],["conter","documentar","next"],["documentar","comunicar","next"],["comunicar","verificar","next"],["verificar","end","next"]]],"displayOrder":["verificar","decisao","conter","start","comunicar","end","registro","documentar","evidencias"],"settings":{"allowExtraEdges":false,"allowCycles":false,"maxHints":3,"maxDraftEdges":12},"hints":["Receba o alerta e prepare o diagnóstico. Registrar o relato e preservar evidências são etapas independentes neste exercício e podem trocar de ordem.","A decisão tem dois ramos rotulados: Sim leva à contenção autorizada; Não segue diretamente para documentar a avaliação. Não crie duas saídas com o mesmo rótulo.","As duas rotas convergem na documentação. Depois comunique os responsáveis, confira os próximos passos e encerre a triagem inicial."]};
+const root=document.getElementById("activity"),$=id=>root.querySelector("#"+id);
+const controller=new AbortController(),sdk=window.MoodleMCP?.progress,progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const store="processBuilderDigitalIncidentV1",location="games/process-builder-digital-incident";
+let state=initialState(DATA),ready=false,disposed=false,modified=false,remote=null,saveQueue=Promise.resolve(),stamp=0;
+let selection={from:"",branch:"",to:""},replacement=null,zoom=1,raf=0,observer=null,drag=null;
+// PURE_START
+function mapBlocks(d){return new Map(d.blocks.map(b=>[b.id,b]));}
+function outlets(b){return b.kind==="end"?[]:b.kind==="decision"?["sim","nao"]:["next"];}
+function edge(tuple){return {from:tuple[0],to:tuple[1],branch:tuple[2]};}
+function slot(e){return e.from+"|"+e.branch;}
+function key(e){return e.from+"|"+e.branch+"|"+e.to;}
+function signature(edges){return edges.length?edges.map(key).sort().join(";"):"[empty]";}
+function cyclic(edges,ids){
+ const routes=new Map(ids.map(id=>[id,[]]));
+ for(const e of edges){if(!routes.has(e.from)||!routes.has(e.to))return true;routes.get(e.from).push(e.to);}
+ const visiting=new Set(),visited=new Set();
+ function visit(id){if(visiting.has(id))return true;if(visited.has(id))return false;visiting.add(id);for(const to of routes.get(id))if(visit(to))return true;visiting.delete(id);visited.add(id);return false;}
+ return ids.some(id=>visit(id));
+}
+function structurallyValid(edges,d){
+ if(!Array.isArray(edges)||edges.length>d.settings.maxDraftEdges)return false;
+ const blocks=mapBlocks(d),used=new Set(),start=d.blocks.find(b=>b.kind==="start").id;
+ for(const e of edges){
+  if(!e||typeof e.from!=="string"||typeof e.to!=="string"||typeof e.branch!=="string"||
+   !blocks.has(e.from)||!blocks.has(e.to)||e.from===e.to||e.to===start||
+   blocks.get(e.from).kind==="end"||!outlets(blocks.get(e.from)).includes(e.branch)||used.has(slot(e)))return false;
+  used.add(slot(e));
+ }
+ return !cyclic(edges,d.blocks.map(b=>b.id));
+}
+function validGraph(tuples,d){
+ if(!Array.isArray(tuples)||tuples.length!==d.blocks.length||tuples.some(t=>!Array.isArray(t)||t.length!==3))return false;
+ const edges=tuples.map(edge),start=d.blocks.find(b=>b.kind==="start").id,finish=d.blocks.find(b=>b.kind==="end").id;
+ if(!structurallyValid(edges,d))return false;
+ const next=new Map(d.blocks.map(b=>[b.id,[]])),previous=new Map(d.blocks.map(b=>[b.id,[]]));
+ for(const e of edges){next.get(e.from).push(e.to);previous.get(e.to).push(e.from);}
+ for(const b of d.blocks){
+  if(next.get(b.id).length!==outlets(b).length)return false;
+  for(const branch of outlets(b))if(!edges.some(e=>e.from===b.id&&e.branch===branch))return false;
+  if(b.id!==start&&previous.get(b.id).length===0)return false;
+ }
+ if(previous.get(start).length||next.get(finish).length===0===false)return false;
+ function reachable(id,links){const seen=new Set([id]),queue=[id];for(let i=0;i<queue.length;i++)for(const to of links.get(queue[i]))if(!seen.has(to)){seen.add(to);queue.push(to);}return seen.size===d.blocks.length;}
+ return reachable(start,next)&&reachable(finish,previous);
+}
+function validate(d){
+ if(!d||d.type!=="process_builder"||typeof d.title!=="string"||!d.title.trim()||
+ !Array.isArray(d.blocks)||d.blocks.length<5||d.blocks.length>20||
+ !d.settings||d.settings.allowExtraEdges!==false||d.settings.allowCycles!==false||
+ !Number.isInteger(d.settings.maxHints)||d.settings.maxHints<1||d.settings.maxHints>10||
+ !Number.isInteger(d.settings.maxDraftEdges)||d.settings.maxDraftEdges<d.blocks.length||d.settings.maxDraftEdges>40||
+ !Array.isArray(d.hints)||d.hints.length!==d.settings.maxHints||d.hints.some(h=>typeof h!=="string"||!h.trim())||
+ !Array.isArray(d.requiredEdges)||!Array.isArray(d.validGraphs)||d.validGraphs.length<1||d.validGraphs.length>4||
+ !Array.isArray(d.displayOrder)||d.displayOrder.length!==d.blocks.length)return false;
+ const ids=new Set();let starts=0,ends=0,decisions=0;
+ for(const b of d.blocks){
+  if(!b||typeof b.id!=="string"||!/^[a-z][a-z0-9-]*$/.test(b.id)||ids.has(b.id)||
+   !["start","action","decision","end"].includes(b.kind)||
+   !["label","short","description","symbol"].every(k=>typeof b[k]==="string"&&b[k].trim()))return false;
+  ids.add(b.id);starts+=b.kind==="start";ends+=b.kind==="end";decisions+=b.kind==="decision";
+ }
+ if(starts!==1||ends!==1||decisions<1||new Set(d.displayOrder).size!==ids.size||d.displayOrder.some(id=>!ids.has(id)))return false;
+ if(!validGraph(d.requiredEdges,d))return false;
+ const seen=new Set();
+ for(const g of d.validGraphs){if(!validGraph(g,d))return false;const s=signature(g.map(edge));if(seen.has(s))return false;seen.add(s);}
+ return seen.has(signature(d.requiredEdges.map(edge)));
+}
+function initialState(d){return {v:1,edges:[],order:[...d.displayOrder],hints:0,checks:0,lastChecked:"",complete:false};}
+function isComplete(edges,d){const sig=signature(edges);return d.validGraphs.some(g=>signature(g.map(edge))===sig);}
+function validState(s,d){
+ if(!s||typeof s!=="object"||Array.isArray(s)||s.v!==1||
+ !Array.isArray(s.edges)||!structurallyValid(s.edges,d)||!Array.isArray(s.order)||s.order.length!==d.blocks.length||
+ new Set(s.order).size!==d.blocks.length||s.order.some(id=>!d.blocks.some(b=>b.id===id))||
+ !Number.isInteger(s.hints)||s.hints<0||s.hints>d.settings.maxHints||
+ !Number.isInteger(s.checks)||s.checks<0||s.checks>1000||
+ typeof s.lastChecked!=="string"||s.lastChecked.length>5000||
+ (s.lastChecked!==""&&s.lastChecked!==signature(s.edges))||typeof s.complete!=="boolean"||(s.complete&&!isComplete(s.edges,d)))return false;
+ return true;
+}
+function feedbackFor(edges,d){
+ const present=new Set(edges.map(key));let best=null;
+ for(const g of d.validGraphs){
+  const expected=g.map(edge),keys=new Set(expected.map(key)),matched=edges.filter(e=>keys.has(key(e))).length;
+  if(!best||matched>best.matched)best={expected,keys,matched};
+ }
+ const incorrect=edges.filter(e=>!best.keys.has(key(e))).length;
+ const missing=best.expected.filter(e=>!present.has(key(e)));
+ const labels=[...new Set(missing.map(e=>mapBlocks(d).get(e.from).label))];
+ return {matched:best.matched,incorrect,missing:missing.length,labels};
+}
+function transition(s,a,d){
+ if(!validState(s,d))return {state:s,changed:false,kind:"bad",message:"Estado inválido; nenhuma ligação foi modificada."};
+ if(!a||typeof a.type!=="string")return {state:s,changed:false,kind:"info",message:"Escolha uma ação."};
+ if(a.type==="restart")return {state:initialState(d),changed:true,kind:"info",message:"Montagem reiniciada. Você pode reconstruir todas as ligações."};
+ if(a.type==="move"||a.type==="place"){
+  if(!s.order.includes(a.id))return {state:s,changed:false,kind:"bad",message:"Bloco desconhecido."};
+  const order=[...s.order],from=order.indexOf(a.id);
+  if(a.type==="move"){
+   if(!Number.isInteger(a.delta)||Math.abs(a.delta)!==1||from+a.delta<0||from+a.delta>=order.length)
+    return {state:s,changed:false,kind:"info",message:"O bloco já está no limite do tabuleiro."};
+   [order[from],order[from+a.delta]]=[order[from+a.delta],order[from]];
+  }else{
+   if(!order.includes(a.before)||a.before===a.id)return {state:s,changed:false,kind:"info",message:"Selecione outro bloco para reposicionar."};
+   order.splice(from,1);order.splice(order.indexOf(a.before),0,a.id);
+   if(order.every((id,i)=>s.order[i]===id))return {state:s,changed:false,kind:"info",message:"Este bloco já está nessa posição."};
+  }
+  return {state:{...s,order},changed:true,kind:"info",message:"Blocos reorganizados visualmente. As ligações semânticas não foram alteradas."};
+ }
+ if(s.complete)return {state:s,changed:false,kind:"info",message:"Fluxo já concluído. Você pode revisar ou reorganizar a visualização, ou recomeçar."};
+ if(a.type==="hint"){
+  if(s.hints>=d.settings.maxHints)return {state:s,changed:false,kind:"info",message:"Não há mais dicas."};
+  return {state:{...s,hints:s.hints+1},changed:true,kind:"info",message:"Dica "+(s.hints+1)+": "+d.hints[s.hints]};
+ }
+ if(a.type==="check"){
+  if(isComplete(s.edges,d))return {state:{...s,complete:true,checks:s.checks+1,lastChecked:signature(s.edges)},changed:true,kind:"good",message:"Processo correto! As duas saídas da decisão e as dependências foram verificadas."};
+  const f=feedbackFor(s.edges,d);
+  const msg=f.matched+" das "+d.requiredEdges.length+" ligações coincidem com um dos fluxos válidos. "+
+    (f.incorrect?"Há "+f.incorrect+" ligação(ões) incompatível(is). ":"")+
+    (f.missing?"Faltam "+f.missing+" ligação(ões); revise as saídas de "+f.labels.join(", ")+". ":"")+"A montagem não foi modificada.";
+  if(s.lastChecked===signature(s.edges))return {state:s,changed:false,kind:"warn",message:"Esta montagem já foi verificada. "+msg};
+  return {state:{...s,checks:s.checks+1,lastChecked:signature(s.edges)},changed:true,kind:"warn",message:msg};
+ }
+ if(a.type==="remove"){
+  const old=s.edges.find(e=>e.from===a.from&&e.to===a.to&&e.branch===a.branch);
+  if(!old)return {state:s,changed:false,kind:"info",message:"Ligação já removida ou inexistente."};
+  return {state:{...s,edges:s.edges.filter(e=>e!==old),lastChecked:""},changed:true,kind:"info",message:"Ligação removida, mantendo as demais."};
+ }
+ if(a.type==="connect"||a.type==="replace"){
+  const map=mapBlocks(d),from=map.get(a.from),to=map.get(a.to);
+  if(!from||!to||from.id===to.id||to.kind==="start"||from.kind==="end"||!outlets(from).includes(a.branch))
+   return {state:s,changed:false,kind:"bad",message:"Origem, destino ou condição inválidos. Selecione dois blocos distintos e um ramo permitido."};
+  const old=s.edges.find(e=>e.from===a.from&&e.branch===a.branch);
+  if(old&&old.to===a.to)return {state:s,changed:false,kind:"info",message:"Esta ligação já existe; não foi duplicada."};
+  if(a.type==="replace"&&(!old||old.to!==a.expectedTo))return {state:s,changed:false,kind:"bad",message:"A ligação original mudou; reveja a troca antes de confirmá-la."};
+  const proposed=[...s.edges.filter(e=>e!==old),{from:a.from,to:a.to,branch:a.branch}];
+  if(!structurallyValid(proposed,d))return {state:s,changed:false,kind:"bad",message:"Ligação rejeitada: ciclo, nó inválido ou quantidade máxima excedida."};
+  if(a.type==="connect"&&old)return {state:s,changed:false,kind:"warn",conflict:{from:a.from,to:a.to,branch:a.branch,oldTo:old.to},message:"A saída já está ligada a "+map.get(old.to).label+". Confirme explicitamente se deseja trocar o destino."};
+  return {state:{...s,edges:proposed,lastChecked:""},changed:true,kind:"info",message:old?"Destino alterado após confirmação, sem modificar as outras ligações.":"Conexão adicionada. Use Verificar processo para testar a solução."};
+ }
+ return {state:s,changed:false,kind:"info",message:"Ação desconhecida."};
+}
+// PURE_END
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+function block(id){return mapBlocks(DATA).get(id);}
+function label(id){return block(id).label;}
+function branchLabel(v){return v==="sim"?"Sim":v==="nao"?"Não":"Próximo";}
+function getState(){return {v:1,edges:state.edges.map(e=>({...e})),order:[...state.order],hints:state.hints,checks:state.checks,lastChecked:state.lastChecked,complete:state.complete};}
+function restoreState(s){
+ if(!validState(s,DATA))return false;
+ state={v:1,edges:s.edges.map(e=>({...e})),order:[...s.order],hints:s.hints,checks:s.checks,lastChecked:s.lastChecked,complete:s.complete};
+ selection={from:"",branch:"",to:""};replacement=null;render(false);return true;
+}
+function announce(text,kind="info"){
+ $("feedback").className="feedback "+kind;
+ $("feedback-head").textContent=kind==="good"?"Fluxo correto":kind==="bad"?"Ação inválida":kind==="warn"?"Confira o processo":"Orientação";
+ $("feedback-text").textContent=text;
+}
+function activeKey(){const a=document.activeElement;return a&&root.contains(a)?a.dataset.focusKey||"":"";}
+function focusKey(key){if(!key)return;const target=[...root.querySelectorAll("[data-focus-key]")].find(e=>e.dataset.focusKey===key&&!e.disabled);if(target)target.focus({preventScroll:true});}
+function makeNode(b){
+ const card=el("article","node "+b.kind);card.dataset.nodeId=b.id;card.setAttribute("role","listitem");
+ if(selection.from===b.id)card.classList.add("selected-from");
+ if(selection.to===b.id)card.classList.add("selected-to");
+ card.append(el("span","symbol",b.symbol),el("span","kind",b.short),el("span","node-title",b.label),el("span","description",b.description));
+ const tools=el("div","tools");
+ function button(text,kind,disabled){
+  const x=el("button","tiny",text);x.type="button";x.dataset[kind]=b.id;x.dataset.focusKey=kind+":"+b.id;x.disabled=!ready||disabled;tools.append(x);return x;
+ }
+ const f=button("Origem","pickFrom",state.complete||b.kind==="end");
+ const t=button("Destino","pickTo",state.complete||b.kind==="start");
+ f.setAttribute("aria-pressed",String(selection.from===b.id));t.setAttribute("aria-pressed",String(selection.to===b.id));
+ const up=button("↑ Subir","moveUp",state.order[0]===b.id),down=button("↓ Descer","moveDown",state.order.at(-1)===b.id);
+ const handle=button("↕ Arrastar","drag",false);handle.classList.add("drag-handle");handle.setAttribute("aria-label","Alça de arraste de "+b.label+". Para o teclado use Subir ou Descer.");
+ card.append(tools);return card;
+}
+function fillSelect(id,rows,placeholder,value){
+ const s=$(id);s.replaceChildren();const first=el("option","",placeholder);first.value="";s.append(first);
+ for(const [val,text] of rows){const opt=el("option","",text);opt.value=val;s.append(opt);}
+ s.value=value;
+}
+function renderSelects(){
+ fillSelect("from",DATA.blocks.filter(b=>b.kind!=="end").map(b=>[b.id,b.label]),"Escolha a origem",selection.from);
+ fillSelect("to",DATA.blocks.filter(b=>b.kind!=="start").map(b=>[b.id,b.label]),"Escolha o destino",selection.to);
+ const b=block(selection.from),options=b?outlets(b).map(slot=>[slot,branchLabel(slot)]):[];
+ fillSelect("branch",options,b?.kind==="decision"?"Escolha Sim ou Não":"Escolha a origem primeiro",selection.branch);
+ $("from").disabled=$("to").disabled=!ready||state.complete;
+ $("branch").disabled=!ready||state.complete||!b||b.kind!=="decision";
+ $("connect").disabled=$("clear").disabled=!ready||state.complete;
+}
+function renderEdges(){
+ const list=$("edge-list");list.replaceChildren();
+ if(!state.edges.length){list.append(el("li","sub","Nenhuma ligação criada. Selecione os blocos no mapa ou pelo formulário."));return;}
+ for(const e of state.edges){
+  const li=el("li","edge"),info=el("div");
+  info.append(el("strong","",label(e.from)+" → "+label(e.to)),el("small","",branchLabel(e.branch)));
+  const remove=el("button","tiny","Remover");remove.type="button";remove.dataset.remove=key(e);remove.dataset.focusKey="remove:"+key(e);
+  remove.disabled=!ready||state.complete;remove.setAttribute("aria-label","Remover "+label(e.from)+" "+branchLabel(e.branch)+" para "+label(e.to));
+  li.append(info,remove);list.append(li);
+ }
+}
+function render(){
+ if(disposed||!validate(DATA)||!validState(state,DATA))return;
+ const focus=activeKey();
+ $("n-edges").textContent=state.edges.length+" / "+DATA.requiredEdges.length;
+ $("n-checks").textContent=String(state.checks);$("n-hints").textContent=state.hints+" / "+DATA.settings.maxHints;
+ $("state-label").textContent=state.complete?"Concluído":"Em construção";
+ $("progress").setAttribute("aria-valuenow",String(Math.min(9,state.edges.length)));
+ $("progress-fill").style.width=Math.min(100,100*state.edges.length/9)+"%";
+ $("check").disabled=!ready||state.complete;$("hint").disabled=!ready||state.complete||state.hints>=3;$("reset").disabled=!ready;
+ const nodes=$("nodes");nodes.replaceChildren(...state.order.map(id=>makeNode(block(id))));
+ $("stage").style.setProperty("--zoom",String(zoom));
+ $("zoom-label").textContent="Zoom "+Math.round(zoom*100)+"%";
+ $("zoom-in").disabled=zoom===1.3;$("zoom-out").disabled=zoom===.85;
+ renderEdges();renderSelects();
+ const hints=$("hints");hints.replaceChildren();
+ for(let i=0;i<state.hints;i++)hints.append(el("li","",DATA.hints[i]));
+ $("replace-panel").hidden=!replacement;
+ if(replacement)$("replace-text").textContent="Substituir a saída "+branchLabel(replacement.branch)+" de \""+label(replacement.from)+"\", hoje ligada a \""+label(replacement.oldTo)+"\", para \""+label(replacement.to)+"\"? As outras ligações serão preservadas.";
+ $("success").hidden=!state.complete;
+ if(state.complete)$("order-result").textContent=state.edges.find(e=>e.from==="start")?.to==="registro"?"Ordem aceita: registro do relato antes da preservação de evidências.":"Ordem aceita: preservação de evidências antes do registro do relato.";
+ scheduleLines();focusKey(focus);
+}
+function selectNode(which,id){
+ if(!ready||state.complete)return;
+ if(which==="from"){selection.from=id;selection.branch=block(id).kind==="decision"?"":"next";}
+ else selection.to=id;
+ replacement=null;render();
+ announce((which==="from"?"Origem":"Destino")+" selecionado: "+label(id)+". Ajuste a condição se necessário e confirme a ligação.");
+}
+function scheduleLines(){if(raf||disposed)return;raf=requestAnimationFrame(()=>{raf=0;drawLines();});}
+function drawLines(){
+ if(disposed)return;
+ const svg=$("wires"),stage=$("stage"),base=stage.getBoundingClientRect(),ns="http://www.w3.org/2000/svg";
+ const width=stage.clientWidth,height=stage.clientHeight;
+ svg.setAttribute("viewBox","0 0 "+width+" "+height);svg.setAttribute("width",String(width));svg.setAttribute("height",String(height));svg.replaceChildren();
+ const defs=document.createElementNS(ns,"defs"),marker=document.createElementNS(ns,"marker");
+ marker.setAttribute("id","arrow");marker.setAttribute("markerWidth","8");marker.setAttribute("markerHeight","8");marker.setAttribute("refX","7");marker.setAttribute("refY","4");marker.setAttribute("orient","auto");
+ const tip=document.createElementNS(ns,"path");tip.setAttribute("d","M0,0 L7,4 L0,8 Z");tip.setAttribute("fill","var(--main)");marker.append(tip);defs.append(marker);svg.append(defs);
+ const blocks=[...root.querySelectorAll("[data-node-id]")];
+ for(const edge of state.edges){
+  const from=blocks.find(n=>n.dataset.nodeId===edge.from),to=blocks.find(n=>n.dataset.nodeId===edge.to);
+  if(!from||!to)continue;
+  const a=from.getBoundingClientRect(),b=to.getBoundingClientRect();
+  const dx=(b.left+b.right-a.left-a.right)/2,dy=(b.top+b.bottom-a.top-a.bottom)/2;
+  const vertical=Math.abs(dy)>Math.abs(dx)*.7;
+  const sx=vertical?(a.left+a.right)/2-base.left:(dx>0?a.right:a.left)-base.left;
+  const sy=vertical?(dy>0?a.bottom:a.top)-base.top:(a.top+a.bottom)/2-base.top;
+  const ex=vertical?(b.left+b.right)/2-base.left:(dx>0?b.left:b.right)-base.left;
+  const ey=vertical?(dy>0?b.top:b.bottom)-base.top:(b.top+b.bottom)/2-base.top;
+  const bend=vertical?Math.max(16,Math.abs(ey-sy)*.43):Math.max(16,Math.abs(ex-sx)*.43);
+  const d=vertical?"M"+sx+","+sy+"C"+sx+","+(sy+(dy>0?bend:-bend))+" "+ex+","+(ey+(dy>0?-bend:bend))+" "+ex+","+ey:
+    "M"+sx+","+sy+"C"+(sx+(dx>0?bend:-bend))+","+sy+" "+(ex+(dx>0?-bend:bend))+","+ey+" "+ex+","+ey;
+  const path=document.createElementNS(ns,"path");path.setAttribute("d",d);path.setAttribute("fill","none");
+  path.setAttribute("stroke",edge.branch==="nao"?"#ba7a2d":"var(--main)");path.setAttribute("stroke-width","2.7");
+  path.setAttribute("stroke-dasharray",edge.branch==="nao"?"6 4":"none");path.setAttribute("marker-end","url(#arrow)");svg.append(path);
+  if(edge.branch!=="next"){
+   const txt=document.createElementNS(ns,"text");txt.textContent=branchLabel(edge.branch);
+   txt.setAttribute("x",String((sx+ex)/2+5));txt.setAttribute("y",String((sy+ey)/2-6));txt.setAttribute("fill","var(--main)");txt.setAttribute("font-weight","800");txt.setAttribute("font-size","12");
+   txt.setAttribute("paint-order","stroke fill");txt.setAttribute("stroke","var(--card)");txt.setAttribute("stroke-width","4");svg.append(txt);
+  }
+ }
+}
+function persist(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),token=++stamp;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||token!==stamp)return;
+  const old=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const data={...old,[store]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(data)).length>12288){announce("O progresso excederia 12 KiB e não foi sincronizado.","bad");return;}
+  const response=await progress.save({version:remote.version,location,data});if(!disposed)remote={...response,data};
+ }).catch(async()=>{
+  if(disposed)return;stamp++;
+  try{
+   const latest=await progress.load();if(disposed)return;
+   if(latest?.data?.[store]&&restoreState(latest.data[store])){remote=latest;announce("Estado remoto divergente ou falha de gravação. Restaurei a versão remota sem sobrescrevê-la.","bad");}
+   else{remote=null;announce("Não foi possível reconciliar o progresso; o jogo continua localmente e as gravações foram suspensas.","bad");}
+  }catch(_){remote=null;announce("Falha de sincronização com o Moodle. A atividade continua em memória.","bad");}
+ });
+}
+function handleAction(a){
+ if(disposed||!ready)return;
+ const r=transition(state,a,DATA);
+ if(!r.changed){replacement=r.conflict||null;render();announce(r.message,r.kind);return;}
+ state=r.state;modified=true;replacement=null;
+ if(a.type==="restart")selection={from:"",branch:"",to:""};
+ render();persist();announce(r.message,r.kind);
+ if(a.type==="connect"||a.type==="replace"){
+  const b=[...root.querySelectorAll("[data-remove]")].find(b=>b.dataset.remove===key(a));
+  if(b)b.focus({preventScroll:true});
+ }
+}
+function requestReset(){
+ const altered=state.edges.length||state.hints||state.checks||state.order.some((id,i)=>id!==DATA.displayOrder[i]);
+ if(!altered){handleAction({type:"restart"});return;}
+ $("reset-panel").hidden=false;$("reset-yes").focus({preventScroll:true});announce("Reiniciar apagará as ligações e as verificações. Confirme ou cancele.","warn");
+}
+function stopDrag(){
+ if(!drag)return;
+ for(const n of root.querySelectorAll("[data-node-id]"))n.classList.remove("drop-target");
+ drag=null;
+}
+function destroy(){
+ disposed=true;stamp++;controller.abort();stopDrag();
+ if(raf){cancelAnimationFrame(raf);raf=0;}if(observer)observer.disconnect();
+}
+async function init(root,data){
+ if(!root||!validate(data)){if(root)root.replaceChildren(el("div","error","Configuração impossível: verifique IDs, ramos, conexões, ciclos e condições de conclusão."));return;}
+ render();
+ if(progress){
+  try{
+   const result=await progress.load();if(disposed)return;remote=result;
+   if(!modified&&result?.data?.[store]&&!restoreState(result.data[store]))announce("O estado salvo é inválido; iniciando do começo sem sobrescrever o servidor.","bad");
+  }catch(_){remote=null;announce("Não foi possível carregar o progresso remoto. A atividade funciona sem sincronização.","bad");}
+ }else announce("Modo independente: as conexões funcionam, mas o progresso não está sincronizado com o Moodle.");
+ if(disposed)return;ready=true;render();
+ if(typeof ResizeObserver!=="undefined"){observer=new ResizeObserver(scheduleLines);observer.observe($("stage"));observer.observe($("nodes"));}
+}
+root.addEventListener("change",e=>{
+ if(!ready||disposed)return;
+ if(e.target.id==="from"){selection.from=e.target.value;selection.branch=selection.from?(block(selection.from).kind==="decision"?"":"next"):"";replacement=null;render();}
+ else if(e.target.id==="to"){selection.to=e.target.value;replacement=null;render();}
+ else if(e.target.id==="branch"){selection.branch=e.target.value;replacement=null;render();}
+},{signal:controller.signal});
+root.addEventListener("click",e=>{
+ const b=e.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.pickFrom){selectNode("from",b.dataset.pickFrom);return;}
+ if(b.dataset.pickTo){selectNode("to",b.dataset.pickTo);return;}
+ if(b.dataset.moveUp){handleAction({type:"move",id:b.dataset.moveUp,delta:-1});return;}
+ if(b.dataset.moveDown){handleAction({type:"move",id:b.dataset.moveDown,delta:1});return;}
+ if(b.dataset.remove){
+  const parts=b.dataset.remove.split("|");handleAction({type:"remove",from:parts[0],branch:parts[1],to:parts[2]});return;
+ }
+ if(b.id==="connect"){handleAction({type:"connect",...selection});return;}
+ if(b.id==="replace-yes"){if(replacement)handleAction({type:"replace",...replacement,expectedTo:replacement.oldTo});return;}
+ if(b.id==="replace-no"){replacement=null;render();announce("Substituição cancelada. O destino original foi mantido.");return;}
+ if(b.id==="clear"){selection={from:"",branch:"",to:""};replacement=null;render();announce("Seleção provisória limpa sem remover conexões.");return;}
+ if(b.id==="check"){handleAction({type:"check"});return;}
+ if(b.id==="hint"){handleAction({type:"hint"});return;}
+ if(b.id==="zoom-in"||b.id==="zoom-out"){
+  const levels=[.85,1,1.15,1.3],idx=levels.indexOf(zoom);zoom=levels[Math.max(0,Math.min(levels.length-1,idx+(b.id==="zoom-in"?1:-1)))];
+  render();announce("Zoom ajustado para "+Math.round(zoom*100)+"%; o grafo não foi alterado.");return;
+ }
+ if(b.id==="reset"){requestReset();return;}
+ if(b.id==="reset-yes"){$("reset-panel").hidden=true;handleAction({type:"restart"});$("reset").focus({preventScroll:true});return;}
+ if(b.id==="reset-no"){$("reset-panel").hidden=true;$("reset").focus({preventScroll:true});announce("Reinício cancelado; suas conexões foram mantidas.");}
+},{signal:controller.signal});
+root.addEventListener("pointerdown",e=>{
+ const h=e.target.closest("[data-drag]");
+ if(!h||h.disabled||!ready||disposed||e.button!==0)return;
+ e.preventDefault();h.setPointerCapture(e.pointerId);
+ drag={id:h.dataset.drag,pointerId:e.pointerId,x:e.clientX,y:e.clientY,over:null,moved:false};
+},{signal:controller.signal});
+root.addEventListener("pointermove",e=>{
+ if(!drag||drag.pointerId!==e.pointerId)return;
+ if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>9)drag.moved=true;
+ if(!drag.moved)return;
+ const card=[...root.querySelectorAll("[data-node-id]")].filter(x=>x.dataset.nodeId!==drag.id).find(x=>{
+  const r=x.getBoundingClientRect();return e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;
+ });
+ for(const n of root.querySelectorAll("[data-node-id]"))n.classList.toggle("drop-target",n===card);
+ drag.over=card?.dataset.nodeId||null;
+},{signal:controller.signal});
+root.addEventListener("pointerup",e=>{
+ if(!drag||drag.pointerId!==e.pointerId)return;
+ const last=drag;stopDrag();if(last.moved&&last.over)handleAction({type:"place",id:last.id,before:last.over});
+},{signal:controller.signal});
+root.addEventListener("pointercancel",e=>{
+ if(drag?.pointerId===e.pointerId){stopDrag();announce("Arraste cancelado; nenhuma ligação foi alterada.");}
+},{signal:controller.signal});
+window.addEventListener("resize",scheduleLines,{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>
