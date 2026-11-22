@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Atlas anatômico interativo do coração humano: quatro câmaras, válvulas, circulação pulmonar e sistêmica, ciclo cardíaco, condução elétrica, pressão e prevenção.">
+<title>Uma viagem por dentro do coração humano | Atlas anatômico</title>
+<style>
+:root{--paper:#f5f0e7;--sheet:#fffbf3;--ink:#332a31;--wine:#84364a;--wine2:#63263a;--rose:#ad6673;--deep:#3e293d;--blue:#3d7884;--teal:#1c6371;--sand:#e6d8c7;--rule:#d4c5b9;--muted:#625860;--gold:#b18555;--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,Consolas,"Liberation Mono",monospace;font-family:var(--sans);color:var(--ink);background:var(--paper)}
+*,*:before,*:after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:290px;line-height:1.78;background:radial-gradient(ellipse at 10% 3%,#fff5e7 0%,transparent 29%),var(--paper)}
+h1,h2,h3,p,figure{margin-top:0}
+h1,h2,h3{line-height:1.13}
+h1,h2,h3{font-family:var(--serif);font-weight:600}
+h1{font-size:clamp(3.2rem,6.1vw,6.7rem);letter-spacing:-.053em}
+h2{font-size:clamp(2rem,4vw,3.8rem);letter-spacing:-.044em}
+h3{font-size:clamp(1.3rem,2.2vw,1.7rem)}
+p{margin-bottom:1.12em}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:.52}
+a{color:#6f395b;text-underline-offset:3px}
+a:hover{color:#1c6371}
+:focus-visible{outline:3px solid #2788a3;outline-offset:4px}
+[hidden]{display:none!important}
+.wrap{width:min(1230px,calc(100% - 48px));margin-inline:auto}
+.mono{font-family:var(--mono)}
+.kicker{font:800 .71rem/1.65 var(--mono);letter-spacing:.135em;text-transform:uppercase;color:#8b4355}
+.skip{position:absolute;top:-100px;left:12px;padding:10px 15px;background:#fff;color:#234454;z-index:10}
+.skip:focus{top:12px}
+.hero{background:#f2e9db;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,#eaccc56e,transparent 52%);pointer-events:none}
+.hero .wrap{position:relative}
+.hero-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:21px 0;border-bottom:2px solid #ad928c;font:800 .75rem/1.5 var(--mono);letter-spacing:.055em;color:#7d4f5a}
+.hero-top span:last-child{font-weight:500;color:#746167}
+.hero-grid{display:grid;grid-template-columns:.91fr 1.09fr;align-items:center;gap:13px;padding:62px 0 60px;min-height:630px}
+.hero h1{max-width:720px;margin:17px 0 27px}
+.hero h1 em{font-weight:400;color:#9b425b}
+.hero .lead{font-size:1.14rem;line-height:1.9;max-width:560px;color:#5c4b50}
+.hero-notes{display:flex;gap:8px;flex-wrap:wrap;margin-top:27px}
+.hero-notes span{padding:8px 11px;border:1px solid #bca9a0;font:.76rem var(--mono);background:#fff9ee9c;color:#7c4f55}
+.hero-figure{margin:0}
+.hero-figure svg{display:block;width:100%;height:auto}
+.hero-figure figcaption{font-size:.8rem;color:#6c5e62;line-height:1.6;margin:10px 0}
+.hero-figure .pulse-heart{animation:gentlebeat 2.8s ease-in-out infinite;transform-origin:355px 300px}
+.hero-figure.is-paused .pulse-heart{animation-play-state:paused}
+@keyframes gentlebeat{0%,80%,100%{transform:scale(1)}9%{transform:scale(1.018)}22%{transform:scale(1)}32%{transform:scale(1.012)}}
+.motion-btn{border:1px solid #8a5b69;background:#fff9ee;color:#733d56;padding:9px 14px;font:.8rem var(--mono)}
+.motion-btn:hover{background:#f5e0e0}
+.hero-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:11px;border-top:1px solid #b9a299;padding:18px 0;font:.74rem var(--mono);color:#7a5b60}
+.band{height:11px;background:linear-gradient(90deg,#3e8493 0 24%,#b4c9bb 24% 40%,#faf4e7 40% 53%,#d8999b 53% 74%,#9b435a 74% 100%)}
+.section{padding:86px 0;border-bottom:1px solid var(--rule)}
+.section-header{display:grid;grid-template-columns:190px 1fr;gap:39px;margin-bottom:38px}
+.section-header .kicker{padding-top:10px}
+.section-header h2{max-width:900px;margin:0 0 18px}
+.section-header p{font-size:1.05rem;color:#60575e;max-width:875px;line-height:1.87;margin:0}
+.opening{display:grid;grid-template-columns:180px 1fr;gap:48px;padding:90px 0}
+.opening .folio{font:7.3rem/.8 var(--serif);letter-spacing:-.09em;color:#dacac4}
+.opening h2{max-width:840px}
+.opening .lead{font:1.43rem/1.55 var(--serif);color:#6b3e50;max-width:900px}
+.opening p{max-width:920px;color:#605860;line-height:1.95}
+.note{background:#eee2d6;border-left:5px solid #99526b;padding:20px 23px;margin:24px 0;color:#5d4e55}
+.note strong{color:#70364b}
+.anatomy{background:#eae2dd;padding:88px 0}
+.anatomy-grid{display:grid;grid-template-columns:1.03fr .97fr;gap:20px;align-items:start}
+.figure-sheet{background:#fbf4e9;border:1px solid #d0bdb3;padding:16px;margin:0}
+.figure-sheet svg{display:block;width:100%;height:auto}
+.figure-sheet figcaption{font-size:.79rem;color:#73646a;line-height:1.67;margin:12px 0 0}
+.anatomy-plate{position:relative}
+.anatomy-plate .marker{position:absolute;transform:translate(-50%,-50%);height:31px;min-width:31px;border-radius:50%;border:2px solid #fffaec;background:#6c4c61;color:#fff;font:800 .72rem var(--mono);box-shadow:0 0 0 3px #70485c5e}
+.anatomy-plate .marker[aria-pressed="true"]{background:#278092;color:#fff;box-shadow:0 0 0 5px #b6dae1}
+.anatomy-plate .marker:hover{background:#a85067}
+.anatomy-plate .marker[data-structure="ra"]{left:33%;top:35%}
+.anatomy-plate .marker[data-structure="rv"]{left:40%;top:65%}
+.anatomy-plate .marker[data-structure="la"]{left:69%;top:35%}
+.anatomy-plate .marker[data-structure="lv"]{left:65%;top:68%}
+.anatomy-plate .marker[data-structure="tricuspid"]{left:36%;top:48%}
+.anatomy-plate .marker[data-structure="mitral"]{left:64%;top:48%}
+.anatomy-plate .marker[data-structure="pulmonary"]{left:47%;top:24%}
+.anatomy-plate .marker[data-structure="aortic"]{left:57%;top:25%}
+.anatomy-plate .marker[data-structure="vena"]{left:20%;top:24%}
+.anatomy-plate .marker[data-structure="pulmartery"]{left:43%;top:12%}
+.anatomy-plate .marker[data-structure="pulmvein"]{left:81%;top:26%}
+.anatomy-plate .marker[data-structure="aorta"]{left:66%;top:10%}
+.anatomy-plate .marker[data-structure="septum"]{left:53%;top:65%}
+.anatomy-plate .marker[data-structure="coronary"]{left:78%;top:80%}
+.anatomy-sheet{background:#fffdf7;padding:24px;border:1px solid #cdbcb8}
+.anatomy-sheet .code{font:760 .73rem var(--mono);color:#94556b}
+.anatomy-sheet h3{font-size:clamp(1.7rem,3vw,2.65rem);margin:10px 0 14px}
+.anatomy-sheet p{color:#5e5961;font-size:.95rem;line-height:1.85}
+.anatomy-sheet .type-tag{display:inline-block;background:#e0ece8;color:#2c6067;padding:6px 10px;font:.76rem var(--mono)}
+.anatomy-sheet .why{padding:15px 18px;background:#f0e6ed;border-left:4px solid #8b6b9a;margin:17px 0;font-size:.94rem}
+.anatomy-sheet .why strong{display:block;margin-bottom:6px}
+.anatomy-list{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:20px}
+.anatomy-list button{border:1px solid #cfbcc0;background:#f8f1ec;color:#633e50;padding:9px;text-align:left;font-size:.82rem}
+.anatomy-list button[aria-pressed="true"]{background:#694354;color:#fff}
+.anatomy-list button:hover{border-color:#458291}
+.histology{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:31px}
+.histology article{background:#fffdf5;border-top:5px solid #a76071;padding:23px}
+.histology article:nth-child(2){border-color:#3c8291}
+.histology article:nth-child(3){border-color:#aa916e}
+.histology h3{margin-bottom:11px;font-size:1.3rem}
+.histology p{color:#665962;font-size:.9rem;line-height:1.78}
+.circulation{background:#213d49;color:#f4f2ec;padding:90px 0}
+.circulation h2{color:#fff6e5}
+.circulation .kicker{color:#b9d9dd}
+.circulation .section-header p{color:#d2e2e1}
+.circulation-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px}
+.circulation-map{background:#132c36;padding:19px;border:1px solid #587a7e;margin:0}
+.circulation-map svg{width:100%;height:auto;display:block}
+.circulation-map figcaption{font-size:.78rem;line-height:1.7;color:#b9d4d7;margin-top:11px}
+.circulation-map .blooddot{animation:flowdrop 4s linear infinite;transform-origin:300px 245px}
+.circulation-map.is-paused .blooddot{animation-play-state:paused}
+@keyframes flowdrop{0%{opacity:.1}40%{opacity:1}100%{opacity:.1}}
+.circulation-map .flow-section{transition:opacity .2s}
+.circulation-map .flow-section.dim{opacity:.22}
+.circulation-panel{background:#35505b;border:1px solid #73919a;padding:25px}
+.circulation-panel h3{font-size:1.8rem;color:#fcf4e7;margin:12px 0}
+.circulation-panel p{color:#d4e5e4;font-size:.94rem;line-height:1.84}
+.circuit-choices{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.circuit-choices button{border:1px solid #a5c0c2;background:#3d626b;color:#f4f6ed;padding:10px 13px;font-size:.86rem}
+.circuit-choices button[aria-pressed="true"]{background:#e8c6c0;color:#533441;border-color:#e8c6c0}
+.circuit-choices button:hover{border-color:#f0d3b3}
+.circulation-panel .phase-meta{font:.78rem var(--mono);color:#cde4e1}
+.circulation-panel .step{padding:17px 19px;background:#223e4a;border-left:4px solid #b1dce1;min-height:178px}
+.circulation-panel .step strong{display:block;color:#fff1d6;margin-bottom:8px;font-size:1.04rem}
+.circulation-panel .step p{margin:0}
+.circ-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.circ-controls button{padding:11px 14px;border:1px solid #93adb0;background:#d4dfe0;color:#284750;font-weight:740}
+.circ-controls button.secondary{background:#3f6168;color:#fff}
+.circ-status{font:.82rem var(--mono);padding:12px 0;color:#dce7e2}
+.circ-key{display:flex;gap:14px;flex-wrap:wrap;font:.76rem var(--mono);margin:14px 0;color:#d1dfe3}
+.circ-key b{display:inline-block;width:14px;height:8px;vertical-align:middle;margin-right:5px}
+.circulation-note{margin-top:25px;padding:21px 23px;border-left:5px solid #e0af9e;background:#39515a;color:#e1e8e2;font-size:.9rem;line-height:1.82}
+.valves{background:#f5eee8}
+.valve-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:29px;align-items:center}
+.valve-figure{margin:0;background:#fffaf3;border:1px solid #d0bfbb;padding:18px}
+.valve-figure svg{width:100%;height:auto;display:block}
+.valve-figure figcaption{font-size:.8rem;color:#6b5c65;margin-top:12px}
+.valve-copy p{line-height:1.9;color:#655b64}
+.valve-copy h3{margin-bottom:14px}
+.valve-note{padding:16px;background:#e9dfda;border-left:4px solid #ae6b7c}
+.cycle{background:#e9e8df;padding:88px 0}
+.cycle-layout{display:grid;grid-template-columns:1.08fr .92fr;gap:24px}
+.cycle-figure{margin:0;background:#fffdf7;border:1px solid #c7c9c0;padding:19px}
+.cycle-figure svg{width:100%;height:auto;display:block}
+.cycle-figure figcaption{font-size:.8rem;line-height:1.75;color:#5f6663;margin-top:12px}
+.cycle-figure .cycle-lamp{transition:opacity .2s}
+.cycle-figure .cycle-lamp.off{opacity:.25}
+.cycle-panel{background:#fffdf7;border:1px solid #c6bfb6;padding:26px}
+.cycle-panel .kicker{color:#985268}
+.cycle-panel h3{font-size:1.85rem;margin:11px 0}
+.cycle-panel p{color:#605b60;font-size:.95rem;line-height:1.84}
+.cycle-phase{display:grid;gap:8px;margin:19px 0}
+.cycle-phase button{padding:11px 14px;border:1px solid #c6b8ba;background:#f8f2eb;color:#634a57;text-align:left;font-size:.86rem}
+.cycle-phase button[aria-pressed="true"]{background:#7f4258;color:#fff;border-color:#7f4258}
+.cycle-phase button:hover{border-color:#43818f}
+.cycle-badges{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:19px 0}
+.cycle-badges .badge{padding:13px 11px;background:#e4edea;border-left:4px solid #3a7c87;font:.8rem/1.65 var(--mono);color:#3b5963}
+.cycle-badges .badge b{display:block;color:#224d59;font-size:.94rem}
+.cycle-badges .badge.closed{background:#f3e6e4;border-color:#bc6a77}
+.cycle-badges .badge.closed b{color:#873d54}
+.cycle-actions{display:flex;gap:9px;flex-wrap:wrap}
+.cycle-actions button{padding:11px 14px;background:#6e4c62;border:1px solid #795d6b;color:#fff;font-weight:720}
+.cycle-actions button.alt{background:#fffaf3;color:#633c53}
+.pressure{padding:85px 0}
+.pressure-grid{display:grid;grid-template-columns:1fr 1fr;gap:33px}
+.pressure-figure{margin:0;background:#f8f5eb;border:1px solid #d0c4b8;padding:18px}
+.pressure-figure svg{width:100%;height:auto;display:block}
+.pressure-figure figcaption{font-size:.79rem;line-height:1.75;color:#655e63;margin-top:11px}
+.pressure-grid p{color:#5f5e61;line-height:1.92}
+.pressure-grid h3{margin:16px 0 12px}
+.pressure-formula{padding:17px 19px;background:#e4eeee;border-left:4px solid #327586;font:.9rem/1.78 var(--mono);color:#395c67}
+.pressure-formula small{display:block;font:.83rem/1.75 var(--sans);margin-top:8px;color:#51636c}
+.conduction{background:#e9e3e9}
+.conduction-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:30px}
+.conduction-figure{background:#3b3443;padding:18px;margin:0}
+.conduction-figure svg{width:100%;height:auto;display:block}
+.conduction-figure figcaption{font-size:.79rem;line-height:1.7;color:#e9d9e4;margin-top:12px}
+.conduction-figure .pulse-path{stroke-dasharray:9 12;animation:conduction 4s linear infinite}
+.conduction-figure.is-paused .pulse-path{animation-play-state:paused}
+@keyframes conduction{to{stroke-dashoffset:-84}}
+.conduction-panel{background:#fffdf7;border:1px solid #cbbbc7;padding:25px}
+.conduction-panel h3{font-size:1.8rem}
+.conduction-panel p{color:#605a63;line-height:1.84}
+.elec-choices{display:grid;gap:9px;margin:18px 0}
+.elec-choices button{padding:11px 13px;text-align:left;background:#f2e9ef;border:1px solid #cebcca;color:#64475d;font-size:.88rem}
+.elec-choices button[aria-pressed="true"]{background:#695270;color:#fff}
+.elec-feedback{padding:16px 18px;background:#e8e0ec;border-left:4px solid #80689c;min-height:135px;color:#514759;line-height:1.85}
+.elec-actions{margin-top:16px}
+.elec-actions button{padding:9px 13px;border:1px solid #805d80;background:#765779;color:#fff;font-weight:740}
+.co-lab{background:#f2f0e6}
+.co-grid{display:grid;grid-template-columns:.94fr 1.06fr;gap:27px}
+.co-controls{background:#fffdf7;border:1px solid #c7c9be;padding:25px}
+.co-controls h3{font-size:1.7rem}
+.co-controls p{font-size:.91rem;line-height:1.84;color:#5b6160}
+.co-controls label{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:.89rem;font-weight:730}
+.co-controls label output{font:.84rem var(--mono);color:#8c485d;white-space:nowrap}
+.co-controls input{width:100%;accent-color:#8f4863;margin:10px 0 23px}
+.co-actions{display:flex;gap:9px;flex-wrap:wrap}
+.co-actions button{padding:10px 13px;border:1px solid #805062;background:#8b4a60;color:#fff;font-weight:740}
+.co-readout{background:#314f5b;padding:27px;color:#edf4ed}
+.co-readout h3{color:#fbf5e4}
+.co-readout .result{border-left:5px solid #b8dbe3;padding:18px;background:#233f4b;margin-bottom:18px}
+.co-readout .result strong{display:block;font:600 2.85rem var(--serif);color:#f7ded1}
+.co-readout .result small{display:block;color:#d2e5e6;margin-top:8px;line-height:1.65}
+.co-readout p{color:#d3e4e5;font-size:.9rem;line-height:1.84}
+.co-readout .formula{font:1.05rem/1.8 var(--mono);color:#d6efe8}
+.prevention{background:#f0e8e2}
+.prevent-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.prevent-figure{margin:0;background:#fffbef;border:1px solid #d3c1ba;padding:17px}
+.prevent-figure svg{width:100%;height:auto;display:block}
+.prevent-figure figcaption{font-size:.8rem;color:#6c5d63;margin-top:12px}
+.prevent-grid p{color:#5c5b60;line-height:1.89}
+.prevent-grid h3{margin:14px 0}
+.prevent-items{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:28px}
+.prevent-items article{padding:22px;background:#fffaf2;border-top:4px solid #9f6175}
+.prevent-items article:nth-child(2){border-color:#42808b}
+.prevent-items article:nth-child(3){border-color:#aaa077}
+.prevent-items article:nth-child(4){border-color:#b18369}
+.prevent-items article:nth-child(5){border-color:#6e9a9a}
+.prevent-items article:nth-child(6){border-color:#b78a9e}
+.prevent-items h3{font-size:1.24rem}
+.prevent-items p{font-size:.89rem;color:#645a61;line-height:1.79}
+.quiz{background:#ebece7;padding:88px 0}
+.quiz-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:43px}
+.quiz-side p{color:#5e6261;line-height:1.9}
+.question{border:0;border-bottom:1px solid #c7cbc5;margin:0 0 24px;padding:0 0 24px;min-width:0}
+.question legend{font-weight:790;line-height:1.6;margin:0 0 12px;padding:0;width:100%}
+.question label{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;margin:8px 0;background:#fffdf7;border:1px solid #c7c8c4;cursor:pointer}
+.question label:has(input:checked){background:#f3e7ec;border-color:#a76c83}
+.question input{flex:none;accent-color:#9f5871;margin-top:6px}
+.question-feedback{font-size:.9rem;color:#84516b;margin:12px 0 0;min-height:1.5em}
+.quiz-actions{display:flex;gap:10px;flex-wrap:wrap}
+.quiz-actions button{padding:12px 16px;border:1px solid #77475d;background:#7c4861;color:#fff;font-weight:750}
+.quiz-actions button.alt{background:transparent;color:#75475e}
+.quiz-result{font-size:1.3rem;font-weight:750;margin-top:19px}
+.epilogue{background:#5b3548;color:#fffaf1;padding:70px 0}
+.epilogue h2{max-width:1060px}
+.epilogue p{color:#f0e0e5;font-size:1.06rem;line-height:1.91;max-width:930px}
+.references{padding:45px 0 72px}
+.references h2{font-size:1.55rem}
+.references p{color:#635b60;font-size:.9rem;line-height:1.85}
+.references a{overflow-wrap:anywhere}
+body.motion-paused *,body.motion-paused *:before,body.motion-paused *:after{animation-play-state:paused!important;transition-duration:0s!important}
+@media(max-width:1020px){.hero-grid,.opening,.section-header,.anatomy-grid,.circulation-grid,.valve-layout,.cycle-layout,.pressure-grid,.conduction-grid,.co-grid,.prevent-grid,.quiz-grid{grid-template-columns:1fr}.hero-grid{min-height:0;padding:49px 0}.hero-figure{max-width:790px}.opening{gap:13px}.opening .folio{font-size:4rem}.section-header{gap:12px}.anatomy-grid{gap:14px}.histology,.prevent-items{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.wrap{width:calc(100% - 28px)}.hero-grid{gap:0}.hero h1{font-size:clamp(3.05rem,11vw,5.4rem)}.opening,.section,.anatomy,.circulation,.cycle,.quiz{padding:57px 0}.anatomy-sheet,.circulation-panel,.cycle-panel,.conduction-panel{padding:18px}.anatomy-plate .marker{height:25px;min-width:25px;font-size:.62rem;border-width:1px}.anatomy-list{grid-template-columns:1fr 1fr}.histology,.prevent-items{grid-template-columns:1fr}.cycle-badges{grid-template-columns:1fr}.hero-top{font-size:.68rem}.circulation-map{padding:9px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o atlas do coração</a>
+<main id="conteudo">
+<section class="hero" aria-labelledby="titulo">
+ <div class="wrap">
+  <div class="hero-top"><span>ATLAS DE ANATOMIA HUMANA / FASCÍCULO 01</span><span>CIÊNCIA · REPRESENTAÇÃO DIDÁTICA · SEM DIAGNÓSTICO</span></div>
+  <div class="hero-grid">
+   <div>
+    <span class="kicker">Uma investigação pelo sistema cardiovascular</span>
+    <h1 id="titulo">Uma viagem por dentro do <em>coração humano.</em></h1>
+    <p class="lead">Quatro câmaras, quatro válvulas e dois circuitos de circulação funcionando de forma coordenada. Abra o atlas, acompanhe o sangue, explore cada batimento e descubra como estrutura, pressão e eletricidade se encontram.</p>
+    <div class="hero-notes"><span>Anatomia explorável</span><span>Circulação dupla</span><span>Ciclo cardíaco</span><span>Condução elétrica</span></div>
+   </div>
+   <figure class="hero-figure" id="heroFigure">
+    <svg viewBox="0 0 720 600" role="img" aria-labelledby="heroSvgTitle heroSvgDesc">
+     <title id="heroSvgTitle">Ilustração anatômica autoral do coração humano em corte frontal didático</title>
+     <desc id="heroSvgDesc">Desenho artístico e esquemático com quatro câmaras, vasos azulados do lado direito anatômico, vasos avermelhados do lado esquerdo, aorta, artéria pulmonar, veias cavas e veias pulmonares. O lado direito anatômico aparece à esquerda da imagem. A forma e a escala são simplificadas.</desc>
+     <rect width="720" height="600" fill="#f3e7d8"/>
+     <g stroke="#cbb5a5" stroke-width="1.5" fill="none" opacity=".6"><path d="M60 0V600 M130 0V600 M200 0V600 M270 0V600 M340 0V600 M410 0V600 M480 0V600 M550 0V600 M620 0V600 M690 0V600 M0 70H720 M0 140H720 M0 210H720 M0 280H720 M0 350H720 M0 420H720 M0 490H720 M0 560H720"/></g>
+     <g class="pulse-heart">
+      <path d="M290 162 C239 120 167 148 148 229 C126 337 242 508 357 552 C456 518 569 347 551 232 C542 158 452 121 405 169 C354 130 321 134 290 162Z" fill="#9a4658" stroke="#71394c" stroke-width="13"/>
+      <path d="M283 178 C226 157 185 203 190 265 C193 341 261 417 341 487" fill="none" stroke="#cc8793" stroke-width="22" stroke-linecap="round"/>
+      <path d="M409 189 C468 157 518 212 504 285 C485 371 422 454 369 500" fill="none" stroke="#dba3a0" stroke-width="24" stroke-linecap="round"/>
+      <path d="M346 200 C325 312 346 437 365 498" fill="none" stroke="#f6d5bd" stroke-width="19" opacity=".85"/>
+      <path d="M212 227Q279 181 322 231L324 293Q263 334 208 284Z" fill="#4a8796" stroke="#cde0d8" stroke-width="5"/>
+      <path d="M222 314Q289 283 330 315L351 447Q292 437 241 370Z" fill="#437587" stroke="#a0cdd1" stroke-width="5"/>
+      <path d="M374 228Q432 184 486 231L473 286Q413 313 378 286Z" fill="#cf777c" stroke="#f6ddd0" stroke-width="5"/>
+      <path d="M369 317Q435 283 481 327L465 402Q410 467 375 467Z" fill="#b75465" stroke="#f1d2b7" stroke-width="5"/>
+      <path d="M324 300L364 312M375 301L407 290" stroke="#e2b6aa" stroke-width="13"/>
+      <path d="M265 194L262 76" stroke="#488a9c" stroke-width="57" fill="none"/>
+      <path d="M289 185Q312 120 401 117L491 123" fill="none" stroke="#508d9e" stroke-width="42" stroke-linecap="round"/>
+      <path d="M398 191Q396 77 456 76Q524 76 518 138L521 220" fill="none" stroke="#ae5266" stroke-width="53" stroke-linecap="round"/>
+      <path d="M263 77V31" stroke="#cee2db" stroke-width="4"/><path d="M450 77V29 M490 78V31 M525 82V31" stroke="#e7aca5" stroke-width="14" fill="none"/>
+      <path d="M206 286L136 272" stroke="#518ca2" stroke-width="32" stroke-linecap="round"/>
+      <path d="M487 254L568 227" stroke="#ca747d" stroke-width="26" stroke-linecap="round"/>
+      <g fill="none" stroke="#f9e5c7" stroke-width="5"><path d="M286 237L303 260L320 238 M393 232L410 252L429 235"/></g>
+     </g>
+     <g font-family="Georgia,serif" font-size="20" fill="#643f4b"><text x="24" y="89">Vena cava</text><text x="24" y="114">superior</text><text x="502" y="67">Aorta</text><text x="510" y="173">Artéria</text><text x="509" y="195">pulmonar</text><text x="35" y="551" font-size="17">DIREITA ANATÔMICA ←</text><text x="471" y="548" font-size="17">→ ESQUERDA</text></g>
+    </svg>
+    <figcaption>Figura 1. Gravura anatômica SVG original, sem proporções clínicas. Em vista frontal, o coração direito anatômico aparece à esquerda de quem olha. Azul e vermelho indicam menor/maior oxigenação, não cor real do sangue.</figcaption>
+    <button type="button" id="pauseHero" class="motion-btn" aria-pressed="false">Pausar pulsação ilustrativa</button>
+    <button type="button" id="pauseAll" class="motion-btn" aria-pressed="false">Pausar todas as animações</button>
+   </figure>
+  </div>
+  <div class="hero-meta"><span>CADERNO 01 / 10</span><span>EXPLORAÇÃO EDUCATIVA · 30–40 MINUTOS</span></div>
+ </div>
+ <div class="band" aria-hidden="true"></div>
+</section>
+
+<section class="opening wrap" aria-labelledby="openingTitle">
+ <div><span class="folio" aria-hidden="true">I.</span><span class="kicker">A bomba dupla</span></div>
+ <div>
+  <h2 id="openingTitle">O coração é uma bomba muscular, mas não trabalha como uma bomba simples.</h2>
+  <p class="lead">O lado direito impulsiona sangue para os pulmões; o lado esquerdo o distribui ao restante do corpo. Os dois lados bombeiam ao mesmo tempo e dependem um do outro.</p>
+  <p>O coração possui dois átrios, que recebem sangue, e dois ventrículos, que o ejetam. O lado direito geralmente opera contra pressões menores no circuito pulmonar, enquanto o ventrículo esquerdo precisa gerar pressão suficiente para alimentar a circulação sistêmica. O septo separa as cavidades direitas das esquerdas. Válvulas direcionam o fluxo ao abrir e fechar conforme diferenças de pressão, não porque sejam portas controladas conscientemente.</p>
+  <p>O miocárdio transforma atividade elétrica em contração coordenada, e artérias coronárias levam sangue ao próprio músculo cardíaco. Como pulmões e tecidos recebem continuamente sangue em um sistema fechado, a narrativa que você seguirá é apenas a trajetória de uma porção de sangue, não uma sequência em que um lado espera o outro funcionar.</p>
+  <div class="note"><strong>Como ler as figuras:</strong> um esquema azul/vermelho indica diferença relativa de oxigenação, não que exista “sangue azul”. O sangue humano é vermelho, com tonalidade que varia com a oxigenação. As dimensões, tempos e volumes dos desenhos são aproximações pedagógicas, não exames ou dados individuais.</div>
+ </div>
+</section>
+
+<section class="anatomy" aria-labelledby="anatomyTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">Lâmina 01 / Anatomia explorável</span><div><h2 id="anatomyTitle">Encontre as quatro câmaras, as válvulas e os grandes vasos.</h2><p>Use os marcadores numerados na ilustração ou a lista ao lado para investigar 14 estruturas. Cada seleção explica sua função e sua relação com a circulação, preservando a orientação anatômica.</p></div></div>
+  <div class="anatomy-grid">
+   <figure class="figure-sheet">
+    <div class="anatomy-plate">
+     <svg viewBox="0 0 780 770" role="img" aria-labelledby="anatomySvgTitle anatomySvgDesc">
+      <title id="anatomySvgTitle">Corte frontal didático do coração com as câmaras e grandes vasos</title>
+      <desc id="anatomySvgDesc">Quatro câmaras em corte esquemático: átrio e ventrículo direitos na esquerda da imagem em azul-esverdeado, átrio e ventrículo esquerdos na direita em tons avermelhados. Válvulas, septo, aorta, vasos pulmonares e veias cavas estão representados. Marcadores com números permitem explorar a anatomia. Não é uma imagem de exame nem um desenho com medidas reais.</desc>
+      <rect width="780" height="770" fill="#fff8ed"/>
+      <g stroke="#dfd1c7" stroke-width="1" fill="none" opacity=".7"><path d="M0 80H780 M0 160H780 M0 240H780 M0 320H780 M0 400H780 M0 480H780 M0 560H780 M0 640H780 M0 720H780 M80 0V770 M160 0V770 M240 0V770 M320 0V770 M400 0V770 M480 0V770 M560 0V770 M640 0V770 M720 0V770"/></g>
+      <path d="M302 199 C212 145 127 209 126 321 C125 472 255 653 385 710 C518 676 653 462 627 318 C615 194 523 155 451 198 C389 164 342 170 302 199Z" fill="#bc6d77" stroke="#8e485d" stroke-width="14"/>
+      <path d="M303 211Q229 189 194 275Q159 418 320 590" fill="none" stroke="#dc9a9d" stroke-width="21"/>
+      <path d="M452 211Q558 172 588 287Q616 423 457 597" fill="none" stroke="#e6b9ad" stroke-width="30"/>
+      <path d="M394 228Q371 343 388 481L405 643" fill="none" stroke="#f7ddc9" stroke-width="17"/>
+      <path d="M228 269 Q314 208 378 286 L370 374 Q278 411 227 354Z" fill="#4b899b" stroke="#e5ece2" stroke-width="7"/>
+      <path d="M224 413 Q322 379 367 425 L385 617 Q273 589 240 515Z" fill="#3c7891" stroke="#a9d5d1" stroke-width="7"/>
+      <path d="M424 286 Q508 216 563 282 L546 358 Q458 398 421 369Z" fill="#c56f7a" stroke="#ffe1cd" stroke-width="7"/>
+      <path d="M424 422 Q528 376 568 441 Q572 526 414 626Z" fill="#ac465c" stroke="#f8d8c0" stroke-width="8"/>
+      <g fill="none" stroke-width="44" stroke-linecap="round"><path stroke="#518c9a" d="M278 266 L272 104"/><path stroke="#458c9b" d="M275 360L247 653"/><path stroke="#528f9c" d="M366 240Q366 125 474 145L587 151"/><path stroke="#ad5068" d="M469 235Q468 115 503 102Q566 60 585 152L586 237"/><path stroke="#bd6977" d="M553 302L684 273"/></g>
+      <g stroke="#f8e6d1" stroke-width="6" fill="none"><path d="M334 395L359 414L378 398 M422 405L438 386L458 403 M347 239L363 254L383 239 M440 239L457 256L474 239"/></g>
+      <g fill="none" stroke="#ad6275" stroke-width="6"><path d="M548 464 Q605 500 566 579 M549 520Q605 569 548 635 M520 557L478 618"/></g>
+      <g font-family="Georgia,serif" fill="#66515b" font-size="22"><text x="27" y="49">CORTE ANTERIOR DIDÁTICO</text><text x="44" y="744">DIREITA ANATÔMICA</text><text x="506" y="744">ESQUERDA ANATÔMICA</text></g>
+     </svg>
+     <button class="marker" type="button" data-structure="ra" aria-label="01: átrio direito" aria-pressed="true">1</button>
+     <button class="marker" type="button" data-structure="rv" aria-label="02: ventrículo direito" aria-pressed="false">2</button>
+     <button class="marker" type="button" data-structure="la" aria-label="03: átrio esquerdo" aria-pressed="false">3</button>
+     <button class="marker" type="button" data-structure="lv" aria-label="04: ventrículo esquerdo" aria-pressed="false">4</button>
+     <button class="marker" type="button" data-structure="tricuspid" aria-label="05: valva tricúspide" aria-pressed="false">5</button>
+     <button class="marker" type="button" data-structure="mitral" aria-label="06: valva mitral" aria-pressed="false">6</button>
+     <button class="marker" type="button" data-structure="pulmonary" aria-label="07: valva pulmonar" aria-pressed="false">7</button>
+     <button class="marker" type="button" data-structure="aortic" aria-label="08: valva aórtica" aria-pressed="false">8</button>
+     <button class="marker" type="button" data-structure="vena" aria-label="09: veias cavas" aria-pressed="false">9</button>
+     <button class="marker" type="button" data-structure="pulmartery" aria-label="10: artérias pulmonares" aria-pressed="false">10</button>
+     <button class="marker" type="button" data-structure="pulmvein" aria-label="11: veias pulmonares" aria-pressed="false">11</button>
+     <button class="marker" type="button" data-structure="aorta" aria-label="12: aorta" aria-pressed="false">12</button>
+     <button class="marker" type="button" data-structure="septum" aria-label="13: septo" aria-pressed="false">13</button>
+     <button class="marker" type="button" data-structure="coronary" aria-label="14: circulação coronária" aria-pressed="false">14</button>
+    </div>
+    <figcaption>Figura 2. Ilustração SVG autoral com marcadores interativos. Ângulos, dimensões e posição das valvas são simplificados. Os pontos numerados não são medições ou estruturas individualizadas em exame de imagem.</figcaption>
+   </figure>
+   <div class="anatomy-sheet">
+    <span class="code" id="structureIndex">ESTRUTURA 01 / 14</span><h3 id="structureName">Átrio direito</h3><span class="type-tag" id="structureType">Câmara receptora</span>
+    <p id="structureDescription" role="status" aria-live="polite" aria-atomic="true">Recebe o sangue que retorna da circulação sistêmica pelas veias cavas e pelo seio coronário. Quando a diferença de pressão permite, o sangue segue pela valva tricúspide ao ventrículo direito.</p>
+    <div class="why"><strong>Relação com o restante do sistema</strong><span id="structureLink">Retorno venoso sistêmico → átrio direito → valva tricúspide → ventrículo direito.</span></div>
+    <p id="structureNuance" style="font-size:.83rem">Direito e esquerdo são definidos na anatomia do paciente, não na posição do desenho na tela.</p>
+    <div class="anatomy-list" role="group" aria-label="Selecionar estrutura anatômica por nome">
+     <button type="button" data-structure="ra" aria-pressed="true">01 · Átrio direito</button>
+     <button type="button" data-structure="rv" aria-pressed="false">02 · Ventrículo direito</button>
+     <button type="button" data-structure="la" aria-pressed="false">03 · Átrio esquerdo</button>
+     <button type="button" data-structure="lv" aria-pressed="false">04 · Ventrículo esquerdo</button>
+     <button type="button" data-structure="tricuspid" aria-pressed="false">05 · Tricúspide</button>
+     <button type="button" data-structure="mitral" aria-pressed="false">06 · Mitral</button>
+     <button type="button" data-structure="pulmonary" aria-pressed="false">07 · Pulmonar</button>
+     <button type="button" data-structure="aortic" aria-pressed="false">08 · Aórtica</button>
+     <button type="button" data-structure="vena" aria-pressed="false">09 · Veias cavas</button>
+     <button type="button" data-structure="pulmartery" aria-pressed="false">10 · Artérias pulmonares</button>
+     <button type="button" data-structure="pulmvein" aria-pressed="false">11 · Veias pulmonares</button>
+     <button type="button" data-structure="aorta" aria-pressed="false">12 · Aorta</button>
+     <button type="button" data-structure="septum" aria-pressed="false">13 · Septo</button>
+     <button type="button" data-structure="coronary" aria-pressed="false">14 · Coronárias</button>
+    </div>
+   </div>
+  </div>
+  <div class="histology">
+   <article><h3>Endocárdio</h3><p>Revestimento interno das cavidades e estruturas valvares, fundamental para a interface entre sangue e tecido. Não é a camada muscular que gera a força principal de ejeção.</p></article>
+   <article><h3>Miocárdio</h3><p>Camada de músculo cardíaco responsável pela contração. Sua espessura e organização variam entre câmaras: o ventrículo esquerdo possui parede tipicamente mais espessa do que o direito.</p></article>
+   <article><h3>Epicárdio e pericárdio</h3><p>O epicárdio recobre a superfície do coração; o pericárdio é o saco que o envolve, com camadas e fluido que favorecem seu movimento. São estruturas distintas do miocárdio.</p></article>
+  </div>
+ </div>
+</section>
+
+<section class="circulation" aria-labelledby="circulationTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">Lâmina 02 / Circulação dupla</span><div><h2 id="circulationTitle">Siga uma porção de sangue pelos dois circuitos.</h2><p>Escolha circulação pulmonar, sistêmica ou uma volta narrativa completa. Avance pelos vasos e câmaras para descobrir onde ocorre a troca gasosa e por que artérias e veias são definidas pelo sentido do fluxo, não pelo teor de oxigênio.</p></div></div>
+  <div class="circuit-choices" role="group" aria-label="Escolher circuito da viagem do sangue">
+   <button type="button" data-route="pulmonary" aria-pressed="true">Circuito pulmonar</button>
+   <button type="button" data-route="systemic" aria-pressed="false">Circuito sistêmico</button>
+   <button type="button" data-route="full" aria-pressed="false">Volta completa</button>
+  </div>
+  <div class="circulation-grid">
+   <figure class="circulation-map is-paused" id="flowMap">
+    <svg viewBox="0 0 760 550" role="img" aria-labelledby="bloodSvgTitle bloodSvgDesc">
+     <title id="bloodSvgTitle">Dois circuitos de circulação passando pelo coração, pulmões e tecidos</title>
+     <desc id="bloodSvgDesc">Esquema original: pulmões acima, tecidos abaixo e coração ao centro com os lados direito e esquerdo anatômicos. Setas azuis representam sangue relativamente menos oxigenado indo aos pulmões ou retornando dos tecidos, e setas vermelhas sangue mais oxigenado voltando dos pulmões ou indo aos tecidos. Os componentes do circuito selecionado ficam realçados.</desc>
+     <rect width="760" height="550" fill="#1b3740"/>
+     <g class="flow-section" data-map-loop="pulmonary">
+      <path d="M310 195Q196 98 156 149Q105 207 224 245" fill="none" stroke="#77b3c0" stroke-width="20" stroke-linecap="round"/>
+      <path d="M254 151Q339 90 365 165" fill="none" stroke="#77b3c0" stroke-width="12"/>
+      <path d="M178 145Q216 72 272 119" fill="none" stroke="#d0a2a5" stroke-width="21" stroke-linecap="round"/>
+      <path d="M375 154Q446 93 543 145Q613 195 500 245" fill="none" stroke="#df989d" stroke-width="20" stroke-linecap="round"/>
+      <g fill="#99b4aa" stroke="#dbe4d7" stroke-width="5"><path d="M143 68Q71 98 114 177Q167 226 278 190Q278 128 216 79Z"/><path d="M472 78Q548 51 614 129Q647 213 531 237L465 184Z"/></g>
+      <g fill="none" stroke="#557f8d" stroke-width="6"><path d="M196 102L229 170 M162 122L204 189 M531 115L498 187 M573 140L519 207"/></g>
+      <g fill="#d8efec" font-family="monospace" font-size="18"><text x="232" y="47">PULMÕES / TROCA GASOSA</text></g>
+     </g>
+     <g class="flow-section" data-map-loop="systemic">
+      <path d="M486 319Q680 323 674 416Q659 492 494 478" fill="none" stroke="#dc969b" stroke-width="21" stroke-linecap="round"/>
+      <path d="M241 479Q76 487 90 394Q103 333 301 320" fill="none" stroke="#7fb6c1" stroke-width="21" stroke-linecap="round"/>
+      <rect x="236" y="445" width="288" height="66" rx="30" fill="#829d8d" stroke="#cbdccb" stroke-width="5"/>
+      <g fill="#d9ece0" font-family="monospace" font-size="18"><text x="275" y="485">TECIDOS DO CORPO</text></g>
+     </g>
+     <g fill="#743d52" stroke="#e0b9ba" stroke-width="7"><path d="M306 240Q237 200 213 283Q190 373 379 426Q566 379 551 276Q532 205 454 237Q388 207 306 240Z"/></g>
+     <g fill="#568b9d"><ellipse cx="294" cy="288" rx="57" ry="39"/><path d="M237 324Q285 309 346 337L378 398Q273 381 237 324Z"/></g>
+     <g fill="#ce858c"><ellipse cx="448" cy="290" rx="57" ry="38"/><path d="M403 334Q455 312 519 326Q500 383 390 400Z"/></g>
+     <path d="M376 267L389 408" stroke="#eed8c3" stroke-width="14"/>
+     <g font-family="monospace" fill="#f3eadf" font-size="17"><text x="244" y="287">AD</text><text x="270" y="356">VD</text><text x="444" y="288">AE</text><text x="454" y="359">VE</text></g>
+     <g class="blooddot" fill="#ffedd4"><circle cx="196" cy="164" r="7"/><circle cx="597" cy="166" r="7"/><circle cx="627" cy="413" r="7"/><circle cx="130" cy="416" r="7"/></g>
+     <g fill="#e7f3ed" font-family="monospace" font-size="15"><text x="29" y="536">CORES: OXIGENAÇÃO RELATIVA, NÃO COR REAL DO SANGUE</text></g>
+    </svg>
+    <figcaption>Figura 3. Mapa SVG autoral da circulação. As setas indicam trajetos gerais e o destaque não corresponde a movimento de células medido; lados do coração e capilares foram simplificados. Pulmões e circulação sistêmica operam ao mesmo tempo.</figcaption>
+    <div class="circ-key"><span><b style="background:#7fb6c1"></b>Menor oxigenação</span><span><b style="background:#df989d"></b>Maior oxigenação</span></div>
+   </figure>
+   <div class="circulation-panel">
+    <span class="phase-meta" id="routeIndex">CIRCUITO PULMONAR / ETAPA 1 DE 6</span>
+    <h3 id="routeName">Ventrículo direito</h3>
+    <p id="routeSummary">O sangue segue do coração direito aos pulmões e retorna ao átrio esquerdo.</p>
+    <div class="step" role="status" aria-live="polite" aria-atomic="true"><strong id="routeStepTitle">Partida: ventrículo direito</strong><p id="routeStepDetail">Na sístole ventricular, o ventrículo direito ejetará sangue através da valva pulmonar quando sua pressão superar a pressão na saída pulmonar.</p></div>
+    <p class="circ-status" id="routeOxygen">Oxigenação relativa: menor (antes da troca nos pulmões).</p>
+    <div class="circ-controls">
+     <button type="button" id="routePrev" class="secondary" disabled>Anterior</button>
+     <button type="button" id="routeNext">Próxima etapa</button>
+     <button type="button" id="routeAuto" class="secondary" aria-pressed="false">Reproduzir etapas</button>
+     <button type="button" id="routeReset" class="secondary">Reiniciar</button>
+    </div>
+    <p style="font-size:.82rem;margin-top:20px">O tempo de cada etapa nesta animação não é tempo fisiológico medido. Não usamos valores de saturação de oxigênio, velocidade de sangue ou pressão de um paciente.</p>
+   </div>
+  </div>
+  <div class="circulation-note"><strong>Três distinções fundamentais:</strong> artéria é vaso que leva sangue <em>para fora</em> do coração, e veia o traz <em>de volta</em>. Assim, artérias pulmonares normalmente levam sangue com menor oxigenação, e veias pulmonares trazem sangue mais oxigenado. A troca gasosa ocorre predominantemente em capilares dos pulmões; tecidos sistêmicos recebem O₂ e liberam CO₂, mas o transporte e a troca não acontecem todos numa única gota de sangue em fila.</div>
+ </div>
+</section>
+
+<section class="section valves" aria-labelledby="valvesTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">Lâmina 03 / Quatro valvas</span><div><h2 id="valvesTitle">As valvas acompanham diferenças de pressão.</h2><p>Folhetos valvares abrem quando a diferença de pressão favorece o fluxo no sentido anatômico e fecham quando essa diferença se inverte. Músculos papilares e cordas tendíneas ajudam a estabilizar valvas atrioventriculares durante a contração.</p></div></div>
+  <div class="valve-layout">
+   <figure class="valve-figure">
+    <svg viewBox="0 0 730 415" role="img" aria-labelledby="valveSvgTitle valveSvgDesc">
+     <title id="valveSvgTitle">Dois tipos de valvas cardíacas: atrioventricular e semilunar</title>
+     <desc id="valveSvgDesc">Dois esquemas anatômicos simplificados: à esquerda, folhetos de valva atrioventricular sustentados por cordas tendíneas; à direita, valva semilunar com três cúspides. Cores não representam estados de abertura ou doença.</desc>
+     <rect width="730" height="415" fill="#fff9ef"/>
+     <g fill="none" stroke="#b4a39c" stroke-width="5"><ellipse cx="184" cy="140" rx="112" ry="59"/><ellipse cx="536" cy="140" rx="110" ry="60"/></g>
+     <g fill="#d6a4a9" stroke="#9a5b6b" stroke-width="6"><path d="M99 121Q152 175 183 145Q218 182 269 123Q247 222 183 212Q119 221 99 121Z"/><path d="M536 82Q595 96 597 144Q554 150 537 194Q519 146 475 145Q474 96 536 82Z"/></g>
+     <g stroke="#b08b8d" stroke-width="5" fill="none"><path d="M150 198L126 315 M186 199L186 336 M220 203L253 320"/></g>
+     <g fill="#8e5967"><ellipse cx="128" cy="319" rx="17" ry="33"/><ellipse cx="251" cy="319" rx="17" ry="33"/></g>
+     <g fill="#6b4f55" font-family="Georgia,serif" font-size="23"><text x="55" y="389">Atrioventricular</text><text x="463" y="389">Semilunar</text></g>
+    </svg>
+    <figcaption>Figura 4. Tipos de valva em SVG autoral. A ilustração não representa anatomia valvar exata, estágio de doença ou estado dinâmico; a próxima lâmina mostra a lógica de abertura por fase.</figcaption>
+   </figure>
+   <div class="valve-copy">
+    <h3>Tricúspide e mitral</h3><p>São valvas atrioventriculares: tricúspide entre átrio e ventrículo direitos e mitral entre átrio e ventrículo esquerdos. Seus folhetos são sustentados por cordas tendíneas e músculos papilares; esses elementos ajudam a impedir prolapso excessivo durante a sístole.</p>
+    <h3>Pulmonar e aórtica</h3><p>São valvas semilunares na saída dos ventrículos. A pulmonar regula passagem para o tronco pulmonar, e a aórtica para a aorta. Normalmente abrem na ejeção ventricular e fecham durante o relaxamento quando a pressão arterial supera a ventricular.</p>
+    <div class="valve-note"><strong>Elas não precisam “decidir”:</strong> em condições fisiológicas, abrir e fechar resulta principalmente de diferenças instantâneas de pressão e de suas propriedades mecânicas. A insuficiência valvar ou estenose alteram esse comportamento e exigem avaliação clínica; não são simuladas aqui.</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="cycle" aria-labelledby="cycleTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">Lâmina 04 / Cinco estados mecânicos</span><div><h2 id="cycleTitle">Um batimento é uma sequência de estados, não um único aperto.</h2><p>Escolha uma fase do ciclo cardíaco idealizado. O painel indica qual grupo de valvas está aberto e como as diferenças de pressão afetam o fluxo. Na realidade, o ciclo é contínuo e as durações mudam com a frequência cardíaca.</p></div></div>
+  <div class="cycle-layout">
+   <figure class="cycle-figure" id="cycleFigure">
+    <svg viewBox="0 0 770 520" role="img" aria-labelledby="cycleSvgTitle cycleSvgDesc">
+     <title id="cycleSvgTitle">Quadro didático do coração com quatro valvas e indicador de fase</title>
+     <desc id="cycleSvgDesc">Corte geométrico simplificado com dois átrios e dois ventrículos. Quatro círculos de estado para tricúspide, mitral, pulmonar e aórtica tornam-se destacados quando a valva está aberta na fase selecionada. O texto ao lado informa os estados para leitores de tela.</desc>
+     <rect width="770" height="520" fill="#fff9ef"/>
+     <path d="M379 77V444" stroke="#e2cdc7" stroke-width="17"/>
+     <g fill="#78a3ac" stroke="#37768a" stroke-width="6"><rect x="101" y="75" width="251" height="155" rx="55"/><rect x="101" y="280" width="251" height="155" rx="66"/></g>
+     <g fill="#dca4a7" stroke="#aa6474" stroke-width="6"><rect x="413" y="75" width="246" height="155" rx="55"/><rect x="413" y="280" width="246" height="155" rx="66"/></g>
+     <g font-family="Georgia,serif" font-size="25" text-anchor="middle" fill="#fdf7ec"><text x="228" y="157">Átrio direito</text><text x="228" y="365">Ventrículo direito</text><text x="539" y="157">Átrio esquerdo</text><text x="539" y="365">Ventrículo esquerdo</text></g>
+     <g fill="#fef6d8" stroke="#6a5964" stroke-width="5"><circle cx="227" cy="255" r="29"/><circle cx="540" cy="255" r="29"/><circle cx="232" cy="51" r="24"/><circle cx="544" cy="51" r="24"/></g>
+     <g fill="#6a495c" font-family="monospace" text-anchor="middle" font-size="17" font-weight="800"><text x="227" y="261">T</text><text x="540" y="261">M</text><text x="232" y="57">P</text><text x="544" y="57">A</text></g>
+     <g fill="none" stroke="#c8afa7" stroke-width="5" stroke-linecap="round"><path d="M227 285V312 M540 285V312 M232 27V5 M544 27V5"/></g>
+     <g class="cycle-lamp" data-valve-lamp="tricuspid" fill="#38877b"><circle cx="280" cy="251" r="12"/></g>
+     <g class="cycle-lamp" data-valve-lamp="mitral" fill="#38877b"><circle cx="596" cy="251" r="12"/></g>
+     <g class="cycle-lamp off" data-valve-lamp="pulmonary" fill="#38877b"><circle cx="275" cy="45" r="11"/></g>
+     <g class="cycle-lamp off" data-valve-lamp="aortic" fill="#38877b"><circle cx="585" cy="45" r="11"/></g>
+     <g font-family="monospace" font-size="16" fill="#756068"><text x="27" y="479">T TRICÚSPIDE · M MITRAL · P PULMONAR · A AÓRTICA</text><text x="29" y="502">PONTO VERDE VISÍVEL = ABERTA NA FASE IDEALIZADA</text></g>
+    </svg>
+    <figcaption>Figura 5. Estados valvares em SVG autoral. A presença do marcador verde indica “aberta” na fase didática selecionada; ausência indica “fechada”. A posição gráfica das valvas não é uma reconstrução cirúrgica.</figcaption>
+   </figure>
+   <div class="cycle-panel">
+    <span class="kicker" id="cycleCount">FASE 1 DE 5</span><h3 id="cycleName">Enchimento ventricular</h3>
+    <p id="cycleExplanation" role="status" aria-live="polite" aria-atomic="true">Durante grande parte da diástole ventricular, a pressão nos átrios favorece a passagem pelas valvas atrioventriculares abertas, enquanto as semilunares estão fechadas.</p>
+    <div class="cycle-phase" role="group" aria-label="Escolha uma fase do ciclo cardíaco">
+     <button type="button" data-cycle="filling" aria-pressed="true">01 · Enchimento ventricular</button>
+     <button type="button" data-cycle="atrial" aria-pressed="false">02 · Sístole atrial</button>
+     <button type="button" data-cycle="isocontract" aria-pressed="false">03 · Contração isovolumétrica</button>
+     <button type="button" data-cycle="ejection" aria-pressed="false">04 · Ejeção ventricular</button>
+     <button type="button" data-cycle="isorelax" aria-pressed="false">05 · Relaxamento isovolumétrico</button>
+    </div>
+    <div class="cycle-badges">
+     <div class="badge" id="avState"><span>Tricúspide e mitral</span><b>ABERTAS</b></div>
+     <div class="badge closed" id="semState"><span>Pulmonar e aórtica</span><b>FECHADAS</b></div>
+    </div>
+    <div class="cycle-actions">
+     <button type="button" id="cyclePrevious" class="alt">Anterior</button>
+     <button type="button" id="cycleNext">Próxima fase</button>
+     <button type="button" id="cycleAuto" class="alt" aria-pressed="false">Reproduzir ciclo</button>
+     <button type="button" id="cycleReset" class="alt">Recomeçar</button>
+    </div>
+    <p style="font-size:.81rem;color:#776a71;margin-top:18px">A reprodução é pausável e cada fase permanece o mesmo tempo apenas por conveniência visual. Essa igualdade não representa duração fisiológica.</p>
+  </div>
+  </div>
+ </div>
+</section>
+
+<section class="section pressure wrap" aria-labelledby="pressureTitle">
+ <div class="section-header"><span class="kicker">Lâmina 05 / Pressão e pulso</span><div><h2 id="pressureTitle">O sangue flui por gradientes de pressão.</h2><p>Contração e relaxamento geram alterações de pressão ao longo do ciclo. A medida chamada “pressão arterial” refere-se a uma variável específica, e não à pressão idêntica em todas as câmaras e vasos.</p></div></div>
+ <div class="pressure-grid">
+  <figure class="pressure-figure">
+   <svg viewBox="0 0 790 490" role="img" aria-labelledby="pressureSvgTitle pressureSvgDesc">
+    <title id="pressureSvgTitle">Traçados conceituais de pressão arterial e pressão ventricular durante um ciclo</title>
+    <desc id="pressureSvgDesc">Gráfico sem valores em milímetros de mercúrio: uma curva vermelha alta simboliza pressão sistêmica arterial, uma curva azul menor representa pressão pulmonar, e uma curva rosa ilustra elevação ventricular. As escalas são separadas e não proporcionais; o gráfico não reproduz um traçado clínico nem deve ser usado para interpretar exames.</desc>
+    <rect width="790" height="490" fill="#fffcf3"/>
+    <g stroke="#e1d9d0" stroke-width="2"><path d="M88 70H747 M88 145H747 M88 220H747 M88 295H747 M88 370H747 M88 445H747 M88 70V447 M253 70V447 M418 70V447 M583 70V447 M747 70V447"/></g>
+    <path d="M88 45V448H749" fill="none" stroke="#8c827d" stroke-width="4"/>
+    <path d="M95 243Q154 243 182 135Q220 76 283 112Q328 150 386 176Q456 207 527 215Q589 228 630 123Q667 80 744 159" fill="none" stroke="#a95062" stroke-width="9"/>
+    <path d="M95 337Q161 338 194 286Q230 254 278 302Q350 329 463 338Q576 345 628 289Q660 263 744 314" fill="none" stroke="#3e7f8f" stroke-width="9"/>
+    <path d="M95 423Q166 425 188 348Q215 226 266 214Q315 237 340 370Q374 419 513 422Q599 429 620 355Q642 235 681 228Q722 245 744 388" fill="none" stroke="#d397a0" stroke-width="7" stroke-dasharray="11 9"/>
+    <g font-family="Georgia,serif" font-size="22" fill="#654f5b"><text x="110" y="38">Pressão (qualitativa)</text><text x="476" y="479">Tempo no ciclo →</text></g>
+    <g font-family="monospace" font-size="17"><text x="430" y="104" fill="#9c4760">Arterial sistêmica</text><text x="424" y="295" fill="#31788a">Pulmonar (esquema)</text><text x="351" y="395" fill="#ab6c7e">Ventricular (esquema)</text></g>
+   </svg>
+   <figcaption>Figura 6. Traçados SVG puramente conceituais; não exibem mmHg, tempos medidos, relação proporcional entre as curvas nem sincronização para uso clínico.</figcaption>
+  </figure>
+  <div>
+   <h3>Sístole e diástole</h3><p>Sístole ventricular designa a contração associada à ejeção quando as valvas de saída estão abertas. Diástole ventricular envolve relaxamento e enchimento, incluindo fases sem alteração de volume e fases de fluxo. A contração atrial ocorre no fim da diástole ventricular em um ciclo organizado.</p>
+   <h3>Pressão arterial sistólica e diastólica</h3><p>O valor sistólico costuma refletir pressão arterial máxima no ciclo, e o diastólico a mínima. A medida clínica utiliza técnicas específicas e não deve ser inferida da força de uma seta, de cores ou de um valor arbitrário de batimentos no nosso laboratório.</p>
+   <div class="pressure-formula">Fluxo depende de diferenças de pressão e da resistência ao escoamento.
+    <small>O circuito pulmonar normalmente funciona a pressões menores que a circulação sistêmica, mas existem variações fisiológicas e doenças. O desenho não simula hemodinâmica, doenças valvares, pressão arterial ou sinais vitais individuais.</small>
+   </div>
+   <h3>E o pulso?</h3><p>A ejeção de sangue pelo ventrículo esquerdo gera uma onda de pressão que se propaga nas artérias. O pulso palpado é uma manifestação dessa onda, não a passagem da mesma porção de sangue pela artéria em velocidade igual à onda.</p>
+  </div>
+ </div>
+</section>
+
+<section class="section conduction" aria-labelledby="electricTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">Lâmina 06 / Condução elétrica</span><div><h2 id="electricTitle">O coração possui um sistema próprio de sincronização.</h2><p>O nó sinoatrial gera impulsos que se propagam pelo tecido atrial, alcançam o nó atrioventricular e seguem por vias especializadas até os ventrículos. Essa coordenação permite ativação sequencial de átrios e ventrículos, com contrações que acontecem de forma organizada.</p></div></div>
+  <div class="conduction-grid">
+   <figure class="conduction-figure is-paused" id="electricFigure">
+    <svg viewBox="0 0 760 600" role="img" aria-labelledby="electricSvgTitle electricSvgDesc">
+     <title id="electricSvgTitle">Traçado esquemático do sistema de condução elétrica do coração</title>
+     <desc id="electricSvgDesc">Coração estilizado em tons roxos com cinco regiões em amarelo: nó sinoatrial no átrio direito, condução atrial, nó atrioventricular, feixe de His com ramos e rede de Purkinje nos ventrículos. Os pontos numerados correspondem aos botões explicativos. As linhas não são um ECG nem trajeto anatômico exato.</desc>
+     <rect width="760" height="600" fill="#423546"/>
+     <path d="M323 138Q231 95 194 173Q163 282 366 509Q577 334 540 192Q511 114 421 155Q382 121 323 138Z" fill="#71485e" stroke="#d2a6b6" stroke-width="9"/>
+     <path d="M369 173V476" stroke="#e2c2bf" stroke-width="10"/>
+     <path class="pulse-path" d="M293 181Q285 231 350 255L370 291V378L312 442 M370 378L453 443 M370 295L460 231" fill="none" stroke="#e6d38d" stroke-width="7"/>
+     <g fill="#f4d69b" stroke="#f8efc5" stroke-width="5"><circle cx="293" cy="182" r="17"/><circle cx="371" cy="291" r="16"/><circle cx="372" cy="379" r="16"/><circle cx="310" cy="444" r="15"/><circle cx="454" cy="444" r="15"/></g>
+     <g font-family="monospace" font-size="21" fill="#f7e8dc"><text x="52" y="79">SISTEMA DE CONDUÇÃO</text><text x="34" y="198">SA ①</text><text x="35" y="296">AV ③</text><text x="482" y="326">HIS ④</text><text x="455" y="520">PURKINJE ⑤</text><text x="31" y="558" font-size="16">TRAÇADO NÃO PROPORCIONAL / SEM ECG</text></g>
+    </svg>
+    <figcaption>Figura 7. Rede elétrica SVG original. Localizações, ramificações e trajetos foram simplificados; as pulsações animadas não medem a frequência cardíaca nem representam eletrocardiograma real.</figcaption>
+   </figure>
+   <div class="conduction-panel">
+    <span class="kicker" id="electricIndex">ETAPA 1 / 5</span><h3 id="electricName">Nó sinoatrial (SA)</h3>
+    <p id="electricDesc" role="status" aria-live="polite" aria-atomic="true">Conjunto de células especializadas no átrio direito que normalmente inicia o impulso elétrico do ritmo sinusal.</p>
+    <div class="elec-choices" role="group" aria-label="Escolha uma etapa do sistema de condução">
+     <button type="button" data-electric="sa" aria-pressed="true">01 · Nó SA</button>
+     <button type="button" data-electric="atria" aria-pressed="false">02 · Propagação nos átrios</button>
+     <button type="button" data-electric="av" aria-pressed="false">03 · Nó AV e atraso</button>
+     <button type="button" data-electric="his" aria-pressed="false">04 · Feixe de His e ramos</button>
+     <button type="button" data-electric="purkinje" aria-pressed="false">05 · Fibras de Purkinje</button>
+    </div>
+    <div class="elec-feedback" id="electricWhy">O nó SA é o marcapasso fisiológico usual. Sua taxa de disparo é modulada pelo sistema nervoso autônomo e outros fatores; o sinal segue pelo músculo atrial.</div>
+    <div class="elec-actions"><button type="button" id="pauseElectric" class="motion-btn" aria-pressed="false">Retomar animação elétrica</button></div>
+    <p style="font-size:.84rem;margin-top:18px">Um ECG registra diferenças de potencial na superfície corporal, relacionadas à atividade elétrica do coração, mas não é um desenho literal de fibras. Ritmos e bloqueios exigem análise clínica específica.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="section co-lab" aria-labelledby="coTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">Lâmina 07 / Experimento conceitual</span><div><h2 id="coTitle">Frequência e volume ejetado mudam o fluxo por minuto.</h2><p>Na fórmula introdutória do débito cardíaco, multiplicamos frequência cardíaca pelo volume sistólico. Mude dois parâmetros hipotéticos e observe a aritmética, sem interpretar o resultado como uma medida clínica.</p></div></div>
+  <div class="co-grid">
+   <div class="co-controls">
+    <span class="kicker">LABORATÓRIO / HEMODINÂMICA BÁSICA</span>
+    <h3>Dois parâmetros diferentes</h3>
+    <p>Esses controles não medem o aluno nem descrevem um paciente. Valores foram escolhidos exclusivamente para criar combinações de unidades possíveis numa conta.</p>
+    <label for="heartRate">Frequência cardíaca hipotética <output id="heartRateOut" for="heartRate">70 bpm</output></label>
+    <input type="range" id="heartRate" min="40" max="140" step="5" value="70"/>
+    <label for="strokeVolume">Volume por batimento hipotético <output id="strokeVolumeOut" for="strokeVolume">70 mL</output></label>
+    <input type="range" id="strokeVolume" min="30" max="120" step="5" value="70"/>
+    <div class="co-actions"><button type="button" id="resetCO">Restaurar exemplo</button></div>
+    <p style="font-size:.82rem">Em fisiologia, frequência e volume sistólico não são independentes em todas as situações. Os valores variam com condições de saúde, atividade, enchimento, contratilidade, retorno venoso e resistência vascular.</p>
+   </div>
+   <div class="co-readout">
+    <h3>Débito cardíaco calculado</h3>
+    <div class="result" role="status" aria-live="polite" aria-atomic="true">
+     <strong id="coResult">4,90 L/min</strong>
+     <small id="coSentence">70 batimentos/min × 70 mL/batimento = 4.900 mL/min = 4,90 L/min.</small>
+    </div>
+    <div class="formula">DC = FC × VS</div>
+    <p>FC: frequência em batimentos/min. VS: volume sistólico em mL/batimento. A unidade “batimento” se cancela, restando mL/min; dividimos por 1.000 para converter em L/min.</p>
+    <p><strong>O que este cálculo não diz:</strong> não estima pressão arterial, saturação de oxigênio, fração de ejeção, débito real medido, gravidade de doença ou segurança de exercício. Uma alteração de frequência não implica aumento proporcional do débito em um organismo real, porque o volume sistólico também pode mudar.</p>
+  </div>
+  </div>
+ </div>
+</section>
+
+<section class="section prevention" aria-labelledby="preventionTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">Lâmina 08 / Cuidar da circulação</span><div><h2 id="preventionTitle">Saúde cardiovascular não se resume a contar batimentos.</h2><p>Prevenção envolve hábitos, condições sociais e ambientais, acesso à atenção primária, avaliação de fatores de risco e tratamento quando indicado. Não é possível prever risco individual pelos esquemas desta atividade.</p></div></div>
+  <div class="prevent-grid">
+   <figure class="prevent-figure">
+    <svg viewBox="0 0 790 490" role="img" aria-labelledby="preventionSvgTitle preventionSvgDesc">
+     <title id="preventionSvgTitle">Ilustração de prevenção cardiovascular com coração, caminhada, alimentação e acompanhamento de saúde</title>
+     <desc id="preventionSvgDesc">Gravura científica esquemática autoral dividida em quatro áreas: coração estilizado, pessoa caminhando, alimentos variados e um registro de acompanhamento em saúde. Não há associação a uma pessoa real ou resultados clínicos quantitativos.</desc>
+     <rect width="790" height="490" fill="#fff7ed"/>
+     <path d="M395 0V490 M0 245H790" stroke="#ddc7ba" stroke-width="4"/>
+     <path d="M184 76C102 15 62 121 96 179Q135 225 194 229Q300 184 296 126Q282 36 184 76Z" fill="#a95266" stroke="#80384f" stroke-width="8"/>
+     <path d="M184 100Q142 70 121 127 M195 116Q252 72 270 129" fill="none" stroke="#dba7a5" stroke-width="9"/>
+     <g fill="none" stroke="#547f82" stroke-width="13" stroke-linecap="round"><circle cx="592" cy="67" r="25" fill="#b2d7ca"/><path d="M592 96L566 158L632 172 M566 159L529 218 M570 158L601 220 M594 109L665 135"/></g>
+     <g fill="#d9a76f" stroke="#b78353" stroke-width="6"><ellipse cx="126" cy="378" rx="52" ry="61"/><ellipse cx="270" cy="375" rx="54" ry="49"/></g>
+     <g fill="#75a782" stroke="#53875b" stroke-width="4"><path d="M126 318Q84 296 99 280Q129 279 145 323Z"/><path d="M271 333Q255 296 290 288Q300 308 280 337Z"/></g>
+     <rect x="507" y="289" width="186" height="143" rx="6" fill="#eee3d7" stroke="#a29d9b" stroke-width="6"/>
+     <path d="M544 327H652 M543 354H660 M543 381H629" stroke="#648f91" stroke-width="6"/>
+     <g font-family="Georgia,serif" font-size="21" fill="#624c53"><text x="28" y="46">CORAÇÃO</text><text x="466" y="45">MOVIMENTO</text><text x="24" y="468">ALIMENTAÇÃO</text><text x="466" y="468">ACOMPANHAMENTO</text></g>
+    </svg>
+    <figcaption>Figura 8. Painel de prevenção em SVG original, sem dados individuais ou promessa de prevenção absoluta. As medidas precisam considerar idade, condições pessoais, ambiente e orientações de saúde.</figcaption>
+   </figure>
+   <div>
+    <h3>Conhecimento anatômico e prevenção são complementares.</h3>
+    <p>Doenças cardiovasculares têm determinantes multifatoriais. A Organização Mundial da Saúde destaca redução do tabagismo, atividade física regular, alimentação adequada e redução do uso nocivo de álcool, além do cuidado com pressão arterial, diabetes, lipídios e fatores ambientais como poluição do ar.</p>
+    <p>Intervenções coletivas importam: acesso a alimentos saudáveis, transporte ativo seguro, espaços de atividade, serviços de saúde e oportunidades de cuidado afetam resultados de populações. Tratamentos específicos e metas individuais dependem de profissionais e contexto clínico.</p>
+    <p><strong>Procure atendimento urgente</strong> diante de sintomas potencialmente graves, como dor ou pressão no peito persistente, falta de ar intensa, desmaio ou sinais neurológicos súbitos, conforme os serviços locais. Este atlas não identifica causas, não oferece triagem e não substitui avaliação de profissionais de saúde.</p>
+   </div>
+  </div>
+  <div class="prevent-items">
+   <article><h3>Tabaco e fumaça</h3><p>Evitar tabaco e exposição passiva reduz riscos importantes, com apoio profissional para cessação quando necessário.</p></article>
+   <article><h3>Atividade física</h3><p>Movimento regular conforme capacidade e condições individuais traz benefícios; o plano depende de idade e saúde.</p></article>
+   <article><h3>Alimentação e sal</h3><p>Padrões alimentares com alimentos variados e atenção a sal e gorduras ajudam na prevenção; necessidades individuais variam.</p></article>
+   <article><h3>Atenção à pressão</h3><p>Acompanhamento adequado da pressão arterial e tratamento de hipertensão quando indicado têm papel relevante.</p></article>
+   <article><h3>Condições metabólicas</h3><p>Diabetes e alterações de lipídios merecem avaliação e estratégias terapêuticas específicas.</p></article>
+   <article><h3>Acesso e ambiente</h3><p>Poluição, renda, condições de vida e acesso a cuidados influenciam a saúde cardiovascular e exigem respostas coletivas.</p></article>
+  </div>
+ </div>
+</section>
+
+<section class="quiz" aria-labelledby="quizTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">Lâmina 09 / Revisão de campo</span><div><h2 id="quizTitle">Teste o que aprendeu sem decorar o caminho ao contrário.</h2><p>Seis questões de interpretação anatômica e fisiológica. O feedback explica a relação entre as estruturas; nenhuma resposta ou nota é enviada para serviços externos ou gravada no navegador.</p></div></div>
+  <div class="quiz-grid">
+   <div class="quiz-side"><h3>Um fluxo coerente explica cada etapa.</h3><p>Enquanto você revisa, lembre-se das diferenças entre circulação pulmonar e sistêmica, entre valvas atrioventriculares e semilunares, entre contração muscular e ativação elétrica e entre cálculo educativo e avaliação clínica.</p><p>Volte ao atlas quantas vezes precisar. O objetivo não é acertar um diagnóstico, e sim reconhecer estruturas e mecanismos.</p></div>
+   <form id="quizForm" novalidate>
+    <fieldset class="question" data-answer="b" data-explain="O ventrículo direito impulsiona sangue pela valva pulmonar até artérias pulmonares e pulmões; ali ocorre a troca gasosa.">
+     <legend>1. De onde sai o sangue que seguirá pelas artérias pulmonares?</legend>
+     <label><input type="radio" name="q1" value="a"> Diretamente do átrio esquerdo para a aorta.</label>
+     <label><input type="radio" name="q1" value="b"> Do ventrículo direito pela valva pulmonar.</label>
+     <label><input type="radio" name="q1" value="c"> Do ventrículo esquerdo pela valva mitral.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="c" data-explain="Artérias são definidas pelo sentido de saída do coração. Artérias pulmonares normalmente levam sangue menos oxigenado aos pulmões; veias pulmonares retornam com sangue mais oxigenado.">
+     <legend>2. Por que artérias pulmonares normalmente transportam sangue menos oxigenado?</legend>
+     <label><input type="radio" name="q2" value="a"> Porque artéria significa sempre sangue com muito oxigênio.</label>
+     <label><input type="radio" name="q2" value="b"> Porque pulmões não recebem sangue.</label>
+     <label><input type="radio" name="q2" value="c"> Porque artéria significa vaso que conduz sangue para fora do coração, não um nível fixo de oxigênio.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="a" data-explain="Na ejeção ventricular, a pressão ventricular supera a pressão a jusante nas grandes artérias e abre as semilunares; valvas atrioventriculares estão fechadas.">
+     <legend>3. Durante a fase de ejeção ventricular normal, qual combinação é a esperada?</legend>
+     <label><input type="radio" name="q3" value="a"> Pulmonar e aórtica abertas; tricúspide e mitral fechadas.</label>
+     <label><input type="radio" name="q3" value="b"> Todas as quatro abertas.</label>
+     <label><input type="radio" name="q3" value="c"> Apenas tricúspide e mitral abertas.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="b" data-explain="O nó SA normalmente inicia o impulso, que se propaga pelos átrios; o nó AV introduz atraso e as vias His–Purkinje distribuem ativação aos ventrículos.">
+     <legend>4. Qual descrição corresponde à condução elétrica fisiológica?</legend>
+     <label><input type="radio" name="q4" value="a"> A eletricidade começa nos pulmões e vai diretamente à aorta.</label>
+     <label><input type="radio" name="q4" value="b"> Nó SA, átrios, nó AV, feixe e ramos, fibras de Purkinje.</label>
+     <label><input type="radio" name="q4" value="c"> Toda a atividade elétrica provém dos músculos esqueléticos da mão.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="a" data-explain="70 batimentos/min × 70 mL/batimento = 4.900 mL/min = 4,90 L/min. Esse resultado é uma aplicação da fórmula, não uma medição do aluno.">
+     <legend>5. Num exemplo hipotético, FC = 70 bpm e VS = 70 mL/batimento. Quanto vale FC × VS?</legend>
+     <label><input type="radio" name="q5" value="a"> 4,90 L/min, apenas como resultado do modelo.</label>
+     <label><input type="radio" name="q5" value="b"> 70 mmHg, como medida de pressão arterial.</label>
+     <label><input type="radio" name="q5" value="c"> 140% de saturação de oxigênio.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="c" data-explain="Prevenção cardiovascular integra hábitos, acompanhamento de fatores de risco, cuidados e condições sociais e ambientais, enquanto o atlas não faz diagnóstico ou estratificação individual.">
+     <legend>6. Qual afirmação sobre prevenção e esta atividade é correta?</legend>
+     <label><input type="radio" name="q6" value="a"> O laboratório calcula o risco individual de infarto.</label>
+     <label><input type="radio" name="q6" value="b"> Apenas contar batimentos substitui acompanhamento de pressão e outros fatores.</label>
+     <label><input type="radio" name="q6" value="c"> Prevenção envolve fatores individuais, coletivos e assistência adequada; o atlas não substitui consulta médica.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <div class="quiz-actions"><button type="button" id="gradeQuiz">Corrigir com explicações</button><button type="reset" class="alt">Refazer revisão</button></div>
+    <p id="quizResult" class="quiz-result" role="status" aria-live="polite"></p>
+   </form>
+  </div>
+ </div>
+</section>
+
+<section class="epilogue">
+ <div class="wrap"><span class="kicker" style="color:#f0c7c1">Fim da viagem / conceito essencial</span><h2>O coração não é apenas um órgão que bate. É uma bomba dupla, elétrica e muscular, integrada a dois circuitos que funcionam juntos.</h2><p>Quando você reconhece a anatomia, entende por que válvulas abrem, onde ocorre a oxigenação, como os impulsos organizam a contração e por que medidas clínicas exigem instrumentos e contexto. Essa compreensão é um começo para estudar o sistema cardiovascular, não um método de diagnóstico.</p></div>
+</section>
+
+<section class="references wrap" aria-labelledby="refTitle">
+ <h2 id="refTitle">Referências e declaração das ilustrações</h2>
+ <p>Oito ilustrações SVG originais foram desenhadas para esta página: coração ilustrado na abertura, corte anatômico explorável, diagrama da circulação dupla, dois tipos de valva, cinco estados valvares, curvas conceituais de pressão, rede elétrica e painel de prevenção. Nenhuma fotografia, exame, imagem de paciente ou medição clínica foi incorporada. As figuras são didáticas e não substituem imagens anatômicas, ecocardiograma, ECG nem avaliação profissional.</p>
+ <p>Fontes médicas: <a href="https://www.nhlbi.nih.gov/health/heart/anatomy" target="_blank" rel="noopener noreferrer">NIH/NHLBI — What the Heart Looks Like</a>; <a href="https://www.nhlbi.nih.gov/health/heart/blood-flow" target="_blank" rel="noopener noreferrer">NIH/NHLBI — How Blood Flows through the Heart</a>; <a href="https://www.nhlbi.nih.gov/health/heart/heart-beats" target="_blank" rel="noopener noreferrer">NIH/NHLBI — How the Heart Beats</a>; <a href="https://www.cdc.gov/heart-defects/how-the-heart-works/index.html" target="_blank" rel="noopener noreferrer">CDC — How the Heart Works</a>; <a href="https://www.heart.org/en/health-topics/heart-valve-problems-and-disease/about-heart-valves" target="_blank" rel="noopener noreferrer">American Heart Association — Heart Valves and Circulation</a>; <a href="https://my.clevelandclinic.org/health/body/21648-heart-conduction-system" target="_blank" rel="noopener noreferrer">Cleveland Clinic — Heart Conduction System</a>; <a href="https://www.ncbi.nlm.nih.gov/books/NBK470455/" target="_blank" rel="noopener noreferrer">NCBI Bookshelf — Physiology, Cardiac Output</a>; <a href="https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)" target="_blank" rel="noopener noreferrer">WHO — Cardiovascular Diseases</a>.</p>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+var d=document,byId=function(id){return d.getElementById(id);};
+var fmt=function(v,p){return Number(v).toLocaleString("pt-BR",{minimumFractionDigits:p,maximumFractionDigits:p});};
+function activate(buttons,key,val){buttons.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset[key]===val));});}
+var heroPaused=false,allPaused=false;
+byId("pauseHero").addEventListener("click",function(){
+ heroPaused=!heroPaused;
+ byId("heroFigure").classList.toggle("is-paused",heroPaused);
+ byId("pauseHero").setAttribute("aria-pressed",String(heroPaused));
+ byId("pauseHero").textContent=heroPaused?"Retomar pulsação ilustrativa":"Pausar pulsação ilustrativa";
+});
+byId("pauseAll").addEventListener("click",function(){
+ allPaused=!allPaused;
+ d.body.classList.toggle("motion-paused",allPaused);
+ byId("pauseAll").setAttribute("aria-pressed",String(allPaused));
+ byId("pauseAll").textContent=allPaused?"Retomar todas as animações":"Pausar todas as animações";
+ if(allPaused){stopRoute();stopCycle();}
+});
+var anatomy={
+ ra:{name:"Átrio direito",type:"Câmara receptora",description:"Recebe sangue venoso sistêmico pelas veias cavas e sangue da própria circulação coronária pelo seio coronário. O átrio se comunica com o ventrículo direito pela valva tricúspide.",link:"Veias cavas e seio coronário → átrio direito → valva tricúspide → ventrículo direito.",nuance:"Direito anatômico é o lado direito do paciente, à esquerda em vista frontal."},
+ rv:{name:"Ventrículo direito",type:"Câmara de ejeção pulmonar",description:"Bombeia sangue relativamente menos oxigenado para o tronco e as artérias pulmonares quando sua pressão supera a pressão na saída pulmonar e a valva abre.",link:"Átrio direito → tricúspide → ventrículo direito → valva pulmonar → tronco pulmonar.",nuance:"Sua pressão de trabalho é tipicamente menor do que a do ventrículo esquerdo em circulação normal."},
+ la:{name:"Átrio esquerdo",type:"Câmara receptora pulmonar",description:"Recebe sangue mais oxigenado trazido pelas veias pulmonares após a troca gasosa nos pulmões. Passa o sangue ao ventrículo esquerdo pela valva mitral.",link:"Veias pulmonares → átrio esquerdo → valva mitral → ventrículo esquerdo.",nuance:"O sangue nas veias pulmonares normalmente é mais oxigenado: elas não são exceção à definição de veia."},
+ lv:{name:"Ventrículo esquerdo",type:"Câmara de ejeção sistêmica",description:"Impulsiona sangue para a aorta e o restante do corpo. Possui parede muscular tipicamente mais espessa, relacionada ao maior trabalho contra a circulação sistêmica.",link:"Átrio esquerdo → valva mitral → ventrículo esquerdo → valva aórtica → aorta.",nuance:"Uma parede mais espessa não autoriza inferir força ou função individual sem exame."},
+ tricuspid:{name:"Valva tricúspide",type:"Valva atrioventricular direita",description:"Entre átrio direito e ventrículo direito. Abre no enchimento quando o gradiente favorece fluxo; fecha com a contração ventricular. Cordas tendíneas e músculos papilares limitam deslocamento dos folhetos.",link:"Átrio direito → tricúspide → ventrículo direito.",nuance:"A abertura é consequência de gradiente de pressão e propriedades mecânicas."},
+ mitral:{name:"Valva mitral (bicúspide)",type:"Valva atrioventricular esquerda",description:"Permite passagem do sangue do átrio esquerdo ao ventrículo esquerdo durante o enchimento. Folhetos, cordas e músculos papilares ajudam a impedir refluxo significativo na sístole.",link:"Átrio esquerdo → mitral → ventrículo esquerdo.",nuance:"Não é a mesma valva que controla a saída do ventrículo para a aorta."},
+ pulmonary:{name:"Valva pulmonar",type:"Valva semilunar direita",description:"Localizada na saída do ventrículo direito para o tronco pulmonar. Abre quando a pressão ventricular supera a pressão arterial pulmonar, permitindo ejeção.",link:"Ventrículo direito → valva pulmonar → artérias pulmonares.",nuance:"Fecha após a ejeção, quando se inverte o gradiente favorável à abertura."},
+ aortic:{name:"Valva aórtica",type:"Valva semilunar esquerda",description:"Controla a passagem do ventrículo esquerdo para a aorta. Abre durante a ejeção quando a pressão ventricular excede a pressão aórtica.",link:"Ventrículo esquerdo → valva aórtica → aorta.",nuance:"A valva fechada previne retorno importante de sangue ao ventrículo no relaxamento."},
+ vena:{name:"Veias cavas superior e inferior",type:"Grandes veias de retorno",description:"A veia cava superior traz sangue da parte superior do corpo e a inferior, em linhas gerais, da parte inferior. Ambas levam sangue ao átrio direito.",link:"Tecidos sistêmicos → veias sistêmicas → veias cavas → átrio direito.",nuance:"O retorno venoso da própria musculatura cardíaca inclui o seio coronário."},
+ pulmartery:{name:"Tronco e artérias pulmonares",type:"Saída para os pulmões",description:"Conduzem sangue do ventrículo direito aos pulmões. São artérias porque saem do coração, embora transportem sangue relativamente menos oxigenado.",link:"Ventrículo direito → valva pulmonar → tronco/arterias pulmonares → capilares dos pulmões.",nuance:"Nelas, a cor didática azul NÃO corresponde à cor real do sangue."},
+ pulmvein:{name:"Veias pulmonares",type:"Retorno dos pulmões",description:"Em condições anatômicas usuais, quatro veias pulmonares trazem sangue mais oxigenado dos pulmões ao átrio esquerdo.",link:"Capilares pulmonares → veias pulmonares → átrio esquerdo.",nuance:"Variantes anatômicas existem; o atlas apresenta a organização geral."},
+ aorta:{name:"Aorta",type:"Maior artéria sistêmica",description:"Recebe a ejeção do ventrículo esquerdo e distribui sangue à circulação sistêmica por seus ramos. Artérias coronárias se originam na raiz da aorta.",link:"Ventrículo esquerdo → valva aórtica → aorta → artérias sistêmicas → tecidos.",nuance:"Pressões arteriais não são uniformes em todos os vasos do corpo."},
+ septum:{name:"Septo cardíaco",type:"Parede de separação",description:"Estruturas septais separam câmaras direitas e esquerdas. O septo interventricular participa da estrutura e da contração ventricular.",link:"Separa vias direita e esquerda, mantendo circuitos adequadamente distintos na anatomia usual.",nuance:"O desenho simplifica septos atrial e ventricular e a geometria tridimensional."},
+ coronary:{name:"Circulação coronária",type:"Suprimento do miocárdio",description:"Artérias coronárias, originadas próximas à raiz da aorta, irrigam o músculo cardíaco; veias cardíacas devolvem sangue ao retorno venoso, em grande parte através do seio coronário.",link:"Aorta → artérias coronárias → capilares do miocárdio → veias cardíacas → átrio direito.",nuance:"O próprio coração precisa receber oxigênio; sangue no interior das câmaras não supre sozinho todo o miocárdio."}
+};
+var structures=Object.keys(anatomy),structureButtons=Array.prototype.slice.call(d.querySelectorAll("[data-structure]"));
+function showStructure(key){
+ var item=anatomy[key];if(!item)return;
+ activate(structureButtons,"structure",key);
+ byId("structureIndex").textContent="ESTRUTURA "+String(structures.indexOf(key)+1).padStart(2,"0")+" / "+structures.length;
+ byId("structureName").textContent=item.name;
+ byId("structureType").textContent=item.type;
+ byId("structureDescription").textContent=item.description;
+ byId("structureLink").textContent=item.link;
+ byId("structureNuance").textContent=item.nuance;
+}
+structureButtons.forEach(function(btn){btn.addEventListener("click",function(){showStructure(btn.dataset.structure);});});
+showStructure("ra");
+var bloodRoutes={
+ pulmonary:{title:"O sangue sai do ventrículo direito, passa pelos pulmões e retorna ao átrio esquerdo.",steps:[
+ ["Partida: ventrículo direito","Na contração ventricular, o sangue será ejetado para a saída pulmonar quando houver pressão suficiente para abrir a valva.","lower"],
+ ["Valva pulmonar","A valva semilunar direita se abre sob o gradiente adequado e permite a passagem do ventrículo ao tronco pulmonar.","lower"],
+ ["Artérias pulmonares","Ramos do tronco pulmonar conduzem sangue com menor oxigenação para os pulmões. Artéria significa saída do coração.","lower"],
+ ["Capilares pulmonares","Nos alvéolos pulmonares, O₂ difunde-se para o sangue e CO₂ difunde-se para o ar alveolar conforme gradientes, membranas e condições fisiológicas.","exchange"],
+ ["Veias pulmonares","O sangue agora relativamente mais oxigenado retorna dos pulmões pelas veias pulmonares.","higher"],
+ ["Chegada: átrio esquerdo","O sangue alcança o átrio esquerdo e poderá passar pela valva mitral para o ventrículo esquerdo.","higher"]
+ ]},
+ systemic:{title:"O sangue sai do ventrículo esquerdo, irriga tecidos e retorna ao átrio direito.",steps:[
+ ["Partida: ventrículo esquerdo","Sob diferença de pressão favorável, ocorre ejeção para a aorta pela valva aórtica.","higher"],
+ ["Valva aórtica","A valva semilunar esquerda se abre na ejeção e fecha após a inversão do gradiente de pressão.","higher"],
+ ["Aorta e artérias","O sangue mais oxigenado percorre a aorta e artérias ramificadas para irrigar os tecidos.","higher"],
+ ["Capilares sistêmicos","Os tecidos recebem O₂ e nutrientes, e há trocas de CO₂ e outros produtos conforme necessidades e condições locais.","exchange"],
+ ["Veias sistêmicas e cavas","O sangue retorna pelas veias ao coração com oxigenação relativa menor. Veias são definidas pelo retorno ao coração.","lower"],
+ ["Chegada: átrio direito","As veias cavas devolvem o sangue ao átrio direito, completando o circuito sistêmico.","lower"]
+ ]},
+ full:{title:"Narrativa completa: uma porção de sangue atravessa os dois circuitos conectados.",steps:[
+ ["Veias cavas","O sangue relativamente menos oxigenado retorna dos tecidos ao coração.","lower"],
+ ["Átrio direito","O sangue chega ao átrio direito.","lower"],
+ ["Tricúspide e ventrículo direito","O sangue passa pela tricúspide e será ejetado pelo ventrículo direito na fase adequada.","lower"],
+ ["Valva e artérias pulmonares","A ejeção direita leva sangue pela valva pulmonar e artérias pulmonares aos pulmões.","lower"],
+ ["Capilares pulmonares","Ocorre troca gasosa nos pulmões: O₂ entra no sangue e CO₂ deixa o sangue.","exchange"],
+ ["Veias pulmonares","Sangue mais oxigenado retorna ao átrio esquerdo.","higher"],
+ ["Átrio esquerdo","O sangue chega à câmara que recebe o retorno pulmonar.","higher"],
+ ["Mitral e ventrículo esquerdo","O sangue passa pela valva mitral e será ejetado pelo ventrículo esquerdo.","higher"],
+ ["Valva aórtica e aorta","O sangue sai pela aorta e segue ao circuito sistêmico.","higher"],
+ ["Artérias do corpo","Os ramos arteriais distribuem fluxo aos tecidos.","higher"],
+ ["Capilares dos tecidos","O₂ é disponibilizado aos tecidos e CO₂ entra no sangue em processos de troca.","exchange"],
+ ["Retorno venoso","Veias sistêmicas conduzem sangue de volta às cavas; o circuito narrativo recomeça, enquanto os dois lados seguem trabalhando juntos.","lower"]
+ ]}
+};
+var bloodKey="pulmonary",bloodIndex=0,routeTimer=null,routeButtons=Array.prototype.slice.call(d.querySelectorAll("[data-route]")),mapLoops=Array.prototype.slice.call(d.querySelectorAll("[data-map-loop]"));
+function stopRoute(){if(routeTimer!==null){clearInterval(routeTimer);routeTimer=null;}byId("routeAuto").setAttribute("aria-pressed","false");byId("routeAuto").textContent="Reproduzir etapas";byId("flowMap").classList.add("is-paused");}
+function renderRoute(){
+ var r=bloodRoutes[bloodKey],step=r.steps[bloodIndex];
+ activate(routeButtons,"route",bloodKey);
+ byId("routeIndex").textContent=(bloodKey==="full"?"VOLTA COMPLETA":bloodKey==="pulmonary"?"CIRCUITO PULMONAR":"CIRCUITO SISTÊMICO")+" / ETAPA "+(bloodIndex+1)+" DE "+r.steps.length;
+ byId("routeName").textContent=step[0];
+ byId("routeSummary").textContent=r.title;
+ byId("routeStepTitle").textContent=step[0];
+ byId("routeStepDetail").textContent=step[1];
+ byId("routeOxygen").textContent=step[2]==="lower"?"Oxigenação relativa: menor.":step[2]==="higher"?"Oxigenação relativa: maior.":"Troca gasosa: o gradiente e a localização determinam entrada ou saída de gases.";
+ byId("routePrev").disabled=bloodIndex===0;
+ byId("routeNext").disabled=bloodIndex===r.steps.length-1;
+ mapLoops.forEach(function(el){el.classList.toggle("dim",bloodKey!=="full"&&el.dataset.mapLoop!==bloodKey);});
+}
+routeButtons.forEach(function(b){b.addEventListener("click",function(){stopRoute();bloodKey=b.dataset.route;bloodIndex=0;renderRoute();});});
+byId("routePrev").addEventListener("click",function(){stopRoute();bloodIndex=Math.max(0,bloodIndex-1);renderRoute();});
+byId("routeNext").addEventListener("click",function(){stopRoute();bloodIndex=Math.min(bloodRoutes[bloodKey].steps.length-1,bloodIndex+1);renderRoute();});
+byId("routeReset").addEventListener("click",function(){stopRoute();bloodIndex=0;renderRoute();});
+byId("routeAuto").addEventListener("click",function(){
+ if(routeTimer!==null){stopRoute();return;}
+ if(allPaused || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) {byId("routeAuto").textContent="Use Próxima etapa (movimento reduzido)";return;}
+ if(bloodIndex===bloodRoutes[bloodKey].steps.length-1)bloodIndex=0;
+ byId("flowMap").classList.remove("is-paused");
+ byId("routeAuto").setAttribute("aria-pressed","true");byId("routeAuto").textContent="Pausar reprodução";
+ renderRoute();
+ routeTimer=setInterval(function(){if(bloodIndex>=bloodRoutes[bloodKey].steps.length-1){stopRoute();return;}bloodIndex++;renderRoute();if(bloodIndex===bloodRoutes[bloodKey].steps.length-1)stopRoute();},1900);
+});
+stopRoute();renderRoute();
+var phases={
+ filling:{name:"Enchimento ventricular",openAV:true,openSemi:false,description:"Durante grande parte da diástole ventricular, a pressão nos átrios favorece a passagem pelas valvas atrioventriculares abertas, enquanto as semilunares estão fechadas."},
+ atrial:{name:"Sístole atrial",openAV:true,openSemi:false,description:"Os átrios se contraem e contribuem para o enchimento final dos ventrículos. As valvas atrioventriculares permanecem abertas e as de saída continuam fechadas neste esquema."},
+ isocontract:{name:"Contração isovolumétrica",openAV:false,openSemi:false,description:"Após o início da contração ventricular, as valvas atrioventriculares fecham e a pressão nos ventrículos sobe; antes de abrir as semilunares, as quatro valvas estão fechadas e o volume ventricular idealmente não se altera."},
+ ejection:{name:"Ejeção ventricular",openAV:false,openSemi:true,description:"Quando a pressão ventricular ultrapassa a pressão na artéria de saída correspondente, as valvas pulmonar e aórtica abrem, enquanto mitral e tricúspide permanecem fechadas."},
+ isorelax:{name:"Relaxamento isovolumétrico",openAV:false,openSemi:false,description:"Após a ejeção, a pressão ventricular cai; as semilunares fecham e, antes da abertura das atrioventriculares, todas as valvas ficam fechadas, mantendo volume idealmente constante."}
+};
+var phaseKeys=Object.keys(phases),phaseIndex=0,cycleTimer=null,cycleButtons=Array.prototype.slice.call(d.querySelectorAll("[data-cycle]")),lamps=Array.prototype.slice.call(d.querySelectorAll("[data-valve-lamp]"));
+function stopCycle(){if(cycleTimer!==null){clearInterval(cycleTimer);cycleTimer=null;}byId("cycleAuto").setAttribute("aria-pressed","false");byId("cycleAuto").textContent="Reproduzir ciclo";}
+function renderCycle(){
+ var key=phaseKeys[phaseIndex],p=phases[key];
+ activate(cycleButtons,"cycle",key);
+ byId("cycleCount").textContent="FASE "+(phaseIndex+1)+" DE "+phaseKeys.length;
+ byId("cycleName").textContent=p.name;byId("cycleExplanation").textContent=p.description;
+ byId("avState").classList.toggle("closed",!p.openAV);byId("semState").classList.toggle("closed",!p.openSemi);
+ byId("avState").querySelector("b").textContent=p.openAV?"ABERTAS":"FECHADAS";
+ byId("semState").querySelector("b").textContent=p.openSemi?"ABERTAS":"FECHADAS";
+ lamps.forEach(function(lamp){var v=lamp.dataset.valveLamp;lamp.classList.toggle("off",v==="tricuspid"||v==="mitral"?!p.openAV:!p.openSemi);});
+}
+cycleButtons.forEach(function(b){b.addEventListener("click",function(){stopCycle();phaseIndex=phaseKeys.indexOf(b.dataset.cycle);renderCycle();});});
+byId("cyclePrevious").addEventListener("click",function(){stopCycle();phaseIndex=(phaseIndex+4)%5;renderCycle();});
+byId("cycleNext").addEventListener("click",function(){stopCycle();phaseIndex=(phaseIndex+1)%5;renderCycle();});
+byId("cycleReset").addEventListener("click",function(){stopCycle();phaseIndex=0;renderCycle();});
+byId("cycleAuto").addEventListener("click",function(){
+ if(cycleTimer!==null){stopCycle();return;}
+ if(allPaused || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)){byId("cycleAuto").textContent="Use Próxima fase (movimento reduzido)";return;}
+ byId("cycleAuto").setAttribute("aria-pressed","true");byId("cycleAuto").textContent="Pausar ciclo";
+ cycleTimer=setInterval(function(){phaseIndex=(phaseIndex+1)%5;renderCycle();},1700);
+});
+stopCycle();renderCycle();
+var electric={
+ sa:{name:"Nó sinoatrial (SA)",desc:"Conjunto de células especializadas no átrio direito que normalmente inicia o impulso elétrico do ritmo sinusal.",why:"O nó SA é o marcapasso fisiológico usual. Sua taxa de disparo é modulada por atividade autonômica e outros fatores; o sinal segue pelo músculo atrial."},
+ atria:{name:"Condução pelos átrios",desc:"A ativação elétrica se propaga pelo tecido atrial, coordenando a contração dos átrios, com vias de condução em direção à região do nó AV.",why:"A ativação atrial precede a ventricular numa sequência sinusal usual; não significa que o sangue percorra todo o corpo antes da contração seguinte."},
+ av:{name:"Nó atrioventricular (AV)",desc:"A região atrioventricular introduz atraso fisiológico na condução e conecta eletricamente a ativação atrial à ventricular por vias especializadas.",why:"O atraso permite que a contribuição da contração atrial ocorra antes da ativação ventricular. Bloqueios e variações patológicas exigem avaliação clínica."},
+ his:{name:"Feixe de His e ramos",desc:"O impulso passa pelo feixe atrioventricular (His) e se distribui por ramos direito e esquerdo ao longo do septo interventricular.",why:"Essas estruturas fazem parte da distribuição rápida do impulso aos ventrículos. O desenho não é um mapa eletrofisiológico tridimensional."},
+ purkinje:{name:"Fibras de Purkinje",desc:"A rede de fibras especializadas distribui a ativação elétrica ao miocárdio ventricular, ajudando a coordenar sua contração.",why:"A coordenação facilita uma ejeção eficiente. Frequência, condução e contração são fenômenos relacionados, mas não idênticos."}
+};
+var electricKeys=Object.keys(electric),electricButtons=Array.prototype.slice.call(d.querySelectorAll("[data-electric]")),electricPaused=true;
+function selectElectric(key){
+ var idx=electricKeys.indexOf(key),p=electric[key];if(!p)return;
+ activate(electricButtons,"electric",key);
+ byId("electricIndex").textContent="ETAPA "+(idx+1)+" / "+electricKeys.length;
+ byId("electricName").textContent=p.name;
+ byId("electricDesc").textContent=p.desc;
+ byId("electricWhy").textContent=p.why;
+}
+electricButtons.forEach(function(b){b.addEventListener("click",function(){selectElectric(b.dataset.electric);});});
+byId("pauseElectric").addEventListener("click",function(){
+ electricPaused=!electricPaused;byId("electricFigure").classList.toggle("is-paused",electricPaused);
+ byId("pauseElectric").setAttribute("aria-pressed",String(electricPaused));
+ byId("pauseElectric").textContent=electricPaused?"Retomar animação elétrica":"Pausar animação elétrica";
+});
+selectElectric("sa");
+var outputInputs=["heartRate","strokeVolume"];
+function updateCO(){
+ var hr=Number(byId("heartRate").value),sv=Number(byId("strokeVolume").value),dc=hr*sv/1000;
+ byId("heartRateOut").textContent=fmt(hr,0)+" bpm";
+ byId("strokeVolumeOut").textContent=fmt(sv,0)+" mL";
+ byId("coResult").textContent=fmt(dc,2)+" L/min";
+ byId("coSentence").textContent=fmt(hr,0)+" batimentos/min × "+fmt(sv,0)+" mL/batimento = "+fmt(hr*sv,0)+" mL/min = "+fmt(dc,2)+" L/min. Resultado apenas da fórmula hipotética.";
+}
+outputInputs.forEach(function(id){byId(id).addEventListener("input",updateCO);});
+byId("resetCO").addEventListener("click",function(){byId("heartRate").value="70";byId("strokeVolume").value="70";updateCO();});
+updateCO();
+var quiz=byId("quizForm");
+byId("gradeQuiz").addEventListener("click",function(){
+ var qs=Array.prototype.slice.call(quiz.querySelectorAll(".question")),score=0,answered=0;
+ qs.forEach(function(q){
+  var answer=q.querySelector("input:checked"),feedback=q.querySelector(".question-feedback");
+  if(!answer){feedback.textContent="Selecione uma alternativa antes de conferir.";return;}
+  answered++;var correct=answer.value===q.dataset.answer;if(correct)score++;
+  feedback.textContent=(correct?"Correto. ":"Reveja a explicação. ")+q.dataset.explain;
+ });
+ byId("quizResult").textContent=answered<qs.length?"Você respondeu "+answered+" de "+qs.length+" questões. Acertos até agora: "+score+".":score+" de "+qs.length+" respostas corretas. "+(score===qs.length?"Você conectou anatomia, circulação e fisiologia.":"Retorne às lâminas para compreender as respostas.");
+});
+quiz.addEventListener("reset",function(){quiz.querySelectorAll(".question-feedback").forEach(function(el){el.textContent="";});byId("quizResult").textContent="";});
+}());
+</script>
+</body>
+</html>
