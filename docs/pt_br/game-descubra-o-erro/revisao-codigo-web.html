@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Descubra o erro - Revisão de código web</title><style>
+:root{font:16px/1.54 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--bg:#f1f5f9;--ink:#27384b;--muted:#62798d;--border:#d8e4ed;--paper:#fff;--accent:#345d9e;--accent-dark:#244b87;--accent-pale:#e9f0fd;--ok:#176f54;--ok-pale:#e2f6ec;--bad:#935a28;--bad-pale:#fff1df;color:var(--ink);background:var(--bg)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #f0aa3f;outline-offset:3px}
+main{max-width:1180px;margin:auto;padding:30px 22px 45px}.eyebrow{color:var(--accent);text-transform:uppercase;font-size:11px;font-weight:850;letter-spacing:1.5px;margin:0 0 8px}
+h1{margin:0 0 12px;font-size:clamp(28px,4vw,40px);line-height:1.17;letter-spacing:-.9px}.intro{color:var(--muted);font-size:14px;max-width:920px;margin:0 0 18px}
+.stats{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-bottom:13px}.stat{min-width:110px;padding:8px 14px;border:1px solid var(--border);border-radius:11px;background:var(--paper)}.stat small{display:block;color:var(--muted);font-size:11px}.stat strong{font-size:20px;font-variant-numeric:tabular-nums}.stats .note{color:var(--muted);font-size:11px;margin-left:auto}
+.progress{height:9px;background:#dce7f1;border-radius:20px;overflow:hidden;margin-bottom:17px}.progress span{display:block;height:100%;width:0;background:#2eac88;transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.44fr) minmax(270px,.72fr);gap:16px;align-items:start}
+.panel{min-width:0;background:var(--paper);border:1px solid var(--border);border-radius:17px;padding:21px;box-shadow:0 9px 26px #1e385007}.panel h2{margin:0 0 11px;font-size:18px}
+.topline{display:flex;gap:9px;align-items:center;justify-content:space-between;flex-wrap:wrap}.topline small{font-size:12px;color:var(--muted);font-weight:750}
+.tag{font-size:11px;font-weight:820;border-radius:30px;background:var(--accent-pale);color:var(--accent);padding:6px 10px}
+.challenge{font-size:clamp(20px,2.6vw,27px);letter-spacing:-.4px;margin:14px 0 8px}
+.context{font-size:13px;color:var(--muted);margin:0 0 15px;line-height:1.55}
+.code-scroll{overflow-x:auto;background:#152537;border:1px solid #29415c;border-radius:12px;padding:11px 0;max-width:100%;scrollbar-color:#748ca1 #152537}
+.code-list{list-style:none;margin:0;padding:0;display:grid;gap:1px;min-width:max-content;width:100%}
+.code-line{border:0;display:flex;align-items:stretch;background:transparent;color:#e9f1ff;width:100%;padding:0;cursor:pointer;text-align:left;font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;font-size:13px;line-height:1.75}
+.code-line:hover:not(:disabled){background:#284057}.code-line:focus-visible{outline:3px solid #ffcf79;outline-offset:-3px}
+.code-line .num{flex:0 0 55px;position:sticky;left:0;z-index:1;display:grid;place-items:center;background:#1e344a;color:#a9c2d7;user-select:none;border-right:1px solid #3c5368;font-size:12px}
+.code-line code{white-space:pre;padding:9px 16px;display:block;flex:1;min-width:max-content;color:inherit;font:inherit}
+.code-line.found{background:#214b40;color:#e0fbe9}.code-line.found .num{background:#246044;color:#c7f9de}
+.code-line.wrong{background:#5d3d2c;color:#ffe4c9}.code-line.wrong .num{background:#67442d;color:#ffe1be}
+.code-line.missed{background:#374e47;color:#d5f3e2}.code-line.missed .num{background:#355b50;color:#d9f4e4}
+.code-line:disabled{opacity:1;cursor:default}
+.legend{font-size:11px;color:var(--muted);margin:9px 0 0}
+.feedback{background:#edf3fa;color:#3a5671;border:1px solid #d0e1ee;border-radius:11px;padding:13px 16px;min-height:64px;font-size:13px;margin-top:15px}
+.feedback strong{display:block;font-size:14px;margin-bottom:4px}.feedback.good{background:var(--ok-pale);color:var(--ok);border-color:#9bd0b6}.feedback.warn{background:var(--bad-pale);color:var(--bad);border-color:#e3bf9c}
+.controls{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}.controls .space{flex:1}
+.btn{background:var(--accent);color:#fff;border:1px solid var(--accent);border-radius:10px;padding:11px 15px;font-size:12px;font-weight:840;cursor:pointer}
+.btn.secondary{background:var(--paper);color:var(--accent)}.btn.warn{background:var(--paper);color:var(--bad);border-color:#d9b492}.btn:hover:not(:disabled){filter:brightness(.93)}.btn:disabled{opacity:.43;cursor:not-allowed}
+.review{margin-top:16px;border:1px solid #b7d8c7;background:#f4fbf7;border-radius:12px;padding:14px}
+.review h3{margin:0 0 10px;font-size:14px;color:#245d46}.review-grid{display:grid;gap:12px}
+.fix{background:#fff;border:1px solid #cfe3d7;border-radius:10px;padding:12px}.fix strong{font-size:13px;display:block;color:#2b5d49}.fix p{font-size:12px;color:#526e60;margin:4px 0 9px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:8px}.compare section{min-width:0}.compare h4{font-size:11px;margin:0 0 4px;color:#3d6455}
+.compare pre{margin:0;padding:10px;border-radius:8px;background:#eff4f8;overflow-x:auto;font:12px/1.5 ui-monospace,monospace;white-space:pre;color:#30465a;min-height:55px}
+.compare .after pre{background:#e4f8ec;color:#155c40}
+.side-intro{font-size:13px;color:var(--muted);margin:0 0 14px}
+.tracker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.marker{min-height:62px;border:1px solid var(--border);border-radius:9px;background:#f5f8fc;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;text-align:center}
+.marker strong{font-size:17px}.marker small{font-size:10px;color:var(--muted)}.marker.current{border:2px solid #779ad0;background:var(--accent-pale)}.marker.done{border-color:#8fc5aa;background:var(--ok-pale);color:var(--ok)}
+.rules{font-size:12px;color:var(--muted);padding-left:20px;margin:14px 0}.rules li{padding:4px 0}
+.tip{font-size:12px;color:#3d648c;border-radius:10px;background:var(--accent-pale);padding:12px 13px;margin-top:15px}
+.summary h2{font-size:27px;letter-spacing:-.6px}.summary p{font-size:13px;color:var(--muted)}.summary-item{border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:9px}
+.summary-item h3{font-size:14px;margin:0 0 5px}.summary-item p{font-size:12px;margin:3px 0;color:var(--muted)}
+.small{font-size:11px;color:var(--muted);margin:14px 0 0}[hidden]{display:none!important}
+@media(max-width:865px){.layout{grid-template-columns:1fr}.panel{padding:16px}.tracker{max-width:380px}}
+@media(max-width:540px){main{padding:22px 12px 32px}.panel{padding:12px}.compare{grid-template-columns:1fr}.code-line{font-size:12px}.code-line .num{flex-basis:41px}.stats .note{margin-left:0}.controls .btn{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#172331;--ink:#e5f0fb;--muted:#b3c7d8;--border:#3b5368;--paper:#273c4c;--accent:#a7c9ff;--accent-dark:#6b9bd8;--accent-pale:#354e6b;--ok:#acf0ce;--ok-pale:#284f3c;--bad:#f3c49b;--bad-pale:#503b2e}
+.feedback{background:#324e65;color:#daecfb;border-color:#52738c}.feedback.good{background:var(--ok-pale);color:var(--ok)}.feedback.warn{background:var(--bad-pale);color:var(--bad)}
+.review{background:#2c4a3d;border-color:#5d8871}.review h3{color:#c5f6da}.fix{background:#2d4139;border-color:#567666}.fix strong{color:#d6fce5}.fix p{color:#c0d7cd}
+.compare h4{color:#cce7d9}.compare pre{background:#293d4f;color:#dceefa}.compare .after pre{background:#26523d;color:#d9fce8}
+.marker{background:#2e4356}.marker.current{background:#385579;border-color:#7babe2}.marker.done{background:var(--ok-pale);color:var(--ok)}.tip{color:#d2e5fa}.summary-item{background:#2c4354}}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 18 · Revisão crítica de código</p>
+<h1>Descubra o erro: revisão de código web</h1>
+<p class="intro">Encontre seis erros distribuídos em três trechos de HTML e JavaScript. Leia o contexto, selecione as linhas problemáticas e compare a linha original com a correção explicada. Os trechos são exibidos exclusivamente como texto e nunca são executados.</p>
+<div class="stats"><div class="stat"><small>Erros encontrados</small><strong id="found">0 / 6</strong></div><div class="stat"><small>Seleções incorretas</small><strong id="wrong">0</strong></div><div class="stat"><small>Trechos concluídos</small><strong id="rounds">0 / 3</strong></div><span class="note">Sem cronômetro ou nota oficial.</span></div>
+<div id="progress" class="progress" role="progressbar" aria-label="Erros identificados" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><span id="progress-bar"></span></div>
+<div class="layout">
+<section class="panel" id="game-panel" aria-labelledby="challenge">
+ <div class="topline"><small id="position">Trecho 1 de 3</small><span class="tag" id="language">HTML</span></div>
+ <h2 id="challenge" class="challenge" tabindex="-1">Preparando o trecho...</h2>
+ <p id="context" class="context"></p>
+ <div class="topline"><strong id="target">Encontre 2 linhas com erro.</strong><span class="tag" id="round-found">0 / 2</span></div>
+ <div class="code-scroll" aria-label="Trecho de código com linhas selecionáveis">
+  <ol id="code-list" class="code-list" aria-label="Selecione a linha que possui erro"></ol>
+ </div>
+ <p class="legend">Cada linha é um botão. Use Tab ou as setas para navegar, Enter/Espaço para selecionar. Em telas pequenas, deslize horizontalmente para ler linhas longas.</p>
+ <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"><strong id="feedback-heading">Orientação</strong><span id="feedback-text">Preparando a revisão...</span></div>
+ <section id="fix-area" class="review" aria-labelledby="fix-heading" hidden>
+  <h3 id="fix-heading">Compare a linha original com a correção</h3>
+  <div class="review-grid" id="fixes"></div>
+ </section>
+ <div class="controls"><button type="button" class="btn secondary" id="reset" disabled>Recomeçar</button><button type="button" class="btn warn" id="reveal" disabled>Mostrar solução e encerrar trecho</button><span class="space" aria-hidden="true"></span><button type="button" class="btn" id="next" disabled>Próximo trecho</button></div>
+</section>
+<section class="panel summary" id="summary-panel" aria-labelledby="summary-title" hidden>
+ <p class="eyebrow">Revisão final</p><h2 id="summary-title" tabindex="-1">Atividade concluída!</h2><p id="summary-line"></p>
+ <div id="summary-review" aria-label="Explicação das correções"></div>
+ <div class="controls"><button type="button" id="summary-reset" class="btn">Jogar novamente</button></div>
+</section>
+<aside class="panel" aria-labelledby="side-title">
+ <h2 id="side-title">Como revisar</h2>
+ <p class="side-intro">Atenção a fechamento de tags HTML, vínculo entre rótulos e campos de formulário, atributos válidos e segurança no uso de dados digitados.</p>
+ <div id="tracker" class="tracker" role="list" aria-label="Progresso dos três trechos"></div>
+ <ol class="rules">
+  <li>Leia o objetivo do trecho antes de procurar problemas.</li>
+  <li>Escolha as linhas que não atendem ao objetivo.</li>
+  <li>Leia a explicação e veja o antes e o depois.</li>
+  <li>Encontre os dois erros ou revele as soluções restantes.</li>
+  <li>Avance para o próximo trecho.</li>
+ </ol>
+ <p class="tip">Marcar uma linha correta não elimina os acertos anteriores. Se você revelar a solução, as linhas restantes aparecem como não identificadas, sem contar como acertos.</p>
+</aside>
+</div>
+<p class="small">Não são utilizadas imagens nem scripts externos. A correção é formativa e não modifica notas ou conclusão acadêmica do Moodle. Na ausência do SDK, toda a atividade continua funcional.</p>
+</main><script>(function findErrorGame(){
+"use strict";
+const DATA={"type":"find_error","title":"Descubra o erro - Revisão de código web","settings":{"mode":"line","allowReveal":true},"rounds":[{"id":"estrutura-html","title":"Cartão de novidades","language":"HTML","context":"Uma página exibe um cartão com título, parágrafo e lista. Encontre as duas linhas com fechamento de tag incompatível.","lines":[{"id":"h1","text":"\u003carticle class=\"card\">"},{"id":"h2","text":"  \u003ch2>Novidades\u003c/h2>"},{"id":"h3","text":"  \u003cp>Confira as atualizações.\u003c/div>"},{"id":"h4","text":"  \u003cul>"},{"id":"h5","text":"    \u003cli>Correções\u003c/li>"},{"id":"h6","text":"    \u003cli>Melhorias\u003c/li>"},{"id":"h7","text":"  \u003c/ol>"},{"id":"h8","text":"\u003c/article>"}],"errors":[{"id":"e-html-p","lineId":"h3","correctText":"  \u003cp>Confira as atualizações.\u003c/p>","explanation":"O elemento iniciado com \u003cp> deve terminar com \u003c/p>; \u003c/div> fecha outro tipo de elemento."},{"id":"e-html-ul","lineId":"h7","correctText":"  \u003c/ul>","explanation":"A lista foi iniciada com \u003cul>, portanto deve ser encerrada com \u003c/ul>, e não \u003c/ol>."}]},{"id":"formulario","title":"Formulário de contato","language":"HTML","context":"O formulário deve associar o rótulo ao campo de e-mail e usar um botão que envie os dados.","lines":[{"id":"f1","text":"\u003cform action=\"/contato\" method=\"post\">"},{"id":"f2","text":"  \u003clabel for=\"email\">E-mail\u003c/label>"},{"id":"f3","text":"  \u003cinput id=\"endereco\" name=\"email\" type=\"email\" required>"},{"id":"f4","text":"  \u003clabel for=\"mensagem\">Mensagem\u003c/label>"},{"id":"f5","text":"  \u003ctextarea id=\"mensagem\" name=\"mensagem\">\u003c/textarea>"},{"id":"f6","text":"  \u003cbutton type=\"buton\">Enviar\u003c/button>"},{"id":"f7","text":"\u003c/form>"}],"errors":[{"id":"e-form-label","lineId":"f3","correctText":"  \u003cinput id=\"email\" name=\"email\" type=\"email\" required>","explanation":"O valor de for no \u003clabel> deve apontar para o id do campo correspondente; aqui, o input precisa ter id=\"email\"."},{"id":"e-form-button","lineId":"f6","correctText":"  \u003cbutton type=\"submit\">Enviar\u003c/button>","explanation":"O valor correto de type para enviar o formulário é submit. A grafia buton não é um valor válido para esse atributo."}]},{"id":"javascript-seguro","title":"Atualização de mensagens","language":"JavaScript","context":"Um botão deve mostrar como texto o conteúdo digitado pelo usuário e depois desabilitar o próprio botão.","lines":[{"id":"j1","text":"const status = document.getElementById(\"status\");"},{"id":"j2","text":"const btn = document.getElementById(\"enviar\");"},{"id":"j3","text":"btn.addEventListener(\"click\", () => {"},{"id":"j4","text":"  const userInput = document.getElementById(\"mensagem\").value;"},{"id":"j5","text":"  status.innerHTML = userInput;"},{"id":"j6","text":"  button.disabled = true;"},{"id":"j7","text":"});"}],"errors":[{"id":"e-js-xss","lineId":"j5","correctText":"  status.textContent = userInput;","explanation":"Inserir texto não confiável com innerHTML permite interpretar marcação. Use textContent para exibi-lo literalmente, evitando injeção de HTML."},{"id":"e-js-name","lineId":"j6","correctText":"  btn.disabled = true;","explanation":"A variável criada para o botão se chama btn; button não foi declarada neste trecho."}]}]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id),controller=new AbortController();
+const sdk=window.MoodleMCP?.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const storageKey="findErrorWebCodeV1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,saveQueue=Promise.resolve(),generation=0;
+
+// Pure rules, independent from rendering.
+function validate(data){
+ if(!data||data.type!=="find_error"||typeof data.title!=="string"||!data.title.trim()||!data.settings||data.settings.mode!=="line"||typeof data.settings.allowReveal!=="boolean"||!Array.isArray(data.rounds)||data.rounds.length<2||data.rounds.length>10)return false;
+ const roundIds=new Set(),errorIds=new Set();
+ for(const round of data.rounds){
+  if(!round||typeof round.id!=="string"||!/^[a-z0-9-]+$/.test(round.id)||roundIds.has(round.id)||typeof round.title!=="string"||!round.title.trim()||typeof round.language!=="string"||!round.language.trim()||typeof round.context!=="string"||!round.context.trim()||!Array.isArray(round.lines)||round.lines.length<4||round.lines.length>20||!Array.isArray(round.errors)||round.errors.length<1||round.errors.length>4||round.errors.length>=round.lines.length)return false;
+  roundIds.add(round.id);
+  const lines=new Map();
+  for(const line of round.lines){
+   if(!line||typeof line.id!=="string"||!/^[a-z0-9-]+$/.test(line.id)||lines.has(line.id)||typeof line.text!=="string"||!line.text.trim()||line.text.length>600)return false;
+   lines.set(line.id,line.text);
+  }
+  const badLines=new Set();
+  for(const error of round.errors){
+   if(!error||typeof error.id!=="string"||!/^[a-z0-9-]+$/.test(error.id)||errorIds.has(error.id)||typeof error.lineId!=="string"||!lines.has(error.lineId)||badLines.has(error.lineId)||typeof error.correctText!=="string"||!error.correctText.trim()||error.correctText===lines.get(error.lineId)||typeof error.explanation!=="string"||!error.explanation.trim())return false;
+   errorIds.add(error.id);badLines.add(error.lineId);
+  }
+ }
+ return true;
+}
+function initialState(data){return {index:0,found:data.rounds.map(()=>[]),wrong:data.rounds.map(()=>[]),revealed:data.rounds.map(()=>false),completed:false};}
+function foundCount(s){return s.found.reduce((n,ids)=>n+ids.length,0);}
+function totalErrors(data){return data.rounds.reduce((n,r)=>n+r.errors.length,0);}
+function roundDone(s,data,index){return s.revealed[index]||s.found[index].length===data.rounds[index].errors.length;}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Number.isInteger(s.index)||s.index<0||s.index>data.rounds.length||!Array.isArray(s.found)||s.found.length!==data.rounds.length||!Array.isArray(s.wrong)||s.wrong.length!==data.rounds.length||!Array.isArray(s.revealed)||s.revealed.length!==data.rounds.length||typeof s.completed!=="boolean"||s.completed!==(s.index===data.rounds.length))return false;
+ for(let i=0;i<data.rounds.length;i++){
+  const round=data.rounds[i],found=s.found[i],wrong=s.wrong[i],reveal=s.revealed[i],correct=new Set(round.errors.map(e=>e.lineId)),all=new Set(round.lines.map(l=>l.id));
+  if(!Array.isArray(found)||!Array.isArray(wrong)||typeof reveal!=="boolean"||new Set(found).size!==found.length||new Set(wrong).size!==wrong.length||found.some(id=>!correct.has(id))||wrong.some(id=>!all.has(id)||correct.has(id))||(!data.settings.allowReveal&&reveal))return false;
+  if(reveal&&found.length===round.errors.length)return false;
+  if(i<s.index&&!roundDone(s,data,i))return false;
+  if(i>s.index&&(found.length||wrong.length||reveal))return false;
+ }
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(data),changed:true,kind:"neutral",message:"Revisão reiniciada. Examine o primeiro trecho."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"O progresso restaurado não é válido."};
+ if(s.completed)return {state:s,changed:false,kind:"neutral",message:"A atividade terminou. Recomece para praticar novamente."};
+ const r=data.rounds[s.index],done=roundDone(s,data,s.index);
+ if(action?.type==="next"){
+  if(!done)return {state:s,changed:false,kind:"warn",message:"Encontre todos os erros ou escolha revelar a solução antes de avançar."};
+  const index=s.index+1;
+  return {state:{...s,index,completed:index===data.rounds.length},changed:true,kind:"neutral",message:index===data.rounds.length?"Atividade concluída. Confira o resumo.":"Novo trecho. Encontre as linhas incorretas."};
+ }
+ if(done)return {state:s,changed:false,kind:"neutral",message:"Este trecho já foi revisado. Avance para o próximo."};
+ if(action?.type==="select"){
+  const line=r.lines.find(l=>l.id===action.id);
+  if(!line)return {state:s,changed:false,kind:"warn",message:"Essa linha não existe neste trecho."};
+  if(s.found[s.index].includes(line.id)||s.wrong[s.index].includes(line.id))return {state:s,changed:false,kind:"neutral",message:"Você já analisou essa linha; selecione outra."};
+  const found=s.found.map(ids=>[...ids]),wrong=s.wrong.map(ids=>[...ids]);
+  const error=r.errors.find(e=>e.lineId===line.id);
+  if(error)found[s.index].push(line.id);else wrong[s.index].push(line.id);
+  const next={...s,found,wrong};
+  return {state:next,changed:true,kind:error?"good":"warn",message:error?
+   "Você encontrou um erro! "+error.explanation+" Correção: "+error.correctText:
+   "A linha "+(r.lines.indexOf(line)+1)+" não está entre os erros desta atividade. Compare as tags, nomes e atributos com o contexto."};
+ }
+ if(action?.type==="reveal"){
+  if(!data.settings.allowReveal)return {state:s,changed:false,kind:"warn",message:"Revelar solução está desativado."};
+  const revealed=[...s.revealed];revealed[s.index]=true;
+  return {state:{...s,revealed},changed:true,kind:"warn",message:"Solução revelada: os erros não encontrados ficam marcados como não identificados. Compare o antes e o depois para aprender."};
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Selecione as linhas que contêm erros."};
+}
+// End pure rules.
+
+function el(tag,cls,value){const n=document.createElement(tag);if(cls)n.className=cls;if(value!==undefined)n.textContent=value;return n;}
+function getState(){return {index:state.index,found:state.found.map(x=>[...x]),wrong:state.wrong.map(x=>[...x]),revealed:[...state.revealed],completed:state.completed};}
+function restoreState(snapshot){
+ if(!validState(snapshot,DATA))return false;
+ state={index:snapshot.index,found:snapshot.found.map(x=>[...x]),wrong:snapshot.wrong.map(x=>[...x]),revealed:[...snapshot.revealed],completed:snapshot.completed};
+ render();return true;
+}
+function announce(message,kind="neutral"){
+ const box=$("feedback");box.className="feedback"+(kind==="good"?" good":kind==="warn"?" warn":"");
+ $("feedback-heading").textContent=kind==="good"?"Erro identificado":kind==="warn"?"Confira o critério":"Orientação";
+ $("feedback-text").textContent=message;
+}
+function renderLines(r){
+ const list=$("code-list");list.replaceChildren();
+ const found=state.found[state.index],wrong=state.wrong[state.index],done=roundDone(state,DATA,state.index);
+ r.lines.forEach((line,i)=>{
+  const error=r.errors.find(e=>e.lineId===line.id),identified=found.includes(line.id),incorrect=wrong.includes(line.id),missed=state.revealed[state.index]&&!!error&&!identified;
+  const entry=el("li"),button=el("button","code-line"+(identified?" found":incorrect?" wrong":missed?" missed":""));
+  button.type="button";button.dataset.line=line.id;button.disabled=!ready||done||identified||incorrect;
+  button.setAttribute("aria-label","Linha "+(i+1)+": "+line.text+". "+(identified?"Erro identificado":incorrect?"Sem erro identificado":missed?"Erro revelado":"Ainda não analisada"));
+  button.setAttribute("aria-pressed",String(identified||incorrect));
+  const no=el("span","num",String(i+1));no.setAttribute("aria-hidden","true");
+  const code=el("code","",line.text);button.append(no,code);entry.append(button);list.append(entry);
+ });
+}
+function renderFixes(r){
+ const area=$("fixes");area.replaceChildren();
+ const found=state.found[state.index],reveal=state.revealed[state.index];
+ const selected=r.errors.filter(e=>found.includes(e.lineId)||reveal);
+ $("fix-area").hidden=selected.length===0;
+ for(const error of selected){
+  const line=r.lines.find(x=>x.id===error.lineId);
+  const card=el("div","fix");
+  const number=r.lines.indexOf(line)+1;
+  card.append(el("strong","", "Linha "+number+(found.includes(line.id)?": encontrada":": revelada")));
+  card.append(el("p","",error.explanation));
+  const compare=el("div","compare");
+  for(const [label,value,type] of [["Antes",line.text,"before"],["Depois",error.correctText,"after"]]){
+   const section=el("section",type),heading=el("h4","",label),pre=el("pre"),code=el("code","",value);
+   pre.append(code);section.append(heading,pre);compare.append(section);
+  }
+  card.append(compare);area.append(card);
+ }
+}
+function renderTracker(){
+ const container=$("tracker");container.replaceChildren();
+ DATA.rounds.forEach((r,i)=>{
+  const correct=state.found[i].length,done=roundDone(state,DATA,i),marker=el("div","marker"+(!state.completed&&state.index===i?" current":"")+(done?" done":""));
+  marker.setAttribute("role","listitem");marker.setAttribute("aria-label","Trecho "+(i+1)+": "+correct+" de "+r.errors.length+" erros encontrados"+(done?"; encerrado":""));
+  marker.append(el("strong","",String(i+1)),el("small","",correct+"/"+r.errors.length+" erros"+(done?" · fim":"")));
+  container.append(marker);
+ });
+}
+function renderSummary(){
+ const area=$("summary-review");area.replaceChildren();
+ DATA.rounds.forEach((r,i)=>{
+  const item=el("section","summary-item"),found=state.found[i].length;
+  item.append(el("h3","",(i+1)+". "+r.title));
+  item.append(el("p","",found+" de "+r.errors.length+" erros identificados; "+state.wrong[i].length+" linha(s) marcadas incorretamente"+(state.revealed[i]?"; solução revelada.":".")));
+  for(const e of r.errors){
+   const line=r.lines.find(l=>l.id===e.lineId);
+   item.append(el("p","", (state.found[i].includes(e.lineId)?"Encontrado: ":"Não identificado: ")+line.text+" → "+e.correctText+". "+e.explanation));
+  }
+  area.append(item);
+ });
+}
+function render(){
+ if(disposed||!state)return;
+ const found=foundCount(state),total=totalErrors(DATA),wrong=state.wrong.reduce((n,a)=>n+a.length,0);
+ $("found").textContent=found+" / "+total;$("wrong").textContent=String(wrong);
+ $("rounds").textContent=DATA.rounds.filter((r,i)=>roundDone(state,DATA,i)).length+" / "+DATA.rounds.length;
+ $("progress").setAttribute("aria-valuenow",String(found));$("progress-bar").style.width=100*found/total+"%";
+ $("game-panel").hidden=state.completed;$("summary-panel").hidden=!state.completed;
+ $("reset").disabled=!ready;renderTracker();
+ if(state.completed){$("summary-line").textContent="Você identificou "+found+" de "+total+" erros nos três trechos. Reveja cada correção e sua justificativa.";renderSummary();return;}
+ const r=DATA.rounds[state.index],done=roundDone(state,DATA,state.index);
+ $("position").textContent="Trecho "+(state.index+1)+" de "+DATA.rounds.length;
+ $("language").textContent=r.language;$("challenge").textContent=r.title;$("context").textContent=r.context;
+ $("target").textContent="Encontre "+r.errors.length+" linhas com erro.";
+ $("round-found").textContent=state.found[state.index].length+" / "+r.errors.length;
+ $("next").disabled=!ready||!done;$("next").textContent=state.index===DATA.rounds.length-1?"Ver resumo final":"Próximo trecho";
+ $("reveal").disabled=!ready||done||!DATA.settings.allowReveal;
+ $("reveal").hidden=done;
+ renderLines(r);renderFixes(r);
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++generation;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||stamp!==generation)return;
+  const other=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const value={...other,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(value)).length>12288){announce("O progresso excede o limite de 12 KiB.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/find-error-web-code",data:value});
+ }).catch(async()=>{
+  if(disposed)return;generation++;
+  try{
+   remote=await progress.load();
+   if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))announce("O progresso mudou em outra sessão. Recuperei a versão salva mais recente.","warn");
+   else announce("Não foi possível conciliar o progresso. Continue nesta página.","warn");
+  }catch(_){remote=null;announce("Salvamento indisponível. Continue normalmente nesta página.","warn");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const result=transition(state,action,DATA);
+ if(!result.changed){announce(result.message,result.kind);return;}
+ state=result.state;modified=true;render();save();announce(result.message,result.kind);
+ if(state.completed)$("summary-title").focus({preventScroll:true});
+ else if(action.type==="next")$("challenge").focus({preventScroll:true});
+ else $("feedback").focus({preventScroll:true});
+}
+function destroy(){disposed=true;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){announce("Configuração inválida: revise linhas, IDs e correções.","warn");return;}
+ state=initialState(data);render();
+ if(progress)try{
+  const snapshot=await progress.load();if(disposed)return;remote=snapshot;
+  if(!modified&&snapshot.data?.[storageKey]&&restoreState(snapshot.data[storageKey]))announce("Seu progresso foi recuperado. Continue a revisão.");
+  else announce("Leia o contexto e selecione as linhas com erros.");
+ }catch(_){announce("Sem sincronização com o Moodle. A atividade funciona normalmente.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",event=>{
+ const button=event.target.closest("button");if(!button||!root.contains(button))return;
+ if(button.dataset.line){handleAction({type:"select",id:button.dataset.line});return;}
+ if(button.id==="reveal"){handleAction({type:"reveal"});return;}
+ if(button.id==="next"){handleAction({type:"next"});return;}
+ if(button.id==="reset"||button.id==="summary-reset")handleAction({type:"restart"});
+},{signal:controller.signal});
+root.addEventListener("keydown",event=>{
+ const button=event.target.closest("button[data-line]");if(!button)return;
+ if(event.key==="ArrowDown"||event.key==="ArrowUp"){
+  event.preventDefault();const arr=[...$("code-list").querySelectorAll("button[data-line]:not(:disabled)")];
+  const index=arr.indexOf(button),dir=event.key==="ArrowDown"?1:-1;
+  if(index!==-1&&arr.length)arr[(index+dir+arr.length)%arr.length].focus();
+ }
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>

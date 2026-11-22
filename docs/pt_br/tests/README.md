@@ -109,3 +109,11 @@ node --test docs/pt_br/tests/image-quiz.test.mjs
 ```
 
 Os testes verificam as seis ilustrações SVG locais, textos alternativos, imagens ausentes ou duplicadas, instrumentos visualmente semelhantes, gabaritos e IDs, embaralhamento determinístico, modo inverso, falha de carregamento, responsividade, respostas repetidas, estado restaurado, sincronização dos manifestos e salvamento opcional via SDK.
+
+Para o jogo 18 (Descubra o erro - Revisão de código web), execute:
+
+```bash
+node --test docs/pt_br/tests/find-error.test.mjs
+```
+
+Os testes verificam trechos HTML perigosos renderizados como texto, erros em linhas inexistentes, múltiplos erros, correção antes/depois, seleções duplicadas, revelação parcial da solução, estados restaurados inconsistentes, linhas com indentação, interação por teclado, acessibilidade e sincronização dos manifestos.
