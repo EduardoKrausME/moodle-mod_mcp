@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "category": "custom",
+  "title": "Eu escolho",
+  "description": "Experiências de formato livre imaginadas pelo professor.",
+  "examples": [
+    {
+      "id": "flashcards-de-revisao",
+      "title": "Flashcards de revisão",
+      "description": "Revele definições de conceitos pedagógicos.",
+      "howItWorks": "Uma mecânica livre responde às escolhas do estudante sem impor um formato de conteúdo fixo.",
+      "path": "custom/flashcards-de-revisao.html",
+      "minutes": 6,
+      "features": [
+        "FLASHCARDS",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "mapa-mental-exploravel",
+      "title": "Mapa mental explorável",
+      "description": "Expanda os ramos de um projeto digital.",
+      "howItWorks": "Uma mecânica livre responde às escolhas do estudante sem impor um formato de conteúdo fixo.",
+      "path": "custom/mapa-mental-exploravel.html",
+      "minutes": 6,
+      "features": [
+        "MAPA MENTAL",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "roteiro-de-estudo-personalizado",
+      "title": "Roteiro de estudo personalizado",
+      "description": "Escolha um objetivo e receba um roteiro inicial.",
+      "howItWorks": "Uma mecânica livre responde às escolhas do estudante sem impor um formato de conteúdo fixo.",
+      "path": "custom/roteiro-de-estudo-personalizado.html",
+      "minutes": 6,
+      "features": [
+        "TRILHA DE ESTUDOS",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "votacao-rapida",
+      "title": "Votação rápida",
+      "description": "Experimente uma enquete local com retorno contextualizado.",
+      "howItWorks": "Uma mecânica livre responde às escolhas do estudante sem impor um formato de conteúdo fixo.",
+      "path": "custom/votacao-rapida.html",
+      "minutes": 6,
+      "features": [
+        "ENQUETE",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "comparador-de-tecnicas",
+      "title": "Comparador de técnicas",
+      "description": "Compare estratégias de revisão de conteúdos.",
+      "howItWorks": "Uma mecânica livre responde às escolhas do estudante sem impor um formato de conteúdo fixo.",
+      "path": "custom/comparador-de-tecnicas.html",
+      "minutes": 6,
+      "features": [
+        "COMPARADOR",
+        "HTML independente"
+      ]
+    }
+  ]
+}

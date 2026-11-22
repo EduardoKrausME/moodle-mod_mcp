@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "category": "simulation",
+  "title": "Simulação",
+  "description": "Modelos didáticos reativos aos controles do estudante.",
+  "examples": [
+    {
+      "id": "planejamento-de-orcamento",
+      "title": "Planejamento de orçamento",
+      "description": "Receitas e despesas alteram o saldo da simulação.",
+      "howItWorks": "Ajuste os controles deslizantes e acompanhe cálculos e premissas em tempo real.",
+      "path": "simulation/planejamento-de-orcamento.html",
+      "minutes": 6,
+      "features": [
+        "Parâmetros ajustáveis",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "estimativa-de-energia-solar",
+      "title": "Estimativa de energia solar",
+      "description": "Avalie a geração ao variar potência e rendimento.",
+      "howItWorks": "Ajuste os controles deslizantes e acompanhe cálculos e premissas em tempo real.",
+      "path": "simulation/estimativa-de-energia-solar.html",
+      "minutes": 6,
+      "features": [
+        "Parâmetros ajustáveis",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "consumo-de-agua",
+      "title": "Consumo de água",
+      "description": "Explore mudanças no volume ao longo dos dias.",
+      "howItWorks": "Ajuste os controles deslizantes e acompanhe cálculos e premissas em tempo real.",
+      "path": "simulation/consumo-de-agua.html",
+      "minutes": 6,
+      "features": [
+        "Parâmetros ajustáveis",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "capacidade-de-equipe",
+      "title": "Capacidade de equipe",
+      "description": "Estime horas necessárias por profissional para atender chamados.",
+      "howItWorks": "Ajuste os controles deslizantes e acompanhe cálculos e premissas em tempo real.",
+      "path": "simulation/capacidade-de-equipe.html",
+      "minutes": 6,
+      "features": [
+        "Parâmetros ajustáveis",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "horas-de-estudo",
+      "title": "Horas de estudo",
+      "description": "Monte uma rotina semanal variando sessões e duração.",
+      "howItWorks": "Ajuste os controles deslizantes e acompanhe cálculos e premissas em tempo real.",
+      "path": "simulation/horas-de-estudo.html",
+      "minutes": 6,
+      "features": [
+        "Parâmetros ajustáveis",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "previsao-de-participantes",
+      "title": "Previsão de participantes",
+      "description": "Faça uma estimativa de comparecimento em um evento.",
+      "howItWorks": "Ajuste os controles deslizantes e acompanhe cálculos e premissas em tempo real.",
+      "path": "simulation/previsao-de-participantes.html",
+      "minutes": 6,
+      "features": [
+        "Parâmetros ajustáveis",
+        "HTML independente"
+      ]
+    }
+  ]
+}

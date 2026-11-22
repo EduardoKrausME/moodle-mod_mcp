@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a32">
+  <meta name="description" content="Explore exemplos interativos de páginas, quiz, pesquisas, linhas do tempo, estudos de caso, simulações e jogos para o Moodle Mod MCP.">
+  <title>Galeria de exemplos | Mod MCP</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#examples">Pular para os exemplos</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./" aria-label="Galeria Mod MCP - Início"><span class="brand-symbol">M</span><span>mod<span class="brand-accent">MCP</span><small>Exemplos interativos</small></span></a>
+      <a class="header-link" href="https://github.com/EduardoKrausME/moodle-mod_mcp" target="_blank" rel="noopener noreferrer">Código no GitHub <span aria-hidden="true">↗</span></a>
+    </div>
+    <nav class="nav-shell" aria-label="Tipos de conteúdo"><div class="container"><div class="nav-list" id="category-nav" role="group" aria-label="Selecione o tipo de conteúdo"></div></div></nav>
+  </header>
+  <main id="main">
+    <section class="hero container" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Biblioteca de experiências interativas</p>
+        <h1 id="hero-title">Uma boa ideia vira uma <em>experiência de aprendizagem.</em></h1>
+        <p class="hero-description">Veja como cada formato funciona de verdade: abra o exemplo, interaja com ele e consulte o HTML completo para adaptar ao seu Moodle.</p>
+        <div class="hero-pills"><span>HTML + CSS + JavaScript</span><span>Prévia interativa</span><span>Sem dependências externas</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="art-top"><span></span><span></span><span></span><i>mod_mcp / preview</i></div><div class="art-content"><div class="art-kicker">EXPERIÊNCIA INTERATIVA</div><div class="art-head"></div><div class="art-line long"></div><div class="art-line medium"></div><div class="art-items"><div><b>01</b><i></i></div><div><b>02</b><i></i></div><div><b>03</b><i></i></div></div></div><div class="art-corner">▶</div></div>
+    </section>
+    <section class="gallery-section" id="examples" aria-labelledby="section-title">
+      <div class="container">
+        <div class="section-heading"><div><p class="eyebrow subdued" id="section-eyebrow">EXPLORAR FORMATOS</p><h2 id="section-title">Exemplos</h2><p id="section-description">Selecione um formato no menu superior.</p></div><div class="counter" id="example-count" aria-live="polite">Carregando…</div></div>
+        <div class="tools"><label class="search-box"><span aria-hidden="true">⌕</span><span class="sr-only">Buscar exemplos</span><input id="search" type="search" placeholder="Buscar por tema, formato ou recurso…" autocomplete="off"></label><label class="filter-box" id="subtype-label" hidden><span class="sr-only">Filtrar tipo de jogo</span><select id="subtype"><option value="">Todos os jogos</option></select></label></div>
+        <div id="state" role="status" aria-live="polite"></div>
+        <div id="cards" class="cards" aria-live="off"></div>
+        <div class="more-row"><button id="more" class="btn btn-outline" type="button" hidden>Mostrar mais exemplos</button></div>
+      </div>
+    </section>
+    <section class="bottom-note container"><div><h2>Quer criar algo parecido no seu Moodle?</h2><p>Estes exemplos executam no navegador e demonstram possibilidades do Mod MCP. Para publicar atividades, gerenciar permissões e registrar dados reais dos alunos, use o fluxo oficial do plugin e as APIs documentadas.</p></div><a href="https://github.com/EduardoKrausME/moodle-mod_mcp/blob/master/API.md" target="_blank" rel="noopener noreferrer">Consultar APIs ↗</a></section>
+  </main>
+  <dialog id="preview-dialog" class="preview-dialog" aria-labelledby="dialog-title"><div class="dialog-inner"><div class="dialog-bar"><div class="dialog-heading"><p class="eyebrow subdued">PRÉVIA INTERATIVA</p><h2 id="dialog-title"></h2><p id="dialog-description"></p></div><button id="close-dialog" class="icon-btn" type="button" aria-label="Fechar prévia">×</button></div><div class="dialog-actions"><a id="open-tab" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Abrir em nova aba ↗</a><button id="toggle-code" class="btn btn-outline" type="button" aria-expanded="false">Ver HTML</button><button id="copy-code" class="btn btn-primary" type="button">Copiar HTML</button><span id="copy-message" role="status" aria-live="polite"></span></div><div id="dialog-preview" class="dialog-preview"><iframe id="large-frame" title="Exemplo interativo em tamanho real" sandbox="allow-scripts"></iframe></div><pre id="code-view" class="code-view" tabindex="0" hidden><code id="source-code"></code></pre><p id="demo-notice" class="demo-notice">Demonstração local: as respostas e pontuações exibidas não são notas do Moodle.</p></div></dialog>
+</body>
+</html>

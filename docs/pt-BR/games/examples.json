@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Games",
+  "description": "Jogos didáticos executados em HTML, CSS e JavaScript, com foco em pequenas mecânicas reutilizáveis.",
+  "examples": [
+    {
+      "id": "jogo-da-memoria",
+      "title": "Jogo da memória",
+      "description": "Combine conceitos de tecnologia com suas definições.",
+      "howItWorks": "Os cartões são embaralhados e o aluno vira dois por vez; combinações corretas permanecem abertas.",
+      "subtype": "Memória",
+      "features": [
+        "Cartões",
+        "Pares"
+      ],
+      "minutes": 5,
+      "path": "games/jogo-da-memoria.html"
+    },
+    {
+      "id": "caca-palavras",
+      "title": "Caça-palavras",
+      "description": "Encontre palavras escondidas em uma grade de letras.",
+      "howItWorks": "Selecione início e fim de uma sequência horizontal ou vertical; o script valida a palavra encontrada.",
+      "subtype": "Caça-palavras",
+      "features": [
+        "Grade de letras",
+        "Seleção"
+      ],
+      "minutes": 5,
+      "path": "games/caca-palavras.html"
+    },
+    {
+      "id": "quebra-cabeca-deslizante",
+      "title": "Quebra-cabeça deslizante",
+      "description": "Organize peças numeradas até formar a sequência correta.",
+      "howItWorks": "O algoritmo embaralha peças usando movimentos legais, e o jogador move blocos adjacentes ao espaço vazio.",
+      "subtype": "Quebra-cabeça",
+      "features": [
+        "Grade 3×3",
+        "Movimentos"
+      ],
+      "minutes": 5,
+      "path": "games/quebra-cabeca-deslizante.html"
+    },
+    {
+      "id": "arrastar-e-classificar",
+      "title": "Arrastar e classificar",
+      "description": "Associe palavras às categorias Web ou Natureza.",
+      "howItWorks": "Arraste um termo até sua categoria ou selecione o termo e depois o destino, também pelo teclado.",
+      "subtype": "Arrastar e soltar",
+      "features": [
+        "Arrastar",
+        "Classificação"
+      ],
+      "minutes": 5,
+      "path": "games/arrastar-e-classificar.html"
+    },
+    {
+      "id": "palavras-cruzadas",
+      "title": "Palavras cruzadas",
+      "description": "Preencha um cruzamento de três palavras por meio de pistas.",
+      "howItWorks": "A grade possui letras compartilhadas; os campos são conferidos contra uma estrutura de posições e respostas.",
+      "subtype": "Palavras cruzadas",
+      "features": [
+        "Cruzamentos",
+        "Digitação"
+      ],
+      "minutes": 5,
+      "path": "games/palavras-cruzadas.html"
+    },
+    {
+      "id": "letras-embaralhadas",
+      "title": "Letras embaralhadas",
+      "description": "Descubra palavras reorganizando letras disponíveis.",
+      "howItWorks": "Selecione as letras na ordem desejada; o algoritmo verifica o anagrama e libera o próximo desafio.",
+      "subtype": "Anagramas",
+      "features": [
+        "Letras",
+        "Sequência"
+      ],
+      "minutes": 5,
+      "path": "games/letras-embaralhadas.html"
+    },
+    {
+      "id": "ordenar-a-sequencia",
+      "title": "Ordenar a sequência",
+      "description": "Organize os passos de uma atividade de resolução de problemas.",
+      "howItWorks": "Use controles de mover para cima ou baixo e compare a sequência com a ordem-alvo.",
+      "subtype": "Ordenação",
+      "features": [
+        "Etapas",
+        "Reordenação"
+      ],
+      "minutes": 5,
+      "path": "games/ordenar-a-sequencia.html"
+    },
+    {
+      "id": "jogo-da-forca",
+      "title": "Jogo da forca",
+      "description": "Descubra a palavra PLANETA com tentativas limitadas.",
+      "howItWorks": "Escolha letras; cada erro acrescenta uma parte do desenho e a partida termina ao descobrir a palavra ou esgotar tentativas.",
+      "subtype": "Forca",
+      "features": [
+        "Vocabulário",
+        "Tentativas"
+      ],
+      "minutes": 5,
+      "path": "games/jogo-da-forca.html"
+    },
+    {
+      "id": "simbolos-e-conceitos",
+      "title": "Símbolos e conceitos",
+      "description": "Relacione imagens simbólicas a seus conceitos.",
+      "howItWorks": "Cada símbolo possui um seletor de conceito; uma verificação confere quantas associações estão corretas.",
+      "subtype": "Associação visual",
+      "features": [
+        "Símbolos",
+        "Associação"
+      ],
+      "minutes": 5,
+      "path": "games/simbolos-e-conceitos.html"
+    },
+    {
+      "id": "quiz-relampago",
+      "title": "Quiz relâmpago",
+      "description": "Responda perguntas curtas antes de terminar o cronômetro.",
+      "howItWorks": "O tempo começa somente ao clicar em iniciar; as respostas incrementam a pontuação demonstrativa.",
+      "subtype": "Desafio de tempo",
+      "features": [
+        "Cronômetro",
+        "Perguntas"
+      ],
+      "minutes": 5,
+      "path": "games/quiz-relampago.html"
+    },
+    {
+      "id": "encontre-as-diferencas",
+      "title": "Encontre as diferenças",
+      "description": "Compare duas paisagens e identifique três diferenças.",
+      "howItWorks": "A imagem SVG possui três alterações na versão da direita; regiões clicáveis e acessíveis registram os acertos.",
+      "subtype": "Observação",
+      "features": [
+        "SVG",
+        "Percepção"
+      ],
+      "minutes": 5,
+      "path": "games/encontre-as-diferencas.html"
+    },
+    {
+      "id": "bingo-educativo",
+      "title": "Bingo educativo",
+      "description": "Sorteie e marque números até completar uma linha.",
+      "howItWorks": "O sorteio não repete números; a validação confere linhas, colunas e diagonais marcadas.",
+      "subtype": "Bingo",
+      "features": [
+        "Sorteio",
+        "Tabuleiro"
+      ],
+      "minutes": 5,
+      "path": "games/bingo-educativo.html"
+    }
+  ]
+}

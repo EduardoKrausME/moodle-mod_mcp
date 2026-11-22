@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "category": "page",
+  "title": "Páginas",
+  "description": "Formatos de páginas educativas em HTML independente.",
+  "examples": [
+    {
+      "id": "fundamentos-de-acessibilidade-digital",
+      "title": "Fundamentos de acessibilidade digital",
+      "description": "Conteúdo organizado em blocos curtos para leitura e revisão.",
+      "howItWorks": "O conteúdo é organizado em blocos de leitura com hierarquia visual.",
+      "features": [
+        "Aula em blocos",
+        "Acessível"
+      ],
+      "minutes": 5,
+      "path": "page/fundamentos-de-acessibilidade-digital.html"
+    },
+    {
+      "id": "criando-uma-senha-segura",
+      "title": "Criando uma senha segura",
+      "description": "O estudante percorre as etapas de uma orientação prática.",
+      "howItWorks": "Abas ou etapas exibem um bloco por vez e permitem navegar no conteúdo.",
+      "features": [
+        "Tutorial passo a passo",
+        "Acessível"
+      ],
+      "minutes": 5,
+      "path": "page/criando-uma-senha-segura.html"
+    },
+    {
+      "id": "vocabulario-de-programacao",
+      "title": "Vocabulário de programação",
+      "description": "Cartões revelam definições ao serem selecionados.",
+      "howItWorks": "O aluno revela cada explicação ao clicar em um cartão.",
+      "features": [
+        "Cartões de conceitos",
+        "Acessível"
+      ],
+      "minutes": 5,
+      "path": "page/vocabulario-de-programacao.html"
+    },
+    {
+      "id": "boas-praticas-de-estudo",
+      "title": "Boas práticas de estudo",
+      "description": "Uma coleção de respostas expansíveis para consulta rápida.",
+      "howItWorks": "Perguntas são expandidas sob demanda, sem sobrecarregar a leitura.",
+      "features": [
+        "Perguntas frequentes",
+        "Acessível"
+      ],
+      "minutes": 5,
+      "path": "page/boas-praticas-de-estudo.html"
+    },
+    {
+      "id": "introducao-ao-css",
+      "title": "Introdução ao CSS",
+      "description": "Explore seletores, propriedades, valores e responsividade por abas.",
+      "howItWorks": "Abas ou etapas exibem um bloco por vez e permitem navegar no conteúdo.",
+      "features": [
+        "Aula com abas",
+        "Acessível"
+      ],
+      "minutes": 5,
+      "path": "page/introducao-ao-css.html"
+    },
+    {
+      "id": "preparacao-para-uma-apresentacao",
+      "title": "Preparação para uma apresentação",
+      "description": "Etapas marcáveis ajudam o aluno a monitorar o próprio progresso.",
+      "howItWorks": "Cada marcação atualiza imediatamente a barra de progresso local.",
+      "features": [
+        "Checklist de aprendizagem",
+        "Acessível"
+      ],
+      "minutes": 5,
+      "path": "page/preparacao-para-uma-apresentacao.html"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "category": "case",
+  "title": "Estudo de caso",
+  "description": "Cenários com escolhas e consequências.",
+  "examples": [
+    {
+      "id": "chamado-de-suporte",
+      "title": "Chamado de suporte",
+      "description": "Escolha ações, observe consequências e explore outros caminhos.",
+      "howItWorks": "Duas decisões consecutivas mudam a trajetória e apresentam consequências, com opção de refazer.",
+      "path": "case/chamado-de-suporte.html",
+      "minutes": 6,
+      "features": [
+        "Decisões ramificadas",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "privacidade-na-inscricao",
+      "title": "Privacidade na inscrição",
+      "description": "Escolha ações, observe consequências e explore outros caminhos.",
+      "howItWorks": "Duas decisões consecutivas mudam a trajetória e apresentam consequências, com opção de refazer.",
+      "path": "case/privacidade-na-inscricao.html",
+      "minutes": 6,
+      "features": [
+        "Decisões ramificadas",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "erro-apos-atualizacao",
+      "title": "Erro após atualização",
+      "description": "Escolha ações, observe consequências e explore outros caminhos.",
+      "howItWorks": "Duas decisões consecutivas mudam a trajetória e apresentam consequências, com opção de refazer.",
+      "path": "case/erro-apos-atualizacao.html",
+      "minutes": 6,
+      "features": [
+        "Decisões ramificadas",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "conflito-entre-profissionais",
+      "title": "Conflito entre profissionais",
+      "description": "Escolha ações, observe consequências e explore outros caminhos.",
+      "howItWorks": "Duas decisões consecutivas mudam a trajetória e apresentam consequências, com opção de refazer.",
+      "path": "case/conflito-entre-profissionais.html",
+      "minutes": 6,
+      "features": [
+        "Decisões ramificadas",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "planejamento-para-turma-diversa",
+      "title": "Planejamento para turma diversa",
+      "description": "Escolha ações, observe consequências e explore outros caminhos.",
+      "howItWorks": "Duas decisões consecutivas mudam a trajetória e apresentam consequências, com opção de refazer.",
+      "path": "case/planejamento-para-turma-diversa.html",
+      "minutes": 6,
+      "features": [
+        "Decisões ramificadas",
+        "HTML independente"
+      ]
+    },
+    {
+      "id": "atendimento-a-uma-cobranca",
+      "title": "Atendimento a uma cobrança",
+      "description": "Escolha ações, observe consequências e explore outros caminhos.",
+      "howItWorks": "Duas decisões consecutivas mudam a trajetória e apresentam consequências, com opção de refazer.",
+      "path": "case/atendimento-a-uma-cobranca.html",
+      "minutes": 6,
+      "features": [
+        "Decisões ramificadas",
+        "HTML independente"
+      ]
+    }
+  ]
+}

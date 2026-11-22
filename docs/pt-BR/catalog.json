@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "title": "Galeria de exemplos - Mod MCP",
+  "categories": [
+    {
+      "id": "page",
+      "label": "Páginas",
+      "description": "Aulas, tutoriais, resumos e materiais de leitura interativos.",
+      "manifest": "page/examples.json"
+    },
+    {
+      "id": "quiz",
+      "label": "Quiz",
+      "description": "Exercícios de revisão e desafios com feedback na própria página.",
+      "manifest": "quiz/examples.json"
+    },
+    {
+      "id": "survey",
+      "label": "Pesquisa de satisfação",
+      "description": "Perguntas passo a passo, escalas e formulários de feedback.",
+      "manifest": "survey/examples.json"
+    },
+    {
+      "id": "timeline",
+      "label": "Linha do tempo",
+      "description": "Eventos organizados no tempo, com exploração de cada etapa.",
+      "manifest": "timeline/examples.json"
+    },
+    {
+      "id": "case",
+      "label": "Estudo de caso",
+      "description": "Histórias com decisões, consequências e caminhos alternativos.",
+      "manifest": "case/examples.json"
+    },
+    {
+      "id": "simulation",
+      "label": "Simulação",
+      "description": "Cenários que respondem a parâmetros e escolhas do estudante.",
+      "manifest": "simulation/examples.json"
+    },
+    {
+      "id": "custom",
+      "label": "Eu escolho",
+      "description": "Experiências livres que o professor pode imaginar e adaptar.",
+      "manifest": "custom/examples.json"
+    },
+    {
+      "id": "games",
+      "label": "Games",
+      "description": "Jogos educativos em HTML, CSS e JavaScript, organizados por mecânica.",
+      "manifest": "games/examples.json"
+    }
+  ]
+}

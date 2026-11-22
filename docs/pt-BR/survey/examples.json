@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "category": "survey",
+  "title": "Pesquisa de satisfação",
+  "description": "Pesquisas demonstrativas, sem envio ou armazenamento de respostas no Moodle.",
+  "examples": [
+    {
+      "id": "experiencia-com-a-aula",
+      "title": "Experiência com a aula",
+      "description": "Perguntas aparecem uma por vez, com transição suave.",
+      "howItWorks": "Apresenta uma pergunta por vez; respostas de seleção simples avançam automaticamente, enquanto texto e seleção múltipla exigem confirmação.",
+      "features": [
+        "Escala de satisfação",
+        "Uma pergunta por tela"
+      ],
+      "minutes": 5,
+      "path": "survey/experiencia-com-a-aula.html"
+    },
+    {
+      "id": "recomendacao-do-curso",
+      "title": "Recomendação do curso",
+      "description": "Escala de 0 a 10, seguida de justificativa.",
+      "howItWorks": "Apresenta uma pergunta por vez; respostas de seleção simples avançam automaticamente, enquanto texto e seleção múltipla exigem confirmação.",
+      "features": [
+        "Pesquisa NPS",
+        "Uma pergunta por tela"
+      ],
+      "minutes": 5,
+      "path": "survey/recomendacao-do-curso.html"
+    },
+    {
+      "id": "autoavaliacao-de-competencias",
+      "title": "Autoavaliação de competências",
+      "description": "Afirmações em escala Likert de cinco níveis.",
+      "howItWorks": "Apresenta uma pergunta por vez; respostas de seleção simples avançam automaticamente, enquanto texto e seleção múltipla exigem confirmação.",
+      "features": [
+        "Escala de concordância",
+        "Uma pergunta por tela"
+      ],
+      "minutes": 5,
+      "path": "survey/autoavaliacao-de-competencias.html"
+    },
+    {
+      "id": "feedback-ao-final-do-modulo",
+      "title": "Feedback ao final do módulo",
+      "description": "Coleta rápida, com um item por tela.",
+      "howItWorks": "Apresenta uma pergunta por vez; respostas de seleção simples avançam automaticamente, enquanto texto e seleção múltipla exigem confirmação.",
+      "features": [
+        "Pesquisa de pulso",
+        "Uma pergunta por tela"
+      ],
+      "minutes": 5,
+      "path": "survey/feedback-ao-final-do-modulo.html"
+    },
+    {
+      "id": "preferencias-de-formato",
+      "title": "Preferências de formato",
+      "description": "Aluno escolhe vários recursos e confirma a seleção.",
+      "howItWorks": "Apresenta uma pergunta por vez; respostas de seleção simples avançam automaticamente, enquanto texto e seleção múltipla exigem confirmação.",
+      "features": [
+        "Seleção múltipla",
+        "Uma pergunta por tela"
+      ],
+      "minutes": 5,
+      "path": "survey/preferencias-de-formato.html"
+    },
+    {
+      "id": "avaliacao-qualitativa",
+      "title": "Avaliação qualitativa",
+      "description": "Campo de texto com confirmação antes de avançar.",
+      "howItWorks": "Apresenta uma pergunta por vez; respostas de seleção simples avançam automaticamente, enquanto texto e seleção múltipla exigem confirmação.",
+      "features": [
+        "Perguntas abertas",
+        "Uma pergunta por tela"
+      ],
+      "minutes": 5,
+      "path": "survey/avaliacao-qualitativa.html"
+    }
+  ]
+}

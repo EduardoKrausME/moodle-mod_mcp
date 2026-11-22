@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "category": "quiz",
+  "title": "Quiz",
+  "description": "Exercícios demonstrativos com feedback local, sem nota Moodle.",
+  "examples": [
+    {
+      "id": "fundamentos-de-html",
+      "title": "Fundamentos de HTML",
+      "description": "Selecione uma resposta por questão.",
+      "howItWorks": "O aluno responde, recebe feedback e avança até ver a pontuação demonstrativa.",
+      "features": [
+        "Escolha única",
+        "Feedback imediato"
+      ],
+      "minutes": 5,
+      "path": "quiz/fundamentos-de-html.html"
+    },
+    {
+      "id": "mitos-sobre-seguranca-digital",
+      "title": "Mitos sobre segurança digital",
+      "description": "Julgue afirmações e leia o feedback.",
+      "howItWorks": "O aluno responde, recebe feedback e avança até ver a pontuação demonstrativa.",
+      "features": [
+        "Verdadeiro ou falso",
+        "Feedback imediato"
+      ],
+      "minutes": 5,
+      "path": "quiz/mitos-sobre-seguranca-digital.html"
+    },
+    {
+      "id": "praticas-sustentaveis",
+      "title": "Práticas sustentáveis",
+      "description": "Marque todas as alternativas corretas.",
+      "howItWorks": "O aluno responde, recebe feedback e avança até ver a pontuação demonstrativa.",
+      "features": [
+        "Múltipla seleção",
+        "Feedback imediato"
+      ],
+      "minutes": 5,
+      "path": "quiz/praticas-sustentaveis.html"
+    },
+    {
+      "id": "conceitos-basicos-de-redes",
+      "title": "Conceitos básicos de redes",
+      "description": "Digite o termo correto e receba feedback.",
+      "howItWorks": "O aluno responde, recebe feedback e avança até ver a pontuação demonstrativa.",
+      "features": [
+        "Preencher lacunas",
+        "Feedback imediato"
+      ],
+      "minutes": 5,
+      "path": "quiz/conceitos-basicos-de-redes.html"
+    },
+    {
+      "id": "fluxo-de-desenvolvimento-de-software",
+      "title": "Fluxo de desenvolvimento de software",
+      "description": "Reorganize os passos do processo usando setas.",
+      "howItWorks": "O estudante reorganiza os itens com setas e confere a sequência.",
+      "features": [
+        "Ordenar sequência",
+        "Feedback imediato"
+      ],
+      "minutes": 5,
+      "path": "quiz/fluxo-de-desenvolvimento-de-software.html"
+    },
+    {
+      "id": "estrutura-da-web",
+      "title": "Estrutura da web",
+      "description": "Associe cada conceito à descrição correta.",
+      "howItWorks": "O aluno responde, recebe feedback e avança até ver a pontuação demonstrativa.",
+      "features": [
+        "Associar conceitos",
+        "Feedback imediato"
+      ],
+      "minutes": 5,
+      "path": "quiz/estrutura-da-web.html"
+    },
+    {
+      "id": "revisao-relampago-de-matematica",
+      "title": "Revisão relâmpago de matemática",
+      "description": "Responda antes de terminar o cronômetro.",
+      "howItWorks": "Um cronômetro inicia sob comando do aluno e limita a duração da revisão.",
+      "features": [
+        "Desafio com tempo",
+        "Feedback imediato"
+      ],
+      "minutes": 5,
+      "path": "quiz/revisao-relampago-de-matematica.html"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Manifesto de exemplos do Mod MCP",
+  "type": "object",
+  "required": [
+    "version",
+    "category",
+    "title",
+    "description",
+    "examples"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "category": {
+      "enum": [
+        "page",
+        "quiz",
+        "survey",
+        "timeline",
+        "case",
+        "simulation",
+        "custom",
+        "games"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "examples": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "description",
+          "howItWorks",
+          "path",
+          "minutes",
+          "features"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "howItWorks": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^(page|quiz|survey|timeline|case|simulation|custom|games)/[a-z0-9-]+\\.html$"
+          },
+          "minutes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subtype": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
