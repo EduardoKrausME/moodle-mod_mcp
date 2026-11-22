@@ -20,37 +20,29 @@
     Example context (json):
     {
         "cmid": 27,
-        "prompt": "Build an interactive activity...",
-        "promptpage": "Build a content page..."
+        "promptoptions": [{"type": "interactive", "label": "Quiz", "prompt": "Build an interactive activity..."}]
     }
 }}
 <div id="mcp-prompt-selector-{{cmid}}" class="mod-mcp-prompt-selector mb-3">
     <p class="mb-2 font-weight-bold">{{#str}}promptselecttitle, mcp{{/str}}</p>
     <div class="d-flex flex-wrap mb-2" role="group" aria-label="{{#str}}promptselecttitle, mcp{{/str}}">
-        <button type="button" class="btn btn-outline-primary m-1" data-prompt-choice="interactive"
-                aria-pressed="false" aria-controls="mcp-prompt-interactive-{{cmid}}">
-            {{#str}}promptselectinteractive, mcp{{/str}}
-        </button>
-        <button type="button" class="btn btn-outline-primary m-1" data-prompt-choice="page"
-                aria-pressed="false" aria-controls="mcp-prompt-page-{{cmid}}">
-            {{#str}}promptselectpage, mcp{{/str}}
-        </button>
+        {{#promptoptions}}
+            <button type="button" class="btn btn-outline-primary m-1" data-prompt-choice="{{type}}"
+                    aria-pressed="false" aria-controls="mcp-prompt-{{type}}-{{cmid}}">
+                {{label}}
+            </button>
+        {{/promptoptions}}
     </div>
     <p class="text-muted small">{{#str}}promptselecthelp, mcp{{/str}}</p>
-    <div id="mcp-prompt-interactive-{{cmid}}" data-prompt-panel="interactive" hidden>
-        <label class="form-label" for="mcp-prompt-interactive-text-{{cmid}}">
-            {{#str}}copyinstructions, mcp{{/str}}
-        </label>
-        <textarea id="mcp-prompt-interactive-text-{{cmid}}" class="form-control mb-3"
-                  rows="8" readonly>{{prompt}}</textarea>
-    </div>
-    <div id="mcp-prompt-page-{{cmid}}" data-prompt-panel="page" hidden>
-        <label class="form-label" for="mcp-prompt-page-text-{{cmid}}">
-            {{#str}}copyinstructions, mcp{{/str}}
-        </label>
-        <textarea id="mcp-prompt-page-text-{{cmid}}" class="form-control mb-3"
-                  rows="8" readonly>{{promptpage}}</textarea>
-    </div>
+    {{#promptoptions}}
+        <div id="mcp-prompt-{{type}}-{{cmid}}" data-prompt-panel="{{type}}" hidden>
+            <label class="form-label" for="mcp-prompt-{{type}}-text-{{cmid}}">
+                {{#str}}copyinstructions, mcp{{/str}}
+            </label>
+            <textarea id="mcp-prompt-{{type}}-text-{{cmid}}" class="form-control mb-3"
+                      rows="8" readonly>{{prompt}}</textarea>
+        </div>
+    {{/promptoptions}}
 </div>
 {{#js}}
 require([], function() {
