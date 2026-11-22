@@ -125,3 +125,11 @@ node --test docs/pt_br/tests/mystery-image.test.mjs
 ```
 
 Esse teste cobre três SVGs autorais incorporados, grade 4×4, proporção estável, revelação determinística, 0 peças, pistas textuais, aliases, limite de tentativas, repetição de palpite, revelação integral sem acerto, desistência, imagem indisponível ou lenta, restauração de estado, SDK opcional e igualdade dos dois catálogos.
+
+Para o jogo 20 (Labirinto educativo - Missão Energia Limpa), execute:
+
+```bash
+node --test docs/pt_br/tests/maze.test.mjs
+```
+
+A suíte cobre BFS e solvabilidade, duas saídas, grades irregulares, portões obrigatórios, perguntas bloqueadas, erros e acertos, passos diagonais proibidos, paredes, reinício, progresso inválido, navegação por teclado, toque, diálogo nativo, SDK opcional e sincronização do catálogo.

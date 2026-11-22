@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Labirinto educativo - Missão Energia Limpa</title><style>
+:root{color-scheme:light;--bg:#eff6f4;--paper:#fff;--ink:#263c3b;--muted:#59736d;--line:#d6e7e0;--accent:#176e5a;--pale:#e6f5ed;--wall:#2b5160;--floor:#e7f2ef;--visited:#c4e5d8;--gate:#fae5bc;--good:#166c50;--good-bg:#e1f5e9;--warn:#8e5525;--warn-bg:#fff0dd;font:16px/1.54 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit}button:focus-visible,[tabindex="0"]:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #edac45;outline-offset:3px}
+main{max-width:1160px;margin:auto;padding:30px 20px 45px}.eyebrow{text-transform:uppercase;color:var(--accent);font-size:11px;letter-spacing:1.5px;font-weight:850;margin:0 0 8px}
+h1{font-size:clamp(28px,4vw,41px);line-height:1.15;letter-spacing:-.9px;margin:0 0 11px}.intro{font-size:14px;color:var(--muted);max-width:970px;margin:0 0 18px}
+.stats{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-bottom:12px}.stat{border:1px solid var(--line);border-radius:11px;background:var(--paper);padding:8px 14px;min-width:107px}.stat small{display:block;color:var(--muted);font-size:11px}.stat b{font-size:20px;font-variant-numeric:tabular-nums}.stats .note{margin-left:auto;font-size:11px;color:var(--muted)}
+.progress{height:9px;border-radius:20px;background:#dbeae4;overflow:hidden;margin-bottom:17px}.progress span{height:100%;width:0;display:block;background:#28a989;transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(260px,.76fr);gap:16px;align-items:start}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:0 9px 27px #183c2f0a;min-width:0}.panel h2{font-size:17px;margin:0 0 11px}
+.topline{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}.topline h2{margin:0}.tag{border-radius:99px;padding:7px 11px;background:var(--pale);color:var(--accent);font-size:11px;font-weight:830}
+.map-frame{border:1px solid #bed7cb;background:#e0ece7;border-radius:14px;padding:13px;margin:14px 0 10px}
+#board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));grid-template-rows:repeat(11,minmax(0,1fr));gap:3px;width:min(100%,520px);aspect-ratio:1;margin:auto}
+.cell{position:relative;display:grid;place-items:center;border-radius:4px;min-width:0;font-size:clamp(10px,2vw,20px);font-weight:850}
+.cell.wall{background:var(--wall);box-shadow:inset 0 -3px #12323e}.cell.floor{background:var(--floor);border:1px solid #c6ded4}.cell.visited{background:var(--visited)}.cell.visited:not(.player):not(.gate):after{content:"";height:23%;width:23%;border-radius:99px;background:#4caa89;opacity:.65}
+.cell.gate{background:var(--gate);border:2px solid #c48b36;color:#8a551b}.cell.gate.unlocked{background:var(--good-bg);border-color:#5eac83;color:var(--good)}
+.cell.start{background:#d6eef8;border:2px solid #82aec2;color:#376c83}.cell.exit{background:#d6f0e1;border:2px solid #75b691;color:#23744c}
+.cell.player{background:#e9f3c4;border:2px solid #518d49;box-shadow:0 0 0 2px #ffffffb5}.avatar{font-size:clamp(12px,2.5vw,24px);line-height:1}
+.legend{display:flex;flex-wrap:wrap;gap:8px 13px;color:var(--muted);font-size:11px;margin:12px 0 0}.legend span{display:flex;align-items:center;gap:5px}.swatch{display:inline-block;width:13px;height:13px;border:1px solid #85a99d;border-radius:3px;background:var(--floor)}.swatch.wall{background:var(--wall)}.swatch.gate{background:var(--gate);border-color:#b8802f}.swatch.path{background:var(--visited)}.swatch.exit{background:#8acfa9}
+.note{font-size:11px;color:var(--muted);margin:12px 0 0}
+.dpad{width:min(260px,100%);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,44px);gap:7px;margin:16px auto 0}
+.dpad button{border:1px solid var(--accent);background:var(--accent);border-radius:9px;color:white;font-size:22px;font-weight:800;cursor:pointer}.dpad button:disabled{opacity:.43;cursor:not-allowed}.dpad button:hover:not(:disabled){filter:brightness(.87)}
+.dpad [data-dir=up]{grid-area:1/2}.dpad [data-dir=left]{grid-area:2/1}.dpad [data-dir=right]{grid-area:2/3}.dpad [data-dir=down]{grid-area:3/2}.dpad .center{grid-area:2/2;display:grid;place-items:center;background:var(--pale);border-radius:9px;font-size:11px;font-weight:830;color:var(--accent)}
+.btn{border:1px solid var(--accent);border-radius:10px;background:var(--accent);color:#fff;font-size:13px;font-weight:820;cursor:pointer;padding:11px 14px}.btn.secondary{background:var(--paper);color:var(--accent)}.btn:disabled{opacity:.44;cursor:not-allowed}.btn:hover:not(:disabled){filter:brightness(.92)}.controls{margin-top:13px;display:flex;gap:8px}
+.feedback{margin-top:16px;background:#eaf5f0;border:1px solid #cfe2d9;border-radius:11px;min-height:64px;padding:13px 15px;color:#426b5b;font-size:13px}.feedback.good{background:var(--good-bg);color:var(--good);border-color:#a2d3b5}.feedback.warn{background:var(--warn-bg);color:var(--warn);border-color:#e7c7a6}.feedback strong{display:block;font-size:14px;margin-bottom:4px}
+.position{padding:13px;border:1px solid #cde3d8;border-radius:10px;background:var(--pale);color:var(--accent);font-size:12px;margin-bottom:13px}.position strong{display:block;font-size:16px;margin-bottom:2px}
+.neighbors{display:grid;gap:8px;margin:12px 0}.neighbor{background:#f8fcfa;border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:100%;display:flex;text-align:left;align-items:center;gap:9px;color:var(--ink);cursor:pointer}
+.neighbor:hover:not(:disabled){border-color:#83baa6;background:#eefaef}.neighbor:disabled{opacity:.55;cursor:default}.neighbor .arrow{flex:0 0 24px;text-align:center;color:var(--accent);font-size:20px;font-weight:850}
+.neighbor strong{display:block;font-size:13px}.neighbor small{display:block;color:var(--muted);font-size:12px}
+.gates{display:grid;gap:8px;margin:11px 0}.gate{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;gap:9px;align-items:center;background:#f8fcfa}.gate.open{background:var(--good-bg);border-color:#9bceb1}
+.gate .number{flex:0 0 28px;height:28px;border-radius:8px;background:#f2dfb9;color:#9b641d;display:grid;place-items:center;font-weight:820;font-size:12px}.gate.open .number{background:#bde6cb;color:var(--good)}.gate strong{font-size:12px;display:block}.gate small{font-size:11px;color:var(--muted)}
+.rules{color:var(--muted);font-size:12px;padding-left:20px}.rules li{margin:7px 0}
+.victory{border-radius:12px;border:1px solid #9dcbae;background:var(--good-bg);color:var(--good);padding:15px;margin-top:15px}.victory strong{font-size:19px}.victory p{font-size:13px;margin:6px 0 0}
+dialog{border:0;padding:0;background:var(--paper);color:var(--ink);border-radius:17px;width:min(92vw,510px);max-height:90vh;overflow:auto;box-shadow:0 22px 90px #071e1f80}dialog::backdrop{background:#071e24bf;backdrop-filter:blur(2px)}
+.dialog-body{padding:22px}.dialog-body h2{font-size:23px;line-height:1.3;margin:8px 0}.dialog-body p{font-size:14px;color:var(--muted)}.answers{display:grid;gap:9px;margin:16px 0}.answers button{padding:12px 13px;background:#f6fbf8;border:2px solid #c9ddd3;border-radius:10px;color:var(--ink);text-align:left;cursor:pointer;font-weight:750;font-size:14px}
+.answers button:hover{background:var(--pale);border-color:#82b69b}.dialog-result{padding:12px;border-radius:10px;background:var(--warn-bg);color:var(--warn);font-size:13px;margin-bottom:14px}.dialog-actions{display:flex;justify-content:flex-end}
+[hidden]{display:none!important}
+@media(max-width:840px){.layout{grid-template-columns:1fr}.panel{padding:16px}}
+@media(max-width:520px){main{padding:22px 12px 34px}.panel{padding:12px}.map-frame{padding:7px}#board{gap:2px}.cell{border-radius:2px}.cell.gate{border-width:1px}.stats .note{margin-left:0}.dialog-body{padding:16px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#172b2b;--paper:#253c3b;--ink:#e9f7f2;--muted:#b6d0c8;--line:#436459;--accent:#9be4c4;--pale:#315249;--wall:#15353f;--floor:#34554d;--visited:#3e6959;--gate:#584b31;--good:#b3f3d2;--good-bg:#2e5a43;--warn:#f5d1a3;--warn-bg:#533d2d}.map-frame{background:#2b4640;border-color:#4a6b60}.cell.floor{border-color:#527368}.cell.gate{color:#ffe1aa}.cell.gate.unlocked{color:#c8fce0;background:#38634e}.cell.start{color:#d5f1ff;background:#355d6d;border-color:#6d9cb1}.cell.exit{color:#e5ffe9;background:#376b50;border-color:#8bbd95}.cell.player{background:#536a45;border-color:#a2d295;box-shadow:0 0 0 2px #1b3030}.neighbor,.gate{background:#304943}.neighbor:hover:not(:disabled){background:#3a5a4e}.gate.open{background:var(--good-bg)}.gate .number{background:#57472d;color:#ffe2b3}.gate.open .number{background:#3b6c4d;color:#d5ffe5}.feedback{background:#305448;color:#e0f4ed}.feedback.good{background:var(--good-bg);color:var(--good)}.feedback.warn{background:var(--warn-bg);color:var(--warn)}.answers button{background:#305048;border-color:#547465}.answers button:hover{background:#3a6052}.dialog-result{background:var(--warn-bg);color:var(--warn)}}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 20 · Caminhos, decisões e energia</p>
+<h1>Labirinto educativo: Missão Energia Limpa</h1>
+<p class="intro">Vá da entrada S até a saída E de um labirinto de 11×11 casas. Três portões interrompem o caminho e só abrem quando você responde corretamente a perguntas sobre energia solar, eólica e eficiência energética. Explore desvios, use as setas ou os botões direcionais e acompanhe as passagens em texto.</p>
+<div class="stats"><div class="stat"><small>Portões liberados</small><b id="gate-count">0 / 3</b></div><div class="stat"><small>Movimentos</small><b id="move-count">0</b></div><div class="stat"><small>Respostas incorretas</small><b id="mistake-count">0</b></div><span class="note">Sem cronômetro nem nota oficial.</span></div>
+<div id="progress" class="progress" role="progressbar" aria-label="Portões liberados" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><span id="progress-fill"></span></div>
+<div class="layout">
+<section class="panel" aria-labelledby="map-heading">
+ <div class="topline"><h2 id="map-heading">Explore o labirinto</h2><span class="tag">3 portões · saída E</span></div>
+ <div class="map-frame"><div id="board" role="group" tabindex="0" aria-label="Labirinto com casas, portões e jogador. Use as setas para navegar." aria-describedby="board-help"></div></div>
+ <div class="legend" aria-label="Legenda do mapa"><span><i class="swatch wall" aria-hidden="true"></i>Parede</span><span><i class="swatch" aria-hidden="true"></i>Corredor</span><span><i class="swatch gate" aria-hidden="true"></i>Portão (?)</span><span><i class="swatch path" aria-hidden="true"></i>Explorado</span><span><i class="swatch exit" aria-hidden="true"></i>Saída (E)</span></div>
+ <p id="board-help" class="note">Com foco no mapa, use setas ou W/A/S/D para mover uma casa por vez. Não há movimento diagonal. Para toque ou leitor de tela, utilize os controles abaixo e a lista textual à direita.</p>
+ <div class="dpad" role="group" aria-label="Controles direcionais">
+  <button type="button" data-dir="up" aria-label="Mover para cima" disabled>↑</button>
+  <button type="button" data-dir="left" aria-label="Mover para esquerda" disabled>←</button>
+  <span class="center" aria-hidden="true">VOCÊ</span>
+  <button type="button" data-dir="right" aria-label="Mover para direita" disabled>→</button>
+  <button type="button" data-dir="down" aria-label="Mover para baixo" disabled>↓</button>
+ </div>
+ <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"><strong id="feedback-heading">Orientação</strong><span id="feedback-text">Preparando o caminho...</span></div>
+ <div id="victory" class="victory" role="status" tabindex="-1" hidden><strong>Missão concluída! Você encontrou a saída.</strong><p>Você explorou o labirinto e respondeu aos três desafios. O resultado é formativo e não concede nota acadêmica oficial.</p></div>
+ <div class="controls"><button id="reset" class="btn secondary" type="button" disabled>Recomeçar labirinto</button></div>
+</section>
+<aside class="panel" aria-labelledby="status-heading">
+ <h2 id="status-heading">Posição e passagens</h2>
+ <div class="position"><strong id="location">Linha 2, coluna 2</strong>Casas diferentes exploradas: <span id="visited-count">1</span></div>
+ <p class="note">Cada botão representa uma passagem da sua casa atual. A descrição avisa quando houver parede, corredor, portão ou saída.</p>
+ <div id="neighbors" class="neighbors" role="group" aria-label="Descrição textual das passagens disponíveis"></div>
+ <h2 style="margin-top:19px">Portões de aprendizagem</h2>
+ <div id="gates" class="gates" aria-label="Progresso dos portões"></div>
+ <ol class="rules"><li>Avance um passo por vez, sem atravessar paredes.</li><li>Ao encontrar um portão ?, leia a pergunta.</li><li>Respostas incorretas recebem explicação, mas não abrem o portão.</li><li>Responda corretamente para liberar a passagem.</li><li>Encontre a saída E após superar os três portões.</li></ol>
+ <p class="note">O tabuleiro é construído com HTML e CSS, sem imagens, Canvas, bibliotecas ou arquivos externos. A lista de passagens oferece alternativa textual equivalente.</p>
+</aside>
+</div>
+<dialog id="gate-dialog" aria-labelledby="dialog-heading" aria-describedby="dialog-question">
+ <div class="dialog-body">
+  <p class="eyebrow">Desafio pedagógico</p><h2 id="dialog-heading">Portão com pergunta</h2><p id="dialog-question"></p>
+  <div id="answer-list" class="answers" role="group" aria-label="Alternativas para abrir o portão"></div>
+  <div id="dialog-feedback" class="dialog-result" role="status" aria-live="polite" hidden></div>
+  <div class="dialog-actions"><button class="btn secondary" id="dialog-back" type="button">Voltar ao mapa, mantendo portão fechado</button></div>
+ </div>
+</dialog>
+<p class="note">A atividade funciona sem conexão com o SDK do Moodle. Acertos verificados no navegador não representam avaliação oficial nem alteram conclusão acadêmica.</p>
+</main><script>(function mazeGame(){
+"use strict";
+const DATA={"type":"maze","title":"Labirinto educativo - Missão Energia Limpa","grid":["###########","#S........#","###.#####.#","###.###...#","#########.#","#.........#","#.#####.###","#...####.##","#.######.##","#........E#","###########"],"challenges":[{"id":"solar","row":1,"col":5,"prompt":"Em um painel fotovoltaico, qual recurso é convertido diretamente em eletricidade?","options":["A luz do Sol","O calor da combustão do carvão","A força das marés"],"correctIndex":0,"explanation":"Células fotovoltaicas convertem a energia da luz solar diretamente em energia elétrica, sem queimar combustível."},{"id":"eolica","row":5,"col":5,"prompt":"O que faz as pás de uma turbina eólica girarem?","options":["O petróleo aquecido","A força do vento","A corrente elétrica da rede"],"correctIndex":1,"explanation":"A energia cinética do vento movimenta as pás e aciona um gerador. A produção depende das condições de vento."},{"id":"eficiencia","row":9,"col":5,"prompt":"Qual atitude reduz o consumo elétrico mantendo a iluminação necessária?","options":["Deixar todas as lâmpadas acesas","Usar lâmpadas incandescentes antigas","Substituir lâmpadas antigas por LED eficiente"],"correctIndex":2,"explanation":"Lâmpadas LED eficientes oferecem iluminação com consumo menor do que muitas tecnologias antigas, em condições equivalentes."}],"settings":{"moves":["up","down","left","right"],"requireAllGates":true}};
+const DIRS={up:[-1,0],down:[1,0],left:[0,-1],right:[0,1]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id),controller=new AbortController();
+const bridge=window.MoodleMCP?.progress,progress=bridge&&typeof bridge.load==="function"&&typeof bridge.save==="function"?bridge:null;
+const storageKey="mazeEnergyV1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,saveQueue=Promise.resolve(),generation=0;
+// Pure rules.
+function key(r,c){return r+","+c;}
+function marker(data,kind){
+ for(let r=0;r<data.grid.length;r++){const c=data.grid[r].indexOf(kind);if(c>=0)return {row:r,col:c};}
+ return null;
+}
+function passable(data,r,c){return Number.isInteger(r)&&Number.isInteger(c)&&r>=0&&r<data.grid.length&&c>=0&&c<data.grid[0].length&&data.grid[r][c]!=="#";}
+function gateAt(data,r,c){return data.challenges.find(q=>q.row===r&&q.col===c)||null;}
+function reachable(data,blocked=null){
+ const start=marker(data,"S"),exit=marker(data,"E");if(!start||!exit)return false;
+ const queue=[start],seen=new Set([key(start.row,start.col)]);
+ for(let i=0;i<queue.length;i++){
+  const p=queue[i];if(p.row===exit.row&&p.col===exit.col)return true;
+  for(const [dr,dc] of Object.values(DIRS)){
+   const r=p.row+dr,c=p.col+dc,k=key(r,c);
+   if(!passable(data,r,c)||seen.has(k)||(blocked&&r===blocked.row&&c===blocked.col))continue;
+   seen.add(k);queue.push({row:r,col:c});
+  }
+ }
+ return false;
+}
+function validate(data){
+ if(!data||data.type!=="maze"||typeof data.title!=="string"||!data.title.trim()||!Array.isArray(data.grid)||data.grid.length<5||data.grid.length>21||typeof data.grid[0]!=="string"||data.grid[0].length<5||data.grid[0].length>21||!Array.isArray(data.challenges)||data.challenges.length<1||data.challenges.length>10||!data.settings||!Array.isArray(data.settings.moves)||data.settings.moves.length!==4||new Set(data.settings.moves).size!==4||data.settings.moves.some(x=>!Object.hasOwn(DIRS,x))||typeof data.settings.requireAllGates!=="boolean")return false;
+ const cols=data.grid[0].length;let starts=0,exits=0;
+ for(const row of data.grid){if(typeof row!=="string"||row.length!==cols||!/^[SE.#]+$/.test(row))return false;for(const ch of row){if(ch==="S")starts++;if(ch==="E")exits++;}}
+ if(starts!==1||exits!==1)return false;
+ const ids=new Set(),cells=new Set();
+ for(const q of data.challenges){
+  if(!q||typeof q.id!=="string"||!/^[a-z0-9-]+$/.test(q.id)||ids.has(q.id)||!Number.isInteger(q.row)||!Number.isInteger(q.col)||!passable(data,q.row,q.col)||data.grid[q.row][q.col]!=="."||cells.has(key(q.row,q.col))||typeof q.prompt!=="string"||!q.prompt.trim()||typeof q.explanation!=="string"||!q.explanation.trim()||!Array.isArray(q.options)||q.options.length<2||q.options.length>5||!Number.isInteger(q.correctIndex)||q.correctIndex<0||q.correctIndex>=q.options.length)return false;
+  const choices=new Set();for(const opt of q.options){if(typeof opt!=="string"||!opt.trim()||choices.has(opt.trim().toLowerCase()))return false;choices.add(opt.trim().toLowerCase());}
+  ids.add(q.id);cells.add(key(q.row,q.col));
+ }
+ if(!reachable(data))return false;
+ if(data.settings.requireAllGates&&data.challenges.some(q=>reachable(data,q)))return false;
+ return true;
+}
+function initialState(data){const p=marker(data,"S");return {row:p.row,col:p.col,visited:[key(p.row,p.col)],moves:0,mistakes:0,unlocked:[],pending:null,finished:false};}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Number.isInteger(s.row)||!Number.isInteger(s.col)||!passable(data,s.row,s.col)||!Array.isArray(s.visited)||!Number.isInteger(s.moves)||s.moves<0||s.moves>1000000||!Number.isInteger(s.mistakes)||s.mistakes<0||s.mistakes>1000000||!Array.isArray(s.unlocked)||!(s.pending===null||typeof s.pending==="string")||typeof s.finished!=="boolean")return false;
+ const start=marker(data,"S"),exit=marker(data,"E"),all=new Set(data.challenges.map(x=>x.id)),seen=new Set(s.visited);
+ if(seen.size!==s.visited.length||!seen.has(key(start.row,start.col))||!seen.has(key(s.row,s.col))||s.visited.length>s.moves+1||s.visited.length>data.grid.join("").replaceAll("#","").length)return false;
+ for(const k of s.visited){if(typeof k!=="string")return false;const [r,c]=k.split(",").map(Number);if(!passable(data,r,c)||key(r,c)!==k)return false;const gate=gateAt(data,r,c);if(gate&&!s.unlocked.includes(gate.id))return false;}
+ if(new Set(s.unlocked).size!==s.unlocked.length||s.unlocked.some(id=>!all.has(id)))return false;
+ if(s.pending!==null){const gate=data.challenges.find(q=>q.id===s.pending);if(!gate||s.unlocked.includes(gate.id)||Math.abs(gate.row-s.row)+Math.abs(gate.col-s.col)!==1||s.finished)return false;}
+ if(s.finished!==(s.row===exit.row&&s.col===exit.col))return false;
+ if(s.finished&&s.unlocked.length!==data.challenges.length)return false;
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(data),changed:true,kind:"neutral",message:"Labirinto reiniciado. Comece pela entrada S."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"O estado do labirinto é inválido."};
+ if(action?.type==="dismiss"){
+  if(!s.pending)return {state:s,changed:false,kind:"neutral",message:"Nenhuma pergunta aberta."};
+  return {state:{...s,pending:null},changed:true,kind:"neutral",message:"Pergunta fechada. O portão permanece trancado."};
+ }
+ if(action?.type==="answer"){
+  if(!s.pending)return {state:s,changed:false,kind:"warn",message:"Nenhum portão aguarda resposta."};
+  const q=data.challenges.find(x=>x.id===s.pending);
+  if(!Number.isInteger(action.index)||action.index<0||action.index>=q.options.length)return {state:s,changed:false,kind:"warn",message:"Alternativa inexistente."};
+  if(action.index!==q.correctIndex)return {state:{...s,mistakes:s.mistakes+1},changed:true,kind:"warn",message:"Resposta incorreta. "+q.explanation+" Selecione a alternativa correta para atravessar."};
+  const visited=s.visited.includes(key(q.row,q.col))?s.visited:[...s.visited,key(q.row,q.col)];
+  return {state:{...s,row:q.row,col:q.col,visited,unlocked:[...s.unlocked,q.id],moves:s.moves+1,pending:null},changed:true,kind:"good",message:"Portão liberado! "+q.explanation+" Você atravessou a porta."};
+ }
+ if(s.pending)return {state:s,changed:false,kind:"warn",message:"Responda ou feche a pergunta antes de continuar."};
+ if(s.finished)return {state:s,changed:false,kind:"neutral",message:"A saída já foi alcançada. Reinicie para jogar novamente."};
+ if(action?.type==="move"){
+  if(!data.settings.moves.includes(action.direction))return {state:s,changed:false,kind:"warn",message:"Movimento inválido. Não são permitidos passos diagonais."};
+  const [dr,dc]=DIRS[action.direction],r=s.row+dr,c=s.col+dc;
+  if(!passable(data,r,c))return {state:s,changed:false,kind:"warn",message:"Parede! Não há passagem nessa direção."};
+  const gate=gateAt(data,r,c);
+  if(gate&&!s.unlocked.includes(gate.id))return {state:{...s,pending:gate.id},changed:true,kind:"question",message:"Portão encontrado! Responda à questão para atravessar."};
+  const visited=s.visited.includes(key(r,c))?s.visited:[...s.visited,key(r,c)],exit=marker(data,"E"),finished=r===exit.row&&c===exit.col;
+  return {state:{...s,row:r,col:c,visited,moves:s.moves+1,finished},changed:true,kind:finished?"good":"neutral",message:finished?"Você chegou à saída e concluiu os três desafios!":"Você avançou para a linha "+(r+1)+", coluna "+(c+1)+"."};
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Escolha uma direção."};
+}
+// End pure rules.
+
+function el(tag,cls,value){const n=document.createElement(tag);if(cls)n.className=cls;if(value!==undefined)n.textContent=value;return n;}
+function getState(){return {row:state.row,col:state.col,visited:[...state.visited],moves:state.moves,mistakes:state.mistakes,unlocked:[...state.unlocked],pending:state.pending,finished:state.finished};}
+function restoreState(value){if(!validState(value,DATA))return false;state={row:value.row,col:value.col,visited:[...value.visited],moves:value.moves,mistakes:value.mistakes,unlocked:[...value.unlocked],pending:value.pending,finished:value.finished};render();return true;}
+function announce(message,kind="neutral"){$("feedback").className="feedback"+(kind==="good"?" good":kind==="warn"?" warn":"");$("feedback-heading").textContent=kind==="good"?"Muito bem!":kind==="warn"?"Confira":"Orientação";$("feedback-text").textContent=message;}
+const DIRLABEL={up:"Cima",down:"Baixo",left:"Esquerda",right:"Direita"},DIRARROW={up:"↑",down:"↓",left:"←",right:"→"};
+function describe(dir){
+ const [dr,dc]=DIRS[dir],r=state.row+dr,c=state.col+dc;if(!passable(DATA,r,c))return "Parede: não é possível avançar";
+ const gate=gateAt(DATA,r,c);if(gate)return state.unlocked.includes(gate.id)?"Portão liberado":"Portão com pergunta";
+ if(DATA.grid[r][c]==="E")return "Saída do labirinto";
+ if(DATA.grid[r][c]==="S")return "Entrada do labirinto";
+ return "Corredor disponível";
+}
+function renderBoard(){
+ const board=$("board");board.replaceChildren();
+ DATA.grid.forEach((line,r)=>[...line].forEach((ch,c)=>{
+  const gate=gateAt(DATA,r,c),here=state.row===r&&state.col===c,visited=state.visited.includes(key(r,c));
+  const n=el("div","cell "+(ch==="#"?"wall":ch==="S"?"start":ch==="E"?"exit":"floor")+(visited?" visited":"")+(gate?" gate":"")+(gate&&state.unlocked.includes(gate.id)?" unlocked":"")+(here?" player":""));
+  n.setAttribute("aria-hidden","true");
+  if(here)n.append(el("span","avatar","●"));else if(gate)n.textContent=state.unlocked.includes(gate.id)?"✓":"?";else if(ch==="S")n.textContent="S";else if(ch==="E")n.textContent="E";
+  board.append(n);
+ }));
+}
+function renderNeighbors(){
+ const box=$("neighbors");box.replaceChildren();
+ DATA.settings.moves.forEach(dir=>{
+  const [dr,dc]=DIRS[dir],available=passable(DATA,state.row+dr,state.col+dc),b=el("button","neighbor");
+  b.type="button";b.dataset.dir=dir;b.disabled=!ready||!available||!!state.pending||state.finished;b.setAttribute("aria-label",DIRLABEL[dir]+": "+describe(dir));
+  const text=el("span");text.append(el("strong","",DIRLABEL[dir]),el("small","",describe(dir)));
+  b.append(el("span","arrow",DIRARROW[dir]),text);box.append(b);
+ });
+}
+function renderGates(){
+ const box=$("gates");box.replaceChildren();
+ DATA.challenges.forEach((q,i)=>{
+  const done=state.unlocked.includes(q.id),row=el("div","gate"+(done?" open":"")),meta=el("span");
+  meta.append(el("strong","",["Energia solar","Energia eólica","Eficiência energética"][i]||q.id),el("small","",done?"Respondido e liberado":"Ainda fechado"));
+  row.append(el("span","number",done?"✓":String(i+1)),meta);box.append(row);
+ });
+}
+function renderDialog(){
+ const dialog=$("gate-dialog");
+ if(!state.pending){if(dialog.open)dialog.close();dialog.dataset.gate="";return;}
+ const q=DATA.challenges.find(x=>x.id===state.pending);
+ if(dialog.dataset.gate!==q.id){
+  dialog.dataset.gate=q.id;$("dialog-heading").textContent="Portão "+(DATA.challenges.indexOf(q)+1)+" - desafio";
+  $("dialog-question").textContent=q.prompt;$("dialog-feedback").hidden=true;
+  const options=$("answer-list");options.replaceChildren();
+  q.options.forEach((choice,i)=>{const b=el("button","",String.fromCharCode(65+i)+". "+choice);b.type="button";b.dataset.answer=String(i);b.setAttribute("aria-label","Alternativa "+String.fromCharCode(65+i)+": "+choice);options.append(b);});
+ }
+ if(!dialog.open){dialog.showModal();$("answer-list").querySelector("button")?.focus();}
+}
+function render(){
+ if(disposed||!state)return;
+ $("gate-count").textContent=state.unlocked.length+" / "+DATA.challenges.length;$("move-count").textContent=String(state.moves);$("mistake-count").textContent=String(state.mistakes);
+ $("progress").setAttribute("aria-valuenow",String(state.unlocked.length));$("progress-fill").style.width=100*state.unlocked.length/DATA.challenges.length+"%";
+ $("location").textContent="Linha "+(state.row+1)+", coluna "+(state.col+1)+(state.finished?" - saída encontrada":"");
+ $("visited-count").textContent=String(state.visited.length);$("reset").disabled=!ready;$("victory").hidden=!state.finished;
+ renderBoard();renderNeighbors();renderGates();
+ for(const b of root.querySelectorAll(".dpad button[data-dir]")){const [dr,dc]=DIRS[b.dataset.dir];b.disabled=!ready||!!state.pending||state.finished||!passable(DATA,state.row+dr,state.col+dc);}
+ renderDialog();
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++generation;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||stamp!==generation)return;
+  const other=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const next={...other,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(next)).length>12288){announce("O progresso excedeu 12 KiB e não foi salvo.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/maze-energy",data:next});
+ }).catch(async()=>{
+  if(disposed)return;generation++;
+  try{remote=await progress.load();if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))announce("Outra sessão mudou o progresso. Recuperei a versão salva.","warn");else announce("Não consegui conciliar o progresso. Continue nesta página.","warn");}
+  catch(_){remote=null;announce("Salvamento indisponível. O labirinto segue funcionando.","warn");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const result=transition(state,action,DATA);
+ if(!result.changed){
+  if(state.pending&&action.type==="answer"){$("dialog-feedback").hidden=false;$("dialog-feedback").textContent=result.message;}
+  else announce(result.message,result.kind);
+  return;
+ }
+ state=result.state;modified=true;render();save();
+ if(state.pending&&action.type==="answer"){$("dialog-feedback").hidden=false;$("dialog-feedback").textContent=result.message;}
+ else announce(result.message,result.kind);
+ if(!state.pending){$("board").focus({preventScroll:true});if(state.finished)$("victory").focus({preventScroll:true});}
+}
+function destroy(){disposed=true;controller.abort();if($("gate-dialog").open)$("gate-dialog").close();}
+async function init(container,data){
+ if(!container||!validate(data)){announce("Dados inválidos: verifique saídas, paredes e portões.","warn");return;}
+ state=initialState(data);render();
+ if(progress)try{const saved=await progress.load();if(disposed)return;remote=saved;
+  if(!modified&&saved.data?.[storageKey]&&restoreState(saved.data[storageKey]))announce("Progresso recuperado. Continue o labirinto.");
+  else announce("Comece na entrada S e procure a saída E. As interrogações indicam desafios.");
+ }catch(_){announce("Sem sincronização com Moodle. O labirinto pode ser jogado normalmente.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",event=>{
+ const button=event.target.closest("button");if(!button||!root.contains(button))return;
+ if(button.dataset.dir){handleAction({type:"move",direction:button.dataset.dir});return;}
+ if(button.dataset.answer!==undefined){handleAction({type:"answer",index:Number(button.dataset.answer)});return;}
+ if(button.id==="dialog-back"){handleAction({type:"dismiss"});return;}
+ if(button.id==="reset")handleAction({type:"restart"});
+},{signal:controller.signal});
+root.addEventListener("keydown",event=>{
+ if($("gate-dialog").open||!event.target.closest("#board,.dpad"))return;
+ const direction={ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRight:"right",w:"up",a:"left",s:"down",d:"right"}[event.key];
+ if(!direction)return;event.preventDefault();handleAction({type:"move",direction});
+},{signal:controller.signal});
+$("gate-dialog").addEventListener("cancel",event=>{event.preventDefault();handleAction({type:"dismiss"});},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>
