@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Published activity content for the Moodle mobile app.
@@ -40,12 +40,23 @@ use moodle_url;
  * Never export a draft, question answers, session cookies or access tokens.
  */
 final class mobile_content extends external_api {
+    /**
+     * Defines the required parameters for retrieving published mobile content.
+     *
+     * @return external_function_parameters Parameter definition.
+     */
     public static function get_parameters(): external_function_parameters {
         return new external_function_parameters([
             "cmid" => new external_value(PARAM_INT, "Course module ID"),
         ]);
     }
 
+    /**
+     * Retrieves the published activity revision for the mobile app.
+     *
+     * @param int $cmid Course module ID.
+     * @return array Published revision content and asset URLs.
+     */
     public static function get(int $cmid): array {
         global $DB;
 
@@ -90,6 +101,11 @@ final class mobile_content extends external_api {
         ];
     }
 
+    /**
+     * Defines the published mobile content response structure.
+     *
+     * @return external_single_structure Response definition.
+     */
     public static function get_returns(): external_single_structure {
         return new external_single_structure([
             "cmid" => new external_value(PARAM_INT, "Course module ID"),
