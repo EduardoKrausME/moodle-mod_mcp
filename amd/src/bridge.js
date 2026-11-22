@@ -78,7 +78,7 @@ define(["core/ajax"], function(Ajax) {
             let payload;
             try {
                 payload = JSON.stringify(msg.payload);
-                if (payload.length > 16384) {
+                if (payload.length > 262144) {
                     return;
                 }
             } catch (e) {
