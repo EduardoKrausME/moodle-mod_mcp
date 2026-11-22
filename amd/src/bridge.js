@@ -30,7 +30,7 @@ define(["core/ajax"], function(Ajax) {
         }
         console.log("[mod_mcp/bridge] Inicializando para cmid:", config.cmid);
 
-        // Request a fresh measurement after the isolated srcdoc finishes loading.
+        // Request a fresh measurement after the isolated content document finishes loading.
         // A direct contentDocument read would violate the allow-scripts sandbox.
         const requestMeasurement = () => {
             if (frame.isConnected && frame.contentWindow) {
@@ -40,7 +40,7 @@ define(["core/ajax"], function(Ajax) {
         };
         // Register the listener before requesting measurements to avoid startup races.
         window.addEventListener("message", (event) => {
-            // The sandboxed srcdoc has an opaque origin. Verify the WindowProxy,
+            // The sandboxed document has an opaque origin. Verify the WindowProxy,
             // not event.origin, which is "null" for this iframe.
             if (event.source !== frame.contentWindow) {
                 return;

@@ -78,6 +78,20 @@ final class content_service_test extends advanced_testcase {
     }
 
     /**
+     * Drafts require management rights and historical revisions are never served.
+     */
+    public function test_revision_access_restricts_drafts_and_old_versions(): void {
+        $activity = (object)["publishedrevision" => 15, "draftrevision" => 18];
+
+        $this->assertTrue(service::can_access_revision($activity, 15, false));
+        $this->assertTrue(service::can_access_revision($activity, 15, true));
+        $this->assertFalse(service::can_access_revision($activity, 18, false));
+        $this->assertTrue(service::can_access_revision($activity, 18, true));
+        $this->assertFalse(service::can_access_revision($activity, 14, true));
+        $this->assertFalse(service::can_access_revision($activity, 0, true));
+    }
+
+    /**
      * Conversion is literal for inline JavaScript and preserves ordinary ASCII.
      */
     public function test_normalizes_quotes_in_inline_script(): void {
