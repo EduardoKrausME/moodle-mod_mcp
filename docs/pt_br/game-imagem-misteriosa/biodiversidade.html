@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Imagem misteriosa - Biodiversidade</title><style>
+:root{font:16px/1.54 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--bg:#f4f5fa;--ink:#26374c;--muted:#637890;--line:#dce4ee;--paper:#fff;--violet:#554ba7;--light:#f0effd;--ok:#157458;--ok-light:#e1f6e9;--warn:#945922;--warn-light:#fff0dd;color:var(--ink);background:var(--bg)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button,input{font:inherit}button:focus-visible,input:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #f0ae42;outline-offset:3px}
+main{max-width:1130px;margin:auto;padding:32px 22px 46px}.eyebrow{margin:0 0 8px;text-transform:uppercase;letter-spacing:1.4px;font-size:11px;color:var(--violet);font-weight:850}
+h1{margin:0 0 11px;font-size:clamp(29px,4vw,41px);letter-spacing:-.85px;line-height:1.16}.intro{font-size:14px;color:var(--muted);max-width:960px;margin:0 0 18px}
+.stats{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-bottom:13px}.stat{min-width:105px;border:1px solid var(--line);border-radius:11px;background:var(--paper);padding:8px 14px}
+.stat small{font-size:11px;color:var(--muted);display:block}.stat strong{font-size:19px;font-variant-numeric:tabular-nums}.stats .note{font-size:11px;color:var(--muted);margin-left:auto}
+.progress{height:9px;border-radius:30px;background:#e0e5f0;overflow:hidden;margin-bottom:17px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#8474d8,#39ad92);transition:width .24s}
+.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(250px,.75fr);gap:16px;align-items:start}
+.panel{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:17px;padding:21px;box-shadow:0 8px 25px #21355209}
+.panel h2{font-size:18px;margin:0 0 12px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.top small{font-size:12px;color:var(--muted);font-weight:790}
+.tag{font-size:11px;font-weight:820;border-radius:100px;padding:6px 10px;background:var(--light);color:var(--violet)}
+.question{font-size:clamp(22px,2.8vw,28px);letter-spacing:-.5px;line-height:1.2;margin:14px 0 6px}.sub{font-size:13px;color:var(--muted);margin:0 0 14px}
+.image-wrap{position:relative;width:100%;aspect-ratio:8/5;overflow:hidden;background:#d9e4f1;border-radius:14px;border:2px solid #cfdae9}
+.image-wrap #image-slot{position:absolute;inset:0}.image-wrap img{display:block;width:100%;height:100%;object-fit:contain;aspect-ratio:8/5}
+.image-fallback{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;padding:20px;background:#e6edf7;color:#324e6d;font-size:13px;text-align:center}
+.image-fallback strong{font-size:15px}.image-fallback span{max-width:340px}
+.mosaic{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr));pointer-events:none}
+.tile{background:#5650a1;border:1px solid #9992d2;background-image:linear-gradient(130deg,#736bc1,#443d89);box-shadow:inset 0 0 13px #2520592a;transition:opacity .22s ease}
+.tile:nth-child(4n+2){background-image:linear-gradient(140deg,#6c62ae,#4c418f)}.tile:nth-child(5n){background-image:linear-gradient(140deg,#8579cc,#594a9e)}
+.tile.revealed{opacity:0}
+.image-credit{font-size:11px;color:var(--muted);margin:8px 0 0}
+.pieces{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--muted);margin:13px 0 7px}
+.pieces strong{font-size:13px;color:var(--ink)}
+.mini-progress{height:7px;background:#e0e5f0;border-radius:12px;overflow:hidden}.mini-progress span{height:100%;display:block;background:#8577cf;transition:width .22s}
+.answer-form{margin-top:17px}.answer-form label{display:block;font-size:13px;font-weight:820;margin-bottom:8px}
+.form-row{display:flex;gap:9px;flex-wrap:wrap}.form-row input{flex:1 1 220px;min-width:0;border:2px solid #bcc7d9;border-radius:10px;padding:11px 13px;background:var(--paper);color:var(--ink);font-size:14px}
+.btn{background:var(--violet);color:#fff;border:1px solid var(--violet);border-radius:10px;padding:11px 15px;font-size:12px;font-weight:840;cursor:pointer}
+.btn.secondary{background:var(--paper);color:var(--violet)}.btn.warn{background:var(--paper);border-color:#d2b08c;color:var(--warn)}
+.btn:disabled{opacity:.44;cursor:not-allowed}.btn:hover:not(:disabled){filter:brightness(.93)}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.controls .spacer{flex:1}
+.feedback{margin-top:16px;min-height:66px;border:1px solid #d7dfef;border-radius:11px;padding:13px 16px;background:#edf0fa;color:#425777;font-size:13px}
+.feedback.good{background:var(--ok-light);color:var(--ok);border-color:#9bd0b1}.feedback.warn{background:var(--warn-light);color:var(--warn);border-color:#e1c09c}
+.feedback strong{display:block;font-size:14px;margin-bottom:3px}
+.revealed-answer{margin-top:14px;border-radius:11px;border:1px solid #b7d9c4;background:#edf9f2;padding:14px 16px;color:#205d45}
+.revealed-answer.lost{border-color:#dfc0a0;background:#fff4e7;color:#84532d}.revealed-answer strong{display:block;font-size:18px}
+.revealed-answer p{margin:6px 0 0;font-size:13px;line-height:1.58}
+.textual{margin-top:14px;border:1px solid var(--line);border-radius:11px;padding:14px;background:#f7f8fd}
+.textual h3{font-size:14px;margin:0 0 5px}.textual p{font-size:12px;color:var(--muted);margin:0 0 11px}
+.textual ol{margin:0;padding-left:22px;display:grid;gap:8px;font-size:13px;color:var(--ink)}
+.textual li{line-height:1.55}
+.textual .empty{color:var(--muted);font-size:12px}
+.attempts{margin-top:13px;font-size:12px;color:var(--muted)}.attempts strong{color:var(--ink)}
+.route{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.marker{min-height:63px;border:1px solid var(--line);border-radius:10px;background:#f6f7fc;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;text-align:center}
+.marker strong{font-size:17px}.marker small{font-size:11px;color:var(--muted)}
+.marker.current{border:2px solid #8276d5;background:var(--light)}.marker.correct{border-color:#9dcbb3;background:var(--ok-light);color:var(--ok)}
+.marker.lost{border-color:#e4bf96;background:var(--warn-light);color:var(--warn)}
+.rules{padding-left:20px;color:var(--muted);font-size:12px}.rules li{margin-bottom:8px}
+.explainer{border-radius:11px;padding:13px;background:var(--light);color:#554c91;font-size:12px;margin-top:15px}.explainer strong{display:block;margin-bottom:5px}.explainer p{margin:0}
+.summary h2{font-size:26px;margin:0 0 10px}.summary p{font-size:13px;color:var(--muted)}
+.review{display:grid;gap:9px;margin:13px 0}.review-item{border-radius:11px;padding:13px;background:#f9faff;border:1px solid var(--line)}
+.review-item.good{background:#eefaf3;border-color:#b0d7bf}.review-item.lost{background:#fff7ec;border-color:#e6c6a7}
+.review-item strong{display:block;font-size:14px}.review-item p{font-size:12px;margin:5px 0;line-height:1.55}
+.note{font-size:11px;color:var(--muted);margin:15px 0 0}[hidden]{display:none!important}
+@media(max-width:835px){.layout{grid-template-columns:1fr}.panel{padding:17px}.route{max-width:370px}}
+@media(max-width:530px){main{padding:23px 12px 33px}.panel{padding:13px}.form-row{display:grid}.form-row input,.form-row .btn{width:100%}.stats .note{margin-left:0}.controls .btn{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#181e30;--ink:#e9ecfb;--muted:#b6c4da;--line:#3f4d67;--paper:#27334b;--violet:#c3b7ff;--light:#3c3b62;--ok:#aff0cf;--ok-light:#294b3c;--warn:#f0c89d;--warn-light:#503c2e}.image-wrap{border-color:#59668a}.image-fallback{background:#394665;color:#e4e9fa}.mini-progress{background:#394665}.tile{border-color:#6865a2}.textual{background:#2e3851}.feedback{background:#343e59;color:#e0e6f8}.feedback.good{background:var(--ok-light);color:var(--ok)}.feedback.warn{background:var(--warn-light);color:var(--warn)}.revealed-answer{background:var(--ok-light);color:#d9ffe6;border-color:#628f74}.revealed-answer.lost{background:var(--warn-light);color:#ffdfbd;border-color:#a08060}.marker{background:#2e3851}.marker.current{background:#464069;color:#e8e0ff}.marker.correct{background:var(--ok-light);color:var(--ok)}.marker.lost{background:var(--warn-light);color:var(--warn)}.explainer{color:#e2deff}.review-item{background:#2f3852}.review-item.good{background:#2c493b}.review-item.lost{background:#493b33}}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 19 · Inferência e descoberta gradual</p>
+<h1>Imagem misteriosa: biodiversidade</h1>
+<p class="intro">Descubra três seres vivos observando uma ilustração que começa coberta por mosaicos. Cada dica abre mais peças e também oferece uma pista textual; respostas incorretas revelam outras partes. Você tem até quatro tentativas por imagem e pode continuar mesmo sem enxergar o desenho.</p>
+<div class="stats"><div class="stat"><small>Imagens concluídas</small><strong id="completed">0 / 3</strong></div><div class="stat"><small>Identificadas</small><strong id="correct">0 / 3</strong></div><span class="note">Sem cronômetro e sem nota acadêmica.</span></div>
+<div id="progress" class="progress" role="progressbar" aria-label="Imagens concluídas" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><span id="progress-bar"></span></div>
+<div class="layout">
+ <section class="panel" id="game-panel" aria-labelledby="question">
+  <div class="top"><small id="position">Imagem 1 de 3</small><span class="tag" id="stage">Imagem oculta</span></div>
+  <h2 id="question" class="question" tabindex="-1">O que está escondido?</h2>
+  <p class="sub">O mosaico revela gradualmente uma figura. Use as pistas textuais abaixo para ter uma experiência equivalente sem depender da imagem.</p>
+  <div class="image-wrap" aria-label="Ilustração com 16 peças de mosaico">
+   <div id="image-slot"></div>
+   <div id="mosaic" class="mosaic" aria-hidden="true"></div>
+  </div>
+  <p class="image-credit">Origem: três ilustrações SVG originais incorporadas ao HTML, sem conexão externa.</p>
+  <div class="pieces"><strong>Peças visíveis: <span id="visible">2 / 16</span></strong><span>Peças cobertas: <span id="remaining">14</span></span></div>
+  <div class="mini-progress" id="tile-progress-container" role="progressbar" aria-label="Peças da imagem reveladas" aria-valuemin="0" aria-valuemax="16" aria-valuenow="2"><span id="tile-progress"></span></div>
+  <form id="answer-form" class="answer-form" autocomplete="off">
+   <label for="guess">Qual ser vivo aparece na imagem?</label>
+   <div class="form-row"><input id="guess" name="guess" type="text" maxlength="80" required autocomplete="off" enterkeyhint="done" placeholder="Digite seu palpite" aria-describedby="guess-help"><button type="submit" id="submit" class="btn" disabled>Confirmar resposta</button></div>
+   <p id="guess-help" class="note">Acentos e maiúsculas são ignorados; sinônimos previstos também são aceitos. Palpites repetidos não gastam tentativa.</p>
+  </form>
+  <div class="controls"><button id="hint" type="button" class="btn secondary" disabled>Revelar mais e ler dica</button><button id="giveup" type="button" class="btn warn" disabled>Desistir da imagem</button><span class="spacer" aria-hidden="true"></span><button id="next" type="button" class="btn" disabled hidden>Próxima imagem</button></div>
+  <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"><strong id="feedback-heading">Nova pista</strong><span id="feedback-text">Preparando a figura...</span></div>
+  <div id="answer-reveal" class="revealed-answer" hidden><strong id="answer-heading"></strong><p id="answer-description"></p></div>
+ </section>
+ <aside class="panel" aria-label="Dicas e acompanhamento">
+  <h2>Dicas textuais</h2>
+  <p class="sub">As pistas descrevem características do mesmo ser vivo que aparece na ilustração, funcionando também com imagens indisponíveis.</p>
+  <div id="hint-count" class="tag">0 / 5</div>
+  <section class="textual" aria-label="Dicas descritivas já reveladas"><h3>O que sabemos até agora?</h3><p>Revele uma dica por vez; nenhuma dica depende de localizar detalhes visuais.</p><ol id="clues"></ol></section>
+  <h2 style="margin-top:17px">Seu percurso</h2><div id="tracker" class="route" role="list" aria-label="Situação das três imagens"></div>
+  <p class="attempts"><strong>Tentativas nesta imagem:</strong> <span id="round-guesses">0 / 4</span></p><div id="guesses" class="attempts" aria-label="Respostas anteriores"></div>
+  <ol class="rules"><li>Veja as peças abertas ou leia as dicas.</li><li>Digite seu palpite e confirme.</li><li>Uma resposta errada revela mais duas peças.</li><li>Uma nova dica abre três peças e apresenta uma pista textual.</li><li>Ao acertar, esgotar as quatro tentativas ou desistir, veja a imagem inteira e a explicação.</li></ol>
+  <div class="explainer"><strong>Reconhecimento e acessibilidade</strong><p>Antes da solução, a descrição alternativa preserva o mistério. As dicas textuais permitem resolver sem imagem, e a descrição visual completa é disponibilizada ao final.</p></div>
+  <div class="controls"><button id="reset" type="button" class="btn secondary" disabled>Recomeçar desafio</button></div>
+ </aside>
+ <section class="panel summary" id="summary-panel" aria-labelledby="summary-heading" hidden><p class="eyebrow">Revisão final</p><h2 id="summary-heading" tabindex="-1">Desafio concluído!</h2><p id="summary-score"></p><div id="review" class="review" aria-label="Explicações das três imagens"></div><button id="summary-reset" type="button" class="btn">Jogar novamente</button></section>
+</div>
+<p class="note">Este jogo apresenta somente feedback e resultados formativos. Não registra notas ou conclusão acadêmica no Moodle. O HTML funciona sem SDK nem arquivos externos.</p>
+</main><script>(function mysteriousImageGame(){
+"use strict";
+const DATA={"type":"reveal_image","title":"Imagem misteriosa - Biodiversidade","settings":{"columns":4,"rows":4,"tiles":16,"initialShown":2,"revealPerHint":3,"revealPerMiss":2,"maxHints":5,"maxGuesses":4,"seed":"biodiversidade-2026"},"rounds":[{"id":"cacto","image":{"src":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20400%22%20width%3D%22640%22%20height%3D%22400%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22sky%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23b5e3fb%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ffeed0%22%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%22stem%22%20x2%3D%221%22%20y2%3D%220%22%3E%3Cstop%20stop-color%3D%22%2323816b%22%2F%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%2349ac70%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2316725b%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22640%22%20height%3D%22400%22%20fill%3D%22url(%23sky)%22%2F%3E%3Ccircle%20cx%3D%22527%22%20cy%3D%2272%22%20r%3D%2249%22%20fill%3D%22%23ffce75%22%2F%3E%3Cpath%20d%3D%22M0%20331Q152%20283%20295%20325Q440%20298%20640%20314V400H0Z%22%20fill%3D%22%23e5bd83%22%2F%3E%3Cpath%20d%3D%22M0%20366Q160%20327%20286%20351Q460%20341%20640%20358V400H0Z%22%20fill%3D%22%23d9a96b%22%2F%3E%3Cpath%20d%3D%22M262%20347V133a52%2052%200%200%201%20104%200v214%22%20fill%3D%22url(%23stem)%22%20stroke%3D%22%23196d58%22%20stroke-width%3D%229%22%2F%3E%3Cpath%20d%3D%22M264%20283q-81%200-81-84v-37a27%2027%200%200%201%2054%200v37q0%2031%2027%2031M365%20250q86%200%2086-83v-34a27%2027%200%200%200-54%200v34q0%2030-32%2030%22%20fill%3D%22%233b9c6d%22%20stroke%3D%22%23196d58%22%20stroke-width%3D%228%22%2F%3E%3Cg%20stroke%3D%22%239de5aa%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M286%20139v198M313%20113v225M342%20136v203M209%20167v35M423%20133v35%22%2F%3E%3Cpath%20d%3D%22M268%20153l-16-9M364%20171l15-8M269%20233l-14%205M363%20292l16%208M295%20194l-16%202M349%20220l16-3M320%20264l13-7M310%20311l-16%205%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22M248%20345Q319%20326%20378%20347%22%20stroke%3D%22%23bc8d5e%22%20stroke-width%3D%2212%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%2F%3E%3Cg%20fill%3D%22%23f5e5bf%22%3E%3Ccircle%20cx%3D%22108%22%20cy%3D%22365%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%22515%22%20cy%3D%22356%22%20r%3D%227%22%2F%3E%3Ccircle%20cx%3D%22578%22%20cy%3D%22379%22%20r%3D%224%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E","alt":"Ilustração vetorial original de um cacto verde com braços e espinhos no deserto, céu azul, sol e areia.","credit":"Ilustração SVG original incorporada ao HTML."},"answer":"Cacto","aliases":["cactus"],"textClues":["Sou um ser vivo que realiza fotossíntese.","Posso viver em lugares onde a chuva é escassa.","Tenho adaptações que reduzem a perda de água.","Muitos representantes possuem espinhos em vez de folhas largas.","Meu caule pode armazenar água para enfrentar períodos secos."],"explanation":"O cacto é uma planta adaptada a ambientes com pouca água. Muitos cactos possuem caule suculento, cutícula espessa e espinhos, que ajudam a reduzir a perda de água."},{"id":"borboleta","image":{"src":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20400%22%20width%3D%22640%22%20height%3D%22400%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22sky%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23c2ebff%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23edfbe1%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22640%22%20height%3D%22400%22%20fill%3D%22url(%23sky)%22%2F%3E%3Cpath%20d%3D%22M0%20322Q150%20282%20292%20318Q449%20270%20640%20312V400H0Z%22%20fill%3D%22%23a3d5a1%22%2F%3E%3Cpath%20d%3D%22M320%20263q-164-230-244-118q-49%2096%2075%20134q-92%20104%2033%20116q114-4%20136-132%22%20fill%3D%22%23fa985b%22%20stroke%3D%22%237e456d%22%20stroke-width%3D%2210%22%2F%3E%3Cpath%20d%3D%22M320%20263q164-230%20244-118q49%2096-75%20134q92%20104-33%20116q-114-4-136-132%22%20fill%3D%22%23eaa0d7%22%20stroke%3D%22%237e456d%22%20stroke-width%3D%2210%22%2F%3E%3Cpath%20d%3D%22M300%20233Q207%20113%20122%20164Q160%20222%20258%20251Q179%20315%20212%20359Q273%20353%20308%20273%22%20fill%3D%22%23ffd174%22%20opacity%3D%22.87%22%2F%3E%3Cpath%20d%3D%22M340%20233Q433%20113%20518%20164Q480%20222%20382%20251Q461%20315%20428%20359Q367%20353%20332%20273%22%20fill%3D%22%23f8c5ed%22%20opacity%3D%22.87%22%2F%3E%3Cg%20fill%3D%22%23fff0db%22%20stroke%3D%22%23935674%22%20stroke-width%3D%225%22%3E%3Ccircle%20cx%3D%22156%22%20cy%3D%22193%22%20r%3D%2227%22%2F%3E%3Ccircle%20cx%3D%22484%22%20cy%3D%22193%22%20r%3D%2227%22%2F%3E%3Ccircle%20cx%3D%22217%22%20cy%3D%22320%22%20r%3D%2220%22%2F%3E%3Ccircle%20cx%3D%22423%22%20cy%3D%22320%22%20r%3D%2220%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22M311%20190q-28-75-50-67M329%20190q28-75%2050-67%22%20fill%3D%22none%22%20stroke%3D%22%233e3c6d%22%20stroke-width%3D%227%22%20stroke-linecap%3D%22round%22%2F%3E%3Cellipse%20cx%3D%22320%22%20cy%3D%22259%22%20rx%3D%2220%22%20ry%3D%2289%22%20fill%3D%22%2341365b%22%2F%3E%3Ccircle%20cx%3D%22320%22%20cy%3D%22190%22%20r%3D%2225%22%20fill%3D%22%23504067%22%2F%3E%3Cpath%20d%3D%22M324%20340l-2%2032%22%20stroke%3D%22%2341365b%22%20stroke-width%3D%226%22%2F%3E%3Cg%20fill%3D%22%23f0fbfe%22%3E%3Ccircle%20cx%3D%2299%22%20cy%3D%2283%22%20r%3D%227%22%2F%3E%3Ccircle%20cx%3D%22537%22%20cy%3D%2282%22%20r%3D%226%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E","alt":"Ilustração vetorial original de uma borboleta colorida com asas laranja e rosa, antenas e corpo escuro.","credit":"Ilustração SVG original incorporada ao HTML."},"answer":"Borboleta","aliases":["butterfly"],"textClues":["Sou um animal invertebrado.","Meu corpo possui cabeça, tórax e abdômen.","Passo por metamorfose durante meu ciclo de vida.","Tenho dois pares de asas recobertas por pequenas escamas.","Meu estágio jovem costuma ser chamado de lagarta."],"explanation":"A borboleta é um inseto da ordem Lepidoptera. Seu ciclo de vida geralmente inclui ovo, lagarta, pupa e adulto, e as asas possuem escamas."},{"id":"polvo","image":{"src":"data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20400%22%20width%3D%22640%22%20height%3D%22400%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22sea%22%20x2%3D%220%22%20y2%3D%220%22%20x1%3D%220%22%20y1%3D%221%22%3E%3Cstop%20stop-color%3D%22%2370c7d9%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%231c678f%22%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%22oct%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23f5a1b9%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23cb648d%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22640%22%20height%3D%22400%22%20fill%3D%22url(%23sea)%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23b4edee%22%20stroke-width%3D%224%22%20opacity%3D%22.55%22%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%2272%22%20r%3D%2214%22%2F%3E%3Ccircle%20cx%3D%22549%22%20cy%3D%22110%22%20r%3D%2223%22%2F%3E%3Ccircle%20cx%3D%22510%22%20cy%3D%2256%22%20r%3D%2211%22%2F%3E%3Ccircle%20cx%3D%22135%22%20cy%3D%22138%22%20r%3D%228%22%2F%3E%3Ccircle%20cx%3D%22570%22%20cy%3D%22230%22%20r%3D%2212%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22M0%20359Q150%20335%20298%20359Q440%20341%20640%20358V400H0Z%22%20fill%3D%22%23d8be94%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23d87298%22%20stroke-width%3D%2231%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M245%20239Q160%20240%20161%20314Q131%20353%2092%20321%22%2F%3E%3Cpath%20d%3D%22M254%20258Q197%20313%20216%20348Q236%20373%20268%20357%22%2F%3E%3Cpath%20d%3D%22M280%20275Q286%20351%20310%20369%22%2F%3E%3Cpath%20d%3D%22M309%20280Q355%20349%20391%20355Q417%20358%20423%20320%22%2F%3E%3Cpath%20d%3D%22M355%20247Q435%20248%20474%20305Q489%20342%20526%20320%22%2F%3E%3Cpath%20d%3D%22M386%20235Q484%20210%20516%20248Q550%20284%20570%20245%22%2F%3E%3Cpath%20d%3D%22M265%20234Q214%20189%20135%20228Q97%20249%2083%20211%22%2F%3E%3Cpath%20d%3D%22M373%20242Q419%20183%20480%20176Q509%20158%20527%20190%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22M241%20244Q224%20120%20320%2098Q414%20109%20400%20244Q390%20287%20320%20289Q253%20288%20241%20244Z%22%20fill%3D%22url(%23oct)%22%20stroke%3D%22%23b85e84%22%20stroke-width%3D%228%22%2F%3E%3Cg%20fill%3D%22%23fff%22%3E%3Cellipse%20cx%3D%22286%22%20cy%3D%22202%22%20rx%3D%2225%22%20ry%3D%2231%22%2F%3E%3Cellipse%20cx%3D%22356%22%20cy%3D%22202%22%20rx%3D%2225%22%20ry%3D%2231%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%233b4f6d%22%3E%3Ccircle%20cx%3D%22291%22%20cy%3D%22210%22%20r%3D%2211%22%2F%3E%3Ccircle%20cx%3D%22351%22%20cy%3D%22210%22%20r%3D%2211%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22M300%20251q20%2021%2042%200%22%20fill%3D%22none%22%20stroke%3D%22%238a3a65%22%20stroke-width%3D%226%22%20stroke-linecap%3D%22round%22%2F%3E%3Cg%20fill%3D%22%23efaaca%22%3E%3Ccircle%20cx%3D%22265%22%20cy%3D%22243%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22379%22%20cy%3D%22243%22%20r%3D%2210%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23a7dfc3%22%3E%3Cpath%20d%3D%22M55%20376q-23-57-9-89M87%20376q9-70%2037-100M579%20376q-13-59%2018-99%22%20stroke%3D%22%235cae9d%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E","alt":"Ilustração vetorial original de um polvo rosa com oito braços, olhos e ventosas sob o mar.","credit":"Ilustração SVG original incorporada ao HTML."},"answer":"Polvo","aliases":["octopus"],"textClues":["Sou um animal invertebrado que vive no ambiente marinho.","Tenho um corpo mole e não possuo ossos.","Sou um molusco do grupo dos cefalópodes.","Consigo usar ventosas para explorar e segurar objetos.","Possuo oito braços e posso liberar tinta como defesa."],"explanation":"O polvo é um molusco cefalópode com oito braços munidos de ventosas. Tem sistema nervoso desenvolvido, pode alterar sua coloração e algumas espécies liberam tinta para escapar de predadores."}]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id),controller=new AbortController();
+const sdk=window.MoodleMCP?.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const storageKey="mysteryBiodiversityV1";
+let state=null,ready=false,disposed=false,modified=false,remote=null,queue=Promise.resolve(),epoch=0,loadGeneration=0;
+// Pure rules: no DOM dependencies.
+function normalize(value){return String(value??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("pt-BR").replace(/[^\p{L}\p{N}]+/gu," ").replace(/\s+/g," ").trim();}
+function validate(data){
+ if(!data||data.type!=="reveal_image"||typeof data.title!=="string"||!data.title.trim()||!data.settings||!Array.isArray(data.rounds)||data.rounds.length<1||data.rounds.length>10)return false;
+ const s=data.settings;
+ if(!Number.isInteger(s.columns)||s.columns<2||s.columns>8||!Number.isInteger(s.rows)||s.rows<2||s.rows>8||!Number.isInteger(s.tiles)||s.tiles<=0||s.tiles!==s.columns*s.rows||s.tiles>64||!Number.isInteger(s.initialShown)||s.initialShown<0||s.initialShown>=s.tiles||!Number.isInteger(s.revealPerHint)||s.revealPerHint<=0||!Number.isInteger(s.revealPerMiss)||s.revealPerMiss<0||!Number.isInteger(s.maxHints)||s.maxHints<1||s.maxHints>10||!Number.isInteger(s.maxGuesses)||s.maxGuesses<1||s.maxGuesses>10||typeof s.seed!=="string"||!s.seed.trim())return false;
+ const ids=new Set(),names=new Set(),sources=new Set();
+ for(const round of data.rounds){
+  if(!round||typeof round.id!=="string"||!/^[a-z0-9-]+$/.test(round.id)||ids.has(round.id)||!round.image||typeof round.image.src!=="string"||!round.image.src.startsWith("data:image/svg+xml;charset=utf-8,")||sources.has(round.image.src)||typeof round.image.alt!=="string"||!round.image.alt.trim()||typeof round.image.credit!=="string"||!round.image.credit.trim()||typeof round.answer!=="string"||!round.answer.trim()||!Array.isArray(round.aliases)||round.aliases.length>8||!Array.isArray(round.textClues)||round.textClues.length!==s.maxHints||typeof round.explanation!=="string"||!round.explanation.trim())return false;
+  ids.add(round.id);sources.add(round.image.src);
+  const local=new Set();
+  for(const item of [round.answer,...round.aliases]){
+   if(typeof item!=="string"||!item.trim()||item.length>80)return false;
+   const key=normalize(item);if(!key||local.has(key)||names.has(key))return false;local.add(key);names.add(key);
+  }
+  for(const clue of round.textClues)if(typeof clue!=="string"||!clue.trim()||clue.length>290)return false;
+ }
+ return true;
+}
+function hashSeed(text){let hash=2166136261;for(let i=0;i<text.length;i++){hash^=text.charCodeAt(i);hash=Math.imul(hash,16777619);}return hash>>>0;}
+function revealOrder(data,round){
+ const a=Array.from({length:data.settings.tiles},(_,i)=>i);let x=hashSeed(data.settings.seed+"/"+round.id)||1;
+ function random(){x^=x<<13;x^=x>>>17;x^=x<<5;return (x>>>0)/4294967296;}
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+function isAnswer(round,guess){
+ const key=normalize(guess);
+ return !!key&&[round.answer,...round.aliases].some(a=>normalize(a)===key);
+}
+function initialState(data){return {index:0,rounds:data.rounds.map(()=>({hints:0,guesses:[],result:null})),completed:false};}
+function shownCount(data,entry){
+ const misses=entry.guesses.length-(entry.result==="correct"?1:0);
+ return Math.min(data.settings.tiles,data.settings.initialShown+entry.hints*data.settings.revealPerHint+misses*data.settings.revealPerMiss);
+}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Number.isInteger(s.index)||s.index<0||s.index>data.rounds.length||!Array.isArray(s.rounds)||s.rounds.length!==data.rounds.length||typeof s.completed!=="boolean"||s.completed!==(s.index===data.rounds.length))return false;
+ for(let i=0;i<data.rounds.length;i++){
+  const entry=s.rounds[i],round=data.rounds[i];
+  if(!entry||!Number.isInteger(entry.hints)||entry.hints<0||entry.hints>data.settings.maxHints||!Array.isArray(entry.guesses)||entry.guesses.length>data.settings.maxGuesses||![null,"correct","attempts","gaveup"].includes(entry.result))return false;
+  const unique=new Set();
+  for(let j=0;j<entry.guesses.length;j++){
+   const guess=entry.guesses[j];
+   if(typeof guess!=="string"||!guess.trim()||guess.length>80)return false;
+   const key=normalize(guess);
+   if(!key||unique.has(key)||isAnswer(round,guess)!==(entry.result==="correct"&&j===entry.guesses.length-1))return false;
+   unique.add(key);
+  }
+  if(entry.result==="correct"&&entry.guesses.length===0)return false;
+  if(entry.result==="attempts"&&entry.guesses.length!==data.settings.maxGuesses)return false;
+  if(entry.result===null&&entry.guesses.length>=data.settings.maxGuesses)return false;
+  if(i<s.index&&entry.result===null)return false;
+  if(i>s.index&&(entry.hints!==0||entry.guesses.length||entry.result!==null))return false;
+ }
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(data),changed:true,kind:"neutral",message:"Desafio reiniciado. Observe a primeira imagem misteriosa."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"O estado do jogo é inválido."};
+ if(s.completed)return {state:s,changed:false,kind:"neutral",message:"O desafio já foi concluído. Você pode reiniciar."};
+ const r=data.rounds[s.index],entry=s.rounds[s.index];
+ if(action?.type==="next"){
+  if(!entry.result)return {state:s,changed:false,kind:"warn",message:"Responda ou desista antes de avançar."};
+  const index=s.index+1;
+  return {state:{...s,index,completed:index===data.rounds.length},changed:true,kind:"neutral",message:index===data.rounds.length?"Desafio concluído. Confira o resumo.":"Nova imagem misteriosa. Observe as partes visíveis."};
+ }
+ if(entry.result)return {state:s,changed:false,kind:"neutral",message:"A rodada já terminou. Avance para continuar."};
+ if(action?.type==="hint"){
+  if(entry.hints>=data.settings.maxHints)return {state:s,changed:false,kind:"warn",message:"A imagem já foi totalmente revelada ou não há mais dicas."};
+  const updated={...entry,hints:entry.hints+1},next={...s,rounds:s.rounds.map((x,i)=>i===s.index?updated:x)};
+  return {state:next,changed:true,kind:"neutral",message:"Dica "+updated.hints+": "+r.textClues[updated.hints-1]+" Agora "+shownCount(data,updated)+" de "+data.settings.tiles+" partes estão visíveis."};
+ }
+ if(action?.type==="guess"){
+  if(typeof action.value!=="string"||!action.value.trim()||action.value.length>80||!normalize(action.value))return {state:s,changed:false,kind:"warn",message:"Digite uma resposta com até 80 caracteres."};
+  const guess=action.value.trim(),key=normalize(guess);
+  if(entry.guesses.some(x=>normalize(x)===key))return {state:s,changed:false,kind:"warn",message:"Você já tentou essa resposta. Escolha outra ou peça uma dica."};
+  const guesses=[...entry.guesses,guess],win=isAnswer(r,guess);
+  const result=win?"correct":guesses.length===data.settings.maxGuesses?"attempts":null;
+  const updated={...entry,guesses,result};
+  const next={...s,rounds:s.rounds.map((x,i)=>i===s.index?updated:x)};
+  return {state:next,changed:true,kind:win?"good":"warn",message:win?"Correto! Você identificou "+r.answer+". "+r.explanation:
+   result==="attempts"?"O limite de "+data.settings.maxGuesses+" tentativas foi atingido. Era "+r.answer+". "+r.explanation:
+   "Ainda não é a resposta. Foram reveladas mais partes. Você tem "+(data.settings.maxGuesses-guesses.length)+" tentativa(s) restante(s)."};
+ }
+ if(action?.type==="giveup"){
+  const next={...s,rounds:s.rounds.map((x,i)=>i===s.index?{...x,result:"gaveup"}:x)};
+  return {state:next,changed:true,kind:"warn",message:"Você encerrou esta rodada. A resposta era "+r.answer+". "+r.explanation};
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Observe a imagem e tente identificar o que aparece."};
+}
+// End pure rules.
+
+function el(tag,className,value){const node=document.createElement(tag);if(className)node.className=className;if(value!==undefined)node.textContent=value;return node;}
+function getState(){return {index:state.index,rounds:state.rounds.map(e=>({hints:e.hints,guesses:[...e.guesses],result:e.result})),completed:state.completed};}
+function restoreState(stored){if(!validState(stored,DATA))return false;state={index:stored.index,completed:stored.completed,rounds:stored.rounds.map(e=>({hints:e.hints,guesses:[...e.guesses],result:e.result}))};render();return true;}
+function announce(message,kind="neutral"){
+ $("feedback").className="feedback"+(kind==="good"?" good":kind==="warn"?" warn":"");
+ $("feedback-heading").textContent=kind==="good"?"Você acertou":kind==="warn"?"Continue tentando":"Nova pista";
+ $("feedback-text").textContent=message;
+}
+function buildImage(round,finished){
+ const host=$("image-slot");host.replaceChildren();
+ const figure=el("img");figure.width=640;figure.height=400;figure.decoding="async";figure.loading="eager";
+ figure.alt=finished?round.image.alt:"Ilustração misteriosa parcialmente coberta por mosaicos. Use as dicas textuais equivalentes para identificar o tema.";
+ const missing=el("div","image-fallback");missing.hidden=true;
+ missing.append(el("strong","","Ilustração indisponível"),el("span","","A atividade continua com as dicas textuais. Use o botão Revelar mais para descobrir o objeto."));
+ const roundStamp=loadGeneration;
+ figure.addEventListener("error",()=>{if(disposed||roundStamp!==loadGeneration)return;figure.hidden=true;missing.hidden=false;},{signal:controller.signal});
+ figure.src=round.image.src;
+ host.append(figure,missing);
+}
+function renderMosaic(entry,round){
+ const mask=$("mosaic");mask.replaceChildren();
+ const finish=entry.result!==null;
+ const shown=finish?DATA.settings.tiles:shownCount(DATA,entry);
+ const order=revealOrder(DATA,round),visible=new Set(order.slice(0,shown));
+ for(let i=0;i<DATA.settings.tiles;i++){
+  const tile=el("div","tile"+(visible.has(i)?" revealed":""));tile.setAttribute("aria-hidden","true");mask.append(tile);
+ }
+ $("visible").textContent=shown+" / "+DATA.settings.tiles;
+ $("remaining").textContent=String(DATA.settings.tiles-shown);
+ $("tile-progress").style.width=100*shown/DATA.settings.tiles+"%";
+ $("tile-progress-container").setAttribute("aria-valuenow",String(shown));
+}
+function renderClues(entry,round){
+ const list=$("clues");list.replaceChildren();
+ if(entry.hints===0){const empty=el("li","empty","Nenhuma dica textual revelada ainda.");list.append(empty);return;}
+ for(let i=0;i<entry.hints;i++)list.append(el("li","",round.textClues[i]));
+}
+function renderTracker(){
+ const host=$("tracker");host.replaceChildren();
+ DATA.rounds.forEach((round,i)=>{
+  const entry=state.rounds[i],label=entry.result==="correct"?"Acerto":entry.result?"Encerrada":state.index===i?"Atual":"Pendente";
+  const node=el("div","marker"+(entry.result==="correct"?" correct":entry.result?" lost":!state.completed&&i===state.index?" current":""));
+  node.setAttribute("role","listitem");node.setAttribute("aria-label","Imagem "+(i+1)+": "+label);
+  node.append(el("strong","",String(i+1)),el("small","",label));host.append(node);
+ });
+}
+function renderSummary(){
+ const area=$("review");area.replaceChildren();
+ DATA.rounds.forEach((round,i)=>{
+  const entry=state.rounds[i],good=entry.result==="correct",item=el("div","review-item "+(good?"good":"lost"));
+  const cause=entry.result==="correct"?"Acertou":entry.result==="attempts"?"Tentativas esgotadas":"Desistiu";
+  item.append(el("strong","",(i+1)+". "+round.answer+" · "+cause));
+  item.append(el("p","",entry.guesses.length+" tentativa(s), "+entry.hints+" dica(s), "+shownCount(DATA,entry)+" peça(s) exposta(s) antes do encerramento."));
+  item.append(el("p","",round.explanation));area.append(item);
+ });
+}
+function render(){
+ if(disposed||!state)return;
+ const total=DATA.rounds.length,ended=state.rounds.filter(r=>r.result!==null).length,wins=state.rounds.filter(r=>r.result==="correct").length;
+ $("completed").textContent=ended+" / "+total;$("correct").textContent=wins+" / "+total;
+ $("progress").setAttribute("aria-valuenow",String(ended));$("progress-bar").style.width=100*ended/total+"%";
+ $("game-panel").hidden=state.completed;$("summary-panel").hidden=!state.completed;
+ $("reset").disabled=!ready;renderTracker();
+ if(state.completed){$("summary-score").textContent="Você identificou "+wins+" de "+total+" imagens. Confira as explicações e tente novamente para usar menos dicas.";renderSummary();return;}
+ const round=DATA.rounds[state.index],entry=state.rounds[state.index],finished=entry.result!==null;
+ $("position").textContent="Imagem "+(state.index+1)+" de "+total;
+ $("stage").textContent=finished?"Imagem revelada":"Imagem oculta";
+ $("answer-form").hidden=finished;$("guess").disabled=!ready||finished;$("submit").disabled=!ready||finished;
+ $("hint").disabled=!ready||finished||entry.hints>=DATA.settings.maxHints;
+ $("giveup").disabled=!ready||finished;$("next").disabled=!ready||!finished;$("next").hidden=!finished;
+ $("next").textContent=state.index===total-1?"Ver resumo final":"Próxima imagem";
+ $("round-guesses").textContent=entry.guesses.length+" / "+DATA.settings.maxGuesses;
+ $("hint-count").textContent=entry.hints+" / "+DATA.settings.maxHints;
+ $("answer-reveal").hidden=!finished;
+ if(finished){
+  $("answer-reveal").className="revealed-answer"+(entry.result==="correct"?"":" lost");
+  $("answer-heading").textContent=(entry.result==="correct"?"Você acertou: ":"Resposta revelada: ")+round.answer;
+  $("answer-description").textContent=round.explanation;
+ }
+ // Reuse the image between state changes: no flicker, no unnecessary slow-image reload.
+ if($("image-slot").dataset.round!==round.id||$("image-slot").dataset.finished!==String(finished)){
+  loadGeneration++;
+  $("image-slot").dataset.round=round.id;$("image-slot").dataset.finished=String(finished);
+  buildImage(round,finished);
+ }
+ renderMosaic(entry,round);renderClues(entry,round);
+ const guesses=$("guesses");guesses.replaceChildren();
+ if(entry.guesses.length===0)guesses.append(el("span","","Nenhuma tentativa enviada."));
+ else entry.guesses.forEach((guess,i)=>guesses.append(el("div","", (i+1)+". "+guess)));
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const saved=getState(),stamp=++epoch;
+ queue=queue.then(async()=>{
+  if(disposed||!remote||stamp!==epoch)return;
+  const current=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const value={...current,[storageKey]:saved};
+  if(new TextEncoder().encode(JSON.stringify(value)).length>12288){announce("Progresso acima de 12 KiB. O jogo continua nesta página.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/mystery-biodiversity",data:value});
+ }).catch(async()=>{
+  if(disposed)return;epoch++;
+  try{remote=await progress.load();if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))announce("Outra sessão modificou o jogo. Recuperei a última versão persistida.","warn");
+    else announce("Não consegui conciliar o progresso salvo. Você pode continuar nesta página.","warn");
+  }catch(_){remote=null;announce("Não foi possível sincronizar o progresso. O jogo continua funcionando.","warn");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const outcome=transition(state,action,DATA);
+ if(!outcome.changed){announce(outcome.message,outcome.kind);return;}
+ state=outcome.state;modified=true;render();save();announce(outcome.message,outcome.kind);
+ if(action.type==="guess")$("guess").value="";
+ if(action.type==="next"||action.type==="restart"){
+  if(state.completed)$("summary-heading").focus({preventScroll:true});
+  else $("question").focus({preventScroll:true});
+ }else $("feedback").focus({preventScroll:true});
+}
+function destroy(){disposed=true;controller.abort();loadGeneration++;}
+async function init(container,data){
+ if(!container||!validate(data)){announce("Dados da imagem misteriosa inválidos. Verifique imagens, respostas e configurações.","warn");return;}
+ state=initialState(data);render();
+ if(progress)try{
+  const persisted=await progress.load();if(disposed)return;remote=persisted;
+  if(!modified&&persisted.data?.[storageKey]&&restoreState(persisted.data[storageKey]))announce("Progresso recuperado. Continue de onde parou.");
+  else announce("A primeira imagem está parcialmente oculta. Peça uma dica ou envie seu palpite.");
+ }catch(_){announce("Sem sincronização do Moodle. A atividade funciona normalmente.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("submit",event=>{if(event.target.id!=="answer-form")return;event.preventDefault();handleAction({type:"guess",value:$("guess").value});},{signal:controller.signal});
+root.addEventListener("click",event=>{
+ const btn=event.target.closest("button");if(!btn||!root.contains(btn))return;
+ if(btn.id==="hint")handleAction({type:"hint"});
+ if(btn.id==="giveup")handleAction({type:"giveup"});
+ if(btn.id==="next")handleAction({type:"next"});
+ if(btn.id==="reset"||btn.id==="summary-reset")handleAction({type:"restart"});
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>

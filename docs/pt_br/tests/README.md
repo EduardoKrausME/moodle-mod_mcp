@@ -117,3 +117,11 @@ node --test docs/pt_br/tests/find-error.test.mjs
 ```
 
 Os testes verificam trechos HTML perigosos renderizados como texto, erros em linhas inexistentes, múltiplos erros, correção antes/depois, seleções duplicadas, revelação parcial da solução, estados restaurados inconsistentes, linhas com indentação, interação por teclado, acessibilidade e sincronização dos manifestos.
+
+Para o jogo 19 (Imagem misteriosa - Biodiversidade), execute:
+
+```bash
+node --test docs/pt_br/tests/mystery-image.test.mjs
+```
+
+Esse teste cobre três SVGs autorais incorporados, grade 4×4, proporção estável, revelação determinística, 0 peças, pistas textuais, aliases, limite de tentativas, repetição de palpite, revelação integral sem acerto, desistência, imagem indisponível ou lenta, restauração de estado, SDK opcional e igualdade dos dois catálogos.
