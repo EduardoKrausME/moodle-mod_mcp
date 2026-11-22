@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Laboratório interativo de engenharia de smartphones: vista explodida, chips, tela, câmera, rádio, segurança, bateria, temperatura e ciclo de vida.">
+<title>Por dentro de um smartphone | Laboratório de engenharia</title>
+<style>
+:root{--ink:#20262b;--muted:#5e6771;--paper:#f3f1eb;--white:#fffef9;--deep:#182025;--black:#101819;--pcb:#194f47;--board:#173a37;--mint:#b9f08a;--lime:#d5ed8c;--violet:#9283cd;--lilac:#d4c8ee;--acid:#d8ff7d;--orange:#f7b68e;--line:#c9cdd0;--mono:ui-monospace,Consolas,"Liberation Mono",monospace;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;font-family:var(--sans);color:var(--ink);background:var(--paper)}
+*,*:before,*:after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:290px;line-height:1.75}
+h1,h2,h3,p,figure{margin-top:0}
+h1,h2,h3{line-height:1.13}
+h1{font-size:clamp(3.2rem,6.9vw,7.3rem);letter-spacing:-.075em}
+h2{font-size:clamp(2rem,4vw,4rem);letter-spacing:-.057em}
+h3{font-size:clamp(1.24rem,2.3vw,1.75rem)}
+p{margin-bottom:1.14em}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+a{color:#335990;text-underline-offset:3px}
+a:hover{color:#8c4d78}
+:focus-visible{outline:3px solid #9c74d0;outline-offset:4px}
+[hidden]{display:none!important}
+.wrap{width:min(1240px,calc(100% - 48px));margin-inline:auto}
+.code{font-family:var(--mono)}
+.eyebrow{font:800 .71rem/1.6 var(--mono);letter-spacing:.15em;text-transform:uppercase}
+.skip{position:absolute;left:12px;top:-100px;padding:10px 15px;z-index:100;background:#fff;color:#253a3c}
+.skip:focus{top:12px}
+.hero{background:#171e1d;color:#f7f8e8;position:relative;overflow:hidden;isolation:isolate}
+.hero:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 74% 30%,#5c675e70 0,transparent 46%),radial-gradient(ellipse at 14% 83%,#52467a4a 0,transparent 40%);opacity:.8}
+.hero-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:19px;align-items:center;min-height:640px;padding:69px 0 70px}
+.hero h1{margin:18px 0 29px;max-width:720px;line-height:.98}
+.hero h1 em{font-style:normal;color:#c6ef93}
+.hero p{color:#cfdcd4;max-width:570px;font-size:1.09rem;line-height:1.85}
+.hero-metadata{display:flex;gap:8px;flex-wrap:wrap;margin:30px 0 0}
+.hero-metadata span{font:.75rem var(--mono);padding:9px 12px;background:#344139;border:1px solid #718c7e;color:#e8f6ce}
+.hero-figure{margin:0;position:relative}
+.hero-figure svg{width:100%;height:auto;display:block}
+.hero-figure figcaption{font-size:.78rem;color:#b4c4b8;margin-top:10px;line-height:1.66}
+.hero .floating{animation:float-device 6s ease-in-out infinite alternate}
+.hero .orbit{animation:orbit 13s linear infinite;transform-origin:380px 278px}
+.hero-figure.is-paused .floating,.hero-figure.is-paused .orbit{animation-play-state:paused}
+@keyframes float-device{from{transform:translateY(-7px)}to{transform:translateY(7px)}}
+@keyframes orbit{to{transform:rotate(360deg)}}
+.hero-motion{padding:8px 13px;border:1px solid #8ec9a4;color:#e8f8d1;background:#344d3f;font:.8rem var(--mono);margin-top:14px}
+.hero-motion:hover{background:#425b4c}
+.hero-head,.hero-bottom{display:flex;justify-content:space-between;gap:13px;align-items:center;flex-wrap:wrap;font:.75rem var(--mono);color:#bacbc0}
+.hero-head{border-bottom:1px solid #6a7e71;padding:21px 0}
+.hero-bottom{border-top:1px solid #5b716a;padding:16px 0}
+.hero-head strong{color:#cdf39a}
+.ribbon{height:12px;background:repeating-linear-gradient(90deg,#b2e28e 0 35px,#292f35 35px 49px,#a897d0 49px 72px,#f3b394 72px 91px)}
+.section{padding:88px 0;border-bottom:1px solid #d5d6cc}
+.section-header{display:grid;grid-template-columns:190px 1fr;gap:43px;margin-bottom:39px}
+.section-header .eyebrow{padding-top:12px;color:#6f5a99}
+.section-header h2{max-width:910px;margin:0 0 18px}
+.section-header p{max-width:860px;font-size:1.05rem;line-height:1.84;color:#556268;margin:0}
+.intro{display:grid;grid-template-columns:200px 1fr;gap:53px;padding:87px 0}
+.intro .number{font:8rem/.86 var(--mono);color:#cfccdc;letter-spacing:-.16em}
+.intro h2{margin:18px 0 21px}
+.intro p{font-size:1.05rem;max-width:850px;color:#516066;line-height:1.9}
+.intro .lead{font-size:1.35rem;color:#2f4745}
+.note{padding:18px 22px;border-left:5px solid #8262b0;background:#e7e1ec;color:#474250;margin-top:24px}
+.note strong{color:#56427d}
+.teardown{background:#e5e7e0;padding:88px 0}
+.teardown-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:24px;align-items:start}
+.exploded{position:relative;background:#131f1f;border:1px solid #354e46;min-width:0;padding:13px}
+.exploded .visual{position:relative}
+.exploded svg{display:block;width:100%;height:auto}
+.exploded figcaption{padding:13px 14px 3px;color:#c1d2c2;font:.78rem/1.65 var(--mono)}
+.exploded .point{position:absolute;transform:translate(-50%,-50%);width:33px;height:33px;border-radius:50%;border:2px solid #f7ffe3;background:#355b4d;color:#fff;font:800 .81rem var(--mono);box-shadow:0 0 0 3px #729c8a54}
+.exploded .point[aria-pressed="true"]{background:#c4ee8e;color:#253c34;box-shadow:0 0 0 5px #e0f5a673}
+.exploded .point:hover{background:#8c73b0}
+.exploded .point[data-part="display"]{left:25%;top:18%}
+.exploded .point[data-part="touch"]{left:48%;top:16%}
+.exploded .point[data-part="camera"]{left:66%;top:29%}
+.exploded .point[data-part="soc"]{left:49%;top:42%}
+.exploded .point[data-part="ram"]{left:68%;top:46%}
+.exploded .point[data-part="flash"]{left:35%;top:52%}
+.exploded .point[data-part="pmic"]{left:63%;top:57%}
+.exploded .point[data-part="battery"]{left:47%;top:68%}
+.exploded .point[data-part="rf"]{left:70%;top:65%}
+.exploded .point[data-part="antenna"]{left:75%;top:85%}
+.exploded .point[data-part="sensors"]{left:31%;top:35%}
+.exploded .point[data-part="audio"]{left:22%;top:77%}
+.exploded .point[data-part="cooling"]{left:38%;top:84%}
+.part-panel{background:#fffdf4;border:1px solid #c5cbc3;padding:27px}
+.part-panel .eyebrow{color:#6e598e}
+.part-panel h3{font-size:clamp(1.65rem,3vw,2.5rem);margin:11px 0 18px}
+.part-panel p{color:#52605e;line-height:1.83;font-size:.98rem}
+.part-panel .family{display:inline-block;padding:7px 11px;background:#e4eddd;color:#285e55;font:760 .75rem var(--mono)}
+.part-panel .relation{border-left:4px solid #8b79bf;padding:15px 17px;background:#eeeaf4;color:#49485c;margin:19px 0}
+.part-panel .relation strong{display:block;margin-bottom:6px}
+.part-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:20px}
+.part-list button{border:1px solid #b6c5be;padding:10px 9px;color:#35544e;background:#f0f3e9;text-align:left;font-size:.82rem}
+.part-list button[aria-pressed="true"]{background:#315b52;color:#fff;border-color:#315b52}
+.part-list button:hover{border-color:#9872b3}
+.explainer{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.explainer article{padding:25px 23px;border:1px solid #d3d0c7;background:#fffef9;border-top:5px solid #8875b0}
+.explainer article:nth-child(2){border-color:#c0d9af}
+.explainer article:nth-child(3){border-color:#b8d5cf}
+.explainer article h3{margin:0 0 13px}
+.explainer article p{font-size:.96rem;color:#576369;line-height:1.86}
+.chip-area{background:#e7e4ed}
+.chip-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:33px;align-items:center}
+.chip-fig{margin:0;background:#263b40;padding:17px}
+.chip-fig svg{display:block;width:100%;height:auto}
+.chip-fig figcaption{margin:13px 0 0;color:#d7e7e0;font-size:.78rem;line-height:1.72}
+.chip-copy p{font-size:1rem;color:#57616b;line-height:1.88}
+.chip-copy h3{margin:16px 0 12px}
+.os-rail{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:31px}
+.os-rail article{background:#fffdf8;border-top:4px solid #8d79b5;padding:21px}
+.os-rail article:nth-child(even){border-color:#579886}
+.os-rail strong{display:block;margin-bottom:8px}
+.os-rail p{font-size:.87rem;line-height:1.75;color:#58636b;margin:0}
+.pipeline{padding:87px 0;background:#22343c;color:#f4f7e9}
+.pipeline .section-header .eyebrow{color:#cab2ea}
+.pipeline h2{color:#f8f6ec}
+.pipeline .section-header p{color:#d5e2db}
+.pipeline-layout{display:grid;grid-template-columns:1.08fr .92fr;gap:24px}
+.flow-sheet{background:#111f25;padding:22px;border:1px solid #64817c}
+.flow-sheet svg{display:block;width:100%;height:auto}
+.flow-sheet figcaption{font-size:.79rem;color:#bdd5cc;margin-top:11px;line-height:1.7}
+.flow-nav{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
+.flow-nav button{padding:10px 11px;border:1px solid #668a88;background:#2c4850;color:#e9f4e8;font-size:.84rem}
+.flow-nav button[aria-pressed="true"]{background:#d7efa4;color:#223931;border-color:#d7efa4}
+.flow-nav button:hover{border-color:#d8bbf0}
+.flow-sheet .flow-node{transition:opacity .18s}
+.flow-sheet .flow-node.highlight{opacity:1}
+.flow-sheet .flow-node.dimmed{opacity:.32}
+.flow-sheet .flow-wire{stroke-dasharray:8 13;animation:signal 5s linear infinite}
+.flow-sheet.is-paused .flow-wire{animation-play-state:paused}
+@keyframes signal{to{stroke-dashoffset:-105}}
+.flow-panel{background:#344a4d;padding:24px;border:1px solid #77948b}
+.flow-panel h3{font-size:1.58rem;color:#fff5d5;margin:10px 0}
+.flow-panel p{font-size:.93rem;color:#dfebe1;line-height:1.85}
+.flow-panel .counter{font:760 .77rem var(--mono);color:#cbea9d}
+.flow-panel .details{border-left:4px solid #b7e494;padding:16px 19px;background:#243c3f;color:#d9ebe1;min-height:117px}
+.flow-panel .flow-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+.flow-panel .flow-actions button{padding:11px 16px;border:1px solid #86aa9c;background:#b5e486;color:#25483e;font-weight:750}
+.flow-panel .flow-actions button.secondary{background:#34575a;color:#e9f6ed}
+.flow-panel .flow-actions button:hover{filter:brightness(.92)}
+.flow-panel .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:24px}
+.flow-panel .steps span{height:10px;background:#587474}
+.flow-panel .steps span.active{background:#c3e795}
+.flow-caveat{padding:20px 23px;margin-top:24px;background:#35505a;border-left:5px solid #d3b0f2;font-size:.89rem;line-height:1.87;color:#e0eee6}
+.communication{background:#f0eee7}
+.comm-grid{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+.comm-figure{background:#e2ebe8;border:1px solid #c4d0cc;padding:16px;margin:0}
+.comm-figure svg{width:100%;height:auto;display:block}
+.comm-figure figcaption{font-size:.79rem;color:#5c6866;line-height:1.7;margin-top:11px}
+.comm-text h3{margin:17px 0 13px}
+.comm-text p{font-size:1rem;color:#5b6567;line-height:1.9}
+.comm-list{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+.comm-list article{padding:21px;background:#fffdf7;border-top:4px solid #84a9a4}
+.comm-list h3{font-size:1.12rem}
+.comm-list p{font-size:.84rem;color:#59636b;line-height:1.77}
+.camera{background:#e8e8df}
+.camera-grid{display:grid;grid-template-columns:1fr 1fr;gap:31px;align-items:start}
+.camera-figure{background:#182d31;padding:17px;margin:0}
+.camera-figure svg{display:block;width:100%;height:auto}
+.camera-figure figcaption{color:#cadfdb;font-size:.78rem;line-height:1.68;margin-top:13px}
+.camera-grid p{color:#526365;font-size:1rem;line-height:1.89}
+.camera-grid h3{margin:16px 0}
+.lab-energy{background:#f2f3e9}
+.energy-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:27px}
+.energy-controls{background:#fffef6;border:1px solid #c9cec6;padding:26px}
+.energy-controls h3{margin:10px 0 15px}
+.energy-controls p{color:#526268;font-size:.89rem;line-height:1.8}
+.preset-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:19px 0}
+.preset-buttons button{padding:10px 4px;border:1px solid #b9c7b9;background:#f0f4e8;color:#32564b;font-size:.75rem}
+.preset-buttons button[aria-pressed="true"]{background:#305c51;color:#fff}
+.slider-list{display:grid;gap:12px}
+.slider-list label{font-weight:750;display:flex;justify-content:space-between;gap:12px;font-size:.85rem}
+.slider-list output{font:.83rem var(--mono);color:#6e5487;white-space:nowrap}
+.slider-list input{width:100%;accent-color:#6478a3}
+.slider-list small{display:block;font-size:.75rem;color:#627069;line-height:1.56;margin:0}
+.energy-display{background:#24373e;color:#f3f5e9;padding:28px}
+.energy-display h3{color:#fff0d8;margin:0 0 17px}
+.energy-display .stat{background:#334a4d;border-left:4px solid #b9ec8a;padding:15px 17px;margin:11px 0}
+.energy-display .stat .caption{font:750 .75rem var(--mono);color:#cddbcf}
+.energy-display .stat strong{display:block;font:700 clamp(1.55rem,3vw,2.3rem)/1.3 var(--sans);color:#d2f0a4;margin-top:7px}
+.energy-display .stat small{display:block;color:#cde1d9;font-size:.83rem;margin-top:6px}
+.energy-display .energy-bar{height:14px;display:flex;background:#445e5c;overflow:hidden;margin:19px 0}
+.energy-display .energy-bar span{height:100%;transition:width .2s}
+.energy-display .labels{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;font:.75rem var(--mono);color:#d8e9de}
+.energy-display p{color:#d7e4dd;line-height:1.8;font-size:.89rem;margin-top:19px}
+.lab-reset{padding:10px 15px;border:1px solid #6b9788;background:#346f64;color:#fff;font-weight:750;margin-top:14px}
+.heat-lab{background:#e8e3e9}
+.thermal-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:31px}
+.thermal-board{padding:22px;background:#23383a;color:#f5f4e9}
+.thermal-board svg{width:100%;height:auto;display:block}
+.thermal-board figure{margin:0}
+.thermal-board figcaption{font-size:.79rem;color:#d1e0d6;margin-top:12px}
+.thermal-board p{color:#cbdcd4;font-size:.88rem;line-height:1.79}
+.thermal-controls{background:#fffcf4;border:1px solid #c9c2cb;padding:26px}
+.thermal-controls h3{margin:8px 0 16px}
+.thermal-controls p{color:#566269;font-size:.9rem;line-height:1.8}
+.thermal-controls .slider-list input{accent-color:#865caa}
+.thermal-out{margin:17px 0 0;padding:16px 20px;background:#eee4f2;border-left:5px solid #8b67b0}
+.thermal-out strong{display:block;font-size:1.8rem;color:#5f447f}
+.thermal-out small{display:block;font-size:.79rem;color:#655873;line-height:1.65;margin-top:6px}
+.thermal-chart{display:block;width:100%;height:auto}
+.thermal-chart .axis{stroke:#879f9c;stroke-width:2;fill:none}
+.thermal-chart .line{stroke:#d2ef92;fill:none;stroke-width:5}
+.thermal-chart .dashed{stroke:#94b5ae;stroke-width:2;stroke-dasharray:7 9}
+.security{background:#192c35;color:#f5f7ee}
+.security h2{color:#f3f7e5}
+.security .section-header p{color:#d3e0d9}
+.security .section-header .eyebrow{color:#b9dfa1}
+.security-grid{display:grid;grid-template-columns:.98fr 1.02fr;gap:26px}
+.security-figure{background:#2b424b;padding:17px;margin:0}
+.security-figure svg{width:100%;height:auto;display:block}
+.security-figure figcaption{font-size:.8rem;color:#d3e3da;margin-top:12px}
+.security-copy h3{color:#f8efda}
+.security-copy p{color:#d5e6dd;line-height:1.86}
+.decisions{margin-top:24px;padding:21px;background:#2d454d}
+.decision-btns{display:grid;gap:9px;margin:15px 0}
+.decision-btns button{padding:12px 13px;text-align:left;background:#3d5b5f;border:1px solid #83a49e;color:#f4faee}
+.decision-btns button[aria-pressed="true"]{background:#c8eb9b;color:#203d32;border-color:#c8eb9b}
+.decision-feedback{background:#182f38;border-left:4px solid #e9b894;padding:17px 18px;min-height:105px;font-size:.9rem;color:#e3ede7;line-height:1.78}
+.lifetime{background:#edece5}
+.lifetime-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.lifetime-figure{margin:0;padding:19px;border:1px solid #cbd1c9;background:#f9faf0}
+.lifetime-figure svg{width:100%;height:auto;display:block}
+.lifetime-figure figcaption{font-size:.81rem;color:#5e6865;margin-top:12px}
+.lifetime-copy p{line-height:1.9;color:#546266}
+.lifetime-copy h3{margin:15px 0 12px}
+.lifetime-copy ul{padding-left:20px;color:#546166;line-height:1.82}
+.lifetime-copy li{margin:8px 0}
+.life-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:28px}
+.life-steps article{background:#fffef5;padding:22px;border-top:4px solid #91b48c}
+.life-steps article:nth-child(2){border-color:#b18bbb}
+.life-steps article:nth-child(3){border-color:#e4b18e}
+.life-steps article:nth-child(4){border-color:#5ba098}
+.life-steps h3{font-size:1.13rem}
+.life-steps p{color:#5c6969;font-size:.87rem;line-height:1.76}
+.quiz{padding:88px 0;background:#e8ece6}
+.quiz-grid{display:grid;grid-template-columns:.72fr 1.28fr;gap:44px}
+.quiz-grid aside p{line-height:1.89;color:#5a6566}
+.question{border:0;border-bottom:1px solid #c3cdc8;padding:0 0 24px;margin:0 0 24px;min-width:0}
+.question legend{padding:0;font-weight:800;line-height:1.55;margin:0 0 13px;width:100%}
+.question label{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;margin:8px 0;background:#fffef7;border:1px solid #c5cfc7;cursor:pointer}
+.question label:has(input:checked){background:#e2efdc;border-color:#6b997b}
+.question input{flex:none;margin-top:6px;accent-color:#416e86}
+.question-feedback{font-size:.91rem;color:#3f6c5d;min-height:1.4em;margin:11px 0 0}
+.quiz-actions{display:flex;gap:10px;flex-wrap:wrap}
+.quiz-actions button{border:1px solid #496f63;padding:12px 17px;background:#305d55;color:#fff;font-weight:780}
+.quiz-actions button.alt{color:#305c52;background:transparent}
+.quiz-result{font-size:1.27rem;font-weight:780;margin-top:17px}
+.ending{background:#2c4e45;padding:68px 0;color:#fffbe9}
+.ending h2{max-width:1040px}
+.ending p{max-width:880px;color:#d9eedd;font-size:1.06rem;line-height:1.9}
+.sources{padding:45px 0 73px}
+.sources h2{font-size:1.48rem}
+.sources p{color:#59636a;font-size:.89rem;line-height:1.84}
+.sources a{overflow-wrap:anywhere}
+@media(max-width:1000px){.hero-grid,.intro,.section-header,.teardown-grid,.chip-grid,.pipeline-layout,.comm-grid,.camera-grid,.energy-grid,.thermal-grid,.security-grid,.lifetime-grid,.quiz-grid{grid-template-columns:1fr}.hero-grid{padding:48px 0}.hero-figure{max-width:760px}.section-header{gap:12px}.intro{gap:8px}.intro .number{font-size:4.3rem}.explainer,.os-rail{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:690px){.wrap{width:calc(100% - 28px)}.hero-grid{min-height:0}.hero h1{font-size:clamp(3.25rem,11vw,5.8rem)}.intro,.section,.teardown,.pipeline,.quiz{padding:60px 0}.explainer,.os-rail,.comm-list,.life-steps{grid-template-columns:1fr}.part-list{grid-template-columns:1fr 1fr}.exploded .point{width:26px;height:26px;font-size:.7rem;border-width:1px}.part-panel,.energy-controls,.thermal-controls{padding:19px}.pipeline-layout{gap:13px}.flow-sheet{padding:10px}.flow-panel{padding:19px}.preset-buttons{grid-template-columns:repeat(2,1fr)}.hero-head{font-size:.68rem}.comm-list{gap:8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para a atividade</a>
+<main id="conteudo">
+<section class="hero" aria-labelledby="title">
+ <div class="wrap">
+  <div class="hero-head"><span><strong>LABORATÓRIO DE ENGENHARIA</strong> / CADERNO 10</span><span>DISPOSITIVO GENÉRICO · SEM MARCA OU MODELO COMERCIAL</span></div>
+  <div class="hero-grid">
+   <div>
+    <span class="eyebrow" style="color:#d2eda0">Um ecossistema de sistemas em miniatura</span>
+    <h1 id="title">Por dentro de um <em>smartphone.</em></h1>
+    <p>Uma câmera, um computador, uma estação de rádio e uma bateria trabalham juntos dentro de poucos centímetros. Desmonte um aparelho imaginário, siga os dados entre componentes e descubra por que desempenho, energia, segurança e reparabilidade precisam ser pensados como um sistema.</p>
+    <div class="hero-metadata"><span>13 componentes exploráveis</span><span>Fluxos de dados</span><span>Energia e calor</span><span>Ciclo de vida</span></div>
+   </div>
+   <figure class="hero-figure" id="heroFigure">
+    <svg viewBox="0 0 740 600" role="img" aria-labelledby="heroSvgTitle heroSvgDesc">
+     <title id="heroSvgTitle">Vista isométrica explodida de um smartphone genérico</title>
+     <desc id="heroSvgDesc">Desenho SVG autoral de um dispositivo genérico aberto, com camadas separadas de tela, estrutura, placa verde com chips, bateria e tampa. Linhas de circuito e órbitas decorativas circundam as partes sem representar dimensões ou conexões reais.</desc>
+     <defs><linearGradient id="hero-metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#829d96"/><stop offset="1" stop-color="#3f5e5c"/></linearGradient><linearGradient id="hero-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#acb9d2"/><stop offset="1" stop-color="#344a67"/></linearGradient></defs>
+     <g class="orbit" fill="none" stroke="#a9db9f" stroke-dasharray="5 14" opacity=".46"><ellipse cx="370" cy="290" rx="315" ry="190"/><ellipse cx="370" cy="290" rx="215" ry="290"/></g>
+     <g class="floating">
+      <path d="M161 166 L374 58 L588 156 L375 270Z" fill="url(#hero-glass)" stroke="#e1f1e0" stroke-width="7"/>
+      <path d="M175 165 L374 71 L573 158 L375 258Z" fill="#354b63"/>
+      <path d="M192 162 L374 85 L548 160 L373 246Z" fill="#887eb8" opacity=".65"/>
+      <path d="M246 160L369 108L470 156L366 209Z" fill="#d5e5e6" opacity=".43"/>
+      <path d="M154 255 L374 145 L593 253 L372 371Z" fill="url(#hero-metal)" stroke="#8caba2" stroke-width="7" opacity=".8"/>
+      <path d="M153 320 L370 207 L599 322 L369 435Z" fill="#235d52" stroke="#8db5a3" stroke-width="7"/>
+      <g stroke="#a8ef94" stroke-width="5" fill="none" opacity=".85"><path d="M204 315L305 262L406 311L528 258 M279 364L376 318L507 385 M366 223L365 419"/><path d="M226 346L304 387L398 337L488 370"/></g>
+      <g stroke="#ade1ac" stroke-width="4" fill="#162c32"><path d="M338 271L409 237L470 267L397 307Z"/><path d="M256 315L308 287L350 312L297 340Z"/><path d="M434 355L482 332L520 352L473 377Z"/></g>
+      <path d="M181 399 L373 304 L564 396 L374 490Z" fill="#2b3c44" stroke="#afc2b2" stroke-width="7"/>
+      <path d="M239 404 L370 338 L508 402 L377 467Z" fill="#d1b5d4" stroke="#ece4d8" stroke-width="5"/>
+      <path d="M161 463 L374 359 L590 458 L374 565Z" fill="#5a7771" stroke="#b4cfc2" stroke-width="6" opacity=".88"/>
+     </g>
+     <g fill="#dbf1b5" font-family="monospace" font-size="19"><text x="25" y="115">DISPLAY</text><text x="583" y="207">CHASSI</text><text x="28" y="359">PLACA</text><text x="565" y="405">BATERIA</text><text x="24" y="547">TAMPA</text></g>
+    </svg>
+    <figcaption>Figura 1. Vista explodida SVG original; distâncias, camadas e formato dos chips são uma interpretação didática, não um produto real.</figcaption>
+    <button type="button" id="pauseHero" class="hero-motion" aria-pressed="false">Pausar animação da ilustração</button>
+   </figure>
+  </div>
+  <div class="hero-bottom"><span>EXPLORAÇÃO TÉCNICA · 30–40 MINUTOS</span><span>Sem coleta de dados, sem dependências externas.</span></div>
+ </div>
+ <div class="ribbon" aria-hidden="true"></div>
+</section>
+
+<section class="intro wrap" aria-labelledby="introTitle">
+ <div><div class="number" aria-hidden="true">00</div><span class="eyebrow">O princípio de engenharia</span></div>
+ <div>
+  <h2 id="introTitle">Não é uma “placa inteligente”. É uma arquitetura inteira negociando recursos.</h2>
+  <p class="lead">O smartphone funciona porque sensores, processadores, memória, armazenamento, rádio, interfaces e energia são coordenados por hardware e software.</p>
+  <p>O sistema em chip, ou <strong>SoC</strong>, integra blocos que podem incluir CPU, GPU, aceleradores de inteligência artificial, controladores de memória, processadores de imagem e outros mecanismos; em alguns projetos, modem e outras funções são integrados ou ficam em chips separados. RAM fornece armazenamento temporário rápido para processos em execução, enquanto memória flash armazena dados persistentes. O sistema operacional organiza processos, permissões, drivers e serviços entre aplicativos e o hardware.</p>
+  <p>Ao tirar uma foto ou abrir um mapa, diversas partes participam da operação. Componentes que trabalham simultaneamente compartilham orçamento de energia, canais de dados e capacidade de dissipação térmica. Essa colaboração explica tanto a versatilidade do dispositivo quanto as limitações de autonomia, desempenho sustentado e durabilidade.</p>
+  <div class="note"><strong>Precisão do modelo:</strong> este aparelho é inteiramente fictício e representa famílias de componentes, não a desmontagem de um modelo vendido no mercado. Posições, dimensões, quantidade de chips e fluxos variam entre fabricantes e gerações.</div>
+ </div>
+</section>
+
+<section class="teardown" aria-labelledby="teardownTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="eyebrow">01 / Mesa de desmontagem</span><div><h2 id="teardownTitle">Abra o aparelho. Investigue cada peça.</h2><p>Os pontos sobre a vista explodida e os botões alternativos apresentam a mesma seleção, acessível ao teclado e ao toque. Explore 13 famílias de componentes, suas funções e as interfaces de que dependem.</p></div></div>
+  <div class="teardown-grid">
+   <figure class="exploded">
+    <div class="visual">
+     <svg viewBox="0 0 780 700" role="img" aria-labelledby="explodeTitle explodeDesc">
+      <title id="explodeTitle">Esquema explodido detalhado de smartphone com placa, câmera, bateria, tela e antenas</title>
+      <desc id="explodeDesc">Camadas vetoriais de display e digitalizador, estrutura, módulos de câmera, placa de circuito com SoC, RAM, armazenamento, PMIC, rádio, bateria, componentes de áudio, sensores, antenas e dissipador. Treze botões em posições aproximadas abrem descrições textuais.</desc>
+      <defs><linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c4d8db"/><stop offset="1" stop-color="#47536f"/></linearGradient></defs>
+      <rect width="780" height="700" fill="#172827"/>
+      <g stroke="#2f5347" stroke-width="2" opacity=".55"><path d="M0 70H780 M0 140H780 M0 210H780 M0 280H780 M0 350H780 M0 420H780 M0 490H780 M0 560H780 M0 630H780 M78 0V700 M156 0V700 M234 0V700 M312 0V700 M390 0V700 M468 0V700 M546 0V700 M624 0V700 M702 0V700"/></g>
+      <g fill="none" stroke="#8cbda3" stroke-width="5" stroke-dasharray="8 15" opacity=".65"><path d="M168 122V584 M607 139V597"/></g>
+      <path d="M116 70 L572 40 L686 139 L228 181Z" fill="url(#glass)" stroke="#ccded4" stroke-width="8"/>
+      <path d="M135 74L565 54L663 138L231 164Z" fill="#8580b7" opacity=".8"/>
+      <path d="M161 81L547 67L618 128L226 151Z" fill="#d8d9e6" opacity=".37"/>
+      <path d="M105 151L561 122L697 236L240 269Z" fill="#607c79" stroke="#9cb4ad" stroke-width="6" opacity=".86"/>
+      <path d="M106 240L562 214L691 318L234 345Z" fill="#205b4b" stroke="#a1c9ab" stroke-width="7"/>
+      <path d="M123 249L552 232L665 318L237 330Z" fill="#215b47" stroke="#6aa18a" stroke-width="3"/>
+      <g fill="none" stroke="#8bdc9f" stroke-width="5" stroke-linecap="round"><path d="M170 274L269 266L352 307L500 283 M235 324L336 270L443 319 M346 249L349 321 M485 244L538 288"/></g>
+      <g fill="#111f26" stroke="#a0d8b5" stroke-width="4"><path d="M335 262L398 258L453 294L393 298Z"/><path d="M465 282L520 278L551 300L494 306Z"/><path d="M235 284L289 278L321 305L264 312Z"/><path d="M525 251L557 250L586 269L554 272Z"/></g>
+      <g fill="#a4cbb8"><circle cx="277" cy="257" r="7"/><circle cx="458" cy="252" r="7"/><circle cx="524" cy="315" r="7"/></g>
+      <g fill="#272b34" stroke="#c2a5c9" stroke-width="5"><path d="M129 361L560 330L685 443L247 472Z"/></g>
+      <path d="M225 382L519 360L596 426L297 443Z" fill="#c8b0cd" stroke="#eee4c7" stroke-width="5"/>
+      <path d="M238 395L511 373L560 418L293 432Z" fill="#a98cb9"/>
+      <path d="M128 481L564 458L685 552L249 581Z" fill="#526c65" stroke="#a8c7b0" stroke-width="6"/>
+      <g fill="#263439" stroke="#c5d9c0" stroke-width="5"><circle cx="583" cy="159" r="20"/><circle cx="625" cy="182" r="19"/><circle cx="644" cy="209" r="18"/></g>
+      <g fill="#9ab4b2"><circle cx="583" cy="159" r="9"/><circle cx="625" cy="182" r="8"/><circle cx="644" cy="209" r="7"/></g>
+      <g fill="none" stroke="#ccd89b" stroke-width="5"><path d="M156 516L206 547L246 536 M602 477L655 521"/></g>
+      <path d="M146 599L560 563L664 645L237 683Z" fill="#354848" stroke="#8fa898" stroke-width="7"/>
+      <g font-family="monospace" font-size="20" fill="#d7f4c3"><text x="30" y="42">VISTA EXPLODIDA</text><text x="26" y="668" font-size="14">NÃO É DISPOSITIVO COMERCIAL</text></g>
+     </svg>
+     <button class="point" type="button" data-part="display" aria-label="Explorar display" aria-pressed="true">01</button>
+     <button class="point" type="button" data-part="touch" aria-label="Explorar touchscreen" aria-pressed="false">02</button>
+     <button class="point" type="button" data-part="camera" aria-label="Explorar módulo de câmeras e ISP" aria-pressed="false">03</button>
+     <button class="point" type="button" data-part="soc" aria-label="Explorar SoC e processadores" aria-pressed="false">04</button>
+     <button class="point" type="button" data-part="ram" aria-label="Explorar memória RAM" aria-pressed="false">05</button>
+     <button class="point" type="button" data-part="flash" aria-label="Explorar armazenamento flash" aria-pressed="false">06</button>
+     <button class="point" type="button" data-part="pmic" aria-label="Explorar gerenciamento de energia" aria-pressed="false">07</button>
+     <button class="point" type="button" data-part="battery" aria-label="Explorar bateria" aria-pressed="false">08</button>
+     <button class="point" type="button" data-part="rf" aria-label="Explorar rádio e modem" aria-pressed="false">09</button>
+     <button class="point" type="button" data-part="antenna" aria-label="Explorar antenas" aria-pressed="false">10</button>
+     <button class="point" type="button" data-part="sensors" aria-label="Explorar sensores" aria-pressed="false">11</button>
+     <button class="point" type="button" data-part="audio" aria-label="Explorar áudio" aria-pressed="false">12</button>
+     <button class="point" type="button" data-part="cooling" aria-label="Explorar dissipação térmica" aria-pressed="false">13</button>
+    </div>
+    <figcaption>Figura 2. Esquema SVG original fora de escala. A posição é meramente ilustrativa: selecionar um marcador não identifica a arquitetura de um produto real.</figcaption>
+   </figure>
+   <div class="part-panel">
+    <span class="eyebrow" style="color:#6c5a91" id="partIndex">COMPONENTE 01 / 13</span>
+    <h3 id="partName">Display</h3>
+    <span class="family" id="partFamily">Interface visual</span>
+    <p id="partDescription" aria-live="polite" aria-atomic="true">Converte sinais elétricos em luz e imagens. Em OLED, elementos emissivos geram luz por pixel; em LCD, o painel modula uma iluminação traseira. Contraste, brilho, taxa de atualização e conteúdo exibido influenciam consumo.</p>
+    <div class="relation"><strong>Como se conecta ao restante do aparelho</strong><span id="partLink">A GPU e o sistema de composição produzem quadros; um controlador envia dados ao display. A camada sensível ao toque é uma interface distinta, embora possa ser laminada à tela.</span></div>
+    <p id="partCaveat" style="font-size:.85rem;color:#686579">Nem todos os dispositivos utilizam a mesma tecnologia de painel ou estrutura física.</p>
+    <div class="part-list" role="group" aria-label="Alternativa textual para selecionar cada componente">
+      <button type="button" data-part="display" aria-pressed="true">01 · Display</button>
+      <button type="button" data-part="touch" aria-pressed="false">02 · Toque</button>
+      <button type="button" data-part="camera" aria-pressed="false">03 · Câmeras</button>
+      <button type="button" data-part="soc" aria-pressed="false">04 · SoC</button>
+      <button type="button" data-part="ram" aria-pressed="false">05 · RAM</button>
+      <button type="button" data-part="flash" aria-pressed="false">06 · Flash</button>
+      <button type="button" data-part="pmic" aria-pressed="false">07 · PMIC</button>
+      <button type="button" data-part="battery" aria-pressed="false">08 · Bateria</button>
+      <button type="button" data-part="rf" aria-pressed="false">09 · Modem</button>
+      <button type="button" data-part="antenna" aria-pressed="false">10 · Antenas</button>
+      <button type="button" data-part="sensors" aria-pressed="false">11 · Sensores</button>
+      <button type="button" data-part="audio" aria-pressed="false">12 · Áudio</button>
+      <button type="button" data-part="cooling" aria-pressed="false">13 · Dissipação</button>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="section wrap" aria-labelledby="trioTitle">
+ <div class="section-header"><span class="eyebrow" style="color:#6a5f9d">02 / Três memórias de trabalho diferentes</span><div><h2 id="trioTitle">Computar, guardar temporariamente e persistir são tarefas diferentes.</h2><p>Um aplicativo parece ocupar uma só tela, mas seu código e seus dados transitam entre recursos com custos de acesso, energia, latência e capacidade distintos.</p></div></div>
+ <div class="explainer">
+  <article><h3>Execução / CPU, GPU, NPU</h3><p>A CPU executa instruções gerais, organiza diversas tarefas e interage com o sistema. A GPU é especializada em processamento paralelo relevante para gráficos e determinados cálculos. NPUs ou aceleradores neurais, quando presentes, favorecem operações de modelos de aprendizado de máquina. A divisão concreta depende de software, drivers e SoC.</p></article>
+  <article><h3>RAM / memória volátil</h3><p>Guarda dados e código de processos ativos com acesso relativamente rápido. Seu conteúdo não funciona como armazenamento durável quando a alimentação é removida. Sistemas usam caches e mecanismos de gerenciamento de memória, mas isso não torna RAM e flash equivalentes.</p></article>
+  <article><h3>Flash / dados persistentes</h3><p>A memória flash NAND é usada para guardar sistema, aplicativos e arquivos sem alimentação contínua. Controladores e software precisam lidar com organização de páginas e blocos, desgaste, correção de erros e integridade. Criptografia protege dados conforme políticas e chaves do dispositivo.</p></article>
+ </div>
+</section>
+
+<section class="section chip-area" aria-labelledby="chipTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="eyebrow">03 / Sistema em chip</span><div><h2 id="chipTitle">Um SoC é uma cidade de circuitos, não um único processador.</h2><p>Em um dispositivo moderno, diferentes blocos aceleram tipos de trabalho e compartilham memória, interconexões, energia e limites térmicos. Os números, tamanhos e posições abaixo são apenas ilustrativos.</p></div></div>
+  <div class="chip-grid">
+   <figure class="chip-fig">
+    <svg viewBox="0 0 760 510" role="img" aria-labelledby="chipSvgTitle chipSvgDesc">
+     <title id="chipSvgTitle">Diagrama de SoC genérico com CPU, GPU, NPU, ISP, controladores e barramento</title>
+     <desc id="chipSvgDesc">Uma placa esquemática escura contém blocos rotulados de CPU, GPU, NPU, ISP, controladores de memória, interfaces de sensores e segurança. Trilhas verdes conectam blocos a um núcleo central de interconexão sem representar topologia de chip real.</desc>
+     <rect width="760" height="510" fill="#1b3936"/>
+     <g fill="none" stroke="#4e907b" stroke-width="3"><path d="M55 80H705 M55 160H705 M55 240H705 M55 320H705 M55 400H705 M132 55V456 M245 55V456 M358 55V456 M471 55V456 M584 55V456 M697 55V456"/></g>
+     <rect x="73" y="66" width="614" height="379" rx="20" fill="#1a4943" stroke="#a2d2b7" stroke-width="6"/>
+     <g fill="#192a34" stroke-width="4" stroke="#93bfa5"><rect x="103" y="95" width="170" height="122"/><rect x="300" y="95" width="155" height="122"/><rect x="485" y="95" width="170" height="122"/><rect x="103" y="254" width="170" height="122"/><rect x="300" y="254" width="155" height="122"/><rect x="485" y="254" width="170" height="122"/></g>
+     <g fill="#d6edb7" font-family="monospace" text-anchor="middle" font-size="28" font-weight="700"><text x="188" y="162">CPU</text><text x="377" y="163">GPU</text><text x="567" y="164">NPU</text><text x="187" y="323">ISP</text><text x="378" y="324">MEMÓRIA</text><text x="571" y="322">I/O</text></g>
+     <g font-family="monospace" fill="#b0dbce" font-size="17" text-anchor="middle"><text x="188" y="189">Geral</text><text x="377" y="189">Paralelo</text><text x="567" y="190">Modelos IA</text><text x="187" y="349">Imagem</text><text x="377" y="349">Controlador</text><text x="567" y="349">Interfaces</text></g>
+     <path d="M188 217V238 M378 217V238 M567 217V238 M188 254V238 H567 V254" stroke="#c7ee9f" stroke-width="7" fill="none"/>
+     <text x="205" y="421" fill="#d5f0be" font-family="monospace" font-size="17">INTERCONEXÃO E GERÊNCIA DE ENERGIA</text>
+    </svg>
+    <figcaption>Figura 3. SoC conceitual em SVG original. Blocos funcionais e interconexões não correspondem a um circuito comercial, contagem de núcleos ou arquitetura física específica.</figcaption>
+   </figure>
+   <div class="chip-copy">
+    <h3>CPU: flexibilidade</h3><p>Núcleos de CPU executam tarefas diversas, desde código de aplicativos até serviços do sistema. Escalonadores decidem quando e em quais núcleos executar processos e threads, equilibrando responsividade, prioridade e energia.</p>
+    <h3>GPU e NPU: especialização</h3><p>Um processador gráfico trabalha bem em operações paralelas de desenho e outros cálculos. Um acelerador de IA pode executar partes de redes neurais com eficiência, mas nem todo aparelho possui NPU separada e nem todo modelo é executado nela.</p>
+    <h3>ISP: do sensor à imagem processada</h3><p>O processador de sinal de imagem integra o fluxo de captura e pode aplicar correções, redução de ruído, demosaicing, balanço de branco e outras operações conforme projeto. Os resultados podem também envolver CPU, GPU, NPU e software.</p>
+    <h3>O software define a cooperação</h3><p>Ter hardware capaz não garante que qualquer aplicativo o utilize. APIs, drivers, bibliotecas, permissões, gerenciamento de memória, temperatura e suporte do sistema determinam que recursos estarão disponíveis.</p>
+   </div>
+  </div>
+  <div class="os-rail" aria-label="Camadas de software em um smartphone">
+   <article><strong>Aplicativos</strong><p>Interface, regras de negócio, multimídia, tarefas do usuário e chamadas às APIs públicas.</p></article>
+   <article><strong>Framework e serviços</strong><p>Gerenciam ciclo de vida, notificações, segurança de acesso, localização, mídias e interfaces.</p></article>
+   <article><strong>Kernel, drivers e HAL</strong><p>Abstraem e controlam hardware, processos, memória, acesso a dispositivos e mecanismos de isolamento.</p></article>
+   <article><strong>Hardware físico</strong><p>SoC, memória, armazenamento, módulos, antenas, circuitos de alimentação, sensores e atuadores.</p></article>
+  </div>
+ </div>
+</section>
+
+<section class="pipeline" aria-labelledby="pipelineTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="eyebrow">04 / Investigue o caminho dos dados</span><div><h2 id="pipelineTitle">O que realmente acontece quando você toca em “capturar”?</h2><p>Troque entre fotografia, vídeo, mensagem pela rede, navegação e jogo. O fluxo de cinco etapas é uma narrativa funcional simplificada: componentes podem atuar em paralelo, e sequências e formatos diferem entre plataformas.</p></div></div>
+  <div class="flow-nav" role="group" aria-label="Escolher fluxo de dados"><button type="button" data-flow="photo" aria-pressed="true">Fotografia</button><button type="button" data-flow="video" aria-pressed="false">Vídeo</button><button type="button" data-flow="message" aria-pressed="false">Mensagem</button><button type="button" data-flow="navigation" aria-pressed="false">Navegação</button><button type="button" data-flow="game" aria-pressed="false">Jogo</button></div>
+  <div class="pipeline-layout">
+   <figure class="flow-sheet" id="flowFigure">
+    <svg viewBox="0 0 740 370" role="img" aria-labelledby="flowSvgTitle flowSvgDesc">
+     <title id="flowSvgTitle">Fluxo educativo de cinco etapas conectadas por sinais</title>
+     <desc id="flowSvgDesc">Cinco blocos numerados conectados por linhas pontilhadas. O bloco ativo é realçado conforme o aluno avança. Os nomes específicos da etapa e seu papel ficam em texto no painel lateral e não dependem da cor do desenho.</desc>
+     <rect width="740" height="370" fill="#172b31"/>
+     <g fill="none" stroke="#9bcca9" stroke-width="6" stroke-linecap="round" class="flow-wire"><path d="M105 177H637"/></g>
+     <g class="flow-node" data-flow-step="0"><circle cx="90" cy="176" r="52" fill="#284d4b" stroke="#c4ec9b" stroke-width="6"/><text x="90" y="188" text-anchor="middle" fill="#f0f3d7" font-size="32" font-family="monospace">01</text></g>
+     <g class="flow-node" data-flow-step="1"><circle cx="225" cy="176" r="52" fill="#284d4b" stroke="#c4ec9b" stroke-width="6"/><text x="225" y="188" text-anchor="middle" fill="#f0f3d7" font-size="32" font-family="monospace">02</text></g>
+     <g class="flow-node" data-flow-step="2"><circle cx="362" cy="176" r="52" fill="#284d4b" stroke="#c4ec9b" stroke-width="6"/><text x="362" y="188" text-anchor="middle" fill="#f0f3d7" font-size="32" font-family="monospace">03</text></g>
+     <g class="flow-node" data-flow-step="3"><circle cx="499" cy="176" r="52" fill="#284d4b" stroke="#c4ec9b" stroke-width="6"/><text x="499" y="188" text-anchor="middle" fill="#f0f3d7" font-size="32" font-family="monospace">04</text></g>
+     <g class="flow-node" data-flow-step="4"><circle cx="637" cy="176" r="52" fill="#284d4b" stroke="#c4ec9b" stroke-width="6"/><text x="637" y="188" text-anchor="middle" fill="#f0f3d7" font-size="32" font-family="monospace">05</text></g>
+     <g font-family="monospace" font-size="17" fill="#cde5cb"><text x="29" y="78">ENTRADA</text><text x="598" y="78">RESULTADO</text><text x="147" y="315">FLUXO CONCEITUAL · ETAPAS NÃO SÃO TEMPOS MEDIDOS</text></g>
+    </svg>
+    <figcaption>Figura 4. Diagrama SVG original animado. A progressão é didática, não reproduz barramentos, tempos de execução ou ordem exata de um aparelho comercial.</figcaption>
+   </figure>
+   <div class="flow-panel">
+    <span class="counter" id="flowCounter">ETAPA 1 DE 5</span>
+    <h3 id="flowName">Comando e permissão</h3>
+    <p id="flowIntro">Fluxo: tirar uma fotografia.</p>
+    <div class="details" id="flowDescription" role="status" aria-live="polite" aria-atomic="true">O usuário aciona a câmera. O aplicativo solicita acesso a uma API de captura e depende da permissão concedida pelo sistema operacional. O evento de toque é interpretado pela interface.</div>
+    <div class="flow-actions">
+     <button type="button" id="flowPrevious" class="secondary" disabled>Anterior</button>
+     <button type="button" id="flowNext">Próxima etapa</button>
+     <button type="button" id="flowAuto" class="secondary" aria-pressed="false">Reproduzir automaticamente</button>
+     <button type="button" id="flowReset" class="secondary">Recomeçar</button>
+    </div>
+    <div class="steps" aria-label="Etapas da narrativa"><span class="active"></span><span></span><span></span><span></span><span></span></div>
+  </div>
+  </div>
+  <div class="flow-caveat">Os processos podem ocorrer simultaneamente, em outras ordens, ou em caminhos diferentes conforme implementação. Por exemplo, a captura de imagem envolve buffers e metadados, e um aplicativo pode optar por JPEG ou RAW. A sequência não mede latência e não se conecta a sensores, rede, câmera ou arquivos reais.</div>
+ </div>
+</section>
+
+<section class="section communication" aria-labelledby="wirelessTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="eyebrow" style="color:#6e638f">05 / Rádio e localização</span><div><h2 id="wirelessTitle">Internet, fones de ouvido e localização não usam a mesma conversa.</h2><p>Um smartphone combina vários receptores, transmissores, antenas, amplificadores, filtros e software de protocolo. Seu modem celular troca dados com infraestrutura de operadoras; o receptor GNSS escuta sinais de sistemas de navegação.</p></div></div>
+  <div class="comm-grid">
+   <figure class="comm-figure">
+    <svg viewBox="0 0 780 490" role="img" aria-labelledby="radioSvgTitle radioSvgDesc">
+     <title id="radioSvgTitle">Ilustração conceitual das comunicações sem fio de um smartphone</title>
+     <desc id="radioSvgDesc">Dispositivo no centro recebe linhas separadas de um roteador Wi-Fi, uma torre celular, um fone Bluetooth e satélites GNSS. As setas de navegação por satélite apontam dos satélites para o dispositivo e não pressupõem envio de localização à constelação.</desc>
+     <rect width="780" height="490" fill="#dce9e4"/>
+     <rect x="321" y="162" width="143" height="251" rx="22" fill="#243e45" stroke="#7b8f8e" stroke-width="7"/>
+     <rect x="335" y="178" width="116" height="214" rx="10" fill="#8fc4ba"/>
+     <circle cx="393" cy="401" r="7" fill="#cee1d4"/>
+     <g stroke-width="5" stroke-dasharray="9 10" fill="none" stroke-linecap="round">
+      <path d="M318 219L159 171" stroke="#327b9e"/><path d="M465 220L615 161" stroke="#b77c5c"/><path d="M323 330L165 388" stroke="#74639c"/><path d="M463 330L619 389" stroke="#508f78"/>
+     </g>
+     <g fill="#2c6b7f"><rect x="78" y="157" width="113" height="24" rx="6"/><rect x="111" y="133" width="16" height="25"/><path d="M108 124Q119 111 131 124" fill="none" stroke="#2c6b7f" stroke-width="4"/></g>
+     <g stroke="#a5674f" stroke-width="8" fill="none"><path d="M614 174V89 M578 174L612 88L645 174 M585 147H638 M597 124H628"/></g>
+     <path d="M131 364Q93 324 59 366Q30 409 99 428L139 406" fill="none" stroke="#806c9d" stroke-width="12" stroke-linecap="round"/>
+     <circle cx="133" cy="407" r="18" fill="#806c9d"/>
+     <g fill="#79a58e" stroke="#477b64" stroke-width="4"><rect x="583" y="360" width="94" height="48" rx="9"/><path d="M590 355L552 324 M669 355L709 328" fill="none"/></g>
+     <g fill="none" stroke="#5d9b83" stroke-width="5"><path d="M540 70Q469 123 434 163 M630 74Q555 124 446 169"/></g>
+     <g fill="#7ca8a0" stroke="#4e7979" stroke-width="4"><rect x="518" y="50" width="58" height="27" rx="6"/><rect x="600" y="49" width="58" height="27" rx="6"/></g>
+     <g font-family="monospace" fill="#33595b" font-size="21"><text x="49" y="112">Wi-Fi</text><text x="581" y="193">Celular</text><text x="54" y="458">Bluetooth</text><text x="560" y="452">GNSS (RX)</text><text x="489" y="27">Satélites</text></g>
+    </svg>
+    <figcaption>Figura 5. Comunicação sem fio representada em SVG original e sem frequências, antenas reais ou medições de cobertura. GNSS geralmente recebe sinais de satélite e calcula posição localmente; a navegação pode depois combinar mapas e conexão de dados.</figcaption>
+   </figure>
+   <div class="comm-text">
+    <h3>Wi-Fi</h3><p>Conecta o dispositivo a redes locais usando protocolos da família IEEE 802.11. Velocidade e latência variam com padrão suportado, faixa, largura de canal, potência, sinal, interferência, roteador e rede de destino. Wi-Fi não é sinônimo de acesso garantido à internet.</p>
+    <h3>Bluetooth Classic e LE</h3><p>Projetados para conexões de dispositivos e diferentes perfis de uso: áudio, controles, sensores, acessórios e serviços de baixo consumo, por exemplo. Os recursos dependem das versões e perfis suportados; Bluetooth LE não significa que qualquer uso consumirá sempre menos energia.</p>
+    <h3>Rede celular</h3><p>O modem implementa protocolos de acesso a células e se conecta à rede de uma operadora por rádio, através de antenas e circuitos de RF. Cobertura, mobilidade, carga da célula, potência de transmissão e tecnologia disponível influenciam consumo e desempenho.</p>
+    <h3>GPS é uma das constelações GNSS</h3><p>GNSS é um conjunto de sistemas de navegação por satélite; GPS é o sistema dos Estados Unidos, e outros sistemas também podem ser utilizados por receptores compatíveis. O aparelho mede sinais e temporização de múltiplos satélites para estimar posição e relógio; não precisa transmitir sua posição aos satélites. Redes, Wi-Fi e sensores podem auxiliar a localização, mas não substituem essa distinção.</p>
+   </div>
+  </div>
+  <div class="comm-list">
+   <article><h3>Antenas</h3><p>Convertem sinais elétricos em ondas eletromagnéticas e vice-versa. Formato, espaço e interação com a mão influenciam o projeto.</p></article>
+   <article><h3>RF e filtros</h3><p>Adaptam, amplificam e filtram sinais em bandas distintas para reduzir interferências e permitir comunicação.</p></article>
+   <article><h3>Sensores de movimento</h3><p>Acelerômetro e giroscópio auxiliam rotação da tela, contagem de passos e fusão sensorial, sem “ver” a posição global sozinhos.</p></article>
+   <article><h3>Proximidade, luz e som</h3><p>Sensor de proximidade e luz ambiente ajustam comportamentos; microfone transforma pressão acústica em sinal elétrico.</p></article>
+  </div>
+ </div>
+</section>
+
+<section class="section camera" aria-labelledby="cameraTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="eyebrow">06 / Da luz aos pixels</span><div><h2 id="cameraTitle">Uma foto não sai pronta do sensor.</h2><p>Uma câmera envolve óptica, exposição, detecção de luz, conversão de sinais, buffers e processamento de imagem. O processamento pode ser diferente para vídeo, foto, modo noturno e arquivo RAW.</p></div></div>
+  <div class="camera-grid">
+   <figure class="camera-figure">
+    <svg viewBox="0 0 750 480" role="img" aria-labelledby="cameraSvgTitle cameraSvgDesc">
+     <title id="cameraSvgTitle">Fluxo visual de uma câmera de smartphone da lente ao arquivo</title>
+     <desc id="cameraSvgDesc">Luz colorida atravessa uma lente, alcança um sensor de matriz de fotosites e segue como dados para um bloco ISP e uma representação de imagem. Setas são esquemáticas e não indicam formatos exatos ou velocidades reais.</desc>
+     <rect width="750" height="480" fill="#1b3033"/>
+     <path d="M23 175L188 212L188 269L23 309" fill="none" stroke="#f2d099" stroke-width="9"/>
+     <ellipse cx="218" cy="240" rx="32" ry="104" fill="#648b91" stroke="#c5e7d5" stroke-width="7"/>
+     <rect x="287" y="156" width="110" height="165" fill="#2f515a" stroke="#93b3b7" stroke-width="6"/>
+     <g fill="#b9dcb0"><rect x="303" y="170" width="25" height="25"/><rect x="332" y="170" width="25" height="25"/><rect x="362" y="170" width="25" height="25"/></g>
+     <g fill="#d59e99"><rect x="303" y="200" width="25" height="25"/><rect x="332" y="200" width="25" height="25"/><rect x="362" y="200" width="25" height="25"/></g>
+     <g fill="#8dbdd3"><rect x="303" y="230" width="25" height="25"/><rect x="332" y="230" width="25" height="25"/><rect x="362" y="230" width="25" height="25"/></g>
+     <rect x="455" y="180" width="125" height="109" rx="8" fill="#2e494c" stroke="#b1cfa6" stroke-width="6"/>
+     <text x="519" y="237" text-anchor="middle" font-family="monospace" font-size="35" fill="#dcf0c7">ISP</text>
+     <rect x="620" y="166" width="100" height="142" rx="7" fill="#455669" stroke="#aac6bc" stroke-width="5"/>
+     <path d="M629 258L665 202L708 254" fill="none" stroke="#dbe3c6" stroke-width="12"/>
+     <path d="M401 232H448 M587 232H618" stroke="#c7e39e" stroke-width="8"/>
+     <g fill="#c7e39e"><path d="M434 220L459 232L434 244Z"/><path d="M605 220L630 232L605 244Z"/></g>
+     <g font-family="monospace" font-size="19" fill="#dfeddb"><text x="36" y="401">LUZ</text><text x="161" y="401">LENTE</text><text x="294" y="401">SENSOR</text><text x="462" y="401">PROCESSAR</text><text x="624" y="401">IMAGEM</text></g>
+    </svg>
+    <figcaption>Figura 6. Ilustração SVG autoral da cadeia óptica e digital. O processamento real pode ser distribuído entre ISP, CPU, GPU, NPU e aplicativos, em ordens distintas.</figcaption>
+   </figure>
+   <div>
+    <h3>Sensor e exposição</h3><p>A lente forma a imagem e os elementos fotossensíveis convertem fótons em sinais elétricos, depois digitalizados. A exposição depende de tempo, abertura fixa ou variável conforme hardware e ganho, e o ruído também importa. A presença de mais pixels não garante melhor imagem por si só.</p>
+    <h3>Processamento e software</h3><p>Processos como demosaicing, balanço de branco, HDR, redução de ruído, nitidez, fusão de múltiplos quadros e compressão são implementados conforme hardware e objetivos. O sistema operacional disponibiliza interfaces e permissões aos aplicativos; formatos JPEG, HEIF e RAW representam escolhas distintas.</p>
+    <h3>Vídeo e áudio</h3><p>Vídeo reúne uma sequência de quadros e normalmente compressão por codec. Microfones e circuitos de captura representam áudio como amostras digitais; alto-falantes fazem o caminho inverso através de conversores e amplificadores. Sincronização, processamento e buffers afetam a experiência multimídia.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="section lab-energy" aria-labelledby="energyTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="eyebrow">07 / Oficina de energia</span><div><h2 id="energyTitle">Por que a bateria acaba mais rápido em algumas atividades?</h2><p>Combine potências fictícias em watts e uma capacidade energética hipotética em watt-horas. A relação E/P fornece uma <strong>autonomia idealizada com potência constante</strong>; não representa a descarga real de um modelo comercial.</p></div></div>
+  <div class="energy-grid">
+   <div class="energy-controls">
+    <span class="eyebrow" style="color:#7660a3">Experimento A / Potência e energia</span><h3>Escolha uma situação ilustrativa</h3>
+    <div class="preset-buttons" role="group" aria-label="Cenários conceituais de uso de bateria">
+     <button type="button" data-power-preset="idle" aria-pressed="false">Em espera</button>
+     <button type="button" data-power-preset="reading" aria-pressed="true">Leitura</button>
+     <button type="button" data-power-preset="camera" aria-pressed="false">Câmera</button>
+     <button type="button" data-power-preset="game" aria-pressed="false">Jogo</button>
+    </div>
+    <div class="slider-list">
+     <div><label for="batteryWh">Energia nominal da bateria <output id="batteryWhOut" for="batteryWh">18 Wh</output></label><input type="range" id="batteryWh" min="8" max="30" step="1" value="18"/><small>Capacidade energética ilustrativa, não medição.</small></div>
+     <div><label for="powerScreen">Potência da tela <output id="powerScreenOut" for="powerScreen">0,8 W</output></label><input type="range" id="powerScreen" min="0" max="4" step=".1" value=".8"/><small>Brilho, tecnologia do painel e conteúdo influenciam demanda.</small></div>
+     <div><label for="powerChip">Potência de processamento <output id="powerChipOut" for="powerChip">0,8 W</output></label><input type="range" id="powerChip" min="0" max="8" step=".1" value=".8"/><small>Representa SoC e processamento agregados nesta hipótese.</small></div>
+     <div><label for="powerRadio">Potência de comunicações <output id="powerRadioOut" for="powerRadio">0,3 W</output></label><input type="range" id="powerRadio" min="0" max="4" step=".1" value=".3"/><small>RF, Wi-Fi e celular variam com rede, atividade e sinal.</small></div>
+     <div><label for="powerOther">Outros circuitos e perdas <output id="powerOtherOut" for="powerOther">0,3 W</output></label><input type="range" id="powerOther" min="0" max="4" step=".1" value=".3"/><small>Aproximação agregada de periféricos e conversões.</small></div>
+    </div>
+    <button type="button" class="lab-reset" id="resetEnergy">Restaurar cenário</button>
+   </div>
+   <div class="energy-display">
+    <h3>Balanço instantâneo idealizado</h3>
+    <div class="stat" role="status" aria-live="polite" aria-atomic="true"><span class="caption">SOMA DAS POTÊNCIAS</span><strong id="totalPower">2,2 W</strong><small>Potência média hipotética mantida constante durante a conta.</small></div>
+    <div class="stat" role="status" aria-live="polite" aria-atomic="true"><span class="caption">TEMPO IDEAL DE DESCARGA</span><strong id="batteryHours">8,18 horas</strong><small id="batteryText">E/P: 18 Wh ÷ 2,2 W. Não considera eficiência variável, reserva, degradação, temperatura, picos de consumo ou curva de descarga.</small></div>
+    <div class="energy-bar" aria-label="Participação percentual estimada de quatro blocos na potência total">
+     <span id="barScreen" style="background:#d4ed97"></span>
+     <span id="barChip" style="background:#aa92d7"></span>
+     <span id="barRadio" style="background:#f1b98c"></span>
+     <span id="barOther" style="background:#70bcae"></span>
+    </div>
+    <div class="labels"><span>Tela</span><span>SoC</span><span>Comunicações</span><span>Outros</span></div>
+    <p>A unidade mAh expressa capacidade de carga elétrica, não energia por si só. Para estimar Wh a partir de Ah, seria preciso conhecer a tensão apropriada: <strong>Wh ≈ Ah × V</strong>. A tensão de uma bateria varia ao longo da descarga; a conta aqui parte diretamente de Wh.</p>
+    <p>Em espera, serviços de fundo e rádio ainda podem consumir energia. O modo avião altera alguns rádios, mas não significa consumo zero. O brilho e as condições de rede podem ter consequências relevantes para o consumo, sem que um único valor seja universal.</p>
+  </div>
+  </div>
+ </div>
+</section>
+
+<section class="section heat-lab" aria-labelledby="thermalTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="eyebrow">08 / Laboratório térmico</span><div><h2 id="thermalTitle">O chip não pode dissipar calor infinitamente.</h2><p>Explore um modelo térmico de primeira ordem, equivalente a uma massa térmica conectada ao ambiente por resistência térmica. Ele calcula apenas a <strong>elevação teórica de temperatura ΔT</strong>, não a temperatura real do SoC, da bateria ou da superfície externa de um telefone.</p></div></div>
+  <div class="thermal-grid">
+   <div class="thermal-board">
+    <figure>
+     <svg viewBox="0 0 740 335" role="img" aria-labelledby="thermSvgTitle thermSvgDesc">
+      <title id="thermSvgTitle">Fluxo de calor de um chip para uma placa dissipadora e o ambiente</title>
+      <desc id="thermSvgDesc">Um chip em placa verde, um espalhador térmico roxo, uma estrutura metálica e setas de calor para o ambiente. O desenho não representa a geometria de um smartphone real nem um sensor.</desc>
+      <rect width="740" height="335" fill="#28443c"/>
+      <rect x="77" y="195" width="586" height="68" rx="10" fill="#326952" stroke="#8fc39d" stroke-width="6"/>
+      <rect x="214" y="151" width="312" height="41" rx="7" fill="#ad98cc" stroke="#d9c3e7" stroke-width="6"/>
+      <rect x="270" y="89" width="192" height="60" rx="7" fill="#29303b" stroke="#cee2c2" stroke-width="6"/>
+      <text x="363" y="125" font-family="monospace" fill="#d5f1af" text-anchor="middle" font-size="28">SoC</text>
+      <g stroke="#f2b28d" stroke-width="9" stroke-linecap="round"><path d="M287 81V23 M363 81V23 M440 81V23"/></g>
+      <g fill="#f2b28d"><path d="M274 36H300L287 12Z M350 36H376L363 12Z M427 36H453L440 12Z"/></g>
+      <g font-family="monospace" font-size="21" fill="#d8edc2"><text x="85" y="295">PLACA</text><text x="468" y="140">DISSIPAÇÃO</text></g>
+    </svg>
+    <figcaption>Figura 7. Dissipação térmica SVG original. Fluxo ilustrativo de energia; sem temperatura de chip, módulo real de resfriamento ou dados de validação.</figcaption>
+    </figure>
+    <p>Equação do modelo: ΔT(t) = P·R<sub>th</sub>·(1 − e<sup>−t/(R<sub>th</sub>·C<sub>th</sub>)</sup>). P é potência térmica hipotética em W, R<sub>th</sub> em K/W, C<sub>th</sub> em J/K e t em segundos. O produto R·C fornece escala de tempo em segundos.</p>
+    <svg class="thermal-chart" viewBox="0 0 740 280" role="img" aria-labelledby="thermalChartTitle thermalChartDesc">
+     <title id="thermalChartTitle">Curva teórica de elevação de temperatura ao longo do tempo</title>
+     <desc id="thermalChartDesc">Curva crescente de aquecimento de um sistema térmico idealizado de primeira ordem. A inclinação e a elevação variam conforme os controles, e os valores numéricos são exibidos em texto adjacente.</desc>
+     <g fill="none" stroke="#52736c" stroke-width="1"><path d="M85 49H710 M85 102H710 M85 155H710 M85 208H710 M85 35V237 M210 35V237 M335 35V237 M460 35V237 M585 35V237 M710 35V237"/></g>
+     <path class="axis" d="M85 30V233H718"/>
+     <path class="line" id="thermalPath" d="M85 228H710"/>
+     <path class="dashed" id="thermalCursor" d="M400 34V229"/>
+     <g fill="#dbecd9" font-size="20" font-family="monospace"><text x="12" y="28">ΔT</text><text x="568" y="270">TEMPO (s) →</text><text x="57" y="233">0</text></g>
+    </svg>
+   </div>
+   <div class="thermal-controls">
+    <span class="eyebrow" style="color:#6d568d">Experimento B / Física idealizada</span>
+    <h3>Altere potência, caminho térmico e tempo.</h3>
+    <div class="slider-list">
+     <div><label for="thermalPower">Potência dissipada P <output for="thermalPower" id="thermalPowerOut">3 W</output></label><input id="thermalPower" type="range" min="0" max="8" step=".5" value="3"/><small>Energia por segundo convertida em calor; não é medição.</small></div>
+     <div><label for="thermalR">Resistência térmica R<sub>th</sub> <output for="thermalR" id="thermalROut">5 K/W</output></label><input id="thermalR" type="range" min="2" max="10" step="1" value="5"/><small>Valor único que agrega um caminho térmico imaginário.</small></div>
+     <div><label for="thermalC">Capacidade térmica C<sub>th</sub> <output for="thermalC" id="thermalCOut">50 J/K</output></label><input id="thermalC" type="range" min="20" max="100" step="10" value="50"/><small>Agregação fictícia, não massa e material de chip reais.</small></div>
+     <div><label for="thermalTime">Tempo de aplicação <output for="thermalTime" id="thermalTimeOut">180 s</output></label><input id="thermalTime" type="range" min="0" max="600" step="30" value="180"/><small>O modelo começa em equilíbrio térmico com o ambiente.</small></div>
+    </div>
+    <div class="thermal-out" role="status" aria-live="polite" aria-atomic="true"><span class="eyebrow" style="color:#694c85">ELEVAÇÃO TEÓRICA, NÃO TEMPERATURA DO DISPOSITIVO</span><strong id="thermalDelta">ΔT = 7,7 K</strong><small id="thermalDetails">Solução exponencial sob potência constante, resistência e capacidade térmicas constantes. Não prevê limiares de thermal throttling.</small></div>
+    <button type="button" id="resetThermal" class="lab-reset">Restaurar experimento</button>
+    <p style="margin-top:18px">Sistemas reais distribuem calor entre vários materiais e sensores, têm fontes variáveis e usam políticas de <em>thermal throttling</em> para ajustar desempenho ou outras funções diante de limites próprios do fabricante. O modelo não simula esse controle nem define temperatura segura.</p>
+  </div>
+  </div>
+ </div>
+</section>
+
+<section class="section security" aria-labelledby="securityTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="eyebrow">09 / Hardware e confiança</span><div><h2 id="securityTitle">Segurança não é apenas colocar uma senha na tela.</h2><p>Camadas de isolamento, inicialização verificada, criptografia, permissões e atualizações trabalham juntas. Componentes de segurança podem proteger chaves sensíveis mesmo quando processos comuns são comprometidos, dependendo do projeto.</p></div></div>
+  <div class="security-grid">
+   <figure class="security-figure">
+    <svg viewBox="0 0 740 490" role="img" aria-labelledby="secSvgTitle secSvgDesc">
+     <title id="secSvgTitle">Ilustração de camadas de proteção entre aplicativo, sistema e hardware</title>
+     <desc id="secSvgDesc">Caixas concêntricas mostram aplicativos dentro de serviços do sistema e isolamento de hardware. Ao lado, uma chave estilizada aparece protegida por um componente de segurança, não diretamente disponível aos aplicativos.</desc>
+     <rect width="740" height="490" fill="#28414c"/>
+     <rect x="45" y="54" width="450" height="382" rx="22" fill="#3e5f68" stroke="#92b6b1" stroke-width="7"/>
+     <rect x="77" y="91" width="387" height="306" rx="18" fill="#597781" stroke="#b4d2b6" stroke-width="6"/>
+     <rect x="116" y="129" width="309" height="230" rx="17" fill="#c0d2cd" stroke="#d5eac1" stroke-width="6"/>
+     <rect x="151" y="167" width="234" height="155" rx="14" fill="#ecf3d5" stroke="#7e9b89" stroke-width="5"/>
+     <g font-family="monospace" font-size="21" text-anchor="middle" fill="#2e5658"><text x="267" y="216">APLICATIVOS</text><text x="267" y="248">PERMISSÕES</text><text x="267" y="279">ISOLAMENTO</text></g>
+     <g fill="#e9f4d6" font-family="monospace" font-size="17"><text x="63" y="78">HARDWARE</text><text x="97" y="118">SISTEMA</text></g>
+     <rect x="539" y="140" width="161" height="213" rx="15" fill="#1c353a" stroke="#b7df9e" stroke-width="7"/>
+     <path d="M573 214L572 186Q620 133 661 186L659 214" fill="none" stroke="#d4efae" stroke-width="15"/>
+     <circle cx="618" cy="258" r="24" fill="#e5efb8"/><path d="M618 282V322" stroke="#e5efb8" stroke-width="13"/>
+     <text x="619" y="393" text-anchor="middle" fill="#d6f1c0" font-family="monospace" font-size="17">CHAVES PROTEGIDAS</text>
+    </svg>
+    <figcaption>Figura 8. Camadas esquemáticas de segurança em SVG original. Não representa um Secure Enclave ou TEE específico nem garante que uma plataforma seja invulnerável.</figcaption>
+   </figure>
+   <div class="security-copy">
+    <h3>Inicialização verificada e isolamento</h3>
+    <p>Uma cadeia de inicialização pode verificar integridade e autenticidade de componentes antes de prosseguir. Ambientes de execução confiáveis e elementos de segurança oferecem isolamento de chaves e operações sensíveis em arquiteturas que os suportam. O Android pode empregar TEE e soluções como StrongBox conforme implementação; a Apple documenta seu Secure Enclave em produtos compatíveis.</p>
+    <h3>Criptografia e permissões</h3>
+    <p>Criptografia de armazenamento transforma dados usando chaves e políticas de acesso. A existência de um chip de segurança não substitui senha forte, atualizações, proteção contra phishing ou boa configuração de permissões de câmera, microfone e localização.</p>
+    <div class="decisions">
+     <h3 style="font-size:1.15rem">Minicaso: um app pede acesso ao microfone sem explicar por quê.</h3>
+     <p>Qual atitude protege melhor sua privacidade, sem assumir que o app é necessariamente malicioso?</p>
+     <div class="decision-btns" role="group" aria-label="Escolha uma reação ao pedido de microfone">
+      <button type="button" data-security="allow" aria-pressed="false">Conceder sempre, sem verificar</button>
+      <button type="button" data-security="deny" aria-pressed="false">Negar por enquanto e conferir a finalidade</button>
+      <button type="button" data-security="delete" aria-pressed="false">Apagar todos os aplicativos imediatamente</button>
+     </div>
+     <div class="decision-feedback" id="securityFeedback" role="status" aria-live="polite" aria-atomic="true">Selecione uma ação e compare conveniência, necessidade de acesso e privacidade. Permissões podem ser revistas nas configurações do sistema.</div>
+   </div>
+  </div>
+  </div>
+ </div>
+</section>
+
+<section class="section lifetime" aria-labelledby="lifeTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="eyebrow">10 / Antes e depois do uso</span><div><h2 id="lifeTitle">Um smartphone começa na mineração e não termina na gaveta.</h2><p>Fabricar semicondutores requer processos de alta precisão; construir e descartar eletrônicos envolve materiais, água, energia, transporte e riscos de gestão de resíduos. Reparabilidade e tempo de uso fazem parte do desenho do produto.</p></div></div>
+  <div class="lifetime-grid">
+   <figure class="lifetime-figure">
+    <svg viewBox="0 0 750 490" role="img" aria-labelledby="lifeSvgTitle lifeSvgDesc">
+     <title id="lifeSvgTitle">Ilustração de um wafer, montagem de placa e circuito de reparo e reciclagem</title>
+     <desc id="lifeSvgDesc">Imagem autoral de uma pastilha circular de silício com grade de chips e uma placa de circuito montada, conectadas visualmente a símbolos de reparo, uso prolongado e reciclagem. Os materiais e proporções são esquemáticos.</desc>
+     <rect width="750" height="490" fill="#e3e9dc"/>
+     <circle cx="197" cy="213" r="152" fill="#8593b5" stroke="#6b6c9b" stroke-width="8"/>
+     <g stroke="#cfd9e6" stroke-width="3"><path d="M76 143H320 M62 183H331 M57 223H338 M67 263H323 M100 303H298 M119 82V339 M159 65V359 M199 61V363 M239 69V354 M279 90V331"/></g>
+     <circle cx="197" cy="213" r="152" fill="none" stroke="#d4e2e0" stroke-width="4"/>
+     <path d="M417 109H672V320H417Z" fill="#326f59" stroke="#9dbd9e" stroke-width="7"/>
+     <g fill="none" stroke="#a6dfae" stroke-width="6"><path d="M448 146H600V273H467 M444 198H642 M507 124V308"/></g>
+     <rect x="487" y="153" width="100" height="94" rx="9" fill="#203c43" stroke="#b6d9bf" stroke-width="6"/>
+     <g font-family="monospace" font-size="19" fill="#315e55"><text x="101" y="425">WAFER</text><text x="455" y="426">PLACA MONTADA</text></g>
+     <g fill="none" stroke="#74957e" stroke-width="7"><path d="M296 83Q410 25 514 71 M519 62L518 84L496 78"/><path d="M555 358Q389 442 260 354 M262 376L249 348L279 350"/></g>
+    </svg>
+    <figcaption>Figura 9. Wafer, placa e reutilização em SVG original. Nenhuma fábrica, linha de produção ou taxa de reciclagem é representada quantitativamente.</figcaption>
+   </figure>
+   <div class="lifetime-copy">
+    <h3>Da matéria-prima ao encapsulamento</h3>
+    <p>Semicondutores são fabricados por etapas como deposição, fotolitografia, gravação, dopagem, metalização, testes e encapsulamento. Um SoC pode usar litografias e empacotamentos muito diferentes dos de outros componentes; tela, bateria e sensores têm cadeias de fabricação próprias.</p>
+    <h3>Materiais e reparabilidade</h3>
+    <p>Um aparelho combina silício, cobre, alumínio, vidro, polímeros, materiais de bateria e diversos elementos em pequenas quantidades. Disponibilidade de peças, manuais, ferramentas, atualizações de software, adesivos, parafusos e projeto modular afetam a possibilidade de reparo. Reparar bateria de íons de lítio exige procedimentos e ferramentas adequados; perfuração, calor ou curto-circuito podem ser perigosos.</p>
+    <h3>Reutilizar e destinar corretamente</h3>
+    <p>Usar por mais tempo, manter atualizações, reparar quando viável, reutilizar equipamentos e entregar resíduos a sistemas apropriados pode reduzir desperdícios. Antes de vender ou descartar, é importante fazer backup conforme necessidade, remover contas e seguir procedimento confiável de exclusão de dados, observando a plataforma e o destino do equipamento.</p>
+   </div>
+  </div>
+  <div class="life-steps">
+   <article><h3>1 · Projetar e produzir</h3><p>Escolhas de material, energia e processos industriais criam impactos antes do primeiro uso.</p></article>
+   <article><h3>2 · Usar e atualizar</h3><p>Eficiência, durabilidade, suporte de software e cuidado com bateria influenciam a vida útil.</p></article>
+   <article><h3>3 · Reparar ou reutilizar</h3><p>Diagnóstico profissional, peças e documentação podem ampliar a continuidade de uso.</p></article>
+   <article><h3>4 · Coletar e reciclar</h3><p>Logística reversa e processamento apropriado permitem recuperar materiais e reduzir danos ambientais.</p></article>
+  </div>
+  <div class="note"><strong>Referência para discussão:</strong> o Global E-waste Monitor 2024, da ITU e UNITAR, documenta o crescimento de resíduos eletrônicos e o desafio da reciclagem formal. O relatório é global e não descreve especificamente um modelo de smartphone.</div>
+ </div>
+</section>
+
+<section class="quiz" aria-labelledby="quizTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="eyebrow">11 / Caderno de verificação</span><div><h2 id="quizTitle">Agora conecte os componentes às decisões.</h2><p>Seis questões para testar arquitetura, dados, energia, segurança e ciclo de vida. A revisão é formativa e não registra notas ou respostas no Moodle.</p></div></div>
+  <div class="quiz-grid">
+   <aside><h3>Um dispositivo é um conjunto de compromissos.</h3><p>Hardware, firmware, drivers, sistema operacional e aplicativos precisam colaborar. Melhores resultados em processamento, conectividade ou câmera podem exigir mais energia e criar desafios térmicos, enquanto segurança e reparabilidade dependem de escolhas adicionais de engenharia.</p><p>Se alguma questão parecer confusa, use a vista explodida e o laboratório: o objetivo é identificar o percurso causal, não decorar nomes de chips.</p></aside>
+   <form id="quizForm" novalidate>
+    <fieldset class="question" data-answer="b" data-explain="RAM guarda dados temporários para a execução; armazenamento flash NAND preserva dados sem energia contínua. Desempenho e função não são intercambiáveis.">
+     <legend>1. O que diferencia memória RAM de armazenamento flash?</legend>
+     <label><input type="radio" name="q1" value="a"> RAM é sempre um cartão removível e flash só existe na nuvem.</label>
+     <label><input type="radio" name="q1" value="b"> RAM atende dados temporários da execução; flash mantém dados de forma não volátil.</label>
+     <label><input type="radio" name="q1" value="c"> Ambas são idênticas e possuem as mesmas propriedades.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="a" data-explain="O receptor GNSS mede sinais e tempos de chegada de múltiplos satélites para estimar posição e relógio; GPS é uma constelação específica, não um canal de envio de localização ao satélite.">
+     <legend>2. Ao usar a localização por GNSS, qual descrição é correta?</legend>
+     <label><input type="radio" name="q2" value="a"> O receptor usa sinais de satélites para estimar posição; não precisa enviar sua localização aos satélites.</label>
+     <label><input type="radio" name="q2" value="b"> O satélite fotografa o telefone e devolve o endereço em tempo real.</label>
+     <label><input type="radio" name="q2" value="c"> GNSS é exatamente o mesmo protocolo do Bluetooth.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="c" data-explain="A autonomia E/P supõe energia útil e potência constantes. No uso real, ambos podem variar; o resultado é um exercício de unidades, não uma previsão de duração da bateria.">
+     <legend>3. Um exercício mostra uma bateria hipotética de 18 Wh alimentando 3 W de carga constante. Como interpretar E/P?</legend>
+     <label><input type="radio" name="q3" value="a"> A bateria real de qualquer smartphone durará exatamente seis horas.</label>
+     <label><input type="radio" name="q3" value="b"> O cálculo prova que a bateria nunca perde capacidade com o tempo.</label>
+     <label><input type="radio" name="q3" value="c"> A autonomia idealizada seria seis horas, sem representar as variações reais.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="b" data-explain="O ISP e outros blocos processam dados do sensor segundo a implementação. Um sensor fotográfico não entrega sempre uma fotografia final sem processamento.">
+     <legend>4. O que pode acontecer entre a luz que atinge o sensor e a foto salva?</legend>
+     <label><input type="radio" name="q4" value="a"> Os fótons são guardados intactos como arquivo de imagem.</label>
+     <label><input type="radio" name="q4" value="b"> Captura, conversão, processamento por ISP ou outros blocos e codificação de imagem.</label>
+     <label><input type="radio" name="q4" value="c"> Apenas transmissão Bluetooth, obrigatória em todas as câmeras.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="a" data-explain="Uma resistência térmica e capacidade térmica hipotéticas permitem explorar a resposta exponencial, mas não definem os limites ou as temperaturas reais de um SoC.">
+     <legend>5. O que a curva térmica do laboratório realmente demonstra?</legend>
+     <label><input type="radio" name="q5" value="a"> Como um sistema idealizado de primeira ordem responde à potência, ao tempo e à dissipação.</label>
+     <label><input type="radio" name="q5" value="b"> A temperatura exata da bateria do aparelho que o aluno está usando.</label>
+     <label><input type="radio" name="q5" value="c"> Um limite universal de throttling para todos os SoCs.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="c" data-explain="Privacidade, suporte de software, peças, reparo seguro, reutilização e coleta adequada devem ser considerados juntos. Baterias danificadas exigem cuidado profissional.">
+     <legend>6. Qual medida considera segurança e ciclo de vida de um smartphone?</legend>
+     <label><input type="radio" name="q6" value="a"> Perfurar a bateria usada antes de encaminhar para descarte.</label>
+     <label><input type="radio" name="q6" value="b"> Publicar dados pessoais para comprovar a propriedade do equipamento.</label>
+     <label><input type="radio" name="q6" value="c"> Buscar reparo apropriado, manter segurança de software e encaminhar resíduos à coleta adequada.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <div class="quiz-actions"><button type="button" id="gradeQuiz">Corrigir com explicações</button><button type="reset" class="alt">Refazer revisão</button></div>
+    <p class="quiz-result" id="quizResult" role="status" aria-live="polite"></p>
+   </form>
+  </div>
+ </div>
+</section>
+
+<section class="ending">
+ <div class="wrap"><span class="eyebrow" style="color:#e1efa8">Síntese do laboratório</span><h2>Quanto mais você entende o caminho de um sinal, mais compreende as escolhas de engenharia.</h2>
+  <p>O aparelho reúne recursos especializados, restrições de potência, calor, segurança e materiais em um único sistema. Entender esses compromissos torna mais fácil avaliar promessas de desempenho, interpretar especificações e tomar decisões conscientes de uso, reparo e descarte, sem confundir uma animação didática com um ensaio em laboratório.</p>
+ </div>
+</section>
+
+<section class="sources wrap" aria-labelledby="sourcesTitle">
+ <h2 id="sourcesTitle">Referências, procedência das imagens e limites</h2>
+ <p>As nove ilustrações SVG desta página são originais: vista isométrica explodida, aparelho explorável com 13 componentes, SoC esquemático, fluxo de dados, comunicações sem fio, câmera, dissipação térmica, camadas de segurança e ciclo de vida industrial. O gráfico térmico também é SVG gerado por JavaScript a partir da equação didática. Não foram usadas fotos, esquemas industriais, fabricantes ou medições reais; todas as representações são conceituais e fora de escala.</p>
+ <p>Referências técnicas: <a href="https://developer.android.com/guide/platform" target="_blank" rel="noopener noreferrer">Android Developers — Platform architecture</a>; <a href="https://developer.android.com/reference/android/hardware/camera2/package-summary" target="_blank" rel="noopener noreferrer">Android Developers — Camera2 pipeline</a>; <a href="https://source.android.com/docs/core/power/thermal-mitigation" target="_blank" rel="noopener noreferrer">Android Open Source — Thermal mitigation</a>; <a href="https://support.apple.com/guide/security/hardware-security-overview-secf020d1074/web" target="_blank" rel="noopener noreferrer">Apple — Hardware security overview</a>; <a href="https://www.bluetooth.com/learn-about-Bluetooth/tech-overview/" target="_blank" rel="noopener noreferrer">Bluetooth SIG — Technology overview</a>; <a href="https://www.gps.gov/trilateration" target="_blank" rel="noopener noreferrer">GPS.gov — Trilateration</a>; <a href="https://www.itu.int/en/ITU-D/Environment/Pages/Publications/The-Global-E-waste-Monitor-2024.aspx" target="_blank" rel="noopener noreferrer">ITU/UNITAR — Global E-waste Monitor 2024</a>.</p>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+var d=document,byId=function(id){return d.getElementById(id);};
+var fmt=function(n,p){return Number(n).toLocaleString("pt-BR",{minimumFractionDigits:p,maximumFractionDigits:p});};
+var clamp=function(x,min,max){return Math.min(max,Math.max(min,x));};
+function press(btns,key,val){btns.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset[key]===val));});}
+var parts={
+display:{name:"Display",family:"Interface visual",description:"Converte sinais elétricos em luz e imagens. Em OLED, elementos emissivos geram luz por pixel; em LCD, o painel modula uma iluminação traseira. Contraste, brilho, taxa de atualização e conteúdo exibido influenciam consumo.",link:"GPU, sistema de composição e controlador de display enviam os quadros. O touchscreen é um sistema de entrada distinto, embora possa estar integrado na mesma montagem.",caveat:"Nem todos os aparelhos usam OLED ou LCD do mesmo tipo."},
+touch:{name:"Touchscreen",family:"Entrada e interação",description:"Uma camada de sensores capacitivos detecta alterações relacionadas ao toque de dedos e outros dispositivos compatíveis. O controlador digitaliza eventos; software aplica gestos, seleção e tratamento de eventos.",link:"Controlador de toque → drivers/sistema → eventos de interface do aplicativo. A sensibilidade ao toque não depende diretamente dos pixels que emitem luz.",caveat:"Tecnologias e frequências de amostragem variam entre painéis."},
+camera:{name:"Câmeras e ISP",family:"Visão e captura",description:"Módulos ópticos direcionam luz aos sensores, que produzem sinais convertidos em dados digitais. ISP, CPU, GPU e aceleradores podem participar da produção da imagem; câmeras e lentes múltiplas oferecem características distintas.",link:"Lente e sensor → processamento de imagem e buffers → aplicativo → tela/arquivo. Permissões e APIs do sistema controlam o acesso.",caveat:"Os módulos da ilustração não correspondem a câmeras, sensores ou resolução reais."},
+soc:{name:"SoC: CPU, GPU, NPU e controladores",family:"Computação integrada",description:"O sistema em chip pode combinar CPU para tarefas gerais, GPU para paralelismo, NPU para determinados modelos de IA, ISP e controladores diversos. Nem toda arquitetura tem todos os blocos separados.",link:"SoC coordena tarefas através de interconexões, memória, drivers e sistema operacional; sua demanda energética varia conforme o trabalho.",caveat:"O desenho representa categorias funcionais, não arquitetura de fabricante."},
+ram:{name:"Memória RAM",family:"Dados voláteis",description:"Memória de trabalho para processos e buffers. Perde seu conteúdo sem alimentação e não substitui armazenamento persistente. Controladores e caches influenciam tempos de acesso.",link:"CPU, GPU e outros blocos acessam memória pelos caminhos permitidos por controladores e mecanismos de proteção.",caveat:"Tecnologias e empacotamento de RAM variam entre projetos."},
+flash:{name:"Armazenamento flash",family:"Persistência",description:"Armazena sistema, aplicativos e arquivos em memória não volátil. Controladores cuidam de desgaste, correção de erros, mapeamento de blocos e operações de leitura e gravação.",link:"Sistema de arquivos e controlador de armazenamento conectam dados persistentes à memória RAM e aos programas em execução.",caveat:"Não há equivalência automática entre capacidade em GB, velocidade e vida útil."},
+pmic:{name:"PMIC e conversores",family:"Gerenciamento de alimentação",description:"Circuitos de gerenciamento de energia regulam tensões e controlam caminhos de alimentação, distribuição e algumas funções de carregamento. Conversões têm perdas e restrições de corrente e temperatura.",link:"Bateria e entrada de carregamento → PMIC e reguladores → domínios de alimentação do SoC, tela, rádio e periféricos.",caveat:"Circuitos de carregamento, proteção e PMIC podem existir em chips separados."},
+battery:{name:"Bateria de íons de lítio",family:"Armazenamento de energia",description:"Células eletroquímicas armazenam energia que alimenta o dispositivo. Capacidade em Wh, envelhecimento, temperatura, tensão, corrente e limites de segurança afetam o uso.",link:"Bateria → sistemas de proteção e gerenciamento → conversores → circuitos. Autonomia depende da energia disponível e da potência demandada.",caveat:"Não desmonte nem perfure baterias; serviços de reparo exigem procedimentos seguros."},
+rf:{name:"Modem e circuito de RF",family:"Comunicação sem fio",description:"Modem implementa protocolos de redes móveis. A cadeia de radiofrequência usa filtros, amplificadores, conversores e outros componentes para transmitir e receber sinais nas bandas suportadas.",link:"Software de rede e modem → transceptor e RF → antenas → estação de rede. Wi-Fi e Bluetooth usam cadeias de rádio com comportamentos diferentes.",caveat:"Bandas, potência, integração de modem e suporte a padrões variam."},
+antenna:{name:"Antenas",family:"Acoplamento eletromagnético",description:"Estruturas condutoras irradiam ou recebem ondas. Múltiplas antenas podem servir faixas, diversidade e técnicas MIMO; seu desempenho depende do projeto, espaço e ambiente.",link:"Rádio e filtros ↔ antenas ↔ ondas no ambiente. Antenas não são a mesma coisa que o processador que interpreta os dados.",caveat:"Antena desenhada é apenas um símbolo visual."},
+sensors:{name:"Sensores e GNSS",family:"Medição e contexto",description:"Acelerômetro, giroscópio, magnetômetro, luz ambiente, proximidade, barômetro e receptor GNSS, quando presentes, fornecem diferentes observáveis. O sistema pode fundir dados para estimar movimento e contexto.",link:"Transdutores → conversores/controladores → drivers → APIs de sensores e aplicações. GNSS recebe sinais de satélites; localização pode usar outras fontes de informação.",caveat:"Nem todo smartphone integra todos os sensores citados."},
+audio:{name:"Microfone e alto-falante",family:"Áudio bidirecional",description:"Microfones transformam variações de pressão sonora em sinais elétricos; circuitos de conversão e processamento produzem áudio digital. Alto-falantes convertem sinais amplificados novamente em movimento e som.",link:"Microfone → codec/ADC → processamento e aplicativo; retorno por codec/DAC e amplificador → alto-falante.",caveat:"O hardware pode incluir múltiplos microfones, processamento de ruído e saídas distintas."},
+cooling:{name:"Dissipação de calor",family:"Integridade térmica",description:"Chips e reguladores dissipam parte da energia elétrica em calor. Espalhadores, grafite, estrutura metálica, câmaras de vapor em alguns projetos e interfaces térmicas ajudam a distribuir energia até o ambiente.",link:"Fontes térmicas → materiais e estrutura → ambiente. Sensores e software podem limitar a atividade de componentes para evitar condições excessivas.",caveat:"A presença de determinado sistema térmico varia entre modelos; o desenho não permite estimar temperatura."}
+};
+var ids=["display","touch","camera","soc","ram","flash","pmic","battery","rf","antenna","sensors","audio","cooling"];
+var partButtons=Array.prototype.slice.call(d.querySelectorAll("[data-part]"));
+function showPart(key){
+ var p=parts[key];if(!p)return;
+ press(partButtons,"part",key);
+ byId("partIndex").textContent="COMPONENTE "+String(ids.indexOf(key)+1).padStart(2,"0")+" / "+ids.length;
+ byId("partName").textContent=p.name;
+ byId("partFamily").textContent=p.family;
+ byId("partDescription").textContent=p.description;
+ byId("partLink").textContent=p.link;
+ byId("partCaveat").textContent=p.caveat;
+}
+partButtons.forEach(function(b){b.addEventListener("click",function(){showPart(b.dataset.part);});});
+showPart("display");
+var heroPaused=false;
+byId("pauseHero").addEventListener("click",function(){heroPaused=!heroPaused;byId("heroFigure").classList.toggle("is-paused",heroPaused);byId("pauseHero").setAttribute("aria-pressed",String(heroPaused));byId("pauseHero").textContent=heroPaused?"Retomar animação da ilustração":"Pausar animação da ilustração";});
+var flows={
+photo:{label:"Fotografia",intro:"Fluxo simplificado: tirar uma fotografia.",steps:[
+["Comando e permissão","O usuário toca no botão de captura. O aplicativo acessa as APIs de câmera conforme permissões e configurações; o controlador de toque identifica o evento."],
+["Sensor e exposição","Lente e sensor recebem luz, geram sinais e produzem dados digitalizados. O hardware controla exposição e metadados da captura."],
+["ISP e processamento","O pipeline de imagem pode fazer conversões de cor, correções, redução de ruído e outros ajustes. CPU/GPU/NPU podem contribuir dependendo do software."],
+["Memória e codificação","Buffers em RAM recebem quadros e resultados. O aplicativo escolhe formatos e codificação, podendo produzir JPEG, HEIF ou RAW em caminhos adequados."],
+["Arquivo e tela","O sistema grava o arquivo em armazenamento não volátil e renderiza uma visualização. A sequência de gravação e exibição pode variar e ocorrer em paralelo."]
+]},
+video:{label:"Vídeo",intro:"Fluxo simplificado: gravar vídeo.",steps:[
+["Configuração","O app configura câmera, microfone quando autorizado e formato de gravação; há verificações de permissões, resolução e frequência."],
+["Quadros e áudio","Sensor produz quadros sucessivos e microfone produz amostras de áudio; buffers recebem os dados para processamento."],
+["Processamento","ISP, hardware de vídeo e outros blocos ajustam imagens, estabilização e tratamento de áudio conforme implementação."],
+["Codificação","Codec compacta vídeo e áudio em fluxos compatíveis; taxas de bits e qualidade dependem de parâmetros e capacidade do dispositivo."],
+["Contêiner e persistência","Dados e metadados são organizados em arquivo ou transmissão. Armazenamento, energia e aquecimento limitam sessões prolongadas."]
+]},
+message:{label:"Mensagem",intro:"Fluxo simplificado: enviar uma mensagem por rede de dados.",steps:[
+["Texto e aplicativo","Entrada por touchscreen/teclado chega ao app, que monta mensagem segundo seu protocolo e permissões."],
+["Segurança de transporte","O aplicativo ou sistema pode negociar canais seguros; criptografia ponta a ponta depende do serviço, não surge automaticamente por usar Wi-Fi."],
+["Pilha de rede","Dados passam pela pilha de protocolos do sistema e buffers em memória, com endereçamento, roteamento e mecanismos de retransmissão quando aplicáveis."],
+["Rádio e infraestrutura","Wi-Fi ou modem celular converte dados para transmissão pelo meio de rede. Antenas, pontos de acesso e operadoras participam."],
+["Destino e resposta","A rede conduz os dados ao servidor ou destinatário conforme aplicação; confirmações e entrega dependem de protocolos e conectividade."]
+]},
+navigation:{label:"Navegação",intro:"Fluxo simplificado: localizar-se e exibir uma rota.",steps:[
+["Permissão e pedido","O app solicita localização conforme permissões. Usuário escolhe destino, enquanto sistema pode consultar fontes de posição."],
+["Sinais GNSS","Receptor mede sinais de vários satélites para estimar posição e relógio. Não é necessário transmitir posição aos satélites."],
+["Fusão sensorial","Sensores e outras fontes, como redes, podem ajudar a estimar localização e movimento. A precisão varia com céu visível e ambiente."],
+["Mapa e rota","Aplicativo processa dados cartográficos locais ou obtidos por rede. A escolha de caminho é cálculo de software, não função do satélite."],
+["Interface e atualizações","GPU e display mostram a rota e o sistema atualiza posição. Consumo depende de tela, sensores, comunicações e processamento."]
+]},
+game:{label:"Jogo",intro:"Fluxo simplificado: processar uma cena interativa.",steps:[
+["Entrada do jogador","Toque ou sensores geram eventos; o app atualiza o estado do jogo conforme suas regras."],
+["Simulação e lógica","CPU e outros blocos calculam física, animações e IA do jogo conforme software; nem tudo roda na GPU."],
+["Renderização","GPU prepara operações de gráficos e pixels; dados e texturas transitam por memória, sem garantir taxa fixa de quadros."],
+["Composição e display","Sistema e controlador exibem quadros. Frequência de atualização, sincronização e latência variam."],
+["Energia e temperatura","CPU, GPU, tela e rádio usam potência; dissipação térmica e políticas do dispositivo podem limitar desempenho sustentado."]
+]}
+};
+var activeFlow="photo",flowIndex=0,timer=null,flowNodes=Array.prototype.slice.call(d.querySelectorAll("[data-flow-step]")),flowButtons=Array.prototype.slice.call(d.querySelectorAll("[data-flow]")),stepMarks=Array.prototype.slice.call(d.querySelectorAll(".flow-panel .steps span"));
+function stopAuto(){
+ if(timer!==null){clearInterval(timer);timer=null;}
+ byId("flowAuto").setAttribute("aria-pressed","false");
+ byId("flowAuto").textContent="Reproduzir automaticamente";
+ byId("flowFigure").classList.add("is-paused");
+}
+function flowRender(){
+ var f=flows[activeFlow],step=f.steps[flowIndex];
+ press(flowButtons,"flow",activeFlow);
+ byId("flowCounter").textContent="ETAPA "+(flowIndex+1)+" DE "+f.steps.length+" / "+f.label.toUpperCase();
+ byId("flowName").textContent=step[0];
+ byId("flowIntro").textContent=f.intro;
+ byId("flowDescription").textContent=step[1];
+ byId("flowPrevious").disabled=flowIndex===0;
+ byId("flowNext").disabled=flowIndex===f.steps.length-1;
+ flowNodes.forEach(function(n,i){n.classList.toggle("highlight",i===flowIndex);n.classList.toggle("dimmed",i!==flowIndex);});
+ stepMarks.forEach(function(n,i){n.classList.toggle("active",i<=flowIndex);});
+}
+flowButtons.forEach(function(b){b.addEventListener("click",function(){stopAuto();activeFlow=b.dataset.flow;flowIndex=0;flowRender();});});
+byId("flowPrevious").addEventListener("click",function(){stopAuto();flowIndex=Math.max(0,flowIndex-1);flowRender();});
+byId("flowNext").addEventListener("click",function(){stopAuto();flowIndex=Math.min(4,flowIndex+1);flowRender();});
+byId("flowReset").addEventListener("click",function(){stopAuto();flowIndex=0;flowRender();});
+byId("flowAuto").addEventListener("click",function(){
+ if(timer!==null){stopAuto();return;}
+ if(flowIndex===4)flowIndex=0;
+ byId("flowFigure").classList.remove("is-paused");
+ byId("flowAuto").setAttribute("aria-pressed","true");byId("flowAuto").textContent="Pausar reprodução";
+ flowRender();
+ timer=setInterval(function(){if(flowIndex>=4){stopAuto();return;}flowIndex++;flowRender();if(flowIndex>=4)stopAuto();},1800);
+});
+stopAuto();flowRender();
+var powerKeys=["batteryWh","powerScreen","powerChip","powerRadio","powerOther"];
+var powerPresets={
+ idle:{batteryWh:18,powerScreen:0,powerChip:.3,powerRadio:.2,powerOther:.2},
+ reading:{batteryWh:18,powerScreen:.8,powerChip:.8,powerRadio:.3,powerOther:.3},
+ camera:{batteryWh:18,powerScreen:1.4,powerChip:3,powerRadio:.5,powerOther:.8},
+ game:{batteryWh:18,powerScreen:2,powerChip:6,powerRadio:.7,powerOther:.8}
+};
+var chosenPower="reading",powerButtons=Array.prototype.slice.call(d.querySelectorAll("[data-power-preset]"));
+function refreshPower(){
+ var v={};powerKeys.forEach(function(k){v[k]=Number(byId(k).value);byId(k+"Out").textContent=fmt(v[k],k==="batteryWh"?0:1)+(k==="batteryWh"?" Wh":" W");});
+ var total=v.powerScreen+v.powerChip+v.powerRadio+v.powerOther;
+ byId("totalPower").textContent=fmt(total,1)+" W";
+ byId("batteryHours").textContent=total>0?fmt(v.batteryWh/total,2)+" horas":"Indefinido (P = 0)";
+ byId("batteryText").textContent=total>0?"E/P: "+fmt(v.batteryWh,0)+" Wh ÷ "+fmt(total,1)+" W. Resultado idealizado, sem perdas, reserva, temperatura ou mudança de carga.":"A relação E/P não fornece tempo finito se a potência total for zero. Um dispositivo real sempre terá perdas ou outras demandas.";
+ var bars=[["barScreen",v.powerScreen],["barChip",v.powerChip],["barRadio",v.powerRadio],["barOther",v.powerOther]];
+ bars.forEach(function(a){byId(a[0]).style.width=(total>0?100*a[1]/total:0)+"%";});
+ press(powerButtons,"powerPreset",chosenPower);
+}
+function loadPower(key){
+ var p=powerPresets[key];if(!p)return;
+ chosenPower=key;powerKeys.forEach(function(k){byId(k).value=String(p[k]);});refreshPower();
+}
+powerButtons.forEach(function(b){b.addEventListener("click",function(){loadPower(b.dataset.powerPreset);});});
+powerKeys.forEach(function(k){byId(k).addEventListener("input",function(){chosenPower="";refreshPower();});});
+byId("resetEnergy").addEventListener("click",function(){loadPower("reading");});
+loadPower("reading");
+var thermalKeys=["thermalPower","thermalR","thermalC","thermalTime"];
+function refreshThermal(){
+ var v={};thermalKeys.forEach(function(k){v[k]=Number(byId(k).value);var unit=k==="thermalPower"?" W":k==="thermalR"?" K/W":k==="thermalC"?" J/K":" s";byId(k+"Out").textContent=fmt(v[k],k==="thermalPower"?1:0)+unit;});
+ var t=v.thermalTime,P=v.thermalPower,R=v.thermalR,C=v.thermalC;
+ function delta(time){return P*R*(1-Math.exp(-time/(R*C)));}
+ var DT=delta(t);
+ byId("thermalDelta").textContent="ΔT = "+fmt(DT,1)+" K";
+ byId("thermalDetails").textContent="Após "+fmt(t,0)+" s, ΔT teórica = "+fmt(DT,1)+" K; regime permanente ideal = "+fmt(P*R,1)+" K e constante de tempo τ = "+fmt(R*C,0)+" s. Não há referência à temperatura real, à pele do aparelho ou a limiares de throttling.";
+ var ymax=Math.max(1,P*R),end=600,pts=[];
+ for(var i=0;i<=80;i++){
+  var sec=end*i/80,x=85+625*i/80,y=229-178*delta(sec)/ymax;
+  pts.push((i?"L":"M")+Number(x.toFixed(2))+","+Number(y.toFixed(2)));
+ }
+ byId("thermalPath").setAttribute("d",pts.join(" "));
+ var cursor=85+625*t/end;
+ byId("thermalCursor").setAttribute("d","M"+cursor+" 34V230");
+}
+thermalKeys.forEach(function(k){byId(k).addEventListener("input",refreshThermal);});
+byId("resetThermal").addEventListener("click",function(){byId("thermalPower").value="3";byId("thermalR").value="5";byId("thermalC").value="50";byId("thermalTime").value="180";refreshThermal();});
+refreshThermal();
+var security={
+ allow:"Conceder acesso permanente por impulso pode expor captação de áudio desnecessária. Verifique finalidade, reputação, configurações e se existe alternativa de acesso pontual. O pedido isolado não prova intenção maliciosa.",
+ deny:"Decisão prudente: negar por enquanto e entender o motivo. Se uma função legítima precisar do microfone, é possível reconsiderar uma permissão limitada conforme sistema e aplicativo. Revise permissões periodicamente.",
+ delete:"Apagar todos os apps não é necessário nem proporcional a um pedido isolado. Investigue a finalidade, recuse se não for necessária e remova apenas software que não atende às suas expectativas de segurança ou privacidade."
+};
+var secButtons=Array.prototype.slice.call(d.querySelectorAll("[data-security]"));
+secButtons.forEach(function(b){b.addEventListener("click",function(){press(secButtons,"security",b.dataset.security);byId("securityFeedback").textContent=security[b.dataset.security];});});
+var quiz=byId("quizForm");
+byId("gradeQuiz").addEventListener("click",function(){
+ var questions=Array.prototype.slice.call(quiz.querySelectorAll(".question"));var score=0,answered=0;
+ questions.forEach(function(q){
+  var answer=q.querySelector("input:checked"),feedback=q.querySelector(".question-feedback");
+  if(!answer){feedback.textContent="Selecione uma alternativa antes de conferir.";return;}
+  answered++;var correct=answer.value===q.dataset.answer;if(correct)score++;
+  feedback.textContent=(correct?"Correto. ":"Reveja a relação entre os componentes. ")+q.dataset.explain;
+ });
+ byId("quizResult").textContent=answered<questions.length?"Você respondeu "+answered+" de "+questions.length+" questões. Acertos até agora: "+score+".":score+" de "+questions.length+" respostas corretas. "+(score===questions.length?"Você conectou arquitetura, energia e segurança.":"Consulte as explicações para revisar os conceitos.");
+});
+quiz.addEventListener("reset",function(){quiz.querySelectorAll(".question-feedback").forEach(function(el){el.textContent="";});byId("quizResult").textContent="";});
+}());
+</script>
+</body>
+</html>
