@@ -6,48 +6,144 @@
       "id": "page",
       "label": "Páginas",
       "description": "Aulas, tutoriais, resumos e materiais de leitura interativos.",
+      "hero": {
+        "eyebrow": "PÁGINAS INTERATIVAS",
+        "title": "Transforme conteúdos em",
+        "emphasis": "experiências para explorar.",
+        "description": "Descubra aulas, explicações e recursos visuais em que o estudante pode interagir com o conteúdo, em vez de apenas percorrer o texto.",
+        "pills": [
+          "Leitura guiada",
+          "Exploração visual",
+          "Interações em HTML"
+        ],
+        "artKicker": "PÁGINA INTERATIVA"
+      },
       "manifest": "page/examples.json"
     },
     {
       "id": "quiz",
       "label": "Quiz",
       "description": "Exercícios de revisão e desafios com feedback na própria página.",
+      "hero": {
+        "eyebrow": "QUESTÕES E DESAFIOS",
+        "title": "Perguntas que ajudam a",
+        "emphasis": "aprender fazendo.",
+        "description": "Explore questões com diferentes abordagens, alternativas visuais e feedback que ajuda o estudante a entender suas escolhas.",
+        "pills": [
+          "Questões interativas",
+          "Feedback imediato",
+          "Revisão do conteúdo"
+        ],
+        "artKicker": "QUIZ INTERATIVO"
+      },
       "manifest": "quiz/examples.json"
     },
     {
       "id": "survey",
       "label": "Pesquisa de satisfação",
       "description": "Perguntas passo a passo, escalas e formulários de feedback.",
+      "hero": {
+        "eyebrow": "PESQUISA DE SATISFAÇÃO",
+        "title": "Cada resposta ajuda a",
+        "emphasis": "entender melhor.",
+        "description": "Veja como coletar opiniões e percepções com perguntas apresentadas uma de cada vez, em uma experiência clara e envolvente.",
+        "pills": [
+          "Uma pergunta por vez",
+          "Escalas e alternativas",
+          "Coleta de feedback"
+        ],
+        "artKicker": "PESQUISA INTERATIVA"
+      },
       "manifest": "survey/examples.json"
     },
     {
       "id": "timeline",
       "label": "Linha do tempo",
       "description": "Eventos organizados no tempo, com exploração de cada etapa.",
+      "hero": {
+        "eyebrow": "LINHAS DO TEMPO",
+        "title": "Explore uma história",
+        "emphasis": "etapa por etapa.",
+        "description": "Percorra acontecimentos e descobertas em ordem cronológica, abrindo detalhes e conectando eventos para compreender sua evolução.",
+        "pills": [
+          "Marcos históricos",
+          "Navegação cronológica",
+          "Eventos exploráveis"
+        ],
+        "artKicker": "LINHA DO TEMPO"
+      },
       "manifest": "timeline/examples.json"
     },
     {
       "id": "case",
       "label": "Estudo de caso",
       "description": "Histórias com decisões, consequências e caminhos alternativos.",
+      "hero": {
+        "eyebrow": "ESTUDOS DE CASO",
+        "title": "Uma decisão pode",
+        "emphasis": "mudar todo o caminho.",
+        "description": "Analise situações, escolha como agir e descubra as consequências de cada decisão em cenários preparados para reflexão.",
+        "pills": [
+          "Situações contextualizadas",
+          "Tomada de decisão",
+          "Consequências"
+        ],
+        "artKicker": "ESTUDO DE CASO"
+      },
       "manifest": "case/examples.json"
     },
     {
       "id": "simulation",
       "label": "Simulação",
       "description": "Cenários que respondem a parâmetros e escolhas do estudante.",
+      "hero": {
+        "eyebrow": "SIMULAÇÕES INTERATIVAS",
+        "title": "Mude as variáveis e",
+        "emphasis": "observe o resultado.",
+        "description": "Experimente parâmetros e cenários, compare resultados e explore relações que seriam difíceis de visualizar apenas com explicações.",
+        "pills": [
+          "Parâmetros ajustáveis",
+          "Experimentação",
+          "Resultados visuais"
+        ],
+        "artKicker": "SIMULAÇÃO INTERATIVA"
+      },
       "manifest": "simulation/examples.json"
     },
     {
       "id": "custom",
       "label": "Eu escolho",
       "description": "Experiências livres que o professor pode imaginar e adaptar.",
+      "hero": {
+        "eyebrow": "EU ESCOLHO",
+        "title": "Sua ideia define",
+        "emphasis": "a experiência.",
+        "description": "Misture recursos e crie formatos próprios: o professor escolhe o que precisa ensinar, e a atividade se adapta à proposta.",
+        "pills": [
+          "Formatos sob medida",
+          "Liberdade de criação",
+          "Interações personalizadas"
+        ],
+        "artKicker": "EXPERIÊNCIA PERSONALIZADA"
+      },
       "manifest": "custom/examples.json"
     },
     {
       "id": "games",
       "label": "Games",
       "description": "Jogos educativos em HTML, CSS e JavaScript, organizados por mecânica.",
+      "hero": {
+        "eyebrow": "JOGOS EDUCATIVOS",
+        "title": "Aprender também pode ser",
+        "emphasis": "um jogo.",
+        "description": "Explore jogos de associação, memória, palavras, lógica e outras mecânicas que transformam conteúdos em desafios interativos.",
+        "pills": [
+          "Desafios interativos",
+          "Diferentes mecânicas",
+          "Aprender jogando"
+        ],
+        "artKicker": "JOGO EDUCATIVO"
+      },
       "manifest": "games/examples.json"
     }
   ]
