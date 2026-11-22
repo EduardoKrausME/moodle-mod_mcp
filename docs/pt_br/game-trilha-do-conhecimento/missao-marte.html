@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trilha do conhecimento - Missão Marte</title>
+<style>
+:root{color-scheme:light;--canvas:#f5eeeb;--paper:#fffdfb;--ink:#3f2b36;--muted:#735966;--line:#e6cdc5;--green:#985039;--green2:#773b31;--soft:#f9e7dc;--gold:#8b591f;--goldsoft:#fff1d5;--coral:#a34b39;--coralsoft:#ffebe5;--shadow:0 12px 30px #244c3615;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;background:var(--canvas);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-width:0}main{max-width:1200px;margin:0 auto;padding:26px 18px 48px}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(28px,4vw,44px);line-height:1.15;letter-spacing:-.8px;margin:5px 0 10px}h2{font-size:20px;margin-bottom:13px}h3{font-size:18px;margin-bottom:8px}p{line-height:1.6}.eyebrow{font-size:12px;font-weight:800;letter-spacing:1.7px;text-transform:uppercase;color:var(--green);margin-bottom:6px}.lead{font-size:14px;max-width:850px;color:var(--muted);margin-bottom:16px}.hero{display:grid;grid-template-columns:1fr minmax(220px,390px);gap:20px;align-items:center;background:linear-gradient(110deg,var(--paper),#e9f2dd);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow);overflow:hidden}.hero svg{width:100%;height:auto;display:block;border-radius:13px}.hero-note{font-size:11px;color:var(--muted);margin:5px 0 0}.stats{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 13px}.stat{padding:9px 14px;background:var(--paper);border:1px solid var(--line);border-radius:12px;min-width:130px}.stat small{font-size:11px;color:var(--muted);display:block}.stat strong{font-size:21px;font-variant-numeric:tabular-nums}.stat.wide{flex:1;min-width:180px}.progress{height:10px;background:#cddfce;border-radius:30px;overflow:hidden;margin-bottom:18px}.progress>span{height:100%;display:block;width:0;background:linear-gradient(90deg,#2e8363,#c8a15c);transition:width .22s}.layout{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(310px,.88fr);gap:16px;align-items:start}.panel{background:var(--paper);border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow);min-width:0}.panel>p.hint{font-size:12px;color:var(--muted)}button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.58}button:focus-visible,input:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #e4a432;outline-offset:3px}.button{min-height:44px;border:1px solid var(--green);border-radius:11px;padding:9px 14px;background:var(--green);color:#fff;font-size:13px;font-weight:750;line-height:1.4}.button:hover:not(:disabled){background:var(--green2)}.button.secondary{background:var(--paper);color:var(--green)}.button.secondary:hover:not(:disabled){background:var(--soft)}.button.warn{color:var(--coral);border-color:#d9a18f;background:var(--paper)}.map-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;list-style:none;margin:0;padding:0}.stage{min-width:0;border:1px dashed #acc8b3;background:#f5faf0;border-radius:13px;padding:9px;display:flex;flex-direction:column;gap:7px}.stage-number{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.8px}.stage-choices{display:grid;gap:7px}.stage:has(.house:nth-child(2)) .stage-choices{grid-template-columns:1fr 1fr}.house{min-width:0}.house-button{width:100%;min-height:82px;border:2px solid #c6d8c9;background:#fff;border-radius:11px;padding:9px 7px;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center}.house-button .symbol{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#e5efe3;color:var(--green);font-size:18px}.house-button .house-name{font-size:12px;font-weight:800;line-height:1.3;overflow-wrap:anywhere}.house-button .house-state{font-size:10px;color:var(--muted);line-height:1.35}.house.current .house-button{border-color:#23724e;background:#e4f5df;box-shadow:0 0 0 2px #8bbe7b80}.house.done .house-button{border-color:#80b09a;background:#f0fbf4}.house.locked .house-button{background:#f1f2ef;border-style:dashed}.house.locked .symbol{filter:grayscale(1)}.house-button[aria-current=step]{outline:2px solid var(--green);outline-offset:1px}.micro{font-size:11px;color:var(--muted)}.list-standalone{margin-top:20px;border-top:1px solid var(--line);padding-top:16px}.list-standalone h3{font-size:15px;margin-bottom:7px}.house-list{display:grid;grid-template-columns:1fr 1fr;list-style:none;gap:6px;padding:0;margin:12px 0 0}.house-list li{min-width:0}.list-button{width:100%;min-height:46px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink);display:flex;align-items:center;gap:8px;padding:7px 9px;text-align:left;font-size:11px}.list-button strong{font-size:11px;display:block}.list-button small{font-size:10px;color:var(--muted);display:block}.list-button.active{background:var(--soft);border-color:var(--green)}.list-button:disabled{background:#f1f4ed}.step-heading{margin:0 0 4px;font-size:13px;font-weight:750;color:var(--green)}.question-prompt{font-size:17px;line-height:1.5;font-weight:750;margin:10px 0 16px}.choices{border:0;padding:0;margin:0;min-width:0}.choices legend{font-size:12px;font-weight:750;color:var(--muted);padding:0 0 9px}.choice{display:flex;align-items:flex-start;gap:11px;border:2px solid var(--line);background:var(--paper);border-radius:11px;padding:12px;margin-bottom:9px;font-size:13px;cursor:pointer;line-height:1.5;min-height:48px}.choice:has(input:checked){background:var(--soft);border-color:var(--green)}.choice input{flex:none;margin:4px 0 0;accent-color:var(--green);width:19px;height:19px}.choice input:disabled{cursor:default}.choice:has(input:disabled){cursor:default}.choice.correct{background:var(--soft);border-color:#5d9c72}.choice.incorrect{border-color:#bd8066;background:var(--coralsoft)}.controls{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-top:15px}.route-buttons{display:flex;flex-direction:column;align-items:stretch;gap:9px;margin-top:14px}.route-buttons .button{width:100%;text-align:left}.feedback{border:1px solid #b6d2c3;border-radius:12px;background:var(--soft);color:var(--ink);padding:12px 14px;margin-top:16px;min-height:76px;font-size:13px;line-height:1.6}.feedback strong{display:block;font-size:13px;margin-bottom:3px}.feedback.bad{border-color:#dfb5a3;background:var(--coralsoft)}.feedback.good{border-color:#8dc3a1;background:var(--soft)}.feedback.info{border-color:#d9c28c;background:var(--goldsoft)}.mini-panel{border:1px solid var(--line);background:#f1f6ee;padding:12px;border-radius:11px;font-size:13px;line-height:1.6;margin-top:12px}.mini-panel strong{display:block;margin-bottom:4px}.review-only{background:var(--soft);padding:14px;border-radius:10px;font-size:13px;margin:14px 0}.review-only strong{display:block;margin-bottom:5px}.review-only p{margin:5px 0}.finish-box{background:linear-gradient(135deg,#e5f4de,#fff1d4);border:1px solid #a4cb9d;border-radius:13px;padding:15px;margin:14px 0}.finish-box h3{color:#20523d}.finish-box p{font-size:13px}.summary-list{padding-left:22px;margin-bottom:4px;font-size:12px}.summary-list li{padding:5px 0}.reset-confirm{border:1px solid #c88e76;border-radius:11px;background:var(--coralsoft);padding:13px;margin-top:15px;font-size:12px}.reset-confirm p{margin-bottom:9px}.smallprint{font-size:11px;color:var(--muted);margin-top:13px}.error-box{border:2px solid #ad4d3c;background:#fff0ed;padding:17px;border-radius:11px}.legend{font-size:12px;color:var(--muted);margin:13px 0 2px}.legend strong{color:var(--ink)}[hidden]{display:none!important}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.hero{grid-template-columns:1fr 260px}}
+@media(max-width:600px){main{padding:12px 9px 30px}.hero{grid-template-columns:1fr;padding:17px}.hero svg{max-height:190px}.panel{padding:14px}.map-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.stat{min-width:100px;padding:7px 10px}.house-list{grid-template-columns:1fr}.stage:has(.house:nth-child(2)) .stage-choices{grid-template-columns:1fr 1fr}}
+@media(max-width:355px){.map-grid{grid-template-columns:1fr}.stage:has(.house:nth-child(2)) .stage-choices{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-contrast:more){.house-button,.list-button,.choice{border-width:3px}.button:focus-visible,input:focus-visible{outline:4px solid #dc8521}.feedback{border-width:2px}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--canvas:#152720;--paper:#22392f;--ink:#f1f8e9;--muted:#c5d8c9;--line:#587263;--green:#b6e8c5;--green2:#9ad6af;--soft:#355342;--gold:#ebc585;--goldsoft:#574930;--coral:#e7a08c;--coralsoft:#573b35;--shadow:0 12px 30px #0005}.hero{background:linear-gradient(110deg,#22392f,#384b34)}.stage{background:#283f33;border-color:#698873}.house-button{background:#294236;color:var(--ink);border-color:#638370}.house-button .symbol{background:#456650;color:#e2fce5}.house.current .house-button{background:#416348;border-color:#b5edb3}.house.done .house-button{background:#355743}.house.locked .house-button,.list-button:disabled{background:#303d34}.list-button{background:#294235}.list-button.active{background:#395b47}.choice{background:#2a4437}.choice:has(input:checked),.choice.correct{background:#3d6449}.choice.incorrect{background:var(--coralsoft)}.mini-panel{background:#304a3b}.feedback{color:var(--ink)}.finish-box{background:linear-gradient(110deg,#325540,#635438);border-color:#6b9975}.finish-box h3{color:#dcf9d9}.error-box{background:#583c36}.button{background:#b6e8c5;color:#193d34}.button:hover:not(:disabled){background:#a0d9b4}.button.secondary,.button.warn{background:#294235;color:var(--green)}.button.warn{color:var(--coral)}.progress{background:#3b5745}}
+</style>
+</head>
+<body>
+<main id="activity">
+  <section class="hero" aria-labelledby="activity-title">
+    <div>
+      <p class="eyebrow">Jogo 26 · Trilha do conhecimento</p>
+      <h1 id="activity-title">Missão Marte: a jornada do explorador</h1>
+      <p class="lead">Explore Marte com sete desafios de ciência e tecnologia, duas bifurcações e decisões sobre o que investigar. Acerte a pergunta da casa atual para desbloquear o próximo trecho; uma resposta incorreta pode ser corrigida sem apagar o percurso.</p>
+      <p class="micro">Sem cronômetro, dado ou sorteio. Você escolhe a rota do rover ou do helicóptero e depois uma investigação sobre rochas ou gelo. A conquista é exclusivamente formativa.</p>
+    </div>
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="mars-title mars-desc">
+  <title id="mars-title">Paisagem marciana com veículo de exploração, antena e helicóptero robótico</title>
+  <desc id="mars-desc">Ilustração vetorial original e estilizada, sem escala real: planeta vermelho no horizonte, céu alaranjado, montes rochosos, um rover de seis rodas com painel e câmera, uma antena de rádio e um helicóptero de exploração no alto. Nenhuma questão exige interpretar a imagem.</desc>
+  <defs>
+    <linearGradient id="marsSky" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#493e68"/><stop offset=".47" stop-color="#bb6757"/><stop offset="1" stop-color="#f2bd81"/>
+    </linearGradient>
+    <linearGradient id="marsGround" x1="0" x2=".9" y1="0" y2="1">
+      <stop stop-color="#c98161"/><stop offset="1" stop-color="#844e4a"/>
+    </linearGradient>
+    <linearGradient id="marsPanel" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#6cc0c9"/><stop offset="1" stop-color="#304f7f"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="url(#marsSky)"/>
+  <g fill="#f2dfcf" opacity=".78">
+    <circle cx="41" cy="33" r="2.2"/><circle cx="87" cy="63" r="1.8"/><circle cx="180" cy="32" r="1.7"/>
+    <circle cx="286" cy="67" r="1.4"/><circle cx="353" cy="31" r="2.4"/><circle cx="661" cy="43" r="2.1"/>
+  </g>
+  <circle cx="565" cy="93" r="43" fill="#ffd39b" opacity=".85"/>
+  <circle cx="565" cy="93" r="53" fill="none" stroke="#ffdfa8" stroke-width="2" opacity=".26"/>
+  <path d="M0 197Q69 142 124 171Q176 108 235 173Q307 137 360 177Q426 118 499 176Q573 139 651 186L720 165V330H0Z" fill="#ba7262"/>
+  <path d="M0 221Q119 171 201 215T411 210T720 209V330H0Z" fill="#a56558"/>
+  <path d="M0 250Q102 214 196 254Q319 223 403 245Q555 216 720 242V330H0Z" fill="url(#marsGround)"/>
+  <path d="M0 287Q154 250 301 290T720 277" fill="none" stroke="#edb180" stroke-width="9" opacity=".48"/>
+  <path d="M0 299Q162 267 322 305T720 298" fill="none" stroke="#744744" stroke-width="3" opacity=".36"/>
+  <g fill="#8c5148" stroke="#733f40" stroke-width="3">
+    <path d="M45 267L87 259L108 277L90 288L48 284Z"/>
+    <path d="M592 263L622 254L654 267L642 287L602 282Z"/>
+    <path d="M456 298L483 291L501 304L490 314L462 310Z"/>
+  </g>
+  <path d="M75 265l20-4m503 1l35 10m-173 34l25 7" fill="none" stroke="#d69b79" stroke-width="3" opacity=".65"/>
+  <!-- Antena em um pequeno posto de comunicação -->
+  <g transform="translate(575 167)">
+    <path d="M-9 72L0 19L9 72" fill="none" stroke="#d0d5dc" stroke-width="7"/>
+    <path d="M-23 72H23" stroke="#e8e1d7" stroke-width="8" stroke-linecap="round"/>
+    <path d="M-40-4Q-20 30 0 27Q22 27 40-4L18 5L0 10L-18 5Z" fill="#e9e3d7" stroke="#a4b0c2" stroke-width="4"/>
+    <path d="M0 15V-24" stroke="#d5e4e9" stroke-width="5"/>
+    <circle cy="-27" r="7" fill="#eebf79"/>
+    <path d="M-14-33Q0-49 14-33M-23-40Q0-62 23-40" fill="none" stroke="#f7dfb2" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <!-- Helicóptero robótico -->
+  <g transform="translate(327 102)">
+    <path d="M-49-20H49M0-29V-1" fill="none" stroke="#e9e7dd" stroke-width="5" stroke-linecap="round"/>
+    <path d="M-29-11H29" stroke="#5f6070" stroke-width="5" stroke-linecap="round"/>
+    <rect x="-18" y="-4" width="36" height="21" rx="5" fill="#ece6d9" stroke="#64748c" stroke-width="3"/>
+    <rect x="-12" y="1" width="24" height="10" fill="#7b9fa9"/>
+    <path d="M-11 16L-23 29H-34M11 16L23 29H34" fill="none" stroke="#e4dccc" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+  <!-- Rover de seis rodas -->
+  <g transform="translate(224 214)">
+    <path d="M-83 45L-53 3H61L82 42" fill="none" stroke="#d9d5cf" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M-72 42H73L57 0H-55Z" fill="#e5d6ba" stroke="#6a5c5b" stroke-width="4"/>
+    <rect x="-53" y="-37" width="107" height="33" rx="3" fill="url(#marsPanel)" stroke="#b8dbdc" stroke-width="4"/>
+    <path d="M-31-35V-6M-4-35V-6M22-35V-6M-51-20H52" stroke="#98cad8" stroke-width="2" opacity=".78"/>
+    <path d="M-1-38V-89" stroke="#d5dbdc" stroke-width="7"/>
+    <rect x="-22" y="-98" width="44" height="19" rx="6" fill="#ede7d8" stroke="#6c7784" stroke-width="3"/>
+    <circle cx="-8" cy="-89" r="5" fill="#37566f"/><circle cx="8" cy="-89" r="5" fill="#37566f"/>
+    <path d="M-54 40L-71 60M0 40V59M58 40L73 59" stroke="#b6b2b0" stroke-width="7"/>
+    <g fill="#3d454f" stroke="#e4d6be" stroke-width="4">
+      <circle cx="-77" cy="63" r="16"/><circle cx="0" cy="64" r="16"/><circle cx="78" cy="63" r="16"/>
+    </g>
+    <g fill="#9baab1"><circle cx="-77" cy="63" r="5"/><circle cy="64" r="5"/><circle cx="78" cy="63" r="5"/></g>
+    <path d="M59-6L85-24" stroke="#f2d9a8" stroke-width="5"/><circle cx="88" cy="-27" r="8" fill="#e4bb73"/>
+  </g>
+  <text x="26" y="35" font-family="system-ui,sans-serif" font-size="13" font-weight="800" fill="#fff0e1">MISSÃO MARTE · EXPLORAÇÃO</text>
+  <text x="688" y="314" text-anchor="end" font-family="system-ui,sans-serif" font-size="10" fill="#fbe4c8">Ilustração conceitual · sem escala</text>
+</svg>
+      <p class="hero-note">Uma ilustração SVG vetorial original e estilizada da superfície de Marte, incorporada ao HTML. Não utiliza imagens externas.</p>
+    </div>
+  </section>
+  <div class="stats" aria-label="Indicadores da trilha">
+    <div class="stat"><small>Desafios concluídos</small><strong id="solved-count">0 / 7</strong></div>
+    <div class="stat"><small>Respostas incorretas</small><strong id="mistakes-count">0</strong></div>
+    <div class="stat"><small>Dicas consultadas</small><strong id="hints-count">0 / 3</strong></div>
+    <div class="stat wide"><small>Casa atual</small><strong id="current-label" style="font-size:15px">Ponto de partida</strong></div>
+  </div>
+  <div id="progress" class="progress" role="progressbar" aria-label="Desafios concluídos" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0"><span id="progress-bar"></span></div>
+  <div class="layout">
+    <section class="panel" aria-labelledby="map-heading">
+      <h2 id="map-heading">Mapa da missão</h2>
+      <p class="hint">As etapas seguem a ordem de leitura. Nas bifurcações, você percorre uma única rota. Casas já visitadas podem ser abertas para revisão, mas as futuras ficam bloqueadas.</p>
+      <ol id="trail-map" class="map-grid" aria-label="Casas visuais da trilha"></ol>
+      <p class="legend"><strong>Estados:</strong> atual = onde está o desafio; concluída = já resolvida; bloqueada = ainda não alcançada. Casas visitadas abrem somente uma revisão, não movimentam o jogador.</p>
+      <div class="list-standalone">
+        <h3>Lista textual de todas as casas</h3>
+        <p class="micro">Esta lista usa os mesmos comandos do mapa e permite explorar a trilha com Tab, Enter e Espaço, sem depender da ilustração.</p>
+        <ol id="house-list" class="house-list" aria-label="Alternativa textual do percurso e estado de cada casa"></ol>
+      </div>
+    </section>
+    <section class="panel" aria-labelledby="challenge-heading">
+      <h2 id="challenge-heading">Desafio da etapa</h2>
+      <div id="challenge" aria-live="off"></div>
+      <div id="hint-panel" class="mini-panel" hidden><strong>Dica de aprendizagem</strong><p id="hint-text" style="margin:0"></p></div>
+      <div id="route-buttons" class="route-buttons" hidden aria-label="Escolha do próximo caminho"></div>
+      <div id="actions" class="controls">
+        <button id="confirm-answer" class="button" type="button" hidden>Confirmar resposta</button>
+        <button id="advance" class="button" type="button">Começar trilha</button>
+        <button id="get-hint" class="button secondary" type="button" hidden>Pedir dica</button>
+        <button id="back-current" class="button secondary" type="button" hidden>Voltar à casa atual</button>
+      </div>
+      <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true">
+        <strong id="feedback-title">Orientação</strong><span id="feedback-message">Comece a missão para explorar ciência e tecnologia espacial.</span>
+      </div>
+      <div id="finish-panel" class="finish-box" hidden>
+        <h3>Missão concluída!</h3>
+        <p>Você concluiu sete desafios de um percurso válido. Revise o que aprendeu sobre Marte, as duas decisões de rota e as descobertas do seu explorador. Este resultado não representa nota oficial do Moodle.</p>
+        <ol id="finish-summary" class="summary-list"></ol>
+      </div>
+      <div class="controls"><button id="reset" class="button warn" type="button">Recomeçar missão</button></div>
+      <div id="reset-confirm" class="reset-confirm" role="group" aria-label="Confirmação para reiniciar" hidden>
+        <p>Recomeçar apaga respostas, caminhos escolhidos e dicas desta rodada. Deseja prosseguir?</p>
+        <div class="controls"><button id="confirm-reset" class="button warn" type="button">Sim, recomeçar</button><button id="cancel-reset" class="button secondary" type="button">Cancelar</button></div>
+      </div>
+      <p class="smallprint">O gabarito está no HTML e serve para feedback formativo. Não há envio de notas nem conclusão acadêmica automática. O salvamento remoto só ocorre se o SDK MoodleMCP estiver disponível.</p>
+    </section>
+  </div>
+</main>
+<script>
+(function knowledgePathGame(){
+"use strict";
+const DATA={"type":"knowledge_path","title":"Trilha do conhecimento - Missão Marte","start":"start","finish":"finish","settings":{"rule":"advance_on_correct","requiredQuestions":7,"maxHints":3},"nodes":[{"id":"start","label":"Centro de controle","short":"Prepare sua missão","stage":0,"lane":"center","symbol":"⌂","next":["gravidade"]},{"id":"gravidade","label":"Gravidade de Marte","short":"Peso e massa","stage":1,"lane":"center","symbol":"↓","next":["atmosfera"],"question":{"prompt":"Uma pessoa chegaria a Marte com a mesma massa que tinha na Terra. O que aconteceria com seu peso?","options":["O peso aumentaria, pois Marte é maior que a Terra","O peso diminuiria, porque a gravidade superficial de Marte é menor","A massa desapareceria ao sair da Terra"],"correctIndex":1,"hint":"Pense na diferença entre quantidade de matéria (massa) e força gravitacional (peso).","explanation":"A massa da pessoa permanece aproximadamente a mesma, mas seu peso é menor na superfície marciana porque a gravidade ali é mais fraca.","wrongFeedback":["Marte tem raio e massa menores que os da Terra, e a gravidade em sua superfície é mais fraca.","","A massa não desaparece quando um objeto muda de planeta."]}},{"id":"atmosfera","label":"Atmosfera fina","short":"Composição e pressão","stage":2,"lane":"center","symbol":"≈","next":["rover","helicoptero"],"question":{"prompt":"Qual substância compõe a maior parte da atmosfera de Marte?","options":["Dióxido de carbono (CO₂)","Oxigênio, como na atmosfera terrestre","Vapor de água em proporções semelhantes às das nuvens da Terra"],"correctIndex":0,"hint":"É um gás com carbono e oxigênio; também aparece na respiração e no efeito estufa da Terra.","explanation":"O dióxido de carbono é o principal componente da atmosfera marciana, que é muito mais rarefeita que a terrestre.","wrongFeedback":["","O oxigênio é apenas uma pequena fração da atmosfera de Marte.","A atmosfera marciana não é dominada por vapor de água."]}},{"id":"rover","label":"Rota do rover","short":"Rodas no terreno marciano","stage":3,"lane":"left","symbol":"▣","next":["energia"],"question":{"prompt":"Por que um rover marciano precisa identificar obstáculos antes de avançar?","options":["Porque as pedras impedem que qualquer sinal de rádio chegue a Marte","Porque todas as superfícies marcianas são iguais","Porque terreno irregular, encostas e pedras podem dificultar a navegação segura"],"correctIndex":2,"hint":"Compare a movimentação de um veículo em uma estrada plana com a de outro em terreno rochoso.","explanation":"Rovers precisam avaliar inclinações, rochas e outros obstáculos para reduzir riscos e escolher deslocamentos viáveis.","wrongFeedback":["Ondas de rádio podem ser afetadas por fatores de propagação, mas a presença de pedras não bloqueia toda comunicação.","A superfície marciana inclui terrenos e formas de relevo diferentes.",""]}},{"id":"helicoptero","label":"Rota do helicóptero","short":"Voo em ar rarefeito","stage":3,"lane":"right","symbol":"✣","next":["energia"],"question":{"prompt":"Qual característica de Marte torna o voo de um helicóptero especialmente desafiador?","options":["A atmosfera muito pouco densa, que exige cuidados no projeto das hélices","A ausência completa de gravidade","O fato de Marte não receber luz solar"],"correctIndex":0,"hint":"Considere quanto ar as hélices precisam movimentar para produzir sustentação.","explanation":"Com uma atmosfera extremamente rarefeita, produzir sustentação exige soluções específicas de engenharia, como rotores eficientes e rotações elevadas.","wrongFeedback":["","Marte tem gravidade, embora menor que a da Terra.","Marte recebe energia do Sol, embora em menor intensidade que a Terra."]}},{"id":"energia","label":"Energia para explorar","short":"Painéis solares e baterias","stage":4,"lane":"center","symbol":"☼","next":["comunicacao"],"question":{"prompt":"Em uma missão que depende de painéis solares, qual situação pode reduzir a geração de eletricidade?","options":["Um aumento no número de imagens científicas armazenadas no rover","Acúmulo de poeira sobre os painéis e redução da luz que os alcança","Uma mudança na cor do solo que não atinja o equipamento"],"correctIndex":1,"hint":"Pense no que acontece quando algo bloqueia a luz que chega à superfície de um painel.","explanation":"Poeira sobre os painéis e menor iluminação podem reduzir a energia produzida. Nem todos os veículos exploradores usam a mesma fonte de energia.","wrongFeedback":["Armazenar imagens usa recursos do veículo, mas não é o mecanismo direto descrito de bloqueio da luz.","","Mudar a cor de uma região distante do solo não bloqueia a luz incidente sobre o painel."]}},{"id":"comunicacao","label":"Mensagem para a Terra","short":"Rádio entre planetas","stage":5,"lane":"center","symbol":"↝","next":["solo","gelo"],"question":{"prompt":"Por que não é possível pilotar um veículo em Marte com resposta instantânea a cada comando enviado da Terra?","options":["Porque a luz e os sinais de rádio levam tempo para viajar entre os planetas","Porque os sinais de rádio precisam atravessar o núcleo da Terra","Porque nenhum equipamento pode transmitir dados de Marte"],"correctIndex":0,"hint":"Lembre que os sinais viajam muito rapidamente, mas a distância entre os planetas é enorme.","explanation":"Os sinais eletromagnéticos viajam à velocidade da luz, mas a distância variável entre Terra e Marte introduz atraso de comunicação.","wrongFeedback":["","O sinal viaja pelo espaço e por estruturas de comunicação, não pelo núcleo do planeta.","Diversas missões enviaram dados de Marte à Terra."]}},{"id":"solo","label":"Rota das rochas","short":"Geologia do planeta","stage":6,"lane":"left","symbol":"◇","next":["ciencia"],"question":{"prompt":"O que a análise química de uma rocha marciana pode ajudar os cientistas a investigar?","options":["A cor exata da próxima nave que será construída","A composição mineral e pistas sobre a história geológica do local","A previsão de todas as tempestades marcianas futuras"],"correctIndex":1,"hint":"Procure uma resposta ligada ao material de que a rocha é formada.","explanation":"Com instrumentos adequados, a análise de rochas fornece dados sobre minerais, processos de formação e transformações geológicas.","wrongFeedback":["A composição de uma rocha não determina as escolhas de pintura de futuras naves.","","Nenhuma rocha isolada permite prever todas as condições meteorológicas futuras."]}},{"id":"gelo","label":"Rota do gelo","short":"Água no planeta","stage":6,"lane":"right","symbol":"❄","next":["ciencia"],"question":{"prompt":"Qual observação é compatível com o que sabemos sobre a água em Marte?","options":["Existe apenas água líquida na superfície de todo o planeta","Não há vestígios de água no planeta, nem em forma sólida","Há gelo de água em Marte, inclusive em depósitos polares e no subsolo"],"correctIndex":2,"hint":"Diferencie água líquida de água em estado sólido e lembre das regiões polares.","explanation":"Observações científicas identificam gelo de água em diferentes regiões de Marte, incluindo calotas polares e depósitos subsuperficiais.","wrongFeedback":["Marte não apresenta oceanos de água líquida na superfície como os da Terra.","Há abundantes evidências de água, especialmente na forma de gelo.",""]}},{"id":"ciencia","label":"Relatório científico","short":"Evidência e hipóteses","stage":7,"lane":"center","symbol":"◎","next":["finish"],"question":{"prompt":"Uma imagem mostra uma formação curiosa no solo de Marte. Qual é a atitude científica mais adequada?","options":["Concluir imediatamente que se trata de uma construção artificial","Ignorar medições e escolher a explicação mais emocionante","Comparar medições independentes, considerar hipóteses naturais e reconhecer incertezas"],"correctIndex":2,"hint":"Pense na diferença entre uma observação interessante e uma conclusão sustentada por evidências.","explanation":"Investigações científicas cruzam imagens, medidas e hipóteses; aparências isoladas não demonstram origem artificial nem existência de vida.","wrongFeedback":["A aparência sozinha não é evidência suficiente de construção artificial.","A ciência depende de dados verificáveis e comparação de hipóteses.",""]}},{"id":"finish","label":"Missão concluída","short":"Conhecimento a bordo","stage":8,"lane":"center","symbol":"★","next":[]}]};
+const root=document.getElementById("activity");
+const $=id=>root.querySelector("#"+id);
+const controller=new AbortController();
+const sdk=window.MoodleMCP&&window.MoodleMCP.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const storageKey="knowledgePathMarsMissionV1";
+const location="games/knowledge-path-mars-mission";
+let state=initialState(),viewId=null,viewKey="",ready=false,disposed=false,modified=false,remote=null,queue=Promise.resolve(),saveStamp=0;
+// PURE_START
+function indexNodes(data){return new Map(data.nodes.map(n=>[n.id,n]));}
+function validate(data){
+ if(!data||data.type!=="knowledge_path"||typeof data.title!=="string"||!data.title.trim()||
+ !data.settings||data.settings.rule!=="advance_on_correct"||
+ !Number.isInteger(data.settings.requiredQuestions)||data.settings.requiredQuestions<5||data.settings.requiredQuestions>20||
+ !Number.isInteger(data.settings.maxHints)||data.settings.maxHints<0||data.settings.maxHints>20||
+ !Array.isArray(data.nodes)||data.nodes.length<7||data.nodes.length>25||
+ typeof data.start!=="string"||typeof data.finish!=="string"||data.start===data.finish)return false;
+ const map=new Map(),ids=new Set();let branches=0;
+ for(const n of data.nodes){
+  if(!n||typeof n.id!=="string"||!/^[a-z0-9-]+$/.test(n.id)||ids.has(n.id)||
+    !["label","short","symbol"].every(k=>typeof n[k]==="string"&&n[k].trim().length>0)||
+    !Number.isInteger(n.stage)||n.stage<0||n.stage>30||!["center","left","right"].includes(n.lane)||
+    !Array.isArray(n.next)||n.next.length>2||new Set(n.next).size!==n.next.length)return false;
+  ids.add(n.id);map.set(n.id,n);
+  if(n.next.length>1)branches++;
+  if(n.id===data.start||n.id===data.finish){if(n.question!==undefined)return false;}
+  else{
+   const q=n.question;
+   if(!q||typeof q.prompt!=="string"||!q.prompt.trim()||
+      !Array.isArray(q.options)||q.options.length!==3||
+      q.options.some(x=>typeof x!=="string"||!x.trim())||
+      new Set(q.options.map(x=>x.trim().toLocaleLowerCase("pt-BR"))).size!==3||
+      !Number.isInteger(q.correctIndex)||q.correctIndex<0||q.correctIndex>2||
+      typeof q.hint!=="string"||!q.hint.trim()||typeof q.explanation!=="string"||!q.explanation.trim()||
+      !Array.isArray(q.wrongFeedback)||q.wrongFeedback.length!==3||
+      q.wrongFeedback.some((x,i)=>typeof x!=="string"||(i!==q.correctIndex&&!x.trim())))return false;
+  }
+ }
+ if(!map.has(data.start)||!map.has(data.finish)||branches<1||
+    map.get(data.start).next.length!==1||map.get(data.finish).next.length!==0)return false;
+ for(const n of data.nodes){
+  for(const dest of n.next){
+   if(!map.has(dest)||dest===data.start||map.get(dest).stage<=n.stage)return false;
+  }
+  if(n.id!==data.finish&&n.next.length===0)return false;
+ }
+ let good=true,paths=0;const touched=new Set();
+ function traverse(id,seen,count){
+  if(seen.has(id)||paths>128){good=false;return;}
+  const n=map.get(id);touched.add(id);
+  if(id===data.finish){paths++;if(count!==data.settings.requiredQuestions)good=false;return;}
+  const nextSeen=new Set(seen);nextSeen.add(id);
+  for(const target of n.next)traverse(target,nextSeen,count+(n.question?1:0));
+ }
+ traverse(data.start,new Set(),0);
+ return good&&paths>0&&paths<=128&&touched.size===data.nodes.length;
+}
+function initialState(){return {path:["start"],answers:{},tried:{},selected:null,hints:[],complete:false};}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Array.isArray(s.path)||s.path.length<1||s.path.length>data.nodes.length||
+    s.path[0]!==data.start||new Set(s.path).size!==s.path.length||
+    !s.answers||typeof s.answers!=="object"||Array.isArray(s.answers)||
+    !s.tried||typeof s.tried!=="object"||Array.isArray(s.tried)||
+    !Array.isArray(s.hints)||s.hints.length>data.settings.maxHints||
+    new Set(s.hints).size!==s.hints.length||typeof s.complete!=="boolean")return false;
+ const map=indexNodes(data);
+ if(s.path.some(id=>!map.has(id)))return false;
+ for(let i=0;i<s.path.length-1;i++){
+  const n=map.get(s.path[i]),next=s.path[i+1];
+  if(!n.next.includes(next)||(n.question&&s.answers[n.id]!==n.question.correctIndex))return false;
+ }
+ const current=s.path[s.path.length-1],node=map.get(current);
+ if(s.complete!==(current===data.finish))return false;
+ const visited=new Set(s.path);
+ for(const [id,choice] of Object.entries(s.answers)){
+  if(!visited.has(id)||!map.get(id).question||choice!==map.get(id).question.correctIndex)return false;
+ }
+ for(const [id,choices] of Object.entries(s.tried)){
+  if(!visited.has(id)||!map.get(id).question||!Array.isArray(choices)||choices.length>2||
+    new Set(choices).size!==choices.length||
+    choices.some(i=>!Number.isInteger(i)||i<0||i>2||i===map.get(id).question.correctIndex))return false;
+ }
+ if(s.hints.some(id=>!visited.has(id)||!map.get(id).question))return false;
+ if(current===data.start||current===data.finish){if(s.selected!==null)return false;}
+ else if(s.answers[current]!==undefined){
+  if(s.selected!==node.question.correctIndex)return false;
+ }else if(s.selected!==null&&(!Number.isInteger(s.selected)||s.selected<0||s.selected>2))return false;
+ return true;
+}
+function transition(s,action,data){
+ if(!validState(s,data))return {state:s,changed:false,kind:"bad",message:"Estado inválido: não foi possível alterar a trilha."};
+ if(action&&action.type==="restart")return {state:initialState(),changed:true,kind:"info",message:"A missão foi reiniciada. Você pode escolher novas rotas."};
+ const id=s.path[s.path.length-1],n=indexNodes(data).get(id),solved=n.question&&s.answers[id]===n.question.correctIndex;
+ if(!action||typeof action.type!=="string")return {state:s,changed:false,kind:"info",message:"Escolha uma ação disponível."};
+ if(action.type==="select"){
+  if(!n.question||solved||s.complete||!Number.isInteger(action.index)||action.index<0||action.index>2)return {state:s,changed:false,kind:"info",message:"Essa alternativa não pode ser selecionada agora."};
+  if(s.selected===action.index)return {state:s,changed:false,kind:"info",message:"A alternativa já está selecionada."};
+  return {state:{...s,selected:action.index},changed:true,kind:"info",message:"Alternativa selecionada. Você pode mudar a escolha antes de confirmar."};
+ }
+ if(action.type==="answer"){
+  if(!n.question||solved||s.complete)return {state:s,changed:false,kind:"info",message:"Este desafio já foi resolvido ou não recebe respostas."};
+  if(s.selected===null)return {state:s,changed:false,kind:"info",message:"Selecione uma alternativa antes de confirmar."};
+  if(s.selected===n.question.correctIndex){
+   return {state:{...s,answers:{...s.answers,[id]:s.selected}},changed:true,kind:"good",message:"Correto! "+n.question.explanation+" Agora avance para a próxima casa ou escolha um caminho."};
+  }
+  const wrong=s.tried[id]||[];
+  if(wrong.includes(s.selected))return {state:s,changed:false,kind:"bad",message:"Você já tentou essa alternativa. Escolha outra resposta; nenhum erro foi contado novamente."};
+  return {state:{...s,tried:{...s.tried,[id]:[...wrong,s.selected]}},changed:true,kind:"bad",message:"Ainda não. "+n.question.wrongFeedback[s.selected]+" Você pode alterar sua resposta e tentar de novo."};
+ }
+ if(action.type==="hint"){
+  if(!n.question||solved||s.complete)return {state:s,changed:false,kind:"info",message:"A dica está disponível somente em desafios ainda não concluídos."};
+  if(s.hints.includes(id))return {state:s,changed:false,kind:"info",message:"A dica desta casa já foi consultada."};
+  if(s.hints.length>=data.settings.maxHints)return {state:s,changed:false,kind:"info",message:"Você já utilizou todas as dicas disponíveis."};
+  return {state:{...s,hints:[...s.hints,id]},changed:true,kind:"info",message:"Dica consultada. Ela não marca a questão como correta: "+n.question.hint};
+ }
+ if(action.type==="advance"||action.type==="choose"){
+  if(s.complete)return {state:s,changed:false,kind:"info",message:"A trilha já terminou. Consulte o resumo ou recomece."};
+  if(n.question&&!solved)return {state:s,changed:false,kind:"bad",message:"Resolva corretamente o desafio antes de avançar."};
+  if(action.type==="advance"&&n.next.length!==1)return {state:s,changed:false,kind:"info",message:"Há duas rotas disponíveis. Escolha explicitamente para onde deseja ir."};
+  if(action.type==="choose"&&(n.next.length<2||!n.next.includes(action.target)))return {state:s,changed:false,kind:"bad",message:"O caminho selecionado não está disponível a partir desta casa."};
+  const dest=action.type==="advance"?n.next[0]:action.target;
+  if(!dest||s.path.includes(dest))return {state:s,changed:false,kind:"bad",message:"Esta casa não pode ser alcançada por esse movimento."};
+  const path=[...s.path,dest],complete=dest===data.finish;
+  return {state:{...s,path,selected:null,complete},changed:true,kind:complete?"good":"info",message:complete?"Missão concluída. Sete desafios resolvidos em uma rota válida.":"Você avançou para "+indexNodes(data).get(dest).label+". Leia o desafio e escolha sua resposta."};
+ }
+ return {state:s,changed:false,kind:"info",message:"Casas bloqueadas não podem ser puladas. Siga as conexões válidas."};
+}
+// PURE_END
+function make(tag,className,text){const el=document.createElement(tag);if(className)el.className=className;if(text!==undefined)el.textContent=text;return el;}
+function currentNode(){return indexNodes(DATA).get(state.path[state.path.length-1]);}
+function getState(){return {path:[...state.path],answers:{...state.answers},tried:Object.fromEntries(Object.entries(state.tried).map(([id,choices])=>[id,[...choices]])),selected:state.selected,hints:[...state.hints],complete:state.complete};}
+function restoreState(saved){
+ if(!validState(saved,DATA))return false;
+ state={path:[...saved.path],answers:{...saved.answers},tried:Object.fromEntries(Object.entries(saved.tried).map(([id,choices])=>[id,[...choices]])),selected:saved.selected,hints:[...saved.hints],complete:saved.complete};
+ viewId=null;viewKey="";render(state);return true;
+}
+function announce(message,kind){
+ const feedback=$("feedback");feedback.className="feedback "+(kind||"info");
+ $("feedback-title").textContent=kind==="good"?"Resposta correta":kind==="bad"?"Confira a resposta":"Orientação";
+ $("feedback-message").textContent=message;
+}
+function buildMap(){
+ const map=$("trail-map"),list=$("house-list");map.replaceChildren();list.replaceChildren();
+ const stages=[...new Set(DATA.nodes.map(n=>n.stage))].sort((a,b)=>a-b);
+ for(const stage of stages){
+  const block=make("li","stage");
+  block.append(make("span","stage-number","Etapa "+(stage+1)));
+  const choices=make("div","stage-choices");
+  for(const n of DATA.nodes.filter(x=>x.stage===stage)){
+   const cell=make("div","house locked");cell.dataset.house=n.id;
+   const button=make("button","house-button");button.type="button";button.dataset.view=n.id;button.disabled=true;
+   button.append(make("span","symbol",n.symbol),make("span","house-name",n.label),make("span","house-state","Bloqueada"));
+   cell.append(button);choices.append(cell);
+  }
+  block.append(choices);map.append(block);
+ }
+ for(const n of DATA.nodes){
+  const row=make("li","");
+  const button=make("button","list-button");button.type="button";button.dataset.view=n.id;button.disabled=true;
+  const words=make("span");words.append(make("strong","",n.label),make("small","",n.short+" · Bloqueada"));
+  button.append(make("span","symbol",n.symbol),words);row.append(button);list.append(row);
+ }
+}
+function statusOf(id){
+ const active=state.path[state.path.length-1]===id;
+ if(active)return state.complete?"Chegada":"Casa atual";
+ if(state.path.includes(id))return "Visitada · revisão";
+ return "Bloqueada";
+}
+function updateMap(){
+ for(const el of root.querySelectorAll("[data-view]")){
+  const id=el.dataset.view,visited=state.path.includes(id),active=id===currentNode().id;
+  const name=indexNodes(DATA).get(id),status=statusOf(id);
+  el.disabled=!ready||!visited;
+  el.setAttribute("aria-label",name.label+". "+status+(visited?". Ativar para consultar.":". Ainda não disponível."));
+  if(active)el.setAttribute("aria-current","step");else el.removeAttribute("aria-current");
+  if(el.classList.contains("house-button")){
+   el.querySelector(".house-state").textContent=status;
+   el.parentElement.className="house "+(active?"current":visited?"done":"locked");
+  }else{
+   el.classList.toggle("active",active);
+   el.querySelector("small").textContent=name.short+" · "+status;
+  }
+ }
+}
+function buildChallenge(node,review){
+ const target=$("challenge");target.replaceChildren();
+ target.append(make("p","step-heading",review?"Revisão somente leitura · "+node.label:node.label+" · "+node.short));
+ const heading=make("h3","",node.id===DATA.start?"Bem-vindo à missão":node.id===DATA.finish?"Você chegou à última casa":review?"O que você aprendeu nesta etapa?":"Responda para avançar");
+ heading.id="question-title";heading.tabIndex=-1;target.append(heading);
+ if(node.id===DATA.start){target.append(make("p","","Comece a jornada espacial: explore gravidade, atmosfera e tecnologia de pesquisa, escolha entre rover e helicóptero e depois investigue rochas ou gelo. Cada rota permite alcançar a chegada."));return;}
+ if(node.id===DATA.finish){target.append(make("p","","Todos os sete desafios do percurso escolhido foram concluídos. Você pode visitar as casas percorridas para revisar as explicações."));return;}
+ target.append(make("p","question-prompt",node.question.prompt));
+ if(review){
+  const block=make("div","review-only");block.append(make("strong","","Resposta correta: "+node.question.options[node.question.correctIndex]),make("p","",node.question.explanation));
+  const count=state.tried[node.id]?state.tried[node.id].length:0;
+  block.append(make("p","micro","Tentativas incorretas anteriores: "+count+". Nenhuma resposta pode ser alterada nesta revisão."));
+  target.append(block);return;
+ }
+ const group=make("fieldset","choices"),legend=make("legend","","Escolha uma alternativa e confirme");group.append(legend);
+ for(let i=0;i<node.question.options.length;i++){
+  const label=make("label","choice");
+  const input=document.createElement("input");input.type="radio";input.name="knowledge-choice";input.value=String(i);input.dataset.choice=String(i);
+  const span=make("span","",node.question.options[i]);label.append(input,span);group.append(label);
+ }
+ target.append(group);
+}
+function updateChallenge(){
+ const now=currentNode(),look=viewId?indexNodes(DATA).get(viewId):now;
+ const review=look.id!==now.id,key=(review?"review:":"current:")+look.id;
+ if(viewKey!==key){buildChallenge(look,review);viewKey=key;}
+ const resolved=!!now.question&&state.answers[now.id]===now.question.correctIndex;
+ for(const input of $("challenge").querySelectorAll("input[data-choice]")){
+  input.checked=Number(input.value)===state.selected;
+  input.disabled=!ready||resolved||review||state.complete;
+  const label=input.closest("label");
+  label.classList.toggle("correct",resolved&&Number(input.value)===now.question.correctIndex);
+  label.classList.toggle("incorrect",!resolved&&(state.tried[now.id]||[]).includes(Number(input.value)));
+ }
+ $("back-current").hidden=!review;
+ $("confirm-answer").hidden=review||!now.question||resolved||state.complete;
+ $("confirm-answer").disabled=!ready||state.selected===null;
+ $("get-hint").hidden=review||!now.question||resolved||state.complete;
+ $("get-hint").disabled=!ready||state.hints.includes(now.id)||state.hints.length>=DATA.settings.maxHints;
+ $("advance").hidden=review||state.complete||now.next.length!==1||!!now.question&&!resolved;
+ $("advance").disabled=!ready;
+ $("advance").textContent=now.id===DATA.start?"Começar trilha":now.next.length===1&&indexNodes(DATA).get(now.next[0])?.id===DATA.finish?"Concluir missão":"Avançar para a próxima casa";
+ $("route-buttons").hidden=review||state.complete||!resolved||now.next.length<2;
+ const routeArea=$("route-buttons");routeArea.replaceChildren();
+ if(!review&&resolved&&now.next.length>1){
+  routeArea.append(make("strong","step-heading","Escolha um dos dois próximos caminhos:"));
+  for(const dest of now.next){
+   const n=indexNodes(DATA).get(dest),button=make("button","button secondary","Seguir pela "+n.label+" · "+n.short);
+   button.type="button";button.dataset.choose=dest;button.disabled=!ready;
+   routeArea.append(button);
+  }
+ }
+ $("hint-panel").hidden=review||!now.question||!state.hints.includes(now.id);
+ if(now.question)$("hint-text").textContent=now.question.hint;
+ $("finish-panel").hidden=!state.complete;
+ if(state.complete){
+  const summary=$("finish-summary");summary.replaceChildren();
+  for(const id of state.path){
+   const n=indexNodes(DATA).get(id);if(!n.question)continue;
+   const item=make("li","");item.append(make("strong","",n.label+". "),document.createTextNode(n.question.explanation));summary.append(item);
+  }
+ }
+}
+function render(current){
+ if(disposed||!validate(DATA)||!validState(current,DATA))return;
+ const solved=Object.keys(current.answers).length;
+ $("solved-count").textContent=solved+" / "+DATA.settings.requiredQuestions;
+ $("hints-count").textContent=current.hints.length+" / "+DATA.settings.maxHints;
+ $("mistakes-count").textContent=String(Object.values(current.tried).reduce((sum,list)=>sum+list.length,0));
+ $("current-label").textContent=currentNode().label;
+ $("progress").setAttribute("aria-valuenow",String(solved));
+ $("progress-bar").style.width=(solved/DATA.settings.requiredQuestions*100)+"%";
+ $("reset").disabled=!ready;
+ updateMap();updateChallenge();
+}
+function refreshMessage(){
+ const n=currentNode();if(state.complete){announce("Missão retomada já concluída. Consulte o resumo ou as casas visitadas.","good");return;}
+ if(n.id===DATA.start){announce("Comece a missão. Casas futuras estão bloqueadas até você avançar.","info");return;}
+ if(state.answers[n.id]!==undefined){announce("Etapa resolvida. "+n.question.explanation+" Agora escolha como avançar.","good");return;}
+ if(state.selected!==null&&(state.tried[n.id]||[]).includes(state.selected)){
+  announce("Alternativa já tentada: "+n.question.wrongFeedback[state.selected]+" Escolha outra.","bad");return;
+ }
+ announce("Escolha uma resposta e confirme. Se precisar, use a dica.","info");
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++saveStamp;
+ queue=queue.then(async()=>{
+  if(disposed||!remote||stamp!==saveStamp)return;
+  const base=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const full={...base,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(full)).length>12288){announce("O registro excederia 12 KiB. O progresso atual não foi sincronizado.","bad");return;}
+  const result=await progress.save({version:remote.version,location:location,data:full});
+  if(disposed)return;
+  remote={...result,data:full};
+ }).catch(async()=>{
+  if(disposed)return;saveStamp++;
+  try{
+   const fresh=await progress.load();if(disposed)return;remote=fresh;
+   const saved=fresh&&fresh.data&&fresh.data[storageKey];
+   if(saved&&restoreState(saved)){
+    announce("O progresso remoto mudou ou a gravação falhou. Recarreguei a versão remota para evitar sobrescrevê-la; revise sua última ação.","bad");
+   }else{
+    announce("Não foi possível salvar com segurança. Nenhum estado remoto foi sobrescrito; você pode continuar localmente.","bad");
+   }
+  }catch(error){remote=null;announce("Falha de sincronização. Continue a atividade; o progresso remoto não está confirmado.","bad");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const r=transition(state,action,DATA);
+ if(!r.changed){announce(r.message,r.kind);return;}
+ state=r.state;modified=true;render(state);save();announce(r.message,r.kind);
+ if(action.type==="answer"&&r.kind==="good"){
+  const next=$("advance").hidden?$("route-buttons").querySelector("button[data-choose]"):$("advance");
+  if(next)next.focus({preventScroll:true});
+ }
+ if(action.type==="advance"||action.type==="choose"){$("question-title")?.focus({preventScroll:true});}
+}
+function askReset(){
+ if(state.path.length===1&&!Object.keys(state.tried).length&&!state.hints.length){handleAction({type:"restart"});return;}
+ $("reset-confirm").hidden=false;$("confirm-reset").focus({preventScroll:true});
+ announce("Recomeçar apagará o trajeto e as respostas. Confirme ou cancele sem perder dados.","info");
+}
+function destroy(){disposed=true;saveStamp++;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){
+  const message=make("div","error-box","Os dados da trilha são inválidos: verifique conexões, questões, caminhos e chegada. A atividade não foi iniciada.");
+  if(container)container.replaceChildren(message);return;
+ }
+ buildMap();render(state);
+ if(progress){
+  try{
+   const loaded=await progress.load();if(disposed)return;remote=loaded;
+   if(!modified&&loaded&&loaded.data&&loaded.data[storageKey]){
+    if(!restoreState(loaded.data[storageKey]))announce("O estado salvo não corresponde a esta trilha. A atividade inicia do começo.","bad");
+   }
+  }catch(error){announce("Não foi possível carregar o progresso remoto. A atividade continua disponível localmente, sem sincronização confirmada.","bad");remote=null;}
+ }else announce("Modo independente: o progresso não está sincronizado com o Moodle.","info");
+ if(disposed)return;ready=true;render(state);
+ if(progress&&remote)refreshMessage();
+}
+root.addEventListener("change",event=>{
+ const el=event.target;if(!el||!el.matches("input[data-choice]"))return;
+ handleAction({type:"select",index:Number(el.value)});
+},{signal:controller.signal});
+root.addEventListener("click",event=>{
+ const b=event.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.view){
+  if(!state.path.includes(b.dataset.view)){announce("Casa bloqueada. Avance somente pelas conexões permitidas.","bad");return;}
+  viewId=b.dataset.view===currentNode().id?null:b.dataset.view;render(state);
+  announce(viewId?"Revisão somente leitura de "+indexNodes(DATA).get(viewId).label+". Nenhum acerto é alterado.":"Você está na casa atual.","info");return;
+ }
+ if(b.dataset.choose){handleAction({type:"choose",target:b.dataset.choose});return;}
+ if(b.id==="confirm-answer"){handleAction({type:"answer"});return;}
+ if(b.id==="advance"){handleAction({type:"advance"});return;}
+ if(b.id==="get-hint"){handleAction({type:"hint"});return;}
+ if(b.id==="back-current"){viewId=null;render(state);$("question-title").focus({preventScroll:true});refreshMessage();return;}
+ if(b.id==="reset"){askReset();return;}
+ if(b.id==="confirm-reset"){
+  $("reset-confirm").hidden=true;viewId=null;viewKey="";
+  handleAction({type:"restart"});$("reset").focus({preventScroll:true});return;
+ }
+ if(b.id==="cancel-reset"){$("reset-confirm").hidden=true;$("reset").focus({preventScroll:true});announce("Reinício cancelado. Seu percurso foi preservado.","info");}
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();
+</script>
+</body>
+</html>
