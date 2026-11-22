@@ -1,6 +1,26 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-// Copyright 2026 Eduardo Kraus. GNU GPL v3 or later.
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * JSON activity assessments and metadata.
+ *
+ * @package   mod_mcp
+ * @copyright 2026 Eduardo Kraus
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace mod_mcp\content;
 
@@ -12,6 +32,11 @@ use stdClass;
  * Never give a learner the author-owned answer key.
  */
 final class metadata {
+    /**
+     * validate for JSON assessment handling.
+     *
+     * @return ?string Result.
+     */
     public static function validate(?string $type, $information): ?string {
         if ($type === "") {
             $type = null;
@@ -45,6 +70,11 @@ final class metadata {
         return $json;
     }
 
+    /**
+     * validate quiz for JSON assessment handling.
+     *
+     * @return void Result.
+     */
     private static function validate_quiz(array $info): void {
         $questions = $info["questions"] ?? null;
         if (!is_array($questions) || !array_is_list($questions) ||
@@ -115,6 +145,11 @@ final class metadata {
         }
     }
 
+    /**
+     * information for JSON assessment handling.
+     *
+     * @return ?array Result.
+     */
     public static function information(stdClass $mcp): ?array {
         return empty($mcp->informationjson) ? null : json_decode($mcp->informationjson, true);
     }
@@ -143,11 +178,21 @@ final class metadata {
         ];
     }
 
+    /**
+     * fingerprint for JSON assessment handling.
+     *
+     * @return string Result.
+     */
     public static function fingerprint(stdClass $mcp): string {
         return hash("sha256", (string)$mcp->activitytype . "|" .
             (string)$mcp->informationjson . "|" . (string)$mcp->timemodified);
     }
 
+    /**
+     * save for JSON assessment handling.
+     *
+     * @return string Result.
+     */
     public static function save(int $mcpid, ?string $type, $information, ?string $expectedhash = null): string {
         global $DB;
         $mcp = $DB->get_record("mcp", ["id" => $mcpid], "*", MUST_EXIST);

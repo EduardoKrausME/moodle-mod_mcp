@@ -1,6 +1,26 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-// Copyright 2026 Eduardo Kraus. GNU GPL v3 or later.
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * JSON activity assessments and metadata.
+ *
+ * @package   mod_mcp
+ * @copyright 2026 Eduardo Kraus
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace mod_mcp\mcp\write;
 
@@ -12,19 +32,39 @@ use moodle_exception;
  * Existing API name and schema; stores all/random/shuffle in information JSON.
  */
 final class configure_questions extends activity_tool {
+    /**
+     * get name for JSON assessment handling.
+     *
+     * @return string Result.
+     */
     public function get_name(): string {
         return "mcp_configure_questions";
     }
 
+    /**
+     * get title for JSON assessment handling.
+     *
+     * @return string Result.
+     */
     public function get_title(): string {
         return "MCP activity: configure JSON question selection";
     }
 
+    /**
+     * get description for JSON assessment handling.
+     *
+     * @return string Result.
+     */
     public function get_description(): string {
         return "Choose all or a random subset and optionally shuffle question order. " .
             "Operates on JSON questions, not Moodle Question Bank. Confirmation required.";
     }
 
+    /**
+     * get input schema for JSON assessment handling.
+     *
+     * @return array Result.
+     */
     public function get_input_schema(): array {
         return $this->object_schema([
             "cmid" => ["type" => "integer", "minimum" => 1],
@@ -35,6 +75,11 @@ final class configure_questions extends activity_tool {
         ], ["cmid", "questionselection", "questionsperattempt", "shufflequestions", "expectedhash"]);
     }
 
+    /**
+     * proposed for JSON assessment handling.
+     *
+     * @return array Result.
+     */
     private function proposed(array $arguments): array {
         $mcp = $this->activity($arguments);
         if ($mcp->activitytype !== "quiz") {
@@ -62,12 +107,22 @@ final class configure_questions extends activity_tool {
             "available" => $available, "expectedhash" => $hash, "information" => $info];
     }
 
+    /**
+     * preview for JSON assessment handling.
+     *
+     * @return array Result.
+     */
     public function preview(array $arguments, authenticated_identity $identity): array {
         $proposed = $this->proposed($arguments);
         unset($proposed["information"]);
         return $proposed + ["published" => false];
     }
 
+    /**
+     * execute for JSON assessment handling.
+     *
+     * @return array Result.
+     */
     public function execute(array $arguments, authenticated_identity $identity): array {
         $this->resolve_context($arguments);
         $proposed = $this->proposed($arguments);

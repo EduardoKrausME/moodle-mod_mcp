@@ -1,6 +1,26 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
-// Copyright 2026 Eduardo Kraus. GNU GPL v3 or later.
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * JSON activity assessments and metadata.
+ *
+ * @package   mod_mcp
+ * @copyright 2026 Eduardo Kraus
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace mod_mcp\question;
 
@@ -16,6 +36,11 @@ use stdClass;
  * One server-owned JSON quiz attempt per student. No Question Engine or bank tables.
  */
 final class attempts {
+    /**
+     * locked for JSON assessment handling.
+     *
+     * @return mixed Result.
+     */
     private static function locked(int $mcpid, int $userid, callable $callback) {
         $factory = lock_config::get_lock_factory("mod_mcp");
         $lock = $factory->get_lock("attempt_" . $mcpid . "_" . $userid, 10);
@@ -29,6 +54,11 @@ final class attempts {
         }
     }
 
+    /**
+     * own for JSON assessment handling.
+     *
+     * @return ?stdClass Result.
+     */
     public static function own(int $mcpid, int $userid): ?stdClass {
         global $DB;
         return $DB->get_record("mcp_attempts", [
@@ -83,6 +113,11 @@ final class attempts {
         }, $selected);
     }
 
+    /**
+     * status for JSON assessment handling.
+     *
+     * @return array Result.
+     */
     public static function status(stdClass $mcp, ?stdClass $attempt): array {
         $hasquestions = $mcp->activitytype === "quiz" &&
             !empty(metadata::information($mcp)["questions"]);
