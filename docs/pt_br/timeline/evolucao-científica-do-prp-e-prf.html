@@ -78,8 +78,8 @@
     <section class="progress-card" aria-label="Progresso de exploração">
         <div class="progress-head"><span>Marcos explorados</span><strong id="progress-number">0 de 8</strong></div>
         <div class="bar" id="progressbar" role="progressbar" aria-label="Marcos históricos explorados" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0"><div class="fill" id="progress-fill"></div></div>
-        <p id="save-state" class="status" role="status" aria-live="polite">Consultando seu progresso individual no Moodle...</p>
-        <button type="button" class="retry" id="retry-save" hidden>Tentar novamente</button>
+        <p id="save-state" class="status" role="status" aria-live="polite">Os marcos explorados são acompanhados apenas nesta página.</p>
+        <button type="button" class="retry" id="reset-exploration">Reiniciar exploração</button>
     </section>
     <section aria-labelledby="heading">
         <div class="heading"><div><h2 id="heading">Explore a evolução científica</h2><p>Selecione um ano e abra o cartão para conhecer o marco.</p></div></div>
@@ -167,41 +167,56 @@
     </section>
     <div class="note"><strong>Interpretação científica:</strong> o aparecimento de uma técnica ou a publicação de um artigo não significam aprovação regulatória nem comprovação de benefício em todas as indicações. Os resultados precisam ser avaliados separadamente por produto, protocolo, população e desfecho.</div>
     <section class="refs" aria-labelledby="ref-heading"><h2 id="ref-heading">Como utilizar as fontes</h2>
-        <ul><li>Cada marco possui uma referência para o artigo original ou uma revisão histórica identificada.</li><li>1987 e 1998 apontam para publicações originais indexadas no PubMed.</li><li>A atribuição de 2001 à PRF decorre de uma revisão histórica retrospectiva, distinta do artigo técnico de 2006.</li><li>O progresso da linha do tempo registra apenas marcos explorados; não altera nota nem conclusão acadêmica.</li></ul>
+        <ul><li>Cada marco possui uma referência para o artigo original ou uma revisão histórica identificada.</li><li>1987 e 1998 apontam para publicações originais indexadas no PubMed.</li><li>A atribuição de 2001 à PRF decorre de uma revisão histórica retrospectiva, distinta do artigo técnico de 2006.</li><li>O indicador de progresso acompanha os marcos explorados somente nesta página; não consulta o Moodle, não salva dados e não altera notas ou conclusão acadêmica.</li></ul>
     </section>
     <footer class="footer">Conteúdo educacional e histórico. A linha do tempo não constitui recomendação de uso clínico ou protocolo de preparação de componentes sanguíneos.</footer>
 </main>
 <script>
     (function(){
         "use strict";
-        const root=document.getElementById("timeline34");if(!root)return;
+        const root=document.getElementById("timeline34");
+        if(!root)return;
         const years=["1954","1987","1998","2001","2006","2009","2017","2021"];
-        const q=(s)=>root.querySelector(s);
-        const state=q("#save-state"),retry=q("#retry-save");
-        const sdk=window.MoodleMCP&&window.MoodleMCP.progress;
-        let snap=null,visited=[],unsaved=null;
-        function safeObject(value){return value&&typeof value==="object"&&!Array.isArray(value)?value:{};}
-        function message(value){state.textContent=value;}
-        function redraw(){const count=visited.length;q("#progress-number").textContent=count+" de "+years.length;q("#progressbar").setAttribute("aria-valuenow",String(count));q("#progress-fill").style.width=Math.round(100*count/years.length)+"%";
-            root.querySelectorAll(".entry").forEach(function(article){const visitedNow=visited.includes(article.dataset.year);article.classList.toggle("is-visited",visitedNow);const info=article.querySelector(".viewed");info.textContent=visitedNow?"Explorado":"Não explorado";info.setAttribute("aria-label",info.textContent);});
-            root.querySelectorAll(".rail a").forEach(function(a){a.classList.toggle("visited",visited.includes(a.dataset.target));});
+        const q=selector=>root.querySelector(selector);
+        const visited=new Set();
+        const message=value=>{q("#save-state").textContent=value;};
+        function redraw(){
+            const count=visited.size;
+            q("#progress-number").textContent=count+" de "+years.length;
+            q("#progressbar").setAttribute("aria-valuenow",String(count));
+            q("#progress-fill").style.width=Math.round(100*count/years.length)+"%";
+            root.querySelectorAll(".entry").forEach(function(article){
+                const explored=visited.has(article.dataset.year);
+                article.classList.toggle("is-visited",explored);
+                const info=article.querySelector(".viewed");
+                info.textContent=explored?"Explorado":"Não explorado";
+                info.setAttribute("aria-label",info.textContent);
+            });
+            root.querySelectorAll(".rail a").forEach(function(a){
+                a.classList.toggle("visited",visited.has(a.dataset.target));
+            });
         }
-        async function load(){retry.hidden=true;message("Consultando seu progresso no Moodle...");
-            if(!sdk||typeof sdk.load!=="function"||typeof sdk.save!=="function"){snap=null;message("A navegação está disponível, mas o SDK de progresso não foi encontrado. Nenhum progresso será indicado como salvo.");return;}
-            try{snap=await sdk.load();const saved=safeObject(safeObject(snap.data).timeline34);visited=Array.isArray(saved.visited)?years.filter(y=>saved.visited.includes(y)):[];redraw();message("Progresso individual carregado. Abra um cartão para marcar sua leitura.");
-                if(years.includes(saved.last)){const item=q("#marco-"+saved.last+" details");if(item&&!item.open)item.open=true;}
-            }catch(err){snap=null;message("Não foi possível consultar o progresso do Moodle. Você pode ler os marcos, mas a leitura não será registrada até reconectar.");retry.hidden=false;retry.textContent="Reconectar";retry.onclick=()=>{queue=queue.then(load);};}
-        }
-        async function saveVisit(year){if(visited.includes(year))return;
-            if(!snap){unsaved=year;message("O marco está aberto, mas seu progresso não foi salvo porque a conexão com Moodle está indisponível.");retry.hidden=false;retry.textContent="Tentar salvar este marco";retry.onclick=()=>{queue=queue.then(async()=>{await load();if(snap)await saveVisit(year);});};return;}
-            const next=years.filter(y=>visited.includes(y)||y===year);
-            message("Salvando exploração de "+year+" no Moodle...");retry.hidden=true;
-            try{const data=safeObject(snap.data);const existing=safeObject(data.timeline34);const saved=await sdk.save({version:snap.version,location:"timeline-"+year,data:Object.assign({},data,{timeline34:Object.assign({},existing,{visited:next,last:year})})});snap=saved;visited=next;unsaved=null;redraw();message("Marco "+year+" salvo no seu progresso individual.");}
-            catch(err){unsaved=year;const code=String(err&&(err.errorcode||err.message)||err);const conflict=code.indexOf("progressconflict")>=0;message(conflict?"O progresso mudou em outra aba. Recarregue antes de tentar novamente.":"Falha ao salvar o marco "+year+". A leitura não foi registrada; tente novamente.");retry.hidden=false;retry.textContent=conflict?"Recarregar progresso":"Tentar salvar novamente";retry.onclick=()=>{queue=queue.then(async()=>{await load();if(snap)await saveVisit(year);});};}
-        }
-        let queue=load();
-        root.querySelectorAll("details[data-milestone]").forEach(function(d){d.addEventListener("toggle",function(){if(d.open){const year=d.dataset.milestone;queue=queue.then(()=>saveVisit(year)).catch(()=>message("Ocorreu uma falha na atualização do progresso."));}});});
-        root.querySelectorAll(".rail a").forEach(function(a){a.addEventListener("click",function(){const d=q("#marco-"+a.dataset.target+" details");if(d)d.open=true;});});
+        root.querySelectorAll("details[data-milestone]").forEach(function(details){
+            details.addEventListener("toggle",function(){
+                if(!details.open||!years.includes(details.dataset.milestone))return;
+                visited.add(details.dataset.milestone);
+                redraw();
+                message("Marco "+details.dataset.milestone+" explorado. O progresso permanece somente nesta página.");
+            });
+        });
+        root.querySelectorAll(".rail a").forEach(function(a){
+            a.addEventListener("click",function(){
+                const details=q("#marco-"+a.dataset.target+" details");
+                if(details)details.open=true;
+            });
+        });
+        q("#reset-exploration").addEventListener("click",function(){
+            root.querySelectorAll("details[data-milestone]").forEach(function(details){details.open=false;});
+            visited.clear();
+            redraw();
+            message("Exploração reiniciada. Nenhum dado foi consultado ou salvo no Moodle.");
+        });
+        redraw();
     })();
 </script>
 </body>
