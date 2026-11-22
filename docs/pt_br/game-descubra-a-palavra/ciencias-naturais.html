@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Descubra a palavra - Ciências naturais</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#29334d;background:#f4f6fc;--ink:#29334d;--muted:#68748e;--accent:#5548c9;--accent-dark:#463aab;--line:#e0e5ef;--panel:#fff;--mint:#13856c;--mint-bg:#e8f7f1;--warn:#98602c;--warn-bg:#fff3e6}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;line-height:1.55}
+button,input{font:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid #d09a3a;outline-offset:3px}
+main{max-width:970px;margin:auto;padding:34px 22px 50px}
+.eyebrow{font-size:11px;font-weight:850;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin:0 0 9px}
+h1{font-size:clamp(27px,4vw,39px);line-height:1.15;letter-spacing:-.9px;margin:0 0 12px}
+.intro{font-size:14px;color:var(--muted);margin:0 0 21px;max-width:780px}
+.topbar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:11px}
+.topbar strong{font-size:14px}.topbar span{font-size:12px;color:var(--muted)}
+.progress{height:10px;border-radius:20px;background:#e4e8f3;overflow:hidden;margin-bottom:22px}
+.progress>span{display:block;width:0;height:100%;background:linear-gradient(90deg,#5b57d5,#2fb79c);transition:width .25s ease}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 10px 30px #2331540c}
+.section-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.section-top h2{font-size:17px;margin:0}
+.pill{font-size:11px;font-weight:820;background:#f0ecff;color:var(--accent);padding:7px 11px;border-radius:99px}
+.hint{background:#f4f3fd;border-radius:13px;padding:17px 19px;margin:17px 0 20px}
+.hint small{display:block;font-size:11px;color:#645a96;font-weight:830;text-transform:uppercase;letter-spacing:.5px}
+.hint p{font-size:16px;font-weight:710;line-height:1.5;margin:7px 0 0}
+.word{display:flex;align-items:end;justify-content:center;gap:5px 7px;flex-wrap:wrap;min-height:88px;padding:10px 2px 18px}
+.word-slot{min-width:clamp(19px,3.4vw,39px);height:50px;display:grid;place-items:center;border-bottom:3px solid #a9b5cf;font-weight:850;font-size:clamp(16px,2.65vw,25px);line-height:1}
+.word-slot.revealed{border-color:#27ac89;color:#13866a;background:#e4f7ee;border-radius:8px 8px 2px 2px}
+.word-slot.uncovered{border-color:var(--accent);color:var(--accent)}
+.word-space{width:17px}.word-separator{font-size:23px;font-weight:800;align-self:center;color:#7c86a1}
+.help-line{font-size:12px;color:var(--muted);text-align:center;margin:0 0 15px}
+.difficulty{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-top:1px solid var(--line);padding-top:17px;margin-bottom:18px}
+.difficulty span{font-size:13px;font-weight:700}.mistakes{display:flex;gap:7px}
+.dot{width:23px;height:12px;border-radius:6px;background:#dce2ef}.dot.used{background:#dc8260}
+.keyboard{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:8px}
+.letter{height:48px;border:1px solid #d6dcea;border-radius:10px;color:#394565;background:#fbfcff;cursor:pointer;font-weight:830;min-width:0}
+.letter:hover:not(:disabled){background:#f1eeff;border-color:#998fe7;color:#4c3ac1}
+.letter:disabled{cursor:default;opacity:1}
+.letter.right{background:#e1f5eb;color:#0c7a5f;border-color:#9cd5be}
+.letter.wrong{background:#ffede6;color:#a35e45;border-color:#efc5b4}
+.form-grid{margin-top:22px;padding-top:19px;border-top:1px solid var(--line)}
+.form-grid label{display:block;font-size:13px;font-weight:750;margin-bottom:8px}
+.form-controls{display:flex;gap:10px;flex-wrap:wrap}
+.form-controls input{flex:1 1 230px;min-width:0;padding:12px 14px;border:1px solid #ced6e5;border-radius:11px;color:var(--ink);background:var(--panel)}
+.btn{padding:11px 17px;border:1px solid var(--accent);border-radius:11px;background:var(--accent);color:#fff;font-weight:780;cursor:pointer;font-size:13px}
+.btn:hover:not(:disabled){background:var(--accent-dark)}
+.btn.secondary{background:var(--panel);color:var(--accent)}
+.btn.secondary:hover:not(:disabled){background:#f2efff}
+.btn:disabled{opacity:.48;cursor:not-allowed}
+.feedback{padding:15px 17px;border-radius:12px;margin:19px 0 0;min-height:54px;font-size:13px;background:#eaf0fc;color:#4b5c77}
+.feedback.success{background:var(--mint-bg);color:#126c57}.feedback.warn{background:var(--warn-bg);color:var(--warn)}
+.extra-hint{margin-top:11px;padding:13px 16px;background:#fff7df;border:1px solid #f2d99b;border-radius:12px;color:#71551d;font-size:13px}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.result{padding:19px;border-radius:13px;border:1px solid #c1dfd2;background:#eaf8f1;margin-top:17px}
+.result.missed{background:#fff1e8;border-color:#efc8b1}
+.result h3{margin:0 0 8px;font-size:19px}
+.result p{margin:0 0 6px;font-size:13px}
+.result p:last-child{margin-bottom:0}
+.summary{padding:9px 0}
+.summary h2{font-size:27px;letter-spacing:-.5px;margin:0 0 9px}
+.summary>p{color:var(--muted);font-size:14px;margin:0 0 17px}
+.summary-grid{display:grid;gap:9px;margin:0 0 23px}
+.summary-row{background:#f8f9fd;border:1px solid var(--line);padding:14px 16px;border-radius:11px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.summary-row strong{font-size:14px}.summary-row span{font-size:12px;color:var(--muted)}
+.summary-row .ok{color:#157d64;font-weight:800}.summary-row .miss{color:#ae6442;font-weight:800}
+.note{font-size:11px;color:var(--muted);margin:18px 0 0}
+.visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+[hidden]{display:none!important}
+@media(max-width:650px){main{padding:23px 13px 33px}.panel{padding:17px}.keyboard{grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}.letter{height:45px;font-size:14px}.word{gap:4px;justify-content:center}.word-slot{height:43px;min-width:21px;font-size:17px}.hint{padding:14px}.hint p{font-size:14px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--ink:#e5eaf7;--muted:#b1bdd5;--accent:#b4a7ff;--accent-dark:#8272e7;--line:#3a4760;--panel:#232d43;--mint:#89e0c2;--mint-bg:#214439;--warn:#ebc095;--warn-bg:#493626}body{background:#141c2b}.hint{background:#35324e}.hint small{color:#b4abe4}.pill{background:#36304e;color:#e0d8ff}.word-slot{border-color:#8291ae}.word-slot.revealed{background:#204b3e;color:#a3ead0}.word-slot.uncovered{color:#d9cfff}.dot{background:#45536d}.dot.used{background:#c37859}.letter{background:#2a354c;color:#f0f2f9;border-color:#45536b}.letter.right{background:#224837;color:#a6ebcf;border-color:#547e6c}.letter.wrong{background:#50362f;color:#ffcdba;border-color:#7e564c}.btn.secondary{background:var(--panel)}.btn.secondary:hover:not(:disabled){background:#383252}.feedback{background:#2d3d55;color:#d5dded}.feedback.success{background:var(--mint-bg);color:#a7ead2}.feedback.warn{background:var(--warn-bg);color:#f3d3b7}.extra-hint{background:#53472a;border-color:#7b6943;color:#f1dfb3}.result{background:#244438;border-color:#456e5b}.result.missed{background:#49352c;border-color:#7b594b}.summary-row{background:#2c3650}.summary-row .ok{color:#8be0bd}.summary-row .miss{color:#efc5a2}}
+</style>
+</head>
+<body>
+<main id="activity">
+ <p class="eyebrow">Jogo de palavras · Ciências naturais</p>
+ <h1>Descubra a palavra</h1>
+ <p class="intro">Leia a dica e escolha letras para revelar a palavra. Você também pode digitar a resposta completa, inclusive com acentos, espaços ou hífen. A cada rodada, você tem até seis erros; uma letra repetida não desconta tentativa.</p>
+ <div class="topbar">
+  <strong id="step-title">Rodada 1 de 4</strong>
+  <span id="overall-count">0 de 4 rodadas finalizadas</span>
+ </div>
+ <div class="progress" id="overall-progress" role="progressbar" aria-label="Rodadas concluídas" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"><span id="overall-fill"></span></div>
+ <section class="panel" id="game-panel" aria-label="Palavra atual">
+  <div class="section-top">
+   <h2>Qual é a palavra?</h2>
+   <span class="pill" id="round-position">Desafio 1 / 4</span>
+  </div>
+  <div class="hint"><small>Pista da rodada</small><p id="round-hint">Carregando...</p></div>
+  <div id="word" class="word" aria-hidden="true"></div>
+  <p id="word-voice" class="visually-hidden">Palavra oculta.</p>
+  <p class="help-line">As letras certas aparecem em todas as posições; espaços e hífens permanecem visíveis.</p>
+  <div class="difficulty">
+   <span id="remaining-errors">0 de 6 erros</span>
+   <div class="mistakes" id="mistake-dots" aria-hidden="true"></div>
+  </div>
+  <div id="keyboard" class="keyboard" role="group" aria-label="Escolha uma letra"></div>
+  <form id="answer-form" class="form-grid">
+   <label for="answer-input">Ou escreva a resposta completa</label>
+   <div class="form-controls">
+    <input id="answer-input" type="text" maxlength="80" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="answer-note" placeholder="Ex.: ÁGUA POTÁVEL" disabled>
+    <button id="answer-button" class="btn" type="submit" disabled>Conferir resposta</button>
+   </div>
+   <p id="answer-note" class="note">Acentos são aceitos, mas a comparação não depende deles. Respostas repetidas não gastam uma nova tentativa.</p>
+  </form>
+  <div class="toolbar">
+   <button id="hint-button" class="btn secondary" type="button" disabled>Mostrar outra dica</button>
+   <span class="note" id="hint-count">0 usadas</span>
+  </div>
+  <div id="round-result" class="result" hidden>
+   <h3 id="result-title">Rodada concluída</h3>
+   <p id="result-answer"></p>
+   <p id="result-explanation"></p>
+  </div>
+  <div class="toolbar"><button id="next-button" class="btn" type="button" hidden>Próxima palavra</button></div>
+ </section>
+ <section id="summary" class="panel summary" hidden aria-labelledby="summary-title">
+  <h2 id="summary-title">Desafio finalizado!</h2>
+  <p id="summary-score"></p>
+  <div class="summary-grid" id="summary-list"></div>
+  <button id="summary-restart" class="btn" type="button">Jogar novamente</button>
+ </section>
+ <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true">Preparando o jogo...</div>
+ <div class="toolbar"><button id="restart" class="btn secondary" type="button">Recomeçar tudo</button><span class="note">Palavras descobertas: <strong id="score-count">0</strong></span></div>
+ <p class="note">Este resultado é apenas lúdico e não representa nota ou conclusão oficial do Moodle.</p>
+</main>
+<script>(function gameEngine(){
+"use strict";
+const gameData={
+ type:"word_guess",title:"Ciências naturais",
+ settings:{maxErrors:6,allowFullAnswer:true},
+ rounds:[
+  {id:"fotossintese",answer:"FOTOSSÍNTESE",hint:"Processo em que plantas utilizam energia da luz para produzir matéria orgânica.",extraHint:"Começa com F e possui doze letras.",explanation:"A fotossíntese converte energia luminosa em energia química; em plantas, usa água e dióxido de carbono e normalmente libera oxigênio."},
+  {id:"agua-potavel",answer:"ÁGUA POTÁVEL",hint:"Expressão usada para a água que atende aos padrões de qualidade para consumo humano.",extraHint:"São duas palavras. A primeira tem quatro letras e começa com A.",explanation:"Água potável é a água adequada para beber, conforme critérios de qualidade e segurança sanitária."},
+  {id:"micro-organismo",answer:"MICRO-ORGANISMO",hint:"Ser microscópico, como uma bactéria ou um protozoário.",extraHint:"É uma palavra composta, escrita com hífen.",explanation:"Micro-organismos incluem muitos seres microscópicos que desempenham papéis importantes na saúde, nos ecossistemas e na decomposição."},
+  {id:"biodiversidade",answer:"BIODIVERSIDADE",hint:"Variedade de seres vivos, genes e ecossistemas presentes em uma região.",extraHint:"Começa com B e termina em DADE.",explanation:"Biodiversidade envolve a diversidade genética, de espécies e de ecossistemas, além das relações entre os seres vivos."}
+ ]
+};
+// BEGIN PURE GAME LOGIC
+function normalize(value){
+ return String(value).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleUpperCase("pt-BR");
+}
+function canonicalAnswer(value){
+ return normalize(value).trim().replace(/\s*-\s*/g,"-").replace(/\s+/g," ");
+}
+function letterKey(value){
+ const normalized=normalize(value);
+ return /^[A-Z]$/.test(normalized)?normalized:null;
+}
+function validConfig(data){
+ if(!data||data.type!=="word_guess"||!data.settings||!Number.isInteger(data.settings.maxErrors)||data.settings.maxErrors<2||data.settings.maxErrors>12||data.settings.allowFullAnswer!==true||!Array.isArray(data.rounds)||data.rounds.length<1||data.rounds.length>20)return false;
+ const ids=new Set();
+ for(const round of data.rounds){
+  if(!round||typeof round.id!=="string"||!/^[a-z0-9-]+$/.test(round.id)||ids.has(round.id)||typeof round.answer!=="string"||round.answer.length>45||typeof round.hint!=="string"||!round.hint.trim()||typeof round.extraHint!=="string"||!round.extraHint.trim()||typeof round.explanation!=="string"||!round.explanation.trim())return false;
+  ids.add(round.id);
+  const cleaned=canonicalAnswer(round.answer);
+  if(!/^[A-Z]+(?:[ -][A-Z]+)*$/.test(cleaned)||cleaned.replace(/[^A-Z]/g,"").length<3)return false;
+ }
+ return true;
+}
+function blankState(){
+ return {round:0,guessed:[],errors:0,hintUsed:false,fullGuesses:[],resolved:[],status:"active"};
+}
+function isSolvedByLetters(answer,guessed){
+ return [...answer].every(char=>{
+  const key=letterKey(char);
+  return key===null||guessed.includes(key);
+ });
+}
+function isValidState(state,data){
+ if(!state||!Number.isInteger(state.round)||state.round<0||state.round>=data.rounds.length||!Array.isArray(state.guessed)||!Array.isArray(state.fullGuesses)||!Array.isArray(state.resolved)||!Number.isInteger(state.errors)||state.errors<0||state.errors>data.settings.maxErrors||typeof state.hintUsed!=="boolean"||!["active","solved","missed","summary"].includes(state.status))return false;
+ if(state.guessed.length>26||new Set(state.guessed).size!==state.guessed.length||state.guessed.some(char=>!letterKey(char)||char!==letterKey(char)))return false;
+ if(state.fullGuesses.length>data.settings.maxErrors||new Set(state.fullGuesses).size!==state.fullGuesses.length||state.fullGuesses.some(x=>typeof x!=="string"||x.length>90||!x||x!==canonicalAnswer(x)||!/^[A-Z]+(?:[ -][A-Z]+)*$/.test(x)))return false;
+ if(state.resolved.length>data.rounds.length)return false;
+ if(state.resolved.some((e,i)=>!e||e.id!==data.rounds[i].id||!["solved","missed"].includes(e.outcome)))return false;
+ if(state.status==="summary")return state.round===data.rounds.length-1&&state.resolved.length===data.rounds.length;
+ if(state.resolved.length!==state.round)return false;
+ if(state.status==="active"&&state.errors>=data.settings.maxErrors)return false;
+ if(state.status==="missed"&&state.errors!==data.settings.maxErrors)return false;
+ return true;
+}
+function updateState(current,action,data){
+ if(action?.type==="restart")return {state:blankState(),changed:true,kind:"neutral",message:"Atividade reiniciada. Escolha uma letra para começar."};
+ if(!isValidState(current,data))return {state:blankState(),changed:false,kind:"warn",message:"O estado anterior era inválido e a atividade foi reiniciada."};
+ const round=data.rounds[current.round],next={...current,guessed:[...current.guessed],fullGuesses:[...current.fullGuesses],resolved:[...current.resolved]};
+ if(action?.type==="next"){
+  if(!["solved","missed"].includes(current.status))return {state:current,changed:false,kind:"warn",message:"Conclua a rodada antes de avançar."};
+  next.resolved.push({id:round.id,outcome:current.status});
+  if(current.round===data.rounds.length-1){next.status="summary";return {state:next,changed:true,kind:"success",message:"Você terminou as rodadas."};}
+  next.round++;next.guessed=[];next.errors=0;next.fullGuesses=[];next.hintUsed=false;next.status="active";
+  return {state:next,changed:true,kind:"neutral",message:"Nova rodada! Leia a dica e escolha uma letra."};
+ }
+ if(current.status!=="active")return {state:current,changed:false,kind:"warn",message:"Essa rodada já foi concluída. Avance para continuar."};
+ if(action?.type==="hint"){
+  if(current.hintUsed)return {state:current,changed:false,kind:"neutral",message:"A dica adicional já está visível."};
+  next.hintUsed=true;
+  return {state:next,changed:true,kind:"neutral",message:"Dica adicional liberada: "+round.extraHint};
+ }
+ if(action?.type==="letter"){
+  const key=letterKey(action.value);
+  if(!key)return {state:current,changed:false,kind:"warn",message:"Escolha uma letra de A a Z."};
+  if(next.guessed.includes(key))return {state:current,changed:false,kind:"neutral",message:"Você já tentou a letra "+key+". Ela não conta como novo erro."};
+  next.guessed.push(key);
+  if(normalize(round.answer).includes(key)){
+   if(isSolvedByLetters(round.answer,next.guessed)){next.status="solved";return {state:next,changed:true,kind:"success",message:"Palavra descoberta! "+round.explanation};}
+   return {state:next,changed:true,kind:"success",message:"Boa escolha! Todas as ocorrências de "+key+" foram reveladas."};
+  }
+  next.errors++;
+  if(next.errors>=data.settings.maxErrors){next.status="missed";return {state:next,changed:true,kind:"warn",message:"As tentativas terminaram. "+round.explanation};}
+  return {state:next,changed:true,kind:"warn",message:"A letra "+key+" não aparece na palavra. Ainda restam "+(data.settings.maxErrors-next.errors)+" erros possíveis."};
+ }
+ if(action?.type==="answer"){
+  const attempt=canonicalAnswer(action.value??"");
+  if(!attempt||attempt.length>90||!/^[A-Z]+(?:[ -][A-Z]+)*$/.test(attempt)){
+   return {state:current,changed:false,kind:"warn",message:"Digite uma palavra ou expressão válida, usando apenas letras, espaços e hífen."};
+  }
+  if(next.fullGuesses.includes(attempt))return {state:current,changed:false,kind:"neutral",message:"Você já tentou essa resposta completa. Não vamos descontar outra tentativa."};
+  if(attempt===canonicalAnswer(round.answer)){
+   next.status="solved";
+   return {state:next,changed:true,kind:"success",message:"Resposta correta! "+round.explanation};
+  }
+  next.fullGuesses.push(attempt);
+  next.errors++;
+  if(next.errors>=data.settings.maxErrors){next.status="missed";return {state:next,changed:true,kind:"warn",message:"Você chegou ao limite de erros. "+round.explanation};}
+  return {state:next,changed:true,kind:"warn",message:"Essa ainda não é a palavra. Restam "+(data.settings.maxErrors-next.errors)+" erros possíveis."};
+ }
+ return {state:current,changed:false,kind:"neutral",message:"Escolha uma letra ou digite uma resposta."};
+}
+// END PURE GAME LOGIC
+const root=document.getElementById("activity");
+const $=id=>document.getElementById(id);
+const keyboard=$("keyboard"),word=$("word"),answerForm=$("answer-form"),answerInput=$("answer-input"),feedback=$("feedback");
+const progress=window.MoodleMCP?.progress?.load&&window.MoodleMCP.progress.save?window.MoodleMCP.progress:null;
+const persistenceKey="wordGuessNaturalSciencesV1";
+const controller=new AbortController();
+let current=blankState(),ready=false,disposed=false,versionSnapshot=null,queue=Promise.resolve();
+const abc="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+function element(tag,cls,label){
+ const node=document.createElement(tag);
+ if(cls)node.className=cls;
+ if(label!==undefined)node.textContent=label;
+ return node;
+}
+function announce(message,kind="neutral"){
+ feedback.className="feedback"+(kind==="neutral"?"":" "+kind);
+ feedback.textContent=message;
+}
+function getState(){return {round:current.round,guessed:[...current.guessed],errors:current.errors,hintUsed:current.hintUsed,fullGuesses:[...current.fullGuesses],resolved:current.resolved.map(x=>({...x})),status:current.status};}
+function restoreState(snapshot){
+ if(!isValidState(snapshot,gameData))return false;
+ current={...snapshot,guessed:[...snapshot.guessed],fullGuesses:[...snapshot.fullGuesses],resolved:snapshot.resolved.map(e=>({...e}))};
+ render();return true;
+}
+function score(){
+ return current.resolved.filter(x=>x.outcome==="solved").length+(current.status==="solved"?1:0);
+}
+function render(){
+ if(disposed)return;
+ const total=gameData.rounds.length;
+ const summary=current.status==="summary";
+ $("game-panel").hidden=summary;
+ $("summary").hidden=!summary;
+ const finishedRounds=current.resolved.length;
+ const overall=summary?total:finishedRounds;
+ $("step-title").textContent=summary?"Atividade finalizada":"Rodada "+(current.round+1)+" de "+total;
+ $("overall-count").textContent=overall+" de "+total+" rodadas finalizadas";
+ $("score-count").textContent=String(current.resolved.filter(x=>x.outcome==="solved").length+(current.status==="solved"?1:0));
+ $("overall-progress").setAttribute("aria-valuenow",String(overall));
+ $("overall-fill").style.width=overall/total*100+"%";
+ if(summary){renderSummary();return;}
+ const item=gameData.rounds[current.round],ended=current.status!=="active";
+ $("round-position").textContent="Desafio "+(current.round+1)+" / "+total;
+ $("round-hint").textContent=item.hint;
+ $("extra-hint").textContent=current.hintUsed?item.extraHint:"";
+ $("extra-hint").hidden=!current.hintUsed;
+ const hintButton=$("hint-button");hintButton.disabled=!ready||current.hintUsed||ended;
+ hintButton.textContent=current.hintUsed?"Dica adicional utilizada":"Mostrar outra dica";
+ word.replaceChildren();
+ for(const char of item.answer){
+  const key=letterKey(char);
+  if(!key){word.append(element("span",char===" "?"word-space":"word-separator",char===" "?"":char));continue;}
+  const show=ended||current.guessed.includes(key);
+  const slot=element("span","word-slot"+(show?" revealed":"")+(ended&&current.status==="missed"?" uncovered":""),show?char:"");
+  slot.setAttribute("aria-hidden","true");
+  word.append(slot);
+ }
+ const readable=[...item.answer].map(char=>{
+  if(char===" ")return "espaço";
+  if(char==="-")return "hífen";
+  return ended||current.guessed.includes(letterKey(char))?char:"lacuna";
+ }).join(", ");
+ $("word-voice").textContent="Palavra da rodada: "+readable+".";
+ $("remaining-errors").textContent=current.errors+" de "+gameData.settings.maxErrors+" erros";
+ const dots=$("mistake-dots");dots.replaceChildren();
+ for(let i=0;i<gameData.settings.maxErrors;i++){
+  const dot=element("span","dot"+(i<current.errors?" used":""));
+  dot.setAttribute("aria-hidden","true");dots.append(dot);
+ }
+ keyboard.replaceChildren();
+ for(const char of abc){
+  const button=element("button","letter",char);
+  button.type="button";button.dataset.letter=char;
+  const tried=current.guessed.includes(char);
+  if(tried)button.classList.add(normalize(item.answer).includes(char)?"right":"wrong");
+  button.disabled=!ready||tried||ended;
+  button.setAttribute("aria-label","Escolher letra "+char+(tried?", já utilizada":""));
+  keyboard.append(button);
+ }
+ answerInput.disabled=!ready||ended;
+ $("answer-button").disabled=!ready||ended;
+ $("round-result").hidden=!ended;
+ $("next-button").hidden=!ended;
+ $("next-button").textContent=current.round===total-1?"Ver resultado final":"Próxima palavra";
+ if(ended){
+  $("round-result").className="result"+(current.status==="missed"?" missed":"");
+  $("result-title").textContent=current.status==="solved"?"Palavra descoberta!":"Tentativas esgotadas";
+  $("result-answer").textContent="Resposta: "+item.answer;
+  $("result-explanation").textContent=item.explanation;
+ }
+ $("hint-count").textContent=current.hintUsed?"1 usada":"0 usadas";
+}
+function renderSummary(){
+ const good=current.resolved.filter(x=>x.outcome==="solved").length;
+ $("summary-title").textContent="Desafio finalizado!";
+ $("summary-score").textContent="Você descobriu "+good+" de "+gameData.rounds.length+" palavras. Explore as respostas e tente novamente quando desejar.";
+ const list=$("summary-list");list.replaceChildren();
+ for(const result of current.resolved){
+  const item=gameData.rounds.find(x=>x.id===result.id),row=element("div","summary-row");
+  row.append(element("strong","",item.answer),element("span",result.outcome==="solved"?"Descoberta":"Revisar"));
+  row.lastChild.className=result.outcome==="solved"?"ok":"miss";
+  list.append(row);
+ }
+}
+function saveProgress(){
+ if(!progress||!versionSnapshot||disposed)return;
+ const state=getState();
+ queue=queue.then(async()=>{
+  if(disposed||!versionSnapshot)return;
+  const raw=versionSnapshot.data;
+  const others=raw&&typeof raw==="object"&&!Array.isArray(raw)?raw:{};
+  const latest=await progress.save({version:versionSnapshot.version,location:"games/word-guess-sciences",data:{...others,[persistenceKey]:state}});
+  versionSnapshot=latest;
+ }).catch(async()=>{
+  if(disposed)return;
+  try{
+   versionSnapshot=await progress.load();
+   if(versionSnapshot.data?.[persistenceKey]&&restoreState(versionSnapshot.data[persistenceKey])){
+    announce("O progresso foi alterado em outra janela. Recuperei o estado salvo mais recente.","warn");
+   }else{
+    announce("Não foi possível conciliar o progresso; suas respostas ainda aparecem nesta página.","warn");
+   }
+  }catch(_){
+   versionSnapshot=null;
+   announce("Não foi possível salvar no Moodle. Você pode continuar nesta página.","warn");
+  }
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const result=updateState(current,action,gameData);
+ if(result.changed){current=result.state;render();saveProgress();}
+ announce(result.message,result.kind);
+ if(action.type==="answer"&&result.changed)answerInput.value="";
+}
+function destroy(){
+ disposed=true;controller.abort();
+ keyboard.replaceChildren();
+ word.replaceChildren();
+}
+function init(root,data){
+ if(!root||!validConfig(data)){announce("O jogo não pôde iniciar: dados de palavras inválidos.","warn");return;}
+ render();
+ const begin=async()=>{
+  let message="Leia a dica e escolha uma letra ou digite a resposta completa.";
+  if(progress){
+   try{
+    versionSnapshot=await progress.load();
+    if(versionSnapshot?.data?.[persistenceKey]&&restoreState(versionSnapshot.data[persistenceKey])){
+     message="Seu progresso foi recuperado. Continue a partir da rodada salva.";
+    }
+   }catch(_){message="Sem sincronização com o Moodle; este jogo funciona normalmente no navegador.";}
+  }
+  if(disposed)return;
+  ready=true;render();announce(message);
+ };
+ begin();
+}
+root.addEventListener("click",event=>{
+ const btn=event.target.closest("button");
+ if(!btn||!root.contains(btn))return;
+ if(btn.dataset.letter)handleAction({type:"letter",value:btn.dataset.letter});
+ else if(btn.id==="hint-button")handleAction({type:"hint"});
+ else if(btn.id==="next-button")handleAction({type:"next"});
+ else if(btn.id==="restart"||btn.id==="summary-restart")handleAction({type:"restart"});
+},{signal:controller.signal});
+answerForm.addEventListener("submit",event=>{
+ event.preventDefault();
+ handleAction({type:"answer",value:answerInput.value});
+},{signal:controller.signal});
+window.addEventListener("keydown",event=>{
+ if(event.altKey||event.ctrlKey||event.metaKey||event.isComposing||event.repeat||!ready||current.status!=="active")return;
+ const target=event.target;
+ if(target?.closest?.('input,textarea,select,[contenteditable="true"],button'))return;
+ if(event.key.length===1&&letterKey(event.key)){
+  event.preventDefault();
+  handleAction({type:"letter",value:event.key});
+ }
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,gameData);
+})();</script>
+</body>
+</html>

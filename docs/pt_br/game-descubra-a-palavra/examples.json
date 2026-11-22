@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Descubra a palavra",
+  "description": "Jogos de recuperação de vocabulário com dicas, escolha de letras e resposta completa; cada exemplo é uma atividade HTML independente.",
+  "examples": [
+    {
+      "id": "descubra-a-palavra-ciencias-naturais",
+      "title": "Descubra a palavra - Ciências naturais",
+      "description": "Descubra quatro termos de Ciências Naturais com pistas progressivas, letras ocultas e a opção de digitar a resposta inteira.",
+      "howItWorks": "O aluno escolhe letras ou digita a palavra completa. O jogo revela repetições, compara acentos, preserva espaços e hífens, oferece uma dica por rodada e permite avançar após acertar ou esgotar seis erros.",
+      "subtype": "Descubra a palavra",
+      "features": [
+        "Quatro rodadas",
+        "Acentos e hífens",
+        "Teclado acessível",
+        "Pistas progressivas"
+      ],
+      "minutes": 7,
+      "path": "game-descubra-a-palavra/ciencias-naturais.html",
+      "prompt": "Crie uma atividade educacional do tipo \"Descubra a palavra\" para o plugin mod_mcp, seguindo a mecânica do exemplo de Ciências Naturais e a especificação `.chatgpt/games/07-descubra-a-palavra.md`. O tema do exemplo é apenas uma demonstração, não é o conteúdo obrigatório.\n\nNa sua PRIMEIRA resposta, antes de criar HTML, CSS, JavaScript, respostas, JSON ou acionar ferramentas que gravem qualquer conteúdo, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta do professor; não gere a atividade nem reutilize automaticamente o assunto do exemplo.\n\nDepois da resposta, adapte as palavras e dicas ao conteúdo escolhido. Quando necessário, pergunte apenas quantas rodadas, qual o nível de aprendizagem e a dificuldade desejada. Valide a ortografia e a correção conceitual das respostas.\n\nMantenha a mecânica word_guess: dicas contextualizadas, lacunas correspondentes às letras da palavra, revelação de todas as ocorrências ao escolher uma letra, teclado virtual e físico, campo alternativo para resposta completa, limite configurável de erros, dicas adicionais, várias rodadas, explicação pedagógica e resultado apenas lúdico. Normalize a comparação de letras e acentos preservando a forma escrita correta, e trate espaços e hífens como caracteres fixos. Letras e respostas completas repetidas não devem descontar novas tentativas.\n\nGere o contrato JSON proposto em `.chatgpt/games/07-descubra-a-palavra.md` somente como metadados de autoria, sem afirmar que o servidor já o interpreta automaticamente. Produza HTML completo, responsivo e acessível com CSS e JavaScript próprios, sem bibliotecas externas, menus, cabeçalho institucional, rodapé, banners ou elementos fora da própria atividade. Inclua feedback anunciável por leitores de tela, foco visível, navegação por teclado, movimento reduzido e possibilidade de recomeçar.\n\nSe o professor solicitar imagens, pergunte quais materiais utilizar e informe explicitamente as imagens e respectivas fontes; não invente URLs ou direitos de uso. Não atribua notas no cliente nem confunda sucesso visual com conclusão oficial. Para salvar progresso, utilize apenas o SDK `MoodleMCP.progress` documentado e trate conflitos de versão. Sem conexão MCP, entregue o HTML pronto para copiar e colar no gerenciador; com conexão, respeite as APIs existentes e não publique sem aprovação expressa do professor."
+    }
+  ]
+}
