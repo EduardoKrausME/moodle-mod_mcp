@@ -31,6 +31,7 @@ use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 use mod_mcp\content\service;
+use mod_mcp\content\metadata;
 use mod_mcp\output\activity;
 use moodle_exception;
 use moodle_url;
@@ -97,6 +98,8 @@ final class mobile_content extends external_api {
             "revision" => (int)$mcp->publishedrevision,
             "sha256" => $revision->sha256,
             "html" => activity::inject_sdk($revision->content),
+            "type" => (string)($mcp->activitytype ?? ""),
+            "information" => json_encode(metadata::public_information($mcp), JSON_INVALID_UTF8_SUBSTITUTE),
             "assets" => $assets,
         ];
     }
@@ -112,6 +115,8 @@ final class mobile_content extends external_api {
             "revision" => new external_value(PARAM_INT, "Published immutable revision ID"),
             "sha256" => new external_value(PARAM_ALPHANUMEXT, "Published content SHA-256"),
             "html" => new external_value(PARAM_RAW, "Sandboxed HTML with the injected SDK"),
+            "type" => new external_value(PARAM_TEXT, "Activity type, blank when unset"),
+            "information" => new external_value(PARAM_RAW, "JSON without private quiz answers"),
             "assets" => new external_multiple_structure(new external_single_structure([
                 "url" => new external_value(PARAM_URL, "Authorized Moodle asset URL"),
             ])),

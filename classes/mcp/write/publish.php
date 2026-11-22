@@ -26,7 +26,6 @@ namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
 use mod_mcp\content\service;
-use mod_mcp\question\slots;
 
 /**
  * Explicit publish operation, separate from editing HTML.
@@ -82,7 +81,9 @@ final class publish extends activity_tool {
         $activity = $this->activity($arguments);
         return ["cmid" => (int)$arguments["cmid"], "revision" => (int)$arguments["revision"],
             "currentdraft" => (int)$activity->draftrevision,
-            "questions" => count(slots::active((int)$activity->id)),
+            "questions" => $activity->activitytype === "quiz" && $activity->informationjson ?
+                count(json_decode($activity->informationjson, true)["questions"] ?? []) : 0,
+            "type" => $activity->activitytype,
             "visible_to_students_after_confirmation" => true];
     }
 

@@ -30,8 +30,6 @@ use local_mcp\read\tool\base_tool;
 use local_mcp\security\authenticated_identity;
 use local_mcp\security\untrusted_content;
 use mod_mcp\content\service;
-use mod_mcp\question\slots;
-use mod_mcp\question\configuration;
 
 /**
  * READ access to the editable revision without exposing question answers.
@@ -115,14 +113,10 @@ final class get_activity extends base_tool {
             "draftsha256" => $revision ? $revision->sha256 : null,
             "html" => $revision ? untrusted_content::text($revision->content) : "",
             "publishedsha256" => $published ? $published->sha256 : null,
-            "questionselection" => (string)$mcp->questionselection,
-            "questionsperattempt" => (int)$mcp->questionsperattempt,
-            "shufflequestions" => (bool)$mcp->shufflequestions,
-            "settingshash" => configuration::fingerprint($mcp),
-            "questions" => array_map(static fn($slot) => [
-                "slot" => (int)$slot->slot, "questionid" => (int)$slot->questionid,
-                "version" => (int)$slot->questionversion, "maxmark" => (float)$slot->maxmark,
-            ], slots::active($mcp->id)),
+            "type" => $mcp->activitytype,
+            "information" => $mcp->informationjson === null ? null :
+                json_decode($mcp->informationjson, true),
+            "settingshash" => \mod_mcp\content\metadata::fingerprint($mcp),
         ];
     }
 }

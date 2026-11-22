@@ -49,9 +49,7 @@ final class provider implements read_provider_interface, write_provider_interfac
         return [
             new write\create_activity(),
             new write\save_content(),
-            new write\attach_question(),
-            new write\configure_questions(),
-            new write\create_question(),
+            new write\save_information(),
             new write\upload_asset(),
             new write\publish(),
         ];
