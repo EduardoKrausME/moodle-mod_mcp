@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="description" content="Um laboratório visual e interativo para entender como navegadores, DNS, conexões TCP ou QUIC, TLS, HTTP, caches e renderização entregam páginas na Web.">
+<title>Por dentro de uma requisição | Laboratório Web</title>
+<style>
+:root{color-scheme:dark;--night:#07131d;--panel:#0c2330;--panel2:#122c38;--line:#355565;--ink:#eaf5f1;--muted:#b5cbd0;--mint:#8af5cb;--cyan:#69dbed;--amber:#ffd78b;--red:#ffb0a0;--code:"SFMono-Regular",Consolas,"Liberation Mono",monospace;--ui:system-ui,-apple-system,"Segoe UI",sans-serif;--max:1240px;font-family:var(--ui);background:var(--night);color:var(--ink)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:300px;line-height:1.68;background:radial-gradient(circle at 3% 11%,#113949 0,transparent 29%),var(--night)}
+p,h1,h2,h3,figure{margin-top:0}
+p{margin-bottom:1.15em}
+h1,h2,h3{line-height:1.19}
+h2{font-size:clamp(1.75rem,3.7vw,3.3rem);letter-spacing:-.045em;font-weight:760}
+h3{font-size:1.16rem}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+a{color:#9df6e4;text-underline-offset:4px}
+a:hover{color:#ffd78b}
+:focus-visible{outline:3px solid var(--amber);outline-offset:4px}
+[hidden]{display:none!important}
+.container{width:min(var(--max),calc(100% - 44px));margin-inline:auto}
+.mono{font-family:var(--code)}
+.kicker{font:700 .77rem/1.5 var(--code);letter-spacing:.15em;text-transform:uppercase;color:var(--mint)}
+.screen-reader-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.skip{position:absolute;left:12px;top:-90px;background:#fff;color:#14252e;padding:12px 16px;z-index:50}
+.skip:focus{top:12px}
+.mast{position:relative;isolation:isolate;overflow:hidden;border-bottom:1px solid #31515b}
+.mast:before{content:"";position:absolute;inset:0;background:linear-gradient(145deg,#06121e 10%,#10323d 65%,#06121d),radial-gradient(circle,#298b83 0,transparent 60%);z-index:-2}
+.mast:after{content:"";inset:0;position:absolute;background-image:linear-gradient(#67dac309 1px,transparent 1px),linear-gradient(90deg,#67dac309 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,#000 0%,transparent 94%);z-index:-1;pointer-events:none}
+.mastline{padding:23px 0;display:flex;justify-content:space-between;gap:18px;align-items:center;border-bottom:1px solid #4c69705e}
+.mastline .tag{font-size:.75rem;border:1px solid #47747a;padding:7px 11px;color:#d1e7e5;white-space:nowrap}
+.mastintro{display:grid;grid-template-columns:1fr .9fr;gap:38px;align-items:center;padding:78px 0 71px}
+.mast h1{font-size:clamp(3.15rem,6.7vw,6.1rem);letter-spacing:-.076em;line-height:.98;max-width:820px;margin:20px 0 28px}
+.mast h1 .accent{color:var(--mint)}
+.mast .lead{font-size:clamp(1rem,1.5vw,1.14rem);color:#cbdde0;max-width:580px;line-height:1.83}
+.keyline{display:flex;flex-wrap:wrap;gap:9px;margin-top:30px}
+.keyline span{font:700 .78rem/1.3 var(--code);padding:9px 12px;background:#122e38;border:1px solid #3b6570;color:#d7f7f0}
+.cover-illustration{margin:0;min-width:0}
+.cover-illustration svg{display:block;width:100%;height:auto;filter:drop-shadow(0 20px 28px #0005)}
+.cover-illustration figcaption{color:#a8c2c4;font-size:.79rem;margin-top:12px}
+.markerbar{border-top:1px solid #345865;background:#092532;color:#8bd6c9}
+.markerbar .container{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;padding:13px 0;font:.76rem var(--code)}
+.story-intro{display:grid;grid-template-columns:190px 1fr;gap:54px;padding:87px 0 77px}
+.story-num{font:6.3rem/1 var(--code);letter-spacing:-.1em;color:#497b80}
+.story-intro .introtext{max-width:880px;font-size:1.12rem;line-height:1.97;color:#d4e1df}
+.story-intro .introtext strong{color:#e5fff7}
+.story-intro h2{margin-bottom:24px}
+.story-intro .opening{font-size:1.35rem;color:#f5fff8}
+.lab-shell{background:#0c1d2a;border-top:1px solid #4c7783;border-bottom:1px solid #4c7783;padding:72px 0 82px}
+.lab-title{display:flex;justify-content:space-between;gap:28px;align-items:end;margin-bottom:32px}
+.lab-title h2{margin:12px 0 0;max-width:760px}
+.lab-title p{max-width:330px;color:var(--muted);font-size:.9rem;margin:0}
+.workbench{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,.83fr);gap:17px;align-items:start}
+.workbench-main{background:#0b2734;border:1px solid #47707a}
+.bench-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 19px;background:#183946;border-bottom:1px solid #537481}
+.window-dots{display:inline-flex;gap:7px;align-items:center}
+.window-dots span{display:block;width:9px;height:9px;border:1px solid #6f99a1;border-radius:50%}
+.window-dots span:first-child{background:#c87368;border-color:#c87368}
+.window-dots span:nth-child(2){background:#dfa65a;border-color:#dfa65a}
+.window-dots span:nth-child(3){background:#62a18c;border-color:#62a18c}
+.bench-top strong{font:700 .82rem var(--code);color:#e2f6f4}
+.bench-top .smallstate{font:.71rem var(--code);color:#b9d4d6}
+.topology{padding:15px 12px 10px;background:radial-gradient(ellipse at 45% 45%,#123f4b,transparent 72%),#0a222e;min-height:360px}
+.topology svg{display:block;width:100%;height:auto}
+.topology .wire{fill:none;stroke:#476e79;stroke-width:3;stroke-dasharray:8 9}
+.topology .wire.current{stroke:#83ebca;stroke-width:4;animation:flow 1.25s linear infinite}
+.topology .device{fill:#153d49;stroke:#66939b;stroke-width:2}
+.topology .iconline{fill:none;stroke:#c3e9e4;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.topology .node-label{font:700 17px var(--code);fill:#d7eeec;text-anchor:middle}
+.topology .node-note{font:12px var(--code);fill:#b0cbd0;text-anchor:middle}
+.topology .cluster [data-active-shape]{opacity:0;transition:opacity .2s}
+.topology .cluster.active [data-active-shape]{opacity:1}
+.topology .cluster.active .device{stroke:#a0ffda;stroke-width:4;fill:#1e5761}
+.topology .cluster.active .node-label{fill:#a3ffdb}
+@keyframes flow{to{stroke-dashoffset:-34}}
+.topology.freeze *, .topology.freeze *:before,.topology.freeze *:after{animation-play-state:paused!important}
+.diagram-caption{font-size:.8rem;color:#b8d2d3;padding:0 20px 17px;margin:0}
+.trace-pane{border-top:1px solid #476b75;padding:23px 24px 26px}
+.trace-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.trace-heading h3{margin:0;font:700 .9rem var(--code);letter-spacing:.09em}
+.trace-counter{font:.77rem var(--code);color:#b7d9dc}
+.trace-step{min-height:180px;margin-top:16px}
+.trace-step .step-kind{color:var(--amber);font:700 .78rem var(--code);text-transform:uppercase}
+.trace-step h3{font-size:1.45rem;margin:8px 0 12px}
+.trace-step p{color:#d5e7e4;margin:0;line-height:1.78}
+.trace-log{padding:14px 16px;background:#061924;color:#b6f8df;font:.75rem/1.8 var(--code);white-space:pre-wrap;overflow-wrap:anywhere;min-height:79px;max-height:140px;overflow:auto;border:1px solid #315968;margin-top:16px}
+.trace-progress{height:8px;background:#35545e;margin:14px 0;border-radius:0;overflow:hidden}
+.trace-progress span{display:block;background:linear-gradient(90deg,#48b9b2,#c2f0a7);height:100%;width:0;transition:width .22s}
+.trace-controls{display:flex;flex-wrap:wrap;gap:9px}
+.btn{padding:10px 15px;font-weight:750;border:1px solid #8ecbbf;background:#133b46;color:#e6fff7;border-radius:3px}
+.btn:hover:not(:disabled){background:#1f5360}
+.btn-primary{background:#a0f2ce;color:#10302b;border-color:#b5ffe3}
+.btn-primary:hover:not(:disabled){background:#d0ffe8;color:#0c2724}
+.btn-danger{border-color:#a9867b;color:#ffe0d2}
+.bench-side{display:grid;gap:16px}
+.console-card{background:#101c26;border:1px solid #4a6975;padding:24px}
+.console-card h3{font-size:1.08rem;margin:0 0 12px}
+.console-card p{color:#c2d6d7;font-size:.87rem}
+.select-label{display:block;font:.74rem var(--code);margin-bottom:10px;color:var(--mint)}
+select{width:100%;padding:12px 14px;border:1px solid #66858e;background:#102c39;color:#f2fff8;border-radius:0}
+.select-help{color:#c4d7db;font-size:.81rem;min-height:4em;margin:13px 0 0}
+.byte-block{padding:14px 16px;background:#06121b;border:1px solid #2d5361;font:.74rem/1.8 var(--code);white-space:pre-wrap;overflow-wrap:anywhere;color:#a9e9e2;min-height:156px;max-height:285px;overflow:auto}
+.notice{border-left:3px solid var(--amber);padding:12px 17px;background:#f8d99014;color:#f5e4c4;font-size:.86rem}
+.lab-message{font-size:.8rem;color:#d1dfe0;margin-top:18px}
+.lesson{padding:87px 0;border-bottom:1px solid #2d4b57}
+.lesson-title{display:grid;grid-template-columns:180px 1fr;gap:35px;margin-bottom:35px}
+.lesson-title .index{font:.82rem var(--code);color:var(--mint);padding-top:11px}
+.lesson-title h2{margin:0;max-width:820px}
+.lesson-title .desc{max-width:760px;font-size:1.08rem;color:#c5d6d5;line-height:1.87;margin:21px 0 0}
+.lesson p,.lesson li{color:#d1e0dc}
+.text-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:46px;align-items:start}
+.text-grid h3{font-size:1.4rem}
+.text-grid p{font-size:1.04rem;line-height:1.86}
+.illustration{margin:0;background:#102b38;border:1px solid #3f6570;padding:20px}
+.illustration svg{width:100%;height:auto;display:block}
+.illustration figcaption{font-size:.79rem;color:#bed2d3;margin-top:15px}
+.url-window{border:1px solid #638692;background:#0d2935;padding:20px 18px}
+.url-window .url{display:block;background:#071823;white-space:normal;overflow-wrap:anywhere;border:1px solid #4d7785;padding:17px 13px;line-height:2.1;font:1rem var(--code)}
+.url-window .url .protocol{color:#a8f0da}.url-window .url .host{color:#fff0ba}.url-window .url .path{color:#80d7ff}.url-window .url .query{color:#f5b3aa}
+.segment-tools{display:flex;flex-wrap:wrap;gap:9px;margin:20px 0 16px}
+.segment-tools button{font:.77rem var(--code);background:#193946;border:1px solid #658491;color:#e9f8f5;padding:11px 14px}
+.segment-tools button[aria-pressed="true"]{background:#9debcf;color:#082923;border-color:#9debcf}
+.segment-detail{min-height:96px;line-height:1.8;color:#d5e9e5;font-size:.95rem}
+.fact-strip{margin-top:22px;background:#16323c;border-left:4px solid #76d7bb;padding:18px 22px;color:#e7f4ed}
+.callouts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.callout{border-top:4px solid #86dbbe;background:#122d37;padding:23px 22px}
+.callout:nth-child(2){border-color:#f9cd86}.callout:nth-child(3){border-color:#82bde3}
+.callout h3{font-size:1.15rem;margin:0 0 11px}
+.callout p{font-size:.93rem;line-height:1.72;margin:0}
+.explainer{padding:75px 0;background:#dae6df;color:#192f33}
+.explainer h2,.explainer p,.explainer li{color:#192f33}
+.explainer .index{color:#356c68}
+.explainer .lesson-title .desc{color:#3d5554}
+.explainer .illustration{background:#edf5f0;border-color:#a8beb7}
+.explainer .illustration figcaption{color:#385554}
+.explainer .text-grid p{color:#344f4d}
+.explainer .fact-strip{background:#f1f8f3;color:#274340;border-color:#237b72}
+.protocols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:35px}
+.protocol-card{padding:30px;background:#092534;border:1px solid #496d7b}
+.protocol-card h3{font-size:1.5rem;color:#c0ffdf}
+.protocol-card p{color:#d4e5e3}
+.protocol-card .top-id{font:.76rem var(--code);color:#e8ce98}
+.protocol-card svg{width:100%;height:auto;display:block;margin:20px 0;border:1px solid #315364;background:#0b1f2b}
+.protocol-card ul{padding-left:20px;margin:20px 0 0}
+.protocol-card li{font-size:.92rem}
+.tab-strap{display:flex;flex-wrap:wrap;gap:9px}
+.tab-strap button{border:1px solid #7095a1;background:#122f3c;color:#f2faf4;padding:11px 16px}
+.tab-strap button[aria-pressed="true"]{background:#9deecf;border-color:#9deecf;color:#0e2b2c;font-weight:800}
+.http-view{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+.http-view>div{min-width:0}
+.http-view h3{font:.9rem var(--code);color:#c7e8e0}
+.http-view pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2;background:#060f19;border:1px solid #315b6a;padding:22px;color:#c6f4e8;min-height:270px;font:.86rem/1.82 var(--code)}
+.http-summary{margin-top:19px;min-height:79px;color:#d6e3dc}
+.cache-map{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:35px 0}
+.cache-item{border:1px solid #6e9299;padding:20px;background:#122f3b;position:relative}
+.cache-item .head{font:.74rem var(--code);color:#a8e9d8}
+.cache-item h3{font-size:1.3rem;margin:9px 0}
+.cache-item p{font-size:.89rem;color:#d5e8e5}
+.cache-item:not(:last-child)::after{content:"→";position:absolute;right:-18px;top:31px;color:#e2c38a;font-size:1.45rem;z-index:1;background:#102c35}
+.error-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.error{border:1px solid #4d6c78;padding:22px;background:#102936}
+.error small{font:700 .77rem var(--code);color:#e7c998}
+.error h3{margin:9px 0 12px}
+.error p{font-size:.91rem}
+.security{padding:80px 0;background:#1a2f32;border-top:1px solid #527368}
+.security h2{max-width:930px}
+.security-items{display:grid;grid-template-columns:repeat(3,1fr);gap:19px;margin-top:35px}
+.security-item{padding:26px;border-left:3px solid #b6e3c9;background:#233d40}
+.security-item h3{color:#d3fadd}
+.security-item p{font-size:.93rem;color:#d9e9e2}
+.latency{padding:79px 0;border-bottom:1px solid #47626a;background:#081b27}
+.latency-layout{display:grid;grid-template-columns:1fr .83fr;gap:36px}
+.latency-control{margin-bottom:20px}
+.latency-control label{display:flex;justify-content:space-between;gap:15px;font-size:.9rem;font-weight:730}
+.latency-control output{font-family:var(--code);color:var(--mint);font-variant-numeric:tabular-nums}
+.latency-control input{width:100%;accent-color:#86e9c4;margin:11px 0}
+.latency-result{background:#132e3b;border:1px solid #56818a;padding:26px}
+.latency-total{font:clamp(2.6rem,5.5vw,4.7rem) var(--code);color:var(--mint);letter-spacing:-.05em;margin:15px 0 7px}
+.bargraph{display:flex;height:32px;border:1px solid #617983;margin:20px 0}
+.bargraph span{min-width:1px;transition:width .17s}
+.bargraph span:nth-child(1){background:#4ea29b}
+.bargraph span:nth-child(2){background:#b4a878}
+.bargraph span:nth-child(3){background:#6b95cc}
+.bargraph span:nth-child(4){background:#d78c72}
+.bargraph span:nth-child(5){background:#99ca8d}
+.latency-legend{display:flex;flex-wrap:wrap;gap:12px;font:.73rem var(--code);color:#d2e4df}
+.latency-legend b{display:inline-block;width:9px;height:9px;margin-right:5px}
+.latency-note{font-size:.85rem;color:#c9dddb;margin-top:18px}
+.render-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin:35px 0 31px}
+.render-node{border:1px solid #5b7b86;background:#10313a;padding:18px 13px;min-height:145px;position:relative}
+.render-node:not(:last-child):after{content:"→";position:absolute;right:-18px;top:34px;color:var(--amber);font-size:1.3rem;z-index:2;background:#081f29}
+.render-node .number{font:.76rem var(--code);color:#a4eddb}
+.render-node h3{font-size:1rem;margin:10px 0}
+.render-node p{font-size:.8rem;color:#b9d0cb;line-height:1.48}
+.review{padding:82px 0 99px;background:#112e35}
+.review .summary{max-width:760px;color:#cbe1d9}
+.review-grid{display:grid;grid-template-columns:1fr .7fr;gap:46px}
+.question{border:0;border-bottom:1px solid #50717b;padding:0 0 22px;margin-bottom:23px;min-width:0}
+.question legend{padding:0;margin-bottom:15px;font-weight:800;line-height:1.65}
+.question label{display:flex;gap:11px;padding:11px 14px;margin:9px 0;border:1px solid #587681;background:#0b2633;cursor:pointer}
+.question label:has(input:checked){border-color:#a5f5d5;background:#1b4b4b}
+.question input{margin-top:7px;flex:none;accent-color:#82e6be}
+.question-feedback{font-size:.9rem;color:#ccf7df;min-height:1.4em;margin:10px 0 0}
+.result{font:1.13rem/1.7 var(--code);color:#e7ffe7;margin-top:19px}
+.summary-plate{background:#092631;border:1px solid #537b85;padding:26px}
+.summary-plate h3{font-size:1.65rem;margin-top:0}
+.summary-plate p{color:#cbe1db}
+.summary-plate code{color:#f5d39a;overflow-wrap:anywhere}
+.references{padding:42px 0 70px;color:#cbdad4}
+.references h2{font-size:1.4rem}
+.references p{font-size:.85rem}
+.references a{overflow-wrap:anywhere}
+@media(max-width:990px){.mastintro,.workbench,.text-grid,.latency-layout,.review-grid{grid-template-columns:1fr}.mastintro{padding:58px 0}.cover-illustration{max-width:740px}.lab-title{display:block}.lab-title p{max-width:800px;margin-top:20px}.story-intro{grid-template-columns:1fr;gap:6px}.story-num{font-size:3.6rem}.lesson-title{grid-template-columns:1fr;gap:12px}.lesson-title .index{padding:0}.cover-illustration figcaption{margin:12px 0}.workbench{gap:13px}}
+@media(max-width:710px){.container{width:calc(100% - 30px)}.mast h1{font-size:clamp(2.9rem,12vw,4.1rem)}.mastline .tag{white-space:normal}.mastintro{padding:42px 0}.story-intro,.lesson{padding:59px 0}.lab-shell,.latency,.security,.review{padding:58px 0}.callouts,.protocols,.http-view,.cache-map,.error-grid,.security-items{grid-template-columns:1fr}.cache-item:not(:last-child)::after{content:"↓";right:18px;top:auto;bottom:-23px}.render-flow{grid-template-columns:1fr 1fr}.render-node:not(:last-child):after{content:""}.trace-pane{padding:20px 17px}.topology{padding:7px 2px;min-height:0}.bench-top .smallstate{width:100%}}
+@media(max-width:420px){.render-flow{grid-template-columns:1fr}.latency-legend{gap:7px}.mastline{flex-wrap:wrap}.kicker{letter-spacing:.06em}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.topology .wire.current{stroke-dasharray:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Pular para o conteúdo</a>
+<main id="main">
+<section class="mast" aria-labelledby="title">
+ <div class="container">
+  <div class="mastline"><span class="kicker">REQUEST / LAB <span aria-hidden="true">•</span> EDIÇÃO 04 DE 10</span><span class="tag mono">DOCUMENTO EXPERIMENTAL / SEM REQUISIÇÕES REAIS</span></div>
+  <div class="mastintro">
+    <div>
+      <span class="kicker">O caminho invisível da Web</span>
+      <h1 id="title">Você digitou uma URL. <span class="accent">E agora?</span></h1>
+      <p class="lead">Em frações de segundo, seu navegador pode consultar nomes, negociar uma conexão segura, buscar dados, executar código e montar pixels. Nem sempre faz tudo isso de novo: conexões e caches mudam o percurso. Abra o laboratório e siga uma requisição, etapa por etapa.</p>
+      <div class="keyline" aria-label="Tópicos abordados"><span>DNS</span><span>TCP / QUIC</span><span>TLS</span><span>HTTP</span><span>CACHE</span><span>DOM / CSSOM</span></div>
+    </div>
+    <figure class="cover-illustration">
+      <svg viewBox="0 0 690 540" role="img" aria-labelledby="cover-title cover-desc">
+        <title id="cover-title">Ilustração original de um navegador, pacotes de rede e um servidor</title>
+        <desc id="cover-desc">Em uma cena abstrata azul escura, uma janela de navegador à esquerda conecta-se, por caminhos luminosos pontilhados, a um servidor e a uma estrutura de documentos no lado direito.</desc>
+        <defs><linearGradient id="glow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6af0bd"/><stop offset="1" stop-color="#75a8e2"/></linearGradient><pattern id="mesh" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#417988"/></pattern></defs>
+        <rect x="18" y="16" width="654" height="510" rx="16" fill="#0b2431" stroke="#47717a"/>
+        <rect x="18" y="16" width="654" height="510" rx="16" fill="url(#mesh)"/>
+        <path d="M188 257 C258 160 305 183 362 255 S493 342 575 229" fill="none" stroke="#6df4d1" stroke-width="4" stroke-dasharray="9 13"/>
+        <path d="M176 375 C264 377 272 474 372 430 S483 364 550 386" fill="none" stroke="#699ecc" stroke-width="3" stroke-dasharray="5 12"/>
+        <g transform="translate(48 99)">
+          <rect x="0" y="0" width="268" height="245" rx="12" fill="#143845" stroke="#90d8d3" stroke-width="3"/>
+          <path d="M0 42 H268" stroke="#618a90" stroke-width="3"/>
+          <g fill="#7ba8ab"><circle cx="24" cy="22" r="6"/><circle cx="43" cy="22" r="6"/><circle cx="62" cy="22" r="6"/></g>
+          <rect x="87" y="12" width="160" height="21" rx="8" fill="#061b27"/>
+          <text x="100" y="27" font-family="monospace" font-size="12" fill="#a4f5d6">https://exemplo.test</text>
+          <rect x="21" y="66" width="226" height="41" rx="3" fill="#216174"/>
+          <rect x="21" y="122" width="111" height="89" rx="4" fill="#315b68"/>
+          <rect x="148" y="122" width="99" height="13" rx="2" fill="#6bb6bb"/>
+          <rect x="148" y="148" width="94" height="8" rx="2" fill="#508996"/>
+          <rect x="148" y="172" width="82" height="8" rx="2" fill="#508996"/>
+          <rect x="148" y="196" width="92" height="8" rx="2" fill="#508996"/>
+          <text x="35" y="93" font-family="monospace" font-size="17" font-weight="700" fill="#e5fff3">PÁGINA</text>
+        </g>
+        <g transform="translate(425 140)">
+          <rect x="0" y="0" width="190" height="290" rx="14" fill="#152f43" stroke="#7ad9c8" stroke-width="4"/>
+          <rect x="17" y="21" width="156" height="73" rx="8" fill="#0b202e" stroke="#4d818f"/>
+          <rect x="17" y="109" width="156" height="73" rx="8" fill="#0b202e" stroke="#4d818f"/>
+          <rect x="17" y="198" width="156" height="73" rx="8" fill="#0b202e" stroke="#4d818f"/>
+          <g fill="#7bffdc"><circle cx="43" cy="57" r="9"/><circle cx="43" cy="146" r="9"/><circle cx="43" cy="237" r="9"/></g>
+          <g stroke="#568ea0" stroke-width="7" stroke-linecap="round"><path d="M67 52 H147 M67 69 H128 M67 141 H147 M67 159 H118 M67 231 H147 M67 246 H128"/></g>
+        </g>
+        <g fill="#a0ffdc"><circle cx="355" cy="247" r="11"/><circle cx="382" cy="320" r="8"/><circle cx="335" cy="434" r="6"/></g>
+        <rect x="52" y="461" width="286" height="36" rx="4" fill="#09212b" stroke="#456e75"/>
+        <text x="70" y="485" font-family="monospace" font-size="17" fill="#b7ffe4">GET /guia  →  200 OK</text>
+      </svg>
+      <figcaption>Ilustração vetorial original. A comunicação real envolve diferentes protocolos, mensagens e equipamentos, não um único cabo entre navegador e servidor.</figcaption>
+    </figure>
+  </div>
+ </div>
+ <div class="markerbar"><div class="container"><span>ESTUDO DE CASO: https://exemplo.test/guia?tema=web</span><span>TIPO: JORNADA INTERATIVA / 20–25 MIN</span></div></div>
+</section>
+
+<section class="story-intro container" aria-labelledby="intro">
+ <div><div class="story-num">01</div><span class="kicker">A pergunta de partida</span></div>
+ <div class="introtext"><h2 id="intro">Um clique não corresponde, necessariamente, a uma única requisição.</h2>
+  <p class="opening">Ao abrir uma página, o navegador precisa obter um documento e, muitas vezes, recursos adicionais como folhas de estilo, scripts, fontes e imagens.</p>
+  <p>Antes de procurar um servidor, ele pode encontrar uma resposta recente em cache. Se precisar da rede, resolve um nome para endereços ou endpoints apropriados, estabelece ou reutiliza conexões, envia mensagens HTTP e recebe respostas. Em seguida interpreta HTML, CSS e JavaScript para produzir a interface. Cada recurso externo pode desencadear outras operações.</p>
+  <p>Também existem diferentes trajetos: uma resposta pode vir de um cache de borda, de um proxy reverso, de um aplicativo que consulta banco de dados ou de arquivos estáticos. A sequência que você verá é <strong>um modelo pedagógico de navegação</strong>, não uma captura de tráfego real, e separa cenários que não podem acontecer simultaneamente na mesma requisição.</p>
+ </div>
+</section>
+
+<section class="lab-shell" aria-labelledby="traceTitle">
+ <div class="container">
+  <div class="lab-title"><div><span class="kicker">02 / NETWORK TRACE</span><h2 id="traceTitle">Siga um pacote, encontre o desvio.</h2></div><p>Escolha um cenário. Use Próxima etapa ou Reproduzir para percorrer o fluxo. Todos os endereços, logs e resultados abaixo são ilustrativos; nenhum pacote é enviado.</p></div>
+  <div class="workbench">
+   <div class="workbench-main">
+    <div class="bench-top"><span class="window-dots" aria-hidden="true"><span></span><span></span><span></span></span><strong>TRAFFIC MAP // https://exemplo.test/guia</strong><span class="smallstate">AMBIENTE ISOLADO / SIMULADO</span></div>
+    <div class="topology" id="topology" role="img" aria-label="Mapa de rede com navegador, resolvedor DNS, conexão, CDN, servidor de origem e motor de renderização; o nó e o caminho da etapa atual ficam destacados.">
+     <svg viewBox="0 0 940 510" aria-hidden="true" focusable="false">
+      <defs><linearGradient id="mapgrad" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#0c2a39"/><stop offset="1" stop-color="#081c29"/></linearGradient></defs>
+      <rect x="0" y="0" width="940" height="510" fill="url(#mapgrad)"/>
+      <g stroke="#2a4d59" stroke-width="1" opacity=".65"><path d="M0 96 H940 M0 196 H940 M0 296 H940 M0 396 H940 M130 0 V510 M260 0 V510 M390 0 V510 M520 0 V510 M650 0 V510 M780 0 V510"/></g>
+      <g><path class="wire" id="wire-browser-dns" d="M194 169 L383 82"/><path class="wire" id="wire-browser-link" d="M194 204 L384 242"/><path class="wire" id="wire-link-edge" d="M531 244 L710 137"/><path class="wire" id="wire-edge-origin" d="M764 187 L754 331"/><path class="wire" id="wire-edge-render" d="M667 137 L188 382"/><path class="wire" id="wire-browser-render" d="M132 258 L130 361"/><path class="wire" id="wire-dns-browser" d="M374 91 L197 169"/></g>
+      <g class="cluster" id="node-browser"><circle cx="131" cy="189" r="74" data-active-shape fill="#6affbd" opacity="0.12"/><rect class="device" x="45" y="136" width="172" height="105" rx="8"/><path class="iconline" d="M45 162 H217 M65 150 h7 m10 0 h7 m12 0 h7 M72 184 H185 M72 202 H164 M72 220 H129"/><text class="node-label" x="132" y="272">NAVEGADOR</text><text class="node-note" x="132" y="295">cliente</text></g>
+      <g class="cluster" id="node-dns"><circle cx="462" cy="91" r="72" data-active-shape fill="#6affbd" opacity="0.12"/><rect class="device" x="385" y="32" width="154" height="99" rx="7"/><g class="iconline"><circle cx="462" cy="77" r="26"/><path d="M436 77 H488 M462 51 C448 63 448 90 462 103 M462 51 C476 63 476 90 462 103 M443 64 H481 M443 90 H481"/></g><text class="node-label" x="462" y="154">DNS</text><text class="node-note" x="462" y="175">resolvedor</text></g>
+      <g class="cluster" id="node-link"><circle cx="465" cy="264" r="76" data-active-shape fill="#6affbd" opacity="0.12"/><rect class="device" x="388" y="205" width="154" height="104" rx="7"/><g class="iconline"><path d="M425 257 H507 M425 257 l21-17 m-21 17 21 17 M507 257 l-21-17 m21 17-21 17"/><path d="M438 224 H495 M438 288 H495"/></g><text class="node-label" x="462" y="331">CONEXÃO</text><text class="node-note" x="462" y="352">TCP/TLS ou QUIC</text></g>
+      <g class="cluster" id="node-edge"><circle cx="751" cy="129" r="70" data-active-shape fill="#6affbd" opacity="0.12"/><rect class="device" x="677" y="68" width="149" height="108" rx="7"/><path class="iconline" d="M698 89 H806 M698 116 H806 M698 143 H806"/><g fill="#8bf0d6"><circle cx="718" cy="96" r="4"/><circle cx="718" cy="123" r="4"/><circle cx="718" cy="150" r="4"/></g><text class="node-label" x="753" y="201">CDN / EDGE</text><text class="node-note" x="753" y="221">cache de borda</text></g>
+      <g class="cluster" id="node-origin"><circle cx="753" cy="382" r="70" data-active-shape fill="#6affbd" opacity="0.12"/><rect class="device" x="675" y="322" width="154" height="112" rx="8"/><path class="iconline" d="M694 344 H811 M694 370 H811 M694 395 H811 M694 419 H811"/><g fill="#91e4c7"><circle cx="706" cy="350" r="3"/><circle cx="706" cy="376" r="3"/><circle cx="706" cy="401" r="3"/></g><text class="node-label" x="754" y="463">ORIGEM</text><text class="node-note" x="754" y="485">aplicação / arquivos</text></g>
+      <g class="cluster" id="node-render"><circle cx="131" cy="407" r="65" data-active-shape fill="#6affbd" opacity="0.12"/><rect class="device" x="53" y="360" width="160" height="98" rx="7"/><path class="iconline" d="M55 382 H211 M76 399 H139 M76 418 H188 M76 438 H170"/><text class="node-label" x="131" y="486">RENDER</text><text class="node-note" x="131" y="503">pixels</text></g>
+     </svg>
+    </div>
+    <p class="diagram-caption">Figura 2. Mapa de serviços abstrato: a posição dos nós não representa topologia física, geografia nem ordem obrigatória. O trecho ativo indica a fase lógica selecionada.</p>
+    <div class="trace-pane">
+     <div class="trace-heading"><h3>TRACE / ETAPA ATUAL</h3><span class="trace-counter" id="traceCounter">1 / 7</span></div>
+     <div class="trace-progress" role="progressbar" aria-label="Progresso da requisição simulada" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="traceProgress"><span id="traceBar"></span></div>
+     <div class="trace-step" aria-live="polite" aria-atomic="true"><span class="step-kind" id="stepKind">CLIENTE</span><h3 id="stepTitle">Iniciar a jornada</h3><p id="stepText">Selecione um cenário e comece a investigação.</p></div>
+     <pre class="trace-log" id="traceLog" aria-label="Log didático da etapa">[demo] aguardando início</pre>
+     <div class="trace-controls"><button class="btn btn-primary" id="nextStep" type="button">Próxima etapa</button><button class="btn" id="autoPlay" type="button" aria-pressed="false">Reproduzir</button><button class="btn" id="resetTrace" type="button">Reiniciar</button><button class="btn btn-danger" id="pauseVisuals" type="button" aria-pressed="false">Pausar animações</button></div>
+     <p class="lab-message" id="traceStatus" role="status" aria-live="polite"></p>
+    </div>
+   </div>
+   <aside class="bench-side" aria-label="Configuração e mensagens de rede simuladas">
+    <div class="console-card"><label class="select-label" for="scenario">CENÁRIO DE REDE</label>
+      <select id="scenario">
+       <option value="cold">Primeira visita: HTTPS + HTTP/2</option>
+       <option value="warm">Documento válido no cache do navegador</option>
+       <option value="h3">Primeira conexão HTTP/3 sobre QUIC</option>
+       <option value="edge">Resposta no cache de borda (CDN)</option>
+       <option value="dnsfail">Domínio sem resolução (NXDOMAIN)</option>
+       <option value="tlsfail">Certificado inválido / conexão interrompida</option>
+       <option value="notfound">HTTP 404: recurso não encontrado</option>
+       <option value="serverfail">HTTP 500: falha na aplicação</option>
+      </select>
+      <p class="select-help" id="scenarioHelp">DNS, conexão TCP, TLS, requisição, origem e renderização: uma simplificação da primeira visita HTTPS.</p>
+      <div class="notice">Fluxo conceitual, sem consulta DNS, sem HTTP real e sem temporização medida. Uma página costuma buscar vários recursos, não apenas um documento.</div>
+    </div>
+    <div class="console-card"><h3>Mensagens ilustrativas</h3><p>O conteúdo muda conforme a etapa: observe como uma falha de conexão difere de uma resposta HTTP com código de erro.</p>
+      <pre class="byte-block" id="wireText" aria-label="Exemplo de mensagem associada à etapa" aria-live="polite">GET /guia HTTP/1.1
+Host: exemplo.test
+
+[apenas um exemplo textual]</pre>
+    </div>
+    <div class="console-card"><h3>O que observar</h3><p id="questionPrompt">Uma requisição fria pode precisar resolver o domínio e negociar uma conexão; o navegador ainda precisa interpretar a resposta recebida.</p><p class="kicker">LEMBRETE / HTTPS NÃO SIGNIFICA SITE HONESTO</p></div>
+   </aside>
+  </div>
+ </div>
+</section>
+
+<section class="lesson container" aria-labelledby="urlTitle">
+ <div class="lesson-title"><span class="index">03 / URL</span><div><h2 id="urlTitle">O endereço é um conjunto de instruções.</h2><p class="desc">Esquema, host, caminho e consulta têm papéis diferentes. O fragmento depois de <code>#</code>, quando existe, é usado localmente pelo navegador e não integra o caminho enviado no pedido HTTP.</p></div></div>
+ <div class="text-grid">
+  <div>
+   <div class="url-window"><div class="kicker">DESMONTE O ENDEREÇO</div>
+    <code class="url"><span class="protocol">https://</span><span class="host">exemplo.test</span><span class="path">/guia</span><span class="query">?tema=web</span></code>
+    <div class="segment-tools" role="group" aria-label="Partes da URL">
+      <button type="button" data-part="scheme" aria-pressed="true">Esquema</button><button type="button" data-part="host" aria-pressed="false">Host</button><button type="button" data-part="path" aria-pressed="false">Caminho</button><button type="button" data-part="query" aria-pressed="false">Consulta</button>
+    </div>
+    <p class="segment-detail" id="urlDetail" role="status" aria-live="polite">https indica uma navegação HTTP protegida por TLS. O esquema influencia o protocolo e a política de segurança utilizada pelo navegador.</p>
+   </div>
+   <div class="fact-strip"><strong>Atenção:</strong> DNS não recebe a URL completa para resolver o nome. De forma simplificada, o resolvedor é consultado sobre nomes de domínio e tipos de registro, não sobre o caminho <code>/guia</code> nem sobre <code>?tema=web</code>.</div>
+  </div>
+  <div>
+   <h3>Nem tudo vai para a rede</h3>
+   <p>O navegador considera o esquema, a origem, suas políticas de cache, a existência de conexões já estabelecidas, proxies e outras condições antes de realizar novos pedidos. A presença de <code>https://</code> não obriga que cada clique repita negociação TCP e TLS.</p>
+   <p>O <strong>host</strong> identifica o nome lógico solicitado, que pode apontar para um balanceador, rede de distribuição ou múltiplos endereços IPv4/IPv6. O caminho é interpretado pela aplicação que recebe a requisição; o servidor não precisa ter um arquivo com exatamente aquele nome.</p>
+   <p>O texto de consulta (<em>query string</em>) pode orientar filtros ou pesquisa, mas não deve conter segredos: URLs podem aparecer em históricos, logs, compartilhamentos e outras superfícies. Dados sensíveis precisam de tratamento apropriado.</p>
+  </div>
+ </div>
+</section>
+
+<section class="explainer" aria-labelledby="dnsTitle">
+ <div class="container">
+  <div class="lesson-title"><span class="index">04 / DNS</span><div><h2 id="dnsTitle">Quem traduz um nome em destinos possíveis?</h2><p class="desc">O DNS é um sistema distribuído de nomes. Um resolvedor recursivo pode responder do cache ou consultar autoridades pela hierarquia apropriada; não precisa consultar toda a árvore a cada visita.</p></div></div>
+  <div class="text-grid">
+   <figure class="illustration">
+    <svg viewBox="0 0 750 480" role="img" aria-labelledby="dns-svg-title dns-svg-desc">
+     <title id="dns-svg-title">Esquema didático de resolução DNS</title>
+     <desc id="dns-svg-desc">Um navegador consulta um resolvedor recursivo; em caso de cache ausente, o resolvedor percorre referências da raiz ao domínio de topo e a servidores autoritativos antes de devolver registros.</desc>
+     <rect width="750" height="480" fill="#edf5f0"/>
+     <g fill="none" stroke="#488479" stroke-width="4" stroke-dasharray="9 9"><path d="M166 135 H269 M388 135 H490 M579 185 V262 M490 316 H388 M264 316 H152 V186"/></g>
+     <g fill="#bbdfcc" stroke="#427e71" stroke-width="3">
+      <rect x="21" y="79" width="145" height="107" rx="12"/><rect x="265" y="79" width="123" height="107" rx="12"/><rect x="489" y="79" width="225" height="107" rx="12"/>
+      <rect x="492" y="260" width="221" height="108" rx="12"/><rect x="264" y="260" width="122" height="108" rx="12"/><rect x="20" y="260" width="149" height="108" rx="12"/>
+     </g>
+     <g font-family="Segoe UI,Arial,sans-serif" font-weight="700" text-anchor="middle" fill="#254840" font-size="21">
+      <text x="94" y="117">Navegador</text><text x="94" y="148" font-size="17">consulta</text><text x="325" y="119">Resolvedor</text><text x="325" y="148" font-size="17">cache?</text><text x="602" y="119">Raiz (.)</text><text x="602" y="148" font-size="17">referência</text>
+      <text x="603" y="299">TLD (.test)</text><text x="603" y="330" font-size="17">referência</text><text x="325" y="300">Servidor</text><text x="325" y="327" font-size="18">autoritativo</text><text x="94" y="302">Resposta</text><text x="94" y="332" font-size="18">A / AAAA</text>
+     </g>
+     <text x="25" y="424" font-size="18" font-family="Segoe UI,Arial,sans-serif" fill="#3e5b57">Trajeto demonstrativo em cache miss; servidores e detalhes são simplificados.</text>
+    </svg>
+    <figcaption>Figura 3. Diagrama SVG original. <code>.test</code> é reservado para testes; esta página não realiza consultas reais.</figcaption>
+   </figure>
+   <div>
+    <h3>Uma pergunta distribuída</h3>
+    <p>O sistema operacional e o navegador podem manter informações em cache. Na ausência de resposta adequada, normalmente há uma consulta a um <strong>resolvedor recursivo</strong>, que consulta seus próprios caches e, quando necessário, encontra os servidores autoritativos. O tempo de vida de respostas DNS é influenciado por TTL e por políticas do resolvedor.</p>
+    <p>Registros <code>A</code> e <code>AAAA</code> são utilizados para endereços IPv4 e IPv6. Registros <code>CNAME</code> podem apontar para nomes alternativos; <code>HTTPS</code>/<code>SVCB</code> podem anunciar parâmetros e alternativas de serviço. O nome resolvido pode representar uma infraestrutura de CDN, não a máquina de aplicação final.</p>
+    <p>DNS não é sinônimo de transporte seguro: consultas tradicionais podem não estar criptografadas. Há mecanismos como DNS-over-HTTPS e DNS-over-TLS, mas a disponibilidade e as configurações variam.</p>
+   </div>
+  </div>
+  <div class="fact-strip"><strong>Ponto de investigação:</strong> a falha <code>NXDOMAIN</code> significa que, naquele contexto de consulta DNS, o nome não existe. Ela ocorre antes de qualquer resposta HTTP da aplicação; portanto não é equivalente a receber um HTTP <code>404</code>.</div>
+ </div>
+</section>
+
+<section class="lesson container" aria-labelledby="transportTitle">
+ <div class="lesson-title"><span class="index">05 / TRANSPORTE E SEGURANÇA</span><div><h2 id="transportTitle">TCP e QUIC chegam por caminhos diferentes.</h2><p class="desc">Uma explicação de “três passos para toda conexão HTTPS” seria enganosa. HTTP/2 normalmente usa TCP + TLS; HTTP/3 usa QUIC, que inclui a negociação criptográfica baseada em TLS 1.3.</p></div></div>
+ <div class="protocols">
+  <div class="protocol-card"><span class="top-id">CENÁRIO A / HTTPS COM HTTP/2</span><h3>TCP + TLS</h3>
+   <svg viewBox="0 0 570 280" role="img" aria-labelledby="tcp-title tcp-desc">
+    <title id="tcp-title">Cronologia de exemplo da abertura TCP e TLS</title><desc id="tcp-desc">Cliente e servidor trocam SYN, SYN-ACK e ACK para iniciar TCP; depois realizam a negociação TLS e enviam HTTP protegido.</desc>
+    <g font-family="Consolas,monospace" fill="#bff7e5" font-size="18"><text x="35" y="31">Cliente</text><text x="442" y="31">Servidor</text></g>
+    <g stroke="#548b8f" stroke-width="2"><path d="M94 49 V260 M475 49 V260"/></g>
+    <g fill="none" stroke="#76d8c0" stroke-width="3"><path d="M94 65 L475 103 M475 111 L94 148 M94 158 L475 174"/></g>
+    <g fill="#e3c892" font-family="Consolas,monospace" font-size="17"><text x="240" y="73">SYN →</text><text x="225" y="128">← SYN-ACK</text><text x="246" y="162">ACK →</text></g>
+    <path d="M94 192 L475 211 M475 219 L94 236 M94 244 L475 260" fill="none" stroke="#92b8ea" stroke-width="3"/>
+    <text x="177" y="205" font-family="Consolas,monospace" font-size="16" fill="#c9e2fa">negociação TLS</text>
+    <text x="215" y="268" font-family="Consolas,monospace" font-size="15" fill="#e7f2eb">HTTP/2 protegido</text>
+   </svg>
+   <p>O handshake TCP geralmente começa com SYN, SYN-ACK e ACK. Em seguida ocorre a negociação TLS, com autenticação do servidor por certificado e estabelecimento de chaves. Reutilização de conexões e retomada de sessões podem evitar etapas em requisições futuras.</p>
+   <ul><li>TCP fornece transporte confiável e ordenado.</li><li>TLS protege a comunicação na conexão estabelecida.</li><li>HTTP/2 multiplexa fluxos sobre essa conexão.</li></ul>
+  </div>
+  <div class="protocol-card"><span class="top-id">CENÁRIO B / HTTPS COM HTTP/3</span><h3>QUIC + TLS 1.3</h3>
+   <svg viewBox="0 0 570 280" role="img" aria-labelledby="quic-title quic-desc">
+    <title id="quic-title">Cronologia simplificada de conexão QUIC</title><desc id="quic-desc">Cliente e servidor trocam mensagens QUIC que incorporam TLS 1.3; o tráfego HTTP/3 usa fluxos QUIC sobre UDP, sem handshake TCP separado.</desc>
+    <g font-family="Consolas,monospace" fill="#bff7e5" font-size="18"><text x="35" y="31">Cliente</text><text x="442" y="31">Servidor</text></g>
+    <g stroke="#548b8f" stroke-width="2"><path d="M94 49 V260 M475 49 V260"/></g>
+    <path d="M94 72 L475 103 M475 123 L94 160 M94 183 L475 213" fill="none" stroke="#9fead5" stroke-width="4"/>
+    <g font-family="Consolas,monospace" font-size="17" fill="#e3c892"><text x="211" y="67">QUIC Initial</text><text x="205" y="129">QUIC + TLS 1.3</text><text x="199" y="197">HTTP/3 sobre QUIC</text></g>
+    <rect x="204" y="222" width="177" height="36" rx="7" fill="#174a4b" stroke="#83cbb5"/>
+    <text x="292" y="246" text-anchor="middle" font-family="Consolas,monospace" font-size="17" fill="#e7fff2">UDP / porta 443*</text>
+   </svg>
+   <p>QUIC usa UDP como base e implementa controle de fluxo, recuperação de perdas e múltiplos fluxos, integrando a negociação TLS 1.3. Na Web, a seleção de HTTP/3 pode ocorrer por anúncios de alternativas e políticas do cliente; não significa que cada visita obrigatoriamente usará QUIC.</p>
+   <ul><li>Não há handshake TCP separado para QUIC.</li><li>O handshake inicial inclui a negociação criptográfica.</li><li>Requisições posteriores podem reutilizar a conexão; UDP 443 é o caso habitual para HTTPS.</li></ul>
+  </div>
+ </div>
+ <div class="fact-strip"><strong>O que HTTPS garante?</strong> Sob condições adequadas, protege confidencialidade e integridade do tráfego entre endpoints negociados e autentica a identidade apresentada pelo servidor. Não garante que o conteúdo seja verdadeiro, que o site não tenha malware nem que todos os metadados da conexão permaneçam ocultos.</div>
+</section>
+
+<section class="lesson container" aria-labelledby="httpTitle">
+ <div class="lesson-title"><span class="index">06 / HTTP</span><div><h2 id="httpTitle">Uma mensagem, um resultado; não confunda código com transporte.</h2><p class="desc">HTTP define semântica de requisições e respostas: método, recurso, cabeçalhos, status e corpo. O exemplo textual abaixo usa HTTP/1.1 para facilitar a leitura; HTTP/2 e HTTP/3 transportam os mesmos conceitos com enquadramento diferente.</p></div></div>
+ <div class="tab-strap" role="group" aria-label="Escolher resposta HTTP didática">
+  <button type="button" data-http="200" aria-pressed="true">200 OK</button>
+  <button type="button" data-http="301" aria-pressed="false">301 Redirect</button>
+  <button type="button" data-http="304" aria-pressed="false">304 Not Modified</button>
+  <button type="button" data-http="403" aria-pressed="false">403 Forbidden</button>
+  <button type="button" data-http="404" aria-pressed="false">404 Not Found</button>
+  <button type="button" data-http="500" aria-pressed="false">500 Server Error</button>
+ </div>
+ <div class="http-view"><div><h3>REQUISIÇÃO DIDÁTICA / HTTP/1.1</h3><pre id="httpRequest">GET /guia HTTP/1.1
+Host: exemplo.test
+Accept: text/html
+User-Agent: Navegador-Exemplo
+
+[sem corpo]</pre></div><div><h3>RESPOSTA DIDÁTICA / HTTP/1.1</h3><pre id="httpResponse">HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Cache-Control: max-age=300
+ETag: "guia-v1"
+
+&lt;!doctype html&gt;
+&lt;html&gt;...&lt;/html&gt;</pre></div></div>
+ <p class="http-summary" id="httpExplanation" role="status" aria-live="polite">200 informa que o servidor respondeu com sucesso. O navegador ainda precisa interpretar o HTML e pode solicitar CSS, JavaScript e outros recursos.</p>
+ <div class="callouts">
+  <div class="callout"><h3>GET / POST</h3><p>GET solicita uma representação de um recurso; POST envia uma requisição para processamento conforme a semântica definida pelo servidor. Autorização e efeitos dependem da aplicação, não só do método.</p></div>
+  <div class="callout"><h3>Content-Type</h3><p>Ajuda o cliente a interpretar o formato da resposta, como <code>text/html</code>, <code>application/json</code> ou <code>text/css</code>. Um cabeçalho errado pode causar falhas ou riscos.</p></div>
+  <div class="callout"><h3>Autenticação</h3><p>Cookies, cabeçalhos de autorização e sessões podem determinar se o cliente tem acesso. HTTPS protege o caminho, mas permissões precisam ser verificadas no servidor.</p></div>
+ </div>
+</section>
+
+<section class="lesson container" aria-labelledby="cacheTitle">
+ <div class="lesson-title"><span class="index">07 / CACHES</span><div><h2 id="cacheTitle">Às vezes, a rede nem precisa ser consultada.</h2><p class="desc">Caches guardam representações e metadados para reutilização, sob condições definidas por cabeçalhos e políticas. O cache do navegador e o cache na borda da rede são diferentes.</p></div></div>
+ <div class="cache-map" aria-label="Três locais conceituais onde respostas podem ser obtidas">
+  <div class="cache-item"><span class="head">NÍVEL 01</span><h3>Browser cache</h3><p>Uma resposta ainda válida pode ser usada localmente. Se precisar revalidar, o navegador pode enviar <code>If-None-Match</code> e receber <code>304</code>.</p></div>
+  <div class="cache-item"><span class="head">NÍVEL 02</span><h3>CDN / edge</h3><p>A borda pode servir uma cópia armazenada conforme as diretivas. Em cache miss, encaminha a busca à origem ou a outra camada.</p></div>
+  <div class="cache-item"><span class="head">NÍVEL 03</span><h3>Origin server</h3><p>O servidor de origem pode gerar o conteúdo, acessar bancos e usar seus próprios caches internos. Nem toda resposta deve ser armazenada.</p></div>
+ </div>
+ <div class="text-grid">
+  <div><h3>Cache válido não é o mesmo que resposta 304</h3><p><code>Cache-Control: max-age=300</code> pode permitir reutilizar uma resposta durante determinado período conforme a política. Quando ela precisa ser revalidada, o cliente pode enviar uma solicitação condicional com <code>If-None-Match</code> baseada em um ETag. Se nada mudou, o servidor responde <code>304 Not Modified</code>, normalmente sem transmitir um novo corpo da representação.</p></div>
+  <div><h3>Os detalhes importam</h3><p><code>no-store</code> instrui caches conformes a não armazenar a resposta; <code>private</code> restringe caches compartilhados; respostas com informações pessoais exigem cuidado extra. Service Workers também podem interceptar requisições e implementar outras estratégias locais, mas não fazem parte do fluxo simplificado da simulação principal.</p></div>
+ </div>
+</section>
+
+<section class="latency" aria-labelledby="latencyTitle">
+ <div class="container">
+  <div class="lesson-title"><span class="index">08 / DESEMPENHO</span><div><h2 id="latencyTitle">Onde o tempo desaparece?</h2><p class="desc">Ajuste durações inventadas para investigar gargalos. Elas não são métricas observadas, e esta soma representa apenas um orçamento didático sequencial. Na Web real há paralelismo, reutilização de conexão, sobreposição e limites de congestionamento.</p></div></div>
+  <div class="latency-layout">
+   <div>
+    <div class="latency-control"><label for="latDns">Resolução DNS ilustrativa <output for="latDns" id="latDnsOut">30 ms</output></label><input type="range" id="latDns" min="0" max="300" step="10" value="30"></div>
+    <div class="latency-control"><label for="latConnect">Conexão e TLS ilustrativos <output for="latConnect" id="latConnectOut">90 ms</output></label><input type="range" id="latConnect" min="0" max="400" step="10" value="90"></div>
+    <div class="latency-control"><label for="latServer">Processamento do servidor <output for="latServer" id="latServerOut">120 ms</output></label><input type="range" id="latServer" min="0" max="900" step="10" value="120"></div>
+    <div class="latency-control"><label for="latTransfer">Transferência do documento <output for="latTransfer" id="latTransferOut">70 ms</output></label><input type="range" id="latTransfer" min="0" max="900" step="10" value="70"></div>
+    <div class="latency-control"><label for="latRender">Renderização inicial <output for="latRender" id="latRenderOut">80 ms</output></label><input type="range" id="latRender" min="0" max="900" step="10" value="80"></div>
+    <button class="btn" type="button" id="resetLatency">Restaurar valores didáticos</button>
+   </div>
+   <div class="latency-result" role="status" aria-live="polite" aria-atomic="true">
+    <div class="kicker">ORÇAMENTO TOTAL / MODELO DE EXEMPLO</div><div class="latency-total" id="latTotal">390 ms</div>
+    <div class="bargraph" role="img" id="latGraph" aria-label="Gráfico de contribuição percentual por etapa">
+     <span id="barDns"></span><span id="barConnect"></span><span id="barServer"></span><span id="barTransfer"></span><span id="barRender"></span>
+    </div>
+    <div class="latency-legend">
+     <span><b style="background:#4ea29b"></b>DNS</span><span><b style="background:#b4a878"></b>Conexão</span><span><b style="background:#6b95cc"></b>Servidor</span><span><b style="background:#d78c72"></b>Transferência</span><span><b style="background:#99ca8d"></b>Render</span>
+    </div>
+    <p class="latency-note" id="latInsight">Servidor é a maior parcela deste exemplo.</p>
+    <p class="latency-note"><strong>Nota:</strong> não trate o total como LCP, TTFB, velocidade real ou garantia de tempo de carregamento. O TTFB observa a chegada do primeiro byte, enquanto a renderização acontece depois e pode depender de muitos outros recursos.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="lesson container" aria-labelledby="renderTitle">
+ <div class="lesson-title"><span class="index">09 / RENDERIZAÇÃO</span><div><h2 id="renderTitle">A resposta vira pixels, não apenas texto.</h2><p class="desc">Receber HTML é só o começo. O navegador analisa o documento, forma estruturas, aplica estilos, calcula posições e pinta a interface. JavaScript pode modificar essas estruturas e provocar trabalho adicional.</p></div></div>
+ <div class="render-flow" aria-label="Etapas simplificadas de renderização do navegador">
+  <div class="render-node"><span class="number">01 / HTML</span><h3>Parsing e DOM</h3><p>Tokens HTML são convertidos em nós e relações.</p></div>
+  <div class="render-node"><span class="number">02 / CSS</span><h3>CSSOM</h3><p>Regras de estilo são analisadas; nem sempre os arquivos chegam junto com HTML.</p></div>
+  <div class="render-node"><span class="number">03 / ESTILO</span><h3>Render tree</h3><p>Nós relevantes e estilos calculados orientam o layout.</p></div>
+  <div class="render-node"><span class="number">04 / GEOMETRIA</span><h3>Layout</h3><p>Caixas recebem dimensões e posições no viewport.</p></div>
+  <div class="render-node"><span class="number">05 / VISUAL</span><h3>Paint / composite</h3><p>Desenho e composição das camadas produzem o quadro.</p></div>
+ </div>
+ <div class="text-grid">
+  <div><p>Um parser HTML pode descobrir referências a <code>&lt;link rel="stylesheet"&gt;</code>, <code>&lt;script&gt;</code>, imagens e outros recursos. Dependendo dos atributos e do contexto, scripts podem bloquear a análise do documento; CSS pode ser necessário antes de exibir conteúdo com o estilo esperado. Recursos de fontes e imagens podem alterar o layout e a pintura em momentos distintos.</p></div>
+  <div><p><strong>JavaScript não é obrigatório para toda página</strong>, mas pode buscar dados, criar componentes e alterar o DOM. Layout, paint e composição são trabalhos relacionados, nem sempre executados exatamente nessa ordem em cada mudança. Para entender lentidão real, use as ferramentas de desempenho do navegador em vez de inferir o tempo só pela quantidade de scripts.</p></div>
+ </div>
+</section>
+
+<section class="lesson container" aria-labelledby="errorsTitle">
+ <div class="lesson-title"><span class="index">10 / DIAGNÓSTICO</span><div><h2 id="errorsTitle">Quatro falhas, quatro investigações diferentes.</h2><p class="desc">Nem toda tela de erro é uma resposta HTTP. Saber em que camada a navegação falhou economiza horas de diagnóstico e evita mexer no servidor errado.</p></div></div>
+ <div class="error-grid">
+  <div class="error"><small>DNS / NAME RESOLUTION</small><h3>NXDOMAIN</h3><p>O nome solicitado não foi encontrado no DNS consultado. Investigue domínio, configuração autoritativa, resolvedor e registros. Não é um HTTP 404 do aplicativo.</p></div>
+  <div class="error"><small>TRANSPORTE / TLS</small><h3>Falha de certificado</h3><p>A verificação de identidade falhou, por exemplo, por certificado inválido ou incompatível. O cliente deve interromper a conexão segura em vez de ignorar a validação. Não há HTTP confiável de aplicação nesse trajeto.</p></div>
+  <div class="error"><small>HTTP / APLICAÇÃO</small><h3>404 Not Found</h3><p>Existe uma resposta HTTP informando que a representação do recurso não foi encontrada naquele contexto. Examine rotas, regras de rewrite, permissões e o caminho solicitado.</p></div>
+  <div class="error"><small>HTTP / ORIGEM</small><h3>500 Internal Server Error</h3><p>O servidor respondeu que houve falha interna durante o processamento. Investigue logs e correlação de requisições, tratando detalhes sensíveis como informação não exibível ao usuário.</p></div>
+ </div>
+</section>
+
+<section class="security" aria-labelledby="secureTitle">
+ <div class="container"><span class="kicker">11 / SEGURANÇA OPERACIONAL</span><h2 id="secureTitle">Criptografia protege o canal; a aplicação ainda precisa ser segura.</h2>
+  <div class="security-items">
+   <div class="security-item"><h3>Confiança no certificado</h3><p>A validação TLS verifica a identidade indicada para o host e estabelece a proteção do canal. Um cadeado não certifica a reputação do conteúdo, do vendedor ou de quem criou o site.</p></div>
+   <div class="security-item"><h3>Dados e permissões</h3><p>Um servidor deve validar autorização e entradas. HTTPS não elimina XSS, CSRF, falhas de controle de acesso nem exposição de informações em URLs e logs. Cookies de sessão pedem atributos apropriados.</p></div>
+   <div class="security-item"><h3>Políticas de navegador</h3><p>Same-origin policy, CORS, CSP, HSTS e políticas de conteúdo misto têm propósitos diferentes. CORS não autentica usuários e CSP não substitui sanitização e tratamento de dados.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="review" aria-labelledby="reviewTitle">
+ <div class="container"><span class="kicker">12 / CHECKPOINT</span><h2 id="reviewTitle">Você consegue explicar onde a requisição parou?</h2><p class="summary">Resolva situações de diagnóstico reais em essência, mas com dados inventados. As respostas são formativas e não representam nota oficial do Moodle.</p>
+  <div class="review-grid">
+   <form id="reviewForm" novalidate>
+    <fieldset class="question" data-correct="b" data-explain="DNS precede a tentativa de conexão ao serviço; NXDOMAIN não é um código HTTP recebido da aplicação.">
+     <legend>1. O navegador mostra erro de resolução de nome, sem chegar a estabelecer conexão. Qual camada investigar primeiro?</legend>
+     <label><input type="radio" name="q1" value="a"> O CSS da página, pois pode ocultar o documento.</label>
+     <label><input type="radio" name="q1" value="b"> DNS, registros, resolvers e configuração do domínio.</label>
+     <label><input type="radio" name="q1" value="c"> A cor de fundo retornada no HTML.</label><p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-correct="c" data-explain="HTTP/3 usa QUIC sobre UDP com TLS 1.3 integrado; não há um handshake TCP separado nessa conexão.">
+     <legend>2. Em uma primeira conexão HTTP/3 bem-sucedida, qual afirmação está correta?</legend>
+     <label><input type="radio" name="q2" value="a"> HTTP/3 exige TCP antes de iniciar QUIC.</label>
+     <label><input type="radio" name="q2" value="b"> TLS é dispensável porque o HTTP/3 é sempre público.</label>
+     <label><input type="radio" name="q2" value="c"> QUIC usa UDP e incorpora a negociação criptográfica.</label><p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-correct="a" data-explain="Uma resposta em cache ainda válida pode evitar uma nova solicitação de rede para aquela representação; renderização local continua necessária.">
+     <legend>3. O navegador possui uma resposta HTML fresca e reutilizável em seu cache. O que pode acontecer?</legend>
+     <label><input type="radio" name="q3" value="a"> O documento pode vir do cache, sem nova requisição de rede.</label>
+     <label><input type="radio" name="q3" value="b"> Ele deve receber HTTP 304 em toda visita.</label>
+     <label><input type="radio" name="q3" value="c"> Nenhuma renderização será necessária.</label><p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-correct="b" data-explain="O HTTP 404 é uma resposta válida do protocolo HTTP; falhas DNS ou TLS podem impedir uma resposta HTTP de aplicação.">
+     <legend>4. Uma requisição retorna HTTP 404. Isso significa necessariamente que falhou a negociação TLS?</legend>
+     <label><input type="radio" name="q4" value="a"> Sim: todos os códigos 4xx significam falhas TLS.</label>
+     <label><input type="radio" name="q4" value="b"> Não: houve uma resposta HTTP informando recurso não encontrado.</label>
+     <label><input type="radio" name="q4" value="c"> Sim: o navegador não conseguiu localizar nenhum endereço IP.</label><p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <div class="trace-controls"><button class="btn btn-primary" type="button" id="gradeReview">Corrigir e explicar</button><button class="btn" type="reset">Refazer revisão</button></div>
+    <p class="result" id="reviewResult" role="status" aria-live="polite"></p>
+   </form>
+   <aside class="summary-plate"><span class="kicker">MAPA MENTAL</span><h3>Diagnostique por camada</h3>
+    <p><code>URL → cache → DNS → transporte seguro → HTTP → recursos → DOM/CSSOM → render</code></p>
+    <p>Essa cadeia é um modelo, não uma regra imutável. O navegador pode reutilizar dados e conexões, enviar requisições concorrentes, usar Service Workers ou receber respostas de intermediários. Em HTTP/3, QUIC altera a etapa de transporte.</p>
+    <p>Quando encontrar um erro, identifique a última camada em que há evidência confiável antes de mudar a configuração de DNS, servidor, certificado, aplicação ou CSS.</p>
+    <div class="notice">A demonstração não coleta dados, não acessa rede externa, não grava respostas nem atribui nota. Os exemplos e endereços são fictícios.</div>
+   </aside>
+  </div>
+ </div>
+</section>
+
+<section class="references container" aria-labelledby="refsTitle">
+ <h2 id="refsTitle">Leituras técnicas para conferir os conceitos</h2>
+ <p>Diagramas SVG originais; não foram utilizadas imagens de terceiros ou chamadas externas. Conteúdo adaptado conceitualmente de documentação pública, sem reproduzir diagramas de outras fontes. Referências: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview" target="_blank" rel="noopener noreferrer">MDN: HTTP overview</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work" target="_blank" rel="noopener noreferrer">MDN: How browsers work</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Critical_rendering_path" target="_blank" rel="noopener noreferrer">MDN: Critical rendering path</a>, <a href="https://www.rfc-editor.org/rfc/rfc9114.html" target="_blank" rel="noopener noreferrer">RFC 9114: HTTP/3</a> e <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching" target="_blank" rel="noopener noreferrer">MDN: HTTP caching</a>.</p>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+var doc=document;
+var byId=function(id){return doc.getElementById(id);};
+var nodes=["browser","dns","link","edge","origin","render"];
+var wires=["browser-dns","dns-browser","browser-link","link-edge","edge-origin","edge-render","browser-render"];
+var scenarioHelp={
+ cold:"Primeira visita didática via HTTP/2: consulta DNS, TCP, TLS, requisição, aplicação, resposta e renderização.",
+ warm:"O documento HTML está fresco no cache do navegador: não há necessidade de consultar DNS nem emitir novo HTTP para esse documento.",
+ h3:"Fluxo didático HTTP/3: consulta DNS, inicialização QUIC com TLS 1.3, HTTP/3 e processamento do documento.",
+ edge:"O navegador precisa da rede, mas a cópia está válida na CDN. A origem não é consultada neste exemplo.",
+ dnsfail:"O nome retorna NXDOMAIN. Não há conexão TLS nem resposta HTTP da aplicação.",
+ tlsfail:"A validação de certificado falha: o navegador interrompe a navegação antes de usar a resposta de aplicação.",
+ notfound:"O servidor retorna uma resposta HTTP 404. A conexão pode ter funcionado perfeitamente.",
+ serverfail:"A origem devolve HTTP 500 após falha interna; o navegador recebe um erro HTTP, não um erro DNS."
+};
+function step(node,wire,kind,title,description,log,raw){
+ return {node:node,wire:wire,kind:kind,title:title,description:description,log:log,raw:raw};
+}
+var begin=step("browser","","CLIENTE","O navegador recebe uma URL","O navegador interpreta o endereço solicitado, identifica esquema, host e caminho e verifica se já tem uma representação reutilizável.","[browser] https://exemplo.test/guia?tema=web","https://exemplo.test/guia?tema=web");
+var dns=step("dns","browser-dns","DNS","Resolver o nome","Como ainda não há resposta apropriada em cache neste cenário, um resolvedor recursivo obtém informações para encontrar o serviço. Pode retornar mais de um endereço ou parâmetros de serviço.","[dns] exemplo.test → endpoint ilustrativo","QNAME: exemplo.test\nQTYPE: A / AAAA\nANSWER: endereços ilustrativos\n[nenhuma consulta real]");
+var tcp=step("link","browser-link","TRANSPORTE","Abrir TCP e negociar TLS","Para este cenário HTTP/2, o cliente estabelece uma conexão TCP e valida o certificado durante o handshake TLS. Em uma navegação real, uma conexão já aberta poderia ser reutilizada.","[tcp] SYN / SYN-ACK / ACK\n[tls] identidade e chaves negociadas","TCP: SYN → SYN-ACK → ACK\nTLS: certificado verificado\nALPN: h2\n[sequência didática]");
+var quic=step("link","browser-link","TRANSPORTE","Iniciar QUIC com TLS 1.3","HTTP/3 usa QUIC sobre UDP e integra o handshake criptográfico. Não existe um handshake TCP separado. O cliente também pode escolher outro protocolo conforme suporte e políticas.","[quic] Initial + TLS 1.3\n[alpn] h3","QUIC sobre UDP\nHandshake com TLS 1.3\nALPN: h3\n[sequência didática]");
+var request=step("edge","link-edge","HTTP","Enviar uma requisição HTTP","O cliente pede o recurso à infraestrutura que atende o host, que pode ser uma CDN ou proxy. HTTP/2 e HTTP/3 têm enquadramento próprio; o texto exibido é uma tradução pedagógica da semântica.","[http] GET /guia\n[accept] text/html","GET /guia\n:authority: exemplo.test\naccept: text/html\n[exibição semântica, não frames reais]");
+var origin=step("origin","edge-origin","APLICAÇÃO","Consultar a origem","O intermediário encaminha a requisição à origem. Um aplicativo pode executar regras, consultar serviços e bancos de dados ou simplesmente devolver um arquivo estático.","[origin] rota /guia\n[backend] resposta preparada","ROTA: /guia\nAPLICAÇÃO: processou pedido\nCONTEÚDO: text/html\n[representação fictícia]");
+var ok=step("edge","edge-render","HTTP 200","Resposta HTML recebida","O servidor responde com status 200 e uma representação HTML. O navegador pode buscar recursos referenciados pelo documento em outras requisições.","[http] 200 OK\n[body] documento HTML","HTTP/2 200\ncontent-type: text/html\ncache-control: max-age=300\n\n<body>Conteúdo exemplo</body>");
+var draw=step("render","edge-render","RENDER","Interpretar e exibir pixels","O navegador transforma HTML em DOM, processa CSS, calcula estilos e layout e produz pintura/composição. Scripts e outros recursos podem desencadear trabalho adicional.","[render] DOM + CSSOM\n[layout] caixas\n[paint] pixels","HTML → DOM\nCSS → CSSOM\nestilo → layout → paint / composite");
+var warm=step("browser","","CACHE DO NAVEGADOR","Documento já armazenado","Existe uma representação do documento ainda fresca e reutilizável. Não é necessário acessar o servidor para obter este HTML neste cenário; imagens e outros recursos podem ter políticas diferentes.","[cache] fresh hit\n[network] sem pedido HTTP para o documento","Cache-Control: max-age=300\nEstado: fresh\nResposta local reutilizada");
+var edge=step("edge","link-edge","CDN / EDGE","Resposta válida no cache da borda","A CDN encontra uma representação utilizável e responde sem consultar o servidor de origem neste exemplo. O navegador ainda recebeu uma resposta de rede e precisa renderizá-la.","[edge] cache HIT\n[origin] não consultada","HTTP/2 200\ncache-status: CDN; hit\ncontent-type: text/html\n[exemplo ilustrativo]");
+var notFound=step("edge","edge-render","HTTP 404","A rota não foi encontrada","A aplicação devolveu uma resposta HTTP 404. DNS e transporte podem ter funcionado; o código trata da representação do recurso solicitado.","[http] 404 Not Found\n[network] requisição concluída","HTTP/2 404\ncontent-type: text/html\n\n<p>Recurso não encontrado</p>");
+var serverError=step("edge","edge-render","HTTP 500","Falha interna no servidor","A origem não conseguiu processar a requisição como esperado e respondeu com status 500. A investigação deve usar logs e rastreamento sem revelar dados internos ao usuário.","[http] 500 Internal Server Error","HTTP/2 500\ncontent-type: text/html\n\n<p>Falha interna</p>");
+var failureDns=step("dns","browser-dns","ERRO DNS","Nome não resolvido: NXDOMAIN","O resolvedor informa que o nome não existe no contexto da consulta. Sem destino válido, o navegador não avança para uma conexão com a aplicação. Isso não é um HTTP 404.","[dns] NXDOMAIN\n[stop] sem pedido HTTP","DNS: NXDOMAIN\nHTTP: nenhuma resposta\nTLS: não iniciado");
+var failureTLS=step("link","browser-link","ERRO TLS","Identidade não validada","O navegador não deve prosseguir com a comunicação como se o host estivesse autenticado quando o certificado falha na validação. Não se trata de HTTP 403 ou 500.","[tls] certificate validation failed\n[stop] requisição de aplicação não enviada","TLS: verificação de certificado falhou\nHTTP: nenhuma resposta segura obtida");
+var traces={
+ cold:[begin,dns,tcp,request,origin,ok,draw],
+ warm:[begin,warm,step("render","browser-render","RENDER","Montar a página a partir do cache","O conteúdo HTML pode ser usado do cache, mas ainda deve ser analisado e desenhado. Outros recursos podem ter condições de cache diferentes.","[render] documento local\n[pixels] nova exibição","Cache local → DOM / CSSOM → layout → paint")],
+ h3:[begin,dns,quic,request,origin,ok,draw],
+ edge:[begin,dns,tcp,request,edge,draw],
+ dnsfail:[begin,failureDns],
+ tlsfail:[begin,dns,failureTLS],
+ notfound:[begin,dns,tcp,request,origin,notFound,step("render","edge-render","RENDER DO ERRO","Exibir a representação de erro","A aplicação pode retornar uma página HTML própria para o código 404; o navegador também pode apresentar informação apropriada.","[render] página de erro HTTP","HTTP 404 recebido → renderização")],
+ serverfail:[begin,dns,tcp,request,origin,serverError,step("render","edge-render","RENDER DO ERRO","Exibir o erro com segurança","O navegador pode renderizar um documento de erro recebido; a aplicação não deve expor stack traces nem segredos aos usuários.","[render] erro genérico, sem segredos","HTTP 500 recebido → página de erro")]
+};
+var current="cold",index=0,timer=null,visualPaused=false;
+var scenario=byId("scenario");
+var controls={next:byId("nextStep"),play:byId("autoPlay"),reset:byId("resetTrace"),pause:byId("pauseVisuals")};
+function stopAuto(){
+ if(timer!==null){clearInterval(timer);timer=null;}
+ controls.play.textContent="Reproduzir";
+ controls.play.setAttribute("aria-pressed","false");
+}
+function renderTrace(){
+ var stages=traces[current],s=stages[index],pct=Math.round((index+1)/stages.length*100);
+ byId("traceCounter").textContent=(index+1)+" / "+stages.length;
+ byId("stepKind").textContent=s.kind;
+ byId("stepTitle").textContent=s.title;
+ byId("stepText").textContent=s.description;
+ byId("traceLog").textContent=s.log;
+ byId("wireText").textContent=s.raw;
+ byId("traceBar").style.width=pct+"%";
+ byId("traceProgress").setAttribute("aria-valuenow",String(pct));
+ nodes.forEach(function(n){byId("node-"+n).classList.toggle("active",n===s.node);});
+ wires.forEach(function(w){byId("wire-"+w).classList.toggle("current",w===s.wire);});
+ controls.next.disabled=index===stages.length-1;
+ byId("traceStatus").textContent=index===stages.length-1?"Fluxo concluído. Escolha outro cenário ou reinicie para comparar.":"Etapa "+(index+1)+" de "+stages.length+".";
+}
+function moveNext(){
+ var stages=traces[current];
+ if(index<stages.length-1){index++;renderTrace();}
+ if(index===stages.length-1)stopAuto();
+}
+function resetTrace(){stopAuto();index=0;renderTrace();}
+function changeScenario(){
+ current=scenario.value;
+ if(!Object.prototype.hasOwnProperty.call(traces,current))current="cold";
+ byId("scenarioHelp").textContent=scenarioHelp[current];
+ resetTrace();
+}
+scenario.addEventListener("change",changeScenario);
+controls.next.addEventListener("click",moveNext);
+controls.reset.addEventListener("click",resetTrace);
+controls.play.addEventListener("click",function(){
+ if(timer!==null){stopAuto();return;}
+ if(index===traces[current].length-1){index=0;renderTrace();}
+ controls.play.textContent="Pausar reprodução";
+ controls.play.setAttribute("aria-pressed","true");
+ timer=setInterval(moveNext,2100);
+});
+controls.pause.addEventListener("click",function(){
+ visualPaused=!visualPaused;
+ byId("topology").classList.toggle("freeze",visualPaused);
+ controls.pause.setAttribute("aria-pressed",String(visualPaused));
+ controls.pause.textContent=visualPaused?"Retomar animações":"Pausar animações";
+});
+doc.addEventListener("visibilitychange",function(){if(doc.hidden)stopAuto();});
+changeScenario();
+var parts={
+ scheme:"https indica comunicação HTTP sobre uma conexão protegida por TLS, diretamente no caso TCP/TLS ou integrada ao QUIC. O esquema também participa da definição da origem da página.",
+ host:"exemplo.test é um nome lógico de host. DNS ajuda a encontrar endpoints, que podem ser CDN ou balanceadores. O nome não identifica obrigatoriamente uma máquina única.",
+ path:"/guia é a rota solicitada. O servidor pode interpretá-la em uma aplicação, por reescrita ou por arquivo físico; o DNS não consulta esse caminho.",
+ query:"?tema=web carrega parâmetros de consulta. Eles podem orientar o conteúdo servido, mas não devem ser tratados como armazenamento seguro para senhas, tokens e outros segredos."
+};
+var partsButtons=Array.prototype.slice.call(doc.querySelectorAll("[data-part]"));
+partsButtons.forEach(function(b){b.addEventListener("click",function(){
+ partsButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===b));});
+ byId("urlDetail").textContent=parts[b.dataset.part];
+});});
+var httpSamples={
+ "200":{
+ request:"GET /guia HTTP/1.1\nHost: exemplo.test\nAccept: text/html\nUser-Agent: Navegador-Exemplo\n\n[sem corpo]",
+ response:'HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\nCache-Control: max-age=300\nETag: "guia-v1"\n\n<!doctype html>\n<html>...</html>',
+ explanation:"200 informa que o servidor respondeu com sucesso. O navegador ainda precisa interpretar o HTML e pode solicitar CSS, JavaScript e outros recursos."
+ },
+ "301":{
+ request:"GET /inicio HTTP/1.1\nHost: exemplo.test\nAccept: text/html",
+ response:"HTTP/1.1 301 Moved Permanently\nLocation: https://exemplo.test/guia\n\n[corpo opcional]",
+ explanation:"301 informa um redirecionamento permanente. O navegador pode seguir o endereço do cabeçalho Location; redirecionamentos excessivos acrescentam trabalho e latência."
+ },
+ "304":{
+ request:'GET /guia HTTP/1.1\nHost: exemplo.test\nIf-None-Match: "guia-v1"',
+ response:'HTTP/1.1 304 Not Modified\nETag: "guia-v1"\nCache-Control: max-age=300\n\n[sem corpo da representação]',
+ explanation:"304 responde a uma requisição condicional: o navegador reutiliza o corpo da representação que já guardou, junto com os metadados atualizados. Não significa que nenhuma requisição foi realizada."
+ },
+ "403":{
+ request:"GET /privado HTTP/1.1\nHost: exemplo.test\nAccept: text/html",
+ response:"HTTP/1.1 403 Forbidden\nContent-Type: text/plain\n\nAcesso recusado",
+ explanation:"403 indica que o servidor compreendeu a requisição e se recusa a satisfazê-la. Autorização é uma decisão de aplicação; o TLS pode ter funcionado normalmente."
+ },
+ "404":{
+ request:"GET /nao-existe HTTP/1.1\nHost: exemplo.test\nAccept: text/html",
+ response:"HTTP/1.1 404 Not Found\nContent-Type: text/html\n\n<h1>Não encontrado</h1>",
+ explanation:"404 significa que o servidor não encontrou uma representação atual para a rota solicitada. O host pode ter sido resolvido e a conexão segura pode ter sido estabelecida com sucesso."
+ },
+ "500":{
+ request:"GET /guia HTTP/1.1\nHost: exemplo.test\nAccept: text/html",
+ response:"HTTP/1.1 500 Internal Server Error\nContent-Type: text/plain\n\nErro interno",
+ explanation:"500 indica falha interna não especificada na origem ou aplicação. Registros do servidor e IDs de correlação ajudam a investigar sem exibir stack traces ou dados privados."
+ }
+};
+var statusButtons=Array.prototype.slice.call(doc.querySelectorAll("[data-http]"));
+statusButtons.forEach(function(b){b.addEventListener("click",function(){
+ statusButtons.forEach(function(item){item.setAttribute("aria-pressed",String(item===b));});
+ var v=httpSamples[b.dataset.http];
+ byId("httpRequest").textContent=v.request;
+ byId("httpResponse").textContent=v.response;
+ byId("httpExplanation").textContent=v.explanation;
+});});
+var latIds=["latDns","latConnect","latServer","latTransfer","latRender"];
+var barIds=["barDns","barConnect","barServer","barTransfer","barRender"];
+function refreshLatency(){
+ var vals=latIds.map(function(id){var value=Number(byId(id).value);byId(id+"Out").textContent=value+" ms";return value;});
+ var total=vals.reduce(function(a,b){return a+b;},0);
+ byId("latTotal").textContent=total+" ms";
+ barIds.forEach(function(id,i){byId(id).style.width=(total===0?0:vals[i]/total*100)+"%";});
+ var names=["DNS","Conexão + TLS","Servidor","Transferência","Renderização"];
+ var max=Math.max.apply(null,vals);
+ var maxIndex=vals.indexOf(max);
+ byId("latInsight").textContent=total===0?"As cinco parcelas do orçamento estão zeradas; não representa carregamento instantâneo real.":"A maior parcela neste exemplo é "+names[maxIndex]+" ("+max+" ms). Reduzir essa parcela impactaria mais esta soma simplificada.";
+ byId("latGraph").setAttribute("aria-label","Composição ilustrativa: "+names.map(function(n,i){return n+" "+vals[i]+" ms";}).join(", ")+". Total "+total+" ms.");
+}
+latIds.forEach(function(id){byId(id).addEventListener("input",refreshLatency);});
+byId("resetLatency").addEventListener("click",function(){
+ [30,90,120,70,80].forEach(function(v,i){byId(latIds[i]).value=String(v);});
+ refreshLatency();
+});
+refreshLatency();
+var review=byId("reviewForm"),reviewOutput=byId("reviewResult");
+byId("gradeReview").addEventListener("click",function(){
+ var score=0,answered=0;
+ var questions=Array.prototype.slice.call(review.querySelectorAll(".question"));
+ questions.forEach(function(q){
+  var chosen=q.querySelector("input:checked");
+  var fb=q.querySelector(".question-feedback");
+  if(!chosen){fb.textContent="Selecione uma alternativa para conferir.";return;}
+  answered++;
+  var right=chosen.value===q.dataset.correct;if(right)score++;
+  fb.textContent=(right?"Correto. ":"Revise este ponto. ")+q.dataset.explain;
+ });
+ reviewOutput.textContent=answered<questions.length
+  ?"Você respondeu "+answered+" de "+questions.length+" questões. Acertos até agora: "+score+"."
+  :score+" de "+questions.length+" respostas corretas. "+(score===questions.length?"Você distinguiu corretamente as camadas.":"Leia as explicações para corrigir as hipóteses.");
+});
+review.addEventListener("reset",function(){
+ review.querySelectorAll(".question-feedback").forEach(function(f){f.textContent="";});
+ reviewOutput.textContent="";
+});
+}());
+</script>
+</body>
+</html>
