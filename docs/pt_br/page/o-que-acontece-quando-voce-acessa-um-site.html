@@ -380,7 +380,7 @@ Host: exemplo.test
      </g>
      <g font-family="Segoe UI,Arial,sans-serif" font-weight="700" text-anchor="middle" fill="#254840" font-size="21">
       <text x="94" y="117">Navegador</text><text x="94" y="148" font-size="17">consulta</text><text x="325" y="119">Resolvedor</text><text x="325" y="148" font-size="17">cache?</text><text x="602" y="119">Raiz (.)</text><text x="602" y="148" font-size="17">referência</text>
-      <text x="603" y="299">TLD (.test)</text><text x="603" y="330" font-size="17">referência</text><text x="325" y="300">Servidor</text><text x="325" y="327" font-size="18">autoritativo</text><text x="94" y="302">Resposta</text><text x="94" y="332" font-size="18">A / AAAA</text>
+      <text x="603" y="299">TLD (modelo)</text><text x="603" y="330" font-size="17">referência</text><text x="325" y="300">Servidor</text><text x="325" y="327" font-size="18">autoritativo</text><text x="94" y="302">Resposta</text><text x="94" y="332" font-size="18">A / AAAA</text>
      </g>
      <text x="25" y="424" font-size="18" font-family="Segoe UI,Arial,sans-serif" fill="#3e5b57">Trajeto demonstrativo em cache miss; servidores e detalhes são simplificados.</text>
     </svg>
@@ -609,6 +609,7 @@ var quic=step("link","browser-link","TRANSPORTE","Iniciar QUIC com TLS 1.3","HTT
 var request=step("edge","link-edge","HTTP","Enviar uma requisição HTTP","O cliente pede o recurso à infraestrutura que atende o host, que pode ser uma CDN ou proxy. HTTP/2 e HTTP/3 têm enquadramento próprio; o texto exibido é uma tradução pedagógica da semântica.","[http] GET /guia\n[accept] text/html","GET /guia\n:authority: exemplo.test\naccept: text/html\n[exibição semântica, não frames reais]");
 var origin=step("origin","edge-origin","APLICAÇÃO","Consultar a origem","O intermediário encaminha a requisição à origem. Um aplicativo pode executar regras, consultar serviços e bancos de dados ou simplesmente devolver um arquivo estático.","[origin] rota /guia\n[backend] resposta preparada","ROTA: /guia\nAPLICAÇÃO: processou pedido\nCONTEÚDO: text/html\n[representação fictícia]");
 var ok=step("edge","edge-render","HTTP 200","Resposta HTML recebida","O servidor responde com status 200 e uma representação HTML. O navegador pode buscar recursos referenciados pelo documento em outras requisições.","[http] 200 OK\n[body] documento HTML","HTTP/2 200\ncontent-type: text/html\ncache-control: max-age=300\n\n<body>Conteúdo exemplo</body>");
+var okH3=step("edge","edge-render","HTTP/3 200","Resposta HTML via HTTP/3","A representação HTML retorna usando HTTP/3 sobre QUIC; conceitos como status, cabeçalhos e corpo seguem a semântica de HTTP, embora o enquadramento de transporte seja diferente.","[http3] 200 OK\n[quic] transporte seguro","HTTP/3 200\ncontent-type: text/html\ncache-control: max-age=300\n\n<body>Exemplo HTTP/3</body>");
 var draw=step("render","edge-render","RENDER","Interpretar e exibir pixels","O navegador transforma HTML em DOM, processa CSS, calcula estilos e layout e produz pintura/composição. Scripts e outros recursos podem desencadear trabalho adicional.","[render] DOM + CSSOM\n[layout] caixas\n[paint] pixels","HTML → DOM\nCSS → CSSOM\nestilo → layout → paint / composite");
 var warm=step("browser","","CACHE DO NAVEGADOR","Documento já armazenado","Existe uma representação do documento ainda fresca e reutilizável. Não é necessário acessar o servidor para obter este HTML neste cenário; imagens e outros recursos podem ter políticas diferentes.","[cache] fresh hit\n[network] sem pedido HTTP para o documento","Cache-Control: max-age=300\nEstado: fresh\nResposta local reutilizada");
 var edge=step("edge","link-edge","CDN / EDGE","Resposta válida no cache da borda","A CDN encontra uma representação utilizável e responde sem consultar o servidor de origem neste exemplo. O navegador ainda recebeu uma resposta de rede e precisa renderizá-la.","[edge] cache HIT\n[origin] não consultada","HTTP/2 200\ncache-status: CDN; hit\ncontent-type: text/html\n[exemplo ilustrativo]");
@@ -619,7 +620,7 @@ var failureTLS=step("link","browser-link","ERRO TLS","Identidade não validada",
 var traces={
  cold:[begin,dns,tcp,request,origin,ok,draw],
  warm:[begin,warm,step("render","browser-render","RENDER","Montar a página a partir do cache","O conteúdo HTML pode ser usado do cache, mas ainda deve ser analisado e desenhado. Outros recursos podem ter condições de cache diferentes.","[render] documento local\n[pixels] nova exibição","Cache local → DOM / CSSOM → layout → paint")],
- h3:[begin,dns,quic,request,origin,ok,draw],
+ h3:[begin,dns,quic,request,origin,okH3,draw],
  edge:[begin,dns,tcp,request,edge,draw],
  dnsfail:[begin,failureDns],
  tlsfail:[begin,dns,failureTLS],
