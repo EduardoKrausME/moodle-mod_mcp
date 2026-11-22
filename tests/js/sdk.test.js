@@ -71,6 +71,48 @@ test("structured progress SDK calls the documented actions without sending a use
     assert.equal((await save).version, 2);
 });
 
+
+test("iframe navigation starts only after the parent bridge registers its message listener", async() => {
+    const template = fs.readFileSync(
+        path.join(__dirname, "../../templates/activity.mustache"), "utf8");
+    assert.match(template, /src="about:blank" data-src="\{\{\{url_content\}\}\}"/);
+    const events = {};
+    const calls = [];
+    const contenturl = "https://moodle.example/pluginfile.php/123/mod_mcp/content/4/index.html";
+    const child = {postMessage: () => {}};
+    const frame = {
+        dataset: {src: contenturl},
+        contentWindow: child,
+        isConnected: true,
+        style: {height: "650px"},
+        addEventListener: () => {},
+        set src(url) {
+            assert.equal(url, contenturl);
+            assert.equal(typeof events.message, "function");
+            events.message({source: child, data: {
+                channel: "mod_mcp", type: "request", id: "mcp-1-early",
+                action: "progress.load", payload: {}
+            }});
+        }
+    };
+    const window = {addEventListener: (name, callback) => {events[name] = callback;}};
+    const document = {querySelector: () => frame};
+    let exposed;
+    const define = (dependencies, factory) => {
+        exposed = factory({call: (requests) => {
+            calls.push(requests[0]);
+            return [Promise.resolve({json: '{"version":0,"data":{},"userdata":{}}'})];
+        }});
+    };
+    vm.runInNewContext(bridge, {define, window, document, Set, JSON, Object, Number, Boolean, String});
+    exposed.init({cmid: 36, preview: false});
+    await new Promise((resolve) => setImmediate(resolve));
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0].args.cmid, 36);
+    assert.equal(calls[0].args.action, "progress.load");
+    assert.equal(frame.dataset.src, undefined);
+});
+
 test("parent bridge rejects messages from another window and never trusts requested cmid", async() => {
     const events = {};
     const requests = [];

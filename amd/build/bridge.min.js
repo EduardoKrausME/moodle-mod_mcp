@@ -191,6 +191,12 @@ define(["core/ajax"], function(Ajax) {
             requestMeasurement();
             sendTheme();
         });
+        // The sandbox must not execute authored scripts before the parent registers
+        // its message handler. A fast iframe can otherwise lose progress.load().
+        if (frame.dataset && frame.dataset.src) {
+            frame.src = frame.dataset.src;
+            delete frame.dataset.src;
+        }
         requestMeasurement();
         sendTheme();
     };

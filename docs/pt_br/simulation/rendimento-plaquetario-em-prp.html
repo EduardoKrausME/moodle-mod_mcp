@@ -248,7 +248,7 @@
                 if(prior.schema===1&&validValues(safeObject(prior.values))){resetFields(prior.values);chosen=presets.some(p=>p.id===prior.scenario)?prior.scenario:"custom";setState("Cenário individual salvo anteriormente foi recuperado.","ok");}
                 else{chosen="base";setState("Simulador pronto. Os valores iniciais são exemplos; salve um cenário quando desejar.","ok");}
                 busy=false;pending=null;render();
-            }catch(err){snapshot=null;busy=false;render();setState("Não foi possível carregar o armazenamento autenticado. Os cálculos funcionam, mas o salvamento não está disponível.","err");const retry=$("retry");retry.hidden=false;retry.textContent="Conectar ao Moodle novamente";retry.onclick=load;}
+            }catch(err){snapshot=null;busy=false;render();const reason=String(err&&err.message||err||"erro desconhecido").slice(0,120);console.error("[mod_mcp] progress.load:",reason);setState("Não foi possível carregar o armazenamento autenticado ("+reason+"). Os cálculos funcionam, mas o salvamento não está disponível.","err");const retry=$("retry");retry.hidden=false;retry.textContent="Conectar ao Moodle novamente";retry.onclick=load;}
         }
         render();load();
     })();
