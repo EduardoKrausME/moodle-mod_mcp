@@ -199,6 +199,14 @@ final class api {
             case "progress.save":
                 require_capability("mod/mcp:submit", $context);
                 return state::save($mcpid, $userid, $revision, $payload);
+            case "progress.getStatus":
+                $completion = self::completion($mcp, $cm);
+                return state::status($mcpid, $userid, $revision, (bool)$completion["completed"]);
+            case "progress.saveStatus":
+                require_capability("mod/mcp:submit", $context);
+                state::save_status($mcpid, $userid, $revision, $payload);
+                $completion = self::completion($mcp, $cm);
+                return state::status($mcpid, $userid, $revision, (bool)$completion["completed"]);
             case "tracking.record":
                 require_capability("mod/mcp:submit", $context);
                 return state::track($mcpid, $userid, $revision, $payload);

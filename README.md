@@ -48,6 +48,14 @@ assessment instructions. The Portuguese and English prompts remain unchanged.
 
 ## Student runtime API (1.1)
 
+The complete, maintained inventory of student SDK actions, Moodle web services
+and authoring MCP tools is in [API.md](API.md). The authoring prompts link directly
+to this catalogue. Structured position tracking uses
+`MoodleMCP.progress.getStatus()` and
+`MoodleMCP.progress.saveStatus({version, location, percent, currentstep, totalsteps})`
+alongside the existing `progress.load()`/`progress.save()` operations. A saved
+100% reading position is not a Moodle grade or an academic completion event.
+
 Published HTML documents receive a small `window.MoodleMCP` SDK before their own scripts.
 The HTML stays inside `sandbox="allow-scripts"` (no `allow-same-origin`).
 A trusted host AMD module accepts messages **only from the matching iframe WindowProxy**,
@@ -78,6 +86,7 @@ Available APIs:
 - `activity.getContext()`, `course.getActivities()`, `course.getNavigation()`;
 - `completion.get()`, `completion.complete()`;
 - `progress.load()`, `progress.save({version, location, data})` with optimistic locking;
+- `progress.getStatus()`, `progress.saveStatus({version, location, percent, currentstep, totalsteps})` for structured per-user reading progress;
 - `attempt.get()`, `attempt.start()`, `attempt.finish()`;
 - `questions.get()`, `questions.submit(responses, finish)` for simple native question
   types. Returned question markup comes from the Moodle Question Engine, never from authored HTML.

@@ -81,7 +81,8 @@ final class dispatch extends external_api {
         if ($preview) {
             // Preview HTML cannot mutate academic records.
             if (!in_array($action, ["activity.getContext", "course.getActivities",
-                    "course.getNavigation", "completion.get", "progress.load", "attempt.get"], true)) {
+                    "course.getNavigation", "completion.get", "progress.load",
+                    "progress.getStatus", "attempt.get"], true)) {
                 throw new moodle_exception("nopermissions");
             }
         } else if (!$mcp->publishedrevision) {

@@ -106,6 +106,79 @@ final class state {
         });
     }
 
+
+    /**
+     * Current learning position, independently of Moodle activity completion.
+     *
+     * @param int $mcpid Activity instance ID.
+     * @param int $userid Authenticated user ID from the trusted caller.
+     * @param int $revision Published revision ID.
+     * @param bool $moodlecompleted Actual Moodle completion state.
+     * @return array Current status for this student and published revision.
+     */
+    public static function status(int $mcpid, int $userid, int $revision, bool $moodlecompleted): array {
+        $snapshot = self::load($mcpid, $userid, $revision);
+        $details = $snapshot["data"]["_modmcpstatus"] ?? [];
+        if (!is_array($details)) {
+            $details = [];
+        }
+        $percent = $details["percent"] ?? 0;
+        $currentstep = $details["currentstep"] ?? 0;
+        $totalsteps = $details["totalsteps"] ?? 0;
+        $percent = is_int($percent) && $percent >= 0 && $percent <= 100 ? $percent : 0;
+        $currentstep = is_int($currentstep) && $currentstep >= 0 ? $currentstep : 0;
+        $totalsteps = is_int($totalsteps) && $totalsteps >= $currentstep ? $totalsteps : 0;
+        $started = $snapshot["location"] !== "" || !empty($snapshot["data"]);
+        return [
+            "version" => $snapshot["version"],
+            "location" => $snapshot["location"],
+            "percent" => $percent,
+            "currentstep" => $currentstep,
+            "totalsteps" => $totalsteps,
+            "status" => !$started ? "notstarted" : ($percent === 100 ? "finished" : "inprogress"),
+            "moodlecompleted" => $moodlecompleted,
+        ];
+    }
+
+    /**
+     * Save structured learning progress without overwriting other authored state.
+     * The underlying save method keeps the existing optimistic lock and size limits.
+     *
+     * @param int $mcpid Activity instance ID.
+     * @param int $userid Authenticated user ID from the trusted caller.
+     * @param int $revision Published revision ID.
+     * @param array $payload Bounded progress data and expected state version.
+     */
+    public static function save_status(int $mcpid, int $userid, int $revision, array $payload): void {
+        $version = $payload["version"] ?? null;
+        $percent = $payload["percent"] ?? null;
+        $currentstep = $payload["currentstep"] ?? 0;
+        $totalsteps = $payload["totalsteps"] ?? 0;
+        if (!is_int($version) || $version < 0 || !is_int($percent) ||
+                $percent < 0 || $percent > 100 || !is_int($currentstep) ||
+                !is_int($totalsteps) || $currentstep < 0 || $totalsteps < 0 ||
+                $currentstep > $totalsteps || $totalsteps > 1000000) {
+            throw new moodle_exception("invaliddata");
+        }
+
+        $snapshot = self::load($mcpid, $userid, $revision);
+        $location = $payload["location"] ?? $snapshot["location"];
+        if (!is_string($location) || strlen($location) > 255) {
+            throw new moodle_exception("invaliddata");
+        }
+        $data = $snapshot["data"];
+        $data["_modmcpstatus"] = [
+            "percent" => $percent,
+            "currentstep" => $currentstep,
+            "totalsteps" => $totalsteps,
+        ];
+        self::save($mcpid, $userid, $revision, [
+            "version" => $version,
+            "location" => $location,
+            "data" => $data,
+        ]);
+    }
+
     /**
      * A declaration from HTML is not a grade; it only fulfils an enabled custom completion rule.
      */

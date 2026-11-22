@@ -38,6 +38,39 @@ test("sandbox SDK keeps credentials outside the iframe and matches parent messag
     assert.equal((await result).version, 3);
 });
 
+
+test("structured progress SDK calls the documented actions without sending a user ID", async() => {
+    const events = {};
+    const calls = [];
+    const parent = {postMessage: (message) => calls.push(message)};
+    const window = {
+        parent,
+        addEventListener: (name, handler) => {events[name] = handler;}
+    };
+    vm.runInNewContext(sdk, {
+        window, setTimeout, clearTimeout, Map, Math, Object, Error, String
+    });
+    const pending = window.MoodleMCP.progress.getStatus();
+    assert.equal(calls[0].action, "progress.getStatus");
+    events.message({source: parent, data: {
+        channel: "mod_mcp", type: "response", id: calls[0].id,
+        ok: true, result: {version: 1, status: "inprogress", percent: 30}
+    }});
+    const status = await pending;
+    const save = window.MoodleMCP.progress.saveStatus({
+        version: status.version, location: "chapter-2",
+        percent: 50, currentstep: 2, totalsteps: 4
+    });
+    assert.equal(calls[1].action, "progress.saveStatus");
+    assert.equal(calls[1].payload.percent, 50);
+    assert.equal(calls[1].payload.userid, undefined);
+    events.message({source: parent, data: {
+        channel: "mod_mcp", type: "response", id: calls[1].id,
+        ok: true, result: {version: 2, status: "inprogress", percent: 50}
+    }});
+    assert.equal((await save).version, 2);
+});
+
 test("parent bridge rejects messages from another window and never trusts requested cmid", async() => {
     const events = {};
     const requests = [];
@@ -72,6 +105,12 @@ test("parent bridge rejects messages from another window and never trusts reques
     assert.equal(responses.find((message) => message.type === "response").ok, true);
     events.message({source: child, data: {...message, action: "grade.update"}});
     assert.equal(requests.length, 1);
+    events.message({source: child, data: {...message, action: "progress.getStatus"}});
+    await new Promise((resolve) => setImmediate(resolve));
+    assert.equal(requests.length, 2);
+    events.message({source: child, data: {...message, action: "progress.saveStatus"}});
+    await new Promise((resolve) => setImmediate(resolve));
+    assert.equal(requests.length, 3);
 });
 
 

@@ -12,6 +12,7 @@ define(["core/ajax"], function(Ajax) {
     const allowed = new Set([
         "activity.getContext", "course.getActivities", "course.getNavigation",
         "completion.get", "completion.complete", "progress.load", "progress.save",
+        "progress.getStatus", "progress.saveStatus",
         "tracking.record", "tracking.summary", "attempt.get", "attempt.start",
         "attempt.finish", "questions.get", "questions.submit"
     ]);

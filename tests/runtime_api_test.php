@@ -85,6 +85,96 @@ final class runtime_api_test extends advanced_testcase {
         ]);
     }
 
+
+    /**
+     * Structured progress retains custom state and belongs only to the current student.
+     */
+    public function test_structured_progress_status_preserves_state_and_user_scope(): void {
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        $mcp = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id]);
+        $alice = $this->getDataGenerator()->create_user();
+        $bob = $this->getDataGenerator()->create_user();
+        $this->assertSame("notstarted",
+            state::status((int)$mcp->id, (int)$alice->id, 7, false)["status"]);
+
+        state::save((int)$mcp->id, (int)$alice->id, 7, [
+            "version" => 0, "location" => "intro", "data" => ["answer" => "draft"],
+        ]);
+        state::save_status((int)$mcp->id, (int)$alice->id, 7, [
+            "version" => 1, "location" => "chapter-2",
+            "percent" => 40, "currentstep" => 2, "totalsteps" => 5,
+        ]);
+        $status = state::status((int)$mcp->id, (int)$alice->id, 7, false);
+        $this->assertSame("inprogress", $status["status"]);
+        $this->assertSame(40, $status["percent"]);
+        $this->assertSame(2, $status["currentstep"]);
+        $this->assertSame(5, $status["totalsteps"]);
+        $this->assertSame("chapter-2", $status["location"]);
+        $this->assertSame(2, $status["version"]);
+        $this->assertFalse($status["moodlecompleted"]);
+        $this->assertSame("draft",
+            state::load((int)$mcp->id, (int)$alice->id, 7)["data"]["answer"]);
+        $this->assertSame("notstarted",
+            state::status((int)$mcp->id, (int)$bob->id, 7, false)["status"]);
+        $this->assertSame(0,
+            state::status((int)$mcp->id, (int)$bob->id, 7, false)["percent"]);
+    }
+
+    /**
+     * Saving a finished reading position cannot forge Moodle completion.
+     */
+    public function test_status_revision_reset_and_native_completion_separation(): void {
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        $mcp = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id]);
+        $user = $this->getDataGenerator()->create_user();
+        state::save_status((int)$mcp->id, (int)$user->id, 1, [
+            "version" => 0, "location" => "end",
+            "percent" => 100, "currentstep" => 3, "totalsteps" => 3,
+        ]);
+        $status = state::status((int)$mcp->id, (int)$user->id, 1, false);
+        $this->assertSame("finished", $status["status"]);
+        $this->assertFalse($status["moodlecompleted"]);
+        $newrevision = state::status((int)$mcp->id, (int)$user->id, 2, false);
+        $this->assertSame("notstarted", $newrevision["status"]);
+        $this->assertSame(0, $newrevision["percent"]);
+        $this->assertSame("", $newrevision["location"]);
+        state::complete((int)$mcp->id, (int)$user->id, 1);
+        $this->assertTrue(state::status((int)$mcp->id, (int)$user->id, 1, true)["moodlecompleted"]);
+    }
+
+    /**
+     * Do not accept percentages, steps or stale writes that violate the contract.
+     */
+    public function test_structured_progress_status_rejects_stale_versions(): void {
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        $mcp = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id]);
+        $user = $this->getDataGenerator()->create_user();
+        state::save_status((int)$mcp->id, (int)$user->id, 1, [
+            "version" => 0, "percent" => 20, "currentstep" => 1, "totalsteps" => 5,
+        ]);
+        $this->expectException(moodle_exception::class);
+        state::save_status((int)$mcp->id, (int)$user->id, 1, [
+            "version" => 0, "percent" => 60, "currentstep" => 3, "totalsteps" => 5,
+        ]);
+    }
+
+    /**
+     * Invalid progress cannot affect the user's existing saved data.
+     */
+    public function test_structured_progress_status_rejects_invalid_steps(): void {
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        $mcp = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id]);
+        $user = $this->getDataGenerator()->create_user();
+        $this->expectException(moodle_exception::class);
+        state::save_status((int)$mcp->id, (int)$user->id, 1, [
+            "version" => 0, "percent" => 101, "currentstep" => 6, "totalsteps" => 5,
+        ]);
+    }
+
     /**
      * Limit telemetry, expose only aggregates and keep user boundaries intact.
      */

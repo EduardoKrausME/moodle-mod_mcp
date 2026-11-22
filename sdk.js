@@ -84,7 +84,9 @@
         }),
         progress: Object.freeze({
             load: () => request("progress.load"),
-            save: (state) => request("progress.save", state)
+            save: (state) => request("progress.save", state),
+            getStatus: () => request("progress.getStatus"),
+            saveStatus: (status) => request("progress.saveStatus", status)
         }),
         attempt: Object.freeze({
             get: () => request("attempt.get"),

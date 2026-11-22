@@ -47,8 +47,10 @@ final class activity {
             "url" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id]))->out(false),
         ];
         $prompt = get_string($type === "page" ? "promptpage" : "promptquiz", "mcp", $args);
+        $apireference = get_string("promptapireference", "mcp",
+            "https://github.com/EduardoKrausME/moodle-mod_mcp/blob/master/API.md");
         return get_string("promptinstructions", "mcp") . " " .
-            $prompt . " " . self::css_instructions($PAGE->theme->name);
+            $apireference . " " . $prompt . " " . self::css_instructions($PAGE->theme->name);
     }
 
     /**
