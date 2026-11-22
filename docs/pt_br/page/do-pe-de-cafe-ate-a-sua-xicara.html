@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Uma reportagem visual e interativa sobre o caminho do café: planta, fruto, pós-colheita, secagem, torra, moagem e extração.">
+<meta name="color-scheme" content="light">
+<title>Do pé de café até a sua xícara | Caderno de Origem</title>
+<style>
+:root{--paper:#f8f4e9;--cream:#efe6d5;--brown:#39271d;--deep:#231b17;--rust:#9d4328;--rust-dark:#7e321d;--leaf:#4e6751;--line:#cabcaa;--muted:#665c51;--white:#fffdf7;--focus:#155f87;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--paper);color:var(--brown)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:280px;line-height:1.72}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:.55}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+a{color:#79341f;text-underline-offset:3px}
+h1,h2,h3,blockquote,.serif{font-family:Georgia,"Times New Roman",serif}
+h1,h2,h3,p,figure{margin-top:0}
+h2{font-size:clamp(2rem,4.6vw,4.6rem);line-height:1.08;letter-spacing:-.045em}
+h3{line-height:1.3}
+p{margin-bottom:1.3em}
+p:last-child{margin-bottom:0}
+article{overflow:hidden}
+.skip{position:absolute;left:15px;top:-100px;background:white;z-index:99;padding:12px;color:var(--deep)}
+.skip:focus{top:15px}
+.edition{width:min(1240px,calc(100% - 64px));margin-inline:auto}
+.read{max-width:770px}
+.micro{font-size:.72rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase}
+.rule{height:1px;background:var(--line)}
+.cover{min-height:730px;position:relative;background:#eae0cd;isolation:isolate}
+.cover::after{content:"";height:22px;position:absolute;left:0;right:0;bottom:0;background:repeating-linear-gradient(90deg,#583627 0 11px,#e2b882 11px 19px,#4e6250 19px 27px)}
+.cover-top{display:flex;justify-content:space-between;align-items:center;padding:31px 0;border-bottom:1px solid #86745f;font-size:.74rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;gap:12px}
+.cover-top span:last-child{text-align:right}
+.cover-body{padding:76px 0 88px;display:grid;grid-template-columns:1.08fr .92fr;gap:30px;align-items:center}
+.cover-issue{display:inline-block;color:var(--rust-dark);border:1px solid #bca793;padding:7px 12px;margin-bottom:25px}
+.cover h1{font-size:clamp(3.65rem,8.4vw,8.2rem);line-height:.9;letter-spacing:-.07em;margin-bottom:38px;max-width:760px}
+.cover h1 em{font-weight:normal;color:var(--rust-dark);font-style:italic}
+.cover-intro{font-size:clamp(1.05rem,1.6vw,1.24rem);line-height:1.7;max-width:480px;color:#544538}
+.cover-meta{margin-top:37px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em}
+.cover-visual{position:relative;min-width:0;align-self:stretch;display:flex;align-items:center}
+.cover-visual svg{display:block;width:100%;height:auto;filter:drop-shadow(12px 15px 18px #60483223)}
+.cover-caption{position:absolute;bottom:20px;right:0;max-width:330px;padding:14px 17px;background:#fff7e8d9;border-left:4px solid #994323;font-size:.79rem}
+.chapter-tag{display:inline-block;color:var(--rust-dark);margin-bottom:21px}
+.opening{padding:105px 0 92px;display:grid;grid-template-columns:255px 1fr;gap:65px}
+.opening-index{font:8rem/.85 Georgia,serif;letter-spacing:-.1em;color:#bcac98;display:block}
+.opening .lead{font:clamp(1.5rem,2.6vw,2.35rem)/1.38 Georgia,serif;letter-spacing:-.025em}
+.opening .lead::first-letter{float:left;font:4.4em/.75 Georgia,serif;color:var(--rust-dark);padding-right:12px;padding-top:10px}
+.opening p:not(.lead){font-size:1.03rem;color:#52493e;line-height:1.94}
+.section{padding:96px 0;border-top:1px solid var(--line)}
+.section-heading{display:grid;grid-template-columns:215px 1fr;gap:50px;margin-bottom:45px}
+.section-heading .micro{margin-top:12px;color:var(--rust)}
+.section-heading h2{max-width:800px;margin:0}
+.section-heading .deck{font-size:1.07rem;color:#625447;max-width:670px;line-height:1.8;margin-top:23px}
+.narrative{font-size:1.04rem;line-height:1.92;color:#463c32}
+.narrative strong{color:#382719}
+.visual-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:55px;align-items:center}
+.illustration{margin:0}
+.illustration svg{width:100%;height:auto;display:block}
+.illustration figcaption{font-size:.8rem;color:#6a5a4d;line-height:1.6;margin-top:13px}
+.botanical{background:#e0e4d4;padding:33px;border:1px solid #a6b49c}
+.botanical .label{font:italic 1.4rem Georgia,serif;fill:#263d2c}
+.species{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:41px}
+.species-card{padding:29px 29px 32px;border:1px solid #b8ad9b;background:#fffbf2}
+.species-card:nth-child(2){background:#e9e6d7}
+.species-card .latin{font-style:italic;color:#886848;font-size:.85rem}
+.species-card h3{font-size:1.85rem;margin:8px 0 13px}
+.species-card p{color:#5b5147;margin:0}
+.fruit-figure{background:#492d21;color:#fff8ed;padding:35px;border-radius:150px 150px 6px 6px;box-shadow:0 15px 35px #382a1e19}
+.fruit-figure figcaption{color:#ebdccb}
+.fruit-points{list-style:none;padding:0;margin:20px 0;display:grid;gap:12px}
+.fruit-points li{padding-bottom:12px;border-bottom:1px solid #c6b7a4;line-height:1.5}
+.fruit-points strong{display:block;color:var(--rust-dark)}
+.maturity-lab{background:#e8ddcd;padding:31px;margin-top:40px;border:1px solid #c3b49b}
+.maturity-lab h3{font-size:1.55rem;margin:0 0 7px}
+.maturity-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}
+.maturity-btn{padding:16px 12px;border:2px solid #c8bda8;background:#fcf7ec;color:#38291f;text-align:center}
+.maturity-btn[aria-pressed="true"]{background:#fffaf0;border-color:#7b3723;box-shadow:0 0 0 2px #7b372334}
+.maturity-berry{display:block;height:59px;width:46px;border-radius:55% 55% 48% 48%;margin:0 auto 11px;box-shadow:inset -8px -9px 12px #29140045,inset 5px 5px 9px #ffffff88}
+.maturity-berry.green{background:#6d8943}.maturity-berry.turning{background:linear-gradient(130deg,#b1ad4d 45%,#c97832 46%)}.maturity-berry.red{background:#ae2c28}
+.maturity-btn small{display:block;font-size:.82rem}
+.maturity-result{min-height:100px;border-left:4px solid #8c543a;padding:14px 20px;background:#fff9ed;color:#504136}
+.maturity-result strong{display:block;color:#6c3121}
+.inline-note{padding:18px 24px;border-left:5px solid var(--rust);background:#eee4d6;color:#514437;font-size:.96rem}
+.full-bleed{padding:90px 0;background:#33241b;color:#f6eadd;position:relative}
+.full-bleed h2{color:#fff6e4}
+.full-bleed .micro{color:#ebad79}
+.full-bleed .section-heading .deck{color:#d6c2ab}
+.process-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px}
+.process-list{display:grid;gap:10px;align-content:start}
+.process-button{display:flex;align-items:center;gap:18px;padding:19px 22px;background:#493427;border:1px solid #947258;color:#f6eadb;text-align:left;min-height:90px}
+.process-button[aria-pressed="true"]{background:#f6e8d4;color:#39251c;border-color:#efbc85}
+.process-button .process-number{font:2.2rem Georgia,serif;color:#d99b71}
+.process-button[aria-pressed="true"] .process-number{color:#9d4c28}
+.process-button strong,.process-button small{display:block}
+.process-button small{font-size:.82rem;margin-top:5px;line-height:1.4}
+.process-card{background:#f8eee0;color:#35271f;padding:35px 37px;min-height:540px;box-shadow:10px 10px 0 #bd835d38}
+.process-card h3{font-size:2rem;margin:7px 0 15px}
+.process-card .diagram{background:#e4d4bf;min-height:175px;margin:22px 0;padding:10px}
+.process-card svg{width:100%;height:auto;display:block}
+.process-card p{line-height:1.85}
+.process-note{font-size:.87rem;color:#6c5b4c;border-top:1px solid #cebba3;padding-top:16px}
+.after-process{max-width:790px;margin-top:40px;color:#e4d4c4;line-height:1.9}
+.drying-section{background:#ece7d9}
+.drying-grid{display:grid;grid-template-columns:1fr 1fr;gap:38px;align-items:center}
+.drying-figure{background:#f9f2e6;padding:17px;border:1px solid #c7b99e}
+.drying-figure svg{display:block;width:100%;height:auto}
+.drying-figure figcaption{font-size:.8rem;color:#77665a;margin-top:11px}
+.small-cap{font-size:.8rem;text-transform:uppercase;letter-spacing:.17em;color:#8b5637;font-weight:800}
+.drying-grid .narrative{max-width:560px}
+.quality-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:35px;border-top:1px solid #b4a896}
+.quality-grid div{padding:22px 20px 0 0}
+.quality-grid div+div{padding-left:20px;border-left:1px solid #b4a896}
+.quality-grid strong{display:block;font-family:Georgia,serif;font-size:1.5rem;margin-bottom:9px}
+.quality-grid p{color:#615448;font-size:.93rem;margin:0}
+.roast-section{background:#f5eadb}
+.roast-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.roast-item{background:#fffaf1;border:2px solid #cbbb9f;text-align:left;padding:25px 18px;color:var(--brown)}
+.roast-item[aria-pressed="true"]{border-color:#934629;background:#fff9e5;box-shadow:inset 0 -5px #934629}
+.roast-bean{width:115px;height:155px;margin:0 auto 20px;border-radius:52% 48% 49% 51%;background:#b07945;position:relative;box-shadow:inset 14px 10px 20px #fff8cb44,inset -18px -15px 22px #3a180d5e}
+.roast-bean::after{content:"";position:absolute;left:54%;top:10%;height:80%;width:14px;transform:rotate(13deg);border-left:6px solid #4125138c;border-radius:80% 16% 70% 40%}
+.roast-item[data-roast="medium"] .roast-bean{background:#844725}
+.roast-item[data-roast="dark"] .roast-bean{background:#422116;box-shadow:inset 14px 10px 20px #b1846b33,inset -18px -15px 22px #160a0780}
+.roast-item strong{font:1.6rem Georgia,serif;display:block}
+.roast-item small{display:block;color:#76604c;line-height:1.5}
+.roast-detail{margin-top:25px;padding:28px 33px;background:#36261e;color:#f7eadc;min-height:160px}
+.roast-detail h3{font:1.6rem Georgia,serif;margin:0 0 10px;color:#f3cda0}
+.roast-detail p{margin:0;color:#eaded0}
+.chemistry{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center;margin-top:65px}
+.chemistry-figure{padding:24px;background:#eee0cb;border:1px solid #c7ac8a}
+.chemistry-figure svg{width:100%;display:block;height:auto}
+.chemistry-figure figcaption{font-size:.79rem;color:#786553}
+.chemistry ul{padding-left:20px;color:#54463b;line-height:1.92}
+.brew{background:#263d30;color:#f8f0e1}
+.brew h2{color:#f6ecd9}
+.brew .micro{color:#eac78c}
+.brew .section-heading .deck{color:#d5e1d0}
+.brew-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px}
+.brew-machine{padding:28px;background:#e8e2d2;color:#392b20}
+.brew-machine svg{display:block;width:100%;height:auto}
+.brew-machine figcaption{font-size:.84rem;color:#6d6050;margin-top:12px}
+.brew-form{padding:30px 33px;background:#fcf6e8;color:#322821}
+.brew-form h3{font-size:2rem;margin-bottom:12px}
+.form-field{margin-top:21px}
+.form-field label{display:block;font-size:.9rem;font-weight:750;margin-bottom:9px}
+.form-field input,.form-field select{width:100%;padding:11px 12px;color:#2b231d;background:white;border:1px solid #9b9485;border-radius:0}
+.form-field input[type="range"]{padding:0;accent-color:#8d4827}
+.form-field .help{color:#6c5c4b;font-size:.8rem;margin:7px 0 0}
+.ratio-result{margin-top:25px;padding:20px 24px;color:#fff8e9;background:#563e2d}
+.ratio-result strong{display:block;font:2.35rem Georgia,serif}
+.ratio-result p{color:#eddec9;font-size:.87rem;margin-top:8px}
+.brew-foot{font-size:.83rem;color:#cbd8c7;margin-top:26px}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:35px;margin-top:44px}
+.fact{padding:30px 30px 25px;background:#f6eee1;border-top:6px solid #8d4a2e}
+.fact h3{font-size:1.6rem;margin-bottom:13px}
+.fact p{color:#56493e}
+.taste-section{background:#ebe2d1}
+.taste-wheel{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.taste-wheel svg{width:100%;height:auto;display:block}
+.taste-wheel .narrative{font-size:1.02rem}
+.taste-wheel figure{margin:0}
+.taste-wheel figcaption{font-size:.82rem;color:#61564a}
+.check-section{padding:90px 0;background:#f8f4e9}
+.check-layout{display:grid;grid-template-columns:.7fr 1.3fr;gap:58px}
+.check-left h2{font-size:clamp(2.3rem,4vw,4rem)}
+.question{padding:0 0 29px;margin:0 0 25px;border:0;border-bottom:1px solid #cebeaa}
+.question legend{font-weight:800;width:100%;line-height:1.5;margin-bottom:15px;padding:0}
+.question label{padding:11px 13px;display:flex;align-items:flex-start;gap:12px;background:#fffcf5;border:1px solid #d9ccba;margin:9px 0;cursor:pointer}
+.question label:has(input:checked){border-color:#8b492d;background:#f2e0ce}
+.question input{margin-top:6px;accent-color:#7b452b;flex:none}
+.feedback{font-size:.91rem;color:#65412b;min-height:1.5em;margin:12px 0 0}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.primary-btn,.secondary-btn{padding:13px 18px;border:2px solid #7e3e26;font-weight:800}
+.primary-btn{background:#713823;color:white}.primary-btn:hover{background:#542817}
+.secondary-btn{color:#6d3622;background:transparent}.secondary-btn:hover{background:#efe1d0}
+.result{font:1.35rem Georgia,serif;margin-top:20px}
+.closeout{background:#30241c;color:#f5e6d4;padding:55px 0}
+.closeout p{max-width:740px;font-size:1.1rem;line-height:1.9}
+.sources{padding:42px 0 70px;font-size:.88rem;color:#5b5147}
+.sources h2{font-size:1.5rem}
+.sources a{overflow-wrap:anywhere}
+@media(max-width:960px){
+.cover-body,.opening,.section-heading,.visual-grid,.process-layout,.drying-grid,.chemistry,.brew-grid,.taste-wheel,.check-layout{grid-template-columns:1fr}
+.cover-body{padding:58px 0}.cover h1{font-size:clamp(3.7rem,10vw,6.8rem)}
+.cover-visual{max-width:680px}
+.opening{gap:18px}.opening-index{font-size:4.8rem}
+.section-heading{gap:12px;margin-bottom:34px}
+.process-card{min-height:0}
+}
+@media(max-width:650px){
+.edition{width:calc(100% - 30px)}
+.cover-top{align-items:start;font-size:.65rem}
+.cover-body{padding:35px 0 55px}
+.cover h1{font-size:clamp(3.4rem,14vw,5rem)}
+.cover-caption{position:static;margin-top:10px}
+.section{padding:60px 0}
+.opening{padding:65px 0 60px}
+.species,.roast-gallery,.facts,.quality-grid{grid-template-columns:1fr}
+.condition{min-height:0}
+.quality-grid div+div{border-left:0;padding-left:0}
+.quality-grid div{padding:17px 0;border-bottom:1px solid #baae9d}
+.maturity-buttons{grid-template-columns:1fr 1fr 1fr;gap:5px}
+.maturity-btn{padding:12px 4px;font-size:.81rem}
+.maturity-btn small{font-size:.73rem}
+.roast-bean{height:100px;width:78px}
+.roast-item{display:grid;grid-template-columns:95px 1fr;gap:10px;align-items:center}
+.roast-item strong{font-size:1.35rem}
+.roast-item small{grid-column:2}
+.roast-item .roast-bean{grid-row:1 / 3;margin:0}
+.brew-form,.brew-machine,.process-card{padding:21px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<main id="conteudo">
+<article>
+<section class="cover" aria-labelledby="capa">
+  <div class="edition">
+    <div class="cover-top"><span>Caderno de origem <span aria-hidden="true">•</span> edição especial</span><span>Ciência, agricultura e cultura alimentar<br>03 / 10</span></div>
+    <div class="cover-body">
+      <div>
+        <span class="micro cover-issue">Reportagem visual / do campo à cozinha</span>
+        <h1 id="capa">Do pé de <em>café</em> até a sua xícara.</h1>
+        <p class="cover-intro">O aroma não começa na cozinha. Ele se constrói ao longo de meses na lavoura, passa pela escolha do fruto, pelo trabalho de quem o processa e pelas transformações químicas que acontecem na torra e na extração.</p>
+        <div class="cover-meta"><span>Leitura guiada: 20 a 25 minutos</span><span>Ilustrações autorais em SVG</span></div>
+      </div>
+      <figure class="cover-visual">
+        <svg viewBox="0 0 650 780" role="img" aria-labelledby="hero-title hero-desc">
+          <title id="hero-title">Café da planta à bebida, em uma composição editorial</title>
+          <desc id="hero-desc">Uma rama de cafeeiro com folhas e cerejas vermelhas passa por um coador até uma xícara de café. Grãos torrados aparecem ao redor, em tons terrosos.</desc>
+          <defs>
+            <linearGradient id="cup-shade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffdf1"/><stop offset="1" stop-color="#cbb4a0"/></linearGradient>
+            <linearGradient id="leaf-shade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#879a58"/><stop offset=".55" stop-color="#405c3e"/><stop offset="1" stop-color="#263c2b"/></linearGradient>
+            <radialGradient id="cherry-shade" cx=".3" cy=".3" r=".8"><stop stop-color="#f06b47"/><stop offset=".6" stop-color="#a92722"/><stop offset="1" stop-color="#5d1b19"/></radialGradient>
+            <pattern id="cover-grain" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="3" cy="4" r=".7" fill="#7b523c" opacity=".3"/><path d="M12 1 l-1 2" stroke="#86624c" opacity=".25"/></pattern>
+          </defs>
+          <path d="M90 620 Q25 385 280 160 Q435 22 536 -32" fill="none" stroke="#694b2f" stroke-width="19" stroke-linecap="round"/>
+          <path d="M180 388 Q39 292 63 129 Q192 126 241 285 Q238 345 180 388Z" fill="url(#leaf-shade)" stroke="#223d2a" stroke-width="5"/>
+          <path d="M180 388 Q175 261 91 165" fill="none" stroke="#adc18a" stroke-width="4"/>
+          <path d="M243 269 Q193 88 340 45 Q440 155 306 280Z" fill="url(#leaf-shade)" stroke="#223c2a" stroke-width="5"/>
+          <path d="M243 269 Q306 167 336 85" fill="none" stroke="#b7bd73" stroke-width="4"/>
+          <path d="M370 175 Q396 33 567 92 Q547 257 407 254Z" fill="url(#leaf-shade)" stroke="#253b2a" stroke-width="5"/>
+          <path d="M370 175 Q452 169 540 111" fill="none" stroke="#b2c27a" stroke-width="4"/>
+          <path d="M137 497 Q17 486 12 336 Q178 319 209 430Z" fill="url(#leaf-shade)" stroke="#2d432f" stroke-width="5"/>
+          <path d="M137 497 Q124 421 52 369" fill="none" stroke="#aac37e" stroke-width="4"/>
+          <g fill="url(#cherry-shade)" stroke="#6b2920" stroke-width="3">
+            <ellipse cx="282" cy="323" rx="48" ry="55" transform="rotate(18 282 323)"/>
+            <ellipse cx="368" cy="307" rx="49" ry="58" transform="rotate(-15 368 307)"/>
+            <ellipse cx="326" cy="413" rx="54" ry="60"/>
+            <ellipse cx="220" cy="425" rx="41" ry="49"/>
+            <ellipse cx="415" cy="404" rx="44" ry="53"/>
+            <ellipse cx="271" cy="505" rx="44" ry="52"/>
+          </g>
+          <g fill="#edbb83" opacity=".7"><ellipse cx="267" cy="301" rx="12" ry="19" transform="rotate(25 267 301)"/><ellipse cx="350" cy="281" rx="12" ry="19" transform="rotate(25 350 281)"/><ellipse cx="314" cy="386" rx="12" ry="19"/></g>
+          <g transform="translate(308 464)">
+            <path d="M95 70 L261 70 L222 178 L129 178Z" fill="#d7c0a1" stroke="#907b62" stroke-width="8"/>
+            <path d="M115 88 L240 88 L209 164 L141 164Z" fill="#f6ecda"/>
+            <path d="M148 106 L206 106 L190 150 L165 150Z" fill="#6c3a22"/>
+            <path d="M176 177 Q179 197 176 238" stroke="#62371e" stroke-width="7" stroke-linecap="round" stroke-dasharray="11 15" fill="none"/>
+          </g>
+          <ellipse cx="400" cy="690" rx="210" ry="26" fill="#4b2d2034"/>
+          <path d="M250 602 Q255 732 408 725 Q551 721 559 602Z" fill="url(#cup-shade)" stroke="#a89179" stroke-width="7"/>
+          <ellipse cx="403" cy="602" rx="155" ry="40" fill="#fdf5e4" stroke="#b49a7e" stroke-width="6"/>
+          <ellipse cx="403" cy="605" rx="136" ry="26" fill="#6d3c22"/>
+          <path d="M554 631 Q660 620 610 696 Q587 716 542 684" fill="none" stroke="#cfbca4" stroke-width="29" stroke-linecap="round"/>
+          <path d="M554 631 Q660 620 610 696 Q587 716 542 684" fill="none" stroke="#fff5e8" stroke-width="16" stroke-linecap="round"/>
+          <path d="M245 735 Q398 763 566 735" fill="none" stroke="#b59c82" stroke-width="15" stroke-linecap="round"/>
+          <g fill="#5f3523" stroke="#2c1d16" stroke-width="2">
+            <ellipse cx="85" cy="646" rx="25" ry="35" transform="rotate(-22 85 646)"/>
+            <ellipse cx="154" cy="712" rx="23" ry="30" transform="rotate(35 154 712)"/>
+            <ellipse cx="578" cy="522" rx="20" ry="31" transform="rotate(-28 578 522)"/>
+          </g>
+          <g fill="none" stroke="#d3a780" stroke-width="4"><path d="M81 621 Q95 646 89 667"/><path d="M158 687 Q146 710 157 736"/><path d="M574 499 Q588 523 582 547"/></g>
+          <rect width="650" height="780" fill="url(#cover-grain)" pointer-events="none"/>
+        </svg>
+        <figcaption class="cover-caption">Ilustração botânica e xícara estilizadas. Da cereja ao café filtrado, cada etapa transforma o resultado.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="opening edition" aria-labelledby="abertura">
+  <div><span class="opening-index" aria-hidden="true">01</span><span class="micro" style="color:#8d4c2e">Antes do primeiro gole</span></div>
+  <div class="read">
+    <h2 id="abertura" style="font-size:clamp(2.3rem,4vw,3.9rem)">Uma semente, muitas decisões.</h2>
+    <p class="lead">Aquilo que chamamos de grão de café é, na verdade, a semente de um fruto.</p>
+    <p>O percurso começa com uma planta do gênero <em>Coffea</em>. Suas flores dão origem a frutos que amadurecem gradualmente, acumulam componentes químicos e, quando colhidos, ainda não têm o aroma característico do café torrado. O que existe ali é um conjunto de precursores: substâncias que, preservadas ou transformadas nas etapas seguintes, influenciarão a bebida.</p>
+    <p>O café é, ao mesmo tempo, agricultura e tecnologia de alimentos. Solo, clima, altitude, sombreamento, material genético e manejo influenciam o desenvolvimento da planta, enquanto maturação, seleção, processamento, secagem, armazenamento, torra e preparo determinam o que chega à xícara. Nenhuma etapa trabalha sozinha, e nenhuma técnica de preparo transforma matéria-prima defeituosa em café excepcional.</p>
+    <p>Nesta reportagem, vamos percorrer esse caminho sem confundir nomes comerciais com categorias botânicas, sem tratar métodos de processamento como receitas infalíveis e sem reduzir qualidade a uma única nota de degustação.</p>
+  </div>
+</section>
+
+<section class="section edition" aria-labelledby="cultivo">
+  <div class="section-heading"><span class="micro">02 / O lugar onde tudo começa</span><div><h2 id="cultivo">No cafeeiro, o trabalho é lento.</h2><p class="deck">Uma lavoura não produz frutos idênticos por acaso: genética, ambiente e práticas agrícolas interagem durante meses de desenvolvimento.</p></div></div>
+  <div class="visual-grid">
+    <figure class="illustration botanical">
+      <svg viewBox="0 0 620 640" role="img" aria-labelledby="plant-title plant-desc">
+        <title id="plant-title">Ilustração original do cafeeiro com flores, folhas e frutos</title>
+        <desc id="plant-desc">Um ramo de cafeeiro atravessa a composição, com folhas verdes opostas, flores brancas de cinco pétalas e frutos em tons verdes e vermelhos.</desc>
+        <rect width="620" height="640" rx="4" fill="#e0e4d4"/>
+        <g fill="none" stroke="#4a5b38" stroke-width="17" stroke-linecap="round"><path d="M72 584 Q266 450 320 294 T516 45"/></g>
+        <g fill="#517343" stroke="#30492d" stroke-width="4">
+          <path d="M198 481 Q33 426 75 254 Q251 263 272 394Z"/>
+          <path d="M283 367 Q157 185 282 113 Q417 209 356 294Z"/>
+          <path d="M344 280 Q477 125 589 193 Q555 359 416 340Z"/>
+          <path d="M133 537 Q-5 513 13 414 Q151 404 195 481Z"/>
+          <path d="M447 158 Q369 30 453 12 Q560 66 520 116Z"/>
+        </g>
+        <g stroke="#a2b976" stroke-width="3" fill="none"><path d="M198 481 95 278 M283 367 289 143 M344 280 570 210 M133 537 31 429 M447 158 465 34"/></g>
+        <g fill="#ac2c28" stroke="#6f2923" stroke-width="3">
+          <ellipse cx="325" cy="408" rx="28" ry="37" transform="rotate(20 325 408)"/>
+          <ellipse cx="383" cy="390" rx="31" ry="37"/>
+          <ellipse cx="419" cy="434" rx="26" ry="35"/>
+        </g>
+        <g fill="#6e9c40" stroke="#3a6836" stroke-width="2"><ellipse cx="269" cy="461" rx="28" ry="34" transform="rotate(-15 269 461)"/><ellipse cx="373" cy="458" rx="25" ry="31"/></g>
+        <g transform="translate(420 276)" fill="#fffdf4" stroke="#d8d7c6" stroke-width="2">
+          <ellipse cy="-35" rx="16" ry="39"/><ellipse transform="rotate(72)" cy="-35" rx="16" ry="39"/><ellipse transform="rotate(144)" cy="-35" rx="16" ry="39"/><ellipse transform="rotate(216)" cy="-35" rx="16" ry="39"/><ellipse transform="rotate(288)" cy="-35" rx="16" ry="39"/>
+          <circle r="13" fill="#e0b15a"/>
+        </g>
+        <path d="M32 47 H185" stroke="#8aa37d" stroke-width="3"/>
+        <text x="34" y="37" font-family="Georgia,serif" font-size="30" fill="#263d2c">Coffea</text>
+        <text x="34" y="610" font-family="Georgia,serif" font-size="23" fill="#36543b">Folhas • flores • frutos</text>
+      </svg>
+      <figcaption>Prancha botânica autoral, com proporções ilustrativas. Flores, folhas e frutos podem coexistir em determinados períodos do ciclo produtivo.</figcaption>
+    </figure>
+    <div class="narrative">
+      <span class="small-cap">A planta e seu ambiente</span>
+      <h3 style="font-size:2.3rem;margin:10px 0 17px">Da flor ao fruto</h3>
+      <p>O cafeeiro produz pequenas flores claras; depois da fecundação, o ovário se desenvolve e origina a chamada <em>cereja do café</em>. O período até a maturação varia com espécie, cultivar, temperatura e ambiente. A cor do fruto também varia: muitos ficam vermelhos, mas alguns cultivares dão frutos amarelos quando maduros.</p>
+      <p>O sistema radicular explora água e nutrientes, enquanto as folhas capturam energia luminosa para realizar fotossíntese. Água em quantidade adequada é crucial, mas excesso de umidade, estresses térmicos, pragas e doenças podem prejudicar produtividade e qualidade.</p>
+      <p>Altitude não funciona como selo automático de qualidade. Ela altera condições ambientais, como a temperatura média, que podem influenciar o desenvolvimento e a maturação; o resultado depende da combinação com material genético e manejo agronômico.</p>
+      <div class="inline-note"><strong>Decisão de campo:</strong> escolher uma cultivar é equilibrar adaptação ao clima, resistência a doenças, produtividade, manejo e potencial sensorial, não apenas perseguir um nome famoso.</div>
+    </div>
+  </div>
+  <div class="species">
+    <div class="species-card"><span class="latin">Coffea arabica</span><h3>Arábica</h3><p>Espécie amplamente cultivada e base de muitas variedades como Bourbon, Typica e Catuaí. Pode apresentar ampla diversidade sensorial, mas sua resposta a temperaturas, doenças e manejo exige avaliação cuidadosa em cada região.</p></div>
+    <div class="species-card"><span class="latin">Coffea canephora</span><h3>Canéfora</h3><p>Espécie que inclui grupos comercialmente conhecidos como robusta e conilon. Possui diversidade genética importante, costuma apresentar maior teor de cafeína que o arábica e pode produzir cafés de excelente qualidade quando bem cultivada e processada.</p></div>
+  </div>
+</section>
+
+<section class="section edition" aria-labelledby="fruto">
+  <div class="section-heading"><span class="micro">03 / Anatomia de uma cereja</span><div><h2 id="fruto">O grão está escondido dentro do fruto.</h2><p class="deck">Cortar uma cereja ao meio ajuda a entender por que os processos pós-colheita produzem resultados diferentes.</p></div></div>
+  <div class="visual-grid">
+    <figure class="illustration fruit-figure">
+      <svg viewBox="0 0 550 590" role="img" aria-labelledby="cherry-title cherry-desc">
+        <title id="cherry-title">Corte esquemático de um fruto de café com duas sementes</title>
+        <desc id="cherry-desc">Um fruto vermelho cortado revela polpa, mucilagem, pergaminho e duas sementes internas. Quatro linhas indicam as camadas.</desc>
+        <defs><radialGradient id="cherry-shell" cx=".22" cy=".2" r=".8"><stop stop-color="#df5b42"/><stop offset=".6" stop-color="#ad2d24"/><stop offset="1" stop-color="#6d201c"/></radialGradient></defs>
+        <path d="M260 52 Q200 94 159 181 Q114 299 161 424 Q191 509 272 531 Q371 509 396 402 Q437 286 376 158 Q333 66 260 52Z" fill="url(#cherry-shell)" stroke="#5c1f19" stroke-width="8"/>
+        <path d="M262 94 Q200 122 185 212 Q160 297 185 402 Q206 476 273 487 Q345 464 365 389 Q391 267 347 177 Q317 112 262 94Z" fill="#efa15a" stroke="#e6a669" stroke-width="6"/>
+        <path d="M263 123 Q215 148 209 222 Q185 309 214 402 Q238 458 274 462 Q325 432 338 386 Q357 272 321 198 Q299 142 263 123Z" fill="#eecb8d"/>
+        <path d="M267 152 Q224 177 228 243 Q223 319 242 409 Q260 434 274 435 Q297 426 309 393 Q327 273 300 203 Q285 168 267 152Z" fill="#e5e1b5" stroke="#c3bd8e" stroke-width="6"/>
+        <path d="M262 163 Q227 202 231 285 Q236 388 270 414 Q280 357 274 286 Q279 219 262 163Z" fill="#a4b579" stroke="#788e5b" stroke-width="4"/>
+        <path d="M282 166 Q315 215 309 294 Q307 375 277 413 Q278 339 276 288 Q270 219 282 166Z" fill="#b1bb84" stroke="#708557" stroke-width="4"/>
+        <path d="M260 77 Q249 29 287 18" fill="none" stroke="#a1a55b" stroke-width="10"/>
+        <g fill="none" stroke="#f3d7ad" stroke-width="2"><path d="M149 220 H44"/><path d="M189 332 H44"/><path d="M305 190 H501"/><path d="M306 342 H502"/></g>
+        <g font-family="Segoe UI,Arial,sans-serif" font-size="18" fill="#fff4dc"><text x="15" y="209">Casca</text><text x="15" y="318">Polpa</text><text x="395" y="180">Mucilagem</text><text x="405" y="331">Sementes</text></g>
+        <text x="85" y="563" fill="#e6c9a4" font-size="18" font-family="Georgia,serif">Corte esquemático • não está em escala</text>
+      </svg>
+      <figcaption>Ilustração original. A representação simplifica as membranas e a posição das sementes; muitos frutos apresentam duas sementes, mas há exceções.</figcaption>
+    </figure>
+    <div>
+      <ul class="fruit-points">
+        <li><strong>Casca (exocarpo)</strong> É a camada mais externa, cuja coloração ajuda a identificar o estágio de maturação em cada cultivar.</li>
+        <li><strong>Polpa e mucilagem</strong> Tecidos ricos em água e componentes orgânicos, incluindo açúcares e pectinas, que tornam as etapas de despolpa e fermentação importantes.</li>
+        <li><strong>Pergaminho e película prateada</strong> Camadas protetoras associadas às sementes. O pergaminho é retirado no beneficiamento do café seco antes da torra.</li>
+        <li><strong>Sementes</strong> O chamado café verde é a matéria-prima que será torrada. Ele contém carboidratos, proteínas, lipídios, ácidos, cafeína e outros precursores de aroma.</li>
+      </ul>
+      <div class="inline-note">Café verde não significa fruto verde: é o nome comercial dado ao grão antes da torra, depois do beneficiamento.</div>
+    </div>
+  </div>
+  <div class="maturity-lab" aria-labelledby="maturacao-titulo">
+    <h3 id="maturacao-titulo">Observe a maturação</h3>
+    <p>Selecione uma cereja e veja o que sua aparência pode sugerir sobre a colheita. Este é um exemplo de cultivar que amadurece na cor vermelha; para cultivares amarelas, a cor de maturação é diferente.</p>
+    <div class="maturity-buttons" role="group" aria-label="Selecione o estágio de maturação">
+      <button type="button" class="maturity-btn" data-maturity="green" aria-pressed="false"><span class="maturity-berry green" aria-hidden="true"></span><strong>Verde</strong><small>Imaturo</small></button>
+      <button type="button" class="maturity-btn" data-maturity="turning" aria-pressed="false"><span class="maturity-berry turning" aria-hidden="true"></span><strong>Virando</strong><small>Em transição</small></button>
+      <button type="button" class="maturity-btn" data-maturity="red" aria-pressed="true"><span class="maturity-berry red" aria-hidden="true"></span><strong>Vermelho</strong><small>Maduro</small></button>
+    </div>
+    <div class="maturity-result" id="maturityResult" role="status" aria-live="polite" aria-atomic="true"><strong>Fruto maduro</strong> Em cultivares de maturação vermelha, a cor pode indicar o ponto de colheita desejado, mas firmeza, sanidade e outros critérios devem confirmar a seleção.</div>
+  </div>
+</section>
+
+<section class="full-bleed" aria-labelledby="poscolheita">
+  <div class="edition">
+    <div class="section-heading"><span class="micro">04 / Três caminhos possíveis</span><div><h2 id="poscolheita">Depois da colheita, cada escolha muda o percurso.</h2><p class="deck">Natural, lavado e honey não são etapas sucessivas. São estratégias alternativas para separar fruto e sementes, conduzir a fermentação e secar o café.</p></div></div>
+    <div class="process-layout">
+      <div>
+        <div class="process-list" role="group" aria-label="Comparar métodos de processamento">
+          <button class="process-button" type="button" data-process="natural" aria-pressed="true" aria-controls="processName processDescription processDetail"><span class="process-number">01</span><span><strong>Natural</strong><small>O fruto permanece envolvendo a semente durante a secagem.</small></span></button>
+          <button class="process-button" type="button" data-process="washed" aria-pressed="false" aria-controls="processName processDescription processDetail"><span class="process-number">02</span><span><strong>Lavado</strong><small>Despolpa, remoção de mucilagem e secagem do café em pergaminho.</small></span></button>
+          <button class="process-button" type="button" data-process="honey" aria-pressed="false" aria-controls="processName processDescription processDetail"><span class="process-number">03</span><span><strong>Honey / cereja descascado</strong><small>Parte da mucilagem pode permanecer na secagem.</small></span></button>
+        </div>
+        <p class="after-process">Qual é o melhor? Não existe campeão universal: qualidade depende de frutos sãos, higiene, controle de fermentação, secagem uniforme e condições locais. Descritores de sabor são tendências possíveis, nunca garantias do método.</p>
+      </div>
+      <div class="process-card" aria-live="polite" aria-atomic="true">
+        <span class="micro" style="color:#995333">Método selecionado</span>
+        <h3 id="processName">Natural: secar o fruto inteiro</h3>
+        <div class="diagram">
+          <svg viewBox="0 0 590 190" role="img" aria-labelledby="process-svg-title process-svg-desc">
+            <title id="process-svg-title">Esquema visual do método de processamento selecionado</title>
+            <desc id="process-svg-desc">A ilustração representa três estações: cereja colhida, método aplicado e sementes após a secagem.</desc>
+            <g font-family="Segoe UI,Arial,sans-serif" text-anchor="middle" font-size="19" fill="#443326">
+              <circle cx="78" cy="75" r="54" fill="#a33b26"/><circle cx="63" cy="54" r="11" fill="#d77b53"/><text x="78" y="154">Fruto</text>
+              <path d="M153 76 H224" stroke="#966c44" stroke-width="7"/><path d="M208 63 l19 13 -19 13" fill="none" stroke="#966c44" stroke-width="7"/>
+              <rect x="245" y="24" width="133" height="105" rx="7" fill="#c8ab7f"/><path d="M259 55 h105 m-105 24 h105 m-105 24 h105" stroke="#eee0c7" stroke-width="5"/><text x="312" y="154">Processo</text>
+              <path d="M393 76 H445" stroke="#966c44" stroke-width="7"/><path d="M433 63 l19 13 -19 13" fill="none" stroke="#966c44" stroke-width="7"/>
+              <ellipse cx="501" cy="72" rx="20" ry="39" fill="#b5af84" stroke="#807452" stroke-width="3"/><ellipse cx="539" cy="72" rx="20" ry="39" fill="#bbb48b" stroke="#807452" stroke-width="3"/><text x="521" y="154">Sementes</text>
+            </g>
+          </svg>
+        </div>
+        <p id="processDescription">Após selecionar e limpar as cerejas, o produtor seca o fruto inteiro em terreiro, cama suspensa ou secador apropriado. A polpa e a mucilagem permanecem durante a secagem, e o descascamento ocorre depois.</p>
+        <div class="process-note" id="processDetail"><strong>Ponto crítico:</strong> mover e monitorar as cerejas para evitar secagem desigual, deterioração e fermentação indesejada. Alguns naturais apresentam notas frutadas pronunciadas, mas o resultado não é automático.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section drying-section" aria-labelledby="secagem">
+  <div class="edition">
+    <div class="section-heading"><span class="micro">05 / Água, tempo e conservação</span><div><h2 id="secagem">Secar não é simplesmente deixar no sol.</h2><p class="deck">A água precisa sair de maneira controlada. Um café úmido demais se deteriora; secagem agressiva ou irregular também pode prejudicar sua estabilidade.</p></div></div>
+    <div class="drying-grid">
+      <figure class="drying-figure">
+        <svg viewBox="0 0 680 450" role="img" aria-labelledby="dry-title dry-desc">
+          <title id="dry-title">Terreiro de secagem de café com camadas de cerejas</title>
+          <desc id="dry-desc">Ilustração de um terreiro em perspectiva com cerejas espalhadas em linhas, sol acima e ferramenta de revolvimento apoiada ao lado.</desc>
+          <rect width="680" height="450" fill="#e8ddc6"/>
+          <circle cx="537" cy="83" r="44" fill="#e8b260"/>
+          <path d="M0 264 L680 232 V450 H0Z" fill="#c6b091"/>
+          <path d="M40 313 L647 276 L680 341 L0 387Z" fill="#aa7552" stroke="#80563c" stroke-width="6"/>
+          <g fill="#792e20" stroke="#54251e" stroke-width="2">
+            <ellipse cx="95" cy="331" rx="16" ry="7"/><ellipse cx="145" cy="326" rx="17" ry="8"/><ellipse cx="196" cy="324" rx="16" ry="7"/><ellipse cx="249" cy="320" rx="17" ry="8"/><ellipse cx="310" cy="315" rx="18" ry="9"/><ellipse cx="375" cy="312" rx="17" ry="8"/><ellipse cx="444" cy="308" rx="17" ry="8"/><ellipse cx="516" cy="300" rx="18" ry="8"/><ellipse cx="590" cy="296" rx="17" ry="8"/>
+            <ellipse cx="104" cy="353" rx="16" ry="7"/><ellipse cx="161" cy="350" rx="17" ry="8"/><ellipse cx="217" cy="346" rx="16" ry="7"/><ellipse cx="277" cy="341" rx="17" ry="8"/><ellipse cx="342" cy="336" rx="18" ry="9"/><ellipse cx="413" cy="332" rx="17" ry="8"/><ellipse cx="492" cy="326" rx="17" ry="8"/><ellipse cx="564" cy="321" rx="18" ry="8"/>
+          </g>
+          <path d="M606 183 L484 384" stroke="#826343" stroke-width="10" stroke-linecap="round"/><path d="M449 382 L527 399" stroke="#826343" stroke-width="12" stroke-linecap="round"/>
+          <g fill="#485e47"><path d="M0 269 Q72 220 146 259 T299 246 T451 258 T680 243 V270Z"/></g>
+          <text x="28" y="55" fill="#725b44" font-family="Georgia,serif" font-size="27">Secagem monitorada</text>
+        </svg>
+        <figcaption>Cena vetorial original: terreiro com café distribuído para secagem. O volume e a frequência de movimentação variam conforme o método e as condições.</figcaption>
+      </figure>
+      <div class="narrative">
+        <p>Os processos pós-colheita seguem para a <strong>secagem</strong>. A escolha do método influencia o que está na superfície: fruto inteiro, grão em pergaminho ou grão com parte da mucilagem. A redução de água deve ocorrer com atenção à temperatura, umidade do ambiente, ventilação, espessura da camada e movimentação.</p>
+        <p>O café comercializado como verde costuma ser estabilizado em faixas de umidade apropriadas para armazenamento. Um valor isolado não resolve tudo: <strong>atividade de água, uniformidade do lote, embalagem e condições de estocagem</strong> também importam. Cafés excessivamente úmidos podem apresentar fungos, defeitos e perda de qualidade.</p>
+        <p>Depois da secagem, o <strong>beneficiamento</strong> remove as camadas secas que envolvem a semente; classificação física, limpeza e separação de defeitos ajudam a preparar o lote para armazenagem e torra.</p>
+      </div>
+    </div>
+    <div class="quality-grid">
+      <div><strong>Uniformidade</strong><p>Frutos com maturações e dimensões diferentes podem secar em ritmos diferentes.</p></div>
+      <div><strong>Higiene</strong><p>Contato inadequado com solo, água e equipamentos pode aumentar risco de contaminação.</p></div>
+      <div><strong>Rastreabilidade</strong><p>Registrar lotes e condições de processo ajuda a investigar defeitos e repetir resultados.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section roast-section" aria-labelledby="torra">
+  <div class="edition">
+    <div class="section-heading"><span class="micro">06 / Química em alta temperatura</span><div><h2 id="torra">O café ganha aroma quando encontra calor.</h2><p class="deck">A torra desencadeia reações simultâneas, altera a estrutura do grão e produz grande parte dos compostos associados ao aroma de café.</p></div></div>
+    <div class="narrative read">
+      <p>Antes da torra, o café verde contém substâncias que se tornam precursores de compostos aromáticos. Durante o aquecimento, há perda de água, expansão, formação de gases e desenvolvimento de cor. Reações de <strong>Maillard</strong> envolvem componentes como açúcares redutores e aminoácidos; transformações térmicas adicionais, incluindo caramelização e pirólise, alteram aromas, acidez percebida e amargor.</p>
+      <p>O chamado <strong>primeiro crack</strong> é uma série de estalos associada ao aumento de pressão interna e à mudança estrutural do grão. É um marco do processo, mas não uma temperatura universal: equipamento, lote e perfil térmico influenciam quando ele ocorre. A cor final, sozinha, não descreve toda a torra.</p>
+    </div>
+    <div class="roast-gallery" role="group" aria-label="Comparar perfis didáticos de torra">
+      <button type="button" class="roast-item" data-roast="light" aria-pressed="false" aria-controls="roastTitle roastText"><span class="roast-bean" aria-hidden="true"></span><strong>Clara</strong><small>Mais preservação de algumas características de origem</small></button>
+      <button type="button" class="roast-item" data-roast="medium" aria-pressed="true" aria-controls="roastTitle roastText"><span class="roast-bean" aria-hidden="true"></span><strong>Média</strong><small>Uma possível combinação de atributos de origem e torra</small></button>
+      <button type="button" class="roast-item" data-roast="dark" aria-pressed="false" aria-controls="roastTitle roastText"><span class="roast-bean" aria-hidden="true"></span><strong>Escura</strong><small>Reações térmicas mais intensas e amargor frequentemente maior</small></button>
+    </div>
+    <div class="roast-detail" role="status" aria-live="polite" aria-atomic="true"><h3 id="roastTitle">Torra média: equilíbrio possível, não garantido</h3><p id="roastText">O avanço das reações térmicas pode combinar acidez percebida, doçura e notas tostadas de maneiras diferentes. O perfil real depende da curva de aquecimento, do café verde e da preparação; não há garantia de um sabor específico.</p></div>
+    <div class="chemistry">
+      <figure class="chemistry-figure">
+        <svg viewBox="0 0 580 400" role="img" aria-labelledby="chem-title chem-desc">
+          <title id="chem-title">Transformação do grão verde durante a torra</title>
+          <desc id="chem-desc">Três grãos progressivamente mais escuros e maiores representam etapas de aquecimento; setas mostram as transformações.</desc>
+          <rect width="580" height="400" fill="#eee0cb"/>
+          <g><ellipse cx="95" cy="171" rx="53" ry="80" fill="#aeba82" stroke="#82905f" stroke-width="5"/><ellipse cx="287" cy="166" rx="62" ry="91" fill="#a76d40" stroke="#6d4329" stroke-width="5"/><ellipse cx="492" cy="163" rx="69" ry="98" fill="#47271e" stroke="#2e1c17" stroke-width="5"/></g>
+          <g stroke-width="8" fill="none" stroke-linecap="round"><path d="M92 110 Q119 171 93 230" stroke="#6b7658"/><path d="M286 100 Q312 170 287 232" stroke="#62381f"/><path d="M492 91 Q520 158 492 231" stroke="#a97453"/></g>
+          <path d="M170 169 H215 M196 156 215 169 196 182 M357 169 H408 M389 156 408 169 389 182" fill="none" stroke="#905b35" stroke-width="7"/>
+          <g font-family="Segoe UI,Arial,sans-serif" fill="#624731" font-size="22" text-anchor="middle"><text x="95" y="300">Verde</text><text x="287" y="300">Aquecimento</text><text x="492" y="300">Torrado</text></g>
+          <text x="290" y="359" text-anchor="middle" font-family="Georgia,serif" font-size="22" fill="#75543b">Perda de água • expansão • novos aromas</text>
+        </svg>
+        <figcaption>Esquema autoral: mudanças de tamanho e cor são ilustrativas, não uma curva de torra mensurável.</figcaption>
+      </figure>
+      <div>
+        <h3 style="font-size:2rem">O que muda na química?</h3>
+        <ul>
+          <li><strong>Maillard:</strong> formação de compostos aromáticos e pigmentos a partir de reações entre compostos carbonílicos e nitrogenados.</li>
+          <li><strong>Caramelização e degradação térmica:</strong> diferentes transformações de carboidratos e outras substâncias ampliam a complexidade sensorial.</li>
+          <li><strong>Ácidos clorogênicos:</strong> parte deles se degrada ou se transforma, alterando o perfil químico e o amargor percebido.</li>
+          <li><strong>Cafeína:</strong> já existe no grão verde; a torra não a cria. O teor na bebida depende de dose, espécie e preparo, e a cafeína é relativamente estável durante o processo.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section edition" aria-labelledby="moagem">
+  <div class="section-heading"><span class="micro">07 / A superfície de contato</span><div><h2 id="moagem">Moer é preparar a extração, não apenas quebrar grãos.</h2><p class="deck">O tamanho das partículas interfere no modo como a água encontra os compostos solúveis e no caminho que ela percorre durante o preparo.</p></div></div>
+  <div class="visual-grid">
+    <div class="narrative">
+      <p>Quando o grão torrado é moído, surge uma combinação de partículas com tamanhos diferentes. A moagem mais fina tende a aumentar a área superficial disponível para contato com a água, mas também pode dificultar a passagem em métodos filtrados; a moagem grossa pode exigir mais tempo de contato para atingir uma extração semelhante.</p>
+      <p>Não existe uma única moagem correta fora de contexto. Em espresso, a resistência hidráulica do leito importa muito. Em uma prensa francesa, a extração acontece por imersão; em métodos coados, a espessura da camada e a vazão também influenciam o resultado. Moedor, distribuição de partículas, agitação, temperatura e tempo trabalham juntos.</p>
+      <div class="inline-note"><strong>Diagnóstico prático:</strong> se o café sai excessivamente adstringente ou amargo, não conclua imediatamente que a moagem é fina demais; dose, temperatura, mistura e características do grão também precisam ser examinadas.</div>
+    </div>
+    <figure class="illustration" style="background:#e9e1d0;padding:22px">
+      <svg viewBox="0 0 580 360" role="img" aria-labelledby="grind-title grind-desc">
+        <title id="grind-title">Comparação de granulações de café moído</title>
+        <desc id="grind-desc">Três conjuntos de círculos representam partículas menores, intermediárias e maiores, rotulados fina, média e grossa.</desc>
+        <rect width="580" height="360" fill="#e9e1d0"/>
+        <g fill="#5e3b27">
+          <g id="fine-dots">
+            <circle cx="57" cy="94" r="5"/><circle cx="75" cy="110" r="6"/><circle cx="103" cy="97" r="5"/><circle cx="123" cy="125" r="5"/><circle cx="49" cy="138" r="5"/><circle cx="82" cy="146" r="6"/><circle cx="108" cy="160" r="5"/><circle cx="139" cy="167" r="6"/><circle cx="67" cy="176" r="5"/><circle cx="94" cy="186" r="5"/><circle cx="120" cy="210" r="5"/><circle cx="44" cy="207" r="6"/><circle cx="145" cy="93" r="6"/><circle cx="141" cy="227" r="5"/><circle cx="53" cy="242" r="6"/><circle cx="93" cy="237" r="5"/><circle cx="113" cy="257" r="5"/><circle cx="76" cy="267" r="5"/>
+          </g>
+          <g><circle cx="219" cy="112" r="11"/><circle cx="251" cy="147" r="12"/><circle cx="291" cy="103" r="12"/><circle cx="318" cy="161" r="13"/><circle cx="220" cy="204" r="12"/><circle cx="273" cy="218" r="14"/><circle cx="321" cy="248" r="12"/><circle cx="245" cy="261" r="13"/></g>
+          <g><circle cx="420" cy="121" r="23"/><circle cx="495" cy="157" r="26"/><circle cx="428" cy="240" r="24"/><circle cx="513" cy="249" r="22"/></g>
+        </g>
+        <g stroke="#a2917b" stroke-width="2"><path d="M182 66 V293 M377 66 V293"/></g>
+        <g fill="#6b452e" font-family="Georgia,serif" font-size="24" text-anchor="middle"><text x="91" y="332">Fina</text><text x="274" y="332">Média</text><text x="476" y="332">Grossa</text></g>
+      </svg>
+      <figcaption>Comparação esquemática autoral. Uma moagem real contém uma distribuição de partículas, não esferas uniformes.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section brew" aria-labelledby="extracao">
+  <div class="edition">
+    <div class="section-heading"><span class="micro">08 / Experimento de bancada</span><div><h2 id="extracao">Agora, a água transforma trabalho em bebida.</h2><p class="deck">A extração dissolve e transporta substâncias presentes no café torrado e moído. Dose, água, moagem, temperatura, tempo e método determinam o resultado.</p></div></div>
+    <div class="brew-grid">
+      <figure class="brew-machine">
+        <svg viewBox="0 0 600 560" role="img" aria-labelledby="brew-title brew-desc">
+          <title id="brew-title">Preparação de café filtrado em um coador</title>
+          <desc id="brew-desc">Um recipiente despeja água quente sobre um filtro em formato de cone que contém café moído; gotas descem até um recipiente com café pronto.</desc>
+          <rect width="600" height="560" fill="#e8e2d2"/>
+          <path d="M105 94 Q155 45 233 80 L284 146 Q278 176 251 195 L199 177" fill="#c9d0c3" stroke="#4d6a62" stroke-width="10"/>
+          <path d="M116 107 Q132 155 168 170 Q188 180 204 168" fill="none" stroke="#6b8179" stroke-width="9"/>
+          <path d="M261 184 Q294 204 294 263" stroke="#b7b6a2" stroke-width="13" fill="none" stroke-linecap="round"/>
+          <path d="M264 187 Q292 221 289 261" stroke="#c9a16c" stroke-width="5" fill="none" stroke-dasharray="8 12"/>
+          <path d="M125 235 L478 235 L398 368 H206Z" fill="#ecded1" stroke="#735f4f" stroke-width="9"/>
+          <path d="M160 255 L442 255 L383 340 H224Z" fill="#c8a17a"/>
+          <path d="M194 275 Q296 245 408 275 L368 322 H246Z" fill="#6c422b"/>
+          <path d="M199 365 H415 L391 475 Q368 515 302 520 Q237 512 218 475Z" fill="#d1c6b4" stroke="#8f8574" stroke-width="8"/>
+          <path d="M215 419 H400 L391 475 Q370 505 302 508 Q246 498 225 475Z" fill="#71442a"/>
+          <path d="M418 386 Q514 369 489 453 Q464 480 405 450" fill="none" stroke="#b3a592" stroke-width="25"/>
+          <path d="M418 386 Q514 369 489 453 Q464 480 405 450" fill="none" stroke="#e4dacf" stroke-width="12"/>
+          <g fill="#82512f"><ellipse cx="302" cy="376" rx="7" ry="13"/><ellipse cx="301" cy="393" rx="7" ry="8"/></g>
+          <g font-family="Georgia,serif" font-size="24" fill="#4c3b2c"><text x="345" y="116">Água</text><text x="38" y="332">Café moído</text><text x="397" y="535">Bebida</text></g>
+          <g fill="none" stroke="#987962" stroke-width="2"><path d="M157 317 H231 M402 526 H365 M347 119 288 181"/></g>
+        </svg>
+        <figcaption>Ilustração original do preparo filtrado. O esquema não indica vazão, temperatura ou tempo específicos.</figcaption>
+      </figure>
+      <div class="brew-form" aria-labelledby="calculadora">
+        <span class="micro" style="color:#9c4b30">Ferramenta de preparo</span>
+        <h3 id="calculadora">Qual proporção você quer testar?</h3>
+        <p>A proporção de preparo relaciona a massa de café seco com a massa de água adicionada. É um ponto de partida para experimentar, não uma garantia de extração ou intensidade sensorial.</p>
+        <div class="form-field"><label for="dose">Café moído, em gramas</label><input id="dose" type="number" min="1" max="100" step="1" value="18" inputmode="decimal"><p class="help">Use um valor entre 1 e 100 g. O cálculo não estima a massa final da bebida.</p></div>
+        <div class="form-field"><label for="ratio">Proporção café:água <output id="ratioOut" for="ratio">1:16</output></label><input id="ratio" type="range" min="12" max="20" step="1" value="16"><p class="help">Ajuste didático de 1:12 a 1:20. O resultado dependerá do método utilizado.</p></div>
+        <div class="form-field"><label for="method">Método para contextualizar</label><select id="method"><option value="filter">Coado / filtro</option><option value="immersion">Imersão / prensa francesa</option><option value="espresso">Espresso</option></select><p class="help" id="methodHelp">Em métodos filtrados, moagem e fluxo de água têm relação direta.</p></div>
+        <div class="ratio-result" role="status" aria-live="polite" aria-atomic="true"><span class="micro" style="color:#f3c998">Água a adicionar</span><strong id="waterOut">288 g</strong><p id="ratioDescription">18 g de café × 16 = 288 g de água adicionada.</p></div>
+        <div style="margin-top:20px"><button type="button" class="secondary-btn" id="resetBrew">Restaurar exemplo</button></div>
+        <p class="help" id="doseError" role="alert" style="margin-top:14px;min-height:1em"></p>
+      </div>
+    </div>
+    <p class="brew-foot">Observação: espresso costuma usar relações de massa de bebida para massa de café, diferentes da medida de água adicionada neste exercício. A seleção do método contextualiza o conceito, mas não muda a fórmula nem substitui uma receita específica.</p>
+  </div>
+</section>
+
+<section class="section edition" aria-labelledby="sentidos">
+  <div class="section-heading"><span class="micro">09 / Na boca e no nariz</span><div><h2 id="sentidos">O sabor é uma interpretação, não uma etiqueta.</h2><p class="deck">Um café pode lembrar fruta, chocolate ou castanhas sem que esses ingredientes tenham sido adicionados. São analogias sensoriais usadas para comunicar percepções.</p></div></div>
+  <div class="taste-wheel">
+    <figure>
+      <svg viewBox="0 0 560 560" role="img" aria-labelledby="flavour-title flavour-desc">
+        <title id="flavour-title">Roda esquemática de descritores sensoriais</title>
+        <desc id="flavour-desc">Uma roda com quatro segmentos ilustrativos representa percepções de aromas frutados, florais, tostados e especiados, sem indicar intensidade ou notas oficiais.</desc>
+        <circle cx="280" cy="280" r="265" fill="#dcc69d"/>
+        <path d="M280 280 L280 25 A255 255 0 0 1 535 280 Z" fill="#cc8e63"/>
+        <path d="M280 280 L535 280 A255 255 0 0 1 280 535 Z" fill="#a34f38"/>
+        <path d="M280 280 L280 535 A255 255 0 0 1 25 280 Z" fill="#70513e"/>
+        <path d="M280 280 L25 280 A255 255 0 0 1 280 25 Z" fill="#d7b873"/>
+        <circle cx="280" cy="280" r="108" fill="#eee4d3" stroke="#fff8e7" stroke-width="9"/>
+        <g fill="#3b2b23" font-family="Georgia,serif" font-size="27" text-anchor="middle">
+          <text x="394" y="147">Frutado</text><text x="407" y="426" fill="#fff7ed">Especiado</text><text x="157" y="423" fill="#fff7ed">Tostado</text><text x="160" y="146">Floral</text>
+        </g>
+        <text x="280" y="267" text-anchor="middle" font-size="30" font-family="Georgia,serif" fill="#4e3628">Percepção</text>
+        <text x="280" y="299" text-anchor="middle" font-size="18" font-family="Segoe UI,Arial,sans-serif" fill="#634638">sensorial</text>
+      </svg>
+      <figcaption>Diagrama editorial autoral, não equivalente à Roda de Sabores oficial da SCA/WCR e sem pretensão de padronização.</figcaption>
+    </figure>
+    <div class="narrative">
+      <p>O sabor envolve paladar, olfato e sensação tátil. A <strong>acidez</strong> sensorial pode lembrar frutas; a <strong>doçura</strong> percebida não corresponde necessariamente a uma grande quantidade de açúcar na bebida; o <strong>corpo</strong> descreve sensações de textura e peso na boca.</p>
+      <p>Uma nota descrita como “chocolate” ou “frutas vermelhas” não prova a presença do ingrediente. É uma linguagem comparativa que depende de repertório, contexto, concentração e percepção individual. Degustações comparativas ajudam mais do que decorar listas de aromas.</p>
+      <p>A avaliação sensorial precisa considerar preparo padronizado, temperatura de consumo, limpeza de equipamentos e ausência de defeitos. Também vale perguntar de onde veio o lote, quem o produziu e quais processos foram utilizados: qualidade não existe desconectada da cadeia produtiva.</p>
+    </div>
+  </div>
+  <div class="facts">
+    <div class="fact"><h3>Mais escuro = mais cafeína?</h3><p>Não necessariamente. A torra muda a massa e a densidade do grão; a dose pesada ou medida por volume, a espécie e o método de extração influenciam a cafeína na xícara. A cafeína não surge durante a torra.</p></div>
+    <div class="fact"><h3>Natural é sempre frutado?</h3><p>Não. Um processamento natural pode expressar características frutadas, mas variedade, maturação, fermentação, secagem, torra e preparo influenciam o resultado. Processamento não determina sozinho o perfil sensorial.</p></div>
+  </div>
+</section>
+
+<section class="check-section" aria-labelledby="revisao">
+  <div class="edition check-layout">
+    <div class="check-left"><span class="micro" style="color:#9c5234">10 / Para pensar</span><h2 id="revisao">Da lavoura à xícara, o que realmente aprendemos?</h2><p>Três situações que exigem conectar etapas. Responda e confira uma explicação para cada decisão; a pontuação é apenas formativa.</p></div>
+    <form id="reviewForm" novalidate>
+      <fieldset class="question" data-answer="b" data-feedback="Acertou: o fruto pode continuar envolvendo as sementes durante a secagem no método natural; lavado e honey seguem caminhos diferentes.">
+        <legend>1. Um produtor decide secar as cerejas inteiras antes de retirar as camadas externas. Qual método foi descrito?</legend>
+        <label><input type="radio" name="q1" value="a"> Lavado, porque a água não entra em contato com o fruto.</label>
+        <label><input type="radio" name="q1" value="b"> Natural, porque o fruto permanece na secagem.</label>
+        <label><input type="radio" name="q1" value="c"> Torra escura, porque a fruta está intacta.</label>
+        <p class="feedback" aria-live="polite"></p>
+      </fieldset>
+      <fieldset class="question" data-answer="a" data-feedback="Acertou: Maillard e outras reações térmicas contribuem para a formação de aroma e cor; a cafeína já estava presente no café verde.">
+        <legend>2. Durante a torra, qual afirmação descreve corretamente a química do processo?</legend>
+        <label><input type="radio" name="q2" value="a"> Reações de Maillard e outras transformações criam muitos aromas.</label>
+        <label><input type="radio" name="q2" value="b"> A torra cria a cafeína que não existia no grão.</label>
+        <label><input type="radio" name="q2" value="c"> Não ocorre transformação química, somente mudança de cor.</label>
+        <p class="feedback" aria-live="polite"></p>
+      </fieldset>
+      <fieldset class="question" data-answer="c" data-feedback="Acertou: a dose e a água constituem uma proporção inicial. Método, moagem, temperatura e tempo ainda alteram a extração.">
+        <legend>3. Você usa 20 g de café e 300 g de água adicionada. O que essa medida permite afirmar?</legend>
+        <label><input type="radio" name="q3" value="a"> O sabor final será necessariamente doce e pouco ácido.</label>
+        <label><input type="radio" name="q3" value="b"> A massa final da bebida será exatamente 300 g.</label>
+        <label><input type="radio" name="q3" value="c"> A proporção inicial é 1:15, mas ainda há outras variáveis.</label>
+        <p class="feedback" aria-live="polite"></p>
+      </fieldset>
+      <div class="actions"><button class="primary-btn" type="button" id="gradeReview">Conferir respostas</button><button class="secondary-btn" type="reset">Recomeçar revisão</button></div>
+      <p id="reviewResult" class="result" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<section class="closeout"><div class="edition">
+  <span class="micro" style="color:#e5b98b">A última página deste caderno</span>
+  <h2 style="font-size:clamp(2.2rem,5vw,4.6rem);max-width:920px;margin:18px 0 25px">O sabor é uma história de escolhas.</h2>
+  <p>Da adaptação do cafeeiro à temperatura da água, cada etapa altera possibilidades. Conhecer esse percurso torna a xícara mais interessante e ajuda a reconhecer o trabalho agronômico, técnico e humano que existe por trás de uma bebida cotidiana.</p>
+</div></section>
+</article>
+
+<section class="sources edition" aria-labelledby="referencias">
+  <h2 id="referencias">Fontes para aprofundamento</h2>
+  <p>As ilustrações e os controles interativos foram criados especificamente para esta página. Os diagramas são educativos, não fotografias nem instrumentos de medição. Não foram usadas imagens externas.</p>
+  <p><a href="https://varieties.worldcoffeeresearch.org/about-the-catalog/whats-included" target="_blank" rel="noopener noreferrer">World Coffee Research: variedades e espécies</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9376573/" target="_blank" rel="noopener noreferrer">Revisão científica sobre fatores pré e pós-colheita</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10138461/" target="_blank" rel="noopener noreferrer">Revisão científica sobre transformações na torra</a> · <a href="https://sca.coffee/research/coffee-standards" target="_blank" rel="noopener noreferrer">Specialty Coffee Association: padrões e pesquisa</a>.</p>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+var maturity = {
+  green: {heading:"Fruto ainda imaturo",text:"Em muitos cultivares, cerejas verdes ainda não alcançaram a composição esperada para a colheita seletiva. Misturá-las em excesso ao lote pode introduzir diferenças de processamento e defeitos sensoriais."},
+  turning: {heading:"Mudança de cor",text:"A mudança de tonalidade indica uma fase intermediária. Cor externa, firmeza, variedade e critérios de campo precisam ser avaliados juntos; uma cor intermediária não confirma maturação completa."},
+  red: {heading:"Fruto maduro",text:"Em cultivares de maturação vermelha, a cor pode indicar o ponto de colheita desejado, mas firmeza, sanidade e outros critérios devem confirmar a seleção."}
+};
+var maturityButtons=Array.prototype.slice.call(document.querySelectorAll("[data-maturity]"));
+maturityButtons.forEach(function(button){
+  button.addEventListener("click",function(){
+    var item=maturity[button.dataset.maturity];
+    maturityButtons.forEach(function(b){b.setAttribute("aria-pressed",String(b===button));});
+    var panel=document.getElementById("maturityResult");
+    panel.replaceChildren();
+    var strong=document.createElement("strong");strong.textContent=item.heading;
+    panel.appendChild(strong);panel.appendChild(document.createTextNode(" "+item.text));
+  });
+});
+var methods={
+  natural:{
+    name:"Natural: secar o fruto inteiro",
+    description:"Após selecionar e limpar as cerejas, o produtor seca o fruto inteiro em terreiro, cama suspensa ou secador apropriado. A polpa e a mucilagem permanecem durante a secagem, e o descascamento ocorre depois.",
+    detail:"Ponto crítico: mover e monitorar as cerejas para evitar secagem desigual, deterioração e fermentação indesejada. Alguns naturais apresentam notas frutadas pronunciadas, mas o resultado não é automático."
+  },
+  washed:{
+    name:"Lavado: remover a mucilagem antes da secagem",
+    description:"As cerejas são despolpadas; a mucilagem pode ser removida por fermentação controlada e lavagem ou por sistemas mecânicos, conforme o processo. Depois, o café em pergaminho é seco e passa pelo beneficiamento.",
+    detail:"Ponto crítico: controlar água, higiene, duração de fermentação e secagem. A palavra 'lavado' descreve o tratamento pós-colheita, não uma garantia de sabor limpo ou de qualidade superior."
+  },
+  honey:{
+    name:"Honey: preservar parte da mucilagem",
+    description:"Após a retirada da casca, parte da mucilagem pode permanecer aderida ao pergaminho durante a secagem. A quantidade varia conforme a técnica e a configuração da despolpa; 'honey' não significa adição de mel.",
+    detail:"Ponto crítico: lidar com a superfície pegajosa e manter secagem uniforme. O resultado depende do controle do processo e não assegura, sozinho, maior doçura sensorial."
+  }
+};
+var methodButtons=Array.prototype.slice.call(document.querySelectorAll("[data-process]"));
+methodButtons.forEach(function(button){
+  button.addEventListener("click",function(){
+    var p=methods[button.dataset.process];
+    methodButtons.forEach(function(b){b.setAttribute("aria-pressed",String(b===button));});
+    document.getElementById("processName").textContent=p.name;
+    document.getElementById("processDescription").textContent=p.description;
+    document.getElementById("processDetail").textContent=p.detail;
+  });
+});
+var roasts={
+  light:{title:"Torra clara: características da origem podem se destacar",text:"Em muitos cafés, torras menos avançadas preservam maior destaque de certas notas associadas à origem e à acidez percebida. Isso não significa que sejam sempre mais ácidas, melhores ou mais cafeinadas. O perfil térmico efetivo continua decisivo."},
+  medium:{title:"Torra média: equilíbrio possível, não garantido",text:"O avanço das reações térmicas pode combinar acidez percebida, doçura e notas tostadas de maneiras diferentes. O perfil real depende da curva de aquecimento, do café verde e da preparação; não há garantia de um sabor específico."},
+  dark:{title:"Torra escura: maior influência da transformação térmica",text:"Torras mais avançadas costumam realçar notas tostadas e amargor, enquanto certas características da origem podem ficar menos perceptíveis. Não se pode concluir o teor de cafeína da bebida apenas pela cor do grão."}
+};
+var roastButtons=Array.prototype.slice.call(document.querySelectorAll("[data-roast]"));
+roastButtons.forEach(function(button){button.addEventListener("click",function(){
+  var p=roasts[button.dataset.roast];
+  roastButtons.forEach(function(b){b.setAttribute("aria-pressed",String(b===button));});
+  document.getElementById("roastTitle").textContent=p.title;
+  document.getElementById("roastText").textContent=p.text;
+});});
+var dose=document.getElementById("dose");
+var ratio=document.getElementById("ratio");
+var method=document.getElementById("method");
+function updateBrew(){
+  var d=Number(dose.value),r=Number(ratio.value);
+  document.getElementById("ratioOut").textContent="1:"+r;
+  var descriptions={
+    filter:"Em métodos filtrados, a moagem e o fluxo de água têm relação direta.",
+    immersion:"Na imersão, a mistura permanece em contato com a água; tempo, moagem e agitação continuam importantes.",
+    espresso:"No espresso, a proporção de bebida obtida costuma ser mais útil que a massa de água colocada na máquina."
+  };
+  document.getElementById("methodHelp").textContent=descriptions[method.value];
+  var valid=dose.value.trim()!==""&&Number.isFinite(d)&&d>=1&&d<=100;
+  document.getElementById("doseError").textContent=valid?"":"Informe uma dose válida entre 1 e 100 g.";
+  document.getElementById("waterOut").textContent=valid?(d*r).toLocaleString("pt-BR",{maximumFractionDigits:1})+" g":"—";
+  document.getElementById("ratioDescription").textContent=valid?d.toLocaleString("pt-BR",{maximumFractionDigits:1})+" g de café × "+r+" = "+(d*r).toLocaleString("pt-BR",{maximumFractionDigits:1})+" g de água adicionada.":"O cálculo será mostrado após a correção da dose.";
+}
+[dose,ratio,method].forEach(function(el){el.addEventListener("input",updateBrew);});
+document.getElementById("resetBrew").addEventListener("click",function(){dose.value="18";ratio.value="16";method.value="filter";updateBrew();});
+updateBrew();
+var form=document.getElementById("reviewForm");
+var result=document.getElementById("reviewResult");
+document.getElementById("gradeReview").addEventListener("click",function(){
+  var right=0,answered=0;
+  var fields=Array.prototype.slice.call(form.querySelectorAll(".question"));
+  fields.forEach(function(field){
+    var selected=field.querySelector("input:checked");
+    var feedback=field.querySelector(".feedback");
+    if(!selected){feedback.textContent="Selecione uma alternativa para conferir.";return;}
+    answered++;
+    var ok=selected.value===field.dataset.answer;
+    if(ok)right++;
+    var prefix=ok?"Correto. ":"Esta alternativa não é a melhor. ";
+    feedback.textContent=prefix+field.dataset.feedback;
+  });
+  result.textContent=answered<fields.length?"Você respondeu "+answered+" de "+fields.length+" questões; "+right+" correta(s) até agora.":right+" de "+fields.length+" respostas corretas. "+(right===fields.length?"Você conectou corretamente todas as etapas.":"Use as explicações para revisar os pontos que faltaram.");
+});
+form.addEventListener("reset",function(){
+  form.querySelectorAll(".feedback").forEach(function(el){el.textContent="";});
+  result.textContent="";
+});
+}());
+</script>
+</body>
+</html>
