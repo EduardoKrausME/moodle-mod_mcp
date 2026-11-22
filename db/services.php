@@ -32,5 +32,15 @@ $functions = [
         "type" => "write",
         "ajax" => true,
         "capabilities" => "mod/mcp:view",
+        "services" => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
+    "mod_mcp_get_mobile_content" => [
+        "classname" => "mod_mcp\\external\\mobile_content",
+        "methodname" => "get",
+        "description" => "Return the published interactive experience and its assets to the authenticated mobile app.",
+        "type" => "read",
+        "services" => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+        "ajax" => false,
+        "capabilities" => "mod/mcp:view",
     ],
 ];
