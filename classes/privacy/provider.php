@@ -99,6 +99,17 @@ final class provider implements
             $attempts = $DB->get_records("mcp_attempts", [
                 "mcpid" => $cm->instance, "userid" => $userid,
             ]);
+            // The frozen selection contains the teacher's answer key; never include
+            // that private key in a learner's GDPR export of their own attempt.
+            foreach ($attempts as $attempt) {
+                $selected = json_decode($attempt->selectedjson, true) ?: [];
+                $attempt->selectedjson = json_encode(array_map(static fn($question) => [
+                    "id" => $question["id"],
+                    "text" => $question["text"],
+                    "type" => $question["type"] ?? "single",
+                    "options" => $question["options"] ?? [],
+                ], $selected), JSON_INVALID_UTF8_SUBSTITUTE);
+            }
             $revisions = $DB->get_records("mcp_revisions", [
                 "mcpid" => $cm->instance, "createdby" => $userid,
             ]);
