@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Conecte os pontos - A viagem da água</title><style>
+:root{font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;--bg:#eef5fa;--ink:#23394b;--muted:#5d7586;--line:#d4e3ed;--panel:#fff;--blue:#096caa;--pale:#e6f3fb;--green:#147656;--greenbg:#e2f6eb;--warn:#955e29;--warnbg:#fff2e2;color:var(--ink);background:var(--bg)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit}button:focus-visible,[tabindex="0"]:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #e6a638;outline-offset:3px}
+main{max-width:1180px;margin:auto;padding:33px 20px 45px}.eyebrow{text-transform:uppercase;color:var(--blue);font-size:11px;letter-spacing:1.5px;font-weight:850;margin:0 0 9px}
+h1{font-size:clamp(28px,4vw,41px);line-height:1.15;letter-spacing:-1px;margin:0 0 11px}.intro{color:var(--muted);font-size:14px;max-width:1000px;margin:0 0 18px}
+.stats{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:8px 14px;min-width:108px}.stat small{display:block;color:var(--muted);font-size:11px}.stat b{font-size:20px;font-variant-numeric:tabular-nums}.stats .note{color:var(--muted);font-size:11px;margin-left:auto}
+.progress{background:#dce9f2;border-radius:20px;height:9px;overflow:hidden;margin-bottom:17px}.progress span{display:block;width:0;height:100%;background:#23a78c;transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.42fr) minmax(270px,.76fr);align-items:start;gap:16px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:18px;min-width:0;box-shadow:0 8px 28px #24425509}
+.panel h2{font-size:17px;margin:0 0 11px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap}.tag{border-radius:99px;color:var(--blue);background:var(--pale);font-size:11px;font-weight:830;padding:6px 11px}
+.map-scroll{overflow:auto;border:1px solid #c8deea;border-radius:13px;background:#e4f3fc;max-height:550px}
+#map{display:block;width:100%;min-width:700px;height:auto;touch-action:pan-x pan-y}
+.point{cursor:pointer}.point .ring{fill:#fff;stroke:#1d709a;stroke-width:5}.point .dot{fill:#1682b2}.point .number{font-size:24px;fill:#fff;font-weight:850;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.point .tag-bg{fill:#fff;stroke:#a9c6d7;stroke-width:1.5}.point .tag-text{font-size:18px;fill:#21445b;text-anchor:middle;font-weight:800;pointer-events:none}
+.point:hover .ring{stroke:#054b70;fill:#effaff}.point:focus-visible .ring{stroke:#efae45;stroke-width:9}
+.point.done .ring{stroke:#149573;fill:#dff8ed}.point.done .dot{fill:#168462}.point.hint:not(.done) .ring{stroke:#be8b29;stroke-width:8;stroke-dasharray:9 5;fill:#fff3c6}
+.edge{stroke:#087eac;stroke-width:9;stroke-linecap:round;fill:none}.edge.finished{stroke:#159a75}
+.map-caption{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;margin-top:11px}.map-caption p{color:var(--muted);font-size:11px;max-width:480px;margin:0}
+.zoom{display:flex;gap:6px;align-items:center}.zoom span{color:var(--muted);font-size:12px;font-weight:800;min-width:43px;text-align:center}
+.btn{background:var(--blue);border:1px solid var(--blue);color:white;font-size:12px;font-weight:840;padding:10px 14px;border-radius:10px;cursor:pointer}.btn.secondary{background:var(--panel);color:var(--blue)}.btn:hover:not(:disabled){filter:brightness(.91)}.btn:disabled{opacity:.46;cursor:not-allowed}.zoom .btn{padding:6px 10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.next{background:var(--pale);border:1px solid #b7d7e9;border-radius:11px;padding:12px 14px;margin:12px 0}.next small{font-size:11px;font-weight:800;color:var(--blue);letter-spacing:.3px;text-transform:uppercase;display:block}.next strong{display:block;font-size:17px;margin:4px 0}
+.instructions,.small{font-size:11px;color:var(--muted)}
+.steps{list-style:none;padding:0;margin:13px 0;display:grid;gap:7px;max-height:425px;overflow:auto}.steps li{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#f9fcff}
+.steps li.current{border-color:#65a8cb;box-shadow:inset 0 0 0 1px #65a8cb}.steps li.done{border-color:#95cbb1;background:var(--greenbg);color:var(--green)}
+.steps .n{display:grid;place-items:center;border-radius:7px;background:#e7f2fc;color:var(--blue);min-width:27px;height:27px;font-size:11px;font-weight:850}.steps li.done .n{background:#c7ead7;color:#1c654f}
+.steps button{flex:1;min-width:0;border:0;background:none;color:inherit;font-size:13px;font-weight:800;text-align:left;cursor:pointer;padding:4px}.steps button:hover:not(:disabled){text-decoration:underline}.steps button:disabled{cursor:default;opacity:.76}
+.feedback{border:1px solid #cfdfea;border-radius:11px;background:#e7f1fa;color:#385873;min-height:57px;margin-top:16px;padding:13px 15px;font-size:13px}.feedback.right{background:var(--greenbg);color:var(--green)}.feedback.warn{background:var(--warnbg);color:var(--warn)}
+.victory{background:var(--greenbg);color:var(--green);padding:16px;border-radius:12px;border:1px solid #9fd0b5;margin-top:15px}.victory strong{font-size:18px;display:block}.victory p{font-size:12px;margin:5px 0 0}
+[hidden]{display:none!important}
+@media(max-width:830px){.layout{grid-template-columns:1fr}.panel{padding:15px}.steps{max-height:310px}}
+@media(max-width:525px){main{padding:22px 12px 32px}.panel{padding:11px}.map-scroll{max-height:410px}.stats .note{margin-left:0}.controls .btn{flex:1}.map-caption p{order:2}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#152530;--ink:#e6f2f9;--muted:#afc7d6;--line:#3d596a;--panel:#263b4a;--blue:#99ddff;--pale:#315165;--green:#a7ebcb;--greenbg:#294d3c;--warn:#f3cd9b;--warnbg:#503d30}.map-scroll{background:#285267}.map-scroll svg{filter:brightness(.91)}.next{border-color:#557b93}.steps li{background:#2b4251}.steps li.current{border-color:#88c8e8}.steps li.done{background:var(--greenbg);color:var(--green);border-color:#638d74}.steps .n{background:#3b5e72;color:#cff0ff}.steps li.done .n{background:#385f48;color:#d6ffe8}.feedback{background:#315165;color:#dcebf4}.feedback.right{background:var(--greenbg);color:var(--green)}.feedback.warn{background:var(--warnbg);color:var(--warn)}}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 16 · Sequência e reconhecimento de padrões</p>
+<h1>Conecte os pontos: a viagem da água</h1>
+<p class="intro">Conecte oito pontos para acompanhar uma trajetória possível da água na natureza. Siga a ordem das etapas e observe as linhas surgirem apenas após a escolha correta. Você pode usar o desenho ou a lista de botões, desfazer a última ligação, ampliar o mapa e pedir três dicas.</p>
+<div class="stats"><div class="stat"><small>Pontos conectados</small><b id="connected">0 / 8</b></div><div class="stat"><small>Erros</small><b id="errors">0</b></div><div class="stat"><small>Dicas</small><b id="hints">0 / 3</b></div><span class="note">Sem tempo limite nem necessidade de arrastar.</span></div>
+<div id="progress" class="progress" role="progressbar" aria-label="Progresso das conexões" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0"><span id="fill"></span></div>
+<div class="layout">
+<section class="panel" aria-labelledby="map-heading">
+ <div class="panel-head"><h2 id="map-heading">Mapa da trajetória</h2><span class="tag">SVG interativo · 8 pontos</span></div>
+ <div class="map-scroll" id="map-scroll">
+  <svg id="map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" role="group" aria-label="Mapa de oito pontos do ciclo da água; o mesmo percurso pode ser acionado pelos botões na lista textual.">
+   <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7f0ff"/><stop offset="1" stop-color="#f5fbff"/></linearGradient><linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#79c9eb"/><stop offset="1" stop-color="#3890c6"/></linearGradient></defs>
+   <g aria-hidden="true" pointer-events="none">
+    <rect width="1000" height="650" fill="url(#sky)"/>
+    <circle cx="160" cy="130" r="83" fill="#ffe7a5" opacity=".65"/>
+    <path d="M0 470 Q220 420 350 476 Q520 416 705 425 Q870 416 1000 471 L1000 650 L0 650Z" fill="#badfbe"/>
+    <path d="M465 460 L620 187 L789 460Z" fill="#9aaeb2" opacity=".65"/>
+    <path d="M539 321 L620 187 L698 321 L651 300 L621 323 L590 299Z" fill="#f7feff"/>
+    <path d="M680 460 L831 286 L996 460Z" fill="#a2b6ab" opacity=".7"/>
+    <path d="M770 353 L831 286 L888 353 L850 340 L831 358 L802 336Z" fill="#f7feff"/>
+    <path d="M0 509 Q119 491 231 527 Q310 543 386 519 L386 650 L0 650Z" fill="url(#sea)"/>
+    <path d="M0 545 Q110 528 227 558 Q309 579 385 560" stroke="#d4f6ff" stroke-width="8" fill="none"/>
+    <path d="M758 476 Q675 528 589 537 Q493 562 334 624" stroke="#68b9d8" stroke-width="20" fill="none" stroke-linecap="round"/>
+    <path d="M758 476 Q675 528 589 537 Q493 562 334 624" stroke="#ddfaff" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <g fill="#fff" opacity=".88"><ellipse cx="628" cy="161" rx="87" ry="29"/><ellipse cx="687" cy="153" rx="67" ry="37"/><ellipse cx="731" cy="164" rx="74" ry="31"/></g>
+    <path d="M798 334 l-12 30 M827 322 l-14 32 M855 338 l-12 30" stroke="#64badd" stroke-width="6" stroke-linecap="round" opacity=".7"/>
+   </g>
+   <g id="edges"></g><g id="nodes"></g>
+  </svg>
+ </div>
+ <div class="map-caption">
+  <p>Use as setas no SVG para mudar o foco e Enter/Espaço para conectar; com Tab você pode alcançar os botões da lista.</p>
+  <div class="zoom"><button id="zoom-out" type="button" class="btn secondary" aria-label="Reduzir zoom" disabled>−</button><span id="zoom-value" aria-live="polite">100%</span><button id="zoom-in" type="button" class="btn secondary" aria-label="Aumentar zoom">+</button></div>
+ </div>
+ <div class="controls"><button id="undo" type="button" class="btn secondary" disabled>Desfazer ligação</button><button id="hint" type="button" class="btn secondary" disabled>Destacar próximo ponto</button><button id="reset" type="button" class="btn secondary" disabled>Recomeçar</button></div>
+</section>
+<aside class="panel" aria-labelledby="steps-heading">
+ <h2 id="steps-heading">Ordem das etapas</h2>
+ <p class="instructions">Siga os processos nesta sequência. Os botões fazem exatamente o mesmo que os pontos do mapa, sem exigir precisão no toque.</p>
+ <div class="next"><small>Próxima etapa</small><strong id="next">Sol</strong><span class="small" id="step">Etapa 1 de 8</span></div>
+ <ol id="point-list" class="steps" aria-label="Oito pontos acionáveis por teclado e toque"></ol>
+ <p class="small">As etapas conectadas aparecem destacadas em verde. Uma dica coloca um anel amarelo no ponto seguinte.</p>
+</aside>
+</div>
+<div id="feedback" class="feedback" tabindex="-1" role="status" aria-live="polite" aria-atomic="true">Preparando o percurso...</div>
+<div id="victory" class="victory" tabindex="-1" role="status" hidden><strong>Trajetória concluída! Você conectou os oito pontos.</strong><p id="conclusion"></p></div>
+<p class="small">Ilustração vetorial SVG original incorporada ao HTML, sem imagens externas. A conquista é formativa e não atribui nota nem conclusão acadêmica oficial do Moodle.</p>
+</main><script>(function connectDots(){
+"use strict";
+const DATA={"type":"connect_dots","title":"Conecte os pontos - A viagem da água","points":[{"id":"sol","x":0.16,"y":0.2,"label":"Sol","description":"A energia solar aquece a superfície e favorece a evaporação."},{"id":"oceano","x":0.145,"y":0.81,"label":"Oceano","description":"Os oceanos armazenam grande parte da água do planeta."},{"id":"evaporacao","x":0.325,"y":0.54,"label":"Evaporação","description":"A água líquida recebe calor e passa ao estado gasoso."},{"id":"condensacao","x":0.47,"y":0.25,"label":"Condensação","description":"O vapor forma gotículas de água ao se resfriar."},{"id":"nuvens","x":0.68,"y":0.31,"label":"Nuvens","description":"Gotículas de água e cristais de gelo podem formar nuvens."},{"id":"precipitacao","x":0.83,"y":0.55,"label":"Precipitação","description":"A água retorna à superfície como chuva, neve ou granizo."},{"id":"escoamento","x":0.71,"y":0.8,"label":"Escoamento","description":"Parte da água escoa sobre o terreno até corpos d'água."},{"id":"rio","x":0.445,"y":0.81,"label":"Rio","description":"Os rios transportam água pelas bacias e podem levá-la de volta ao oceano."}],"path":["sol","oceano","evaporacao","condensacao","nuvens","precipitacao","escoamento","rio"],"settings":{"allowBacktrack":true,"maxHints":3},"completionText":"Você representou uma trajetória possível da água. Na natureza, também há infiltração, aquíferos e transpiração das plantas, de modo que o ciclo possui diferentes caminhos."};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id);
+const abort=new AbortController(),sdk=window.MoodleMCP?.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null;
+const storageKey="connectDotsWaterV1",NS="http://www.w3.org/2000/svg",map=$("map");
+let state=null,ready=false,disposed=false,modified=false,remote=null,queue=Promise.resolve(),epoch=0,zoom=100;
+// Pure rules.
+function validate(data){
+ if(!data||data.type!=="connect_dots"||typeof data.title!=="string"||!data.title.trim()||!Array.isArray(data.points)||data.points.length<3||data.points.length>14||!Array.isArray(data.path)||data.path.length!==data.points.length||!data.settings||typeof data.settings.allowBacktrack!=="boolean"||!Number.isInteger(data.settings.maxHints)||data.settings.maxHints<0||data.settings.maxHints>8||typeof data.completionText!=="string"||!data.completionText.trim())return false;
+ const ids=new Set(),labels=new Set();
+ for(const p of data.points){
+  if(!p||typeof p.id!=="string"||!/^[a-z0-9-]+$/.test(p.id)||ids.has(p.id)||typeof p.label!=="string"||!p.label.trim()||labels.has(p.label.toLocaleLowerCase("pt-BR"))||typeof p.description!=="string"||!p.description.trim()||typeof p.x!=="number"||typeof p.y!=="number"||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<.065||p.x>.935||p.y<.065||p.y>.935)return false;
+  for(const other of data.points){if(other===p||typeof other.x!=="number"||typeof other.y!=="number")continue;if((p.x-other.x)**2+(p.y-other.y)**2<.0049)return false;}
+  ids.add(p.id);labels.add(p.label.toLocaleLowerCase("pt-BR"));
+ }
+ return new Set(data.path).size===data.path.length&&data.path.every(id=>typeof id==="string"&&ids.has(id));
+}
+function initialState(){return {path:[],errors:0,hints:[],completed:false};}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Array.isArray(s.path)||!Array.isArray(s.hints)||s.path.length>data.path.length||!Number.isInteger(s.errors)||s.errors<0||s.errors>100000||typeof s.completed!=="boolean")return false;
+ if(s.path.some((id,i)=>id!==data.path[i]))return false;
+ const ids=new Set(data.path);
+ if(s.hints.length>data.settings.maxHints||new Set(s.hints).size!==s.hints.length||s.hints.some(id=>!ids.has(id)))return false;
+ return s.completed===(s.path.length===data.path.length);
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(),changed:true,kind:"neutral",message:"Percurso reiniciado. Comece pelo primeiro ponto."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"O progresso é inválido."};
+ if(s.completed)return {state:s,changed:false,kind:"neutral",message:"O percurso terminou. Reinicie para jogar novamente."};
+ if(action?.type==="point"){
+  const p=data.points.find(x=>x.id===action.id);
+  if(!p)return {state:s,changed:false,kind:"warn",message:"Ponto desconhecido. Use o mapa ou a lista de pontos."};
+  if(s.path.includes(p.id))return {state:s,changed:false,kind:"neutral",message:"Este ponto já foi conectado. Utilize Desfazer para voltar."};
+  const expected=data.path[s.path.length];
+  if(p.id!==expected)return {state:{...s,errors:s.errors+1},changed:true,kind:"warn",message:p.label+" ainda não é a próxima etapa. Procure "+data.points.find(x=>x.id===expected).label+"."};
+  const path=[...s.path,p.id],completed=path.length===data.path.length;
+  return {state:{...s,path,completed},changed:true,kind:"right",message:completed?
+   "Parabéns! Todas as etapas foram conectadas. "+data.completionText:
+   "Conectou "+p.label+". "+p.description+" Próximo: "+data.points.find(x=>x.id===data.path[path.length]).label+"."};
+ }
+ if(action?.type==="backtrack"){
+  if(!data.settings.allowBacktrack)return {state:s,changed:false,kind:"warn",message:"Voltar não está habilitado."};
+  if(!s.path.length)return {state:s,changed:false,kind:"neutral",message:"Nenhuma ligação para desfazer."};
+  const removed=data.points.find(x=>x.id===s.path[s.path.length-1]);
+  return {state:{...s,path:s.path.slice(0,-1),completed:false},changed:true,kind:"neutral",message:"A ligação com "+removed.label+" foi desfeita."};
+ }
+ if(action?.type==="hint"){
+  const id=data.path[s.path.length],p=data.points.find(x=>x.id===id);
+  if(s.hints.includes(id))return {state:s,changed:false,kind:"neutral",message:"A dica deste ponto já foi revelada."};
+  if(s.hints.length>=data.settings.maxHints)return {state:s,changed:false,kind:"warn",message:"Você já usou as três dicas."};
+  return {state:{...s,hints:[...s.hints,id]},changed:true,kind:"neutral",message:"Dica: "+p.label+" está destacado com um anel amarelo. "+p.description};
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Conecte o próximo ponto."};
+}
+// End pure rules.
+function node(tag,cls,value){const n=document.createElement(tag);if(cls)n.className=cls;if(value!==undefined)n.textContent=value;return n;}
+function svg(tag,props={}){const n=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(props))n.setAttribute(k,String(v));return n;}
+function find(id){return DATA.points.find(p=>p.id===id);}
+function getState(){return {path:[...state.path],errors:state.errors,hints:[...state.hints],completed:state.completed};}
+function restoreState(snapshot){if(!validState(snapshot,DATA))return false;state={path:[...snapshot.path],errors:snapshot.errors,hints:[...snapshot.hints],completed:snapshot.completed};render();return true;}
+function announce(message,kind="neutral"){$("feedback").className="feedback"+(kind==="right"?" right":kind==="warn"?" warn":"");$("feedback").textContent=message;}
+function renderMap(s){
+ const edges=$("edges"),nodes=$("nodes");edges.replaceChildren();nodes.replaceChildren();
+ for(let i=1;i<s.path.length;i++){const a=find(s.path[i-1]),b=find(s.path[i]);edges.append(svg("line",{class:"edge"+(s.completed?" finished":""),x1:a.x*1000,y1:a.y*650,x2:b.x*1000,y2:b.y*650}));}
+ DATA.points.forEach((p,i)=>{
+  const g=svg("g",{class:"point"+(s.path.includes(p.id)?" done":"")+(s.hints.includes(p.id)?" hint":""),transform:"translate("+p.x*1000+" "+p.y*650+")",role:"button",tabindex:s.completed?"-1":"0","data-point":p.id,"aria-label":"Ponto "+p.label+". "+p.description+". "+(s.path.includes(p.id)?"Conectado":"Não conectado")});
+  g.append(svg("circle",{class:"ring",r:33}),svg("circle",{class:"dot",r:25}));
+  const n=svg("text",{class:"number",y:1});n.textContent=String(i+1);g.append(n);
+  const width=Math.min(215,Math.max(83,p.label.length*11+26));
+  g.append(svg("rect",{class:"tag-bg",x:-width/2,y:45,width,height:34,rx:11}));
+  const label=svg("text",{class:"tag-text",y:68});label.textContent=p.label;g.append(label);nodes.append(g);
+ });
+}
+function renderList(s){
+ const list=$("point-list");list.replaceChildren();
+ DATA.path.forEach((id,i)=>{
+  const p=find(id),done=s.path.includes(id),current=i===s.path.length,li=node("li",done?"done":current?"current":"");
+  const num=node("span","n",String(i+1)),button=node("button","",p.label);
+  button.type="button";button.dataset.point=id;button.disabled=!ready||s.completed;
+  button.setAttribute("aria-label","Etapa "+(i+1)+": "+p.label+". "+p.description+". "+(done?"Já conectada":current?"Próxima etapa":"Aguardando"));
+  li.append(num,button);list.append(li);
+ });
+}
+function render(s=state){
+ if(disposed||!s)return;
+ $("connected").textContent=s.path.length+" / "+DATA.path.length;$("errors").textContent=String(s.errors);$("hints").textContent=s.hints.length+" / "+DATA.settings.maxHints;
+ $("progress").setAttribute("aria-valuenow",String(s.path.length));$("fill").style.width=100*s.path.length/DATA.path.length+"%";
+ $("next").textContent=s.completed?"Percurso concluído":find(DATA.path[s.path.length]).label;
+ $("step").textContent=s.completed?"Todas as etapas completas":"Etapa "+(s.path.length+1)+" de "+DATA.path.length;
+ $("undo").disabled=!ready||!s.path.length||!DATA.settings.allowBacktrack||s.completed;
+ $("hint").disabled=!ready||s.completed||s.hints.length>=DATA.settings.maxHints||s.hints.includes(DATA.path[s.path.length]);
+ $("reset").disabled=!ready;$("victory").hidden=!s.completed;
+ if(s.completed)$("conclusion").textContent=DATA.completionText;
+ renderMap(s);renderList(s);
+}
+function setZoom(value){
+ if(![100,150,200].includes(value))return;
+ zoom=value;map.style.width=value+"%";map.style.minWidth=700*value/100+"px";
+ $("zoom-value").textContent=value+"%";$("zoom-out").disabled=value===100;$("zoom-in").disabled=value===200;
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++epoch;
+ queue=queue.then(async()=>{
+  if(disposed||!remote||stamp!==epoch)return;
+  const old=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const combined={...old,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(combined)).length>12288){announce("O progresso ultrapassou 12 KiB.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/connect-dots-water",data:combined});
+ }).catch(async()=>{
+  if(disposed)return;epoch++;
+  try{remote=await progress.load();if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))announce("O progresso mudou em outra janela. Recuperei a última versão salva.","warn");else announce("Não foi possível conciliar o progresso. Continue nesta página.","warn");}
+  catch(_){remote=null;announce("Salvamento indisponível. O jogo continua funcionando.","warn");}
+ });
+}
+function handleAction(action){
+ if(!ready||disposed)return;
+ const out=transition(state,action,DATA);
+ if(!out.changed){announce(out.message,out.kind);return;}
+ state=out.state;modified=true;render();save();announce(out.message,out.kind);
+ $("feedback").focus({preventScroll:true});
+ if(state.completed)$("victory").focus({preventScroll:true});
+}
+function destroy(){disposed=true;abort.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){announce("Dados inválidos: confira as coordenadas e a rota.","warn");return;}
+ state=initialState();setZoom(100);render();
+ if(progress)try{
+  const saved=await progress.load();if(disposed)return;remote=saved;
+  if(!modified&&saved.data?.[storageKey]&&restoreState(saved.data[storageKey]))announce("Percurso recuperado. Continue de onde parou.");
+  else announce("Selecione o primeiro ponto: "+find(DATA.path[0]).label+".");
+ }catch(_){announce("Sem sincronização com o Moodle. O jogo funciona normalmente.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",event=>{
+ const choice=event.target.closest("[data-point]");
+ if(choice&&root.contains(choice)){handleAction({type:"point",id:choice.dataset.point});return;}
+ const button=event.target.closest("button");if(!button||!root.contains(button))return;
+ if(button.id==="undo")handleAction({type:"backtrack"});
+ if(button.id==="hint")handleAction({type:"hint"});
+ if(button.id==="reset")handleAction({type:"restart"});
+ if(button.id==="zoom-in")setZoom(Math.min(200,zoom+50));
+ if(button.id==="zoom-out")setZoom(Math.max(100,zoom-50));
+},{signal:abort.signal});
+root.addEventListener("keydown",event=>{
+ const p=event.target.closest("g[data-point]");if(!p)return;
+ if(event.key==="Enter"||event.key===" "){event.preventDefault();handleAction({type:"point",id:p.dataset.point});return;}
+ if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(event.key)){
+  event.preventDefault();const index=DATA.points.findIndex(x=>x.id===p.dataset.point),dir=event.key==="ArrowLeft"||event.key==="ArrowUp"?-1:1;
+  const next=DATA.points[(index+dir+DATA.points.length)%DATA.points.length];
+  $("nodes").querySelector('g[data-point="'+next.id+'"]')?.focus({preventScroll:true});
+ }
+},{signal:abort.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:abort.signal});
+init(root,DATA);
+})();</script></body></html>

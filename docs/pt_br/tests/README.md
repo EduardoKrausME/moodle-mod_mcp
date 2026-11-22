@@ -93,3 +93,11 @@ node --test docs/pt_br/tests/odd-one-out.test.mjs
 ```
 
 Esse teste cobre critérios e explicações ausentes, respostas inválidas, itens iguais, ID da exceção desconhecido, zero ou múltiplas exceções, embaralhamento reproduzível, respostas repetidas, restauração de progresso, acessibilidade e sincronização dos dois catálogos.
+
+Para o jogo 16 (Conecte os pontos - A viagem da água), execute:
+
+```bash
+node --test docs/pt_br/tests/connect-dots.test.mjs
+```
+
+O teste cobre coordenadas inválidas, IDs e pontos repetidos, seleção fora da ordem, clique fora de ponto, zoom, backtrack, teclado, dicas, conclusão, persistência opcional e igualdade dos manifestos.
