@@ -574,7 +574,7 @@ body.motion-paused *,body.motion-paused *:before,body.motion-paused *:after{anim
      <button type="button" data-electric="purkinje" aria-pressed="false">05 · Fibras de Purkinje</button>
     </div>
     <div class="elec-feedback" id="electricWhy">O nó SA é o marcapasso fisiológico usual. Sua taxa de disparo é modulada pelo sistema nervoso autônomo e outros fatores; o sinal segue pelo músculo atrial.</div>
-    <div class="elec-actions"><button type="button" id="pauseElectric" class="motion-btn" aria-pressed="false">Retomar animação elétrica</button></div>
+    <div class="elec-actions"><button type="button" id="pauseElectric" class="motion-btn" aria-pressed="true">Retomar animação elétrica</button></div>
     <p style="font-size:.84rem;margin-top:18px">Um ECG registra diferenças de potencial na superfície corporal, relacionadas à atividade elétrica do coração, mas não é um desenho literal de fibras. Ritmos e bloqueios exigem análise clínica específica.</p>
    </div>
   </div>
@@ -782,7 +782,7 @@ var bloodRoutes={
  ]},
  full:{title:"Narrativa completa: uma porção de sangue atravessa os dois circuitos conectados.",steps:[
  ["Veias cavas","O sangue relativamente menos oxigenado retorna dos tecidos ao coração.","lower"],
- ["Átrio direito","O sangue chega ao átrio direito.","lower"],
+ ["Átrio direito","O sangue chega ao átrio direito através das veias cavas, preparando a passagem à valva tricúspide quando o gradiente de pressão permitir.","lower"],
  ["Tricúspide e ventrículo direito","O sangue passa pela tricúspide e será ejetado pelo ventrículo direito na fase adequada.","lower"],
  ["Valva e artérias pulmonares","A ejeção direita leva sangue pela valva pulmonar e artérias pulmonares aos pulmões.","lower"],
  ["Capilares pulmonares","Ocorre troca gasosa nos pulmões: O₂ entra no sangue e CO₂ deixa o sangue.","exchange"],
@@ -862,6 +862,8 @@ var electric={
  purkinje:{name:"Fibras de Purkinje",desc:"A rede de fibras especializadas distribui a ativação elétrica ao miocárdio ventricular, ajudando a coordenar sua contração.",why:"A coordenação facilita uma ejeção eficiente. Frequência, condução e contração são fenômenos relacionados, mas não idênticos."}
 };
 var electricKeys=Object.keys(electric),electricButtons=Array.prototype.slice.call(d.querySelectorAll("[data-electric]")),electricPaused=true;
+byId("electricFigure").classList.toggle("is-paused",electricPaused);
+byId("pauseElectric").setAttribute("aria-pressed",String(electricPaused));
 function selectElectric(key){
  var idx=electricKeys.indexOf(key),p=electric[key];if(!p)return;
  activate(electricButtons,"electric",key);
