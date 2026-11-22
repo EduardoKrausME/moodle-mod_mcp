@@ -2,7 +2,7 @@
 "use strict";
 const $=(id)=>document.getElementById(id);
 const nodes={nav:$("category-nav"),title:$("section-title"),desc:$("section-description"),eyebrow:$("section-eyebrow"),count:$("example-count"),cards:$("cards"),state:$("state"),search:$("search"),subtype:$("subtype"),subtypeLabel:$("subtype-label"),pagination:$("pagination"),dialog:$("preview-dialog"),frame:$("large-frame"),code:$("source-code"),codeView:$("code-view"),preview:$("dialog-preview"),copyMessage:$("copy-message")};
-let catalog=[],active=null,entries=[],filtered=[],currentPage=1,version=0,observer=null,frameObserver=null,sourceLoaded=null;
+let catalog=[],active=null,entries=[],entriesCategory=null,filtered=[],currentPage=1,version=0,observer=null,frameObserver=null,sourceLoaded=null,openedPreviewPath=null;
 const PAGE_SIZE=9,PAGINATE_FROM=20;
 const cache=new Map();
 const pathSafe=(path)=>/^(?:(?:page|quiz|survey|timeline|case|simulation|custom)\/[a-z0-9-]+|game-[a-z0-9-]+\/[a-z0-9-]+)\.html$/.test(path);
@@ -90,8 +90,8 @@ function render(){
  showState(filtered.length?"":"Nenhum exemplo encontrado. Experimente outra busca.");
 }
 function hashCategory(){const id=decodeURIComponent(location.hash.replace(/^#/,""));return catalog.find(c=>c.id===id)||catalog[0];}
-async function selectCategory(c){if(!c)return;active=c;currentPage=pageFromURL();const request=++version;nodes.search.value="";nodes.subtype.value="";nodes.subtypeLabel.hidden=c.id!=="games";nodes.title.textContent=c.label;nodes.desc.textContent=c.description;nodes.eyebrow.textContent="EXPLORAR / "+c.label.toLocaleUpperCase("pt-BR");nodes.count.textContent="Carregando…";nodes.cards.replaceChildren();nodes.pagination.hidden=true;nodes.pagination.replaceChildren();showState("Carregando exemplos…");for(const btn of nodes.nav.querySelectorAll("button"))btn.setAttribute("aria-current",String(btn.dataset.category===c.id));
- try{if(!cache.has(c.id)){const data=await readJSON(c.manifest);if(!data||!Array.isArray(data.examples))throw Error("Manifesto inválido");cache.set(c.id,data);}if(version!==request)return;entries=cache.get(c.id).examples.filter(i=>i&&typeof i.title==="string"&&pathSafe(i.path)&&(c.id==="games"?/^game-[a-z0-9-]+\/[a-z0-9-]+\.html$/.test(i.path):i.path.startsWith(c.id+"/")));nodes.subtype.replaceChildren(new Option("Todos os jogos",""));if(c.id==="games"){const types=[...new Set(entries.map(i=>i.subtype).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR"));for(const s of types)nodes.subtype.add(new Option(s,s));}render();}catch(error){if(version!==request)return;entries=[];nodes.count.textContent="Indisponível";showState("Não foi possível carregar esta categoria. Confira o manifesto JSON ou tente recarregar a página.");console.error(error);}
+async function selectCategory(c){if(!c)return;closePreview(false);active=c;entriesCategory=null;entries=[];currentPage=pageFromURL();const request=++version;nodes.search.value="";nodes.subtype.value="";nodes.subtypeLabel.hidden=c.id!=="games";nodes.title.textContent=c.label;nodes.desc.textContent=c.description;nodes.eyebrow.textContent="EXPLORAR / "+c.label.toLocaleUpperCase("pt-BR");nodes.count.textContent="Carregando…";nodes.cards.replaceChildren();nodes.pagination.hidden=true;nodes.pagination.replaceChildren();showState("Carregando exemplos…");for(const btn of nodes.nav.querySelectorAll("button"))btn.setAttribute("aria-current",String(btn.dataset.category===c.id));
+ try{if(!cache.has(c.id)){const data=await readJSON(c.manifest);if(!data||!Array.isArray(data.examples))throw Error("Manifesto inválido");cache.set(c.id,data);}if(version!==request)return;entries=cache.get(c.id).examples.filter(i=>i&&typeof i.title==="string"&&pathSafe(i.path)&&(c.id==="games"?/^game-[a-z0-9-]+\/[a-z0-9-]+\.html$/.test(i.path):i.path.startsWith(c.id+"/")));nodes.subtype.replaceChildren(new Option("Todos os jogos",""));if(c.id==="games"){const types=[...new Set(entries.map(i=>i.subtype).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR"));for(const s of types)nodes.subtype.add(new Option(s,s));}entriesCategory=c.id;currentPage=pageFromURL();render();syncPreviewFromURL();}catch(error){if(version!==request)return;entries=[];nodes.count.textContent="Indisponível";showState("Não foi possível carregar esta categoria. Confira o manifesto JSON ou tente recarregar a página.");console.error(error);}
 }
 let selectedPrompt="";
 function showDialogView(mode){
@@ -103,7 +103,31 @@ function showDialogView(mode){
  $("toggle-prompt").textContent=mode==="prompt"?"Ver prévia":"Ver comando";
  $("toggle-prompt").setAttribute("aria-expanded",String(mode==="prompt"));
 }
-async function openPreview(item){
+function closePreview(updateURL=true){
+ const closingPath=openedPreviewPath;
+ openedPreviewPath=null;
+ if(nodes.dialog.open){
+  if(typeof nodes.dialog.close==="function")nodes.dialog.close();
+  else nodes.dialog.removeAttribute("open");
+ }
+ nodes.frame.removeAttribute("src");
+ nodes.copyMessage.textContent="";
+ if(updateURL&&closingPath){
+  const url=new URL(location.href);
+  if(url.searchParams.get("preview")===closingPath){
+   url.searchParams.delete("preview");
+   history.pushState(null,"",url);
+  }
+ }
+}
+function openPreview(item,updateURL=true){
+ if(updateURL){
+  const url=new URL(location.href);
+  url.hash=active.id;
+  url.searchParams.set("preview",item.path);
+  if(url.href!==location.href)history.pushState(null,"",url);
+ }
+ openedPreviewPath=item.path;
  nodes.dialog.querySelector("#dialog-title").textContent=item.title;
  $("dialog-description").textContent=item.description;
  $("open-tab").href=item.path;
@@ -115,8 +139,26 @@ async function openPreview(item){
  showDialogView("preview");
  nodes.copyMessage.textContent="";
  sourceLoaded=null;
- if(typeof nodes.dialog.showModal==="function")nodes.dialog.showModal();
- else nodes.dialog.setAttribute("open","");
+ if(!nodes.dialog.open){
+  if(typeof nodes.dialog.showModal==="function")nodes.dialog.showModal();
+  else nodes.dialog.setAttribute("open","");
+ }
+}
+function syncPreviewFromURL(){
+ const url=new URL(location.href);
+ const requested=url.searchParams.get("preview");
+ if(requested===null){
+  if(nodes.dialog.open)closePreview(false);
+  return;
+ }
+ const item=entries.find(entry=>entry.path===requested);
+ if(!item){
+  url.searchParams.delete("preview");
+  history.replaceState(null,"",url);
+  if(nodes.dialog.open)closePreview(false);
+  return;
+ }
+ if(!nodes.dialog.open||openedPreviewPath!==item.path)openPreview(item,false);
 }
 async function loadSource(){
  if(!sourceLoaded){
@@ -166,9 +208,9 @@ $("copy-prompt").addEventListener("click",async()=>{
  try{await copyText(selectedPrompt);nodes.copyMessage.textContent="Comando copiado!";}
  catch(_){nodes.copyMessage.textContent="Não foi possível copiar. Use Ver comando e selecione o texto.";}
 });
-$("close-dialog").addEventListener("click",()=>nodes.dialog.close?nodes.dialog.close():nodes.dialog.removeAttribute("open"));
-nodes.dialog.addEventListener("close",()=>{nodes.frame.removeAttribute("src");nodes.copyMessage.textContent="";});
-nodes.dialog.addEventListener("click",e=>{if(e.target===nodes.dialog&&nodes.dialog.close)nodes.dialog.close();});
+$("close-dialog").addEventListener("click",()=>closePreview());
+nodes.dialog.addEventListener("close",()=>{if(!nodes.dialog.open)closePreview();});
+nodes.dialog.addEventListener("click",e=>{if(e.target===nodes.dialog)closePreview();});
 function resetPagination(){currentPage=1;writePageURL(1);render();}
 nodes.search.addEventListener("input",resetPagination);
 nodes.subtype.addEventListener("change",resetPagination);
@@ -176,14 +218,17 @@ function syncFromURL(){
  if(!catalog.length)return;
  const category=hashCategory();
  if(!active||active.id!==category.id)selectCategory(category);
- else if(currentPage!==pageFromURL()){currentPage=pageFromURL();render();}
+ else if(entriesCategory===category.id){
+  if(currentPage!==pageFromURL()){currentPage=pageFromURL();render();}
+  syncPreviewFromURL();
+ }
 }
 window.addEventListener("popstate",syncFromURL);
 window.addEventListener("hashchange",syncFromURL);
 window.addEventListener("resize",()=>{if(!frameObserver)document.querySelectorAll(".card-preview").forEach(fitFrame);});
 (async()=>{try{const data=await readJSON("./catalog.json");catalog=(data.categories||[]).filter(c=>/^[a-z-]+$/.test(c.id)&&c.manifest===c.id+"/examples.json");for(const c of catalog){const b=el("button","nav-button",c.label);b.type="button";b.dataset.category=c.id;b.setAttribute("aria-current","false");b.addEventListener("click",()=>{
  const url=new URL(location.href);
- url.hash=c.id;url.searchParams.delete("page");
+ url.hash=c.id;url.searchParams.delete("page");url.searchParams.delete("preview");
  if(url.href!==location.href)history.pushState(null,"",url);
  selectCategory(c);
 });nodes.nav.appendChild(b);}if(catalog.length)await selectCategory(hashCategory());else showState("Catálogo sem categorias.");}catch(e){showState("Não foi possível carregar o catálogo. Abra este site por HTTP(S), e não como arquivo local.");nodes.count.textContent="Indisponível";console.error(e);}})();
