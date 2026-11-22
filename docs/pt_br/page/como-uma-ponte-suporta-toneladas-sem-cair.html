@@ -67,6 +67,10 @@ a:hover{color:#a24b2e}
 .beam-view{padding:15px 13px 11px;min-width:0}
 .beam-view svg{width:100%;height:auto;display:block}
 .beam-view .moving-truck{transition:transform .2s ease}
+.monitor:not(.is-paused) .reaction{stroke-dasharray:11 9;animation:reactionFlow 2s linear infinite}
+.monitor.is-paused .reaction{animation-play-state:paused}
+.monitor.is-paused .moving-truck{transition:none}
+@keyframes reactionFlow{to{stroke-dashoffset:-80}}
 .beam-view .draw-stroke{fill:none;stroke:#a4dfea;stroke-width:4}
 .beam-view .static-grid{fill:none;stroke:#345975;stroke-width:1}
 .beam-view .guide{fill:none;stroke:#7799aa;stroke-width:2;stroke-dasharray:7 7}
@@ -275,6 +279,7 @@ a:hover{color:#a24b2e}
   <div class="lab-grid">
    <div class="monitor">
     <div class="monitor-head"><span>DIAGRAMA DE CORPO LIVRE / 2D</span><span>SEM DIMENSIONAMENTO · SEM VERIFICAÇÃO DE RESISTÊNCIA</span></div>
+    <div style="padding:10px 18px;border-bottom:1px solid #385a71"><button type="button" id="toggleMotion" aria-pressed="false" style="padding:9px 13px;border:1px solid #7ea5b0;background:#24475c;color:#eff9f8;font-weight:750">Pausar animação das reações</button></div>
     <div class="beam-view">
      <svg viewBox="0 0 960 365" role="img" aria-labelledby="beamTitle beamDesc">
       <title id="beamTitle">Viga biapoiada com carga concentrada móvel, carga distribuída e reações dos apoios</title>
@@ -659,7 +664,7 @@ a:hover{color:#a24b2e}
 
 <section class="references wrap" aria-labelledby="refsTitle">
  <h2 id="refsTitle">Fontes técnicas e imagens da atividade</h2>
- <p>Onze ilustrações/diagramas SVG originais: vista de treliça, viga e reações, diagramas de cortante e momento, painel de esforços, cinco tipologias, corte de fundação e desenhos de flambagem e fadiga. Nenhuma fotografia ou imagem de ponte real foi incorporada. Todas as figuras são conceituais, fora de escala e identificadas como didáticas.</p>
+ <p>Treze ilustrações/diagramas SVG originais: vista de treliça, viga e reações, diagramas de cortante e momento, painel de esforços, cinco tipologias, corte de fundação e desenhos de flambagem e fadiga. Nenhuma fotografia ou imagem de ponte real foi incorporada. Todas as figuras são conceituais, fora de escala e identificadas como didáticas.</p>
  <p>Referências para consulta: <a href="https://www.fhwa.dot.gov/bridge/steel.cfm" target="_blank" rel="noopener noreferrer">Federal Highway Administration (FHWA): Steel Bridges, estabilidade, fadiga e materiais</a>; <a href="https://www.fhwa.dot.gov/bridge/lrfd/lrfdtoc.cfm" target="_blank" rel="noopener noreferrer">FHWA: guia de projeto de superestruturas</a>; <a href="https://www.fhwa.dot.gov/BRIDGE/" target="_blank" rel="noopener noreferrer">FHWA: Bridges &amp; Structures, fundações, inspeções e riscos</a>; <a href="https://www.teachengineering.org/activities/cub_brid_lesson01_activity1" target="_blank" rel="noopener noreferrer">TeachEngineering: tension and compression in bridges</a>; <a href="https://rosap.ntl.bts.gov/view/dot/43721" target="_blank" rel="noopener noreferrer">FHWA/NHI: LRFD for Highway Bridge Superstructures, referência técnica</a>. Este material não substitui normas aplicáveis ou a análise de um engenheiro habilitado.</p>
 </section>
 </main>
@@ -670,6 +675,8 @@ var d=document;
 var byId=function(id){return d.getElementById(id);};
 var fmt=function(n,places){return Number(n).toLocaleString("pt-BR",{minimumFractionDigits:places,maximumFractionDigits:places});};
 var controls=["span","point","position","uniform"];
+var monitor=d.querySelector(".monitor"),motionBtn=byId("toggleMotion");
+motionBtn.addEventListener("click",function(){var pause=motionBtn.getAttribute("aria-pressed")!=="true";motionBtn.setAttribute("aria-pressed",String(pause));monitor.classList.toggle("is-paused",pause);motionBtn.textContent=pause?"Retomar animação das reações":"Pausar animação das reações";});
 function calc(){
  var L=Number(byId("span").value),P=Number(byId("point").value),pc=Number(byId("position").value),enabled=byId("enableUniform").checked,w=enabled?Number(byId("uniform").value):0;
  var a=L*pc/100,RA=P*(L-a)/L+w*L/2,RB=P*a/L+w*L/2,total=P+w*L;
