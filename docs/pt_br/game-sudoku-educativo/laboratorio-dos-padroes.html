@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sudoku educativo - Laboratório dos padrões</title><style>
+:root{color-scheme:light;--bg:#eef6f6;--paper:#fff;--ink:#183e44;--sub:#58767c;--line:#cadfe0;--strong:#176b76;--strongdark:#0e4e59;--soft:#e5f4f3;--fill:#f6fbfb;--given:#dae8ef;--selected:#a8e0dc;--peer:#e4f2f2;--conflict:#fce2de;--conflictborder:#c75546;--ok:#176848;--okbg:#e1f5ea;--warn:#945321;--warnbg:#fff0dc;font:16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button{font:inherit}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #d88122;outline-offset:3px}
+main{max-width:1160px;margin:auto;padding:30px 20px 42px}.eyebrow{font-size:11px;letter-spacing:1.4px;font-weight:850;color:var(--strong);text-transform:uppercase;margin:0 0 7px}
+h1{font-size:clamp(28px,4.3vw,41px);letter-spacing:-.85px;line-height:1.16;margin:0 0 10px}.intro{font-size:14px;color:var(--sub);margin:0 0 19px;max-width:960px}
+.metrics{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.metric{min-width:110px;border:1px solid var(--line);border-radius:11px;background:var(--paper);padding:8px 14px}
+.metric small{font-size:11px;color:var(--sub);display:block}.metric strong{font-variant-numeric:tabular-nums;font-size:20px}
+.track{height:9px;background:#d8e8e6;border-radius:20px;overflow:hidden;margin-bottom:18px}.track span{display:block;height:100%;width:0;background:linear-gradient(90deg,#4d9fbd,#44b49a);transition:width .2s}
+.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(270px,.78fr);align-items:start;gap:17px}.panel{min-width:0;padding:22px;border:1px solid var(--line);background:var(--paper);border-radius:18px;box-shadow:0 9px 30px #153b4009}
+.panel h2{font-size:18px;margin:0 0 11px}.topline{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap}.topline h2{margin:0}.tag{border-radius:30px;background:var(--soft);color:var(--strong);padding:7px 11px;font-size:11px;font-weight:850}
+.board-wrap{border-radius:14px;background:#e2efef;border:1px solid #c6dcdb;padding:15px;margin:14px 0 12px}
+.board{width:min(100%,530px);margin:auto;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));aspect-ratio:1;gap:0;border:3px solid #276b74;background:#276b74}
+.cell{min-width:0;min-height:0;aspect-ratio:1;border:1px solid #c5d9da;border-radius:0;background:var(--fill);padding:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;cursor:pointer;color:var(--ink);font-weight:850;position:relative}
+.cell.br{border-right:3px solid #276b74}.cell.bb{border-bottom:3px solid #276b74}.cell.given{background:var(--given);color:#204c68;cursor:default}.cell.peer:not(.given):not(.conflict){background:var(--peer)}
+.cell.selected{background:var(--selected)!important;box-shadow:inset 0 0 0 3px #2b797c;z-index:1}
+.cell.conflict{background:var(--conflict)!important;color:#8b2d26;box-shadow:inset 0 0 0 2px var(--conflictborder)}
+.cell.conflict.selected{box-shadow:inset 0 0 0 3px #a02c23,0 0 0 2px #fff}
+.cell:focus-visible{z-index:2;outline:3px solid #df9b38;outline-offset:-3px}
+.cell .digit{font-size:clamp(18px,3.3vw,35px);line-height:1.15;min-height:35%;display:grid;place-items:center}.cell .notes{display:flex;align-items:center;justify-content:center;gap:2px;flex-wrap:wrap;font-size:clamp(7px,1.06vw,11px);font-weight:720;color:#56878b;line-height:1;min-height:13px}
+.cell .notes span{padding:0 1px}.cell.given .notes{visibility:hidden}
+.legend{display:flex;gap:9px 16px;flex-wrap:wrap;color:var(--sub);font-size:11px;margin:10px 0 0}.legend span{display:inline-flex;align-items:center;gap:6px}.swatch{width:13px;height:13px;border:1px solid #a8c4c3;border-radius:3px;background:var(--fill);display:inline-block}
+.swatch.given{background:var(--given)}.swatch.selected{background:var(--selected)}.swatch.conflict{background:var(--conflict);border-color:var(--conflictborder)}
+.zone{margin-top:16px;border:1px solid var(--line);background:#f8fcfc;border-radius:12px;padding:14px}
+.zone-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:9px;margin-bottom:12px}.zone-head strong{font-size:14px}.zone-head small{color:var(--sub);font-size:11px}
+.pad{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+.pad button{min-width:0;min-height:48px;border:2px solid #82b4b7;border-radius:10px;background:var(--paper);color:var(--strongdark);cursor:pointer;font-size:19px;font-weight:850}
+.pad button:hover:not(:disabled){background:#e1f2f0;border-color:var(--strong)}.pad button:disabled{opacity:.4;cursor:not-allowed}
+.buttons{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:13px}.btn{background:var(--strong);border:1px solid var(--strong);color:#fff;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:840;cursor:pointer}
+.btn.secondary{background:var(--paper);color:var(--strong)}.btn.quiet{background:#f2f9f8;color:var(--strong);border-color:#a7cac7}
+.btn:disabled{opacity:.43;cursor:not-allowed}.btn:hover:not(:disabled){filter:brightness(.93)}.buttons .grow{flex:1}
+.notes-toggle{min-height:38px}.notes-toggle[aria-pressed=true]{background:#c7e9df;border-color:#509d8f;color:#145846}
+.feedback{min-height:72px;margin-top:15px;border:1px solid #bed9db;border-radius:11px;background:#e8f3f6;color:#365e70;padding:14px 15px;font-size:13px;line-height:1.58}
+.feedback.warn{border-color:#dfb995;background:var(--warnbg);color:var(--warn)}.feedback.good{border-color:#99d1b0;background:var(--okbg);color:var(--ok)}
+.feedback strong{display:block;font-size:14px;margin-bottom:3px}
+.victory{margin-top:13px;border-radius:12px;border:1px solid #a0cfb0;background:var(--okbg);color:var(--ok);padding:16px}.victory strong{font-size:20px}.victory p{font-size:13px;margin:6px 0 0}
+.side-title{font-size:17px;font-weight:850;margin:0 0 11px}.coord{padding:12px 14px;background:var(--soft);color:var(--strong);border-radius:11px;font-size:12px;line-height:1.6}
+.coord strong{font-size:15px;display:block}.coord span{display:block}
+.rulestext{color:var(--sub);font-size:12px;padding-left:20px}.rulestext li{margin:7px 0}
+.conflicts-list{font-size:12px;color:var(--sub);padding-left:19px}.conflicts-list li{margin:7px 0;line-height:1.5}
+.helptext{background:var(--soft);color:#246671;padding:12px 14px;border-radius:10px;font-size:12px;line-height:1.55;margin-top:14px}
+.helptext strong{display:block;margin-bottom:4px}.helptext p{margin:0}
+.confirm{border:1px solid #dab18d;background:var(--warnbg);border-radius:11px;padding:12px;margin-top:13px;font-size:12px;color:var(--warn)}
+.confirm p{margin:0 0 8px}.confirm .buttons{margin:0}
+.note{margin:14px 0 0;font-size:11px;color:var(--sub);line-height:1.6}
+[hidden]{display:none!important}
+@media(max-width:840px){.layout{grid-template-columns:1fr}.panel{padding:17px}.board{max-width:530px}}
+@media(max-width:550px){main{padding:21px 11px 32px}.panel{padding:12px}.board-wrap{padding:7px}.board{border-width:2px}.cell.br{border-right-width:2px}.cell.bb{border-bottom-width:2px}.cell{padding:0}.cell .digit{font-size:clamp(16px,6vw,30px)}.cell .notes{font-size:clamp(7px,1.6vw,10px)}.pad{gap:5px}.pad button{min-height:45px;font-size:18px}.buttons .btn{flex-grow:1}.metrics{gap:7px}.metric{min-width:94px;padding:7px 10px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media(prefers-contrast:more){.cell{border-color:#4b6269}.cell.selected{outline:3px solid #0d6e70;outline-offset:-3px}.cell.conflict{outline:3px solid #8c2719;outline-offset:-3px}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#142d34;--paper:#223e47;--ink:#e9f6f5;--sub:#b8d5d6;--line:#456d70;--strong:#b4ede6;--strongdark:#defef9;--soft:#31545c;--fill:#2b4954;--given:#365466;--selected:#436d6a;--peer:#3a5c60;--conflict:#633a3d;--conflictborder:#ef9990;--ok:#b1f2ca;--okbg:#274b3b;--warn:#f4c99b;--warnbg:#4b3d31}
+.board-wrap{background:#284851;border-color:#507277}.board{background:#a0d2c9;border-color:#a0d2c9}.cell{border-color:#476c70}.cell.br{border-right-color:#a0d2c9}.cell.bb{border-bottom-color:#a0d2c9}
+.cell.given{color:#d3ebff}.cell .notes{color:#badcda}.cell.selected{color:#fff;box-shadow:inset 0 0 0 3px #9ef0e1}.cell.conflict{color:#ffdcda}.cell.conflict.selected{box-shadow:inset 0 0 0 3px #ffb4a4}
+.zone{background:#294b54}.pad button{background:#304e57;color:#effffb;border-color:#659595}.pad button:hover:not(:disabled){background:#3a6870}
+.btn.quiet{background:#2c5355;color:#c1eee7;border-color:#599a96}.notes-toggle[aria-pressed=true]{background:#3d7364;color:#edfff3}
+.feedback{background:#2f5260;color:#d6f3fc;border-color:#517b85}.feedback.warn{background:var(--warnbg);color:var(--warn)}.feedback.good{background:var(--okbg);color:var(--ok)}
+.helptext{color:#dbfaf6}.victory{color:var(--ok)}}
+</style></head>
+<body><main id="activity">
+<p class="eyebrow">Jogo 23 · Dedução e raciocínio lógico</p>
+<h1>Sudoku educativo: Laboratório dos padrões</h1>
+<p class="intro">Complete o tabuleiro 6×6 usando os números de 1 a 6 sem repeti-los nas linhas, colunas e blocos de 2×3. As 15 pistas iniciais são fixas. Você pode substituir um número imediatamente, testar anotações, desfazer e refazer quantas vezes forem permitidas pelo histórico, sempre sem limite de tempo.</p>
+<div class="metrics"><div class="metric"><small>Casas preenchidas</small><strong id="filled">15 / 36</strong></div><div class="metric"><small>Casas com conflitos</small><strong id="conflict-count">0</strong></div><div class="metric"><small>Formato</small><strong>6×6</strong></div></div>
+<div id="progress" class="track" role="progressbar" aria-label="Casas preenchidas" aria-valuemin="0" aria-valuemax="36" aria-valuenow="15"><span id="progress-fill"></span></div>
+<div class="layout">
+<section class="panel" aria-labelledby="board-title">
+ <div class="topline"><h2 id="board-title">Resolva o tabuleiro</h2><span class="tag">Solução única verificada</span></div>
+ <div class="board-wrap"><div id="board" class="board" role="group" aria-label="Grade Sudoku de seis linhas e seis colunas, com pistas fixas e células editáveis" aria-describedby="keyboard-help"></div></div>
+ <div class="legend" aria-label="Legenda do tabuleiro"><span><i class="swatch given" aria-hidden="true"></i>Pista fixa</span><span><i class="swatch selected" aria-hidden="true"></i>Casa selecionada</span><span><i class="swatch conflict" aria-hidden="true"></i>Conflito de regra</span></div>
+ <p id="keyboard-help" class="note">Com foco numa casa, use as setas para caminhar e os dígitos 1–6 para escrever ou substituir o valor. Backspace/Delete apaga o valor, ou as anotações se a casa estiver vazia. Tab e Shift+Tab permitem sair da grade normalmente. Clique ou toque para escolher uma casa.</p>
+ <div class="zone"><div class="zone-head"><strong>Teclado numérico</strong><small>Mesmo comportamento do teclado físico</small></div><div class="pad" role="group" aria-label="Escolher um símbolo">
+  <button type="button" data-number="1" disabled>1</button><button type="button" data-number="2" disabled>2</button><button type="button" data-number="3" disabled>3</button><button type="button" data-number="4" disabled>4</button><button type="button" data-number="5" disabled>5</button><button type="button" data-number="6" disabled>6</button>
+ </div>
+ <div class="buttons">
+  <button id="note-mode" type="button" class="btn secondary notes-toggle" aria-pressed="false" disabled>Ativar anotações</button>
+  <button id="clear" type="button" class="btn quiet" disabled>Apagar</button>
+  <button id="undo" type="button" class="btn quiet" disabled>Desfazer</button>
+  <button id="redo" type="button" class="btn quiet" disabled>Refazer</button>
+ </div>
+ </div>
+ <div class="buttons"><button id="hint" type="button" class="btn secondary" disabled>Dica de candidatos</button><span class="grow" aria-hidden="true"></span><button id="check" type="button" class="btn" disabled>Conferir Sudoku</button></div>
+ <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1"><strong id="feedback-heading">Orientação</strong><span id="feedback-message">Preparando o tabuleiro...</span></div>
+ <div id="victory" class="victory" tabindex="-1" role="status" hidden><strong>Sudoku concluído!</strong><p>Você preencheu todas as casas respeitando as regras das linhas, colunas e blocos. Isso é uma conquista formativa e não uma nota oficial do Moodle.</p></div>
+</section>
+<aside class="panel" aria-labelledby="side-title">
+ <h2 id="side-title">Casa selecionada</h2>
+ <div class="coord" aria-live="polite" aria-atomic="true"><strong id="selection">Linha 1, coluna 1 · pista fixa</strong><span id="selection-detail">Valor: 1.</span></div>
+ <h2 style="margin-top:19px">Conflitos de regras</h2>
+ <p class="note">Conflitos são repetições de símbolos em linha, coluna ou bloco. Uma casa sem conflito ainda pode estar incorreta; por isso, não indicamos acerto em relação a um gabarito a cada jogada.</p>
+ <ul id="conflicts" class="conflicts-list" aria-label="Conflitos detectados"><li>Nenhuma repetição detectada.</li></ul>
+ <h2 style="margin-top:19px">Como jogar</h2>
+ <ol class="rulestext">
+  <li>Selecione uma casa vazia que não seja uma pista fixa.</li>
+  <li>Digite um número ou escolha no teclado numérico; digitar outro substitui o valor anterior.</li>
+  <li>Ative Anotações para registrar possíveis números sem substituir a resposta definitiva.</li>
+  <li>Use Desfazer e Refazer para revisar as alterações e Apagar para limpar a casa.</li>
+  <li>Use Dica de candidatos para consultar possibilidades pelas regras, sem revelar o gabarito.</li>
+  <li>Preencha as 36 casas, corrija os conflitos e clique em Conferir Sudoku.</li>
+ </ol>
+ <div class="helptext"><strong>Dedução, não adivinhação</strong><p>A grade possui uma única solução, confirmada por algoritmo de busca. Durante a resolução, o jogo verifica apenas regras locais; o resultado final exige todas as casas preenchidas e ausência de conflitos.</p></div>
+ <div class="buttons"><button id="reset" type="button" class="btn secondary" disabled>Recomeçar tabuleiro</button></div>
+ <div id="reset-confirm" class="confirm" role="group" aria-label="Confirmação de reinício" hidden><p>Recomeçar apaga todos os números inseridos e anotações, mas mantém as 15 pistas fixas. Deseja continuar?</p><div class="buttons"><button type="button" id="confirm-reset" class="btn">Confirmar reinício</button><button type="button" id="cancel-reset" class="btn secondary">Cancelar</button></div></div>
+ <p class="note">A atividade funciona sem relógio, imagens, áudio, fontes remotas ou bibliotecas. O progresso pode ser retomado quando a ponte de progresso Moodle estiver disponível.</p>
+</aside>
+</div>
+<p class="note">Feedback formativo apenas. Nenhum resultado calculado pelo navegador altera notas, tentativas oficiais ou conclusão acadêmica no Moodle.</p>
+</main><script>(function sudokuGame(){
+"use strict";
+const DATA={"type":"sudoku","title":"Sudoku educativo - Laboratório dos padrões","settings":{"size":6,"boxRows":2,"boxCols":3,"requireUnique":true,"maxHistory":40},"symbols":["1","2","3","4","5","6"],"givens":[[1,0,3,4,5,0],[0,0,6,0,2,0],[2,0,0,0,6,1],[0,6,0,2,0,0],[0,4,0,6,0,0],[6,0,0,0,0,5]]};
+const root=document.getElementById("activity"),$=id=>document.getElementById(id);
+const controller=new AbortController(),sdk=window.MoodleMCP?.progress;
+const progress=sdk&&typeof sdk.load==="function"&&typeof sdk.save==="function"?sdk:null,storageKey="sudokuLaboratorio6x6V1";
+const buttons=[],cells=[],MAX_NOTES=6;
+let state=null,ready=false,disposed=false,modified=false,remote=null,queue=Promise.resolve(),versionStamp=0;
+// Pure rules. No access to DOM, time, network, or Moodle.
+function id(r,c){return r+","+c;}
+function inBounds(data,r,c){return Number.isInteger(r)&&Number.isInteger(c)&&r>=0&&r<data.settings.size&&c>=0&&c<data.settings.size;}
+function sameBox(data,r,c,x,y){const s=data.settings;return Math.floor(r/s.boxRows)===Math.floor(x/s.boxRows)&&Math.floor(c/s.boxCols)===Math.floor(y/s.boxCols);}
+function initialValues(data){return data.givens.map(row=>[...row]);}
+function blankNotes(data){return Array.from({length:data.settings.size},()=>Array.from({length:data.settings.size},()=>[]));}
+function conflicts(data,values){
+ const size=data.settings.size,cells=new Map(),groups=[];
+ function record(coords,name){
+  const byNumber=new Map();
+  for(const [r,c] of coords){const value=values[r][c];if(!value)continue;if(!byNumber.has(value))byNumber.set(value,[]);byNumber.get(value).push([r,c]);}
+  for(const [value,positions] of byNumber){
+   if(positions.length<2)continue;
+   groups.push({name,value,cells:positions.map(([r,c])=>id(r,c))});
+   for(const [r,c] of positions){const k=id(r,c);if(!cells.has(k))cells.set(k,new Set());cells.get(k).add(name);}
+  }
+ }
+ for(let r=0;r<size;r++)record(Array.from({length:size},(_,c)=>[r,c]),"linha "+(r+1));
+ for(let c=0;c<size;c++)record(Array.from({length:size},(_,r)=>[r,c]),"coluna "+(c+1));
+ for(let br=0;br<size;br+=data.settings.boxRows)for(let bc=0;bc<size;bc+=data.settings.boxCols){
+  const points=[];for(let r=br;r<br+data.settings.boxRows;r++)for(let c=bc;c<bc+data.settings.boxCols;c++)points.push([r,c]);
+  record(points,"bloco L"+(br+1)+"-"+(br+data.settings.boxRows)+"/C"+(bc+1)+"-"+(bc+data.settings.boxCols));
+ }
+ return {cells,groups};
+}
+function candidates(data,values,r,c){
+ if(!inBounds(data,r,c))return [];
+ const used=new Set(),size=data.settings.size;
+ for(let k=0;k<size;k++){if(k!==c&&values[r][k])used.add(values[r][k]);if(k!==r&&values[k][c])used.add(values[k][c]);}
+ for(let x=0;x<size;x++)for(let y=0;y<size;y++)if((x!==r||y!==c)&&sameBox(data,r,c,x,y)&&values[x][y])used.add(values[x][y]);
+ return Array.from({length:size},(_,i)=>i+1).filter(n=>!used.has(n));
+}
+function countSolutions(data,limit=2,budget=80000){
+ const values=initialValues(data),size=data.settings.size;let total=0,visited=0,truncated=false;
+ function backtrack(){
+  if(total>=limit||truncated)return;
+  visited++;if(visited>budget){truncated=true;return;}
+  let slot=null,poss=null;
+  for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(!values[r][c]){
+   const opts=candidates(data,values,r,c);
+   if(!opts.length)return;
+   if(!poss||opts.length<poss.length){slot=[r,c];poss=opts;}
+  }
+  if(!slot){total++;return;}
+  const [r,c]=slot;for(const number of poss){values[r][c]=number;backtrack();values[r][c]=0;if(total>=limit||truncated)break;}
+ }
+ backtrack();return {count:total,truncated};
+}
+function validate(data){
+ if(!data||data.type!=="sudoku"||typeof data.title!=="string"||!data.title.trim()||!data.settings)return false;
+ const {size,boxRows,boxCols,requireUnique,maxHistory}=data.settings;
+ if(![4,6,9].includes(size)||!Number.isInteger(boxRows)||!Number.isInteger(boxCols)||boxRows<2||boxCols<2||boxRows*boxCols!==size||size%boxRows!==0||size%boxCols!==0||typeof requireUnique!=="boolean"||!Number.isInteger(maxHistory)||maxHistory<5||maxHistory>50)return false;
+ if(!Array.isArray(data.symbols)||data.symbols.length!==size||new Set(data.symbols).size!==size||data.symbols.some(s=>typeof s!=="string"||!s.trim()||s.length>3))return false;
+ if(!Array.isArray(data.givens)||data.givens.length!==size)return false;
+ let fixed=0;
+ for(const row of data.givens){if(!Array.isArray(row)||row.length!==size)return false;for(const value of row){if(!Number.isInteger(value)||value<0||value>size)return false;if(value)fixed++;}}
+ if(fixed===0||fixed===size*size||conflicts(data,data.givens).groups.length)return false;
+ const sol=countSolutions(data,2);if(sol.truncated||sol.count===0||requireUnique&&sol.count!==1)return false;
+ return true;
+}
+function validNotes(list,data){return Array.isArray(list)&&list.length<=data.settings.size&&new Set(list).size===list.length&&list.every((v,i)=>Number.isInteger(v)&&v>=1&&v<=data.settings.size&&(i===0||list[i-1]<v));}
+function sameCell(a,b){return a.value===b.value&&JSON.stringify(a.notes)===JSON.stringify(b.notes);}
+function recordOK(data,rec){
+ if(!rec||!inBounds(data,rec.r,rec.c)||data.givens[rec.r][rec.c]!==0)return false;
+ for(const name of ["before","after"]){
+  const x=rec[name];
+  if(!x||!Number.isInteger(x.value)||x.value<0||x.value>data.settings.size||!validNotes(x.notes,data))return false;
+ }
+ return !sameCell(rec.before,rec.after);
+}
+function isComplete(data,values){return values.every(row=>row.every(v=>v!==0))&&conflicts(data,values).groups.length===0;}
+function initialState(data){return {values:initialValues(data),notes:blankNotes(data),selected:{r:0,c:0},mode:"value",history:[],redo:[],solved:false};}
+function validState(s,data){
+ if(!s||typeof s!=="object"||Array.isArray(s)||!Array.isArray(s.values)||s.values.length!==data.settings.size||!Array.isArray(s.notes)||s.notes.length!==data.settings.size||!s.selected||!inBounds(data,s.selected.r,s.selected.c)||!["value","note"].includes(s.mode)||!Array.isArray(s.history)||!Array.isArray(s.redo)||s.history.length>data.settings.maxHistory||s.redo.length>data.settings.maxHistory||typeof s.solved!=="boolean")return false;
+ const n=data.settings.size;
+ for(let r=0;r<n;r++){
+  if(!Array.isArray(s.values[r])||s.values[r].length!==n||!Array.isArray(s.notes[r])||s.notes[r].length!==n)return false;
+  for(let c=0;c<n;c++){const v=s.values[r][c];
+   if(!Number.isInteger(v)||v<0||v>n||!validNotes(s.notes[r][c],data))return false;
+   if(data.givens[r][c]&&(v!==data.givens[r][c]||s.notes[r][c].length!==0))return false;
+  }
+ }
+ if(s.history.some(x=>!recordOK(data,x))||s.redo.some(x=>!recordOK(data,x)))return false;
+ if(s.history.length){
+  const rec=s.history[s.history.length-1];
+  if(!sameCell({value:s.values[rec.r][rec.c],notes:s.notes[rec.r][rec.c]},rec.after))return false;
+ }
+ if(s.redo.length){
+  const rec=s.redo[s.redo.length-1];
+  if(!sameCell({value:s.values[rec.r][rec.c],notes:s.notes[rec.r][rec.c]},rec.before))return false;
+ }
+ if(s.solved&&!isComplete(data,s.values))return false;
+ return true;
+}
+function transition(s,action,data){
+ if(action?.type==="restart")return {state:initialState(data),changed:true,persist:true,kind:"neutral",message:"Tabuleiro reiniciado; as pistas fixas foram preservadas."};
+ if(!validState(s,data))return {state:s,changed:false,kind:"warn",message:"Progresso inválido. Nenhuma casa foi alterada."};
+ if(action?.type==="select"){
+  if(!inBounds(data,action.r,action.c))return {state:s,changed:false,kind:"warn",message:"Casa fora da grade."};
+  if(s.selected.r===action.r&&s.selected.c===action.c)return {state:s,changed:false,kind:"neutral",message:"Casa já selecionada."};
+  return {state:{...s,selected:{r:action.r,c:action.c}},changed:true,persist:false,kind:"neutral",message:"Linha "+(action.r+1)+", coluna "+(action.c+1)+(data.givens[action.r][action.c]?" (pista fixa).":" (editável).")};
+ }
+ if(action?.type==="move"){
+  if(!["up","down","left","right"].includes(action.direction))return {state:s,changed:false,kind:"warn",message:"Direção inválida."};
+  const step={up:[-1,0],down:[1,0],left:[0,-1],right:[0,1]}[action.direction],r=s.selected.r+step[0],c=s.selected.c+step[1];
+  if(!inBounds(data,r,c))return {state:s,changed:false,kind:"neutral",message:"Você está na borda da grade."};
+  return transition(s,{type:"select",r,c},data);
+ }
+ if(action?.type==="hint"){
+  const {r,c}=s.selected;
+  if(data.givens[r][c])return {state:s,changed:false,kind:"neutral",message:"Esta casa é uma pista fixa. Escolha uma casa editável para ver candidatos."};
+  const nums=candidates(data,s.values,r,c);
+  return {state:s,changed:false,kind:"neutral",message:"Dica para linha "+(r+1)+", coluna "+(c+1)+": "+(nums.length?"valores permitidos pelas regras locais: "+nums.map(v=>data.symbols[v-1]).join(", ")+".":"nenhum candidato possível com os valores atuais; revise os conflitos.")+" A dica não revela o gabarito."};
+ }
+ if(action?.type==="check"){
+  if(s.solved)return {state:s,changed:false,kind:"good",message:"Sudoku já concluído. Você pode revisar as casas ou reiniciar."};
+  const problems=conflicts(data,s.values);
+  if(problems.groups.length)return {state:s,changed:false,kind:"warn",message:"Existem "+problems.groups.length+" grupos com símbolos repetidos. Corrija-os antes de conferir novamente."};
+  const filled=s.values.flat().filter(Boolean).length,total=data.settings.size**2;
+  if(filled!==total)return {state:s,changed:false,kind:"neutral",message:"Regras respeitadas até aqui, mas faltam "+(total-filled)+" casas. Continue preenchendo."};
+  return {state:{...s,solved:true},changed:true,persist:true,kind:"good",message:"Sudoku concluído! Todas as casas preenchidas, sem repetições em linhas, colunas ou blocos."};
+ }
+ if(s.solved)return {state:s,changed:false,kind:"neutral",message:"Atividade concluída. Valores e anotações estão em modo de revisão."};
+ if(action?.type==="mode"){
+  if(!["value","note"].includes(action.mode))return {state:s,changed:false,kind:"warn",message:"Modo desconhecido."};
+  if(s.mode===action.mode)return {state:s,changed:false,kind:"neutral",message:"O modo já está ativo."};
+  return {state:{...s,mode:action.mode},changed:true,persist:true,kind:"neutral",message:action.mode==="note"?"Modo anotações: os números alternam notas sem substituir o valor definitivo.":"Modo números: uma tecla substitui diretamente o valor existente."};
+ }
+ if(action?.type==="undo"||action?.type==="redo"){
+  const undo=action.type==="undo",source=undo?s.history:s.redo;
+  if(!source.length)return {state:s,changed:false,kind:"neutral",message:undo?"Não há movimento para desfazer.":"Não há movimento para refazer."};
+  const rec=source[source.length-1],snapshot=undo?rec.before:rec.after;
+  const values=s.values.map(row=>[...row]),notes=s.notes.map(row=>row.map(n=>[...n]));
+  values[rec.r][rec.c]=snapshot.value;notes[rec.r][rec.c]=[...snapshot.notes];
+  const history=(undo?s.history.slice(0,-1):[...s.history,rec].slice(-data.settings.maxHistory));
+  const redo=(undo?[...s.redo,rec].slice(-data.settings.maxHistory):s.redo.slice(0,-1));
+  const next={...s,values,notes,selected:{r:rec.r,c:rec.c},history,redo};
+  return {state:next,changed:true,persist:true,kind:"neutral",message:undo?"Última alteração desfeita.":"Alteração refeita."};
+ }
+ if(action?.type==="enter"||action?.type==="clear"){
+  const {r,c}=s.selected;
+  if(data.givens[r][c])return {state:s,changed:false,kind:"warn",message:"Esta casa contém uma pista fixa e não pode ser editada."};
+  const old={value:s.values[r][c],notes:[...s.notes[r][c]]},nextCell={value:old.value,notes:[...old.notes]};
+  if(action.type==="clear"){
+   if(nextCell.value)nextCell.value=0;
+   else nextCell.notes=[];
+  }else{
+   const number=action.value;
+   if(!Number.isInteger(number)||number<1||number>data.settings.size)return {state:s,changed:false,kind:"warn",message:"Símbolo inválido para esta grade."};
+   if(s.mode==="note"){
+    nextCell.notes=nextCell.notes.includes(number)?nextCell.notes.filter(v=>v!==number):[...nextCell.notes,number].sort((a,b)=>a-b);
+   }else{nextCell.value=number;nextCell.notes=[];}
+  }
+  if(sameCell(old,nextCell))return {state:s,changed:false,kind:"neutral",message:"Nenhuma alteração necessária."};
+  const values=s.values.map(row=>[...row]),notes=s.notes.map(row=>row.map(n=>[...n]));
+  values[r][c]=nextCell.value;notes[r][c]=[...nextCell.notes];
+  const record={r,c,before:old,after:nextCell};
+  const history=[...s.history,record].slice(-data.settings.maxHistory);
+  const next={...s,values,notes,history,redo:[]},problems=conflicts(data,values),here=problems.cells.get(id(r,c));
+  const kind=here?"warn":"neutral";
+  const message=action.type==="clear"?"Conteúdo apagado.":s.mode==="note"?"Anotação alternada sem trocar o valor definitivo.":"Símbolo "+data.symbols[action.value-1]+" colocado; substitui imediatamente o valor anterior.";
+  return {state:next,changed:true,persist:true,kind,message:message+(here?" Conflito nesta casa: "+[...here].join(", ")+".":"")};
+ }
+ return {state:s,changed:false,kind:"neutral",message:"Selecione uma casa e use o teclado ou a régua numérica."};
+}
+// End pure rules.
+function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
+function getState(){return JSON.parse(JSON.stringify(state));}
+function restoreState(value){if(!validState(value,DATA))return false;state=JSON.parse(JSON.stringify(value));render();return true;}
+function announce(message,kind="neutral"){
+ const f=$("feedback");f.className="feedback"+(kind==="warn"?" warn":kind==="good"?" good":"");
+ $("feedback-heading").textContent=kind==="warn"?"Verifique a grade":kind==="good"?"Muito bem!":"Orientação";
+ $("feedback-message").textContent=message;
+}
+function buildBoard(){
+ const board=$("board"),n=DATA.settings.size;
+ board.style.gridTemplateColumns="repeat("+n+",minmax(0,1fr))";
+ for(let r=0;r<n;r++)for(let c=0;c<n;c++){
+  const b=el("button","cell");b.type="button";b.dataset.r=String(r);b.dataset.c=String(c);
+  b.tabIndex=r===0&&c===0?0:-1;
+  if((c+1)%DATA.settings.boxCols===0&&c<n-1)b.classList.add("br");
+  if((r+1)%DATA.settings.boxRows===0&&r<n-1)b.classList.add("bb");
+  const big=el("span","digit"),small=el("span","notes");
+  b.append(big,small);board.append(b);buttons.push(b);
+ }
+}
+function conflictText(problems){
+ const list=$("conflicts");list.replaceChildren();
+ if(!problems.groups.length){list.append(el("li","","Nenhuma repetição detectada nas linhas, colunas ou blocos."));return;}
+ for(const group of problems.groups.slice(0,8)){
+  const coords=group.cells.map(k=>{const [r,c]=k.split(",").map(Number);return "L"+(r+1)+"C"+(c+1);}).join(" e ");
+  list.append(el("li","",DATA.symbols[group.value-1]+" repetido em "+group.name+": "+coords+"."));
+ }
+ if(problems.groups.length>8)list.append(el("li","","Mais "+(problems.groups.length-8)+" conflitos não listados."));
+}
+function render(){
+ if(!state||disposed)return;
+ const n=DATA.settings.size,problems=conflicts(DATA,state.values),filled=state.values.flat().filter(Boolean).length,total=n*n;
+ $("filled").textContent=filled+" / "+total;
+ $("conflict-count").textContent=String(problems.cells.size);
+ $("progress").setAttribute("aria-valuenow",String(filled));
+ $("progress-fill").style.width=100*filled/total+"%";
+ const {r:sr,c:sc}=state.selected;
+ for(const b of buttons){
+  const r=Number(b.dataset.r),c=Number(b.dataset.c),value=state.values[r][c],note=state.notes[r][c],fixed=!!DATA.givens[r][c];
+  const here=r===sr&&c===sc,peer=r===sr||c===sc||sameBox(DATA,r,c,sr,sc),reasons=problems.cells.get(id(r,c));
+  b.classList.toggle("given",fixed);b.classList.toggle("selected",here);b.classList.toggle("peer",peer);b.classList.toggle("conflict",!!reasons);
+  b.tabIndex=here?0:-1;
+  b.querySelector(".digit").textContent=value?DATA.symbols[value-1]:"";
+  const small=b.querySelector(".notes");small.replaceChildren();
+  for(const num of note)small.append(el("span","",DATA.symbols[num-1]));
+  b.setAttribute("aria-label","Linha "+(r+1)+", coluna "+(c+1)+": "+(value?DATA.symbols[value-1]:"vazia")+(fixed?", pista fixa, não editável":", editável")+(note.length?", anotações: "+note.map(v=>DATA.symbols[v-1]).join(", "):"")+(reasons?", conflito em "+[...reasons].join(", "):""));
+  b.setAttribute("aria-pressed",String(here));
+ }
+ const fixed=!!DATA.givens[sr][sc],locVal=state.values[sr][sc],locNotes=state.notes[sr][sc];
+ $("selection").textContent="Linha "+(sr+1)+", coluna "+(sc+1)+(fixed?" · pista fixa":" · editável");
+ $("selection-detail").textContent="Valor: "+(locVal?DATA.symbols[locVal-1]:"vazio")+". "+(locNotes.length?"Anotações: "+locNotes.map(v=>DATA.symbols[v-1]).join(", ")+".":"Sem anotações.")+(problems.cells.has(id(sr,sc))?" Atenção: há conflito nesta casa.":"");
+ $("note-mode").setAttribute("aria-pressed",String(state.mode==="note"));
+ $("note-mode").textContent=state.mode==="note"?"Anotações ativadas":"Ativar anotações";
+ for(const b of root.querySelectorAll("[data-number]"))b.disabled=!ready||fixed||state.solved;
+ $("clear").disabled=!ready||fixed||state.solved||(!locVal&&!locNotes.length);
+ $("undo").disabled=!ready||state.solved||!state.history.length;
+ $("redo").disabled=!ready||state.solved||!state.redo.length;
+ $("check").disabled=!ready||state.solved;
+ $("note-mode").disabled=!ready||state.solved;
+ $("reset").disabled=!ready;
+ $("victory").hidden=!state.solved;
+ conflictText(problems);
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),stamp=++versionStamp;
+ queue=queue.then(async()=>{
+  if(disposed||!remote||stamp!==versionStamp)return;
+  const existing=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const updated={...existing,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(updated)).length>12288){announce("Progresso acima de 12 KiB. Continue jogando, mas sem sincronização confirmada.","warn");return;}
+  remote=await progress.save({version:remote.version,location:"games/sudoku-laboratorio-padroes",data:updated});
+ }).catch(async()=>{
+  if(disposed)return;versionStamp++;
+  try{remote=await progress.load();
+   if(remote?.data?.[storageKey]&&restoreState(remote.data[storageKey]))announce("Outra sessão atualizou o jogo. Recuperei o progresso salvo.","warn");
+   else announce("Conflito de progresso: não foi possível conciliar o salvamento. Continue nesta página.","warn");
+  }catch(_){remote=null;announce("Sincronização indisponível; o jogo permanece funcional.","warn");}
+ });
+}
+function handleAction(action){
+ if(disposed||!ready)return;
+ const result=transition(state,action,DATA);
+ if(!result.changed){announce(result.message,result.kind);return;}
+ state=result.state;modified=true;render();
+ if(result.persist)save();
+ announce(result.message,result.kind);
+}
+function requestRestart(){
+ if(!state)return;
+ const changed=state.history.length||state.solved||state.values.some((row,r)=>row.some((value,c)=>!DATA.givens[r][c]&&value));
+ if(changed){$("reset-confirm").hidden=false;$("confirm-reset").focus({preventScroll:true});announce("O reinício apaga sua montagem e as anotações. Confirme ou cancele.","warn");}
+ else handleAction({type:"restart"});
+}
+function focusSelected(){
+ const {r,c}=state.selected;buttons[r*DATA.settings.size+c]?.focus({preventScroll:true});
+}
+function destroy(){disposed=true;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){announce("Sudoku inválido: confira a grade, os blocos, as pistas e a unicidade da solução.","warn");return;}
+ state=initialState(data);buildBoard();render();
+ if(progress)try{
+  const snapshot=await progress.load();if(disposed)return;remote=snapshot;
+  if(!modified&&snapshot.data?.[storageKey]&&restoreState(snapshot.data[storageKey]))announce("Progresso retomado sem mudar o foco. Continue o Sudoku.");
+  else announce("Escolha uma casa e digite 1 a 6. Nenhuma dica revela uma solução pronta.");
+ }catch(_){announce("Sem sincronização Moodle. Este HTML funciona independentemente.");}
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",event=>{
+ const b=event.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.r!==undefined){handleAction({type:"select",r:Number(b.dataset.r),c:Number(b.dataset.c)});return;}
+ if(b.dataset.number!==undefined){handleAction({type:"enter",value:Number(b.dataset.number)});return;}
+ if(b.id==="note-mode"){handleAction({type:"mode",mode:state.mode==="note"?"value":"note"});return;}
+ if(b.id==="clear"||b.id==="undo"||b.id==="redo"||b.id==="hint"||b.id==="check"){handleAction({type:b.id});return;}
+ if(b.id==="reset"){requestRestart();return;}
+ if(b.id==="confirm-reset"){$("reset-confirm").hidden=true;handleAction({type:"restart"});focusSelected();return;}
+ if(b.id==="cancel-reset"){$("reset-confirm").hidden=true;announce("Reinício cancelado. O progresso foi mantido.");$("reset").focus({preventScroll:true});return;}
+},{signal:controller.signal});
+$("board").addEventListener("keydown",event=>{
+ const b=event.target.closest("button[data-r]");if(!b||event.isComposing||event.key==="Process"||event.ctrlKey||event.metaKey||event.altKey)return;
+ const direction={ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRight:"right"}[event.key];
+ if(direction){event.preventDefault();const before=state.selected;handleAction({type:"move",direction});
+  if(state.selected.r!==before.r||state.selected.c!==before.c)focusSelected();return;}
+ if(event.key==="Backspace"||event.key==="Delete"){event.preventDefault();handleAction({type:"clear"});return;}
+ const index=DATA.symbols.indexOf(event.key);
+ if(index>=0){event.preventDefault();handleAction({type:"enter",value:index+1});}
+},{signal:controller.signal});
+$("board").addEventListener("paste",event=>{
+ const target=event.target.closest("button[data-r]");if(!target)return;
+ event.preventDefault();
+ const text=event.clipboardData?.getData("text")?.trim();
+ if(text&&DATA.symbols.includes(text))handleAction({type:"enter",value:DATA.symbols.indexOf(text)+1});
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>

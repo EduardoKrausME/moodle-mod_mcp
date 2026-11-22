@@ -149,3 +149,11 @@ node --test docs/pt_br/tests/quiz-battle.test.mjs
 ```
 
 A suíte verifica configuração solo/robô e relógio opcional, seleção única, clique duplo, embaralhamento, pontuação por combo, tempo expirado, teto de bônus, recomeço com confirmação, corrida entre clique e expiração, aba oculta, empate, placar após retomada, sessão sem áudio, acessibilidade e sincronização dos manifestos.
+
+Para o jogo 23 (Sudoku educativo - Laboratório dos padrões), execute:
+
+```bash
+node --test docs/pt_br/tests/sudoku.test.mjs
+```
+
+A suíte verifica tabuleiro de solução única, grades impossíveis e inválidas, pistas fixas, sobrescrita imediata, números e anotações, detecção de conflitos simultâneos, dicas de candidatos sem gabarito, limpeza, undo/redo, pilhas limitadas, navegação por setas, mobile, acessibilidade, conclusão formativa e sincronização dos JSONs.
