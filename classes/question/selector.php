@@ -28,6 +28,7 @@ use moodle_exception;
 
 /**
  * Preserve existing all/random/shuffle semantics, but draw from validated JSON.
+  * @package mod_mcp
  */
 final class selector {
     /**

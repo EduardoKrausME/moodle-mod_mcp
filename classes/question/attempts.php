@@ -34,6 +34,7 @@ use stdClass;
 
 /**
  * One server-owned JSON quiz attempt per student. No Question Engine or bank tables.
+  * @package mod_mcp
  */
 final class attempts {
     /**

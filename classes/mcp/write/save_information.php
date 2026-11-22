@@ -29,6 +29,7 @@ use mod_mcp\content\metadata;
 
 /**
  * ChatGPT/Claude write tool; the information JSON never goes through a question bank.
+  * @package mod_mcp
  */
 final class save_information extends activity_tool {
     /**

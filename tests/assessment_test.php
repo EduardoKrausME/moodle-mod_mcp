@@ -31,8 +31,14 @@ use mod_mcp\question\attempts;
 
 /** JSON assessment never uses Question Engine.
  * @covers \mod_mcp\question\attempts
+  * @package mod_mcp
  */
 final class assessment_test extends advanced_testcase {
+    /**
+     * test_json_grading_and_private_answers in the JSON activity API.
+     *
+     * @return mixed Result.
+     */
     public function test_json_grading_and_private_answers(): void {
         global $DB, $USER;
         $this->resetAfterTest();
@@ -72,6 +78,11 @@ final class assessment_test extends advanced_testcase {
             json_decode($state->userdatajson, true)["quiz"]["answers"][$qid]);
     }
 
+    /**
+     * test_nullable_activity_information in the JSON activity API.
+     *
+     * @return mixed Result.
+     */
     public function test_nullable_activity_information(): void {
         $this->assertNull(metadata::validate(null, null));
         $this->assertSame("{}", metadata::validate("custom", []));
@@ -79,6 +90,11 @@ final class assessment_test extends advanced_testcase {
             ["id" => "s1", "text" => "Satisfied?"]]]));
     }
 
+    /**
+     * test_invalid_random_configuration_is_rejected in the JSON activity API.
+     *
+     * @return mixed Result.
+     */
     public function test_invalid_random_configuration_is_rejected(): void {
         $this->expectException(\moodle_exception::class);
         metadata::validate("quiz", ["selection" => "random", "count" => 2,

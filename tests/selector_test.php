@@ -30,8 +30,14 @@ use mod_mcp\question\selector;
 /**
  * JSON subset and shuffle semantics.
  * @covers \mod_mcp\question\selector
+  * @package mod_mcp
  */
 final class selector_test extends advanced_testcase {
+    /**
+     * test_json_random_subset_is_unique_and_ordered_when_not_shuffled in the JSON activity API.
+     *
+     * @return mixed Result.
+     */
     public function test_json_random_subset_is_unique_and_ordered_when_not_shuffled(): void {
         $questions = array_map(static fn($n) => ["id" => "q" . $n], range(1, 10));
         for ($i = 0; $i < 10; $i++) {
@@ -45,6 +51,11 @@ final class selector_test extends advanced_testcase {
         }
     }
 
+    /**
+     * test_all_mode_keeps_all_json_questions in the JSON activity API.
+     *
+     * @return mixed Result.
+     */
     public function test_all_mode_keeps_all_json_questions(): void {
         $questions = [["id" => "q1"], ["id" => "q2"]];
         $this->assertSame($questions, selector::choose($questions, "all", 0, false));

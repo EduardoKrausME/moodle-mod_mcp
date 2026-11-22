@@ -30,6 +30,7 @@ use moodle_exception;
 
 /**
  * Existing API name and schema; stores all/random/shuffle in information JSON.
+  * @package mod_mcp
  */
 final class configure_questions extends activity_tool {
     /**

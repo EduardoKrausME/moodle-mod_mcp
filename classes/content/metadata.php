@@ -30,6 +30,7 @@ use stdClass;
 /**
  * Portable nullable JSON metadata, with a strict quiz schema.
  * Never give a learner the author-owned answer key.
+  * @package mod_mcp
  */
 final class metadata {
     /**
