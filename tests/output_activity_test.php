@@ -35,6 +35,36 @@ use moodle_url;
  */
 final class output_activity_test extends advanced_testcase {
     /**
+     * Runtime SDK injection must be inline and precede authored JavaScript.
+     */
+    public function test_sdk_is_embedded_before_authored_scripts(): void {
+        $html = '<!doctype html><html><head><script>window.authored = true;</script></head><body>Hi</body></html>';
+        $result = activity::inject_sdk($html);
+
+        $sdkposition = strpos($result, 'Object.defineProperty(window, "MoodleMCP"');
+        $authoredposition = strpos($result, "window.authored = true;");
+        $this->assertNotFalse($sdkposition);
+        $this->assertNotFalse($authoredposition);
+        $this->assertLessThan($authoredposition, $sdkposition);
+        $this->assertSame(0, strpos($result, "<!doctype html>"));
+        $this->assertStringNotContainsString('src="/mod/mcp/sdk.js"', $result);
+        $this->assertStringContainsString('type: "resize"', $result);
+        $this->assertSame(1, substr_count($result, 'Object.defineProperty(window, "MoodleMCP"'));
+        $this->assertStringContainsString('<script>window.authored = true;</script>', $result);
+    }
+
+    /**
+     * Keep a missing-head document's doctype when injecting the SDK.
+     */
+    public function test_sdk_injection_without_head_preserves_doctype(): void {
+        $html = '<!doctype html><html lang="pt-BR"><body><p>Test</p></body></html>';
+        $result = activity::inject_sdk($html);
+        $this->assertSame(0, strpos($result, "<!doctype html>"));
+        $this->assertLessThan(strpos($result, "<body>"), strpos($result, "MoodleMCP"));
+        $this->assertSame(1, substr_count($result, 'Object.defineProperty(window, "MoodleMCP"'));
+    }
+
+    /**
      * The empty activity has no connection for the current user.
      */
     public function test_empty_activity_without_connection(): void {

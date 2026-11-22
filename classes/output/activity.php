@@ -106,22 +106,41 @@ final class activity {
     }
 
     /**
+     * Inject the trusted SDK into iframe HTML without changing the stored revision.
+     *
+     * An inline bootstrap does not depend on a separate network request from
+     * the sandboxed srcdoc document.
+     *
+     * @param string $content Stored activity HTML.
+     * @return string HTML with the SDK injected before authored scripts.
+     */
+    public static function inject_sdk(string $content): string {
+        $sdk = file_get_contents(__DIR__ . "/../../sdk.js");
+        if ($sdk === false) {
+            throw new \coding_exception("Cannot read the mod_mcp sandbox SDK");
+        }
+        $bootstrap = "<script>\n" . $sdk . "\n</script>";
+
+        // Preserve the doctype even if the document has no head element.
+        foreach (["/<head\b[^>]*>/i", "/<html\b[^>]*>/i"] as $pattern) {
+            if (preg_match($pattern, $content, $matches, PREG_OFFSET_CAPTURE)) {
+                $position = $matches[0][1] + strlen($matches[0][0]);
+                return substr_replace($content, $bootstrap, $position, 0);
+            }
+        }
+        return $bootstrap . $content;
+    }
+
+    /**
      * Build view data. HTML content always remains in an isolated sandboxed iframe.
      */
     public static function page(stdClass $mcp, stdClass $cm, bool $canmanage, bool $preview): array {
         global $USER;
         $revisionid = $preview && $canmanage ? (int)$mcp->draftrevision : (int)$mcp->publishedrevision;
         $revision = service::get((int)$mcp->id, $revisionid);
-        // Initialise the iframe SDK before any authored JavaScript.
-        $content = $revision ? $revision->content : "";
-        if ($revision) {
-            $src = new moodle_url("/mod/mcp/sdk.js");
-            $bootstrap = '<script src="' . $src->out(false) . '"></script>';
-            $content = preg_replace('/(<head\b[^>]*>)/i', '$1' . $bootstrap, $content, 1, $count);
-            if (!$count) {
-                $content = $bootstrap . $content;
-            }
-        }
+        // Embed the trusted SDK at render time, before authored scripts.
+        // An external script can be unavailable inside an isolated srcdoc iframe.
+        $content = $revision ? self::inject_sdk($revision->content) : "";
         $hasconnection = $canmanage && !$revision && self::has_active_connection((int)$USER->id);
         return [
             "name" => format_string($mcp->name),
