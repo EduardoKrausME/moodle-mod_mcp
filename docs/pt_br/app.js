@@ -125,10 +125,29 @@ function showDialogView(mode){
  nodes.preview.hidden=mode!=="preview";
  nodes.codeView.hidden=mode!=="html";
  $("prompt-view").hidden=mode!=="prompt";
- $("toggle-code").textContent=mode==="html"?"Ver prévia":"Ver HTML";
- $("toggle-code").setAttribute("aria-expanded",String(mode==="html"));
- $("toggle-prompt").textContent=mode==="prompt"?"Ver prévia":"Ver comando";
- $("toggle-prompt").setAttribute("aria-expanded",String(mode==="prompt"));
+ for(const tab of $("dialog-tabs").querySelectorAll('[role="tab"]')){
+  const selected=tab.dataset.view===mode;
+  tab.setAttribute("aria-selected",String(selected));
+  tab.tabIndex=selected?0:-1;
+ }
+ $("copy-code").hidden=mode!=="html";
+ nodes.copyMessage.textContent="";
+}
+async function activateDialogTab(mode){
+ if(mode==="prompt"&&!selectedPrompt)return;
+ showDialogView(mode);
+ if(mode!=="html")return;
+ const requestedPath=openedPreviewPath;
+ nodes.code.textContent="Carregando HTML…";
+ try{
+  const html=await loadSource();
+  if(openedPreviewPath===requestedPath)nodes.code.textContent=html;
+ }catch(_){
+  if(openedPreviewPath===requestedPath){
+   nodes.code.textContent="HTML indisponível.";
+   if(!nodes.codeView.hidden)nodes.copyMessage.textContent="Não foi possível carregar o HTML.";
+  }
+ }
 }
 function closePreview(updateURL=true){
  const closingPath=openedPreviewPath;
@@ -162,7 +181,7 @@ function openPreview(item,updateURL=true){
  nodes.frame.src=item.path;
  selectedPrompt=typeof item.prompt==="string"?item.prompt:"";
  $("prompt-text").textContent=selectedPrompt;
- $("toggle-prompt").hidden=!selectedPrompt;
+ $("tab-prompt").hidden=!selectedPrompt;
  showDialogView("preview");
  nodes.copyMessage.textContent="";
  sourceLoaded=null;
@@ -210,12 +229,24 @@ async function copyText(text){
  try{area.select();if(!document.execCommand("copy"))throw Error("Cópia não permitida");}
  finally{area.remove();}
 }
-$("toggle-code").addEventListener("click",async()=>{
- if(!nodes.codeView.hidden){showDialogView("preview");return;}
- try{nodes.code.textContent=await loadSource();showDialogView("html");}
- catch(_){nodes.copyMessage.textContent="HTML indisponível.";}
+$("dialog-tabs").addEventListener("click",(event)=>{
+ const tab=event.target.closest('[role="tab"]');
+ if(tab&&!tab.hidden)activateDialogTab(tab.dataset.view);
 });
-$("toggle-prompt").addEventListener("click",()=>showDialogView($("prompt-view").hidden?"prompt":"preview"));
+$("dialog-tabs").addEventListener("keydown",(event)=>{
+ if(!["ArrowRight","ArrowLeft","Home","End"].includes(event.key))return;
+ const tabs=[...$("dialog-tabs").querySelectorAll('[role="tab"]:not([hidden])')];
+ const index=tabs.indexOf(document.activeElement);
+ if(index===-1)return;
+ event.preventDefault();
+ let next=index;
+ if(event.key==="ArrowRight")next=(index+1)%tabs.length;
+ if(event.key==="ArrowLeft")next=(index-1+tabs.length)%tabs.length;
+ if(event.key==="Home")next=0;
+ if(event.key==="End")next=tabs.length-1;
+ tabs[next].focus();
+ activateDialogTab(tabs[next].dataset.view);
+});
 $("copy-code").addEventListener("click",async()=>{
  try{await copyText(await loadSource());nodes.copyMessage.textContent="HTML copiado!";}
  catch(_){nodes.copyMessage.textContent="Não foi possível copiar. Use Ver HTML e selecione o código.";}
