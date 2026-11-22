@@ -62,6 +62,21 @@ final class activity_prompt_test extends \advanced_testcase {
             $this->assertStringNotContainsString("[[", $prompt);
         }
         $this->assertNotEmpty(get_string("promptpublishinstructions", "mcp"));
+        foreach (["copyprompt", "copypromptsucceeded", "copypromptfailed"] as $key) {
+            $this->assertNotEmpty(get_string($key, "mcp"));
+        }
+    }
+
+    /**
+     * The authoring selector must expose a copy action and an accessible status.
+     */
+    public function test_prompt_selector_has_copy_controls(): void {
+        $template = file_get_contents(__DIR__ . "/../templates/prompt_selector.mustache");
+        $this->assertNotFalse($template);
+        $this->assertStringContainsString("data-copy-prompt", $template);
+        $this->assertStringContainsString('aria-live="polite"', $template);
+        $this->assertStringContainsString("navigator.clipboard.writeText", $template);
+        $this->assertStringContainsString("document.execCommand('copy')", $template);
     }
 
     /**
