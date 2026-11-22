@@ -33,22 +33,11 @@ class backup_mcp_activity_structure_step extends backup_activity_structure_step 
     protected function define_structure() {
         $mcp = new backup_nested_element("mcp", ["id"],
             ["name", "intro", "introformat", "grade",
-                "questionselection", "questionsperattempt", "shufflequestions", "draftrevision",
+                "activitytype", "informationjson", "draftrevision",
                 "publishedrevision", "completioninteractive", "timecreated", "timemodified"]);
         $revisions = new backup_nested_element("revisions");
         $revision = new backup_nested_element("revision", ["id"],
             ["content", "sha256", "createdby", "timecreated"]);
-        $slots = new backup_nested_element("slots");
-        $slot = new backup_nested_element("slot", ["id"],
-            ["slot", "questionid", "questionversion", "maxmark", "active", "timecreated"]);
-        $mcp->add_child($revisions);
-        $revisions->add_child($revision);
-        $mcp->add_child($slots);
-        $slots->add_child($slot);
-        $mcp->set_source_table("mcp", ["id" => backup::VAR_ACTIVITYID]);
-        $revision->set_source_table("mcp_revisions", ["mcpid" => backup::VAR_PARENTID]);
-        $slot->set_source_table("mcp_slots", ["mcpid" => backup::VAR_PARENTID]);
-        $slot->annotate_ids("question", "questionid");
         $revision->annotate_ids("user", "createdby");
         // Assets use itemid 0 in Moodle File API, not an element named "0" in the backup XML.
         $mcp->annotate_files("mod_mcp", "assets", null);

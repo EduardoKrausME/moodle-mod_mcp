@@ -27,7 +27,7 @@ namespace mod_mcp\runtime;
 use completion_info;
 use context_module;
 use mod_mcp\question\attempts;
-use mod_mcp\question\slots;
+use mod_mcp\content\metadata;
 use moodle_exception;
 use stdClass;
 
@@ -121,8 +121,7 @@ final class api {
         }
         if ($current["mode"] === "interactive") {
             // An authored page may request completion, but cannot bypass a native assessment.
-            $slots = slots::active((int)$mcp->id);
-            if ($slots) {
+            if ($mcp->activitytype === "quiz") {
                 $attempt = attempts::own((int)$mcp->id, (int)$USER->id);
                 if (!$attempt || $attempt->status !== "finished") {
                     throw new moodle_exception("completionnotallowed", "mcp");
@@ -137,34 +136,20 @@ final class api {
     }
 
     /**
-     * The Question Engine still owns questions, attempt state and grades.
+     * The existing attempt APIs now use immutable question selections stored as JSON.
      */
     private static function attempt(stdClass $mcp): array {
         global $USER;
-        $active = (bool)slots::active((int)$mcp->id);
-        $record = attempts::own((int)$mcp->id, (int)$USER->id);
-        return [
-            "hasquestions" => $active,
-            "status" => $record ? $record->status : "notstarted",
-            "canstart" => $active && !$record,
-            "canfinish" => $record && $record->status === "inprogress",
-        ];
+        return attempts::status($mcp, attempts::own((int)$mcp->id, (int)$USER->id));
     }
 
     /**
-     * Validate the native field names before handing any response to Question Engine.
+     * A question response is a scalar or list of option identifiers.
      */
     private static function responses(array $payload): array {
         $responses = $payload["responses"] ?? null;
         if (!is_array($responses) || count($responses) > 200) {
             throw new moodle_exception("invaliddata");
-        }
-        foreach ($responses as $field => $value) {
-            if (!is_string($field) || strlen($field) > 120 ||
-                    !preg_match("/^q[0-9]+:[0-9]+_[a-zA-Z0-9_:-]+$/", $field) ||
-                    !is_string($value) || strlen($value) > 4096) {
-                throw new moodle_exception("invaliddata");
-            }
         }
         return $responses;
     }
@@ -184,6 +169,8 @@ final class api {
                     "cmid" => (int)$cm->id, "courseid" => (int)$cm->course,
                     "language" => current_language(),
                     "revision" => $revision,
+                    "type" => $mcp->activitytype,
+                    "information" => metadata::public_information($mcp),
                 ];
             case "course.getActivities":
                 return ["activities" => self::activities($cm)];
@@ -234,7 +221,9 @@ final class api {
                 return [
                     "attempt" => self::attempt($mcp),
                     "questions" => $attempt && $attempt->status === "inprogress" ?
-                        attempts::render($attempt) : [],
+                        array_map(static function($question, $rendered) {
+                            return $question + ["html" => $rendered["html"]];
+                        }, attempts::questions($attempt), attempts::render($attempt)) : [],
                 ];
             case "questions.submit":
                 require_capability("mod/mcp:submit", $context);

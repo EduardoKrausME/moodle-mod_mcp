@@ -47,7 +47,6 @@ class restore_mcp_activity_structure_step extends restore_activity_structure_ste
         $paths = [
             new restore_path_element("mcp", "/activity/mcp"),
             new restore_path_element("revision", "/activity/mcp/revisions/revision"),
-            new restore_path_element("slot", "/activity/mcp/slots/slot"),
         ];
         return $this->prepare_activity_structure($paths);
     }
@@ -78,21 +77,6 @@ class restore_mcp_activity_structure_step extends restore_activity_structure_ste
         $data->createdby = (int)$this->get_mappingid("user", $data->createdby, 0);
         $newid = $DB->insert_record("mcp_revisions", $data);
         $this->set_mapping("mcp_revision", $oldid, $newid);
-    }
-
-    /**
-     * Never attach a question ID from the original site without a valid remapping.
-     */
-    protected function process_slot($data) {
-        global $DB;
-        $data = (object)$data;
-        $questionid = (int)$this->get_mappingid("question", $data->questionid, 0);
-        if (!$questionid) {
-            return;
-        }
-        $data->mcpid = $this->newmcpid;
-        $data->questionid = $questionid;
-        $DB->insert_record("mcp_slots", $data);
     }
 
     /**

@@ -24,7 +24,7 @@
 
 use mod_mcp\output\activity;
 use mod_mcp\question\attempts;
-use mod_mcp\question\slots;
+use mod_mcp\content\metadata;
 
 require_once(__DIR__ . "/../../config.php");
 
@@ -63,7 +63,8 @@ if ($data["hascontent"]) {
 $assessment = ["hasassessment" => false];
 if (!$preview && $mcp->publishedrevision &&
         has_capability("mod/mcp:submit", $context) &&
-        slots::active((int)$mcp->id)) {
+        $mcp->activitytype === "quiz" &&
+        !empty(metadata::information($mcp)["questions"])) {
     $attempt = attempts::own((int)$mcp->id, (int)$USER->id);
     $assessment = [
         "hasassessment" => true,

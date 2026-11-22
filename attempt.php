@@ -52,8 +52,12 @@ if ($action === "start") {
     if (!$attempt) {
         throw new moodle_exception("invaliddata");
     }
-    // Only question-engine field names and sequence tokens can alter responses.
-    attempts::submit($mcp, $attempt, $_POST, $action === "finish");
+    // Never accept a client score or correctness declaration.
+    $responses = $_POST["responses"] ?? [];
+    if (!is_array($responses)) {
+        throw new moodle_exception("invaliddata");
+    }
+    attempts::submit($mcp, $attempt, $responses, $action === "finish");
 } else {
     throw new moodle_exception("invaliddata");
 }
