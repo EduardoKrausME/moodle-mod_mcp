@@ -144,6 +144,54 @@ test("sandbox SDK tracks the real height, including later growth and shrinkage",
     assert.equal(messages.at(-1).height, 720);
 });
 
+test("sandbox SDK shrinks even when html.scrollHeight reflects the old iframe viewport", () => {
+    const messages = [];
+    let changed;
+    const parent = {postMessage: (message) => messages.push(message)};
+    const doc = {
+        readyState: "complete",
+        documentElement: {scrollHeight: 8408, offsetHeight: 8408, clientHeight: 8408},
+        body: {scrollHeight: 8408, offsetHeight: 8408},
+        addEventListener: () => {}
+    };
+    const window = {
+        parent,
+        document: doc,
+        innerHeight: 8408,
+        addEventListener: () => {},
+        requestAnimationFrame: (callback) => callback(),
+        ResizeObserver: class {
+            constructor(callback) {
+                changed = callback;
+            }
+            observe() {}
+        },
+        MutationObserver: class {
+            observe() {}
+        }
+    };
+    vm.runInNewContext(sdk, {
+        window, setTimeout, clearTimeout, Map, Math, Object, Error, String, Number,
+        console: {log: () => {}}
+    });
+    assert.equal(messages[0].height, 8408);
+
+    // Browser keeps html.scrollHeight at the iframe's old height while the
+    // document's actual content and offset dimensions have already shrunk.
+    doc.documentElement.scrollHeight = 8408;
+    doc.documentElement.offsetHeight = 7525;
+    doc.body.scrollHeight = 7525;
+    doc.body.offsetHeight = 7525;
+    changed();
+    assert.equal(messages.at(-1).type, "resize");
+    assert.equal(messages.at(-1).height, 7525);
+
+    // Keep html.scrollHeight when it represents actual overflow, not the viewport.
+    doc.documentElement.scrollHeight = 9500;
+    changed();
+    assert.equal(messages.at(-1).height, 9500);
+});
+
 test("parent bridge resizes only its own iframe on valid measurements", () => {
     const events = {};
     const outgoing = [];

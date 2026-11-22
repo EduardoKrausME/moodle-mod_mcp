@@ -166,15 +166,23 @@
                 console.log("[mod_mcp/sdk] Medição ignorada: documentElement indisponível.");
                 return;
             }
+            // html.scrollHeight cannot be used as a minimum: it includes the iframe viewport
+            // itself, so a previously tall iframe would otherwise never become shorter.
+            // Only count html.scrollHeight when it exceeds the current viewport.
+            const viewportHeight = window.innerHeight || root.clientHeight || 0;
+            const htmlOverflowHeight = root.scrollHeight > viewportHeight ?
+                root.scrollHeight : 0;
             const height = Math.ceil(Math.max(
-                root.scrollHeight, root.offsetHeight,
-                body ? body.scrollHeight : 0, body ? body.offsetHeight : 0
+                root.offsetHeight, body ? body.scrollHeight : 0,
+                body ? body.offsetHeight : 0, htmlOverflowHeight
             ));
             console.log("[mod_mcp/sdk] Alturas medidas:", {
                 htmlScroll: root.scrollHeight,
                 htmlOffset: root.offsetHeight,
                 bodyScroll: body ? body.scrollHeight : null,
                 bodyOffset: body ? body.offsetHeight : null,
+                viewport: viewportHeight,
+                htmlOverflow: htmlOverflowHeight,
                 calculated: height,
                 previous: lastheight
             });
