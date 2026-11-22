@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Escolha o caminho - Missão Checagem: uma notícia viral na escola</title><style>:root{color-scheme:light;--bg:#eef0fa;--paper:#fffdfc;--ink:#273652;--muted:#576983;--line:#cdd8e7;--green:#355a8e;--pale:#e3ebf8;--amber:#946424;--sand:#fff1d8;--red:#a34c3d;--redpale:#fff0ea;--shadow:0 10px 30px #2a4e3614;font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0}main{max-width:1170px;margin:auto;padding:24px 17px 45px}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(29px,4vw,43px);line-height:1.13;margin-bottom:12px}h2{font-size:21px;line-height:1.3}h3{font-size:16px}p{line-height:1.65}.kicker{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);font-weight:850;margin-bottom:7px}.intro{font-size:14px;color:var(--muted);max-width:830px}.fine{font-size:11px;color:var(--muted)}.hero,.panel{border:1px solid var(--line);border-radius:17px;background:var(--paper);box-shadow:var(--shadow)}.hero{background:linear-gradient(110deg,var(--paper),#e7f0dc);padding:23px}.metrics{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0}.metric{min-width:127px;padding:9px 13px;background:var(--paper);border:1px solid var(--line);border-radius:11px}.metric small{display:block;color:var(--muted);font-size:11px}.metric strong{font-size:19px;font-variant-numeric:tabular-nums}.meter{background:#c7dccb;height:9px;border-radius:20px;overflow:hidden;margin-bottom:16px}.meter span{display:block;width:0;height:100%;background:linear-gradient(90deg,#398965,#c5a068);transition:width .2s}.layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(295px,.82fr);gap:16px;align-items:start}.column{display:grid;gap:16px;min-width:0}.panel{padding:19px;min-width:0}.chapter{font-size:12px;font-weight:850;letter-spacing:.5px;color:var(--green)}.picture{border:1px solid #b1cbb7;border-radius:12px;overflow:hidden;background:#dce9d8;margin:14px 0 9px}.picture svg{display:block;width:100%;height:auto;aspect-ratio:900/340}.alt{font-size:12px;color:var(--muted)}.story{font-size:15px;line-height:1.73}.arrival{background:var(--pale);border:1px solid #abd0b4;border-radius:11px;padding:13px;margin:13px 0}.arrival strong{display:block;font-size:13px}.arrival p{font-size:12px;margin:7px 0}.choices{display:grid;gap:9px;margin:12px 0}.choice{width:100%;min-height:58px;display:flex;justify-content:space-between;align-items:center;gap:12px;border:2px solid #a5c4aa;background:#fff;border-radius:12px;padding:13px;text-align:left;color:var(--ink);font-size:13px;line-height:1.5;font-weight:770;cursor:pointer}.choice:hover:not(:disabled){background:var(--pale);border-color:var(--green)}.arrow{font-size:22px}.button{background:var(--green);color:#fff;border:1px solid var(--green);border-radius:10px;font-size:12px;font-weight:780;min-height:44px;padding:9px 14px;cursor:pointer}.button.secondary{background:var(--paper);color:var(--green)}.button.warn{background:var(--sand);color:var(--amber);border-color:#d5b57c}.button.danger{background:var(--paper);color:var(--red);border-color:#d09f96}.button:hover:not(:disabled){filter:brightness(.93)}button:disabled{opacity:.57;cursor:not-allowed}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #d99b36;outline-offset:3px}.controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:13px}.rule{border-top:1px solid var(--line);padding-top:15px;margin-top:15px}.reflection{background:var(--sand);border:1px solid #d8c18c;border-radius:11px;padding:12px;margin-top:12px;font-size:13px}.feedback{background:var(--pale);border:1px solid #b2d2b7;border-radius:11px;padding:13px;min-height:75px;margin-top:13px;font-size:13px;line-height:1.65}.feedback strong{display:block;margin-bottom:4px}.feedback.warn{background:var(--sand);border-color:#d6bb85}.feedback.bad{background:var(--redpale);border-color:#dab1a4}.ending{background:linear-gradient(110deg,var(--pale),var(--sand));border:1px solid #b0cfae;border-radius:12px;padding:15px;margin-top:13px}.ending h3{font-size:19px}.ending p,.ending li{font-size:12px}.ending li{margin-bottom:7px}.history,.archives{padding:0;margin:10px 0;list-style:none;display:grid;gap:9px}.history li,.archives li{border:1px solid var(--line);background:#f5f9f0;border-radius:11px;padding:12px}.history strong,.archives strong{display:block;font-size:13px}.history p,.archives p{font-size:12px;color:var(--muted);margin:6px 0}.smallbutton{background:var(--paper);color:var(--green);border:1px solid var(--green);border-radius:8px;font-size:11px;font-weight:770;min-height:38px;padding:7px 10px;cursor:pointer}.review{background:var(--pale);border:1px solid #abd0b3;border-radius:11px;padding:13px;margin-top:12px;font-size:12px}.review strong{display:block}.review p{margin:8px 0}.confirm{background:var(--sand);border:1px solid #d6b98c;border-radius:11px;padding:12px;margin-top:13px;font-size:12px}.confirm p{font-size:12px}.empty{font-size:12px;color:var(--muted)}.error{border:2px solid var(--red);background:var(--redpale);color:var(--red);padding:16px;border-radius:12px}[hidden]{display:none!important}
+@media(max-width:940px){.layout{grid-template-columns:1fr}}@media(max-width:550px){main{padding:11px 9px 28px}.panel,.hero{padding:14px}.picture svg{min-height:155px}.metric{min-width:105px;padding:8px 10px}.controls .button{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-contrast:more){.choice,.button,.history li,.smallbutton{border-width:3px}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#162a22;--paper:#253e31;--ink:#edf8ef;--muted:#c6d9c8;--line:#587763;--green:#b7edc6;--pale:#365a43;--amber:#fbd99d;--sand:#54452f;--red:#ffb3a9;--redpale:#553b36;--shadow:0 12px 28px #0004}.hero{background:linear-gradient(110deg,#253e31,#334c37)}.choice{background:#2d4b39;color:var(--ink);border-color:#6e937b}.choice:hover:not(:disabled){background:var(--pale)}.button{color:#183c28}.button.secondary,.button.danger{background:var(--paper);color:var(--green)}.button.danger{color:var(--red)}.button.warn{background:var(--sand);color:var(--amber)}.history li,.archives li{background:#2c4b38}.smallbutton{background:var(--paper);color:var(--green)}.feedback,.review{background:var(--pale)}.feedback.warn,.confirm,.reflection{background:var(--sand)}.feedback.bad{background:var(--redpale)}.ending{background:linear-gradient(110deg,#34573e,#58472d)}}</style></head><body><main id="game"><section class="hero"><p class="kicker">Jogo 29 · História com decisões</p><h1>Escolha o caminho: Missão Checagem</h1>
+<p class="intro">Uma notícia sem data se espalha na escola. Investigue a origem, escute as dúvidas e decida como comunicar o que realmente foi verificado. Cada escolha tem consequências e existem três finais pedagógicos, sem classificação automática como certo ou errado.</p><p class="fine">Releia escolhas em modo somente leitura ou volte com confirmação para alterar apenas parte da tentativa atual. Percursos finalizados permanecem em um histórico separado. Sem cronômetro nem nota oficial.</p></section>
+<div class="metrics"><div class="metric"><small>Decisões atuais</small><strong id="count-decisions">0 / até 6</strong></div><div class="metric"><small>Percursos completos</small><strong id="count-archives">0</strong></div><div class="metric"><small>Finais diferentes</small><strong id="count-endings">0 / 3</strong></div><div class="metric"><small>Reflexões lidas</small><strong id="count-reflections">0</strong></div></div>
+<div id="meter" class="meter" role="progressbar" aria-label="Avanço aproximado no percurso atual" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><span id="meter-fill"></span></div>
+<div class="layout"><section class="panel" aria-labelledby="scene-title"><p id="scene-kicker" class="chapter"></p><h2 id="scene-title" tabindex="-1"></h2><div class="picture"><svg id="scene-art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" role="img" aria-labelledby="art-title art-desc">
+<title id="art-title">Uma informação circula na escola</title>
+<desc id="art-desc">Quatro cenas ilustradas originais e alternativas, descritas em texto, sobre uma mensagem viral, diálogo, verificação de fontes e comunicação final.</desc>
+<defs>
+<linearGradient id="check-bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#dbe6ff"/><stop offset="1" stop-color="#f1e8fa"/></linearGradient>
+<linearGradient id="check-screen" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#415d9b"/><stop offset="1" stop-color="#263e73"/></linearGradient>
+</defs>
+<!-- Cena 1: mensagem sem fonte em tela de celular e cartões -->
+<g data-visual="before">
+<rect width="900" height="340" fill="url(#check-bg)"/>
+<circle cx="720" cy="75" r="56" fill="#f4dda9" opacity=".5"/>
+<path d="M0 275Q190 235 370 274T900 261V340H0Z" fill="#c9d8ef"/>
+<rect x="282" y="32" width="300" height="290" rx="30" fill="#334970" stroke="#213453" stroke-width="9"/>
+<rect x="300" y="60" width="264" height="228" rx="13" fill="#fcfcff"/>
+<rect x="326" y="82" width="212" height="32" rx="8" fill="#9fb7e5"/>
+<text x="432" y="103" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="bold" fill="#2a4779">MENSAGEM RECEBIDA</text>
+<rect x="324" y="136" width="212" height="100" rx="11" fill="#fff0d9" stroke="#e3bf8c" stroke-width="3"/>
+<path d="M350 162H509M350 181H494M350 201H455" stroke="#c4a87e" stroke-width="8" stroke-linecap="round"/>
+<circle cx="507" cy="215" r="21" fill="#e9a25f"/>
+<text x="507" y="223" font-family="sans-serif" font-size="23" font-weight="bold" text-anchor="middle" fill="#fff">?</text>
+<path d="M197 135H272M620 177H704" stroke="#6988b5" stroke-width="7" stroke-dasharray="8 11"/>
+<rect x="66" y="85" width="133" height="111" rx="15" fill="#f8fafd" stroke="#93a9ca" stroke-width="6"/>
+<path d="M89 113H175M89 134H153M89 156H169" stroke="#c0cfe0" stroke-width="7" stroke-linecap="round"/>
+<rect x="702" y="128" width="144" height="105" rx="14" fill="#f8fafd" stroke="#93a9ca" stroke-width="6"/>
+<path d="M724 156H825M724 179H806M724 203H779" stroke="#c0cfe0" stroke-width="7" stroke-linecap="round"/>
+<text x="448" y="310" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#dae9f7">Sem data e sem origem identificada</text>
+</g>
+<!-- Cena 2: pessoas discutem dúvidas em torno de uma mesa -->
+<g data-visual="people" display="none">
+<rect width="900" height="340" fill="#e8ecfa"/>
+<rect y="271" width="900" height="69" fill="#c5cce3"/>
+<rect x="164" y="160" width="574" height="116" rx="36" fill="#b0c6dc" stroke="#829fb9" stroke-width="8"/>
+<rect x="208" y="183" width="486" height="72" rx="18" fill="#fdfcfa"/>
+<rect x="348" y="192" width="207" height="56" rx="6" fill="#e7f0f3"/>
+<path d="M371 210H530M371 228H483" stroke="#9cb9c7" stroke-width="7" stroke-linecap="round"/>
+<g>
+<circle cx="194" cy="102" r="47" fill="#ae805f"/><path d="M128 178Q135 132 194 134Q250 133 259 181V231H128Z" fill="#557aa4"/>
+<circle cx="709" cy="102" r="47" fill="#886951"/><path d="M643 181Q653 137 709 133Q770 134 775 183V232H643Z" fill="#4a8a84"/>
+<circle cx="371" cy="65" r="39" fill="#b88967"/><path d="M315 133Q319 97 371 97Q422 99 428 133V157H315Z" fill="#8b6ca4"/>
+<circle cx="535" cy="66" r="39" fill="#947352"/><path d="M480 131Q487 100 535 98Q584 99 591 132V160H480Z" fill="#c19165"/>
+</g>
+<path d="M270 73Q285 42 317 53M584 66Q617 43 644 71" fill="none" stroke="#7289ae" stroke-width="5" stroke-linecap="round"/>
+<rect x="48" y="38" width="121" height="44" rx="13" fill="#fff6e7" stroke="#d4b780" stroke-width="4"/>
+<text x="109" y="66" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#786039">E a fonte?</text>
+<rect x="724" y="34" width="132" height="44" rx="13" fill="#fff6e7" stroke="#d4b780" stroke-width="4"/>
+<text x="790" y="61" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#786039">É atual?</text>
+</g>
+<!-- Cena 3: quadro de comparação de evidências -->
+<g data-visual="plan" display="none">
+<rect width="900" height="340" fill="#ddeaf4"/>
+<rect x="78" y="20" width="746" height="299" rx="17" fill="#fdfefa" stroke="#89a5bd" stroke-width="8"/>
+<rect x="112" y="43" width="676" height="48" rx="8" fill="#4d719a"/>
+<text x="450" y="73" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="bold" fill="#fff">CHECAR ORIGEM · DATA · CONTEXTO</text>
+<rect x="113" y="110" width="295" height="177" rx="11" fill="#f7e9e4" stroke="#d6b1a3" stroke-width="4"/>
+<rect x="491" y="110" width="296" height="177" rx="11" fill="#e5f4ed" stroke="#a4ccb9" stroke-width="4"/>
+<text x="260" y="140" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="bold" fill="#8f574b">RECORTE</text>
+<text x="639" y="140" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="bold" fill="#2f715c">REGISTRO COMPLETO</text>
+<path d="M143 169H371M143 191H332M143 213H348" stroke="#d3b4ab" stroke-width="9" stroke-linecap="round"/>
+<path d="M525 169H753M525 191H724M525 213H740" stroke="#a4cbbd" stroke-width="9" stroke-linecap="round"/>
+<circle cx="348" cy="254" r="16" fill="#d58a6d"/><text x="348" y="260" font-family="sans-serif" text-anchor="middle" font-size="19" font-weight="bold" fill="#fff">?</text>
+<circle cx="739" cy="254" r="16" fill="#4b9976"/><path d="M730 254l6 6 12-13" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+<path d="M422 186H476M462 173l14 13-14 13" fill="none" stroke="#6b87a9" stroke-width="6" stroke-linecap="round"/>
+</g>
+<!-- Cena 4: comunicação baseada em fontes -->
+<g data-visual="final" display="none">
+<rect width="900" height="340" fill="#e0f2eb"/>
+<circle cx="743" cy="66" r="41" fill="#f3d7a1"/>
+<path d="M0 276Q222 249 414 281T900 267V340H0Z" fill="#b9d7ca"/>
+<rect x="153" y="57" width="582" height="237" rx="16" fill="#fdfefd" stroke="#719e97" stroke-width="9"/>
+<rect x="170" y="73" width="548" height="45" rx="7" fill="#3f8478"/>
+<text x="444" y="103" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="bold" fill="#fff">INFORMAÇÃO VERIFICADA</text>
+<rect x="196" y="145" width="233" height="123" rx="10" fill="#e8f0f8"/>
+<path d="M220 177H403M220 198H387M220 220H380M220 240H332" stroke="#a5bed2" stroke-width="8" stroke-linecap="round"/>
+<path d="M495 163L555 184V219Q548 250 495 269Q443 249 435 219V184Z" fill="#c8ecdd" stroke="#6fae92" stroke-width="7"/>
+<path d="M468 216l21 19 38-40" fill="none" stroke="#348566" stroke-width="10" stroke-linecap="round"/>
+<rect x="579" y="153" width="104" height="38" rx="8" fill="#e7f3df"/>
+<text x="631" y="178" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#42785c">FONTE</text>
+<path d="M583 220H676M583 239H654M583 258H671" stroke="#a9c6b6" stroke-width="7" stroke-linecap="round"/>
+</g>
+</svg></div><p id="scene-alt" class="alt"></p><p id="scene-text" class="story"></p>
+<div id="arrival" class="arrival" hidden><strong>Consequência da decisão anterior</strong><p id="arrival-consequence"></p><p id="arrival-choice" class="alt"></p></div>
+<div id="decision-area"><h3 class="rule">O que você decide?</h3><div id="options" class="choices" aria-label="Escolhas disponíveis na cena atual"></div></div>
+<div id="ending-area" class="ending" hidden><h3 id="ending-title"></h3><p id="ending-summary"></p><ul id="ending-criteria"></ul><p id="ending-question"></p></div>
+<div class="controls"><button id="hint" class="button warn" type="button">Ver contexto para refletir</button><button id="back" class="button secondary" type="button" hidden>Voltar à decisão anterior</button><button id="restart" class="button danger" type="button">Iniciar novo percurso</button></div>
+<div id="reflection" class="reflection" hidden><strong>Para pensar</strong><p id="reflection-text"></p></div>
+<div id="back-confirm" class="confirm" role="group" aria-label="Confirmação de retorno" hidden><p id="back-text"></p><div class="controls"><button id="back-yes" class="button warn" type="button">Confirmar retorno</button><button id="back-no" class="button secondary" type="button">Cancelar</button></div></div>
+<div id="restart-confirm" class="confirm" role="group" aria-label="Confirmação de novo percurso" hidden><p>Iniciar um novo percurso apaga apenas as decisões e reflexões atuais. Até oito percursos completos permanecem registrados. Confirma?</p><div class="controls"><button id="restart-yes" class="button danger" type="button">Iniciar novo percurso</button><button id="restart-no" class="button secondary" type="button">Cancelar</button></div></div>
+<div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"><strong id="feedback-title">Orientação</strong><span id="feedback-text">Leia a situação e escolha como iniciar.</span></div></section>
+<div class="column"><section class="panel"><h2>Histórico da tentativa</h2><p class="alt">Rever é somente leitura. Refazer a partir de uma decisão exige confirmação e remove apenas as escolhas posteriores do percurso atual.</p><ol id="history" class="history" aria-label="Decisões e consequências atuais"></ol>
+<div id="review" class="review" hidden><strong id="review-title"></strong><p id="review-context"></p><p id="review-choice"></p><p id="review-consequence"></p><button id="review-close" type="button" class="button secondary">Fechar revisão</button></div></section>
+<section class="panel"><h2>Percursos concluídos</h2><p class="alt">Cada final alcançado fica registrado como uma tentativa independente. O histórico guarda os oito percursos completos mais recentes.</p><ol id="archives" class="archives" aria-label="Percursos completos e finais anteriores"></ol><p class="fine">O jogo funciona sem ponte MoodleMCP, mas nesse caso o progresso não está sincronizado com o Moodle. O resultado no navegador não equivale a nota acadêmica.</p></section></div></div></main><script>(function branchingStory(){
+"use strict";
+const DATA={"type":"branching_story","title":"Escolha o caminho - Missão Checagem: uma notícia viral na escola","start":"briefing","settings":{"maxDecisions":6,"maxArchives":8},"scenes":[{"id":"briefing","title":"Uma mensagem que se espalha","kicker":"Capítulo 1 · A situação","text":"Uma mensagem circula entre turmas afirmando que as aulas serão suspensas amanhã. Ela traz uma imagem recortada, sem data visível, e já está sendo compartilhada como fato. Você participa do grupo de comunicação da escola. O que faz primeiro?","visual":"before","reflection":"Uma afirmação que parece urgente ainda precisa de contexto, data e fonte verificável.","options":[{"id":"check-origin","label":"Investigar a origem e a data do comunicado","next":"origem","consequence":"A busca pela fonte ajuda a entender de onde a informação veio e se é atual."},{"id":"map-reach","label":"Entender o alcance e a preocupação das pessoas","next":"impacto","consequence":"Você identifica dúvidas reais dos estudantes, mas ainda precisa verificar a afirmação antes de comunicá-la como fato."}]},{"id":"origem","title":"Uma imagem sem contexto","kicker":"Capítulo 2 · Verificação","text":"Alguém enviou uma captura de tela de um suposto comunicado oficial. A imagem está cortada, e não há endereço, assinatura ou data visível.","visual":"plan","reflection":"Uma captura de tela pode circular fora de contexto. Procure a publicação original e compare detalhes.","options":[{"id":"find-original","label":"Procurar o comunicado original e conferir a data","next":"evidencias","consequence":"A equipe começa a diferenciar documentos verificáveis de imagens sem procedência."},{"id":"trust-crop","label":"Aceitar a captura porque vários colegas a enviaram","next":"atalho","consequence":"A repetição da mensagem aumenta sua visibilidade, mas não prova que ela seja autêntica."}]},{"id":"impacto","title":"Dúvidas por toda a escola","kicker":"Capítulo 2 · Escuta","text":"Algumas famílias estão mudando compromissos por causa da mensagem. Estudantes perguntam a professores diferentes, que ainda não receberam uma orientação comum.","visual":"people","reflection":"Ouvir as dúvidas permite comunicar melhor, mas não substitui checar a alegação.","options":[{"id":"collect-doubts","label":"Registrar as perguntas e buscar uma confirmação verificável","next":"evidencias","consequence":"As dúvidas são organizadas, e a equipe passa a investigar a alegação sem ampliar o boato."},{"id":"share-reassure","label":"Repassar a mensagem para tranquilizar quem pergunta","next":"atalho","consequence":"O compartilhamento pode aumentar a confusão se o conteúdo estiver incorreto ou desatualizado."}]},{"id":"atalho","title":"O custo de uma conclusão apressada","kicker":"Capítulo 3 · Correção de rota","text":"A mensagem foi repetida por mais pessoas, mas surgiram versões com horários diferentes. A equipe percebe que a circulação de várias cópias não demonstra autenticidade.","visual":"people","reflection":"Quando aparecem versões conflitantes, uma revisão explícita é melhor que defender uma suposição.","options":[{"id":"recheck","label":"Reabrir a verificação e procurar evidências independentes","next":"evidencias","consequence":"Você interrompe uma conclusão precipitada e procura evidências mais confiáveis."},{"id":"post-warning","label":"Publicar um alerta genérico sem confirmar a informação","next":"publicacao","consequence":"A intenção é avisar rápido, mas o aviso pode alimentar novas interpretações sem esclarecer os fatos."}]},{"id":"evidencias","title":"O que realmente se sabe?","kicker":"Capítulo 3 · Evidências","text":"A equipe encontrou uma página oficial com calendário atualizado e a captura completa de um comunicado antigo. Ainda é preciso decidir como documentar a checagem e responder às pessoas.","visual":"plan","reflection":"Evidência forte depende de origem, contexto e atualização, e vale registrar o que permanece incerto.","options":[{"id":"document-check","label":"Conferir datas, fontes e o contexto de cada registro","next":"fontes","consequence":"A equipe prepara uma explicação rastreável, que outros podem conferir."},{"id":"talk-first","label":"Ouvir a comunidade e organizar a comunicação com cuidado","next":"dialogo","consequence":"Você melhora a linguagem e identifica as dúvidas mais urgentes; a mensagem ainda precisa apoiar-se nas evidências encontradas."}]},{"id":"fontes","title":"Rastreabilidade das fontes","kicker":"Capítulo 4 · Análise","text":"Os registros mostram que a imagem foi recortada de um anúncio antigo. O calendário atualizado não indica suspensão para amanhã. Como preparar uma resposta responsável?","visual":"plan","reflection":"Explicações verificáveis mostram de onde vêm as conclusões e reconhecem os limites dos registros.","options":[{"id":"explain-method","label":"Preparar uma resposta com fontes e indicação da data","next":"acompanhamento","consequence":"A comunicação poderá apresentar evidências e o método usado para chegar à conclusão."},{"id":"short-response","label":"Criar uma resposta muito curta e deixar as referências para depois","next":"publicacao","consequence":"A mensagem será rápida, mas algumas pessoas ainda poderão ter dúvidas sobre a origem da conclusão."}]},{"id":"dialogo","title":"Como falar com públicos diferentes?","kicker":"Capítulo 4 · Comunicação","text":"Há dúvidas entre estudantes, responsáveis e funcionários. Um único aviso cheio de termos técnicos pode não ser suficiente, mas versões contraditórias também criariam problemas.","visual":"people","reflection":"Comunicação responsável usa linguagem clara sem trocar precisão por popularidade.","options":[{"id":"adapt-explain","label":"Escrever uma explicação acessível com a fonte identificada","next":"acompanhamento","consequence":"A equipe combina clareza, referência verificável e respostas às dúvidas mais comuns."},{"id":"announce-fast","label":"Enviar um aviso breve sem explicar a evidência","next":"publicacao","consequence":"O aviso chega rapidamente, mas o público ainda precisa de contexto para avaliar o que foi afirmado."}]},{"id":"acompanhamento","title":"E se houver novas versões?","kicker":"Capítulo 5 · Continuidade","text":"Um comunicado cuidadoso está quase pronto. A equipe também percebe que o boato pode voltar a circular com outra imagem. É preciso decidir como acompanhar dúvidas e correções.","visual":"final","reflection":"Uma correção útil inclui meios de acompanhar mudanças e resolver novas perguntas.","options":[{"id":"open-dialogue","label":"Estabelecer um canal de dúvidas e revisões públicas","next":"colaborativo","consequence":"A comunidade ganha um ponto de referência para esclarecimentos, embora isso exija responsáveis e acompanhamento contínuo."},{"id":"publish-updates","label":"Publicar a checagem e programar atualizações verificáveis","next":"gradual","consequence":"A escola define etapas de divulgação e revisão, mas cada atualização precisará de critérios e responsáveis."}]},{"id":"publicacao","title":"O aviso já está circulando","kicker":"Capítulo 5 · Avaliação","text":"O aviso curto foi divulgado. Alguns estudantes entenderam que há suspensão; outros, que não há. A falta de referências e contexto provocou novas perguntas.","visual":"final","reflection":"Mesmo uma mensagem bem-intencionada pode produzir leituras diferentes quando omite a fundamentação.","options":[{"id":"correct-publicly","label":"Publicar uma correção fundamentada e acompanhar dúvidas","next":"gradual","consequence":"A equipe reconhece limitações do primeiro aviso e inicia uma comunicação verificável por etapas."},{"id":"leave-open","label":"Manter o aviso sem indicar fontes nem quem fará a atualização","next":"pendente","consequence":"A informação continua circulando sem uma referência clara para confirmar, corrigir ou atualizar a mensagem."}]},{"id":"colaborativo","title":"Uma comunidade que verifica","kicker":"Final do percurso","text":"A escola publica a checagem com datas e fontes verificáveis, abre espaço para perguntas e assume a tarefa de esclarecer novas versões.","visual":"final","ending":"valid","summary":"Verificação compartilhada: fontes e diálogo aumentam a transparência, mas precisam de manutenção.","criteria":["A origem e a data dos registros podem ser conferidas.","Dúvidas são acolhidas sem transformar boatos em fatos.","A responsabilidade por responder e atualizar fica definida."],"question":"Como incluir pessoas que não acompanham os canais digitais da escola?","options":[]},{"id":"gradual","title":"Uma correção em etapas","kicker":"Final do percurso","text":"A informação é esclarecida com fontes, e a equipe planeja avisos e revisões posteriores. A comunicação melhora à medida que as dúvidas são registradas.","visual":"final","ending":"valid","summary":"Comunicação progressiva: um final válido quando atualizações e responsáveis são verificáveis.","criteria":["A correção apresenta as evidências disponíveis.","Prazos e responsáveis pelas atualizações precisam estar claros.","É importante evitar que versões antigas continuem circulando sem contexto."],"question":"Como garantir que uma atualização chegue a quem recebeu a primeira mensagem?","options":[]},{"id":"pendente","title":"Um aviso que deixou dúvidas","kicker":"Final do percurso","text":"O aviso continua circulando, mas ninguém definiu um procedimento de correção. Parte da comunidade ainda não sabe onde confirmar a informação. A história não julga você; ela ajuda a examinar essa consequência.","visual":"final","ending":"valid","summary":"Comunicação com pendências: rapidez isolada não garante que as pessoas recebam informação verificável.","criteria":["A intenção de avisar pode ser legítima, mas não substitui evidência.","A ausência de fontes dificulta conferir a informação.","Sem acompanhamento, mensagens antigas podem permanecer enganosas."],"question":"Qual decisão anterior você mudaria para tornar essa comunicação verificável?","options":[]}]},root=document.getElementById("game"),$=id=>root.querySelector("#"+id);
+const controller=new AbortController(),bridge=window.MoodleMCP&&window.MoodleMCP.progress,progress=bridge&&typeof bridge.load==="function"&&typeof bridge.save==="function"?bridge:null;
+const storageKey="branchingStoryMissaoChecagemV1",location="games/branching-story-missao-checagem";
+let state=initialState(DATA),ready=false,disposed=false,remote=null,modified=false,saveQueue=Promise.resolve(),serial=0,reviewIndex=null,rewindIndex=null;
+// PURE_START
+function sceneMap(d){return new Map(d.scenes.map(s=>[s.id,s]));}
+function validate(d){
+ if(!d||d.type!=="branching_story"||typeof d.title!=="string"||!d.title.trim()||typeof d.start!=="string"||
+ !d.settings||!Number.isInteger(d.settings.maxDecisions)||d.settings.maxDecisions<3||d.settings.maxDecisions>12||
+ !Number.isInteger(d.settings.maxArchives)||d.settings.maxArchives<1||d.settings.maxArchives>10||
+ !Array.isArray(d.scenes)||d.scenes.length<8||d.scenes.length>30)return false;
+ const ids=new Set(),optionIds=new Set(),map=new Map();let endings=0;
+ for(const s of d.scenes){
+  if(!s||typeof s.id!=="string"||!/^[a-z][a-z0-9-]*$/.test(s.id)||ids.has(s.id)||
+   !["title","kicker","text","visual"].every(k=>typeof s[k]==="string"&&s[k].trim())||
+   !["before","people","plan","final"].includes(s.visual)||!Array.isArray(s.options))return false;
+  ids.add(s.id);map.set(s.id,s);
+  if(s.ending!==undefined){
+   endings++;
+   if(s.ending!=="valid"||s.options.length||
+    !["summary","question"].every(k=>typeof s[k]==="string"&&s[k].trim())||
+    !Array.isArray(s.criteria)||s.criteria.length<2||s.criteria.some(x=>typeof x!=="string"||!x.trim()))return false;
+  }else{
+   if(typeof s.reflection!=="string"||!s.reflection.trim()||s.options.length<2||s.options.length>3)return false;
+   for(const o of s.options){
+    if(!o||typeof o.id!=="string"||!/^[a-z][a-z0-9-]*$/.test(o.id)||optionIds.has(o.id)||
+     typeof o.label!=="string"||!o.label.trim()||typeof o.next!=="string"||
+     typeof o.consequence!=="string"||!o.consequence.trim())return false;
+    optionIds.add(o.id);
+   }
+  }
+ }
+ if(!map.has(d.start)||map.get(d.start).ending||endings<3)return false;
+ for(const s of d.scenes)for(const o of s.options)if(!map.has(o.next))return false;
+ const visited=new Set(),gray=new Set();
+ function check(id,depth){
+  if(gray.has(id)||depth>d.settings.maxDecisions)return false;
+  visited.add(id);const s=map.get(id);
+  if(s.ending)return true;
+  gray.add(id);for(const o of s.options)if(!check(o.next,depth+1))return false;gray.delete(id);return true;
+ }
+ return check(d.start,0)&&visited.size===d.scenes.length;
+}
+function initialState(d){return {v:1,scene:d.start,path:[],hints:[],archives:[],complete:false};}
+function trace(path,d){
+ if(!Array.isArray(path)||path.length>d.settings.maxDecisions)return null;
+ const map=sceneMap(d),visited=new Set([d.start]);let current=d.start;
+ for(const step of path){
+  const s=map.get(current);
+  if(!step||!s||s.ending||step.scene!==current||typeof step.choice!=="string"||typeof step.next!=="string")return null;
+  const choice=s.options.find(x=>x.id===step.choice);
+  if(!choice||choice.next!==step.next||visited.has(choice.next))return null;
+  current=choice.next;visited.add(current);
+ }
+ return {scene:current,visited,complete:!!map.get(current).ending};
+}
+function validState(s,d){
+ if(!s||typeof s!=="object"||Array.isArray(s)||s.v!==1||typeof s.scene!=="string"||
+ !Array.isArray(s.path)||!Array.isArray(s.hints)||new Set(s.hints).size!==s.hints.length||
+ !Array.isArray(s.archives)||s.archives.length>d.settings.maxArchives||typeof s.complete!=="boolean")return false;
+ const route=trace(s.path,d);if(!route||route.scene!==s.scene||route.complete!==s.complete||
+ s.hints.some(id=>!route.visited.has(id)||!!sceneMap(d).get(id).ending))return false;
+ for(const saved of s.archives){
+  if(!saved||typeof saved.ending!=="string"||!Array.isArray(saved.path))return false;
+  const old=trace(saved.path,d);
+  if(!old||!old.complete||old.scene!==saved.ending)return false;
+ }
+ if(s.complete){
+  const last=s.archives.at(-1);
+  if(!last||last.ending!==s.scene||JSON.stringify(last.path)!==JSON.stringify(s.path))return false;
+ }
+ return true;
+}
+function transition(s,a,d){
+ if(!validState(s,d))return {state:s,changed:false,kind:"bad",message:"Estado inválido: nenhuma alteração foi aplicada."};
+ if(!a||typeof a.type!=="string")return {state:s,changed:false,kind:"info",message:"Escolha uma ação válida."};
+ if(a.type==="restart"){
+  if(!s.path.length&&!s.hints.length)return {state:s,changed:false,kind:"info",message:"O percurso já está no início."};
+  const next=initialState(d);next.archives=s.archives.map(x=>({ending:x.ending,path:x.path.map(y=>({...y}))}));
+  return {state:next,changed:true,kind:"info",message:"Novo percurso iniciado. Os resultados anteriores foram preservados."};
+ }
+ if(a.type==="rewind"){
+  if(!Number.isInteger(a.index)||a.index<0||a.index>=s.path.length)return {state:s,changed:false,kind:"bad",message:"Decisão inválida para voltar."};
+  const current=s.path[a.index].scene,path=s.path.slice(0,a.index),allowed=new Set([current,...path.map(x=>x.scene)]);
+  return {state:{...s,scene:current,path,hints:s.hints.filter(id=>allowed.has(id)),complete:false},changed:true,kind:"info",
+   message:"Você voltou à decisão "+(a.index+1)+". As "+(s.path.length-a.index)+" escolhas descendentes foram descartadas somente deste percurso."};
+ }
+ if(a.type==="hint"){
+  const node=sceneMap(d).get(s.scene);
+  if(node.ending||s.hints.includes(s.scene))return {state:s,changed:false,kind:"info",message:"Reflexão já consultada ou percurso concluído."};
+  return {state:{...s,hints:[...s.hints,s.scene]},changed:true,kind:"info",message:"Para pensar: "+node.reflection};
+ }
+ if(a.type==="choose"){
+  if(s.complete)return {state:s,changed:false,kind:"info",message:"O percurso foi concluído. Você pode revisá-lo ou iniciar outro."};
+  if(a.scene!==s.scene)return {state:s,changed:false,kind:"info",message:"A escolha não pertence à cena atual. Nada mudou."};
+  const node=sceneMap(d).get(s.scene),choice=node.options.find(o=>o.id===a.choice);
+  if(!choice)return {state:s,changed:false,kind:"bad",message:"Esta opção não existe na cena atual."};
+  if(s.path.length>=d.settings.maxDecisions)return {state:s,changed:false,kind:"bad",message:"Limite de decisões atingido."};
+  const path=[...s.path,{scene:s.scene,choice:choice.id,next:choice.next}],target=sceneMap(d).get(choice.next),complete=!!target.ending;
+  const archives=complete?[...s.archives,{ending:target.id,path:path.map(x=>({...x}))}].slice(-d.settings.maxArchives):s.archives;
+  return {state:{...s,scene:target.id,path,archives,complete},changed:true,kind:complete?"good":"info",
+   message:choice.consequence+(complete?" Desfecho alcançado. Leia seus critérios e oportunidades de reflexão.":" Leia a próxima situação para continuar.")};
+ }
+ return {state:s,changed:false,kind:"info",message:"Ação não reconhecida."};
+}
+// PURE_END
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+function getState(){return {v:1,scene:state.scene,path:state.path.map(x=>({...x})),hints:[...state.hints],archives:state.archives.map(x=>({ending:x.ending,path:x.path.map(y=>({...y}))})),complete:state.complete};}
+function restoreState(saved){
+ if(!validState(saved,DATA))return false;
+ state={v:1,scene:saved.scene,path:saved.path.map(x=>({...x})),hints:[...saved.hints],archives:saved.archives.map(x=>({ending:x.ending,path:x.path.map(y=>({...y}))})),complete:saved.complete};
+ reviewIndex=null;rewindIndex=null;render();return true;
+}
+function tell(message,kind="info"){
+ $("feedback").className="feedback "+kind;$("feedback-title").textContent=kind==="good"?"Desfecho registrado":kind==="bad"?"Ação não aplicada":kind==="warn"?"Confirmação necessária":"Orientação";
+ $("feedback-text").textContent=message;
+}
+function showReview(i){
+ const step=state.path[i];if(!step){reviewIndex=null;$("review").hidden=true;return;}
+ const node=sceneMap(DATA).get(step.scene),choice=node.options.find(o=>o.id===step.choice);
+ $("review").hidden=false;$("review-title").textContent="Decisão "+(i+1)+": "+node.title;
+ $("review-context").textContent=node.text;$("review-choice").textContent="Você escolheu: "+choice.label;
+ $("review-consequence").textContent="Consequência: "+choice.consequence;
+}
+function renderHistory(){
+ const list=$("history");list.replaceChildren();
+ if(!state.path.length)list.append(el("li","empty","Nenhuma decisão registrada até agora."));
+ for(const [i,step] of state.path.entries()){
+  const scene=sceneMap(DATA).get(step.scene),choice=scene.options.find(o=>o.id===step.choice),li=el("li");
+  li.append(el("strong","","Decisão "+(i+1)+": "+scene.title),el("p","",choice.label),el("p","",choice.consequence));
+  const controls=el("div","controls"),review=el("button","smallbutton","Rever"),rewind=el("button","smallbutton","Refazer a partir daqui");
+  review.type=rewind.type="button";review.dataset.review=String(i);rewind.dataset.rewind=String(i);review.disabled=rewind.disabled=!ready;
+  controls.append(review,rewind);li.append(controls);list.append(li);
+ }
+ if(reviewIndex!==null&&state.path[reviewIndex])showReview(reviewIndex);else $("review").hidden=true;
+}
+function renderArchives(){
+ const list=$("archives");list.replaceChildren();
+ if(!state.archives.length){list.append(el("li","empty","Nenhum percurso finalizado ainda."));return;}
+ for(const [i,attempt] of state.archives.entries()){
+  const ending=sceneMap(DATA).get(attempt.ending),li=el("li");
+  li.append(el("strong","","Percurso "+(i+1)+" · "+ending.title),
+   el("p","",attempt.path.length+" decisões. "+ending.summary));
+  list.append(li);
+ }
+}
+function render(){
+ if(disposed||!validate(DATA)||!validState(state,DATA))return;
+ const s=sceneMap(DATA).get(state.scene),last=state.path.at(-1),unique=new Set(state.archives.map(x=>x.ending));
+ $("count-decisions").textContent=state.path.length+" / até "+DATA.settings.maxDecisions;
+ $("count-archives").textContent=String(state.archives.length);
+ $("count-endings").textContent=unique.size+" / "+DATA.scenes.filter(x=>x.ending).length;
+ $("count-reflections").textContent=String(state.hints.length);
+ $("meter").setAttribute("aria-valuenow",String(state.complete?DATA.settings.maxDecisions:state.path.length));
+ $("meter-fill").style.width=(state.complete?100:100*state.path.length/DATA.settings.maxDecisions)+"%";
+ $("scene-kicker").textContent=s.kicker;$("scene-title").textContent=s.title;$("scene-text").textContent=s.text;
+ $("art-title").textContent=s.title;
+ const descriptions={before:"Tela de celular com uma mensagem viral sem data ou fonte identificada e cartões que mostram sua circulação.",people:"Grupo de estudantes e educadores conversando ao redor de uma mesa com dúvidas sobre a informação.",plan:"Painel ilustrado de comparação entre um recorte sem contexto e um registro completo, com origem, data e evidências.",final:"Painel de comunicação responsável, com aviso fundamentado e símbolo de verificação; representação conceitual."};
+ $("art-desc").textContent=descriptions[s.visual];$("scene-alt").textContent=descriptions[s.visual]+" A história e todas as escolhas estão disponíveis em texto.";
+ for(const g of root.querySelectorAll("[data-visual]"))g.setAttribute("display",g.dataset.visual===s.visual?"inline":"none");
+ $("arrival").hidden=!last;
+ if(last){const prev=sceneMap(DATA).get(last.scene),choice=prev.options.find(o=>o.id===last.choice);
+  $("arrival-consequence").textContent=choice.consequence;$("arrival-choice").textContent="Decisão anterior: "+choice.label;
+ }
+ $("decision-area").hidden=state.complete;
+ const options=$("options");options.replaceChildren();
+ if(!state.complete)for(const o of s.options){
+  const b=el("button","choice");b.type="button";b.dataset.choose=o.id;b.dataset.scene=s.id;
+  b.disabled=!ready;b.setAttribute("aria-label","Escolher: "+o.label);
+  b.append(el("span","",o.label),el("span","arrow","›"));options.append(b);
+ }
+ $("ending-area").hidden=!state.complete;
+ if(state.complete){
+  $("ending-title").textContent="Seu desfecho: "+s.title;$("ending-summary").textContent=s.summary;
+  const list=$("ending-criteria");list.replaceChildren();for(const criterion of s.criteria)list.append(el("li","",criterion));
+  $("ending-question").textContent="Para refletir: "+s.question;
+ }
+ $("hint").hidden=state.complete;$("hint").disabled=!ready||state.hints.includes(s.id);
+ $("reflection").hidden=state.complete||!state.hints.includes(s.id);
+ if(!s.ending)$("reflection-text").textContent=s.reflection;
+ $("back").hidden=!state.path.length;$("back").disabled=!ready;$("restart").disabled=!ready;
+ renderHistory();renderArchives();$("back-confirm").hidden=rewindIndex===null;
+ if(rewindIndex!==null&&state.path[rewindIndex])$("back-text").textContent="Voltar à decisão "+(rewindIndex+1)+": "+sceneMap(DATA).get(state.path[rewindIndex].scene).title+"? Isso remove "+(state.path.length-rewindIndex)+" decisão(ões) posteriores só desta tentativa. Os percursos concluídos serão preservados.";
+}
+function save(){
+ if(!progress||!remote||disposed)return;
+ const snapshot=getState(),number=++serial;
+ saveQueue=saveQueue.then(async()=>{
+  if(disposed||!remote||number!==serial)return;
+  const base=remote.data&&typeof remote.data==="object"&&!Array.isArray(remote.data)?remote.data:{};
+  const data={...base,[storageKey]:snapshot};
+  if(new TextEncoder().encode(JSON.stringify(data)).length>12288){tell("Progresso excederia 12 KiB e não foi enviado.","bad");return;}
+  const response=await progress.save({version:remote.version,location,data});if(!disposed)remote={...response,data};
+ }).catch(async()=>{
+  if(disposed)return;serial++;
+  try{
+   const fresh=await progress.load();if(disposed)return;
+   if(fresh?.data?.[storageKey]&&restoreState(fresh.data[storageKey])){remote=fresh;tell("Progresso remoto mudou ou a escrita falhou. Restaurei a versão do servidor, sem sobrescrevê-la.","bad");}
+   else{remote=null;tell("Não foi possível reconciliar o progresso remoto. A história continua localmente.","bad");}
+  }catch(_){remote=null;tell("Falha de conexão. Não há sincronização de progresso confirmada.","bad");}
+ });
+}
+function handleAction(a){
+ if(!ready||disposed)return;
+ const r=transition(state,a,DATA);
+ if(!r.changed){tell(r.message,r.kind);return;}
+ state=r.state;modified=true;rewindIndex=null;reviewIndex=null;render();save();tell(r.message,r.kind);
+ if(["choose","rewind","restart"].includes(a.type))$("scene-title").focus({preventScroll:true});
+ if(a.type==="hint")$("hint").focus({preventScroll:true});
+}
+function askRewind(index){
+ if(!Number.isInteger(index)||!state.path[index])return;
+ rewindIndex=index;render();$("back-yes").focus({preventScroll:true});
+ tell("Confirme o retorno; apenas as decisões posteriores serão apagadas desta tentativa.","warn");
+}
+function askRestart(){
+ if(!state.path.length&&!state.hints.length){tell("Você já está no começo deste percurso.");return;}
+ $("restart-confirm").hidden=false;$("restart-yes").focus({preventScroll:true});
+ tell("Confirme o início de uma nova tentativa. Percursos anteriores continuam no histórico.","warn");
+}
+function destroy(){disposed=true;serial++;controller.abort();}
+async function init(container,data){
+ if(!container||!validate(data)){if(container)container.replaceChildren(el("div","error","A história contém cenas, escolhas, destinos ou finais inválidos."));return;}
+ render();
+ if(progress)try{
+  const loaded=await progress.load();if(disposed)return;remote=loaded;
+  if(!modified&&loaded?.data?.[storageKey]){
+   if(restoreState(loaded.data[storageKey]))tell("História retomada. Você pode continuar ou reler as escolhas.");
+   else tell("Estado remoto inválido ou incompatível. Não sobrescrevi o registro.","bad");
+  }
+ }catch(_){remote=null;tell("Não foi possível carregar o progresso remoto; a história funciona localmente.","bad");}
+ else tell("Modo independente: a história funciona sem sincronização confirmada com o Moodle.");
+ if(disposed)return;ready=true;render();
+}
+root.addEventListener("click",e=>{
+ const b=e.target.closest("button");if(!b||!root.contains(b))return;
+ if(b.dataset.choose){handleAction({type:"choose",scene:b.dataset.scene,choice:b.dataset.choose});return;}
+ if(b.dataset.review!==undefined){
+  const i=Number(b.dataset.review);if(!state.path[i])return;
+  reviewIndex=i;showReview(i);tell("Revisão somente leitura da decisão "+(i+1)+". Nada foi alterado.");return;
+ }
+ if(b.dataset.rewind!==undefined){askRewind(Number(b.dataset.rewind));return;}
+ if(b.id==="hint"){handleAction({type:"hint"});return;}
+ if(b.id==="back"){askRewind(state.path.length-1);return;}
+ if(b.id==="restart"){askRestart();return;}
+ if(b.id==="review-close"){reviewIndex=null;$("review").hidden=true;tell("Revisão fechada; nenhuma decisão foi alterada.");return;}
+ if(b.id==="back-yes"){const i=rewindIndex;$("back-confirm").hidden=true;if(i!==null)handleAction({type:"rewind",index:i});return;}
+ if(b.id==="back-no"){rewindIndex=null;$("back-confirm").hidden=true;tell("Retorno cancelado; o caminho foi preservado.");return;}
+ if(b.id==="restart-yes"){$("restart-confirm").hidden=true;handleAction({type:"restart"});return;}
+ if(b.id==="restart-no"){$("restart-confirm").hidden=true;tell("Novo percurso cancelado; a tentativa atual foi preservada.");}
+},{signal:controller.signal});
+window.addEventListener("pagehide",destroy,{once:true,signal:controller.signal});
+init(root,DATA);
+})();</script></body></html>
