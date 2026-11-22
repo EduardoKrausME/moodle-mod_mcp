@@ -53,6 +53,25 @@ function mcp_supports($feature) {
 }
 
 /**
+ * Record a real learner view through Moodle's native completion API.
+ * Called by local_kopere_mobile_mod_make_view after its capability check.
+ *
+ * @param stdClass $mcp Activity instance.
+ * @param stdClass $course Course.
+ * @param stdClass $cm Course module.
+ * @param context_module $context Module context.
+ */
+function mcp_view($mcp, $course, $cm, $context) {
+    require_login($course, true, $cm);
+    require_capability("mod/mcp:view", $context);
+    if (empty($mcp->publishedrevision)) {
+        throw new moodle_exception("activitynotpublished", "mcp");
+    }
+    $completion = new completion_info($course);
+    $completion->set_module_viewed($cm);
+}
+
+/**
  * Insert a Moodle activity instance.
  * @param $data
  * @param null $mform
