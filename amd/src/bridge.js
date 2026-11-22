@@ -27,16 +27,17 @@ define(["core/ajax"], function(Ajax) {
         if (!frame) {
             return;
         }
+        console.log("[mod_mcp/bridge] Inicializando para cmid:", config.cmid);
 
         // Request a fresh measurement after the isolated srcdoc finishes loading.
         // A direct contentDocument read would violate the allow-scripts sandbox.
         const requestMeasurement = () => {
             if (frame.isConnected && frame.contentWindow) {
+                console.log("[mod_mcp/bridge] Solicitando medição de altura ao iframe.");
                 frame.contentWindow.postMessage({channel: "mod_mcp", type: "measure"}, "*");
             }
         };
-        frame.addEventListener("load", requestMeasurement);
-        requestMeasurement();
+        // Register the listener before requesting measurements to avoid startup races.
         window.addEventListener("message", (event) => {
             // The sandboxed srcdoc has an opaque origin. Verify the WindowProxy,
             // not event.origin, which is "null" for this iframe.
@@ -48,6 +49,11 @@ define(["core/ajax"], function(Ajax) {
             if (!msg || msg.channel !== "mod_mcp") {
                 return;
             }
+            if (msg.type === "ready") {
+                console.log("[mod_mcp/bridge] SDK sinalizou ready; solicitando altura.");
+                requestMeasurement();
+                return;
+            }
             if (msg.type === "resize") {
                 // An authored script can also post messages, so bound the layout impact.
                 if (typeof msg.height !== "number" || !Number.isFinite(msg.height) ||
@@ -55,8 +61,10 @@ define(["core/ajax"], function(Ajax) {
                     return;
                 }
                 const height = Math.ceil(msg.height) + "px";
+                console.log("[mod_mcp/bridge] Altura recebida do iframe:", height);
                 if (frame.style.height !== height) {
                     frame.style.height = height;
+                    console.log("[mod_mcp/bridge] Altura aplicada ao iframe:", height);
                 }
                 return;
             }
@@ -102,6 +110,11 @@ define(["core/ajax"], function(Ajax) {
                 });
             });
         });
+        frame.addEventListener("load", () => {
+            console.log("[mod_mcp/bridge] Evento iframe.load; solicitando altura.");
+            requestMeasurement();
+        });
+        requestMeasurement();
     };
 
     return {init: init};

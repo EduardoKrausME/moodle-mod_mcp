@@ -135,9 +135,13 @@ test("sandbox SDK tracks the real height, including later growth and shrinkage",
     mutationObserver();
     assert.equal(messages.at(-1).height, 720);
 
+    assert.equal(messages[0].type, "resize");
+    assert.ok(messages.some((message) => message.type === "ready"));
     const count = messages.length;
     events.message({source: parent, data: {channel: "mod_mcp", type: "measure"}});
-    assert.equal(messages.length, count);
+    assert.equal(messages.length, count + 1);
+    assert.equal(messages.at(-1).type, "resize");
+    assert.equal(messages.at(-1).height, 720);
 });
 
 test("parent bridge resizes only its own iframe on valid measurements", () => {
@@ -157,6 +161,11 @@ test("parent bridge resizes only its own iframe on valid measurements", () => {
     vm.runInNewContext(bridge, {define, window, document, Set, JSON, Object, Number, Boolean, String});
     exposed.init({cmid: 27, preview: false});
     assert.equal(outgoing[0].type, "measure");
+    events.message({source: {}, data: {channel: "mod_mcp", type: "ready"}});
+    assert.equal(outgoing.length, 1);
+    events.message({source: child, data: {channel: "mod_mcp", type: "ready"}});
+    assert.equal(outgoing.length, 2);
+    assert.equal(outgoing[1].type, "measure");
     const data = {channel: "mod_mcp", type: "resize", height: 857};
     events.message({source: {}, data});
     assert.equal(frame.style.height, "650px");

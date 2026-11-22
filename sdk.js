@@ -49,7 +49,8 @@
         if (msg.type === "measure") {
             console.log("[mod_mcp/sdk] Parent solicitou nova medição de altura.");
             if (requestResize) {
-                requestResize();
+                // A lost initial resize must be recoverable even if the measured height is unchanged.
+                requestResize(true);
             } else {
                 console.log("[mod_mcp/sdk] Medição solicitada antes de iniciar auto-resize.");
             }
@@ -189,7 +190,12 @@
             console.log("[mod_mcp/sdk] Enviando nova altura ao parent:", height, "px");
             window.parent.postMessage({channel: "mod_mcp", type: "resize", height: height}, "*");
         };
-        const schedule = function() {
+        const schedule = function(force = false) {
+            if (force) {
+                // A parent handshake must receive a fresh height even if we sent it earlier.
+                lastheight = 0;
+                console.log("[mod_mcp/sdk] Medição forçada: reenviando altura atual ao parent.");
+            }
             if (queued) {
                 console.log("[mod_mcp/sdk] Medição já agendada, ignorando agendamento duplicado.");
                 return;
@@ -266,5 +272,9 @@
     };
 
     initAutoResize();
+    if (window.parent !== window && window.document) {
+        console.log("[mod_mcp/sdk] Enviando sinal ready ao bridge do Moodle.");
+        window.parent.postMessage({channel: "mod_mcp", type: "ready"}, "*");
+    }
     console.log("[mod_mcp/sdk] Fim da inicialização do SDK.");
 })(window);
