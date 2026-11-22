@@ -88,10 +88,15 @@ function mcp_add_instance($data, $mform = null) {
         "intro" => $data->intro ?? "",
         "introformat" => $data->introformat ?? FORMAT_HTML,
         "grade" => max(0, (float)($data->grade ?? 0)),
+        "questionselection" => (string)($data->questionselection ?? "all"),
+        "questionsperattempt" => (int)($data->questionsperattempt ?? 0),
+        "shufflequestions" => empty($data->shufflequestions) ? 0 : 1,
         "completioninteractive" => empty($data->completioninteractive) ? 0 : 1,
         "draftrevision" => 0, "publishedrevision" => 0,
         "timecreated" => $now, "timemodified" => $now,
     ];
+    \mod_mcp\question\configuration::validate(
+        $record->questionselection, $record->questionsperattempt, $record->shufflequestions);
     $id = $DB->insert_record("mcp", $record);
     if (trim((string)($data->content ?? "")) !== "") {
         \mod_mcp\content\service::save((int)$id, (string)$data->content, (int)$USER->id);
@@ -121,6 +126,17 @@ function mcp_update_instance($data, $mform = null) {
     }
     $mcp->grade = max(0, (float)($data->grade ?? $mcp->grade));
     $mcp->completioninteractive = empty($data->completioninteractive) ? 0 : 1;
+    // Programmatic updates without question settings must preserve the existing values.
+    if (isset($data->questionselection) || isset($data->questionsperattempt) ||
+            isset($data->shufflequestions)) {
+        $mode = (string)($data->questionselection ?? $mcp->questionselection);
+        $count = (int)($data->questionsperattempt ?? $mcp->questionsperattempt);
+        $shuffle = (int)($data->shufflequestions ?? $mcp->shufflequestions);
+        \mod_mcp\question\configuration::validate($mode, $count, $shuffle);
+        $mcp->questionselection = $mode;
+        $mcp->questionsperattempt = $count;
+        $mcp->shufflequestions = $shuffle;
+    }
     $mcp->timemodified = time();
     $DB->update_record("mcp", $mcp);
     if (isset($data->content) && trim((string)$data->content) !== "") {

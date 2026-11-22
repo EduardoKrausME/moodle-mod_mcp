@@ -56,6 +56,9 @@ final class backup_restore_test extends advanced_testcase {
         $module = $this->getDataGenerator()->create_module('mcp', [
             'course' => $course->id,
             'name' => 'Original interactive document',
+            'questionselection' => 'random',
+            'questionsperattempt' => 5,
+            'shufflequestions' => 1,
         ]);
         $sourcecontext = context_module::instance($module->cmid);
 
@@ -93,6 +96,9 @@ final class backup_restore_test extends advanced_testcase {
         $copy = end($instances);
         $this->assertNotEquals($module->id, $copy->id);
         $this->assertNotEquals($revisionid, $copy->publishedrevision);
+        $this->assertSame('random', $copy->questionselection);
+        $this->assertSame(5, (int)$copy->questionsperattempt);
+        $this->assertSame(1, (int)$copy->shufflequestions);
         $this->assertSame((int)$copy->draftrevision, (int)$copy->publishedrevision);
         $this->assertSame($html, service::get((int)$copy->id, (int)$copy->publishedrevision)->content);
 

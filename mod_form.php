@@ -47,6 +47,17 @@ class mod_mcp_mod_form extends moodleform_mod {
             $mform->addElement("static", "managecontent", "", $link);
         }
         $this->standard_intro_elements();
+        $mform->addElement("header", "questionconfig", get_string("questionconfig", "mcp"));
+        $mform->addElement("select", "questionselection", get_string("questionselection", "mcp"), [
+            "all" => get_string("selectionall", "mcp"),
+            "random" => get_string("selectionrandom", "mcp"),
+        ]);
+        $mform->setDefault("questionselection", "all");
+        $mform->addElement("text", "questionsperattempt", get_string("questionsperattempt", "mcp"));
+        $mform->setType("questionsperattempt", PARAM_INT);
+        $mform->setDefault("questionsperattempt", 0);
+        $mform->addElement("advcheckbox", "shufflequestions", get_string("shufflequestions", "mcp"));
+        $mform->setDefault("shufflequestions", 0);
         // Use Moodle's native grade group for type, maximum points, category and grade to pass.
         $this->standard_grading_coursemodule_elements();
         // New activities are ungraded unless the teacher explicitly enables points.
@@ -64,6 +75,12 @@ class mod_mcp_mod_form extends moodleform_mod {
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
+        $mode = (string)($data["questionselection"] ?? "all");
+        $count = (int)($data["questionsperattempt"] ?? 0);
+        if (!in_array($mode, ["all", "random"], true) || ($mode === "random" && $count < 1) ||
+                $count < 0) {
+            $errors["questionsperattempt"] = get_string("invalidquestioncount", "mcp");
+        }
         if (isset($data["grade"]) && (float)$data["grade"] < 0) {
             $errors["grade"] = get_string("gradescalenotsupported", "mcp");
         }

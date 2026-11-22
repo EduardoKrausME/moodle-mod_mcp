@@ -85,11 +85,18 @@ final class attempts {
         $ctx = context_module::instance((int)$cm->id);
         $quba = question_engine::make_questions_usage_by_activity("mod_mcp", $ctx);
         $quba->set_preferred_behaviour("deferredfeedback");
-        foreach ($slots as $slot) {
-            // Question definitions are loaded by ID, never by latest version.
+        $selection = selector::choose($slots, (string)($mcp->questionselection ?? "all"),
+            (int)($mcp->questionsperattempt ?? 0), !empty($mcp->shufflequestions));
+        foreach ($selection as $index => $slot) {
+            // Validate the pinned version before beginning a new attempt.
+            $validated = slots::validate_question((int)$slot->questionid);
+            if ((int)$validated->version !== (int)$slot->questionversion) {
+                throw new moodle_exception("invalidquestionconfiguration", "mcp");
+            }
             $question = question_bank::load_question((int)$slot->questionid);
+            // Native usage slots are sequential after subset selection, regardless of bank slot.
             $nativeslot = $quba->add_question($question, (float)$slot->maxmark);
-            if ($nativeslot !== (int)$slot->slot) {
+            if ($nativeslot !== $index + 1) {
                 throw new moodle_exception("invaliddata");
             }
         }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/mcp/db" VERSION="20261121" COMMENT="XMLDB file for Moodle MCP activity"
+<XMLDB PATH="mod/mcp/db" VERSION="20261122" COMMENT="XMLDB file for Moodle MCP activity"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
   <TABLES>
@@ -11,6 +11,9 @@
         <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
         <FIELD NAME="grade" TYPE="number" LENGTH="10" DECIMALS="5" NOTNULL="true" DEFAULT="10" SEQUENCE="false"/>
+        <FIELD NAME="questionselection" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="all" SEQUENCE="false"/>
+        <FIELD NAME="questionsperattempt" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="shufflequestions" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="completioninteractive" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" DEFAULT="0"/>
         <FIELD NAME="draftrevision" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="publishedrevision" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>

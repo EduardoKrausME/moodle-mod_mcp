@@ -79,5 +79,22 @@ function xmldb_mcp_upgrade($oldversion) {
         }
         upgrade_mod_savepoint(true, 2026112101, "mcp");
     }
+    if ($oldversion < 2026112200) {
+        $table = new xmldb_table("mcp");
+        $fields = [
+            new xmldb_field("questionselection", XMLDB_TYPE_CHAR, "10",
+                null, XMLDB_NOTNULL, null, "all", "grade"),
+            new xmldb_field("questionsperattempt", XMLDB_TYPE_INTEGER, "10",
+                null, XMLDB_NOTNULL, null, "0", "questionselection"),
+            new xmldb_field("shufflequestions", XMLDB_TYPE_INTEGER, "1",
+                null, XMLDB_NOTNULL, null, "0", "questionsperattempt"),
+        ];
+        foreach ($fields as $field) {
+            if (!$dbman->field_exists($table, $field)) {
+                $dbman->add_field($table, $field);
+            }
+        }
+        upgrade_mod_savepoint(true, 2026112200, "mcp");
+    }
     return true;
 }
