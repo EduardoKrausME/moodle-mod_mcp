@@ -230,7 +230,7 @@ final class state {
             $userdata["quiz"] = ["answers" => $answers];
             $json = json_encode($userdata, JSON_INVALID_UTF8_SUBSTITUTE);
             if ($json === false || strlen($json) > 131072) {
-                throw new \moodle_exception("invaliddata");
+                throw new moodle_exception("invaliddata");
             }
             if ($record) {
                 $DB->update_record("mcp_state", (object)[

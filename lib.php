@@ -23,6 +23,7 @@
  */
 
 use mod_mcp\grade\service;
+use mod_mcp\output\activity;
 
 
 /**
@@ -237,7 +238,7 @@ function mcp_pluginfile($course, $cm, $context, $filearea, $args,
         header("Content-Security-Policy: sandbox allow-scripts");
         header("X-Content-Type-Options: nosniff");
         header("Referrer-Policy: no-referrer");
-        $html = \mod_mcp\output\activity::inject_sdk($revision->content);
+        $html = activity::inject_sdk($revision->content);
         send_file($html, "index.html", 0, 0, true, false, "text/html; charset=utf-8");
         return;
     }

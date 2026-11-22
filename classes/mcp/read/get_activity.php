@@ -29,6 +29,7 @@ use context_module;
 use local_mcp\read\tool\base_tool;
 use local_mcp\security\authenticated_identity;
 use local_mcp\security\untrusted_content;
+use mod_mcp\content\metadata;
 use mod_mcp\content\service;
 
 /**
@@ -119,7 +120,7 @@ final class get_activity extends base_tool {
             "type" => $mcp->activitytype,
             "information" => $mcp->informationjson === null ? null :
                 json_decode($mcp->informationjson, true),
-            "settingshash" => \mod_mcp\content\metadata::fingerprint($mcp),
+            "settingshash" => metadata::fingerprint($mcp),
         ];
     }
 }

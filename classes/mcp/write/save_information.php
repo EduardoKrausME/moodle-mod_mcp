@@ -26,6 +26,7 @@ namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
 use mod_mcp\content\metadata;
+use moodle_exception;
 
 /**
  * ChatGPT/Claude write tool; the information JSON never goes through a question bank.
@@ -85,7 +86,7 @@ final class save_information extends activity_tool {
         $mcp = $this->activity($arguments);
         $hash = metadata::fingerprint($mcp);
         if (!hash_equals($hash, (string)$arguments["expectedhash"])) {
-            throw new \moodle_exception("revisionconflict", "mcp");
+            throw new moodle_exception("revisionconflict", "mcp");
         }
         $json = metadata::validate($arguments["type"], $arguments["information"]);
         return [
