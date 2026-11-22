@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Quiz formativo de anatomia e fisiologia cardíaca com pranchas SVG autorais, doze desafios, explicações e revisão.">
+<title>Atlas do coração | Quiz interativo</title>
+<style>
+:root{--paper:#f5f0e7;--sheet:#fffbf3;--ink:#332a31;--wine:#84364a;--wine-dark:#63263a;--rose:#ad6673;--deep:#3e293d;--blue:#3d7884;--teal:#1c6371;--sand:#e6d8c7;--rule:#d4c5b9;--muted:#625860;--gold:#b18555;--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,Consolas,"Liberation Mono",monospace;color:var(--ink);font-family:var(--sans);background:var(--paper)}
+*,*:before,*:after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:290px;background:radial-gradient(ellipse at 10% 3%,#fff5e7 0%,transparent 34%),var(--paper);line-height:1.65}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.5}
+a{color:#703b59;text-underline-offset:3px}
+a:hover{color:var(--teal)}
+:focus-visible{outline:3px solid #247c95;outline-offset:4px}
+[hidden]{display:none!important}
+.wrap{width:min(1170px,calc(100% - 44px));margin-inline:auto}
+.skip{position:absolute;top:-140px;left:14px;padding:12px;background:white;z-index:20}
+.skip:focus{top:12px}
+.kicker{font:800 .73rem/1.6 var(--mono);text-transform:uppercase;letter-spacing:.13em;color:#844154}
+.mono{font-family:var(--mono)}
+.masthead{background:#f1e8da;position:relative;overflow:hidden}
+.masthead:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 80% 13%,#e5bfc078,transparent 52%);pointer-events:none}
+.masthead .wrap{position:relative}
+.folio{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:19px 0;border-bottom:2px solid #b6998f;font:.73rem var(--mono);color:#795461;letter-spacing:.07em;text-transform:uppercase}
+.folio strong{color:#63374a}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center;min-height:360px;padding:40px 0 31px}
+.hero-title{font:normal clamp(2.7rem,5.7vw,5.8rem)/1.07 var(--serif);letter-spacing:-.052em;margin:13px 0 19px}
+.hero-title em{color:var(--wine);font-weight:400}
+.hero-lead{font-size:1.07rem;color:#62515b;max-width:625px;line-height:1.86;margin:0}
+.hero-plate{position:relative;max-width:400px;justify-self:center;width:100%}
+.hero-plate svg{display:block;width:100%;height:auto}
+.hero-plate .caption{position:absolute;right:0;bottom:0;border-top:1px solid #bd9f95;padding:6px 4px;font:.71rem var(--mono);color:#674e59;background:#f1e8daaa}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.hero-tags span{border:1px solid #bca9a0;background:#fff9eea6;padding:6px 10px;font:.77rem var(--mono);color:#704953}
+.color-band{height:10px;background:linear-gradient(90deg,#3e8493 0 23%,#b4c9bb 23% 40%,#faf4e7 40% 53%,#d8999b 53% 74%,#9b435a 74% 100%)}
+.progress-section{padding:26px 0 19px}
+.progress-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#6a5260;font:.79rem/1.7 var(--mono);margin-bottom:9px}
+.progress-track{height:10px;background:#e4d6cf;border:1px solid #cbb7ad;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#327888,#8b455b);transition:width .3s ease}
+.progress-caption{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;font:.77rem var(--mono);color:#6b5860}
+.notice{border-left:4px solid #3b7a8a;padding:12px 17px;background:#e7eeee;font-size:.88rem;color:#3e5861;line-height:1.8}
+.main-shell{padding:26px 0 62px}
+.question-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.03fr);gap:24px;align-items:start}
+.plate{margin:0;border:1px solid #d1bdb4;background:#fbf4e9;padding:18px}
+.plate-number{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #d5c1b7;padding:0 0 12px;margin-bottom:12px;font:.73rem/1.6 var(--mono);color:#885166;letter-spacing:.07em}
+.plate-picture{min-height:365px;display:grid;place-items:center}
+.plate-picture svg{width:100%;max-height:440px;height:auto;display:block}
+.plate figcaption{border-top:1px solid #d5c1b7;padding-top:12px;font-size:.81rem;color:#675e61;line-height:1.75}
+.plate-note{margin-top:10px;font:.76rem/1.65 var(--mono);color:#725e67}
+.question-card{background:var(--sheet);border:1px solid #cebdb7;padding:clamp(19px,3.2vw,35px);min-height:570px;display:flex;flex-direction:column}
+.question-index{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid #d7c5bd;font:.75rem var(--mono);color:#98556a}
+.question-card h2{font:normal clamp(1.7rem,3vw,2.55rem)/1.2 var(--serif);letter-spacing:-.028em;margin:20px 0 15px}
+.question-instruction{font:.91rem/1.77 var(--sans);color:#645a60;margin:0 0 18px}
+.answers{border:0;padding:0;margin:0;min-width:0}
+.answers legend{font:.76rem/1.65 var(--mono);color:#7d5662;letter-spacing:.045em;margin-bottom:9px}
+.options{display:grid;gap:9px}
+.option{display:flex;align-items:center;gap:12px;border:1px solid #d6c5bc;background:#fbf5ed;padding:12px 14px;cursor:pointer;min-height:59px;transition:border-color .16s,background .16s}
+.option:hover{border-color:#44798a;background:#f0f5f2}
+.option.selected{border:2px solid #356d7d;padding:11px 13px;background:#e8f1ee}
+.option input{flex:none;width:19px;height:19px;accent-color:#7c3e55}
+.option-copy{min-width:0;font-size:.91rem;line-height:1.55}
+.option-art{flex:none;width:52px;height:42px;display:grid;place-items:center}
+.option-art svg{width:50px;height:40px}
+.sequence{display:grid;gap:8px;list-style:none;padding:0;margin:0}
+.sequence-item{display:grid;grid-template-columns:29px minmax(0,1fr) auto;gap:9px;align-items:center;background:#fbf5ee;border:1px solid #d3c1b9;padding:9px 10px}
+.sequence-item .num{font:.85rem var(--mono);color:#8f4a5d}
+.sequence-item .label{font-size:.89rem;line-height:1.4}
+.order-buttons{display:flex;gap:5px}
+.order-buttons button{border:1px solid #b49a9f;color:#744259;background:white;width:33px;height:34px;display:grid;place-items:center;font-size:1.04rem}
+.order-buttons button:not(:disabled):hover{background:#e7edf0}
+.answer-help{color:#74646c;font-size:.81rem;line-height:1.75;margin:13px 0 0}
+.feedback{padding:16px 18px;margin:23px 0 0;border-left:5px solid #9f6d7d;background:#f0e6e4;color:#563c49;line-height:1.78}
+.feedback.correct{border-color:#2d727a;background:#e4f0ea;color:#2b555b}
+.feedback strong{display:block;font:700 1.05rem var(--serif);margin-bottom:7px}
+.feedback p{margin:0}
+.feedback .feedback-extra{font-size:.84rem;margin-top:8px}
+.actions{margin-top:auto;padding-top:25px;display:flex;gap:9px;flex-wrap:wrap}
+.btn{border:1px solid #71354b;padding:11px 17px;background:#7e3e55;color:#fff;font-size:.89rem;font-weight:740;min-height:46px}
+.btn:hover:not(:disabled){background:#62273d}
+.btn.secondary{background:#fff8ee;color:#74435a}
+.btn.secondary:hover:not(:disabled){background:#f1e2e1}
+.btn.teal{border-color:#2c6574;background:#2b7181}
+.btn.teal:hover:not(:disabled){background:#225869}
+.btn.next{margin-left:auto}
+.tips{margin-top:21px;background:#eae1dd;border-left:4px solid #98708a;padding:15px 20px;color:#5c505a;font-size:.88rem}
+.tips b{color:#784b60}
+.summary{max-width:1000px;margin:0 auto;background:#fffbf3;border:1px solid #cdbbb3;padding:clamp(23px,5vw,51px)}
+.summary h2{font:normal clamp(2.2rem,4.8vw,4rem)/1.13 var(--serif);letter-spacing:-.04em;margin:14px 0 20px}
+.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:22px 0}
+.stat{background:#f0e5de;border-top:4px solid #9f6277;padding:15px 18px}
+.stat:nth-child(2){border-color:#3e8290}
+.stat:nth-child(3){border-color:#9c926e}
+.stat b{font:normal 2.6rem/1.2 var(--serif);display:block;color:#6b394e}
+.stat span{display:block;font:.75rem/1.55 var(--mono);color:#625761;margin-top:7px}
+.review-list{padding:0;list-style:none;display:grid;gap:11px}
+.review-item{display:grid;grid-template-columns:1fr auto;gap:13px;align-items:center;background:#faf1e9;border:1px solid #dac6bb;padding:13px 15px}
+.review-item strong{font-size:.94rem}
+.review-item p{margin:3px 0 0;color:#665b60;font-size:.83rem}
+.review-item button{border:1px solid #bca3a3;background:#fff;padding:9px 10px;color:#79445b;font-size:.8rem}
+.references{border-top:1px solid var(--rule);padding:30px 0 44px;color:#60575e;font-size:.82rem;line-height:1.85}
+.references h2{font:normal 1.65rem var(--serif);margin:0 0 10px}
+.references p{margin:8px 0}
+.references a{overflow-wrap:anywhere}
+.motion-reduce *,.motion-reduce *:before,.motion-reduce *:after{animation:none!important;transition:none!important}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr .65fr}.question-grid{grid-template-columns:1fr}.plate-picture{min-height:230px}.plate-picture svg{max-height:360px}.question-card{min-height:0}.main-shell{padding-top:18px}}
+@media(max-width:620px){.wrap{width:min(100% - 28px,1170px)}.folio{font-size:.66rem}.hero-grid{grid-template-columns:1fr;padding:26px 0 23px;gap:15px;min-height:auto}.hero-plate{max-width:250px}.hero-title{font-size:clamp(2.5rem,11vw,4rem)}.hero-lead{font-size:.98rem}.question-grid{gap:13px}.plate{padding:12px}.plate-picture{min-height:0}.question-card{padding:19px}.btn{flex:1 1 42%;padding:11px}.btn.next{margin-left:0}.summary-stats{grid-template-columns:1fr}.review-item{grid-template-columns:1fr}.sequence-item{grid-template-columns:20px minmax(0,1fr) 76px}.order-buttons button{width:33px}.progress-section{padding-top:18px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+@media print{.actions,.progress-track,.skip{display:none!important}.question-grid{display:block}.plate,.question-card{break-inside:avoid}.hero-grid{min-height:0}}
+</style>
+</head>
+<body>
+<a class="skip" href="#atividade">Ir para a questão</a>
+<header class="masthead">
+ <div class="wrap">
+  <div class="folio"><strong>ATLAS / AVALIAÇÃO FORMATIVA</strong><span>Prancha I · Sistema cardiovascular</span></div>
+  <div class="hero-grid">
+   <div>
+    <div class="kicker">Um laboratório de perguntas</div>
+    <h1 class="hero-title">O coração em <em>12 desafios</em></h1>
+    <p class="hero-lead">Observe pranchas anatômicas, acompanhe o percurso do sangue e investigue como válvulas, músculos e impulsos elétricos trabalham juntos. Uma pergunta por vez, sempre com explicação após conferir.</p>
+    <div class="hero-tags"><span>12 questões</span><span>Imagens SVG autorais</span><span>Sem nota oficial</span></div>
+   </div>
+   <div class="hero-plate" aria-hidden="true">
+    <svg viewBox="0 0 390 315" xmlns="http://www.w3.org/2000/svg">
+     <defs><linearGradient id="heroTone" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c88085"/><stop offset="1" stop-color="#8a3a55"/></linearGradient></defs>
+     <circle cx="197" cy="153" r="130" fill="#e5d6ca" stroke="#cbaea4"/>
+     <g opacity=".33" stroke="#a58a82"><circle cx="197" cy="153" r="104" fill="none"/><circle cx="197" cy="153" r="82" fill="none"/><path d="M54 153H336M197 23V283" stroke-dasharray="3 7"/></g>
+     <path d="M177 75 C143 38 111 74 113 126 C115 175 149 232 193 268 C248 220 287 167 277 110 C270 71 226 50 197 92 Z" fill="url(#heroTone)" stroke="#71384d" stroke-width="4"/>
+     <path d="M172 72V25 Q172 10 188 12 L203 17 L206 93" fill="none" stroke="#417987" stroke-width="23" stroke-linecap="round"/>
+     <path d="M222 81V33 Q222 4 251 25 L258 68" fill="none" stroke="#a85262" stroke-width="23" stroke-linecap="round"/>
+     <path d="M136 100 C153 90 168 103 183 120 C201 137 220 132 241 111" fill="none" stroke="#f2cfbd" stroke-width="4" opacity=".76"/>
+     <path d="M185 122C170 154 181 203 196 245M215 133C226 177 215 213 197 246" fill="none" stroke="#e6b4a7" stroke-width="3"/>
+     <circle cx="134" cy="117" r="7" fill="#f7e4c3"/><circle cx="233" cy="103" r="7" fill="#f7e4c3"/>
+     <g font-family="Georgia,serif" font-size="17" fill="#614653"><text x="26" y="40">FIG. I</text><text x="303" y="290">COR</text></g>
+     <path d="M29 67H92M282 241H358" stroke="#a17977"/>
+    </svg>
+    <span class="caption">Ilustração esquemática / não clínica</span>
+   </div>
+  </div>
+ </div>
+</header>
+<div class="color-band" aria-hidden="true"></div>
+<div class="wrap">
+ <section class="progress-section" aria-label="Acompanhamento do quiz">
+  <div class="progress-meta"><span id="progressStep">QUESTÃO 01 / 12</span><span id="progressDone">0 de 12 conferidas</span></div>
+  <div class="progress-track" id="progressBar" role="progressbar" aria-label="Questões conferidas" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-caption"><span id="progressTopic">A anatomia de um coração de quatro câmaras</span><button class="btn secondary" type="button" id="motionToggle" aria-pressed="false">Reduzir movimentos</button></div>
+  <p class="notice">Este quiz é uma revisão formativa local. As respostas não são enviadas ao Moodle, nenhuma nota oficial é lançada e os desenhos não servem para diagnóstico clínico.</p>
+ </section>
+ <main id="atividade" class="main-shell">
+  <section id="questionScreen" class="question-grid" aria-label="Questão atual">
+   <figure class="plate">
+    <div class="plate-number"><span id="plateNum">PRANCHA 01</span><span id="plateLabel">ESTRUTURA</span></div>
+    <div id="platePicture" class="plate-picture"></div>
+    <figcaption id="plateCaption">Prancha anatômica esquemática.</figcaption>
+    <div class="plate-note">Ilustração vetorial original · Sem escala anatômica</div>
+   </figure>
+   <div class="question-card">
+    <div class="question-index"><span id="questionSection">01 / ESTRUTURA</span><span id="questionType">ESCOLHA ÚNICA</span></div>
+    <h2 id="questionTitle" tabindex="-1">Carregando a primeira questão…</h2>
+    <p id="questionInstruction" class="question-instruction"></p>
+    <div id="answerMount"></div>
+    <p class="answer-help" id="answerHelp"></p>
+    <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+    <div class="actions">
+     <button type="button" id="previousButton" class="btn secondary">Anterior</button>
+     <button type="button" id="checkButton" class="btn">Conferir resposta</button>
+     <button type="button" id="nextButton" class="btn teal next">Próxima questão →</button>
+    </div>
+   </div>
+  </section>
+  <section id="summaryScreen" class="summary" hidden aria-labelledby="summaryTitle">
+   <div class="kicker">Conclusão / revisão comentada</div>
+   <h2 id="summaryTitle" tabindex="-1">O que você descobriu sobre o coração?</h2>
+   <p>Os indicadores abaixo refletem apenas esta interação, sem registro acadêmico. Errar e rever faz parte da aprendizagem; volte às pranchas sempre que quiser.</p>
+   <div class="summary-stats">
+    <div class="stat"><b id="totalReviewed">0</b><span>QUESTÕES CONFERIDAS</span></div>
+    <div class="stat"><b id="totalMastered">0</b><span>RESPOSTAS CORRETAS AO FINAL</span></div>
+    <div class="stat"><b id="totalFirst">0</b><span>ACERTOS NA PRIMEIRA TENTATIVA</span></div>
+   </div>
+   <h3 style="font:normal 1.65rem Georgia,serif;margin:22px 0 14px">Revisitar pranchas</h3>
+   <ol id="reviewList" class="review-list"></ol>
+   <div class="actions"><button class="btn secondary" type="button" id="restartButton">Recomeçar do zero</button><button class="btn teal" type="button" id="reviewFirstButton">Rever a primeira questão</button></div>
+  </section>
+ </main>
+ <aside class="tips" aria-label="Instruções"><b>Como usar:</b> marque uma alternativa ou várias quando solicitado. Na questão de ordenar, use as setas de cada etapa. Confira a resposta para receber o comentário e avance; é possível voltar, alterar escolhas e tentar novamente.</aside>
+ <section class="references" aria-labelledby="sourcesTitle">
+  <h2 id="sourcesTitle">Fontes e limites do material</h2>
+  <p>As pranchas são desenhos SVG originais produzidos para este exercício, sem fotografias, imagens clínicas, dados pessoais ou arquivos externos. Formas, dimensões, trajetos e curvas foram simplificados para ilustrar conceitos; não representam um exame médico nem medições fisiológicas.</p>
+  <p>Referências para conferência: <a href="https://www.nhlbi.nih.gov/health/heart/anatomy" target="_blank" rel="noopener noreferrer">NHLBI / anatomia do coração</a>, <a href="https://www.nhlbi.nih.gov/health/heart/blood-flow" target="_blank" rel="noopener noreferrer">NHLBI / circulação sanguínea</a>, <a href="https://www.nhlbi.nih.gov/health/heart/heart-beats" target="_blank" rel="noopener noreferrer">NHLBI / batimentos</a>, <a href="https://www.heart.org/en/health-topics/heart-valve-problems-and-disease/about-heart-valves" target="_blank" rel="noopener noreferrer">American Heart Association / valvas</a>, <a href="https://my.clevelandclinic.org/health/body/21648-heart-conduction-system" target="_blank" rel="noopener noreferrer">Cleveland Clinic / condução elétrica</a> e <a href="https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)" target="_blank" rel="noopener noreferrer">OMS / prevenção cardiovascular</a>.</p>
+ </section>
+</div>
+<script>
+(function(){
+'use strict';
+var root=document, total=12;
+var $=function(id){return root.getElementById(id);};
+var questions=[
+ {section:'Câmaras cardíacas',type:'single',figure:'chambers',figureTitle:'As quatro câmaras em uma vista frontal',caption:'Nesta vista, o lado direito anatômico está à esquerda de quem observa. As letras identificam câmaras sem indicar uma escala.',title:'Qual letra representa a câmara que impulsiona o sangue para a circulação sistêmica?',instruction:'Observe a orientação anatômica e considere de onde o sangue sai para a aorta.',options:[['a','A · Átrio direito'],['b','B · Ventrículo direito'],['c','C · Átrio esquerdo'],['d','D · Ventrículo esquerdo']],correct:'d',hint:'A aorta recebe a ejeção do ventrículo esquerdo.',explain:'A letra D corresponde ao ventrículo esquerdo, cuja parede muscular é mais espessa e que impulsiona sangue para a aorta. O lado esquerdo anatômico aparece à direita da figura frontal.'},
+ {section:'Retorno venoso',type:'single',figure:'venous',figureTitle:'O retorno sistêmico ao coração',caption:'As duas veias cavas se conectam ao átrio direito. O diagrama mostra apenas o primeiro destino do retorno venoso sistêmico.',title:'Ao voltar dos tecidos pelas veias cavas, em qual câmara o sangue chega primeiro?',instruction:'Siga as setas azuladas que retornam do corpo.',options:[['a','Átrio esquerdo'],['b','Ventrículo esquerdo'],['c','Átrio direito'],['d','Ventrículo direito']],correct:'c',hint:'As veias cavas desembocam no lado direito do coração.',explain:'As veias cavas superior e inferior desembocam no átrio direito. O sangue passa então pela valva tricúspide até o ventrículo direito.'},
+ {section:'Circuito pulmonar',type:'single',figure:'pulmonary',figureTitle:'Uma viagem do ventrículo direito aos pulmões',caption:'Setas azuis indicam sangue relativamente menos oxigenado; setas vermelhas mostram o retorno com maior oxigenação após as trocas gasosas.',title:'Qual percurso resume corretamente a circulação pulmonar?',instruction:'Não confunda o nome do vaso com o grau de oxigenação do sangue.',options:[['a','Ventrículo direito → artérias pulmonares → pulmões → veias pulmonares → átrio esquerdo'],['b','Ventrículo esquerdo → veias cavas → pulmões → átrio direito'],['c','Átrio direito → aorta → pulmões → ventrículo esquerdo'],['d','Ventrículo direito → veias pulmonares → pulmões → artérias pulmonares → átrio esquerdo']],correct:'a',hint:'Artérias levam sangue para fora do coração; veias trazem o sangue de volta.',explain:'O ventrículo direito ejeta para as artérias pulmonares, e o sangue retorna pelas veias pulmonares ao átrio esquerdo. Em condições habituais, a artéria pulmonar contém sangue menos oxigenado que as veias pulmonares.'},
+ {section:'Valvas',type:'single',figure:'valve',figureTitle:'Passagem entre as câmaras esquerdas',caption:'A prancha indica a valva atrioventricular esquerda entre o átrio e o ventrículo, sem reproduzir sua morfologia exata.',title:'Qual valva impede o refluxo do ventrículo esquerdo para o átrio esquerdo durante a contração ventricular?',instruction:'Identifique a valva entre as duas câmaras, não a valva na saída da aorta.',options:[['a','Pulmonar'],['b','Mitral (bicúspide)'],['c','Tricúspide'],['d','Aórtica']],correct:'b',hint:'A valva mitral é a atrioventricular esquerda.',explain:'A valva mitral, também chamada bicúspide, separa átrio e ventrículo esquerdos. Na sístole ventricular ela se fecha, enquanto a valva aórtica pode se abrir quando o gradiente de pressão favorece a ejeção.'},
+ {section:'Sístole ventricular',type:'single',figure:'ejection',figureTitle:'A fase de ejeção ventricular',caption:'O desenho compara posições conceituais das valvas durante a ejeção; abertura real depende dos gradientes de pressão.',title:'Durante a fase de ejeção dos ventrículos, qual combinação de valvas é esperada?',instruction:'Pense no sentido do fluxo: dos ventrículos para as grandes artérias.',options:[['a','Valvas atrioventriculares abertas e semilunares fechadas'],['b','Todas abertas durante toda a sístole'],['c','Valvas atrioventriculares fechadas e semilunares abertas'],['d','Todas fechadas durante toda a ejeção']],correct:'c',hint:'A ejeção deve ocorrer pelas saídas arterial pulmonar e aórtica.',explain:'Na ejeção, as valvas aórtica e pulmonar estão abertas, enquanto mitral e tricúspide permanecem fechadas, limitando o refluxo para os átrios. Na contração isovolumétrica, que antecede a ejeção, todas estão fechadas.'},
+ {section:'Diástole ventricular',type:'single',figure:'filling',figureTitle:'Enchimento dos ventrículos',caption:'Setas descem dos átrios para os ventrículos na fase de enchimento; a figura não representa pressões reais.',title:'No enchimento ventricular habitual, quais valvas permitem a passagem do sangue dos átrios?',instruction:'Compare o fluxo de entrada com as saídas para as artérias.',options:[['a','Mitral e tricúspide'],['b','Aórtica e pulmonar'],['c','Somente a aórtica'],['d','Todas as quatro']],correct:'a',hint:'As valvas atrioventriculares comunicam átrios e ventrículos.',explain:'Durante grande parte do enchimento ventricular, mitral e tricúspide estão abertas, enquanto as valvas semilunares estão fechadas. A abertura resulta das diferenças de pressão, e a contração atrial contribui para o enchimento final.'},
+ {section:'Eletrocardiograma',type:'multiple',figure:'ecg',figureTitle:'Ondas de um ECG idealizado',caption:'Traçado esquemático não derivado de paciente. As letras P, QRS e T representam fenômenos elétricos, não contrações diretamente medidas.',title:'Quais associações entre ondas do ECG e eventos elétricos estão corretas?',instruction:'Marque todas as associações corretas. O ECG detecta atividade elétrica, não o volume bombeado.',options:[['a','Onda P: despolarização atrial'],['b','Complexo QRS: despolarização ventricular'],['c','Onda T: repolarização ventricular'],['d','Onda P: ejeção de sangue pela aorta'],['e','Complexo QRS: enchimento ventricular medido diretamente']],correct:['a','b','c'],hint:'P, QRS e T correspondem a alterações de atividade elétrica no tecido cardíaco.',explain:'P representa despolarização atrial; QRS, despolarização ventricular; T, repolarização ventricular. Eventos mecânicos ocorrem associados, mas o ECG não mede fluxo ou volume ejetado.'},
+ {section:'Condução elétrica',type:'single',figure:'conduction',figureTitle:'O sistema de condução do coração',caption:'Os pontos e linhas representam a organização da ativação, sem reproduzir a velocidade ou os intervalos reais de condução.',title:'Que estrutura retarda brevemente a condução entre a ativação atrial e a ventricular?',instruction:'Procure a passagem elétrica localizada na junção entre átrios e ventrículos.',options:[['a','Veia cava superior'],['b','Nó atrioventricular (AV)'],['c','Valva aórtica'],['d','Veias pulmonares']],correct:'b',hint:'A sigla AV indica a estrutura localizada entre átrios e ventrículos.',explain:'O nó atrioventricular (AV) introduz atraso fisiológico na condução, favorecendo a sequência coordenada entre átrios e ventrículos. O nó sinoatrial inicia normalmente o ritmo.'},
+ {section:'Gradientes de pressão',type:'single',figure:'pressure',figureTitle:'Comparação conceitual de pressões',caption:'Curvas sem valores nem unidade clínica: o objetivo é comparar a pressão ventricular esquerda com a da aorta, não estimar pressão de uma pessoa.',title:'O que favorece a abertura da valva aórtica e o começo da ejeção?',instruction:'Considere o instante em que a curva ventricular ultrapassa a pressão aórtica.',options:[['a','Pressão ventricular esquerda maior que a da aorta'],['b','Pressão aórtica maior que a ventricular esquerda'],['c','Ausência de qualquer diferença de pressão ao longo do ciclo'],['d','Abertura voluntária da valva pelo sistema nervoso']],correct:'a',hint:'O sangue tende a fluir conforme o gradiente de pressão quando há uma passagem aberta.',explain:'Na ejeção, a pressão do ventrículo esquerdo torna-se suficiente para superar a pressão aórtica e abrir a valva. As curvas são apenas didáticas e não permitem calcular pressão arterial ou diagnosticar doenças.'},
+ {section:'Sequência sistêmica',type:'sequence',figure:'systemic',figureTitle:'Da bomba aos tecidos e de volta',caption:'Um caminho didático para seguir uma porção de sangue; os circuitos circulatórios operam continuamente, e não como turnos isolados.',title:'Ordene as cinco etapas do circuito sistêmico.',instruction:'Use os botões de subir e descer até reconstruir o percurso do sangue, começando no ventrículo esquerdo.',items:[['t','Capilares dos tecidos'],['v','Veias sistêmicas'],['l','Ventrículo esquerdo'],['r','Átrio direito'],['a','Aorta e artérias sistêmicas']],correct:['l','a','t','v','r'],hint:'Comece com a ejeção do ventrículo esquerdo e termine com o retorno ao átrio direito.',explain:'No circuito sistêmico, o sangue sai do ventrículo esquerdo pela aorta, percorre artérias até os capilares teciduais e retorna pelas veias sistêmicas ao átrio direito.'},
+ {section:'Circulação coronária',type:'single',figure:'coronary',figureTitle:'Irrigação do próprio músculo cardíaco',caption:'As linhas douradas esquematizam vasos na superfície do coração. A imagem não permite avaliar obstruções ou doenças.',title:'Quais vasos fornecem sangue ao músculo cardíaco (miocárdio)?',instruction:'Não confunda o sangue dentro das câmaras com o suprimento do próprio tecido muscular.',options:[['a','Veias cavas, diretamente de suas luzes'],['b','Artérias coronárias e seus ramos'],['c','Artérias pulmonares, diretamente dentro do miocárdio'],['d','Valvas mitral e tricúspide']],correct:'b',hint:'Esses vasos nascem na região inicial da aorta e irrigam o miocárdio.',explain:'As artérias coronárias e seus ramos irrigam o miocárdio, que também precisa receber oxigênio e nutrientes. O desenho não representa artérias de pacientes nem possibilita avaliação clínica.'},
+ {section:'Prevenção cardiovascular',type:'multiple',figure:'prevention',figureTitle:'Hábitos, acompanhamento e ambiente',caption:'Pictogramas originais ilustram possibilidades de cuidado, sem prometer prevenção absoluta ou substituir acompanhamento individualizado.',title:'Quais medidas fazem parte de estratégias reconhecidas de prevenção cardiovascular?',instruction:'Marque todas as estratégias coerentes com evidências de saúde pública.',options:[['a','Manter atividade física adaptada à condição individual'],['b','Evitar tabaco e exposição à fumaça'],['c','Acompanhar a pressão arterial quando indicado'],['d','Suspender medicamentos por conta própria quando não há sintomas'],['e','Confiar apenas na frequência cardíaca para descartar doenças']],correct:['a','b','c'],hint:'Prevenção envolve hábitos, avaliações apropriadas e acompanhamento profissional quando necessário.',explain:'Atividade física adequada, não fumar e acompanhamento de fatores de risco como pressão arterial são medidas amplamente recomendadas. Decisões sobre medicamentos exigem orientação clínica, e frequência cardíaca isolada não exclui doenças.'}
+];
+var answer=Object.create(null),checked=Object.create(null),firstTry=Object.create(null),index=0,reduceMotion=false;
+function wrapSvg(title,desc,body){
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 370" role="img" aria-labelledby="plateSvgTitle plateSvgDesc"><title id="plateSvgTitle">'+title+'</title><desc id="plateSvgDesc">'+desc+'</desc>'+
+ '<rect x="1" y="1" width="538" height="368" fill="#fff8ed" stroke="#d2bdb3"/>'+
+ '<path d="M30 40H510M30 328H510" stroke="#d6c0b7"/>'+
+ '<text x="29" y="25" font-family="monospace" font-size="11" fill="#795665">ATLAS CARDÍACO · ESQUEMA DIDÁTICO</text>'+
+ body+'<text x="30" y="351" font-family="monospace" font-size="11" fill="#8c6a6b">NÃO ESTÁ EM ESCALA · NÃO É EXAME CLÍNICO</text></svg>';
+}
+function text(x,y,t,color,size){return '<text x="'+x+'" y="'+y+'" font-family="system-ui,sans-serif" font-size="'+(size||14)+'" fill="'+(color||'#514351')+'">'+t+'</text>';}
+function arrow(x1,y1,x2,y2,c){return '<path d="M'+x1+' '+y1+'L'+x2+' '+y2+'" stroke="'+c+'" stroke-width="7" stroke-linecap="round"/><path d="M'+x2+' '+y2+'l-13 -9v18z" fill="'+c+'" transform="rotate('+(Math.atan2(y2-y1,x2-x1)*180/Math.PI)+' '+x2+' '+y2+')"/>';}
+function heartBase(){
+ return '<path d="M248 89C209 52 157 72 152 126C144 202 203 286 266 320C335 273 397 184 384 120C375 76 326 58 281 99Z" fill="#dcacaa" stroke="#9d5965" stroke-width="4"/>'+
+ '<path d="M267 113C251 166 265 251 266 307" fill="none" stroke="#fff1df" stroke-width="5"/>'+
+ '<path d="M165 180Q216 160 261 185M274 179Q329 159 373 178" fill="none" stroke="#fbe2ce" stroke-width="4"/>';
+}
+function art(kind){
+ var body='', blue='#3d7884',red='#9a425b', gold='#b18555',dark='#4d4050';
+ if(kind==='chambers'){
+  body=heartBase()+'<path d="M175 104C188 99 222 105 244 132L245 178Q209 165 166 181Z" fill="#6f9aa2" opacity=".85"/>'+
+   '<path d="M167 188Q220 170 254 199L259 287Q207 253 179 210Z" fill="#427d8a" opacity=".86"/>'+
+   '<path d="M288 129Q327 94 362 111L369 174Q323 157 278 180Z" fill="#cb8f91"/>'+
+   '<path d="M282 198Q319 167 370 191Q349 256 273 306Z" fill="#9d485c"/>'+
+   '<g font-family="Georgia,serif" font-size="26" fill="white" text-anchor="middle"><text x="207" y="143">A</text><text x="214" y="231">B</text><text x="324" y="145">C</text><text x="321" y="231">D</text></g>'+
+   text(30,93,'Vista frontal')+text(30,119,'Direita anatômica')+text(391,119,'Esquerda')+text(391,140,'anatômica');
+ }
+ else if(kind==='venous'){
+  body='<rect x="315" y="80" width="166" height="225" rx="75" fill="#ebd0c9" stroke="#bd9291"/>'+
+   '<path d="M390 70V143M390 286V214" stroke="'+blue+'" stroke-width="33" stroke-linecap="round"/>'+
+   '<path d="M390 151Q430 143 435 185Q430 232 390 228Q354 224 350 188Q355 150 390 151Z" fill="#75a6af" stroke="#396f7c" stroke-width="4"/>'+
+   '<path d="M390 232V284" stroke="'+blue+'" stroke-width="12"/>'+
+   text(26,77,'Veia cava superior',dark,16)+arrow(220,89,356,90,blue)+
+   text(26,247,'Veia cava inferior',dark,16)+arrow(220,267,356,267,blue)+
+   text(343,195,'ÁTRIO',dark,16)+text(343,215,'DIREITO',dark,16);
+ }
+ else if(kind==='pulmonary'){
+  body='<path d="M70 123Q100 75 134 121L149 230Q100 251 62 224Z" fill="#e9c7c7" stroke="#b57882" stroke-width="3"/>'+
+   '<path d="M398 120Q439 77 467 127L476 226Q444 252 393 228Z" fill="#e9c7c7" stroke="#b57882" stroke-width="3"/>'+
+   '<path d="M267 154C226 126 208 173 223 217Q245 259 270 274Q300 252 315 211C325 166 295 129 267 154Z" fill="#ca9498" stroke="#874359" stroke-width="4"/>'+
+   '<path d="M256 186L164 134L117 164M286 186L384 133L433 170" fill="none" stroke="'+blue+'" stroke-width="13" stroke-linecap="round"/>'+
+   '<path d="M115 207L202 254L244 228M427 208L340 253L291 233" fill="none" stroke="'+red+'" stroke-width="13" stroke-linecap="round"/>'+
+   text(70,70,'PULMÃO')+text(391,70,'PULMÃO')+text(236,307,'CORAÇÃO')+
+   text(20,286,'Azul: saída para os pulmões',blue,12)+text(305,286,'Vinho: retorno',red,12);
+ }
+ else if(kind==='valve'){
+  body='<rect x="147" y="65" width="243" height="97" rx="45" fill="#e6b7b3" stroke="#aa6775" stroke-width="4"/>'+
+   '<path d="M147 248Q153 182 240 191H308Q385 191 390 250Q371 305 263 310Q163 292 147 248Z" fill="#a14d62" stroke="#873f55" stroke-width="4"/>'+
+   '<path d="M264 153V194" stroke="'+red+'" stroke-width="30"/>'+
+   '<path d="M224 175Q260 208 267 185Q282 210 315 175" fill="#f7e3ce" stroke="#9d6e65" stroke-width="3"/>'+
+   '<path d="M261 115V148" stroke="#fff3e5" stroke-width="6"/>'+
+   text(178,112,'ÁTRIO ESQUERDO')+text(183,267,'VENTRÍCULO ESQUERDO','#fff5e6')+
+   text(28,183,'VALVA ?','#8c4b62',19)+'<path d="M125 177L216 177" stroke="'+gold+'" stroke-width="3" stroke-dasharray="5 5"/>';
+ }
+ else if(kind==='ejection'||kind==='filling'){
+  var ejec=kind==='ejection';
+  body='<rect x="63" y="90" width="182" height="92" rx="40" fill="#e0b9b4" stroke="#ad7581" stroke-width="3"/>'+
+   '<rect x="294" y="90" width="182" height="92" rx="40" fill="#e0b9b4" stroke="#ad7581" stroke-width="3"/>'+
+   '<path d="M83 205Q55 299 154 311Q250 297 227 205Z" fill="#709ba5" stroke="#3d7884" stroke-width="3"/>'+
+   '<path d="M314 205Q290 297 386 311Q485 299 454 205Z" fill="#b66370" stroke="#913e54" stroke-width="3"/>'+
+   '<path d="M152 92V57M383 92V57" stroke="'+red+'" stroke-width="14"/>'+
+   (ejec?'<path d="M152 196V80M385 196V80" stroke="#fff1dd" stroke-width="6" stroke-dasharray="9 7"/>':
+   '<path d="M152 114V240M385 114V240" stroke="#fff1dd" stroke-width="6" stroke-dasharray="9 7"/>')+
+   text(98,135,'ÁTRIO D.',dark,15)+text(331,135,'ÁTRIO E.',dark,15)+
+   text(118,273,'VD','#fff',17)+text(350,273,'VE','#fff',17)+
+   text(57,333,ejec?'AV fechadas · Saídas abertas':'AV abertas · Saídas fechadas',dark,16);
+ }
+ else if(kind==='ecg'){
+  body='<g stroke="#e7d5c7" stroke-width="1"><path d="M36 88H505M36 138H505M36 188H505M36 238H505M36 288H505M65 65V310M135 65V310M205 65V310M275 65V310M345 65V310M415 65V310M485 65V310"/></g>'+
+   '<path d="M40 214H91Q110 158 133 214H194L211 234L231 119L249 285L268 214H338Q367 166 402 214H501" stroke="'+red+'" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'+
+   '<g font-family="Georgia,serif" font-size="21" fill="'+dark+'"><text x="112" y="145">P</text><text x="220" y="83">QRS</text><text x="361" y="146">T</text></g>'+
+   text(54,317,'Linha de base',dark,13);
+ }
+ else if(kind==='conduction'){
+  body=heartBase()+
+   '<circle cx="185" cy="116" r="13" fill="#f6d481" stroke="#755c51" stroke-width="3"/>'+
+   '<circle cx="255" cy="177" r="12" fill="#f6d481" stroke="#755c51" stroke-width="3"/>'+
+   '<path d="M185 116Q232 122 255 177L268 233L233 277M268 233L316 274" fill="none" stroke="'+gold+'" stroke-width="8" stroke-linecap="round" stroke-dasharray="7 6"/>'+
+   text(28,104,'NÓ SA',dark,16)+'<path d="M98 108L170 116" stroke="'+gold+'" stroke-width="2"/>'+
+   text(342,173,'NÓ AV',dark,16)+'<path d="M335 171L269 177" stroke="'+gold+'" stroke-width="2"/>'+
+   text(30,307,'Distribuição ventricular',dark,13)+'<path d="M196 299L230 278" stroke="'+gold+'" stroke-width="2"/>';
+ }
+ else if(kind==='pressure'){
+  body='<path d="M65 65V289H487" fill="none" stroke="#6b6263" stroke-width="3"/>'+
+   '<path d="M65 235C130 238 154 238 175 203C195 153 240 116 291 125C335 134 369 198 403 223C436 243 457 240 480 236" fill="none" stroke="'+red+'" stroke-width="6"/>'+
+   '<path d="M65 161C160 163 185 172 222 174C252 178 286 169 310 174C354 179 376 171 480 170" fill="none" stroke="'+blue+'" stroke-width="5" stroke-dasharray="12 7"/>'+
+   '<path d="M201 73V290" stroke="'+gold+'" stroke-width="3" stroke-dasharray="5 7"/>'+
+   '<circle cx="201" cy="172" r="8" fill="'+gold+'" stroke="#fff8ed" stroke-width="3"/>'+
+   text(70,54,'Pressão relativa (conceitual)',dark,15)+
+   text(280,95,'Ventrículo esquerdo',red,14)+text(342,150,'Aorta',blue,14)+
+   text(182,316,'Tempo →',dark,13);
+ }
+ else if(kind==='systemic'){
+  body='<g fill="#efe4d6" stroke="#c6a79f" stroke-width="3"><rect x="30" y="132" rx="19" width="126" height="94"/><rect x="212" y="61" rx="19" width="115" height="86"/><rect x="377" y="132" rx="19" width="125" height="94"/><rect x="211" y="254" rx="19" width="115" height="63"/></g>'+
+   '<path d="M155 161Q175 90 213 90M328 105Q375 110 383 151" fill="none" stroke="'+red+'" stroke-width="10" stroke-linecap="round"/>'+
+   '<path d="M440 231Q434 282 328 286M211 285Q113 285 95 229" fill="none" stroke="'+blue+'" stroke-width="10" stroke-linecap="round"/>'+
+   text(56,172,'VE',dark,23)+text(231,95,'AORTA',dark,13)+text(395,167,'TECIDOS',dark,13)+text(229,282,'VEIAS',dark,13)+text(59,202,'ÁTRIO D. ←',dark,12)+
+   text(28,53,'Ordene do VE ao átrio direito',dark,14);
+ }
+ else if(kind==='coronary'){
+  body=heartBase()+
+   '<path d="M279 108Q286 150 302 169Q345 191 340 241M283 150Q250 166 239 199Q226 236 204 249M304 182Q272 195 272 252M231 206Q205 189 190 193" fill="none" stroke="'+gold+'" stroke-width="8" stroke-linecap="round"/>'+
+   '<g fill="#f8df91" stroke="#a67948" stroke-width="2"><circle cx="302" cy="169" r="6"/><circle cx="239" cy="199" r="6"/><circle cx="340" cy="241" r="6"/></g>'+
+   text(27,100,'Ramos da',dark,16)+text(27,122,'circulação',dark,16)+text(27,144,'coronária',dark,16)+
+   '<path d="M120 135L232 197" stroke="'+gold+'" stroke-width="3"/>';
+ }
+ else if(kind==='prevention'){
+  body='<g fill="#e9d9cc" stroke="#aa8f83" stroke-width="3"><circle cx="121" cy="140" r="81"/><circle cx="270" cy="140" r="81"/><circle cx="418" cy="140" r="81"/></g>'+
+   '<g stroke="'+blue+'" stroke-linecap="round" stroke-linejoin="round" stroke-width="8" fill="none"><circle cx="113" cy="93" r="14"/><path d="M119 116L133 157L165 174M130 158L95 190M112 136L82 152"/></g>'+
+   '<path d="M248 88L294 184M302 93L242 179" stroke="'+red+'" stroke-width="11" stroke-linecap="round"/>'+
+   '<path d="M244 98L296 98L296 166L244 166Z" fill="none" stroke="'+red+'" stroke-width="5"/>'+
+   '<rect x="381" y="101" width="74" height="80" rx="9" fill="#fff6ea" stroke="'+gold+'" stroke-width="4"/>'+
+   '<path d="M393 126H444M393 146H444" stroke="'+gold+'" stroke-width="5"/>'+
+   text(72,254,'MOVIMENTO',dark,15)+text(226,254,'SEM TABACO',dark,15)+text(367,254,'ACOMPANHAR',dark,15)+
+   text(112,283,'Medidas complementares, não garantias individuais',dark,13);
+ }
+ return wrapSvg('Prancha: '+questions[index].figureTitle,questions[index].caption,body);
+}
+function chosen(q){
+ if(q.type==='sequence'){return (answer[index]||q.items.map(function(x){return x[0];})).slice();}
+ return q.type==='multiple'?(answer[index]||[]).slice():(answer[index]||'');
+}
+function equal(a,b){
+ if(Array.isArray(a)&&Array.isArray(b)){
+  if(a.length!==b.length)return false;
+  return a.slice().sort().join('|')===b.slice().sort().join('|');
+ }
+ return a===b;
+}
+function correctCount(){return questions.filter(function(q,i){return checked[i]&&checked[i].ok;}).length;}
+function reviewedCount(){return Object.keys(checked).length;}
+function updateProgress(){
+ var done=reviewedCount();
+ $('progressStep').textContent='QUESTÃO '+String(index+1).padStart(2,'0')+' / '+total;
+ $('progressDone').textContent=done+' de '+total+' conferidas';
+ $('progressFill').style.width=(done*100/total)+'%';
+ $('progressBar').setAttribute('aria-valuenow',String(done));
+ $('progressTopic').textContent=questions[index].section;
+}
+function updateSelections(){
+ Array.prototype.forEach.call($('answerMount').querySelectorAll('.option'),function(el){el.classList.toggle('selected',!!el.querySelector('input').checked);});
+}
+function render(focus){
+ var q=questions[index],isSequence=q.type==='sequence';
+ $('summaryScreen').hidden=true;$('questionScreen').hidden=false;
+ $('plateNum').textContent='PRANCHA '+String(index+1).padStart(2,'0');
+ $('plateLabel').textContent=q.section.toUpperCase();
+ $('platePicture').innerHTML=art(q.figure);
+ $('plateCaption').textContent=q.caption;
+ $('questionSection').textContent=String(index+1).padStart(2,'0')+' / '+q.section.toUpperCase();
+ $('questionType').textContent=isSequence?'ORDENAÇÃO':q.type==='multiple'?'MÚLTIPLA SELEÇÃO':'ESCOLHA ÚNICA';
+ $('questionTitle').textContent=q.title;
+ $('questionInstruction').textContent=q.instruction;
+ $('answerHelp').textContent=isSequence?'Use ↑ e ↓ para mover cada etapa.':q.type==='multiple'?'Marque uma ou mais alternativas antes de conferir.':'Escolha uma única alternativa e confira.';
+ var mount=$('answerMount');mount.replaceChildren();
+ if(isSequence){
+  var ul=document.createElement('ol');ul.className='sequence';ul.setAttribute('aria-label','Etapas em ordem editável');
+  var current=chosen(q);
+  current.forEach(function(id,j){
+   var li=document.createElement('li');li.className='sequence-item';
+   var n=document.createElement('span');n.className='num';n.textContent=String(j+1).padStart(2,'0');
+   var lab=document.createElement('span');lab.className='label';lab.textContent=q.items.find(function(it){return it[0]===id;})[1];
+   var group=document.createElement('span');group.className='order-buttons';
+   [-1,1].forEach(function(delta){
+    var b=document.createElement('button');b.type='button';b.textContent=delta<0?'↑':'↓';b.disabled=delta<0?j===0:j===current.length-1;
+    b.dataset.position=String(j);b.dataset.delta=String(delta);
+    b.setAttribute('aria-label',(delta<0?'Subir: ':'Descer: ')+lab.textContent);
+    group.appendChild(b);
+   });
+   li.appendChild(n);li.appendChild(lab);li.appendChild(group);ul.appendChild(li);
+  });mount.appendChild(ul);
+ }else{
+  var field=document.createElement('fieldset');field.className='answers';
+  var legend=document.createElement('legend');legend.textContent=q.type==='multiple'?'Selecione todas as respostas corretas':'Escolha a resposta';field.appendChild(legend);
+  var opts=document.createElement('div');opts.className='options';
+  q.options.forEach(function(opt){
+   var lab=document.createElement('label');lab.className='option';
+   var inp=document.createElement('input');inp.type=q.type==='multiple'?'checkbox':'radio';inp.name='q'+index;inp.value=opt[0];
+   inp.checked=q.type==='multiple'?chosen(q).indexOf(opt[0])!==-1:chosen(q)===opt[0];
+   var label=document.createElement('span');label.className='option-copy';label.textContent=opt[1];
+   lab.appendChild(inp);lab.appendChild(label);opts.appendChild(lab);
+  });field.appendChild(opts);mount.appendChild(field);updateSelections();
+ }
+ var state=checked[index];var fb=$('feedback');
+ fb.hidden=!state;fb.className='feedback'+(state&&state.ok?' correct':'');
+ if(state){
+  fb.replaceChildren();
+  var strong=document.createElement('strong');strong.textContent=state.ok?'Correto: você identificou a relação essencial.':'Ainda não. Examine novamente a prancha.';
+  var detail=document.createElement('p');detail.textContent=state.ok?q.explain:q.hint+' '+q.explain;
+  fb.appendChild(strong);fb.appendChild(detail);
+  var small=document.createElement('p');small.className='feedback-extra';small.textContent=state.ok?'Resposta conferida. Você pode avançar ou voltar para revisar.':'Você pode alterar a resposta e conferir novamente, ou avançar e revisar depois.';
+  fb.appendChild(small);
+ }
+ $('previousButton').disabled=index===0;
+ $('checkButton').textContent=state?'Tentar novamente':'Conferir resposta';
+ $('nextButton').disabled=!state;
+ $('nextButton').textContent=index===total-1?'Ver resultado →':'Próxima questão →';
+ updateProgress();
+ if(focus){$('questionTitle').focus();$('questionScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});}
+}
+function invalidate(){if(checked[index])delete checked[index];$('feedback').hidden=true;$('checkButton').textContent='Conferir resposta';$('nextButton').disabled=true;updateProgress();}
+$('answerMount').addEventListener('change',function(e){
+ var input=e.target;
+ if(!input.matches('input'))return;
+ var q=questions[index];
+ if(q.type==='multiple'){answer[index]=Array.prototype.map.call($('answerMount').querySelectorAll('input:checked'),function(it){return it.value;});}
+ else{answer[index]=input.value;}
+ invalidate();updateSelections();
+});
+$('answerMount').addEventListener('click',function(e){
+ var b=e.target.closest('button[data-position]');if(!b)return;
+ var q=questions[index],current=chosen(q);
+ var pos=Number(b.dataset.position),next=pos+Number(b.dataset.delta);
+ if(next<0||next>=current.length)return;
+ var temp=current[pos];current[pos]=current[next];current[next]=temp;answer[index]=current;
+ invalidate();render(false);
+ var selector='button[data-position="'+next+'"][data-delta="'+b.dataset.delta+'"]';
+ var focusButton=$('answerMount').querySelector(selector);if(focusButton&&!focusButton.disabled)focusButton.focus();
+});
+$('checkButton').addEventListener('click',function(){
+ if(checked[index]){invalidate();$('questionTitle').focus();return;}
+ var q=questions[index],value=chosen(q),missing=q.type==='sequence'?false:q.type==='multiple'?value.length===0:!value;
+ if(missing){$('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Selecione uma resposta antes de conferir.';return;}
+ var ok=equal(value,q.correct);
+ if(firstTry[index]===undefined)firstTry[index]=ok;
+ checked[index]={ok:ok};
+ render(false);
+});
+$('previousButton').addEventListener('click',function(){if(index>0){index--;render(true);}});
+$('nextButton').addEventListener('click',function(){
+ if(!checked[index])return;
+ if(index===total-1){showSummary();return;}
+ index++;render(true);
+});
+function showSummary(){
+ $('questionScreen').hidden=true;$('summaryScreen').hidden=false;
+ $('progressStep').textContent='REVISÃO CONCLUÍDA';
+ $('progressTopic').textContent='Síntese da jornada cardíaca';
+ $('totalReviewed').textContent=String(reviewedCount())+' / '+total;
+ $('totalMastered').textContent=String(correctCount())+' / '+total;
+ $('totalFirst').textContent=String(Object.keys(firstTry).filter(function(k){return firstTry[k]===true;}).length)+' / '+total;
+ var list=$('reviewList');list.replaceChildren();
+ questions.forEach(function(q,i){
+  var li=document.createElement('li');li.className='review-item';
+  var block=document.createElement('div');
+  var strong=document.createElement('strong');strong.textContent=String(i+1).padStart(2,'0')+'. '+q.section;
+  var p=document.createElement('p');p.textContent=checked[i]?(checked[i].ok?'Correta. ':'A revisar. ')+q.explain:'Ainda não conferida. '+q.explain;
+  block.appendChild(strong);block.appendChild(p);
+  var b=document.createElement('button');b.type='button';b.textContent='Rever prancha';b.dataset.review=String(i);
+  li.appendChild(block);li.appendChild(b);list.appendChild(li);
+ });
+ $('summaryTitle').focus();$('summaryScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});
+}
+$('reviewList').addEventListener('click',function(e){var b=e.target.closest('button[data-review]');if(!b)return;index=Number(b.dataset.review);render(true);});
+$('restartButton').addEventListener('click',function(){answer=Object.create(null);checked=Object.create(null);firstTry=Object.create(null);index=0;render(true);});
+$('reviewFirstButton').addEventListener('click',function(){index=0;render(true);});
+$('motionToggle').addEventListener('click',function(){reduceMotion=!reduceMotion;document.body.classList.toggle('motion-reduce',reduceMotion);this.setAttribute('aria-pressed',String(reduceMotion));this.textContent=reduceMotion?'Restaurar movimentos':'Reduzir movimentos';});
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){reduceMotion=true;document.body.classList.add('motion-reduce');$('motionToggle').setAttribute('aria-pressed','true');$('motionToggle').textContent='Restaurar movimentos';}
+if(questions.length!==total){throw new Error('Total de questões inconsistente');}
+render(false);
+})();
+</script>
+</body>
+</html>
