@@ -87,6 +87,11 @@ p{margin-bottom:1.15em}
 .stage-btn span small{display:block;color:#c4d1dd;font-size:.85rem;line-height:1.5}
 .stage-btn[aria-pressed="true"]{border-color:#efbd76;background:#f1c07a17;box-shadow:inset 4px 0 #e1b26d}
 .stage-btn:hover{background:#ffffff17}
+.stage-mini{margin:22px 0 0;padding:13px 16px 11px;border:1px solid #6f829478;background:linear-gradient(160deg,#1e4358,#11283c)}
+.stage-mini svg{width:100%;height:auto;display:block}
+.stage-mini [data-mini-phase]{opacity:0}
+.stage-mini[data-stage="growth"] [data-mini-phase="growth"],.stage-mini[data-stage="mature"] [data-mini-phase="mature"],.stage-mini[data-stage="decay"] [data-mini-phase="decay"]{opacity:1}
+.stage-mini figcaption{font-size:.79rem;color:#c9d6db;margin:8px 0 0}
 .stage-detail{padding:28px 0 0;max-width:570px}
 .stage-detail h3{font:2rem Georgia,serif;color:#f4cf96;margin-bottom:15px}
 .stage-detail p{color:#d4dfe6;line-height:1.86;margin-bottom:0}
@@ -310,6 +315,29 @@ html{scroll-behavior:auto}
           <button class="stage-btn" type="button" data-stage-choice="mature" aria-pressed="true" aria-controls="skyScene stageTitle stageText stageFact"><span class="stage-number">II</span><span><strong>Maturidade</strong><small>Chuva e correntes ascendentes e descendentes coexistem</small></span></button>
           <button class="stage-btn" type="button" data-stage-choice="decay" aria-pressed="false" aria-controls="skyScene stageTitle stageText stageFact"><span class="stage-number">III</span><span><strong>Dissipação</strong><small>O ar descendente enfraquece a alimentação da célula</small></span></button>
         </div>
+        <figure class="stage-mini" id="stageMini" data-stage="mature">
+          <svg viewBox="0 0 580 225" role="img" aria-labelledby="stage-mini-title stage-mini-desc">
+            <title id="stage-mini-title">Perfil ilustrado do estágio selecionado</title>
+            <desc id="stage-mini-desc">O perfil da nuvem muda entre desenvolvimento, maturidade e dissipação; setas representam subida e descida do ar.</desc>
+            <path d="M0 204 Q145 194 290 203 T580 202" fill="none" stroke="#90a8ad" stroke-width="2"/>
+            <g data-mini-phase="growth">
+              <path d="M148 186 Q113 151 164 123 Q165 88 210 88 Q242 37 286 70 Q333 62 345 111 Q408 107 411 161 Q379 195 148 186Z" fill="#c9dbe3"/>
+              <path d="M256 202 V127 m-15 15 15-15 15 15" fill="none" stroke="#ffc37d" stroke-width="7" stroke-linecap="round"/>
+            </g>
+            <g data-mini-phase="mature">
+              <path d="M64 97 Q114 59 193 70 Q219 31 276 39 Q349 8 384 46 Q456 42 523 86 L480 99 Q504 123 474 153 Q443 175 130 167 Q86 166 80 143 Q71 120 110 107Z" fill="#b4c4cd"/>
+              <path d="M172 199 V124 m-16 16 16-16 16 16" fill="none" stroke="#ffc37d" stroke-width="7" stroke-linecap="round"/>
+              <path d="M400 123 V198 m-16-18 16 18 16-18" fill="none" stroke="#7bbfe4" stroke-width="7" stroke-linecap="round"/>
+              <path d="M315 139 l-16 40 m48-38-16 40 m48-39-16 40" stroke="#7bbfe4" stroke-width="4"/>
+              <path d="M433 117 l-23 38 13-2-27 48 7-38-14 3 27-47Z" fill="#ffe0a0"/>
+            </g>
+            <g data-mini-phase="decay">
+              <path d="M74 118 Q128 84 206 102 Q260 73 335 91 Q409 62 486 107 Q529 110 531 142 Q486 163 387 150 L167 162 Q105 160 74 118Z" fill="#8ba3b2"/>
+              <path d="M318 157 V198 m-14-15 14 15 14-15 M388 157 V199 m-14-15 14 15 14-15" fill="none" stroke="#84b4d2" stroke-width="6" stroke-linecap="round"/>
+            </g>
+          </svg>
+          <figcaption>Perfil simplificado do estágio selecionado. Amarelo: subida; azul: descida e chuva.</figcaption>
+        </figure>
         <div class="stage-detail" aria-live="polite" aria-atomic="true">
           <h3 id="stageTitle">O momento de maior atividade</h3>
           <p id="stageText">Na fase madura, a corrente ascendente ainda transporta ar úmido, enquanto parte da precipitação cai e arrasta ar para baixo. O encontro dessas correntes organiza chuva intensa, rajadas e, em muitos casos, raios e granizo.</p>
@@ -496,6 +524,7 @@ html{scroll-behavior:auto}
       var selected=button.getAttribute("data-stage-choice");
       var item=stages[selected];
       scene.dataset.stage=selected;
+      document.getElementById("stageMini").dataset.stage=selected;
       document.getElementById("stageTitle").textContent=item.title;
       document.getElementById("stageText").textContent=item.text;
       document.getElementById("stageFact").textContent=item.fact;
