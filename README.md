@@ -22,7 +22,9 @@ The activity authoring selector offers **Interactive (quiz/exercises)**, **Conte
 generates a localized prompt for ChatGPT or Claude; the choice is not a new
 Moodle activity type or a different storage format. Prompts are generated on
 both the empty activity view and the management page, and all modes retain
-the same draft, preview, approval and publish flow.
+the same draft, preview, approval and publish flow. Each mode's prompt panel also
+has a **Copy command** button, which copies the entire prompt into the clipboard
+with a fallback for older or restricted browsers and announces the result.
 
 - **Satisfaction survey:** one question at a time; on single-choice selection,
   save before animating the outgoing question and showing the next one. Text
