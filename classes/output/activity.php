@@ -24,6 +24,7 @@
 
 namespace mod_mcp\output;
 
+use coding_exception;
 use mod_mcp\content\service;
 use moodle_url;
 use stdClass;
@@ -117,7 +118,7 @@ final class activity {
     public static function inject_sdk(string $content): string {
         $sdk = file_get_contents(__DIR__ . "/../../sdk.js");
         if ($sdk === false) {
-            throw new \coding_exception("Cannot read the mod_mcp sandbox SDK");
+            throw new coding_exception("Cannot read the mod_mcp sandbox SDK");
         }
         $bootstrap = "<script>{$sdk}</script><style>:root{background: transparent !important;}html,body{background: transparent !important;}";
 

@@ -25,6 +25,10 @@
 namespace mod_mcp;
 
 use advanced_testcase;
+use moodle_url;
+use navigation_node;
+use settings_navigation;
+use function mcp_extend_settings_navigation;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -51,12 +55,12 @@ final class navigation_test extends advanced_testcase {
         $cmrecord = get_coursemodule_from_instance('mcp', $module->id, $course->id, false, MUST_EXIST);
         $cm = get_fast_modinfo($course)->get_cm($cmrecord->id);
 
-        $PAGE->set_url(new \moodle_url('/mod/mcp/view.php', ['id' => $cm->id]));
+        $PAGE->set_url(new moodle_url('/mod/mcp/view.php', ['id' => $cm->id]));
         $PAGE->set_course($course);
         $PAGE->set_cm($cm, $course);
 
-        $builder = $this->getMockBuilder(\settings_navigation::class)->disableOriginalConstructor();
-        if (method_exists(\settings_navigation::class, 'get_page')) {
+        $builder = $this->getMockBuilder(settings_navigation::class)->disableOriginalConstructor();
+        if (method_exists(settings_navigation::class, 'get_page')) {
             $settingsnav = $builder->onlyMethods(['get_page'])->getMock();
         } else {
             // Moodle 3.10 exposes the page without a get_page() method.
@@ -64,15 +68,15 @@ final class navigation_test extends advanced_testcase {
         }
         $settingsnav->method('get_page')->willReturn($PAGE);
 
-        $managernode = \navigation_node::create('Activity', null, \navigation_node::TYPE_SETTING);
-        $managernode->add('Edit settings', new \moodle_url('/course/modedit.php'),
-            \navigation_node::TYPE_SETTING, null, 'modedit');
-        \mcp_extend_settings_navigation($settingsnav, $managernode);
+        $managernode = navigation_node::create('Activity', null, navigation_node::TYPE_SETTING);
+        $managernode->add('Edit settings', new moodle_url('/course/modedit.php'),
+            navigation_node::TYPE_SETTING, null, 'modedit');
+        mcp_extend_settings_navigation($settingsnav, $managernode);
 
-        $link = $managernode->get('mod_mcp_manage', \navigation_node::TYPE_SETTING);
-        $this->assertInstanceOf(\navigation_node::class, $link);
+        $link = $managernode->get('mod_mcp_manage', navigation_node::TYPE_SETTING);
+        $this->assertInstanceOf(navigation_node::class, $link);
         $this->assertSame(
-            (new \moodle_url('/mod/mcp/manage.php', ['id' => $cm->id]))->out(false),
+            (new moodle_url('/mod/mcp/manage.php', ['id' => $cm->id]))->out(false),
             $link->action->out(false)
         );
         $this->assertSame(['modedit', 'mod_mcp_manage'], $managernode->get_children_key_list());
@@ -81,8 +85,8 @@ final class navigation_test extends advanced_testcase {
         $this->getDataGenerator()->enrol_user($student->id, $course->id, 'student');
         $this->setUser($student);
 
-        $studentnode = \navigation_node::create('Activity', null, \navigation_node::TYPE_SETTING);
-        \mcp_extend_settings_navigation($settingsnav, $studentnode);
-        $this->assertFalse($studentnode->get('mod_mcp_manage', \navigation_node::TYPE_SETTING));
+        $studentnode = navigation_node::create('Activity', null, navigation_node::TYPE_SETTING);
+        mcp_extend_settings_navigation($settingsnav, $studentnode);
+        $this->assertFalse($studentnode->get('mod_mcp_manage', navigation_node::TYPE_SETTING));
     }
 }

@@ -25,6 +25,8 @@
 namespace mod_mcp;
 
 use advanced_testcase;
+use mod_mcp_mod_form;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -53,11 +55,11 @@ final class manage_content_test extends advanced_testcase {
         $cm = get_coursemodule_from_id('mcp', $module->cmid, 0, false, MUST_EXIST);
         [$cm, , , $data, $section] = get_moduleinfo_data($cm, $course);
 
-        $form = new \mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
+        $form = new mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
         $form->set_data($data);
         $html = $form->render();
 
-        $url = (new \moodle_url('/mod/mcp/manage.php', ['id' => $cm->id]))->out(false);
+        $url = (new moodle_url('/mod/mcp/manage.php', ['id' => $cm->id]))->out(false);
         $this->assertStringContainsString($url, $html);
         $this->assertStringContainsString(get_string('editcontent', 'mcp'), $html);
         $this->assertStringNotContainsString('name="content"', $html);
@@ -74,8 +76,8 @@ final class manage_content_test extends advanced_testcase {
         $document = '<html><body><textarea>Example</textarea><script>let value = 1;</script></body></html>';
         $rendered = $OUTPUT->render_from_template('mod_mcp/manage', [
             'draftcontent' => $document,
-            'actionurl' => (new \moodle_url('/mod/mcp/manage.php'))->out(false),
-            'previewurl' => (new \moodle_url('/mod/mcp/view.php', ['id' => 42, 'preview' => 1]))->out(false),
+            'actionurl' => (new moodle_url('/mod/mcp/manage.php'))->out(false),
+            'previewurl' => (new moodle_url('/mod/mcp/view.php', ['id' => 42, 'preview' => 1]))->out(false),
             'cmid' => 42,
             'revision' => 23,
             'sesskey' => sesskey(),

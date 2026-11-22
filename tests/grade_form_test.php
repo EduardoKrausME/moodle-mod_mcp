@@ -25,6 +25,11 @@
 namespace mod_mcp;
 
 use advanced_testcase;
+use DOMDocument;
+use DOMXPath;
+use grade_item;
+use mod_mcp_mod_form;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -58,7 +63,7 @@ final class grade_form_test extends advanced_testcase {
         $cm = get_coursemodule_from_instance('mcp', $module->id, $course->id, false, MUST_EXIST);
         [$cm, , , $data, $section] = get_moduleinfo_data($cm, $course);
 
-        $form = new \mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
+        $form = new mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
         $form->set_data($data);
         $html = $form->render();
 
@@ -79,20 +84,20 @@ final class grade_form_test extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $COURSE = $course;
         $PAGE->set_course($course);
-        $PAGE->set_url(new \moodle_url('/course/modedit.php', ['add' => 'mcp', 'course' => $course->id]));
+        $PAGE->set_url(new moodle_url('/course/modedit.php', ['add' => 'mcp', 'course' => $course->id]));
         [, , $section, $cm, $data] = prepare_new_moduleinfo_data($course, 'mcp', 0);
 
-        $form = new \mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
+        $form = new mod_mcp_mod_form($data, (int)$section->section, $cm, $course);
         $form->set_data($data);
         $html = $form->render();
 
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         $previous = libxml_use_internal_errors(true);
         $dom->loadHTML($html);
         libxml_clear_errors();
         libxml_use_internal_errors($previous);
 
-        $xpath = new \DOMXPath($dom);
+        $xpath = new DOMXPath($dom);
         $this->assertSame(1, $xpath->query(
             '//select[@name="grade[modgrade_type]"]/option[@value="none" and @selected]'
         )->length);
@@ -113,7 +118,7 @@ final class grade_form_test extends advanced_testcase {
         ]);
 
         $this->assertEquals(0, $DB->get_field('mcp', 'grade', ['id' => $id]));
-        $gradeitem = \grade_item::fetch([
+        $gradeitem = grade_item::fetch([
             'itemtype' => 'mod',
             'itemmodule' => 'mcp',
             'iteminstance' => $id,
