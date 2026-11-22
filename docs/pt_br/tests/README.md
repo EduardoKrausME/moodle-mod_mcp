@@ -37,3 +37,11 @@ node --test docs/pt_br/tests/crossword.test.mjs
 ```
 
 O teste verifica a consistência dos cruzamentos, numeração, acentuação, limites da grade, integridade de estados e sincronização dos catálogos.
+
+Para o jogo 09 (Classifique os itens), execute:
+
+```bash
+node --test docs/pt_br/tests/categorize.test.mjs
+```
+
+Esse teste cobre categorias inválidas ou vazias, itens multicategoria, IDs desconhecidos, desfazer, conferência por conjunto, estado de progresso, acessibilidade e sincronização dos dois manifestos.

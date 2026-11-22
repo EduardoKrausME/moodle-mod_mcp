@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "category": "games",
+  "title": "Classifique os itens",
+  "description": "Exemplos de classificação educacional com destinos únicos ou múltiplos, feedback pedagógico e conteúdo independente de Moodle.",
+  "examples": [
+    {
+      "id": "classifique-os-itens-habitos-sustentaveis",
+      "title": "Classifique os itens - Hábitos sustentáveis",
+      "description": "Distribua nove atitudes sustentáveis entre economia de água, energia e redução de resíduos; duas atitudes pertencem a mais de uma categoria.",
+      "howItWorks": "Selecione um item e atribua uma ou mais categorias por botão, toque ou arraste. Revise associações, remova destinos, desfaça a última alteração e confira as escolhas com explicações específicas e acertos por categoria.",
+      "subtype": "Classificação por categorias",
+      "features": [
+        "9 itens e 3 categorias",
+        "2 itens multicategoria",
+        "Arraste, toque e teclado",
+        "Desfazer e conferir"
+      ],
+      "minutes": 7,
+      "path": "game-classifique-os-itens/habitos-sustentaveis.html",
+      "prompt": "Crie uma atividade do tipo \"Classifique os itens\" para o plugin mod_mcp, seguindo `.chatgpt/games/09-classifique-os-itens.md` e a mecânica do exemplo de Hábitos sustentáveis. O assunto do exemplo é somente uma demonstração e não deve ser reutilizado automaticamente.\n\nNa sua PRIMEIRA resposta, antes de escrever HTML, CSS, JavaScript, JSON, enunciados ou usar ferramentas de gravação, pergunte ao professor exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta do professor e não gere a atividade antes disso.\n\nDepois de receber o tema, construa itens e categorias pedagogicamente coerentes com o conteúdo escolhido. Se necessário, pergunte o nível de aprendizagem, o número de itens e se um mesmo item pode pertencer a várias categorias. Evite categorias ambíguas: explique quais características justificam cada associação correta, principalmente quando a regra aceitar múltiplas categorias.\n\nPreserve a mecânica `categorize` do jogo 09: JSON com `type`, `title`, `categories` (id e label), `items` (id, label e categoryIds) e `settings.allowMultiCategory`, com descrições e explicações específicas. Valide IDs únicos, categorias existentes, pelo menos duas categorias com respostas, conjuntos sem valores repetidos e coerência entre a regra de multiclasse e os destinos. Quando allowMultiCategory for verdadeiro, permita copiar o mesmo item para várias categorias; quando for falso, mova-o para um único destino, substituindo o anterior. A validação precisa comparar conjuntos independentemente da ordem.\n\nEntregue uma atividade HTML completa, responsiva e acessível por teclado, mouse e toque, com CSS e JavaScript incorporados, sem bibliotecas remotas, menus, cabeçalho institucional, rodapé ou elementos externos à atividade. Implemente seleção de item e destino por botões grandes, arrastar e soltar como alternativa, remoção de associações, desfazer, reiniciar, contagem de pendentes, acertos por categoria, feedback explicativo após conferir, foco visível e suporte a movimento reduzido. Teste categoria vazia, item com múltiplas categorias, ID desconhecido, desfazer, responsividade e ordem dos itens.\n\nO JSON proposto é um contrato de autoria e não significa que o servidor Moodle já interpreta esse tipo automaticamente. Não atribua notas nem conclusão oficial no navegador; use `MoodleMCP.progress` apenas se o SDK estiver disponível, respeitando versões de gravação e limite de 12 KiB. Sem conexão MCP, entregue HTML pronto para copiar e colar no gerenciador; com conexão, respeite APIs existentes e não publique sem aprovação explícita. Imagens não são obrigatórias; se forem usadas, informe quais e suas origens."
+    }
+  ]
+}
