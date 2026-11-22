@@ -85,3 +85,11 @@ node --test docs/pt_br/tests/who-am-i.test.mjs
 ```
 
 Este teste cobre aliases, acentuação, pontuação, repetição de palpites, pontuação lúdica, dicas vazias, tentativas esgotadas, encerramento após a última dica, desistência, retorno de sessão, funcionamento sem SDK, acessibilidade e sincronização dos manifestos.
+
+Para o jogo 15 (Qual não pertence? - Ciências e Tecnologia), execute:
+
+```bash
+node --test docs/pt_br/tests/odd-one-out.test.mjs
+```
+
+Esse teste cobre critérios e explicações ausentes, respostas inválidas, itens iguais, ID da exceção desconhecido, zero ou múltiplas exceções, embaralhamento reproduzível, respostas repetidas, restauração de progresso, acessibilidade e sincronização dos dois catálogos.
