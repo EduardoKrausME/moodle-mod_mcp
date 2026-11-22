@@ -88,15 +88,12 @@ function mcp_add_instance($data, $mform = null) {
         "intro" => $data->intro ?? "",
         "introformat" => $data->introformat ?? FORMAT_HTML,
         "grade" => max(0, (float)($data->grade ?? 0)),
-        "questionselection" => (string)($data->questionselection ?? "all"),
-        "questionsperattempt" => (int)($data->questionsperattempt ?? 0),
-        "shufflequestions" => empty($data->shufflequestions) ? 0 : 1,
+        "activitytype" => null,
+        "informationjson" => null,
         "completioninteractive" => empty($data->completioninteractive) ? 0 : 1,
         "draftrevision" => 0, "publishedrevision" => 0,
         "timecreated" => $now, "timemodified" => $now,
     ];
-    \mod_mcp\question\configuration::validate(
-        $record->questionselection, $record->questionsperattempt, $record->shufflequestions);
     $id = $DB->insert_record("mcp", $record);
     if (trim((string)($data->content ?? "")) !== "") {
         \mod_mcp\content\service::save((int)$id, (string)$data->content, (int)$USER->id);
@@ -126,17 +123,6 @@ function mcp_update_instance($data, $mform = null) {
     }
     $mcp->grade = max(0, (float)($data->grade ?? $mcp->grade));
     $mcp->completioninteractive = empty($data->completioninteractive) ? 0 : 1;
-    // Programmatic updates without question settings must preserve the existing values.
-    if (isset($data->questionselection) || isset($data->questionsperattempt) ||
-            isset($data->shufflequestions)) {
-        $mode = (string)($data->questionselection ?? $mcp->questionselection);
-        $count = (int)($data->questionsperattempt ?? $mcp->questionsperattempt);
-        $shuffle = (int)($data->shufflequestions ?? $mcp->shufflequestions);
-        \mod_mcp\question\configuration::validate($mode, $count, $shuffle);
-        $mcp->questionselection = $mode;
-        $mcp->questionsperattempt = $count;
-        $mcp->shufflequestions = $shuffle;
-    }
     $mcp->timemodified = time();
     $DB->update_record("mcp", $mcp);
     if (isset($data->content) && trim((string)$data->content) !== "") {
@@ -158,16 +144,9 @@ function mcp_delete_instance($id) {
     if (!$record) {
         return false;
     }
-    require_once($CFG->dirroot . "/question/engine/lib.php");
-    foreach ($DB->get_records("mcp_attempts", ["mcpid" => $id]) as $attempt) {
-        if ($attempt->qubaid) {
-            question_engine::delete_questions_usage_by_activity((int)$attempt->qubaid);
-        }
-    }
     $DB->delete_records("mcp_attempts", ["mcpid" => $id]);
     $DB->delete_records("mcp_state", ["mcpid" => $id]);
     $DB->delete_records("mcp_tracking", ["mcpid" => $id]);
-    $DB->delete_records("mcp_slots", ["mcpid" => $id]);
     $DB->delete_records("mcp_revisions", ["mcpid" => $id]);
     $DB->delete_records("mcp", ["id" => $id]);
     mcp_grade_item_delete($record);
