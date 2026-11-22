@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>Linha do Tempo | Evolução Científica do PRP e da PRF</title>
+    <style>
+        :root{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#133641;background:#f4f8f9}
+        *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;line-height:1.6}button{font:inherit;cursor:pointer}a{color:#096978}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #e8ae4d;outline-offset:3px}h1,h2,h3,p{margin-top:0}
+        .wrap{max-width:1060px;margin:0 auto;padding:16px 20px 70px}
+        .hero{position:relative;overflow:hidden;border-radius:25px;background:linear-gradient(118deg,#092f49,#075d68 65%,#118b81);color:#fff;padding:clamp(28px,5vw,56px);isolation:isolate}
+        .hero:after{content:"";position:absolute;right:-88px;top:-120px;width:315px;height:315px;border:43px solid #ffffff13;border-radius:50%;z-index:-1}
+        .eyebrow{font-size:.75rem;font-weight:750;letter-spacing:.14em;text-transform:uppercase;color:#a6e9d5;margin-bottom:13px}
+        .hero h1{font-size:clamp(2.1rem,5vw,3.7rem);line-height:1.12;max-width:800px;margin-bottom:16px}
+        .hero p{color:#e0f2f1;max-width:780px;font-size:1.06rem}
+        .hero .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+        .chips span{font-size:.82rem;border:1px solid #ffffff6b;border-radius:99px;background:#ffffff14;padding:5px 12px}
+        .progress-card{background:#fff;border:1px solid #d7e6e8;border-radius:17px;padding:20px 25px;margin:19px 0;box-shadow:0 7px 26px #143d4b0a}
+        .progress-head{display:flex;gap:12px;justify-content:space-between;align-items:center;font-weight:700;color:#164854;margin-bottom:10px}
+        .progress-head strong{font-variant-numeric:tabular-nums;color:#087669}
+        .bar{height:12px;border-radius:99px;background:#dcebec;overflow:hidden}
+        .fill{width:0;height:100%;background:linear-gradient(90deg,#117b89,#3ab794);transition:width .35s}
+        .status{font-size:.9rem;color:#526b72;margin:10px 0 0;min-height:22px}
+        .retry{display:inline-block;margin:12px 0 0;color:#8b3232;background:#fff3f1;border:1px solid #cfaaa4;border-radius:9px;padding:8px 13px;font-weight:700}
+        [hidden]{display:none!important}
+        .heading{display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin:33px 0 12px}
+        .heading h2{font-size:clamp(1.5rem,3vw,2.05rem);margin:0}
+        .heading p{color:#4d6972;margin:0}
+        .rail{display:flex;gap:9px;overflow-x:auto;padding:10px 3px 18px;scrollbar-width:thin}
+        .rail a{display:inline-block;text-decoration:none;text-align:center;flex:1 0 68px;font-weight:800;color:#135c68;background:#e9f4f4;border:1px solid #c9dedf;border-radius:12px;padding:11px 12px;transition:background .2s}
+        .rail a:hover,.rail a:focus{background:#d5f0e9}
+        .rail a.visited{background:#d9f6e8;border-color:#7bc8a7;color:#075d4b}
+        .timeline{position:relative;margin-top:12px}
+        .timeline:before{content:"";position:absolute;left:69px;top:22px;bottom:60px;width:3px;background:linear-gradient(#138b96,#b5ddcf);border-radius:5px}
+        .entry{display:grid;grid-template-columns:116px minmax(0,1fr);position:relative;gap:16px;margin:0 0 20px;scroll-margin-top:22px}
+        .track{display:flex;align-items:flex-start;position:relative;padding-top:19px;gap:13px}
+        .track .year{font-size:1.18rem;font-weight:850;color:#185563;font-variant-numeric:tabular-nums}
+        .dot{position:absolute;width:17px;height:17px;top:25px;left:62px;border:4px solid #f4f8f9;background:#148c8c;border-radius:50%;z-index:1;box-sizing:content-box}
+        .event{background:#fff;border:1px solid #d7e6e8;border-radius:17px;padding:24px 26px;box-shadow:0 4px 18px #133f4c0a}
+        .event:hover{border-color:#b7d7d4}
+        .event h3{font-size:1.26rem;line-height:1.32;color:#153d49;margin:10px 0}
+        .summary{color:#506971;margin-bottom:14px}
+        .meta{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
+        .category{font-size:.76rem;font-weight:750;color:#0b716d;background:#e1f6ee;padding:5px 10px;border-radius:50px}
+        .viewed{font-size:.77rem;color:#63777b;font-weight:650}
+        .entry.is-visited .viewed{color:#08745d}
+        .event details{border-top:1px solid #e3eced;padding-top:13px}
+        .event summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;color:#096874;font-weight:780;list-style:none}
+        .event summary::-webkit-details-marker{display:none}
+        .chev{font-size:1.4rem;line-height:1}
+        .event details[open] .chev{transform:rotate(45deg)}
+        .more{margin-top:16px;padding-top:5px;border-top:1px solid #e8eeee;animation:appear .24s ease}
+        .more p{color:#3f5d65}
+        .lesson{background:#eaf7f4;border-left:4px solid #0c9881;border-radius:8px;padding:14px 17px;margin:16px 0}
+        .lesson strong{color:#07544b}.lesson p{margin:6px 0 0;color:#28554f}
+        .source{font-size:.9rem;margin-bottom:0}
+        .note{margin:24px 0;background:#fff9ea;border:1px solid #ecd7a7;border-left:4px solid #ce9628;border-radius:12px;padding:18px 22px;color:#5e4e2f}
+        .refs{padding:23px 25px;background:#fff;border:1px solid #d8e7e7;border-radius:16px;margin-top:28px}
+        .refs h2{font-size:1.4rem;margin-bottom:10px}
+        .refs ul{padding-left:20px;color:#516970;margin:0}
+        .refs li{margin-bottom:7px}
+        .refs a{overflow-wrap:anywhere}
+        .footer{border-top:1px solid #d9e7e8;margin-top:27px;padding-top:20px;color:#60777c;font-size:.88rem}
+        @keyframes appear{from{opacity:.2;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+        @media(max-width:650px){.wrap{padding:10px 11px 50px}.hero{padding:29px 23px;border-radius:18px}.progress-card{padding:17px 18px}.timeline:before{left:22px}.entry{grid-template-columns:55px minmax(0,1fr);gap:9px}.track .year{font-size:.75rem;padding-top:0}.track{padding-top:3px}.dot{left:16px;top:32px;width:11px;height:11px;border-width:3px}.event{padding:17px 16px}.event h3{font-size:1.11rem}.rail a{flex-basis:58px}}
+        @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+    </style>
+</head>
+<body>
+<main class="wrap" id="timeline34">
+    <header class="hero">
+        <div class="eyebrow">Hematologia regenerativa · História da ciência</div>
+        <h1>Da transfusão ao estudo do reparo tecidual</h1>
+        <p>Explore oito marcos documentados da evolução do plasma rico em plaquetas (PRP) e da fibrina rica em plaquetas (PRF), compreendendo como surgiram técnicas, classificações e exigências de evidência.</p>
+        <div class="chips"><span>1954 a 2021</span><span>8 marcos históricos</span><span>Artigos e revisões científicas</span></div>
+    </header>
+    <section class="progress-card" aria-label="Progresso de exploração">
+        <div class="progress-head"><span>Marcos explorados</span><strong id="progress-number">0 de 8</strong></div>
+        <div class="bar" id="progressbar" role="progressbar" aria-label="Marcos históricos explorados" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0"><div class="fill" id="progress-fill"></div></div>
+        <p id="save-state" class="status" role="status" aria-live="polite">Consultando seu progresso individual no Moodle...</p>
+        <button type="button" class="retry" id="retry-save" hidden>Tentar novamente</button>
+    </section>
+    <section aria-labelledby="heading">
+        <div class="heading"><div><h2 id="heading">Explore a evolução científica</h2><p>Selecione um ano e abra o cartão para conhecer o marco.</p></div></div>
+        <nav class="rail" aria-label="Navegação cronológica"><a href="#marco-1954" data-target="1954">1954</a><a href="#marco-1987" data-target="1987">1987</a><a href="#marco-1998" data-target="1998">1998</a><a href="#marco-2001" data-target="2001">2001</a><a href="#marco-2006" data-target="2006">2006</a><a href="#marco-2009" data-target="2009">2009</a><a href="#marco-2017" data-target="2017">2017</a><a href="#marco-2021" data-target="2021">2021</a></nav>
+        <div class="timeline"><article class="entry" id="marco-1954" data-year="1954" data-kind="terminologia">
+            <div class="track"><span class="dot" aria-hidden="true"></span><span class="year">1954</span></div>
+            <div class="event">
+                <div class="meta"><span class="category">Origens</span><span class="viewed" aria-label="Ainda não explorado">Não explorado</span></div>
+                <h3>O termo plasma rico em plaquetas</h3><p class="summary">Kingsley emprega PRP no contexto de concentrados plaquetários para transfusão.</p>
+                <details data-milestone="1954"><summary><span>Explorar este marco</span><span class="chev" aria-hidden="true">+</span></summary>
+                    <div class="more"><p>É importante distinguir o significado hematológico original do termo das aplicações regenerativas que seriam estudadas décadas depois. Em 1954, a expressão estava associada à preparação de concentrados para fins transfusionais, e não a uma indicação clínica regenerativa comprovada.</p><div class="lesson"><strong>Por que isso importa?</strong><p>Uma mesma sigla pode representar contextos históricos e produtos distintos.</p></div><p class="source">Fonte: <a href="https://pubmed.ncbi.nlm.nih.gov/34214233/" rel="noopener noreferrer" target="_blank">Revisão histórica de PRP (2021)</a></p></div>
+                </details>
+            </div>
+        </article>
+            <article class="entry" id="marco-1987" data-year="1987" data-kind="prp">
+                <div class="track"><span class="dot" aria-hidden="true"></span><span class="year">1987</span></div>
+                <div class="event">
+                    <div class="meta"><span class="category">Cirurgia</span><span class="viewed" aria-label="Ainda não explorado">Não explorado</span></div>
+                    <h3>Uso de PRP autólogo em cirurgia cardíaca</h3><p class="summary">Ferrari e colaboradores descrevem um sistema de coleta e preparação de PRP autólogo para apoio transfusional.</p>
+                    <details data-milestone="1987"><summary><span>Explorar este marco</span><span class="chev" aria-hidden="true">+</span></summary>
+                        <div class="more"><p>O trabalho de Ferrari e colaboradores em cirurgia cardíaca aborda hemodiluição, separação do componente plaquetário e recuperação de sangue no próprio procedimento. Sua relevância histórica está no emprego do PRP autólogo em um cenário cirúrgico específico, sem demonstrar automaticamente eficácia para outras indicações.</p><div class="lesson"><strong>Por que isso importa?</strong><p>Transferir resultados de um contexto cirúrgico para outro exige novas evidências.</p></div><p class="source">Fonte: <a href="https://pubmed.ncbi.nlm.nih.gov/3570542/" rel="noopener noreferrer" target="_blank">Ferrari et al. (1987), artigo original</a></p></div>
+                    </details>
+                </div>
+            </article>
+            <article class="entry" id="marco-1998" data-year="1998" data-kind="prp">
+                <div class="track"><span class="dot" aria-hidden="true"></span><span class="year">1998</span></div>
+                <div class="event">
+                    <div class="meta"><span class="category">Reparo ósseo</span><span class="viewed" aria-label="Ainda não explorado">Não explorado</span></div>
+                    <h3>PRP e enxertos ósseos maxilofaciais</h3><p class="summary">Marx e colaboradores publicam estudo sobre a adição de PRP a enxertos ósseos.</p>
+                    <details data-milestone="1998"><summary><span>Explorar este marco</span><span class="chev" aria-hidden="true">+</span></summary>
+                        <div class="more"><p>A pesquisa relacionou concentrados plaquetários, fatores de crescimento e formação óssea em cirurgia oral e maxilofacial. Tornou-se referência na história da medicina regenerativa, mas seus resultados precisam ser interpretados à luz do desenho do estudo e da indicação examinada.</p><div class="lesson"><strong>Por que isso importa?</strong><p>Um estudo influente abre uma linha de pesquisa; não determina resultados para todos os tecidos.</p></div><p class="source">Fonte: <a href="https://pubmed.ncbi.nlm.nih.gov/9638695/" rel="noopener noreferrer" target="_blank">Marx et al. (1998), artigo original</a></p></div>
+                    </details>
+                </div>
+            </article>
+            <article class="entry" id="marco-2001" data-year="2001" data-kind="prf">
+                <div class="track"><span class="dot" aria-hidden="true"></span><span class="year">2001</span></div>
+                <div class="event">
+                    <div class="meta"><span class="category">Nova geração</span><span class="viewed" aria-label="Ainda não explorado">Não explorado</span></div>
+                    <h3>Desenvolvimento histórico da PRF</h3><p class="summary">Revisões situam em 2001 o desenvolvimento da fibrina rica em plaquetas por Choukroun e colaboradores.</p>
+                    <details data-milestone="2001"><summary><span>Explorar este marco</span><span class="chev" aria-hidden="true">+</span></summary>
+                        <div class="more"><p>A PRF passa a ser descrita como uma família de preparados com matriz de fibrina e componentes celulares, diferente de formulações líquidas tradicionais de PRP. A data de 2001 é registrada em revisões retrospectivas; não deve ser confundida com a publicação de 2006 que sistematizou conceitos tecnológicos.</p><div class="lesson"><strong>Por que isso importa?</strong><p>PRF não é apenas PRP com outro nome: a arquitetura da fibrina também importa.</p></div><p class="source">Fonte: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3177496/" rel="noopener noreferrer" target="_blank">Revisão histórica sobre concentrados plaquetários</a></p></div>
+                    </details>
+                </div>
+            </article>
+            <article class="entry" id="marco-2006" data-year="2006" data-kind="prf">
+                <div class="track"><span class="dot" aria-hidden="true"></span><span class="year">2006</span></div>
+                <div class="event">
+                    <div class="meta"><span class="category">Tecnologia</span><span class="viewed" aria-label="Ainda não explorado">Não explorado</span></div>
+                    <h3>Conceitos tecnológicos da PRF</h3><p class="summary">Dohan, Choukroun e colaboradores descrevem a PRF como concentrado plaquetário de segunda geração.</p>
+                    <details data-milestone="2006"><summary><span>Explorar este marco</span><span class="chev" aria-hidden="true">+</span></summary>
+                        <div class="more"><p>A publicação discute conceitos e evolução dos preparados baseados em fibrina, com ênfase na simplificação do processamento e na organização da matriz. Isso ajudou a esclarecer diferenças tecnológicas entre famílias de produtos, sem equivaler a uma prova universal de superioridade clínica.</p><div class="lesson"><strong>Por que isso importa?</strong><p>Caracterizar como o material é preparado é indispensável para compará-lo.</p></div><p class="source">Fonte: <a href="https://pubmed.ncbi.nlm.nih.gov/16504849/" rel="noopener noreferrer" target="_blank">Dohan et al. (2006), PubMed</a></p></div>
+                    </details>
+                </div>
+            </article>
+            <article class="entry" id="marco-2009" data-year="2009" data-kind="metodo">
+                <div class="track"><span class="dot" aria-hidden="true"></span><span class="year">2009</span></div>
+                <div class="event">
+                    <div class="meta"><span class="category">Classificação</span><span class="viewed" aria-label="Ainda não explorado">Não explorado</span></div>
+                    <h3>Quatro grupos de concentrados plaquetários</h3><p class="summary">Dohan Ehrenfest e colaboradores propõem classificar preparados conforme leucócitos e organização da fibrina.</p>
+                    <details data-milestone="2009"><summary><span>Explorar este marco</span><span class="chev" aria-hidden="true">+</span></summary>
+                        <div class="more"><p>A publicação distingue P-PRP (PRP puro), L-PRP (PRP com leucócitos), P-PRF (PRF pura) e L-PRF (PRF com leucócitos). A classificação ajuda a reduzir ambiguidades, mas ainda não substitui a descrição detalhada do protocolo, da composição e da indicação clínica.</p><div class="lesson"><strong>Por que isso importa?</strong><p>A etiqueta PRP ou PRF sozinha é insuficiente para reprodutibilidade científica.</p></div><p class="source">Fonte: <a href="https://pubmed.ncbi.nlm.nih.gov/19187989/" rel="noopener noreferrer" target="_blank">Dohan Ehrenfest et al. (2009)</a></p></div>
+                    </details>
+                </div>
+            </article>
+            <article class="entry" id="marco-2017" data-year="2017" data-kind="metodo">
+                <div class="track"><span class="dot" aria-hidden="true"></span><span class="year">2017</span></div>
+                <div class="event">
+                    <div class="meta"><span class="category">Relato científico</span><span class="viewed" aria-label="Ainda não explorado">Não explorado</span></div>
+                    <h3>Requisitos mínimos para pesquisas com biológicos</h3><p class="summary">O consenso MIBO sistematiza informações a relatar em estudos ortopédicos com PRP e outros biológicos.</p>
+                    <details data-milestone="2017"><summary><span>Explorar este marco</span><span class="chev" aria-hidden="true">+</span></summary>
+                        <div class="more"><p>Murray e colaboradores apresentam recomendações de relato para permitir análise crítica e reprodução metodológica. Informar preparação, caracterização do produto, desenho do estudo e desfechos é fundamental, pois a heterogeneidade das preparações pode dificultar comparações entre trabalhos.</p><div class="lesson"><strong>Por que isso importa?</strong><p>Qualidade do relato não prova eficácia, mas permite avaliar melhor a evidência.</p></div><p class="source">Fonte: <a href="https://pubmed.ncbi.nlm.nih.gov/28509821/" rel="noopener noreferrer" target="_blank">Murray et al. (2017), MIBO</a></p></div>
+                    </details>
+                </div>
+            </article>
+            <article class="entry" id="marco-2021" data-year="2021" data-kind="metodo">
+                <div class="track"><span class="dot" aria-hidden="true"></span><span class="year">2021</span></div>
+                <div class="event">
+                    <div class="meta"><span class="category">Revisão histórica</span><span class="viewed" aria-label="Ainda não explorado">Não explorado</span></div>
+                    <h3>Revisão da trajetória do PRP autólogo</h3><p class="summary">Uma revisão histórica retoma a passagem do conceito transfusional à pesquisa de aplicações regenerativas.</p>
+                    <details data-milestone="2021"><summary><span>Explorar este marco</span><span class="chev" aria-hidden="true">+</span></summary>
+                        <div class="more"><p>A publicação de 2021 organiza eventos do desenvolvimento do PRP e ajuda a identificar diferenças entre técnicas, usos e hipóteses biológicas. Revisões históricas oferecem contexto, mas não substituem revisões sistemáticas ou estudos clínicos específicos ao decidir sobre eficácia e segurança.</p><div class="lesson"><strong>Por que isso importa?</strong><p>Conhecer a história científica é diferente de afirmar que toda aplicação clínica já foi validada.</p></div><p class="source">Fonte: <a href="https://pubmed.ncbi.nlm.nih.gov/34214233/" rel="noopener noreferrer" target="_blank">History of autologous platelet-rich plasma (2021)</a></p></div>
+                    </details>
+                </div>
+            </article></div>
+    </section>
+    <div class="note"><strong>Interpretação científica:</strong> o aparecimento de uma técnica ou a publicação de um artigo não significam aprovação regulatória nem comprovação de benefício em todas as indicações. Os resultados precisam ser avaliados separadamente por produto, protocolo, população e desfecho.</div>
+    <section class="refs" aria-labelledby="ref-heading"><h2 id="ref-heading">Como utilizar as fontes</h2>
+        <ul><li>Cada marco possui uma referência para o artigo original ou uma revisão histórica identificada.</li><li>1987 e 1998 apontam para publicações originais indexadas no PubMed.</li><li>A atribuição de 2001 à PRF decorre de uma revisão histórica retrospectiva, distinta do artigo técnico de 2006.</li><li>O progresso da linha do tempo registra apenas marcos explorados; não altera nota nem conclusão acadêmica.</li></ul>
+    </section>
+    <footer class="footer">Conteúdo educacional e histórico. A linha do tempo não constitui recomendação de uso clínico ou protocolo de preparação de componentes sanguíneos.</footer>
+</main>
+<script>
+    (function(){
+        "use strict";
+        const root=document.getElementById("timeline34");if(!root)return;
+        const years=["1954","1987","1998","2001","2006","2009","2017","2021"];
+        const q=(s)=>root.querySelector(s);
+        const state=q("#save-state"),retry=q("#retry-save");
+        const sdk=window.MoodleMCP&&window.MoodleMCP.progress;
+        let snap=null,visited=[],unsaved=null;
+        function safeObject(value){return value&&typeof value==="object"&&!Array.isArray(value)?value:{};}
+        function message(value){state.textContent=value;}
+        function redraw(){const count=visited.length;q("#progress-number").textContent=count+" de "+years.length;q("#progressbar").setAttribute("aria-valuenow",String(count));q("#progress-fill").style.width=Math.round(100*count/years.length)+"%";
+            root.querySelectorAll(".entry").forEach(function(article){const visitedNow=visited.includes(article.dataset.year);article.classList.toggle("is-visited",visitedNow);const info=article.querySelector(".viewed");info.textContent=visitedNow?"Explorado":"Não explorado";info.setAttribute("aria-label",info.textContent);});
+            root.querySelectorAll(".rail a").forEach(function(a){a.classList.toggle("visited",visited.includes(a.dataset.target));});
+        }
+        async function load(){retry.hidden=true;message("Consultando seu progresso no Moodle...");
+            if(!sdk||typeof sdk.load!=="function"||typeof sdk.save!=="function"){snap=null;message("A navegação está disponível, mas o SDK de progresso não foi encontrado. Nenhum progresso será indicado como salvo.");return;}
+            try{snap=await sdk.load();const saved=safeObject(safeObject(snap.data).timeline34);visited=Array.isArray(saved.visited)?years.filter(y=>saved.visited.includes(y)):[];redraw();message("Progresso individual carregado. Abra um cartão para marcar sua leitura.");
+                if(years.includes(saved.last)){const item=q("#marco-"+saved.last+" details");if(item&&!item.open)item.open=true;}
+            }catch(err){snap=null;message("Não foi possível consultar o progresso do Moodle. Você pode ler os marcos, mas a leitura não será registrada até reconectar.");retry.hidden=false;retry.textContent="Reconectar";retry.onclick=()=>{queue=queue.then(load);};}
+        }
+        async function saveVisit(year){if(visited.includes(year))return;
+            if(!snap){unsaved=year;message("O marco está aberto, mas seu progresso não foi salvo porque a conexão com Moodle está indisponível.");retry.hidden=false;retry.textContent="Tentar salvar este marco";retry.onclick=()=>{queue=queue.then(async()=>{await load();if(snap)await saveVisit(year);});};return;}
+            const next=years.filter(y=>visited.includes(y)||y===year);
+            message("Salvando exploração de "+year+" no Moodle...");retry.hidden=true;
+            try{const data=safeObject(snap.data);const existing=safeObject(data.timeline34);const saved=await sdk.save({version:snap.version,location:"timeline-"+year,data:Object.assign({},data,{timeline34:Object.assign({},existing,{visited:next,last:year})})});snap=saved;visited=next;unsaved=null;redraw();message("Marco "+year+" salvo no seu progresso individual.");}
+            catch(err){unsaved=year;const code=String(err&&(err.errorcode||err.message)||err);const conflict=code.indexOf("progressconflict")>=0;message(conflict?"O progresso mudou em outra aba. Recarregue antes de tentar novamente.":"Falha ao salvar o marco "+year+". A leitura não foi registrada; tente novamente.");retry.hidden=false;retry.textContent=conflict?"Recarregar progresso":"Tentar salvar novamente";retry.onclick=()=>{queue=queue.then(async()=>{await load();if(snap)await saveVisit(year);});};}
+        }
+        let queue=load();
+        root.querySelectorAll("details[data-milestone]").forEach(function(d){d.addEventListener("toggle",function(){if(d.open){const year=d.dataset.milestone;queue=queue.then(()=>saveVisit(year)).catch(()=>message("Ocorreu uma falha na atualização do progresso."));}});});
+        root.querySelectorAll(".rail a").forEach(function(a){a.addEventListener("click",function(){const d=q("#marco-"+a.dataset.target+" details");if(d)d.open=true;});});
+    })();
+</script>
+</body>
+</html>
