@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Atlas climático urbano interativo: ilhas de calor, diferenças entre temperatura de superfície e ar, laboratório de bairros, albedo, sombra, calor noturno e adaptação.">
+<title>Por que algumas cidades são tão quentes? | Atlas dos microclimas</title>
+<style>
+:root{--paper:#f6f3e7;--white:#fffdf5;--ink:#2b3437;--secondary:#5e6563;--green:#247568;--forest:#155d54;--red:#b64b37;--red2:#8e362e;--coral:#df8a60;--orange:#f6bd78;--sky:#6daeb1;--night:#273d50;--line:#d0caba;--sand:#f0e6d1;--mono:ui-monospace,"SFMono-Regular",Consolas,monospace;--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;font-family:var(--sans);color:var(--ink);background:var(--paper)}
+*,*:before,*:after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:285px;line-height:1.76;background:radial-gradient(ellipse at 5% 0%,#f8e7cd 0%,transparent 31%),var(--paper)}
+h1,h2,h3,p,figure{margin-top:0}
+h1,h2,h3{line-height:1.16}
+h1,h2{font-family:var(--serif)}
+h2{font-size:clamp(2rem,4.1vw,4rem);letter-spacing:-.05em}
+h3{font-size:clamp(1.25rem,2vw,1.6rem)}
+p{margin-bottom:1.15em}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.55;cursor:default}
+a{color:#8c382c;text-underline-offset:3px}
+a:hover{color:#155d54}
+:focus-visible{outline:3px solid #2677aa;outline-offset:4px}
+[hidden]{display:none!important}
+.wrap{width:min(1220px,calc(100% - 48px));margin-inline:auto}
+.kicker{font:800 .72rem/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:#a34b38}
+.smallcaps{font:750 .74rem/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.skip{position:absolute;left:12px;top:-100px;background:#fff;color:#20363e;padding:12px 17px;z-index:100}
+.skip:focus{top:12px}
+.hero{background:#f6e8d2;position:relative;isolation:isolate;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 79% 19%,#f9bb8060,transparent 46%),linear-gradient(143deg,#f7f2df 5%,#edd1b0 100%)}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:2px solid #bda58a;padding:20px 0;font:800 .72rem var(--mono);letter-spacing:.07em}
+.hero-top .folio{border:2px solid #a84b38;padding:6px 11px;color:#8e3b31}
+.hero-grid{display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;gap:12px;min-height:630px;padding:56px 0 62px}
+.hero h1{font-size:clamp(3.35rem,6.25vw,6.5rem);line-height:.97;letter-spacing:-.068em;max-width:630px;margin:18px 0 29px}
+.hero h1 em{font-weight:400;font-style:italic;color:#bb4c33}
+.hero .lead{font-size:1.1rem;max-width:540px;line-height:1.88;color:#5d5146}
+.hero .tags{display:flex;gap:9px;flex-wrap:wrap;margin:25px 0 0}
+.hero .tags span{border:1px solid #b7a38c;padding:7px 11px;font:.76rem var(--mono);color:#7b5948;background:#fffaf080}
+.hero-art{margin:0;position:relative}
+.hero-art svg{width:100%;height:auto;display:block;filter:drop-shadow(8px 17px 18px #77593c26)}
+.hero-art figcaption{font-size:.8rem;color:#735f4f;line-height:1.65;margin-top:12px}
+.hero .hero-sun{animation:sunfloat 11s ease-in-out infinite alternate;transform-origin:505px 96px}
+.hero .heat-wave{animation:heatdrift 4s linear infinite}
+.hero-art.is-paused .hero-sun,.hero-art.is-paused .heat-wave{animation-play-state:paused}
+@keyframes sunfloat{from{transform:rotate(-5deg)}to{transform:rotate(6deg)}}
+@keyframes heatdrift{to{stroke-dashoffset:-86}}
+.motion-button{padding:9px 14px;border:1px solid #a97b5f;background:#fff8e9;color:#6d4333;font-size:.85rem;font-weight:750}
+.motion-button:hover{background:#f6dbbd}
+.hero-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;border-top:1px solid #b7a68d;padding:18px 0;font:.75rem var(--mono);color:#6c5546}
+.colorstrip{height:13px;background:linear-gradient(90deg,#286e81 0 17%,#74b7a7 17% 34%,#d7d58f 34% 50%,#f0b267 50% 68%,#cf6c4f 68% 83%,#963c37 83% 100%)}
+.prologue{display:grid;grid-template-columns:185px 1fr;gap:54px;padding:91px 0}
+.prologue .big-number{display:block;font:7.4rem/.95 var(--serif);color:#e0cbb4;letter-spacing:-.12em}
+.prologue .lead{font:1.56rem/1.52 var(--serif);color:#4a594e;max-width:820px}
+.prologue p{max-width:850px;font-size:1.06rem;line-height:1.94;color:#5a5d56}
+.note{background:#eee2cc;padding:19px 23px;border-left:5px solid #ba5c3d;margin-top:24px;color:#594b40}
+.note strong{color:#8b352d}
+.section{padding:87px 0;border-top:1px solid var(--line)}
+.section-header{display:grid;grid-template-columns:200px 1fr;gap:38px;margin-bottom:40px}
+.section-header .kicker{padding-top:12px}
+.section-header h2{margin:0 0 18px;max-width:890px}
+.section-header p{font-size:1.07rem;color:#5f615a;line-height:1.84;max-width:830px;margin:0}
+.fact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.fact-card{background:#fffcf4;border:1px solid #d0c3ae;padding:27px 25px;border-top:5px solid #c96d4e}
+.fact-card:nth-child(2){border-top-color:#4c9e8b}
+.fact-card:nth-child(3){border-top-color:#b9a56a}
+.fact-card .n{font:750 .75rem var(--mono);color:#ac6148}
+.fact-card h3{font-family:var(--serif);margin:15px 0}
+.fact-card p{color:#5f5b53;font-size:.97rem;line-height:1.81;margin:0}
+.diagram-section{background:#efece1}
+.diagram-grid{display:grid;grid-template-columns:1.09fr .91fr;gap:37px;align-items:center}
+.figure-paper{margin:0;background:#fafaf2;border:1px solid #cecbc0;padding:18px;box-shadow:7px 8px 0 #d5cdba69}
+.figure-paper svg{width:100%;height:auto;display:block}
+.figure-paper figcaption{color:#5d615b;font-size:.81rem;line-height:1.66;margin-top:13px}
+.diagram-copy p{line-height:1.91;color:#57605b;font-size:1.02rem}
+.diagram-copy h3{margin:19px 0 13px}
+.equation{padding:17px 19px;background:#e2e8df;border-left:4px solid #397f71;font:800 .95rem/1.85 var(--mono);color:#2b6058}
+.equation small{display:block;font:400 .79rem/1.7 var(--sans);color:#49665e}
+.map-section{background:#e5e7d9}
+.heat-controls{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:18px}
+.choice-group{display:inline-flex;gap:5px;flex-wrap:wrap;align-items:center;background:#fff9eb;padding:7px;border:1px solid #c4b8a3}
+.choice-group .group-label{font:.76rem var(--mono);color:#765c4e;padding:0 9px}
+.choice-group button{border:1px solid #c7bba8;background:#f5eddf;color:#604e43;padding:9px 14px;font-size:.86rem}
+.choice-group button[aria-pressed="true"]{background:#214f53;border-color:#214f53;color:#fff}
+.choice-group button:hover{border-color:#9f6f57}
+.map-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:start}
+.city-map{margin:0;background:#fcf8eb;border:9px solid #f8f6ed;box-shadow:0 9px 24px #8173592b;min-width:0}
+.city-map .map-canvas{position:relative}
+.city-map svg{width:100%;height:auto;display:block}
+.city-map .map-patch{stroke:#f8edd2;stroke-width:6;transition:fill .22s}
+.city-map .map-roads{fill:none;stroke:#f3ead9;stroke-width:18;stroke-linecap:round;opacity:.85}
+.city-map .map-roads-center{fill:none;stroke:#7d8178;stroke-width:3;stroke-dasharray:12 14}
+.city-map .map-point{position:absolute;transform:translate(-50%,-50%);height:38px;min-width:38px;border-radius:50%;border:3px solid #fffcf0;background:#305c60;color:#fff;box-shadow:0 3px 0 #38545577;font:800 1rem var(--mono)}
+.city-map .map-point[aria-pressed="true"]{background:#9d4933;box-shadow:0 0 0 4px #fff9df}
+.city-map .map-point[data-zone="centro"]{left:42%;top:37%}
+.city-map .map-point[data-zone="industria"]{left:78%;top:24%}
+.city-map .map-point[data-zone="parque"]{left:20%;top:23%}
+.city-map .map-point[data-zone="bairro"]{left:24%;top:74%}
+.city-map .map-point[data-zone="orla"]{left:76%;top:77%}
+.city-map .map-point[data-zone="jardins"]{left:52%;top:72%}
+.city-map figcaption{padding:12px 15px;font-size:.79rem;line-height:1.72;color:#695f50}
+.map-key{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:15px 0}
+.map-key .swatches{display:flex;gap:4px}
+.map-key .swatches i{display:block;width:30px;height:13px}
+.map-key small{font-size:.78rem;color:#645f56}
+.map-inspector{padding:27px;background:#fffdf4;border:1px solid #c7c4b1}
+.map-inspector .idx{font:760 .76rem var(--mono);letter-spacing:.06em;color:#8a503b}
+.map-inspector h3{font:700 2rem/1.17 var(--serif);margin:12px 0 18px}
+.map-inspector p{font-size:.96rem;line-height:1.83;color:#5c5d54}
+.map-inspector .zone-score{padding:15px 16px;background:#eef1df;border-left:5px solid #af7f56}
+.map-inspector .zone-score strong{display:block;font:700 1.55rem var(--serif);color:#704a37;margin-top:6px}
+.map-inspector .zone-score small{display:block;margin-top:8px;line-height:1.65;color:#685a49}
+.zone-buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:20px}
+.zone-buttons button{padding:10px;text-align:left;border:1px solid #c5b9a9;background:#f4eee2;color:#5f5043;font-size:.85rem}
+.zone-buttons button[aria-pressed="true"]{background:#286f65;border-color:#286f65;color:#fff}
+.map-caveat{font-size:.87rem;color:#5e6058;line-height:1.78;margin:21px 0 0;max-width:960px}
+.metric-section{padding:85px 0}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:35px}
+.metric-figure{background:#e3eeeb}
+.metric-list{display:grid;gap:12px}
+.metric-list article{padding:21px 24px;border-left:4px solid #b46b4a;background:#f5eddd}
+.metric-list h3{margin:0 0 7px}
+.metric-list p{font-size:.95rem;color:#5c635e;margin:0;line-height:1.75}
+.lab{background:#263d47;color:#eef5ec;padding:87px 0}
+.lab .kicker{color:#ffcb9d}
+.lab h2{color:#f6f4e9}
+.lab .section-header p{color:#d4e4dd}
+.lab-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:22px}
+.lab-controls{background:#f2f0e5;color:#28434a;padding:26px;border:1px solid #acbab6}
+.lab-controls .kicker{color:#8d4e37}
+.lab-controls h3{font-family:var(--serif);font-size:1.7rem}
+.lab-controls p{font-size:.91rem;color:#53665c;line-height:1.8}
+.preset-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 22px}
+.preset-row button{border:1px solid #a7b7ae;background:#fbfaf1;padding:9px 7px;color:#315954;font-size:.8rem;line-height:1.4}
+.preset-row button[aria-pressed="true"]{background:#216d68;color:#fff}
+.sliders{display:grid;gap:13px}
+.sliders label{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:730;font-size:.87rem}
+.sliders output{font:.85rem var(--mono);color:#9e4e36;white-space:nowrap}
+.sliders input{accent-color:#3b9186;width:100%;margin:2px 0}
+.sliders .hint{display:block;font-size:.74rem;line-height:1.4;color:#69776c;margin:0}
+.lab-controls .reset{margin-top:20px;border:1px solid #236b68;background:#286f68;color:#fff;padding:10px 15px;font-weight:760}
+.lab-results{background:#152c3b;padding:27px;border:1px solid #62848a}
+.lab-results h3{font-family:var(--serif);font-size:1.9rem;color:#fff0d4}
+.lab-results .choice-group{margin:10px 0 18px}
+.lab-results .value-box{background:#274350;border-left:5px solid #ffb27c;padding:17px 20px;margin-bottom:16px}
+.lab-results .value-box .metric{font:750 3rem var(--serif);color:#ffc088}
+.lab-results .value-box small{display:block;color:#d2e6df;margin-top:9px;line-height:1.67}
+.lab-results .heat-bar{height:15px;background:#406170;border:1px solid #738f91;overflow:hidden}
+.lab-results .heat-bar span{display:block;width:40%;height:100%;background:linear-gradient(90deg,#77b8aa,#e5d579,#e28d58,#b34738);transition:width .25s}
+.lab-results p{font-size:.89rem;color:#dce9e5;line-height:1.82}
+.lab-figure{background:#304c5a;margin:16px 0;border:1px solid #5c8d93;padding:12px}
+.lab-figure svg{width:100%;height:auto;display:block}
+.lab-figure figcaption{font-size:.77rem;line-height:1.62;color:#c5dfe0;margin-top:10px}
+.lab-figure[data-period="night"] .skyday{opacity:0}
+.lab-figure[data-period="night"] .skynight{opacity:1}
+.lab-figure[data-period="day"] .skyday{opacity:1}
+.lab-figure[data-period="day"] .skynight{opacity:0}
+.lab-figure .tree-element{transition:opacity .2s}
+.lab-figure .wind-element{transition:opacity .2s}
+.lab-assumptions{margin-top:21px;background:#344d56;padding:21px 25px;color:#e0eae7;border-left:5px solid #e4aa79}
+.lab-assumptions p{margin:0;font-size:.9rem;line-height:1.85}
+.surface{background:#f1eadf}
+.surface-layout{display:grid;grid-template-columns:.86fr 1.14fr;gap:33px}
+.surface-controls{background:#fffcf3;border:1px solid #d0bfaa;padding:24px}
+.surface-controls h3{font-family:var(--serif);font-size:1.85rem}
+.material-picks{display:grid;gap:9px;margin:17px 0 23px}
+.material-picks button{padding:11px 14px;border:1px solid #d0b49e;text-align:left;background:#f4e7d5;color:#644c3e;font-size:.88rem}
+.material-picks button[aria-pressed="true"]{background:#8f4939;color:#fff;border-color:#8f4939}
+.surface-controls label{display:flex;justify-content:space-between;gap:15px;align-items:center;font-size:.9rem;font-weight:770;margin-top:14px}
+.surface-controls label output{font:.85rem var(--mono);color:#a3503c}
+.surface-controls input{width:100%;accent-color:#a54d3a;margin:9px 0}
+.surface-controls .reset{padding:10px 15px;border:1px solid #a9503d;background:#a14e3b;color:#fff;font-weight:760;margin-top:13px}
+.surface-results{background:#fbfaf2;padding:25px;border:1px solid #c9bfb1}
+.surface-results p{font-size:.94rem;color:#585a51;line-height:1.78}
+.surface-results figure{margin:0;background:#d8ebde;padding:14px}
+.surface-results figure svg{display:block;width:100%;height:auto}
+.surface-results figure figcaption{font-size:.77rem;color:#526660;line-height:1.6;margin-top:8px}
+.energy-bars{display:grid;gap:12px;margin-top:22px}
+.energy-row{display:grid;grid-template-columns:145px minmax(0,1fr) 70px;align-items:center;gap:10px;font-size:.84rem}
+.energy-row .track{height:15px;background:#e4dfd3}
+.energy-row .track span{display:block;height:100%;width:0;transition:width .2s}
+.energy-row output{text-align:right;font:.83rem var(--mono);color:#715548}
+.surface-formula{padding:17px 19px;margin-top:23px;background:#eee4d2;border-left:4px solid #b96644;font-size:.9rem;line-height:1.83;color:#5b5548}
+.canyon{background:#e0e5de}
+.canyon-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:start}
+.canyon-figure{margin:0;background:#fcf8ec;border:1px solid #afc4be;padding:18px}
+.canyon-figure svg{width:100%;height:auto;display:block}
+.canyon-figure figcaption{font-size:.78rem;color:#566760;margin-top:11px;line-height:1.72}
+.canyon-figure[data-period="night"] .day-layer{opacity:0}
+.canyon-figure[data-period="night"] .night-layer{opacity:1}
+.canyon-figure[data-period="day"] .day-layer{opacity:1}
+.canyon-figure[data-period="day"] .night-layer{opacity:0}
+.canyon-figure .air-flow{stroke-dasharray:9 12;animation:airflow 5s linear infinite}
+.canyon-figure.is-paused .air-flow{animation-play-state:paused}
+@keyframes airflow{to{stroke-dashoffset:-84}}
+.canyon-copy h3{margin:15px 0}
+.canyon-copy p{color:#53645b;font-size:1rem;line-height:1.88}
+.canyon-copy .choice-group{margin:10px 0 20px}
+.canyon-copy .explain{background:#f7f4ea;border-left:5px solid #b5674c;padding:20px 23px;color:#4b5e57;min-height:120px;line-height:1.8}
+.canyon-copy .motion-button{margin-top:13px}
+.night-strip{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-top:35px}
+.night-strip article{background:#f0f2e8;border-top:4px solid #317c79;padding:25px}
+.night-strip article:nth-child(2){border-top-color:#bd755a}
+.night-strip p{color:#53655a;font-size:.95rem;line-height:1.85}
+.health{background:#283e46;color:#f2f4e9}
+.health .kicker{color:#efbf8b}
+.health h2{color:#fbf4e5}
+.health .section-header p{color:#d5e3d9}
+.health-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.health p{color:#dfe8df;line-height:1.86}
+.health-figure{background:#334f55;padding:17px;border:1px solid #6d918d}
+.health-figure svg{display:block;width:100%;height:auto}
+.health-figure figcaption{font-size:.8rem;color:#cfdfd7;margin-top:14px}
+.health-list{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:25px}
+.health-list article{background:#375159;padding:18px 19px;border-left:4px solid #d39b77}
+.health-list h3{font-size:1.18rem}
+.health-list p{font-size:.88rem;margin:8px 0 0}
+.adaptation{padding:86px 0}
+.adapt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.adapt-grid article{background:#fefcf4;border:1px solid #cdc9b6;padding:25px;border-top:5px solid #4b897b}
+.adapt-grid article:nth-child(2){border-top-color:#c1885a}
+.adapt-grid article:nth-child(3){border-top-color:#7e9e8e}
+.adapt-grid article:nth-child(4){border-top-color:#bc6f52}
+.adapt-grid article:nth-child(5){border-top-color:#548da6}
+.adapt-grid article:nth-child(6){border-top-color:#9c936a}
+.adapt-grid h3{font-family:var(--serif)}
+.adapt-grid p{font-size:.94rem;color:#5c625d;line-height:1.83;margin:0}
+.adapt-figure{margin:30px 0 0;padding:18px;background:#e9f0e7;border:1px solid #b3c4b6}
+.adapt-figure svg{width:100%;height:auto;display:block}
+.adapt-figure figcaption{font-size:.8rem;color:#536b5c;margin-top:11px}
+.climate{padding:84px 0;background:#e6eadf}
+.climate-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.climate-grid article{padding:26px;background:#faf9f0;border:1px solid #c5cdbf}
+.climate-grid p{color:#5d615a;line-height:1.89}
+.quiz{padding:87px 0;background:#f4f0e5}
+.quiz-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:48px}
+.quiz-side p{color:#58635c;font-size:1.03rem;line-height:1.9}
+.question{border:0;border-bottom:1px solid #c7cbbd;padding:0 0 23px;margin:0 0 25px;min-width:0}
+.question legend{font-weight:820;line-height:1.54;padding:0;margin:0 0 14px;width:100%}
+.question label{display:flex;align-items:flex-start;gap:12px;margin:8px 0;padding:11px 14px;background:#fffdf5;border:1px solid #cec9bc;cursor:pointer}
+.question label:has(input:checked){background:#e8eee0;border-color:#64947b}
+.question input{margin-top:6px;flex:none;accent-color:#317e6c}
+.question-feedback{min-height:1.5em;color:#37735f;font-size:.9rem;margin:12px 0 0}
+.quiz-actions{display:flex;gap:10px;flex-wrap:wrap}
+.quiz-actions button{padding:12px 18px;border:1px solid #286b66;background:#286e65;color:#fff;font-weight:770}
+.quiz-actions button.alt{background:transparent;color:#276e63}
+.quiz-result{font:700 1.3rem/1.5 var(--serif);margin-top:17px}
+.epilogue{padding:69px 0;background:#226962;color:#f9f6e9}
+.epilogue h2{color:#fff4df;max-width:950px}
+.epilogue p{font-size:1.1rem;line-height:1.91;color:#dcf0e1;max-width:900px}
+.sources{padding:48px 0 72px}
+.sources h2{font-size:1.6rem}
+.sources p{font-size:.9rem;line-height:1.8;color:#58635a}
+.sources a{overflow-wrap:anywhere}
+@media(max-width:1020px){
+.hero-grid,.prologue,.section-header,.diagram-grid,.map-grid,.metric-grid,.lab-layout,.surface-layout,.canyon-layout,.health-grid,.quiz-grid{grid-template-columns:1fr}
+.hero-grid{gap:0}.hero-art{max-width:810px}.section-header{gap:13px}
+.prologue{gap:8px}.prologue .big-number{font-size:4.5rem}
+.map-grid{gap:17px}.map-inspector{max-width:none}
+}
+@media(max-width:700px){
+.wrap{width:calc(100% - 28px)}
+.hero-top{font-size:.65rem;letter-spacing:0}
+.hero-grid{min-height:0;padding:44px 0}
+.hero h1{font-size:clamp(3.1rem,11vw,5.4rem)}
+.prologue,.section,.lab,.adaptation,.climate,.quiz{padding:58px 0}
+.fact-grid,.health-list,.adapt-grid,.climate-grid,.night-strip{grid-template-columns:1fr}
+.map-grid{grid-template-columns:1fr}
+.city-map{border-width:5px}
+.city-map .map-point{height:29px;min-width:29px;font-size:.75rem;border-width:2px}
+.map-inspector,.lab-results,.lab-controls{padding:19px}
+.preset-row{grid-template-columns:1fr 1fr 1fr}
+.preset-row button{font-size:.72rem}
+.surface-controls,.surface-results{padding:19px}
+.energy-row{grid-template-columns:100px minmax(0,1fr) 56px;font-size:.73rem}
+.choice-group .group-label{width:100%}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o atlas</a>
+<main id="conteudo">
+<section class="hero" aria-labelledby="title">
+ <div class="wrap">
+  <div class="hero-top"><span>ATLAS DE MICROCLIMAS URBANOS / ENSAIO Nº 09</span><span class="folio">PRANCHA 09 · CIDADE FICTÍCIA</span></div>
+  <div class="hero-grid">
+   <div>
+    <span class="kicker">Clima, ciência e desenho urbano</span>
+    <h1 id="title">Por que algumas cidades são <em>tão quentes?</em></h1>
+    <p class="lead">Do asfalto que recebe sol ao bairro que permanece abafado depois de escurecer, a cidade constrói microclimas diferentes. Investigue mapas, superfícies, sombras e ruas para entender por que o calor não se distribui igualmente.</p>
+    <div class="tags"><span>Mapa de calor explorável</span><span>Laboratório de bairros</span><span>Dia e noite</span><span>Saúde e justiça climática</span></div>
+   </div>
+   <figure class="hero-art" id="heroArt">
+    <svg viewBox="0 0 745 580" role="img" aria-labelledby="heroSvgTitle heroSvgDesc">
+     <title id="heroSvgTitle">Atlas artístico de uma cidade sob o sol, com ilhas de calor representadas por cores</title>
+     <desc id="heroSvgDesc">Visão oblíqua fictícia de quadras, avenidas, edifícios e parques, com manchas em tons quentes sobre áreas pavimentadas e verdes sobre áreas arborizadas. Um sol estilizado e linhas de fluxo de calor fazem parte da ilustração. Não há temperaturas medidas nem imagens reais de satélite.</desc>
+     <defs><linearGradient id="heroHeat" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f3d29b"/><stop offset=".55" stop-color="#e8875a"/><stop offset="1" stop-color="#bd4b3b"/></linearGradient></defs>
+     <circle class="hero-sun" cx="505" cy="96" r="63" fill="#f9bb74" opacity=".9"/>
+     <g fill="none" stroke="#e6a46b" stroke-width="5"><circle cx="505" cy="96" r="82" stroke-dasharray="7 17"/><circle cx="505" cy="96" r="98" opacity=".35"/></g>
+     <path d="M45 271 L349 122 L707 299 L403 486Z" fill="#eadfc7" stroke="#a6a494" stroke-width="5"/>
+     <g fill="#f0be85" stroke="#9c826c" stroke-width="3"><path d="M91 263L230 197L302 232L162 301Z"/><path d="M321 198L452 139L543 183L412 244Z"/><path d="M479 252L588 201L679 245L563 310Z"/><path d="M175 354L301 287L390 332L266 405Z"/><path d="M404 369L538 302L644 351L501 421Z"/></g>
+     <path d="M56 278L385 438 M184 217L520 389 M313 160L661 329 M141 317L461 153" stroke="#f8edda" stroke-width="20" fill="none"/>
+     <path d="M57 278L385 438 M184 217L520 389 M313 160L661 329" stroke="#c29c7d" stroke-width="2" stroke-dasharray="8 13" fill="none"/>
+     <g fill="url(#heroHeat)" opacity=".65"><ellipse cx="332" cy="267" rx="92" ry="36" transform="rotate(-23 332 267)"/><ellipse cx="561" cy="328" rx="91" ry="38" transform="rotate(-23 561 328)"/><ellipse cx="191" cy="285" rx="66" ry="31" transform="rotate(-24 191 285)"/></g>
+     <g fill="#6d9b78"><ellipse cx="168" cy="205" rx="52" ry="26" transform="rotate(-24 168 205)"/><ellipse cx="532" cy="402" rx="59" ry="20" transform="rotate(-25 532 402)"/></g>
+     <g fill="#b87d63" stroke="#815b4b" stroke-width="3">
+      <path d="M258 235L306 210L306 151L258 176Z"/><path d="M306 210L336 224L336 165L306 151Z"/>
+      <path d="M358 303L409 280L409 193L358 217Z"/><path d="M409 280L440 296L440 209L409 193Z"/>
+      <path d="M497 324L549 298L549 229L497 254Z"/><path d="M549 298L580 313L580 243L549 229Z"/>
+      <path d="M214 364L255 344L255 292L214 311Z"/><path d="M255 344L283 358L283 306L255 292Z"/>
+     </g>
+     <g fill="#e5c9a6" opacity=".85"><path d="M258 176L306 151L336 165L290 189Z"/><path d="M358 217L409 193L440 209L390 233Z"/><path d="M497 254L549 229L580 243L528 267Z"/></g>
+     <g fill="#397f68" stroke="#255f56" stroke-width="2"><circle cx="143" cy="220" r="18"/><circle cx="168" cy="205" r="19"/><circle cx="192" cy="195" r="18"/><circle cx="516" cy="409" r="19"/><circle cx="542" cy="396" r="20"/><circle cx="564" cy="387" r="17"/></g>
+     <g class="heat-wave" fill="none" stroke="#ca6849" stroke-width="5" stroke-dasharray="10 12" stroke-linecap="round"><path d="M332 169Q302 136 330 103"/><path d="M398 157Q367 127 396 92"/><path d="M619 256Q594 220 620 182"/></g>
+     <g font-family="Georgia,serif" font-size="19" fill="#755347"><text x="56" y="502">VISTA OBLÍQUA — MODELO ARTÍSTICO</text><text x="55" y="528" font-size="14">SEM COORDENADAS, SEM MEDIÇÃO</text></g>
+    </svg>
+    <figcaption>Figura 1. Ilustração SVG original. As manchas coloridas simbolizam contrastes urbanos, não representam medições térmicas nem um bairro real.</figcaption>
+    <button type="button" class="motion-button" id="pauseHero" aria-pressed="false">Pausar animação ilustrativa</button>
+   </figure>
+  </div>
+  <div class="hero-bottom"><span>EXPERIÊNCIA CIENTÍFICA · 25–35 MIN</span><span>Todos os mapas e cenários são hipotéticos.</span></div>
+ </div>
+ <div class="colorstrip" aria-hidden="true"></div>
+</section>
+
+<section class="prologue wrap" aria-labelledby="introTitle">
+ <div><span class="big-number" aria-hidden="true">01</span><span class="kicker">O problema urbano</span></div>
+ <div>
+  <h2 id="introTitle">O calor não se espalha pela cidade como tinta numa parede.</h2>
+  <p class="lead">Prédios, pavimentos, árvores, umidade e circulação do ar fazem vizinhanças próximas sentirem e armazenarem energia de maneiras diferentes.</p>
+  <p>A chamada <strong>ilha de calor urbana</strong> descreve um ambiente urbano mais quente do que áreas de referência, frequentemente rurais ou menos construídas, sob condições comparáveis. Dentro de uma cidade, também existem contrastes entre bairros. Materiais e geometrias diferentes modificam a radiação solar absorvida, a emissão térmica, o armazenamento de energia, a evapotranspiração e as trocas com o ar.</p>
+  <p>Os contrastes mudam durante o dia, ao anoitecer e conforme a meteorologia. Há cidades onde o aquecimento urbano noturno do ar é mais pronunciado do que o diurno; há superfícies muito quentes sob sol forte que não implicam ar igualmente quente. Nem todo centro compacto será o lugar mais quente em todas as horas, pois sombra e ventilação podem alterar o resultado.</p>
+  <div class="note"><strong>Antes de interpretar qualquer mapa:</strong> pergunte o que foi medido — temperatura do ar, da superfície ou outro indicador —, em que horário, em qual altura e em quais condições. A cor vermelha, sozinha, não fornece essas respostas.</div>
+ </div>
+</section>
+
+<section class="section wrap" aria-labelledby="mechanismTitle">
+ <div class="section-header"><span class="kicker">02 / Causas físicas</span><div><h2 id="mechanismTitle">Três processos que ajudam a explicar o calor urbano.</h2><p>A ilha de calor não tem uma causa única. O resultado observado combina processos físicos e escolhas de desenho urbano, interagindo também com o clima regional.</p></div></div>
+ <div class="fact-grid">
+  <article class="fact-card"><span class="n">MECANISMO 01 / RADIAÇÃO</span><h3>Absorver, refletir e emitir</h3><p>O albedo é a fração da radiação solar refletida pela superfície. Materiais de menor albedo frequentemente absorvem mais radiação solar direta, mas a temperatura final também depende de emissão térmica, condução, vento, umidade e geometria.</p></article>
+  <article class="fact-card"><span class="n">MECANISMO 02 / ÁGUA E VEGETAÇÃO</span><h3>Sombra e evapotranspiração</h3><p>Copas interceptam radiação antes que ela atinja calçadas, enquanto a evapotranspiração utiliza energia na mudança de fase da água. Sem água disponível, a capacidade de resfriamento evaporativo cai; uma árvore não funciona como ar-condicionado independente do ambiente.</p></article>
+  <article class="fact-card"><span class="n">MECANISMO 03 / FORMA URBANA</span><h3>Calor armazenado e ventilação</h3><p>Paredes e pavimentos armazenam calor durante o dia e podem liberá-lo à noite. Ruas estreitas entre edifícios criam sombra, mas também podem restringir a visão do céu e a ventilação, interferindo na perda de calor por radiação e convecção.</p></article>
+ </div>
+</section>
+
+<section class="section diagram-section" aria-labelledby="balanceTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">03 / Balanço de energia</span><div><h2 id="balanceTitle">Onde a energia chega e para onde ela vai?</h2><p>Uma superfície recebe radiação de ondas curtas, troca radiação térmica de ondas longas, calor sensível com o ar, calor latente pela evaporação e calor por condução e armazenamento. Essas parcelas variam com hora, material, água e meteorologia.</p></div></div>
+  <div class="diagram-grid">
+   <figure class="figure-paper">
+    <svg viewBox="0 0 760 500" role="img" aria-labelledby="balanceSvgTitle balanceSvgDesc">
+     <title id="balanceSvgTitle">Balanço simplificado de energia em uma superfície urbana</title>
+     <desc id="balanceSvgDesc">Desenho de uma superfície de rua iluminada pelo sol. Setas amarelas indicam radiação solar incidente e refletida, setas vermelhas trocas térmicas com o ar, verdes evaporação e azuis armazenamento no material. Não há proporções quantitativas.</desc>
+     <rect width="760" height="500" fill="#e0ebe1"/>
+     <circle cx="115" cy="105" r="56" fill="#f5bf75"/>
+     <path d="M0 336 H760 V500 H0Z" fill="#b7a38c"/>
+     <path d="M0 352 H760 V413 H0Z" fill="#777978"/>
+     <path d="M0 413 H760 V500 H0Z" fill="#b7a38c"/>
+     <g fill="none" stroke="#e9a951" stroke-width="12" stroke-linecap="round"><path d="M207 153 L325 320 M306 320 L394 183"/></g>
+     <g fill="#e9a951"><path d="M306 301 L315 326 L338 311Z"/><path d="M376 191 L402 168 L410 203Z"/></g>
+     <g fill="none" stroke="#b95745" stroke-width="9" stroke-linecap="round"><path d="M494 321 Q464 270 489 230 M536 321 Q558 269 532 218"/></g>
+     <g fill="#b95745"><path d="M475 238 L495 216 L505 244Z"/><path d="M518 227 L530 206 L547 230Z"/></g>
+     <g fill="none" stroke="#418d78" stroke-width="9" stroke-linecap="round" stroke-dasharray="10 12"><path d="M675 317 Q652 260 661 216"/></g>
+     <g fill="#418d78"><path d="M648 225 L660 200 L674 226Z"/></g>
+     <g fill="none" stroke="#4c8190" stroke-width="11" stroke-linecap="round"><path d="M375 354 V453"/></g>
+     <g fill="#4c8190"><path d="M361 433 L375 461 L389 433Z"/></g>
+     <g fill="#315952" font-family="Georgia,serif" font-size="21">
+      <text x="15" y="49">Radiação solar</text><text x="246" y="140">Reflexão</text>
+      <text x="427" y="126">Calor sensível</text><text x="501" y="150">e emissão</text>
+      <text x="605" y="170">Evaporação</text><text x="17" y="470">Armazenamento e condução</text>
+     </g>
+    </svg>
+    <figcaption>Figura 2. Balanço de energia esquemático em SVG autoral. Setas identificam processos diferentes sem fornecer fluxos, temperaturas nem magnitudes reais.</figcaption>
+   </figure>
+   <div class="diagram-copy">
+    <h3>O saldo precisa fechar.</h3>
+    <p>O balanço de energia na superfície relaciona a radiação líquida às trocas de calor sensível com o ar, calor latente associado às mudanças de fase da água e condução/armazenamento. Convenções de sinal diferem entre livros e instrumentos, mas o princípio de conservação permanece.</p>
+    <div class="equation">R<sub>n</sub> ≈ H + LE + G <small>Forma introdutória para uma superfície sob convenção de fluxos. Rn: radiação líquida; H: calor sensível; LE: calor latente; G: fluxo no material/solo. Alguns estudos tratam armazenamento urbano e calor antropogênico em termos adicionais ou convenções específicas.</small></div>
+    <h3>Por que essa divisão importa?</h3>
+    <p>Um asfalto seco pode transferir mais energia a aquecer o material e o ar; uma superfície vegetada com água disponível pode consumir parte da energia em evapotranspiração. Um edifício que recebe sol acumula calor no envelope e o devolve posteriormente, de modo que o horário da observação muda a interpretação.</p>
+    <p>Ar-condicionado, veículos e atividades humanas também liberam calor para o ambiente urbano. Esses fluxos não foram dimensionados nos nossos experimentos, e não se deve confundir seu papel com o balanço físico completo da cidade.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="section map-section" aria-labelledby="mapTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">04 / Atlas térmico explorável</span><div><h2 id="mapTitle">Seis bairros. Quatro maneiras de observar.</h2><p>Selecione superfície ou ar, dia ou noite, e abra cada região da cidade fictícia de Vale-Claro. As cores são uma escala <strong>ordinal e inventada para ensino</strong>: não são imagens de satélite, graus Celsius, previsões nem dados reais de bairros.</p></div></div>
+  <div class="heat-controls">
+   <div class="choice-group" role="group" aria-label="Selecione a variável representada no mapa"><span class="group-label">INDICADOR</span><button type="button" data-map-metric="surface" aria-pressed="true">Superfície</button><button type="button" data-map-metric="air" aria-pressed="false">Ar próximo ao chão</button></div>
+   <div class="choice-group" role="group" aria-label="Selecione o horário ilustrativo do mapa"><span class="group-label">PERÍODO</span><button type="button" data-map-period="day" aria-pressed="true">Dia</button><button type="button" data-map-period="night" aria-pressed="false">Noite</button></div>
+  </div>
+  <div class="map-grid">
+   <div>
+    <figure class="city-map">
+     <div class="map-canvas">
+      <svg viewBox="0 0 920 580" role="img" aria-labelledby="mapSvgTitle mapSvgDesc">
+       <title id="mapSvgTitle">Mapa ilustrado de seis bairros fictícios com cores relativas de calor</title>
+       <desc id="mapSvgDesc">Mapa esquemático com seis regiões irregulares, avenidas, quadras, um curso d'água e áreas verdes. As cores mudam conforme o aluno seleciona indicador e período. Os seis botões sobre o mapa e uma lista alternativa permitem explorar cada bairro pelo teclado ou toque.</desc>
+       <rect width="920" height="580" fill="#f5eadd"/>
+       <g stroke="#f9f4e7" stroke-width="6">
+        <path class="map-patch" data-map-shape="parque" d="M22 28 H322 L376 217 L269 292 L24 265Z" fill="#83b3a0"/>
+        <path class="map-patch" data-map-shape="centro" d="M322 27 H574 L623 298 L406 337 L269 292 L376 217Z" fill="#e4ab78"/>
+        <path class="map-patch" data-map-shape="industria" d="M574 28 H898 V263 L623 298Z" fill="#c97158"/>
+        <path class="map-patch" data-map-shape="bairro" d="M21 265 L269 292 L405 337 L384 552 H22Z" fill="#dc9369"/>
+        <path class="map-patch" data-map-shape="jardins" d="M405 337 L623 298 L683 555 H384Z" fill="#a2bc99"/>
+        <path class="map-patch" data-map-shape="orla" d="M623 298 L898 263 V554 H683Z" fill="#b2c4aa"/>
+       </g>
+       <g class="map-roads"><path d="M32 275 Q276 249 535 328 T899 291"/><path d="M355 30 Q377 237 408 552"/><path d="M586 30 Q597 259 683 554"/><path d="M30 468 Q447 447 896 462"/></g>
+       <g class="map-roads-center"><path d="M32 275 Q276 249 535 328 T899 291"/><path d="M355 30 Q377 237 408 552"/><path d="M586 30 Q597 259 683 554"/></g>
+       <g fill="#566960" opacity=".7">
+        <rect x="414" y="87" width="47" height="70" rx="3"/><rect x="470" y="114" width="40" height="64" rx="3"/><rect x="493" y="203" width="44" height="55" rx="3"/>
+        <rect x="689" y="71" width="103" height="51" rx="4"/><rect x="716" y="141" width="79" height="60" rx="4"/>
+        <rect x="73" y="373" width="90" height="47" rx="3"/><rect x="209" y="369" width="95" height="52" rx="3"/>
+        <rect x="481" y="394" width="45" height="33" rx="3"/><rect x="549" y="454" width="65" height="32" rx="3"/>
+       </g>
+       <g fill="#337b5d" opacity=".85"><circle cx="95" cy="100" r="29"/><circle cx="150" cy="122" r="34"/><circle cx="203" cy="93" r="29"/><circle cx="102" cy="206" r="31"/><circle cx="220" cy="210" r="37"/><circle cx="479" cy="497" r="27"/><circle cx="536" cy="526" r="25"/><circle cx="593" cy="396" r="24"/></g>
+       <path d="M849 241 Q795 359 865 424 T814 564" fill="none" stroke="#8dc7c2" stroke-width="41"/>
+       <path d="M849 241 Q795 359 865 424 T814 564" fill="none" stroke="#d6e8db" stroke-width="5" stroke-dasharray="8 14"/>
+       <g fill="#fff8e9" stroke="#64716b" stroke-width="2"><rect x="28" y="23" width="247" height="29" rx="3"/></g>
+       <text x="39" y="43" fill="#4f5750" font-family="monospace" font-size="16">VALE-CLARO · MAPA INVENTADO</text>
+       <text x="47" y="551" fill="#5a6057" font-family="monospace" font-size="15">SEM ESCALA / SEM COORDENADAS</text>
+      </svg>
+      <button type="button" class="map-point" data-zone="parque" aria-label="Bairro 1: Parque das Mangueiras" aria-pressed="false">1</button>
+      <button type="button" class="map-point" data-zone="centro" aria-label="Bairro 2: Centro vertical" aria-pressed="true">2</button>
+      <button type="button" class="map-point" data-zone="industria" aria-label="Bairro 3: Distrito industrial" aria-pressed="false">3</button>
+      <button type="button" class="map-point" data-zone="bairro" aria-label="Bairro 4: Jardim do Concreto" aria-pressed="false">4</button>
+      <button type="button" class="map-point" data-zone="jardins" aria-label="Bairro 5: Ruas arborizadas" aria-pressed="false">5</button>
+      <button type="button" class="map-point" data-zone="orla" aria-label="Bairro 6: Orla do Canal" aria-pressed="false">6</button>
+     </div>
+     <figcaption>Figura 3. Mapa SVG original inspirado em cartografia temática, porém inteiramente fictício. Nenhum gradiente foi produzido a partir de imagens termais, sensores ou estações meteorológicas.</figcaption>
+    </figure>
+    <div class="map-key"><span class="smallcaps">LEGENDA RELATIVA</span><span class="swatches" aria-hidden="true"><i style="background:#4d8da5"></i><i style="background:#78ae9e"></i><i style="background:#d6ce8b"></i><i style="background:#e9a46a"></i><i style="background:#bd604c"></i></span><small>Menor sinal ilustrativo → maior sinal ilustrativo (somente dentro da mesma camada)</small></div>
+   </div>
+   <div class="map-inspector">
+    <span class="idx" id="zoneIndex">02 / CENTRO VERTICAL</span>
+    <h3 id="zoneName">Centro vertical</h3>
+    <p id="zoneDescription" aria-live="polite" aria-atomic="true">Edifícios altos podem sombrear ruas durante parte do dia, mas as superfícies construídas armazenam calor e a geometria altera trocas radiativas e ventilação.</p>
+    <div class="zone-score" aria-live="polite" aria-atomic="true"><span class="smallcaps" id="zoneLayer">SUPERFÍCIE · DIA</span><strong id="zoneLevel">Faixa 5 de 5 · mais aquecida</strong><small>Classificação ordinal fictícia, sem graus Celsius e sem comparação entre modos diferentes.</small></div>
+    <p id="zoneReason" style="margin-top:19px">Uma cobertura extensa de material construído pode elevar a temperatura das superfícies expostas, embora áreas sombreadas estejam mais frias. O ar da rua responde de modo diferente.</p>
+    <div class="zone-buttons" role="group" aria-label="Selecionar bairro sem usar o mapa">
+     <button type="button" data-zone="parque" aria-pressed="false">1 · Parque</button>
+     <button type="button" data-zone="centro" aria-pressed="true">2 · Centro</button>
+     <button type="button" data-zone="industria" aria-pressed="false">3 · Industrial</button>
+     <button type="button" data-zone="bairro" aria-pressed="false">4 · Adensado</button>
+     <button type="button" data-zone="jardins" aria-pressed="false">5 · Arborizado</button>
+     <button type="button" data-zone="orla" aria-pressed="false">6 · Orla</button>
+    </div>
+   </div>
+  </div>
+  <p class="map-caveat"><strong>Atenção à escala:</strong> o mapa usa faixas relativas de 1 a 5; cada combinação de indicador e horário foi criada para explicar tendências, não para representar uma série temporal real. Não compare as faixas de “superfície” com as de “ar” como se fossem medições do mesmo termômetro. Na natureza, elas exigem instrumentos, horários, exposição e métodos distintos.</p>
+ </div>
+</section>
+
+<section class="section metric-section" aria-labelledby="sensorsTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">05 / O que o sensor realmente vê?</span><div><h2 id="sensorsTitle">Temperatura da superfície não é temperatura do ar.</h2><p>Um satélite com sensor térmico interpreta radiação emitida por superfícies visíveis no seu campo de visão. Um termômetro meteorológico bem instalado mede ar sob condições padronizadas. Não são a mesma variável e não podem ser confundidas ao avaliar exposição humana.</p></div></div>
+  <div class="metric-grid">
+   <figure class="figure-paper metric-figure">
+    <svg viewBox="0 0 760 510" role="img" aria-labelledby="sensorsSvgTitle sensorsSvgDesc">
+     <title id="sensorsSvgTitle">Comparação entre sensor térmico de satélite e termômetro de ar instalado numa rua</title>
+     <desc id="sensorsSvgDesc">Um satélite fictício acima das nuvens observa radiação de telhados e ruas. Na parte inferior, uma pequena estação protegida do sol mede a temperatura do ar a uma altura de referência. As setas marcam observáveis diferentes; o desenho não mostra medições reais.</desc>
+     <rect width="760" height="510" fill="#d5e9e1"/>
+     <path d="M0 335H760V510H0Z" fill="#b8beaf"/>
+     <g fill="#8f9d9b" stroke="#607f80" stroke-width="4"><rect x="112" y="230" width="174" height="105"/><rect x="337" y="180" width="170" height="155"/><rect x="540" y="257" width="138" height="78"/></g>
+     <g fill="#e2d2be"><rect x="109" y="214" width="179" height="24"/><rect x="335" y="163" width="174" height="23"/><rect x="537" y="241" width="144" height="20"/></g>
+     <g transform="translate(370 60) rotate(-7)">
+       <rect x="-34" y="-21" width="68" height="42" rx="6" fill="#5c8190" stroke="#355c69" stroke-width="4"/>
+       <rect x="-130" y="-25" width="82" height="53" fill="#467a8b" stroke="#2c556c" stroke-width="4"/>
+       <rect x="48" y="-25" width="82" height="53" fill="#467a8b" stroke="#2c556c" stroke-width="4"/>
+       <path d="M-48 0H-34 M34 0H48" stroke="#3e6677" stroke-width="8"/>
+     </g>
+     <path d="M366 98 L169 235 M379 100 L425 175 M389 101 L617 261" stroke="#c46a4c" stroke-width="5" stroke-dasharray="9 13" fill="none"/>
+     <g fill="#f1aa76"><path d="M158 223L174 247L186 225Z"/><path d="M412 161L430 188L440 163Z"/><path d="M600 250L619 274L636 252Z"/></g>
+     <path d="M615 362V474" stroke="#4d756e" stroke-width="10"/>
+     <rect x="590" y="359" width="49" height="36" rx="6" fill="#f4f8ef" stroke="#527f7a" stroke-width="5"/>
+     <g stroke="#567e76" stroke-width="4"><path d="M592 369H638 M592 377H638 M592 385H638"/></g>
+     <g fill="none" stroke="#399582" stroke-width="5"><path d="M611 402 Q559 425 520 408 M615 397 Q662 415 702 399"/></g>
+     <g font-family="Georgia,serif" font-size="21" fill="#325c5b"><text x="37" y="99">Observação da superfície</text><text x="513" y="485">Ar na rua</text></g>
+    </svg>
+    <figcaption>Figura 4. Instrumentos em SVG autoral. O sensor remoto observa radiância associada às superfícies; o equipamento de ar mede o ambiente gasoso sob condições próprias. Ambos exigem calibração e métodos adequados.</figcaption>
+   </figure>
+   <div class="metric-list">
+    <article><h3>Temperatura radiométrica da superfície</h3><p>Inclui telhados, solo exposto, vegetação e pavimentos visíveis ao sensor; produtos de temperatura da superfície terrestre dependem de emissividade, atmosfera, resolução espacial e horário da passagem. Debaixo de uma copa fechada, o satélite tende a enxergar a superfície da copa, não o asfalto sombreado abaixo dela.</p></article>
+    <article><h3>Temperatura do ar</h3><p>Termômetros em abrigos apropriados medem o ar em um ponto e altura conhecidos; redes urbanas podem usar observações em múltiplas alturas para entender a camada de copa urbana. Exposição solar direta do sensor pode distorcer medidas se o instrumento não for protegido adequadamente.</p></article>
+    <article><h3>Conforto e risco térmico</h3><p>O estresse térmico humano também depende de umidade, vento, radiação incidente, atividade física, roupas, hidratação e características pessoais. Temperatura de superfície, isoladamente, não mede o calor recebido por uma pessoa caminhando na rua.</p></article>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="lab" aria-labelledby="labTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">06 / Simulador conceitual de bairro</span><div><h2 id="labTitle">Projete uma rua. Observe tendências, não graus Celsius.</h2><p>Altere seis características urbanas e compare o período diurno com o noturno. O índice de pressão térmica abaixo foi inventado para mostrar relações qualitativas: <strong>não é modelo meteorológico, medição, temperatura prevista nem risco à saúde calculado</strong>.</p></div></div>
+  <div class="lab-layout">
+   <div class="lab-controls">
+    <span class="kicker">Painel de cenário / 6 parâmetros</span>
+    <h3>O bairro que você desenha</h3>
+    <p>As variáveis são independentes apenas no exercício; na cidade real, árvores, sombra, geometria, água, albedo e ventilação interagem.</p>
+    <div class="preset-row" role="group" aria-label="Aplicar cenários didáticos prontos">
+      <button type="button" data-preset="dense" aria-pressed="true">Centro adensado</button>
+      <button type="button" data-preset="green" aria-pressed="false">Ruas arborizadas</button>
+      <button type="button" data-preset="paved" aria-pressed="false">Bairro pavimentado</button>
+    </div>
+    <div class="sliders">
+     <div><label for="trees">Cobertura de copas <output for="trees" id="treesOut">20%</output></label><input id="trees" type="range" min="0" max="80" step="5" value="20"><span class="hint">Percentual ilustrativo da superfície coberta por copas, não árvores plantadas.</span></div>
+     <div><label for="impervious">Superfície impermeabilizada <output for="impervious" id="imperviousOut">75%</output></label><input id="impervious" type="range" min="0" max="100" step="5" value="75"><span class="hint">Predomínio de pavimento e coberturas pouco permeáveis.</span></div>
+     <div><label for="reflect">Refletância solar / albedo <output for="reflect" id="reflectOut">30%</output></label><input id="reflect" type="range" min="0" max="100" step="5" value="30"><span class="hint">Valor simplificado para superfícies expostas, não albedo real do bairro todo.</span></div>
+     <div><label for="vent">Ventilação potencial <output for="vent" id="ventOut">35%</output></label><input id="vent" type="range" min="0" max="100" step="5" value="35"><span class="hint">Proxy conceitual, sem velocidade do vento nem dados meteorológicos.</span></div>
+     <div><label for="density">Adensamento e geometria urbana <output for="density" id="densityOut">75%</output></label><input id="density" type="range" min="0" max="100" step="5" value="75"><span class="hint">Inclui massa construída e menor abertura do céu, mas não calcula a sombra real.</span></div>
+     <div><label for="water">Água disponível à vegetação <output for="water" id="waterOut">35%</output></label><input id="water" type="range" min="0" max="100" step="5" value="35"><span class="hint">Sem água no solo, a contribuição evaporativa pode ser limitada.</span></div>
+    </div>
+    <button type="button" class="reset" id="resetDistrict">Restaurar cenário inicial</button>
+   </div>
+   <div class="lab-results">
+    <span class="kicker" style="color:#cde6d8">Resposta do laboratório</span>
+    <h3>Duas leituras da mesma rua.</h3>
+    <div class="choice-group" role="group" aria-label="Período do simulador de bairro"><span class="group-label">PERÍODO</span><button type="button" data-lab-period="day" aria-pressed="true">Dia</button><button type="button" data-lab-period="night" aria-pressed="false">Noite</button></div>
+    <figure class="lab-figure" id="districtFigure" data-period="day">
+     <svg viewBox="0 0 750 350" role="img" aria-labelledby="districtSvgTitle districtSvgDesc">
+      <title id="districtSvgTitle">Corte ilustrado de rua urbana com árvores, edifícios e circulação do ar</title>
+      <desc id="districtSvgDesc">Uma rua com edifícios de alturas diferentes, pavimento, árvores e setas de ventilação. O céu e a iluminação mudam quando se alterna dia e noite; a aparência da arborização e das setas muda com os parâmetros. O desenho é qualitativo e não reproduz uma rua real.</desc>
+      <rect class="skyday" width="750" height="350" fill="#c1dad4"/>
+      <rect class="skynight" width="750" height="350" fill="#283c54" opacity="0"/>
+      <circle class="skyday" cx="600" cy="65" r="40" fill="#f9cd81"/>
+      <path class="skynight" d="M597 27 Q553 75 617 96 Q581 113 556 90 Q527 40 597 27Z" fill="#f2eac6" opacity="0"/>
+      <rect y="271" width="750" height="79" fill="#706b65"/>
+      <rect x="39" y="92" width="153" height="179" fill="#ba917d" stroke="#735955" stroke-width="5"/>
+      <rect x="564" y="42" width="149" height="229" fill="#9a968c" stroke="#686d69" stroke-width="5"/>
+      <g fill="#e6c9a6"><rect x="65" y="119" width="36" height="43"/><rect x="119" y="119" width="36" height="43"/><rect x="65" y="182" width="36" height="43"/><rect x="119" y="182" width="36" height="43"/></g>
+      <g fill="#b9d2ca"><rect x="589" y="73" width="37" height="40"/><rect x="651" y="73" width="37" height="40"/><rect x="589" y="130" width="37" height="40"/><rect x="651" y="130" width="37" height="40"/><rect x="589" y="187" width="37" height="40"/><rect x="651" y="187" width="37" height="40"/></g>
+      <path id="districtRoad" d="M212 275H554V350H212Z" fill="#55595d"/>
+      <g class="tree-element" data-tree="0"><path d="M239 271V217" stroke="#6b6b48" stroke-width="10"/><circle cx="239" cy="201" r="33" fill="#367c65"/></g>
+      <g class="tree-element" data-tree="1"><path d="M314 271V207" stroke="#6b6b48" stroke-width="10"/><circle cx="314" cy="185" r="37" fill="#367c65"/></g>
+      <g class="tree-element" data-tree="2"><path d="M410 271V210" stroke="#6b6b48" stroke-width="10"/><circle cx="410" cy="188" r="37" fill="#367c65"/></g>
+      <g class="tree-element" data-tree="3"><path d="M493 271V218" stroke="#6b6b48" stroke-width="10"/><circle cx="493" cy="200" r="31" fill="#367c65"/></g>
+      <g class="wind-element" fill="none" stroke="#dcf1e0" stroke-width="5" stroke-linecap="round" stroke-dasharray="14 10"><path d="M210 127 Q338 113 473 132"/><path d="M290 157 Q397 148 531 159"/></g>
+      <g fill="#fff7dc" font-family="monospace" font-size="18"><text x="226" y="320">RUA / MODELO ARTÍSTICO</text></g>
+     </svg>
+     <figcaption>Figura 5. Corte urbano SVG original. Cor da rua, copas e vento mudam visualmente conforme controles; não há geometria, sombras ou velocidades calculadas.</figcaption>
+    </figure>
+    <div class="value-box" role="status" aria-live="polite" aria-atomic="true">
+     <span class="smallcaps" id="districtMetricLabel">ÍNDICE HEURÍSTICO · CENÁRIO DIURNO</span>
+     <div class="metric" id="districtIndex">68/100</div>
+     <small id="districtLabel">Tendência ilustrativa mais elevada de acúmulo/aquecimento. Este índice não mede a temperatura do ar, da superfície ou risco de saúde.</small>
+    </div>
+    <div class="heat-bar" role="progressbar" aria-label="Índice conceitual de pressão térmica do bairro" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68" id="districtMeter"><span id="districtBar"></span></div>
+    <p id="districtExplanation" role="status" aria-live="polite" aria-atomic="true" style="margin-top:18px">Uma rua adensada e impermeabilizada dispõe de menos oportunidades de resfriamento evaporativo e pode armazenar calor. A resposta depende de sombra e vento locais.</p>
+    <p>Os <strong>pesos arbitrários</strong> do índice diferem entre dia e noite: no dia, valorizam exposição solar, arborização e albedo; à noite, armazenamento e ventilação. Não há equação física calibrada nem conversão do índice para °C.</p>
+  </div>
+  </div>
+  <div class="lab-assumptions"><p><strong>Hipóteses e limites:</strong> valor inicial 50 em escala de 0 a 100, somado a ajustes lineares e arbitrários. Variáveis independentes e não calibradas, sem radiação horária, orientação da rua, umidade meteorológica, cobertura real, relevo ou calor antropogênico. As relações mudam com clima, estação, horário, disponibilidade de água e geometria. O índice serve apenas para explorar tendências dentro da atividade, nunca para comparar cidades ou prever temperatura.</p></div>
+ </div>
+</section>
+
+<section class="section surface" aria-labelledby="surfaceTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">07 / Superfícies e luz solar</span><div><h2 id="surfaceTitle">Claro, escuro ou sombreado: o que acontece com a energia?</h2><p>Explore um balanço puramente geométrico de <strong>100 unidades de radiação solar incidente</strong>. A fração sombreada não chega diretamente ao material; do restante, o albedo determina a parte refletida e a parcela absorvida. Isso não calcula temperatura.</p></div></div>
+  <div class="surface-layout">
+   <div class="surface-controls">
+    <h3>Biblioteca de superfícies</h3>
+    <div class="material-picks" role="group" aria-label="Selecionar superfície hipotética">
+     <button type="button" data-material="asphalt" aria-pressed="true">Asfalto escuro / exposto</button>
+     <button type="button" data-material="concrete" aria-pressed="false">Concreto mais claro</button>
+     <button type="button" data-material="roof" aria-pressed="false">Cobertura refletiva</button>
+     <button type="button" data-material="grass" aria-pressed="false">Superfície vegetada</button>
+     <button type="button" data-material="shade" aria-pressed="false">Asfalto sob sombra</button>
+    </div>
+    <label for="albedo">Albedo ilustrativo <output for="albedo" id="albedoOut">10%</output></label>
+    <input id="albedo" type="range" min="0" max="100" step="5" value="10">
+    <label for="shade">Fração sombreada <output for="shade" id="shadeOut">0%</output></label>
+    <input id="shade" type="range" min="0" max="100" step="5" value="0">
+    <button type="button" class="reset" id="resetSurface">Restaurar asfalto exposto</button>
+    <p style="font-size:.81rem;color:#716457;margin-top:18px">Valores iniciais dos materiais são escolhidos para comparação didática e não descrevem qualquer pavimento ou pintura específica; propriedades reais variam por idade, composição, sujeira, umidade e radiação.</p>
+   </div>
+   <div class="surface-results">
+    <figure>
+     <svg viewBox="0 0 760 325" role="img" aria-labelledby="surfaceSvgTitle surfaceSvgDesc">
+      <title id="surfaceSvgTitle">Esquema da divisão de energia solar em sombra, reflexão e absorção</title>
+      <desc id="surfaceSvgDesc">Uma fonte de luz envia radiação para uma superfície de cor variável. Setas mostram frações de energia sombreada, refletida e absorvida. O diagrama é conceitual, e os valores são exibidos em barras textuais acessíveis abaixo.</desc>
+      <rect width="760" height="325" fill="#d8ebdf"/>
+      <circle cx="118" cy="80" r="42" fill="#f6c06b"/>
+      <path d="M0 263H760V325H0Z" fill="#a6a79b"/>
+      <path id="surfaceMaterialShape" d="M66 256H691V282H66Z" fill="#4a5050"/>
+      <path d="M158 125L308 245" stroke="#dca458" stroke-width="10" stroke-linecap="round"/>
+      <path d="M292 235L314 256L314 226Z" fill="#dca458"/>
+      <path d="M320 243L428 112" stroke="#70a08a" stroke-width="9" stroke-linecap="round"/>
+      <path d="M414 126L439 98L427 138Z" fill="#70a08a"/>
+      <path d="M481 244V305" stroke="#b45e44" stroke-width="9" stroke-linecap="round"/>
+      <path d="M468 293L482 315L496 293Z" fill="#b45e44"/>
+      <g fill="#365851" font-family="Georgia,serif" font-size="22"><text x="15" y="170">Incidente</text><text x="403" y="84">Refletida</text><text x="510" y="304">Absorvida</text></g>
+      <rect x="556" y="17" width="184" height="49" fill="#f9faf2" stroke="#adbeaa" stroke-width="2"/>
+      <text x="570" y="48" fill="#58655a" font-family="monospace" font-size="18">100 unidades</text>
+     </svg>
+     <figcaption>Figura 6. Desenho SVG autoral, não proporcional: o balanço numérico, e não o tamanho das setas, representa as frações calculadas.</figcaption>
+    </figure>
+    <div class="energy-bars" aria-label="Partição conceitual da energia solar incidente">
+     <div class="energy-row"><span>Sombreada</span><div class="track"><span id="shadeBar" style="background:#6f9090"></span></div><output id="shadeResult">0%</output></div>
+     <div class="energy-row"><span>Refletida</span><div class="track"><span id="reflectBar" style="background:#73aa91"></span></div><output id="reflectResult">10%</output></div>
+     <div class="energy-row"><span>Absorvida</span><div class="track"><span id="absorbBar" style="background:#c47050"></span></div><output id="absorbResult">90%</output></div>
+    </div>
+    <div class="surface-formula" role="status" aria-live="polite" aria-atomic="true">
+     <strong id="surfaceTitleDynamic">Asfalto escuro / exposto</strong>
+     <div id="surfaceSummary">De 100 unidades de radiação, 0 são bloqueadas pela sombra, 10 são refletidas pela superfície e 90 são absorvidas na simplificação.</div>
+     <p style="margin:9px 0 0;font-size:.84rem">Modelo: sombra = S; reflexão = (100 − S)·α; absorção = (100 − S)·(1 − α), com α entre 0 e 1. As parcelas somam 100. Sombra é tratada como desvio ideal da radiação direta; luz difusa não é considerada.</p>
+    </div>
+    <p id="surfaceCaveat" style="margin:16px 0 0;font-size:.83rem">A energia absorvida não equivale à temperatura. Em vegetação, evapotranspiração também remove energia, e em coberturas a emissividade e o isolamento importam.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="section canyon" aria-labelledby="canyonTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">08 / O calor depois do sol</span><div><h2 id="canyonTitle">A noite não apaga imediatamente a energia guardada.</h2><p>A forma da rua influencia sombra diurna, trocas radiativas noturnas e circulação do ar. Observe o corte do chamado cânion urbano; o desenho alterna processos qualitativos, não simula temperatura real de edifícios.</p></div></div>
+  <div class="canyon-layout">
+   <figure class="canyon-figure" id="canyonFigure" data-period="day">
+    <svg viewBox="0 0 770 470" role="img" aria-labelledby="canyonSvgTitle canyonSvgDesc">
+     <title id="canyonSvgTitle">Corte de rua entre edifícios durante o dia e a noite</title>
+     <desc id="canyonSvgDesc">Dois prédios altos delimitam uma rua estreita. No modo dia, sol e setas de radiação incidem sobre telhados e pavimento. No modo noite, aparecem lua e setas de liberação de calor e trocas radiativas dificultadas pela geometria do cânion urbano. Há também setas animadas de circulação que podem ser pausadas.</desc>
+     <rect width="770" height="470" fill="#d2e6df" class="day-layer"/>
+     <rect width="770" height="470" fill="#354a62" class="night-layer" opacity="0"/>
+     <g class="day-layer"><circle cx="387" cy="73" r="48" fill="#f4be6e"/><path d="M383 125L380 268" stroke="#e9ab60" stroke-width="13" stroke-dasharray="16 12"/><path d="M365 253L380 279L395 253Z" fill="#e9ab60"/></g>
+     <g class="night-layer" opacity="0"><path d="M414 38Q365 100 434 119Q387 137 358 99Q343 65 414 38Z" fill="#f4e9c2"/><g fill="none" stroke="#e3a07f" stroke-width="7" stroke-linecap="round"><path d="M326 294Q307 248 333 211"/><path d="M427 297Q450 248 425 206"/><path d="M498 292Q535 240 512 199"/></g></g>
+     <rect y="329" width="770" height="141" fill="#939186"/>
+     <rect x="31" y="93" width="253" height="237" fill="#8c928d" stroke="#566b6a" stroke-width="6"/>
+     <rect x="527" y="37" width="217" height="292" fill="#929b96" stroke="#566b6a" stroke-width="6"/>
+     <g fill="#d9e0cb"><rect x="59" y="119" width="51" height="46"/><rect x="139" y="119" width="51" height="46"/><rect x="59" y="197" width="51" height="46"/><rect x="139" y="197" width="51" height="46"/><rect x="560" y="67" width="51" height="46"/><rect x="654" y="67" width="51" height="46"/><rect x="560" y="145" width="51" height="46"/><rect x="654" y="145" width="51" height="46"/><rect x="560" y="223" width="51" height="46"/><rect x="654" y="223" width="51" height="46"/></g>
+     <path d="M286 332H526" stroke="#4e5c60" stroke-width="12"/>
+     <g class="day-layer" fill="none" stroke="#b85a41" stroke-width="5" stroke-dasharray="9 12"><path d="M287 235Q347 271 374 316"/><path d="M527 179Q491 221 435 314"/></g>
+     <g class="night-layer" fill="none" stroke="#ffc58c" stroke-width="5" stroke-dasharray="9 12" opacity="0"><path d="M286 278Q400 210 522 270"/><path d="M283 233Q391 179 525 227"/></g>
+     <g class="air-flow" fill="none" stroke="#4b8e8b" stroke-width="6" stroke-linecap="round"><path d="M306 388Q379 370 462 384"/><path d="M321 425Q382 416 459 422"/></g>
+     <g fill="#2d5354" font-family="monospace" font-size="19"><text x="302" y="454" fill="#faf3dc">RUA / CORTE HIPOTÉTICO</text></g>
+    </svg>
+    <figcaption>Figura 7. Cânion urbano SVG original. Os efeitos de sombra, calor armazenado e ventilação são qualitativos; largura, altura, orientação e intensidade do vento não são calculadas.</figcaption>
+   </figure>
+   <div class="canyon-copy">
+    <h3>O que muda quando o sol se põe?</h3>
+    <div class="choice-group" role="group" aria-label="Alternar período do cânion urbano"><span class="group-label">CORTE</span><button type="button" data-canyon-period="day" aria-pressed="true">Dia</button><button type="button" data-canyon-period="night" aria-pressed="false">Noite</button></div>
+    <div class="explain" id="canyonExplanation" role="status" aria-live="polite" aria-atomic="true">Durante o dia, edifícios projetam sombras que podem diminuir a radiação sobre parte da rua. As superfícies que permanecem expostas absorvem energia, e a ventilação ajuda a transportar calor. A geometria pode criar simultaneamente áreas mais frias e mais quentes.</div>
+    <button type="button" class="motion-button" id="pauseCanyon" aria-pressed="false">Pausar fluxo ilustrado de ar</button>
+    <p style="margin-top:24px">Na noite, a energia armazenada em paredes e pavimentos pode retornar ao ambiente. A geometria também modifica a troca radiativa com o céu: uma rua com pouco céu visível pode resfriar mais lentamente em certas condições. Mas uma copa de árvore ou edifício também oferece sombra, e seu efeito líquido depende da hora e do contexto.</p>
+    <p>Não há um desenho urbano universalmente mais frio. Um bairro denso com ruas bem orientadas, materiais adequados, áreas verdes e boa ventilação pode se comportar de maneira diferente de outro com densidade semelhante.</p>
+   </div>
+  </div>
+  <div class="night-strip">
+   <article><h3>Ilha de calor da superfície</h3><p>É especialmente evidente em imagens diurnas de superfícies muito expostas. A intensidade e o padrão mudam ao longo do dia e entre materiais, mas não dizem diretamente quanto uma pessoa sente de calor no ar.</p></article>
+   <article><h3>Ilha de calor atmosférica</h3><p>Compara temperaturas do ar entre áreas construídas e de referência ou entre bairros. Em muitas condições urbanas, diferenças noturnas persistem por liberação de calor armazenado e mudanças nas trocas de energia; variam com ventos, nuvens e topografia.</p></article>
+  </div>
+ </div>
+</section>
+
+<section class="section health" aria-labelledby="healthTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">09 / Quem sente mais?</span><div><h2 id="healthTitle">O mapa do calor também é um mapa de desigualdades.</h2><p>Exposição térmica depende do lugar onde se vive e trabalha, da qualidade da moradia, do acesso à sombra e à água, dos recursos disponíveis e de fatores pessoais de vulnerabilidade. As condições não se distribuem igualmente entre grupos e bairros.</p></div></div>
+  <div class="health-grid">
+   <figure class="health-figure">
+    <svg viewBox="0 0 780 490" role="img" aria-labelledby="equitySvgTitle equitySvgDesc">
+     <title id="equitySvgTitle">Duas ruas ilustrativas com diferentes condições de sombra e proteção contra calor</title>
+     <desc id="equitySvgDesc">Um desenho original dividido em duas metades: uma rua exposta com muito asfalto, poucas árvores e parada de ônibus sem sombra; outra com árvores, cobertura sombreada e bebedouro. Não representa bairros reais ou grupos específicos.</desc>
+     <rect width="780" height="490" fill="#cfded8"/>
+     <rect x="0" y="310" width="390" height="180" fill="#aa8c76"/>
+     <rect x="390" y="310" width="390" height="180" fill="#91ae8e"/>
+     <rect x="15" y="177" width="130" height="132" fill="#a9917a"/>
+     <rect x="179" y="155" width="155" height="155" fill="#b59a81"/>
+     <rect x="439" y="176" width="130" height="134" fill="#acb6aa"/>
+     <rect x="605" y="189" width="140" height="120" fill="#a7b7a5"/>
+     <path d="M0 384H780" stroke="#69716f" stroke-width="23"/>
+     <path d="M390 0V490" stroke="#f5e8d2" stroke-width="7" stroke-dasharray="10 12"/>
+     <circle cx="85" cy="83" r="54" fill="#e7a16d"/>
+     <circle cx="478" cy="85" r="43" fill="#f3ce89"/>
+     <g fill="#387e5b"><circle cx="490" cy="230" r="67"/><circle cx="574" cy="233" r="52"/><circle cx="677" cy="236" r="57"/></g>
+     <g stroke="#586c52" stroke-width="11"><path d="M490 312V275 M574 311V274 M677 312V282"/></g>
+     <g fill="#f4f5e7" stroke="#557a71" stroke-width="5"><path d="M84 289H293V301H84Z"/><path d="M84 302V373 M293 302V373"/><path d="M449 291H705V307H449Z"/><path d="M449 307V372 M705 307V372"/></g>
+     <g fill="#565d55"><circle cx="230" cy="360" r="14"/><path d="M220 374L210 415H249L240 374Z"/></g>
+     <g fill="#42584b"><circle cx="560" cy="356" r="14"/><path d="M549 372L541 415H578L570 372Z"/></g>
+     <g fill="#f3f3e5" font-family="Georgia,serif" font-size="22"><text x="33" y="463">Pouca sombra</text><text x="429" y="463">Sombra e infraestrutura</text></g>
+    </svg>
+    <figcaption>Figura 8. Contraste urbano ilustrativo, totalmente fictício. Mostra fatores de acesso e infraestrutura sem atribuir dados, identidades ou condições a uma população real.</figcaption>
+   </figure>
+   <div>
+    <h3>Exposição não é a mesma coisa que vulnerabilidade.</h3>
+    <p>Uma pessoa exposta ao sol por trabalho, deslocamento ou moradia pode receber carga térmica diferente de quem permanece num local protegido. Renda, condições habitacionais, transporte, acesso a água, energia, espaços públicos e atendimento de saúde influenciam as possibilidades de adaptação.</p>
+    <p>Altas temperaturas podem agravar problemas de saúde e causar doenças relacionadas ao calor. Crianças pequenas, idosos, pessoas com condições de saúde relevantes, pessoas com deficiência e trabalhadores externos podem enfrentar riscos maiores sob certas circunstâncias. A avaliação requer dados de exposição e necessidades específicas, não apenas uma mancha vermelha de imagem de satélite.</p>
+    <p>Em eventos de calor intenso, informações públicas, hidratação, áreas acessíveis de resfriamento, ambientes com sombra e apoio a quem não consegue se proteger são medidas importantes. A prevenção deve considerar os protocolos locais de saúde e proteção civil.</p>
+   </div>
+  </div>
+  <div class="health-list">
+    <article><h3>Áreas verdes acessíveis</h3><p>Não basta medir a quantidade de vegetação: sua distribuição, manutenção, proximidade e acessibilidade para diferentes públicos também importam.</p></article>
+    <article><h3>Trabalho e deslocamentos</h3><p>Paradas sem sombra, caminhadas em pavimentos expostos e trabalho externo podem ampliar a exposição ao calor, mesmo sem mudança na temperatura do ar da cidade.</p></article>
+    <article><h3>Habitação e energia</h3><p>Isolamento, ventilação, proteção solar e acesso a resfriamento influenciam o calor interno. Alguns sistemas de refrigeração rejeitam calor para o exterior e consomem energia.</p></article>
+    <article><h3>Planejamento participativo</h3><p>Dados ambientais e participação dos moradores ajudam a identificar prioridades; políticas precisam considerar quem ganha benefícios e quem arca com custos e manutenção.</p></article>
+  </div>
+ </div>
+</section>
+
+<section class="adaptation" aria-labelledby="adaptTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">10 / Ferramentas de adaptação</span><div><h2 id="adaptTitle">Resfriar a cidade exige combinar soluções.</h2><p>Cada medida atua sobre processos diferentes. A escolha precisa considerar clima, disponibilidade hídrica, manutenção, segurança, biodiversidade, custo e distribuição dos benefícios.</p></div></div>
+  <div class="adapt-grid">
+   <article><h3>Árvores e sombra</h3><p>Copas protegem superfícies e pessoas da radiação direta e podem resfriar por evapotranspiração. Espécies adequadas, volume de solo, água, acessibilidade e manutenção são condições relevantes.</p></article>
+   <article><h3>Coberturas refletivas</h3><p>Materiais de alta refletância solar e emissividade adequada podem reduzir o aquecimento de telhados e o ganho térmico de edifícios. O desempenho depende do clima, isolamento e condições do sistema.</p></article>
+   <article><h3>Superfícies permeáveis</h3><p>Pavimentos que favorecem infiltração e soluções de drenagem podem melhorar o manejo da água; sua contribuição térmica depende do material e da umidade. Nem todo pavimento permeável é automaticamente mais frio.</p></article>
+   <article><h3>Ventilação e geometria</h3><p>Orientação das ruas, permeabilidade ao vento, afastamentos e sombra alteram exposição e trocas com o ar. É preciso avaliar também ruído, segurança, uso do solo e condições regionais.</p></article>
+   <article><h3>Infraestrutura azul e verde</h3><p>Parques, jardins de chuva, solos vivos, áreas úmidas e corpos d'água podem oferecer benefícios múltiplos, mas exigem gestão ambiental, água de qualidade e atenção a condições locais.</p></article>
+   <article><h3>Planos de calor e equidade</h3><p>Alertas, espaços de resfriamento, rotas sombreadas, proteção de trabalhadores e priorização de bairros vulneráveis complementam intervenções físicas. Monitoramento deve avaliar resultados reais.</p></article>
+  </div>
+  <figure class="adapt-figure">
+   <svg viewBox="0 0 1080 375" role="img" aria-labelledby="adaptSvgTitle adaptSvgDesc">
+    <title id="adaptSvgTitle">Ilustração de rua adaptada com árvores, telhados refletivos e drenagem verde</title>
+    <desc id="adaptSvgDesc">Panorama autoral de rua com edifícios de telhado claro, árvores em ambos os lados, ciclovia, canteiros para captar chuva e pessoas sob sombra. O desenho mostra possibilidades de planejamento, sem afirmar resultados quantitativos.</desc>
+    <rect width="1080" height="375" fill="#d4e6dd"/>
+    <path d="M0 254H1080V375H0Z" fill="#b8bbab"/>
+    <rect x="50" y="97" width="228" height="161" fill="#94afa4" stroke="#627e7c" stroke-width="5"/>
+    <path d="M42 99L160 60L288 99Z" fill="#f8f2da" stroke="#a0aea0" stroke-width="5"/>
+    <rect x="792" y="76" width="243" height="181" fill="#93a7a4" stroke="#667d7b" stroke-width="5"/>
+    <path d="M784 75L909 30L1044 75Z" fill="#f8f2da" stroke="#9cae9f" stroke-width="5"/>
+    <g fill="#cfe8de"><rect x="78" y="122" width="54" height="58"/><rect x="160" y="122" width="54" height="58"/><rect x="820" y="110" width="61" height="58"/><rect x="920" y="110" width="61" height="58"/></g>
+    <rect x="287" y="254" width="501" height="121" fill="#a0bca9"/>
+    <path d="M334 290H736" stroke="#667d78" stroke-width="34"/>
+    <path d="M334 291H736" stroke="#dce9d7" stroke-width="3" stroke-dasharray="12 20"/>
+    <g stroke="#687e55" stroke-width="12"><path d="M345 260V170 M437 261V160 M629 260V151 M727 260V171"/></g>
+    <g fill="#4f916b"><circle cx="345" cy="159" r="60"/><circle cx="429" cy="144" r="64"/><circle cx="633" cy="142" r="68"/><circle cx="728" cy="158" r="57"/></g>
+    <path d="M318 326Q427 343 537 325T769 326" fill="none" stroke="#5eaaaf" stroke-width="18"/>
+    <g fill="#e8e9d6" font-family="monospace" font-size="18"><text x="343" y="365">DRENAGEM VERDE</text></g>
+    <g fill="#566d5e"><circle cx="546" cy="239" r="11"/><path d="M537 251L529 287H563L555 251Z"/></g>
+   </svg>
+   <figcaption>Figura 9. Rua adaptada hipotética em SVG original. A presença de vegetação e materiais claros ilustra opções, não garante temperaturas ou resultados específicos.</figcaption>
+  </figure>
+ </div>
+</section>
+
+<section class="climate" aria-labelledby="climateTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">11 / Clima global e microclima local</span><div><h2 id="climateTitle">Ilhas de calor e aquecimento global não são a mesma coisa.</h2><p>Os dois processos podem aumentar a exposição ao calor, mas possuem causas e escalas diferentes. Separá-los permite propor soluções locais sem perder de vista a mudança climática.</p></div></div>
+  <div class="climate-grid">
+   <article><h3>Ilha de calor urbana</h3><p>Resulta de propriedades da ocupação do solo, dos materiais, da vegetação, da forma urbana e de fluxos de energia. É estudada comparando locais, alturas, variáveis e horários sob condições compatíveis. A intensidade pode mudar com a meteorologia e até se inverter em algumas situações.</p></article>
+   <article><h3>Aquecimento do clima</h3><p>Está associado ao aumento de gases de efeito estufa e a mudanças climáticas de larga escala. Ondas de calor mais frequentes e intensas em muitas regiões ampliam desafios urbanos. Árvores, sombra e materiais adequados reduzem vulnerabilidades locais, mas não substituem a redução de emissões.</p></article>
+  </div>
+  <div class="note"><strong>Interpretar sem extrapolar:</strong> um mapa de superfície de um único dia não comprova tendência climática de décadas. Para isso, são necessários séries temporais, controles de qualidade e métodos de comparação adequados.</div>
+ </div>
+</section>
+
+<section class="quiz" aria-labelledby="quizTitle">
+ <div class="wrap">
+  <div class="section-header"><span class="kicker">12 / Revisão de campo</span><div><h2 id="quizTitle">Você consegue ler o calor sem confundir as variáveis?</h2><p>As questões avaliam interpretação científica e decisões de planejamento. O feedback é formativo e não registra nota acadêmica.</p></div></div>
+  <div class="quiz-grid">
+   <div class="quiz-side">
+    <h3>Uma cor é uma pergunta, não uma resposta.</h3>
+    <p>Mapas e índices só fazem sentido depois de identificar sua variável, escala, origem, horários e incertezas. Em cidades reais, a comparação precisa ser sustentada por observações e modelos adequados.</p>
+    <p>Retorne ao atlas e experimente as mesmas zonas de dia e à noite, depois observe no laboratório que aumentar a sombra não equivale a baixar automaticamente a temperatura do ar por uma quantidade fixa.</p>
+   </div>
+   <form id="quizForm" novalidate>
+    <fieldset class="question" data-answer="b" data-explain="A temperatura de superfície representa a superfície vista pelo sensor e pode mudar mais rapidamente; a temperatura do ar depende de medição específica, altura e condições de exposição.">
+     <legend>1. Um satélite identifica um telhado muito quente. O que isso permite concluir diretamente?</legend>
+     <label><input type="radio" name="q1" value="a"> Que o ar respirado por pedestres tem exatamente a mesma temperatura.</label>
+     <label><input type="radio" name="q1" value="b"> Que a superfície observada está aquecida segundo o produto térmico; a temperatura do ar requer outro tipo de medição.</label>
+     <label><input type="radio" name="q1" value="c"> Que toda a cidade tem a mesma exposição térmica.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="c" data-explain="Árvores oferecem sombra e podem resfriar por evapotranspiração, que depende de água disponível e de condições ambientais; o efeito varia entre lugares e horários.">
+     <legend>2. Por que a arborização pode ajudar no conforto térmico urbano?</legend>
+     <label><input type="radio" name="q2" value="a"> Porque qualquer árvore elimina o calor armazenado durante a noite.</label>
+     <label><input type="radio" name="q2" value="b"> Porque folhas transformam toda a radiação solar em eletricidade.</label>
+     <label><input type="radio" name="q2" value="c"> Porque a sombra reduz radiação sobre pessoas e superfícies, e a evapotranspiração pode contribuir para resfriamento.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="a" data-explain="Materiais e edifícios armazenam energia e a liberam depois. A geometria de um cânion urbano pode restringir trocas radiativas e vento, contribuindo para calor noturno, dependendo das condições.">
+     <legend>3. Uma rua permanece quente depois do pôr do sol. Qual explicação é fisicamente plausível?</legend>
+     <label><input type="radio" name="q3" value="a"> Calor armazenado nas superfícies e trocas radiativas/ventilação alteradas pela geometria.</label>
+     <label><input type="radio" name="q3" value="b"> O asfalto continua recebendo radiação solar direta à meia-noite em todas as cidades.</label>
+     <label><input type="radio" name="q3" value="c"> A temperatura do ar só depende da cor do telhado mais próximo.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="b" data-explain="O simulador declara pesos e parâmetros arbitrários; seus índices servem apenas para comparar tendências internas. Ele não calcula °C, riscos reais ou resultados de políticas urbanas.">
+     <legend>4. O índice térmico hipotético do laboratório caiu de 70 para 45. Qual interpretação é correta?</legend>
+     <label><input type="radio" name="q4" value="a"> A rua resfriou exatamente 25 °C.</label>
+     <label><input type="radio" name="q4" value="b"> A combinação de controles reduziu um índice conceitual, sem equivalência direta em graus.</label>
+     <label><input type="radio" name="q4" value="c"> O índice prova que o projeto eliminou as ondas de calor.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <fieldset class="question" data-answer="c" data-explain="A exposição e a capacidade de adaptação são desiguais. Planejamento térmico responsável combina evidências ambientais, necessidades e participação social.">
+     <legend>5. Como uma cidade deve priorizar intervenções para enfrentar o calor?</legend>
+     <label><input type="radio" name="q5" value="a"> Olhando apenas qual bairro aparece vermelho numa imagem de satélite.</label>
+     <label><input type="radio" name="q5" value="b"> Distribuindo exatamente a mesma solução em todas as ruas, sem dados ou consulta aos moradores.</label>
+     <label><input type="radio" name="q5" value="c"> Combinando medições relevantes, saúde, vulnerabilidades, infraestrutura e participação das comunidades.</label>
+     <p class="question-feedback" aria-live="polite"></p>
+    </fieldset>
+    <div class="quiz-actions"><button type="button" id="gradeQuiz">Corrigir com explicações</button><button type="reset" class="alt">Refazer revisão</button></div>
+    <p id="quizResult" class="quiz-result" role="status" aria-live="polite"></p>
+   </form>
+  </div>
+ </div>
+</section>
+
+<section class="epilogue">
+ <div class="wrap"><span class="kicker" style="color:#cde9bc">Última observação do atlas</span><h2>Cidades mais frescas começam com boas perguntas e melhores escolhas de projeto.</h2>
+  <p>Ajustar materiais, sombra, árvores, água e geometria urbana ajuda a administrar o calor, mas exige olhar para o dia e a noite, o ar e as superfícies, as limitações de cada dado e a distribuição desigual dos riscos. Um mapa útil não é só bonito: ele informa o que mede, o que não mede e quem pode se beneficiar das decisões.</p>
+ </div>
+</section>
+
+<section class="sources wrap" aria-labelledby="sourcesTitle">
+ <h2 id="sourcesTitle">Fontes científicas e transparência das imagens</h2>
+ <p>Foram produzidas nove ilustrações SVG originais para esta atividade: panorama térmico da cidade, balanço de energia, mapa temático fictício, comparação de sensores, corte interativo de rua, divisão da radiação solar, cânion urbano de dia/noite, contrastes de exposição e rua adaptada. Nenhuma imagem de satélite, fotografia ou medição externa foi incorporada. Todas as figuras e mapas são esquemáticos, sem escala, e os valores de laboratório não são medições.</p>
+ <p>Referências técnicas: <a href="https://www.epa.gov/heatislands/what-are-heat-islands" target="_blank" rel="noopener noreferrer">EPA — What Are Heat Islands?</a>; <a href="https://www.epa.gov/heatislands/measuring-heat-islands" target="_blank" rel="noopener noreferrer">EPA — Measuring Heat Islands</a>; <a href="https://www.epa.gov/heatislands/benefits-trees-and-vegetation" target="_blank" rel="noopener noreferrer">EPA — Benefits of Trees and Vegetation</a>; <a href="https://www.epa.gov/heatislands/using-cool-roofs-reduce-heat-islands" target="_blank" rel="noopener noreferrer">EPA — Cool Roofs</a>; <a href="https://science.nasa.gov/earth/earth-observatory/global-maps/land-surface-temperature-vegetation/" target="_blank" rel="noopener noreferrer">NASA Earth Observatory — Land Surface Temperature &amp; Vegetation</a>; <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-10/" target="_blank" rel="noopener noreferrer">IPCC AR6 WGI — Chapter 10</a>; <a href="https://www.ipcc.ch/report/ar6/wg2/chapter/chapter-6/" target="_blank" rel="noopener noreferrer">IPCC AR6 WGII — Chapter 6: Cities</a>.</p>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+var d=document;
+var byId=function(id){return d.getElementById(id);};
+var clamp=function(v,a,b){return Math.min(b,Math.max(a,v));};
+function activate(btns,key,val){btns.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset[key]===val));});}
+var hero=byId("heroArt"),heroPause=byId("pauseHero");
+heroPause.addEventListener("click",function(){var value=heroPause.getAttribute("aria-pressed")!=="true";heroPause.setAttribute("aria-pressed",String(value));hero.classList.toggle("is-paused",value);heroPause.textContent=value?"Retomar animação ilustrativa":"Pausar animação ilustrativa";});
+var zones={
+ centro:{name:"Centro vertical",label:"02 / CENTRO VERTICAL",description:"Edifícios altos podem sombrear ruas durante parte do dia, mas superfícies construídas armazenam calor e a geometria altera trocas radiativas e ventilação.",reason:"Uma grande área de superfícies construídas favorece armazenamento, mas a sombra diurna de edifícios pode criar áreas relativamente frescas. À noite, a redução de visão do céu e o calor armazenado podem influenciar a temperatura do ar."},
+ industria:{name:"Distrito industrial",label:"03 / DISTRITO INDUSTRIAL",description:"Telhados e pátios extensos podem alterar a absorção solar, a umidade e a exposição ao sol. Processos industriais também podem liberar calor, embora não tenham sido modelados neste mapa.",reason:"Grandes áreas expostas e pouco vegetadas podem aquecer bastante durante o dia. O comportamento noturno depende da capacidade térmica, dos edifícios e da meteorologia."},
+ parque:{name:"Parque das Mangueiras",label:"01 / PARQUE DAS MANGUEIRAS",description:"Copas de árvores reduzem radiação solar direta na superfície e podem resfriar por evapotranspiração. O efeito depende de água disponível, espécies, vento e configuração do parque.",reason:"No satélite, uma copa fecha a visão do pavimento que está sob ela: o produto térmico pode mostrar a copa, enquanto pedestres experimentam sombra e condições de ar específicas."},
+ bairro:{name:"Jardim do Concreto",label:"04 / BAIRRO ADENSADO",description:"Moradias próximas, pouca vegetação e longos trajetos expostos tornam importante estudar cobertura, materiais, sombra, ventilação e condições habitacionais sem presumir quem mora no bairro.",reason:"Superfícies construídas podem conservar calor. A exposição noturna do ar pode ser relevante quando o tecido urbano tem pouca ventilação e grande armazenamento térmico."},
+ jardins:{name:"Ruas arborizadas",label:"05 / RUAS ARBORIZADAS",description:"Calçadas protegidas por copas e vegetação podem oferecer condições melhores para pedestres, desde que haja manutenção, infraestrutura e água disponível às plantas.",reason:"Sombra reduz carga radiativa direta e parte da energia pode ir para evapotranspiração. À noite, copa e geometria podem influenciar trocas com o céu, de modo que o efeito final não é universal."},
+ orla:{name:"Orla do Canal",label:"06 / ORLA DO CANAL",description:"Água e circulação local podem modificar microclimas, mas seu efeito varia com vento, brisas, umidade e geometria. Estar perto de água não garante sempre menor estresse térmico.",reason:"Superfícies de água e superfícies construídas trocam energia de formas diferentes. Brisas e umidade podem ser relevantes; o mapa não inclui um modelo de vento ou de conforto térmico."}
+};
+var mapValues={
+ day:{surface:{parque:20,centro:87,industria:93,bairro:79,jardins:35,orla:52},air:{parque:31,centro:64,industria:68,bairro:71,jardins:41,orla:50}},
+ night:{surface:{parque:39,centro:72,industria:78,bairro:75,jardins:45,orla:52},air:{parque:41,centro:74,industria:71,bairro:82,jardins:47,orla:57}}
+};
+var palettes=["#4d8da5","#78ae9e","#d6ce8b","#e9a46a","#bd604c"];
+var mapMetric="surface",mapPeriod="day",selectedZone="centro";
+var zoneBtns=Array.prototype.slice.call(d.querySelectorAll("[data-zone]"));
+var mapMetricBtns=Array.prototype.slice.call(d.querySelectorAll("[data-map-metric]"));
+var mapPeriodBtns=Array.prototype.slice.call(d.querySelectorAll("[data-map-period]"));
+var shapes=Array.prototype.slice.call(d.querySelectorAll("[data-map-shape]"));
+function band(value){return clamp(Math.ceil(value/20),1,5);}
+function redrawMap(){
+ var values=mapValues[mapPeriod][mapMetric],v=values[selectedZone],z=zones[selectedZone],n=band(v);
+ activate(zoneBtns,"zone",selectedZone);activate(mapMetricBtns,"mapMetric",mapMetric);activate(mapPeriodBtns,"mapPeriod",mapPeriod);
+ shapes.forEach(function(shape){shape.setAttribute("fill",palettes[band(values[shape.dataset.mapShape])-1]);});
+ byId("zoneIndex").textContent=z.label;
+ byId("zoneName").textContent=z.name;
+ byId("zoneDescription").textContent=z.description;
+ byId("zoneLayer").textContent=(mapMetric==="surface"?"SUPERFÍCIE":"AR PRÓXIMO AO CHÃO")+" · "+(mapPeriod==="day"?"DIA":"NOITE");
+ byId("zoneLevel").textContent="Faixa "+n+" de 5 · "+(n<=2?"menor sinal térmico":n===3?"sinal intermediário":"maior sinal térmico");
+ byId("zoneReason").textContent=z.reason;
+}
+zoneBtns.forEach(function(b){b.addEventListener("click",function(){selectedZone=b.dataset.zone;redrawMap();});});
+mapMetricBtns.forEach(function(b){b.addEventListener("click",function(){mapMetric=b.dataset.mapMetric;redrawMap();});});
+mapPeriodBtns.forEach(function(b){b.addEventListener("click",function(){mapPeriod=b.dataset.mapPeriod;redrawMap();});});
+redrawMap();
+var labIDs=["trees","impervious","reflect","vent","density","water"];
+var labPresets={
+ dense:{trees:20,impervious:75,reflect:30,vent:35,density:75,water:35},
+ green:{trees:65,impervious:25,reflect:45,vent:70,density:25,water:75},
+ paved:{trees:5,impervious:95,reflect:15,vent:25,density:75,water:20}
+};
+var labPeriod="day",labPreset="dense";
+var presetBtns=Array.prototype.slice.call(d.querySelectorAll("[data-preset]"));
+var labPeriodBtns=Array.prototype.slice.call(d.querySelectorAll("[data-lab-period]"));
+var districtTrees=Array.prototype.slice.call(d.querySelectorAll("[data-tree]"));
+var districtWind=Array.prototype.slice.call(d.querySelectorAll(".wind-element"));
+function readLab(){var out={};labIDs.forEach(function(id){out[id]=Number(byId(id).value);byId(id+"Out").textContent=out[id]+"%";});return out;}
+function drawLab(){
+ var v=readLab(),score;
+ if(labPeriod==="day"){
+  score=50+0.30*(v.impervious-55)+0.24*(v.density-50)-0.40*(v.trees-25)-0.18*(v.reflect-35)-0.15*(v.vent-40)-0.16*(v.water-30);
+ }else{
+  score=50+0.21*(v.impervious-55)+0.37*(v.density-50)-0.14*(v.trees-25)-0.25*(v.vent-40)-0.08*(v.water-30);
+ }
+ score=clamp(Math.round(score),0,100);
+ activate(labPeriodBtns,"labPeriod",labPeriod);
+ activate(presetBtns,"preset",labPreset);
+ byId("districtFigure").dataset.period=labPeriod;
+ byId("districtRoad").setAttribute("fill",v.reflect>60?"#b6b6aa":v.reflect>30?"#777c7b":"#4d555b");
+ districtTrees.forEach(function(node,i){node.setAttribute("opacity",String(clamp(v.trees/80*4-i,0.07,1)));});
+ districtWind.forEach(function(node){node.setAttribute("opacity",String(clamp(v.vent/100,0.12,1)));});
+ byId("districtMetricLabel").textContent="ÍNDICE HEURÍSTICO · CENÁRIO "+(labPeriod==="day"?"DIURNO":"NOTURNO");
+ byId("districtIndex").textContent=score+"/100";
+ byId("districtMeter").setAttribute("aria-valuenow",String(score));
+ byId("districtBar").style.width=score+"%";
+ var classText=score<34?"menor":score<67?"intermediária":"mais elevada";
+ byId("districtLabel").textContent="Tendência "+classText+" de pressão térmica no modelo ilustrativo. Não mede temperatura do ar, de superfície ou risco à saúde.";
+ var info=(labPeriod==="day"
+  ?"Durante o dia, o índice privilegia copas, albedo, pavimentação, ventilação, geometria e água disponível, por pesos puramente didáticos. "
+  :"À noite, o índice valoriza o armazenamento associado a materiais e geometria, e a ventilação; albedo não atua diretamente na ausência de sol neste modelo. ");
+ var nuance=v.trees>55&&v.water<25
+  ?"Há muita copa, mas pouca água disponível no cenário: a evapotranspiração pode ser limitada, e o índice simplificado não representa esse acoplamento."
+  :v.trees>50?"Arborização e água podem reduzir exposição solar e favorecer fluxos de calor latente, mas a sombra real não é calculada.":v.impervious>75?"Pavimentação extensa e pouca vegetação justificam avaliar sombra e armazenamento de energia em campo.":"A combinação merece avaliação local de radiação, vento e umidade antes de concluir.";
+ byId("districtExplanation").textContent=info+nuance;
+}
+function setPreset(key){if(!Object.prototype.hasOwnProperty.call(labPresets,key))return;labPreset=key;var v=labPresets[key];labIDs.forEach(function(id){byId(id).value=String(v[id]);});drawLab();}
+labIDs.forEach(function(id){byId(id).addEventListener("input",function(){labPreset="";drawLab();});});
+presetBtns.forEach(function(b){b.addEventListener("click",function(){setPreset(b.dataset.preset);});});
+labPeriodBtns.forEach(function(b){b.addEventListener("click",function(){labPeriod=b.dataset.labPeriod;drawLab();});});
+byId("resetDistrict").addEventListener("click",function(){labPeriod="day";setPreset("dense");});
+setPreset("dense");
+var materials={
+ asphalt:{name:"Asfalto escuro exposto",albedo:10,shade:0,color:"#4a5050",note:"Superfície seca e escura: esta partição solar não considera emissividade, condução, evaporação ou condições de vento."},
+ concrete:{name:"Concreto claro ilustrativo",albedo:35,shade:0,color:"#bcb7aa",note:"Uma superfície mais refletiva tende a absorver uma menor parcela da radiação solar direta recebida, mas isso não fornece temperatura do pavimento."},
+ roof:{name:"Cobertura refletiva ilustrativa",albedo:75,shade:0,color:"#e7dfcd",note:"A refletância solar é apenas uma propriedade relevante: emissividade, isolamento e composição da cobertura afetam a resposta térmica."},
+ grass:{name:"Superfície vegetada ilustrativa",albedo:20,shade:0,color:"#739d69",note:"Este modelo trata apenas radiação direta. Não representa o resfriamento evaporativo e o balanço de água no solo, decisivos para vegetação."},
+ shade:{name:"Asfalto parcialmente sombreado",albedo:10,shade:65,color:"#4a5050",note:"Sombra reduz radiação direta recebida pelo material; a fração sombreada não desaparece, mas é interceptada/redirecionada por árvores ou edificações. Luz difusa foi omitida."}
+};
+var selectedMaterial="asphalt";
+var materialBtns=Array.prototype.slice.call(d.querySelectorAll("[data-material]"));
+function drawSurface(){
+ var a=Number(byId("albedo").value)/100,s=Number(byId("shade").value)/100;
+ var blocked=100*s,reflected=100*(1-s)*a,absorbed=100*(1-s)*(1-a);
+ var fix=function(n){return (Math.round(n*10)/10).toLocaleString("pt-BR",{maximumFractionDigits:1});};
+ activate(materialBtns,"material",selectedMaterial);
+ byId("albedoOut").textContent=Math.round(a*100)+"%";
+ byId("shadeOut").textContent=Math.round(s*100)+"%";
+ byId("shadeResult").textContent=fix(blocked)+"%";
+ byId("reflectResult").textContent=fix(reflected)+"%";
+ byId("absorbResult").textContent=fix(absorbed)+"%";
+ byId("shadeBar").style.width=blocked+"%";byId("reflectBar").style.width=reflected+"%";byId("absorbBar").style.width=absorbed+"%";
+ byId("surfaceMaterialShape").setAttribute("fill",materials[selectedMaterial]?.color||"#777");
+ byId("surfaceTitleDynamic").textContent=(materials[selectedMaterial]?.name||"Superfície personalizada")+(selectedMaterial?" / controles ajustáveis":"");
+ byId("surfaceSummary").textContent="Das 100 unidades hipotéticas, "+fix(blocked)+" são desviadas por sombra, "+fix(reflected)+" são refletidas pela superfície e "+fix(absorbed)+" são absorvidas na simplificação. A soma é 100.";
+ byId("surfaceCaveat").textContent=(materials[selectedMaterial]?.note||"Modelo sem medição") +" Uma fração de energia absorvida não é igual a uma temperatura, muito menos à temperatura do ar.";
+}
+function selectMaterial(key){if(!Object.prototype.hasOwnProperty.call(materials,key))return;selectedMaterial=key;byId("albedo").value=materials[key].albedo;byId("shade").value=materials[key].shade;drawSurface();}
+materialBtns.forEach(function(b){b.addEventListener("click",function(){selectMaterial(b.dataset.material);});});
+["albedo","shade"].forEach(function(id){byId(id).addEventListener("input",drawSurface);});
+byId("resetSurface").addEventListener("click",function(){selectMaterial("asphalt");});
+selectMaterial("asphalt");
+var canyonPeriod="day";
+var canyonBtns=Array.prototype.slice.call(d.querySelectorAll("[data-canyon-period]"));
+function drawCanyon(){
+ byId("canyonFigure").dataset.period=canyonPeriod;
+ activate(canyonBtns,"canyonPeriod",canyonPeriod);
+ byId("canyonExplanation").textContent=canyonPeriod==="day"
+  ?"Durante o dia, edifícios projetam sombras que podem diminuir a radiação sobre parte da rua. As superfícies que permanecem expostas absorvem energia, e a ventilação ajuda a transportar calor. A geometria pode criar simultaneamente áreas mais frias e mais quentes."
+  :"À noite, pavimentos e paredes podem devolver energia armazenada. A menor visão do céu entre edifícios altera trocas de radiação de onda longa e a circulação do ar pode ser restringida. O efeito líquido depende de vento, nuvens, altura e geometria; o desenho não prevê graus.";
+}
+canyonBtns.forEach(function(b){b.addEventListener("click",function(){canyonPeriod=b.dataset.canyonPeriod;drawCanyon();});});
+var canyonPause=byId("pauseCanyon");
+canyonPause.addEventListener("click",function(){var paused=canyonPause.getAttribute("aria-pressed")!=="true";canyonPause.setAttribute("aria-pressed",String(paused));byId("canyonFigure").classList.toggle("is-paused",paused);canyonPause.textContent=paused?"Retomar fluxo ilustrado de ar":"Pausar fluxo ilustrado de ar";});
+drawCanyon();
+var quiz=byId("quizForm");
+byId("gradeQuiz").addEventListener("click",function(){
+ var score=0,answered=0,questions=Array.prototype.slice.call(quiz.querySelectorAll(".question"));
+ questions.forEach(function(q){
+  var choice=q.querySelector("input:checked"),feedback=q.querySelector(".question-feedback");
+  if(!choice){feedback.textContent="Selecione uma alternativa para conferir.";return;}
+  answered++;var correct=choice.value===q.dataset.answer;if(correct)score++;
+  feedback.textContent=(correct?"Correto. ":"Reveja a interpretação. ")+q.dataset.explain;
+ });
+ byId("quizResult").textContent=answered<questions.length
+  ?"Você respondeu "+answered+" de "+questions.length+" questões. Acertos até agora: "+score+"."
+  :score+" de "+questions.length+" respostas corretas. "+(score===questions.length?"Você distinguiu dados, modelos e riscos urbanos.":"Releia as explicações para rever as inferências.");
+});
+quiz.addEventListener("reset",function(){quiz.querySelectorAll(".question-feedback").forEach(function(el){el.textContent="";});byId("quizResult").textContent="";});
+}());
+</script>
+</body>
+</html>
