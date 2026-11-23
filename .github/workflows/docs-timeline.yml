@@ -13,6 +13,7 @@ on:
       - 'docs/pt_br/tests/flower-to-fruit.test.mjs'
       - 'docs/pt_br/tests/astrology-history.test.mjs'
       - 'docs/pt_br/tests/zodiac-signs.test.mjs'
+      - 'docs/pt_br/tests/astronomy-history.test.mjs'
       - '.github/workflows/docs-timeline.yml'
   pull_request:
     paths:
@@ -26,6 +27,7 @@ on:
       - 'docs/pt_br/tests/flower-to-fruit.test.mjs'
       - 'docs/pt_br/tests/astrology-history.test.mjs'
       - 'docs/pt_br/tests/zodiac-signs.test.mjs'
+      - 'docs/pt_br/tests/astronomy-history.test.mjs'
       - '.github/workflows/docs-timeline.yml'
 
 permissions:
@@ -41,4 +43,4 @@ jobs:
         with:
           node-version: '22'
       - name: Validate timeline manifests, HTML and interactions
-        run: node --test docs/pt_br/tests/timeline.test.mjs docs/pt_br/tests/space-race.test.mjs docs/pt_br/tests/inventions.test.mjs docs/pt_br/tests/evolution.test.mjs docs/pt_br/tests/banana-history.test.mjs docs/pt_br/tests/cocoa-chocolate.test.mjs docs/pt_br/tests/flower-to-fruit.test.mjs docs/pt_br/tests/astrology-history.test.mjs docs/pt_br/tests/zodiac-signs.test.mjs
+        run: node --test docs/pt_br/tests/timeline.test.mjs docs/pt_br/tests/space-race.test.mjs docs/pt_br/tests/inventions.test.mjs docs/pt_br/tests/evolution.test.mjs docs/pt_br/tests/banana-history.test.mjs docs/pt_br/tests/cocoa-chocolate.test.mjs docs/pt_br/tests/flower-to-fruit.test.mjs docs/pt_br/tests/astrology-history.test.mjs docs/pt_br/tests/zodiac-signs.test.mjs docs/pt_br/tests/astronomy-history.test.mjs

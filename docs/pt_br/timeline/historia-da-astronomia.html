@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>História da Astronomia | Observatório das Descobertas</title>
+<style>
+:root{color-scheme:dark;--night:#091624;--navy:#102337;--panel:#192f45;--blue:#1e4055;--border:#426379;--sky:#a8dee8;--white:#f1f4e9;--muted:#bdd0da;--amber:#f3bd73;--green:#b4e6ce;--rust:#f2b6a4;--glow:#70bfd2;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--night);color:var(--white)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px;background:radial-gradient(ellipse at 88% 4%,#24455b 0,transparent 45%),radial-gradient(circle at 18% 65%,#193549 0,transparent 37%),var(--night)}
+button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #ffdb93;outline-offset:4px}button:disabled{opacity:.4;cursor:not-allowed}
+a{color:#b9e9ed;text-underline-offset:3px}
+.skip{position:absolute;top:-100px;left:10px;background:#f3e9d4;color:#102337;z-index:6;padding:12px;border-radius:8px}.skip:focus{top:10px}
+.observatory{max-width:1450px;margin:0 auto;padding:clamp(12px,2.6vw,38px)}
+.mast{position:relative;isolation:isolate;overflow:hidden;border:1px solid #637b90;border-radius:24px;background:linear-gradient(111deg,#0c1a2b 10%,#173348 71%,#27526b 110%);padding:clamp(23px,4.2vw,52px);min-height:230px}
+.mast:before{content:"";position:absolute;right:-90px;top:-210px;border:1px solid #accdd469;border-radius:50%;height:540px;width:540px;box-shadow:0 0 0 41px #bddbe213,0 0 0 92px #bddbe210;z-index:-1}
+.mast:after{content:"✦   ·         ✧      ·     ✦  ·       ✧";position:absolute;right:0;bottom:16px;color:#c7f3f45a;letter-spacing:13px;font-size:1.2rem;max-width:310px;pointer-events:none}
+.eyebrow{font:850 .73rem ui-monospace,Consolas,monospace;letter-spacing:.19em;text-transform:uppercase;color:var(--amber);margin:0 0 14px}
+.mast h1{font:normal clamp(2.15rem,5vw,4.8rem)/1.06 Georgia,serif;letter-spacing:-.046em;max-width:950px;color:#f7efdc;margin:0}
+.mast p:last-child{max-width:860px;line-height:1.68;color:#dbe8ea;font-size:.95rem;margin:16px 0 0}
+.method-banner{display:grid;grid-template-columns:1fr auto;gap:17px;align-items:center;border-radius:12px;background:#193348;border:1px solid #4d7987;padding:14px 19px;margin:18px 0;color:#d6e7e9}
+.method-banner b{color:#f5d09b}.method-banner p{font-size:.84rem;line-height:1.58;margin:0}.method-banner .seal{font:850 .75rem ui-monospace,monospace;border:1px solid #82adbc;border-radius:99px;padding:9px 13px;white-space:nowrap;color:#cde9e8}
+.track-layout{display:grid;grid-template-columns:minmax(245px,300px) minmax(0,1fr);gap:18px;align-items:start}
+.index{background:#132a3b;border:1px solid #4d7081;border-radius:17px;padding:17px 13px}
+.index h2,.model-lab h2,.signal-lab h2,.quiz h2{font-size:1.15rem;margin:0 0 8px;color:#f3e6cb}
+.index p,.model-lab>p,.signal-lab>p,.quiz>p{font-size:.83rem;color:#c2d0d6;line-height:1.6;margin:0 0 13px}
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.filter{min-height:38px;border:1px solid #608494;border-radius:100px;background:#213a4d;color:#e0eff0;font-size:.73rem;font-weight:800;padding:8px 11px}
+.filter[aria-pressed="true"]{background:#f1c787;color:#193145;border-color:#f1c787}
+.timeline{display:grid;gap:7px;max-height:685px;overflow-y:auto;scrollbar-color:#6b96a2 transparent;padding:3px 3px 14px}
+.stop{background:#1c3648;border:1px solid #557080;border-left:5px solid #81a2aa;min-height:66px;border-radius:9px;text-align:left;color:#eff2eb;padding:9px 9px;display:flex;gap:9px;align-items:center;width:100%}
+.stop[aria-current="true"]{border-color:#f0c286;background:#354e5e;border-left-color:#f0c286}
+.stop.visited:not([aria-current="true"]){background:#254457}
+.stop .when{font:850 .68rem ui-monospace,Consolas,monospace;min-width:68px;color:#f0c78e;line-height:1.34}
+.stop .label{font-size:.81rem;font-weight:840;line-height:1.32}
+.progress{border-top:1px solid #4f7784;padding:13px 2px 0;margin-top:12px}
+.progress-label{font-size:.78rem;font-weight:860;color:#c4e6e4}
+.progress-meter{height:9px;background:#305061;border-radius:100px;overflow:hidden;margin:10px 0}
+.progress-meter span{display:block;height:100%;width:4.16%;background:#efbf77;transition:width .22s}
+.reset{border:0;background:none;color:#b0e4e7;text-decoration:underline;padding:10px 1px;font-size:.83rem;font-weight:820}
+.archival{border:1px solid #577384;background:linear-gradient(155deg,#1b3044,#15293b);border-radius:17px;overflow:hidden;box-shadow:8px 8px 0 #04121e99}
+.archival-top{padding:clamp(18px,3vw,33px) clamp(18px,3vw,36px) 0}
+.archive-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center;color:#e4c184;font:850 .74rem ui-monospace,Consolas,monospace;letter-spacing:.07em}
+.context-label{background:#344d5a;border:1px solid #83aab1;padding:7px 12px;border-radius:100px;color:#d4edf0;font:780 .75rem system-ui,sans-serif;letter-spacing:0}
+.archival h2{font:normal clamp(1.75rem,3.5vw,3.15rem)/1.1 Georgia,serif;letter-spacing:-.033em;color:#f7ecd5;margin:19px 0 7px}
+.date{font:850 .86rem ui-monospace,Consolas,monospace;color:#f0c387;margin:0 0 18px}
+.plate{position:relative;display:grid;place-items:center;min-height:295px;background:radial-gradient(circle at center,#284e60 0,#0f2337 67%),repeating-radial-gradient(circle at center,#508c9a25 0 1px,transparent 2px 33px);border-block:1px solid #537183}
+.plate:before{content:"";position:absolute;inset:18px;border:1px dashed #81a1ad8a;border-radius:47% 53% 48% 52%;pointer-events:none}
+.plate svg{width:min(95%,550px);height:275px;color:#a6e2de;filter:drop-shadow(0 0 13px #2c7c9035);z-index:1}
+.plate .corner{position:absolute;left:17px;top:13px;font:800 .68rem ui-monospace,Consolas,monospace;letter-spacing:.09em;color:#b9d9d7}
+.plate .corner.end{left:auto;top:auto;bottom:14px;right:17px}
+.archive-body{padding:clamp(18px,3vw,33px)}
+.archive-body .summary{font-size:1rem;line-height:1.72;color:#e0e8e6;margin:0 0 17px}
+.factrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fact{background:#1f4050;border:1px solid #4c7b83;border-radius:10px;padding:15px}
+.fact.caution{background:#3d3847;border-color:#777084}
+.fact b{display:block;text-transform:uppercase;font-size:.71rem;letter-spacing:.08em;color:#b7e8d7;margin-bottom:7px}
+.fact.caution b{color:#f2c49f}
+.fact p{font-size:.88rem;line-height:1.62;color:#d2e0df;margin:0}
+.meta-source{font-size:.82rem;line-height:1.6;color:#bcd0d4;margin:16px 0}
+.meta-source a{font-weight:800;overflow-wrap:anywhere}
+.badges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:17px}
+.evidence-badge{background:#294b58;border:1px solid #7fa4ad;border-radius:999px;color:#dfefed;font-size:.76rem;padding:8px 12px;font-weight:820}
+.evidence-explain{font-size:.78rem;color:#bfd1d2;line-height:1.57}
+.actions{display:flex;justify-content:space-between;gap:10px}
+.actions button,.lab-actions button{border:1px solid #9fc4c5;color:#d6efeb;background:#253f4d;border-radius:9px;min-height:45px;padding:11px 15px;font-weight:850}
+.actions button:last-child,.lab-actions button:last-child{background:#efc788;color:#172d3c;border-color:#efc788}
+.labs{display:grid;grid-template-columns:1.08fr .92fr;gap:18px;margin-top:19px}
+.model-lab,.signal-lab,.quiz{background:#172d40;border:1px solid #55748a;border-radius:17px;padding:clamp(17px,2.5vw,28px)}
+.lab-controls{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}
+.lab-controls button{min-height:44px;border:1px solid #80a1af;border-radius:9px;background:#2b455b;color:#e6eeed;padding:10px 12px;font-size:.81rem;font-weight:790}
+.lab-controls button[aria-pressed="true"]{background:#e8c18b;border-color:#e8c18b;color:#1c3344}
+.diagram{background:radial-gradient(circle,#234255,#0c2033);border-radius:13px;border:1px solid #557687;display:grid;place-items:center;min-height:250px}
+.diagram svg{display:block;width:min(100%,470px);height:260px}
+.diagram text{fill:#e7ddd0;font-family:system-ui,sans-serif;font-size:13px}
+.diagram .orbit{stroke:#80aebb;stroke-width:3;fill:none;stroke-dasharray:5 8}
+.diagram .sun{fill:#f8cf85;stroke:#ffc777;stroke-width:3}
+.diagram .earth{fill:#82c8d8;stroke:#c1f1f3;stroke-width:2}
+.diagram .planet{fill:#d9a8aa;stroke:#efc5b4;stroke-width:2}
+.description-panel{margin-top:13px;background:#234051;border-left:4px solid #dfa965;padding:14px;color:#dce8e5;line-height:1.62;font-size:.87rem;min-height:124px}
+.description-panel strong{display:block;color:#f4d7a9;margin-bottom:5px}
+.description-panel span,.description-panel em{display:block}
+.description-panel em{font-style:normal;color:#f1cdb0;margin-top:8px}
+.signal-display{border:1px solid #537a8c;border-radius:12px;background:radial-gradient(circle,#15354e,#0b2235);min-height:250px;display:grid;place-items:center}
+.signal-display svg{display:block;width:100%;height:230px}
+.signal-display svg text{fill:#e4d9ca;font-size:13px;font-family:system-ui,sans-serif}
+.signal-display .grid-line{stroke:#39586a;stroke-width:1;stroke-dasharray:4 9}
+.signal-display .signal-line{fill:none;stroke:#e4c17f;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.quiz{margin-top:18px}
+.quiz h2{font-size:1.18rem;margin:0 0 8px;color:#f4e2c9}
+.quiz>p{font-size:.85rem;color:#c6d4db;line-height:1.63;margin:0 0 15px}
+.score{display:inline-block;padding:10px 14px;border:1px solid #65959b;background:#234754;color:#c7ebdd;border-radius:10px;margin:0 0 15px;font:850 .79rem ui-monospace,monospace}
+.questions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.question{border:1px solid #536e84;border-radius:11px;padding:15px;margin:0;min-width:0}
+.question legend{font-size:.87rem;line-height:1.47;color:#f4ead7;font-weight:830;padding:0 4px}
+.options{display:grid;gap:8px;margin:12px 0}
+.option{background:#2b4558;border:1px solid #7692a6;color:#e6eeee;padding:10px 12px;text-align:left;min-height:44px;border-radius:8px;font-size:.83rem}
+.option[aria-pressed="true"]{background:#e6c488;color:#1c3242;border-color:#e6c488}
+.feedback{font-size:.82rem;color:#f0c6ac;line-height:1.55;min-height:46px;margin:9px 0 0}
+.feedback.correct{color:#afe6c7}
+.note{font-size:.79rem;color:#aec1ca;line-height:1.73;margin:19px 3px 8px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:1080px){.track-layout{grid-template-columns:1fr}.timeline{display:flex;overflow-x:auto;overflow-y:hidden;max-height:none;padding:5px 3px 16px;scroll-snap-type:x proximity}.stop{flex:0 0 169px;flex-direction:column;align-items:flex-start;scroll-snap-align:center}.index{padding:15px}}
+@media(max-width:980px){.labs{grid-template-columns:1fr}}
+@media(max-width:650px){.observatory{padding:11px}.mast{padding:25px 19px;border-radius:14px}.mast h1{font-size:2.55rem}.method-banner{grid-template-columns:1fr}.method-banner .seal{justify-self:start}.archival-top,.archive-body{padding:18px}.archival h2{font-size:2rem}.plate{min-height:205px}.plate svg{height:195px}.factrow,.questions{grid-template-columns:1fr}.actions button{padding:10px}.lab-controls button{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.timeline{scroll-snap-type:none}}
+</style></head>
+<body>
+<a class="skip" href="#archive">Ir para a descoberta selecionada</a>
+<main class="observatory">
+<header class="mast">
+<p class="eyebrow">Observatório das Descobertas · Ciência em construção</p>
+<h1>História da Astronomia</h1>
+<p>Como passamos de registros do céu em tabuletas a observatórios capazes de captar ondas gravitacionais e estudar galáxias distantes? Nesta viagem, cada descoberta está ligada aos instrumentos, às evidências e às pessoas que tornaram possível corrigir nossas ideias sobre o Universo.</p>
+</header>
+<div class="method-banner"><p><b>Três perguntas para cada marco:</b> o que foi observado ou proposto, por que isso mudou a astronomia e quais são os limites da conclusão? Um modelo superado pode ter sido matematicamente útil em sua época, enquanto uma observação precisa pode continuar válida mesmo quando a explicação muda.</p><span class="seal">24 MARCOS · 24 SVG · 3 MODELOS · 4 SINAIS</span></div>
+<div class="track-layout">
+<aside class="index" aria-label="Índice da astronomia histórica">
+<h2>Registro de observações</h2><p>Escolha um período ou um marco. Use as setas, Home e End na sequência. Em telas pequenas, deslize com o dedo.</p>
+<div id="filters" class="filters" role="group" aria-label="Filtrar épocas"></div>
+<nav id="timeline" class="timeline" aria-label="Linha do tempo das descobertas astronômicas"></nav>
+<div class="progress"><strong id="progress-label" class="progress-label">1 de 24 marcos explorados</strong>
+<div id="progress" class="progress-meter" role="progressbar" aria-label="Marcos explorados" aria-valuemin="0" aria-valuemax="24" aria-valuenow="1"><span id="progress-fill"></span></div>
+<button type="button" class="reset" id="reset-history">Reiniciar linha do tempo</button>
+</div>
+</aside>
+<article id="archive" class="archival" aria-labelledby="event-title" tabindex="-1">
+<div class="archival-top">
+<div class="archive-meta"><span id="event-index">OBSERVAÇÃO 01 / 24</span><span id="event-place" class="context-label">Mesopotâmia</span></div>
+<h2 id="event-title">Astronomia registrada em tabuletas</h2><p id="event-date" class="date">c. século VII–VI a.C.</p>
+</div>
+<div class="plate"><span class="corner">LÂMINA VETORIAL ORIGINAL</span>
+<svg viewBox="0 0 460 300" role="img" aria-labelledby="illustration-title illustration-desc"><title id="illustration-title">Ilustração da descoberta</title><desc id="illustration-desc">Gravura esquemática original, sem escala.</desc><defs>
+<symbol id="obs-tablet" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect x="105" y="28" width="250" height="245" rx="24"/><path d="M144 82l23-28 24 28m44-27 23 28m40-18 24 18M147 120l32-17 24 17m42-17 27 19m-125 39 27-24 21 23m41-17 24 19m40-18 23 17M148 206l30-18 21 21m42-24 28 23m-122 29 30-15m77 3 29-16"/><circle cx="297" cy="218" r="10"/></g></symbol>
+<symbol id="obs-armillary" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5"><circle cx="228" cy="133" r="102"/><ellipse cx="228" cy="133" rx="47" ry="102" transform="rotate(24 228 133)"/><ellipse cx="228" cy="133" rx="102" ry="46" transform="rotate(-18 228 133)"/><path d="M228 235v37m-59 0h118M126 133h204M228 31v204"/><circle cx="228" cy="133" r="13"/><path d="M148 68 308 199" stroke-dasharray="8 9"/></g></symbol>
+<symbol id="obs-geocentric" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5"><circle cx="230" cy="151" r="31"/><circle cx="230" cy="151" r="75"/><circle cx="230" cy="151" r="122"/><circle cx="230" cy="151" r="89" stroke-dasharray="6 9"/><circle cx="230" cy="76" r="11"/><circle cx="314" cy="180" r="15"/><circle cx="119" cy="95" r="12"/><circle cx="230" cy="151" r="10"/><path d="M230 31v23m0 198v20M108 151H85m264 0h23"/></g></symbol>
+<symbol id="obs-manuscript" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M230 60q-75-42-158-12v198q88-31 158 15 76-45 158-15V48q-85-30-158 12zM230 60v201M105 96q47-15 88 2m-88 32q44-11 88 2m-88 31q44-12 88 2m-88 31q45-13 88 3m74-103q46-15 86 2m-86 32q46-12 86 3m-86 31q47-12 86 2"/><circle cx="312" cy="220" r="12"/></g></symbol>
+<symbol id="obs-quadrant" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M115 64v173h185A185 185 0 0 0 115 64zM115 64l183 173M110 237h203M110 63l22-23m-17 197-17 28"/><path d="M148 236v-18m34 15-4-24m36 16-10-20m32 4-17-16m34 4-19-16m29-8-26-13"/></g></symbol>
+<symbol id="obs-supernova" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="m230 26 24 79 82-45-45 82 85 29-87 22 46 81-81-47-24 51-24-51-84 47 45-81-85-22 85-29-45-82 84 45z"/><circle cx="230" cy="165" r="43"/><circle cx="230" cy="165" r="19"/><path d="M46 48l14 14m340 13-14 14m-350 153 16-15m351 10-16-15"/></g></symbol>
+<symbol id="obs-observatory" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M73 241h319M105 239V154q0-118 126-120 124 5 124 120v85zM103 156h255M225 35v120M173 239v-67h113v67M125 187h37m142 0h30M70 263h325"/><path d="M231 36l42-23m-50 20-34-24"/></g></symbol>
+<symbol id="obs-heliocentric" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5"><circle cx="232" cy="148" r="28"/><circle cx="232" cy="148" r="70"/><circle cx="232" cy="148" r="116"/><circle cx="232" cy="148" r="137" stroke-dasharray="7 11"/><path d="M232 130v36m-18-18h36"/><circle cx="232" cy="77" r="10"/><circle cx="315" cy="220" r="14"/><circle cx="113" cy="148" r="12"/><circle cx="270" cy="39" r="8"/></g></symbol>
+<symbol id="obs-quadrant2" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M95 250V62m0 188h273A273 273 0 0 0 95 62M95 62l273 188"/><path d="M126 249v-21m36 20-6-24m38 21-11-25m36 22-13-22m34 17-18-22m38 12-21-19m39 4-26-19m34-12-24-12"/></g></symbol>
+<symbol id="obs-ellipse" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5"><ellipse cx="232" cy="150" rx="175" ry="97"/><circle cx="159" cy="150" r="20"/><circle cx="378" cy="114" r="11"/><path d="M159 150 378 114" stroke-dasharray="8 9"/><path d="M232 50v200M55 150h355" stroke-width="2" stroke-dasharray="5 11"/><path d="m349 89 23 26-29 13"/></g></symbol>
+<symbol id="obs-jupiter" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5"><circle cx="231" cy="150" r="79"/><path d="M169 103q60 23 121 0M155 141q76-17 152 0m-151 35q76 20 152 0m-133 34q56-11 114 0"/><ellipse cx="231" cy="150" rx="170" ry="100" stroke-dasharray="7 9"/><circle cx="62" cy="153" r="9"/><circle cx="396" cy="140" r="9"/><circle cx="343" cy="80" r="7"/><circle cx="112" cy="220" r="7"/></g></symbol>
+<symbol id="obs-gravity" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><ellipse cx="228" cy="150" rx="165" ry="94"/><ellipse cx="228" cy="150" rx="123" ry="65"/><ellipse cx="228" cy="150" rx="78" ry="42"/><circle cx="228" cy="150" r="21"/><circle cx="370" cy="200" r="12"/><path d="M228 34v230M53 150h350" stroke-dasharray="7 13"/></g></symbol>
+<symbol id="obs-uranus" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5"><circle cx="229" cy="151" r="88"/><ellipse cx="229" cy="151" rx="167" ry="57" transform="rotate(-29 229 151)"/><path d="M156 106q70 25 146-6m-152 72q78 26 156-2"/><circle cx="75" cy="44" r="7"/><circle cx="389" cy="249" r="9"/></g></symbol>
+<symbol id="obs-spectrum" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M55 98h338v119H55zM100 99v118m45-118v118m54-118v118m38-118v118m52-118v118m60-118v118"/><path d="m55 152 338 0M56 235h336"/><path d="M75 72l19-42m38 42 19-42m39 42 19-42m37 42 19-42m36 42 19-42"/></g></symbol>
+<symbol id="obs-cepheid" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M61 241h350M77 255V50"/><path d="M81 194q37 8 65-84 22-73 46 71t48-70 47 71 45-69 65 79"/><circle cx="145" cy="110" r="9"/><circle cx="240" cy="111" r="9"/><circle cx="333" cy="113" r="9"/><path d="M85 104h300" stroke-width="2" stroke-dasharray="6 11"/></g></symbol>
+<symbol id="obs-galaxies" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><circle cx="130" cy="142" r="17"/><circle cx="320" cy="159" r="15"/><path d="M130 142q-74-61-86 0 12 71 104 49 74-21 74-79-19-66-100-62M320 159q-58-48-77 0 12 60 88 44 68-18 63-74-19-50-81-48"/><path d="M206 79 238 55m-13 83 26 4m-25 85 28-2"/></g></symbol>
+<symbol id="obs-expansion" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><circle cx="228" cy="147" r="23"/><circle cx="85" cy="53" r="13"/><circle cx="385" cy="65" r="16"/><circle cx="83" cy="250" r="13"/><circle cx="388" cy="243" r="15"/><path d="M205 129 108 67m24 0H108V91M247 131l116-54m-24-11 24 11-4 24M210 165 106 239m6-25-6 25 25 3m116-75 113 63m-26 6 26-6-5-25"/></g></symbol>
+<symbol id="obs-radio" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M98 113q73 104 165 9l42-83M263 122l-25 128m25-128-104 130m42-89 40 86m-123 5h195M305 38l36-29"/><path d="M337 40q40 19 29 58m-7-68q69 33 55 94M81 44q-36 47 0 97m-23-113q-55 70 0 133"/></g></symbol>
+<symbol id="obs-microwave" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M63 102q41-83 82 0t82 0t83 0t84 0M62 150q42-84 84 0t83 0t82 0t84 0M62 201q43-86 85 0t83 0t81 0t83 0"/><path d="M96 47h265M96 246h265" stroke-dasharray="9 12"/></g></symbol>
+<symbol id="obs-hubble" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M172 81h110l29 131H142zM172 81l13-26h80l17 26M142 212l-29 24m198-24 32 24M174 92h109m-123 42h137m-146 42h151"/><path d="M144 111 55 72v136l89-36m168-61 90-39v136l-90-36M225 55V29m-26 1h55M225 212v40"/></g></symbol>
+<symbol id="obs-planet" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><circle cx="117" cy="144" r="45"/><ellipse cx="117" cy="144" rx="67" ry="67"/><circle cx="315" cy="144" r="42"/><path d="M315 101v86m-40-43h80M178 100q65-73 115-40m-100 25-15 15 24 1M177 202q66 61 114 41m-99-23-15-18 23 1"/></g></symbol>
+<symbol id="obs-waves" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M30 146h75q31 0 35-56t32 111q20 70 38-102t31 125q17 53 37-125t31 102q12 31 31-111t26 56h67"/><path d="M30 224h402M30 80h402" stroke-width="2" stroke-dasharray="7 12"/></g></symbol>
+<symbol id="obs-blackhole" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5"><ellipse cx="230" cy="151" rx="166" ry="108" transform="rotate(-18 230 151)"/><ellipse cx="230" cy="151" rx="129" ry="83" transform="rotate(-18 230 151)" stroke-width="13"/><circle cx="230" cy="151" r="63" stroke-dasharray="9 11"/><circle cx="230" cy="151" r="39" fill="#0b1729"/><path d="M85 87q66-72 173-51m102 179q-72 71-177 40"/></g></symbol>
+<symbol id="obs-webb" viewBox="0 0 460 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="m197 58 34-20 35 20v41l-35 20-34-20zm-70 42 35-20 35 20v41l-35 20-35-20zm139 0 35-20 35 20v41l-35 20-35-20zm-69 41 34-20 35 20v41l-35 20-34-20zm-70 0 35-20 35 20v41l-35 20-35-20zm139 0 35-20 35 20v41l-35 20-35-20z"/><path d="M231 221v30M103 239q130-44 258 0M119 258q115-29 222 0M74 256h314"/></g></symbol>
+</defs><use id="illustration-use" href="#obs-tablet"></use></svg>
+<span class="corner end">ESQUEMA · NÃO É DOCUMENTO OU IMAGEM CIENTÍFICA REAL</span></div>
+<div class="archive-body">
+<div class="badges"><span id="evidence-label" class="evidence-badge">Registro observacional</span><span id="evidence-explain" class="evidence-explain">Registro, modelo e instrumento não são a mesma coisa.</span></div>
+<p id="event-what" class="summary"></p>
+<div class="factrow"><div class="fact"><b>O que essa etapa permitiu</b><p id="event-impact"></p></div><div class="fact caution"><b>Limites e correções</b><p id="event-caution"></p></div></div>
+<p class="meta-source">Fonte para aprofundar: <a id="event-source" href="https://www.asc-csa.gc.ca/eng/astronomy/basics/brief-history-astronomy.asp" target="_blank" rel="noopener noreferrer">Fonte científica/histórica</a></p>
+<div class="actions"><button type="button" id="previous">← Anterior</button><button type="button" id="next">Próximo marco →</button></div>
+</div></article></div>
+<div class="labs">
+<section class="model-lab" aria-labelledby="model-heading"><h2 id="model-heading">Mesa dos modelos do Sistema Solar</h2>
+<p>Selecione três formas históricas de representar movimentos planetários. Estes diagramas não simulam efemérides e não são usados para calcular a posição real de planetas.</p>
+<div id="model-controls" class="lab-controls" role="group" aria-label="Selecionar modelo de órbitas"></div>
+<div class="diagram">
+<svg viewBox="0 0 500 290" role="img" aria-labelledby="models-art-title models-art-desc"><title id="models-art-title">Diagramas de modelos de órbita</title><desc id="models-art-desc">Representação inicial geocêntrica de círculos em torno da Terra. Diagramas esquemáticos, sem escala e sem posições reais.</desc>
+<g id="model-geocentric">
+ <circle cx="250" cy="145" r="96" class="orbit"/><circle cx="250" cy="145" r="60" class="orbit"/>
+ <circle cx="250" cy="145" r="22" class="earth"/><circle cx="250" cy="49" r="12" class="sun"/><circle cx="306" cy="168" r="10" class="planet"/>
+ <text x="250" y="150" text-anchor="middle" font-size="10" fill="#142637">Terra</text><text x="250" y="30" text-anchor="middle">Sol</text><text x="280" y="205" text-anchor="middle">Órbitas esquemáticas</text>
+</g>
+<g id="model-heliocentric" style="display:none" aria-hidden="true">
+ <circle cx="250" cy="145" r="97" class="orbit"/><circle cx="250" cy="145" r="62" class="orbit"/>
+ <circle cx="250" cy="145" r="24" class="sun"/><circle cx="309" cy="164" r="13" class="earth"/><circle cx="250" cy="48" r="13" class="planet"/>
+ <text x="250" y="150" text-anchor="middle" font-size="10" fill="#142637">Sol</text><text x="337" y="170">Terra</text><text x="250" y="268" text-anchor="middle">Círculos históricos idealizados</text>
+</g>
+<g id="model-kepler" style="display:none" aria-hidden="true">
+ <ellipse cx="250" cy="145" rx="176" ry="97" class="orbit" stroke-dasharray="none"/>
+ <circle cx="175" cy="145" r="22" class="sun"/><circle cx="407" cy="108" r="12" class="earth"/>
+ <path d="M175 145 407 108" stroke="#9bbcc4" fill="none" stroke-dasharray="6 9" stroke-width="2"/>
+ <circle cx="250" cy="145" r="4" fill="#f7e6cf"/><text x="175" y="180" text-anchor="middle">Sol no foco</text><text x="397" y="90">Planeta</text><text x="250" y="267" text-anchor="middle">Elipse deliberadamente exagerada</text>
+</g>
+</svg></div>
+<div class="description-panel" id="model-description" aria-live="polite"><strong>Geocêntrico histórico</strong><span>Modelo físico superado.</span></div>
+</section>
+<section class="signal-lab" aria-labelledby="signals-heading"><h2 id="signals-heading">Janelas de observação</h2>
+<p>Os instrumentos modernos não observam todos o mesmo fenômeno. Compare luz visível, rádio, infravermelho e ondas gravitacionais, lembrando que os traços são apenas símbolos didáticos.</p>
+<div id="signal-controls" class="lab-controls" role="group" aria-label="Selecionar sinal astronômico"></div>
+<div class="signal-display">
+<svg viewBox="0 0 500 290" role="img" aria-labelledby="signal-art-title signal-art-desc">
+<title id="signal-art-title">Sinal visual estilizado</title><desc id="signal-art-desc">Traço original esquemático de radiação visível, sem dados experimentais.</desc>
+<g class="grid-line"><path d="M30 64h440M30 145h440M30 225h440M90 40v215M190 40v215M290 40v215M390 40v215"/></g>
+<path id="signal-path" class="signal-line" d="M30 145 Q60 62 90 145 T150 145 T210 145 T270 145 T330 145 T390 145 T450 145"/>
+<text id="signal-graphic-label" x="250" y="273" text-anchor="middle">Luz visível: oscilação ilustrativa</text>
+</svg></div>
+<div id="signal-description" class="description-panel" aria-live="polite"><strong>Luz visível</strong><span>Uma janela observacional entre várias.</span></div>
+</section></div>
+<section class="quiz" aria-labelledby="quiz-heading"><h2 id="quiz-heading">Caderno de evidências</h2>
+<p>Seis perguntas para revisar modelos históricos, instrumentos e interpretações científicas. Cada resposta recebe uma explicação; a pontuação é apenas formativa e não fica salva.</p>
+<div id="score" class="score" role="status" aria-live="polite">0 de 6 respondidas · 0 acertos</div>
+<div id="questions" class="questions"></div>
+<button type="button" id="reset-quiz" class="reset">Reiniciar perguntas</button></section>
+<p class="note">As 24 gravuras SVG e os diagramas são ilustrações originais, não reconstruções exatas de artefatos, observações ou dados científicos. Datas antigas são aproximadas; modelos históricos substituídos são apresentados com seus contextos. Progresso e respostas permanecem em memória, sem recursos remotos, sem contas, dados pessoais ou notas no Moodle.</p>
+<p id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+</main>
+<script>
+"use strict";
+const data={"events":[{"id":"babylon","year":-600,"date":"c. século VII–VI a.C.","short":"Registros de ciclos celestes","era":"antiga","classification":"registro","place":"Mesopotâmia","title":"Astronomia registrada em tabuletas","what":"Astrônomos babilônicos preservavam registros sistemáticos do movimento aparente de astros e ciclos celestes. Prever fenômenos periódicos por observação e matemática foi parte de tradições desenvolvidas em diferentes regiões.","impact":"As observações acumuladas permitem identificar regularidades no céu e comparar ciclos de longa duração.","caution":"Não foi a primeira observação humana do céu. O uso de presságios nessas culturas não significa que interpretações sobre destino fossem científicas.","motif":"tablet","source":"NASA · Pioneiros da astronomia","url":"https://www.nasa.gov/space-science-and-astrobiology-at-ames/interesting-fact-of-the-month-current/"},{"id":"hipparchus","year":-150,"date":"c. século II a.C.","short":"Estrelas e precessão","era":"antiga","classification":"registro","place":"Mundo grego","title":"Posições de estrelas podem ser comparadas","what":"Hiparco é associado a catálogos de posições estelares e à identificação da precessão dos equinócios, comparando medidas astronômicas de épocas distintas.","impact":"Ao confrontar observações, pesquisadores puderam perceber mudanças lentas na referência do céu.","caution":"A data é aproximada e não representa a invenção isolada dos catálogos; tradições antigas já registravam posições e ciclos.","motif":"armillary","source":"Agência Espacial Canadense · Breve história da astronomia","url":"https://www.asc-csa.gc.ca/eng/astronomy/basics/brief-history-astronomy.asp"},{"id":"ptolemy","year":150,"date":"c. século II d.C.","short":"O sistema geocêntrico de Ptolomeu","era":"antiga","classification":"modelo","place":"Alexandria, Egito romano","title":"Um modelo histórico que foi substituído","what":"No Almagesto, Ptolomeu sistematizou um modelo geométrico que colocava a Terra no centro da descrição dos movimentos planetários, incluindo deferentes e epiciclos para ajustar posições observadas.","impact":"O modelo serviu à previsão de posições em seu contexto e ilustra a diferença entre uma estrutura matemática útil e uma explicação física correta.","caution":"Como descrição física das órbitas planetárias, o geocentrismo ptolomaico foi superado. 'Superado' não significa que seus autores não observassem ou calculassem.","motif":"geocentric","source":"NASA · Planetary Motion: History of an Idea","url":"https://science.nasa.gov/earth/earth-observatory/planetary-motion/"},{"id":"aryabhata","year":499,"date":"499 d.C.","short":"Āryabhaṭīya e rotação terrestre","era":"global","classification":"modelo","place":"Índia","title":"Astronomia matemática em sânscrito","what":"O tratado Āryabhaṭīya, atribuído a Āryabhaṭa, incluiu cálculos astronômicos e a ideia de rotação da Terra para explicar movimentos aparentes das estrelas.","impact":"O exemplo mostra que discussões sofisticadas sobre movimento terrestre ocorreram em diferentes tradições intelectuais, não apenas na Europa moderna.","caution":"O conjunto de modelos de Āryabhaṭa não era equivalente à teoria gravitacional moderna, e houve debates posteriores sobre a interpretação dos textos.","motif":"manuscript","source":"Pustakālaya · Astrônomos de Āryabhaṭa a Gaṇeśa","url":"https://pustakalaya-org.github.io/vol12_jyotisa/chapter09_astronomers.html"},{"id":"battani","year":900,"date":"c. séculos IX–X","short":"Al-Battānī refina medições","era":"global","classification":"registro","place":"Raqqa e centros de astronomia islâmica","title":"Medir mais precisamente o céu","what":"Trabalhos observacionais de al-Battānī e outros astrônomos em territórios islâmicos refinaram parâmetros de movimentos solares e lunares e cálculos astronômicos.","impact":"Tabelas e instrumentos possibilitaram comparações de longa duração e circularam por redes de tradução e ensino.","caution":"'Astronomia islâmica' designa diversas pessoas, línguas e instituições. Não se trata de uma prática uniforme ou de um único inventor.","motif":"quadrant","source":"UNESCO · Heritage Sites of Astronomy (estudo)","url":"https://whc.unesco.org/document/104639"},{"id":"supernova","year":1054,"date":"1054 d.C.","short":"Uma estrela nova registrada na China","era":"global","classification":"registro","place":"China e observações do leste asiático","title":"Registros que atravessaram milênios","what":"Astrônomos chineses registraram a aparição de uma estrela temporariamente muito brilhante. O fenômeno é associado hoje à supernova que deixou a Nebulosa do Caranguejo.","impact":"Observações antigas podem ser confrontadas com restos celestes estudados por telescópios contemporâneos.","caution":"O relato histórico registra brilho aparente, não uma explicação física moderna da explosão no momento da observação.","motif":"supernova","source":"NASA/Hubble · Remanescente da supernova de 1054","url":"https://science.nasa.gov/missions/hubble/peering-into-the-heart-of-the-crab-nebula/"},{"id":"ulugh","year":1437,"date":"século XV (c. 1437)","short":"Observatório de Samarcanda","era":"global","classification":"instrumento","place":"Samarcanda, Ásia Central","title":"Catálogos e grandes instrumentos","what":"Ulugh Beg e equipes de estudiosos realizaram medições de posições estelares em Samarcanda com instrumentos de grande porte, contribuindo para tabelas astronômicas da época.","impact":"Instituições de observação permitiram confrontar cálculos e construir registros precisos.","caution":"O trabalho foi coletivo e sua datação representa um período de compilação; não se deve tratar o observatório como instrumento moderno de captura de imagens.","motif":"observatory","source":"UNESCO · Evolução da astronomia pelas rotas da seda","url":"https://www.unesco.org/en/articles/evolution-astronomy-along-silk-roads"},{"id":"copernicus","year":1543,"date":"1543","short":"Copérnico publica modelo heliocêntrico","era":"revolucao","classification":"modelo","place":"Europa","title":"A Terra deixa de ocupar o centro das órbitas","what":"Na obra De revolutionibus, Nicolau Copérnico apresentou um arranjo matemático com planetas orbitando o Sol. O modelo reorganizou problemas astronômicos e estimulou novas verificações.","impact":"A hipótese heliocêntrica criou uma estrutura comparável às observações e abriu caminho a formulações mais precisas.","caution":"Copérnico ainda utilizou combinações de movimentos circulares; seu modelo não era idêntico à descrição gravitacional atual. Ideias heliocêntricas têm antecedentes antigos.","motif":"heliocentric","source":"Agência Espacial Canadense · Breve história da astronomia","url":"https://www.asc-csa.gc.ca/eng/astronomy/basics/brief-history-astronomy.asp"},{"id":"brahe","year":1580,"date":"fim do século XVI","short":"Tycho Brahe coleta medidas precisas","era":"revolucao","classification":"registro","place":"Observatórios da Dinamarca","title":"Medições antes do telescópio","what":"Tycho Brahe e seus colaboradores reuniram observações especialmente precisas de posições planetárias com grandes instrumentos ópticos e mecânicos, antes do uso astronômico do telescópio.","impact":"O material observacional permitiu testar e melhorar descrições dos movimentos planetários.","caution":"As datas representam uma longa atividade, não a invenção da medida de ângulos. O modelo cosmológico de Tycho não é a explicação moderna adotada.","motif":"quadrant2","source":"NASA · Planetary Motion: History of an Idea","url":"https://science.nasa.gov/earth/earth-observatory/planetary-motion/"},{"id":"kepler","year":1609,"date":"1609 (e 1619)","short":"Kepler propõe órbitas elípticas","era":"revolucao","classification":"modelo","place":"Europa","title":"Elipses substituem círculos perfeitos","what":"Com base nas observações de Tycho Brahe, Johannes Kepler apresentou em 1609 leis descrevendo órbitas elípticas e áreas iguais em tempos iguais; a terceira lei foi publicada em 1619.","impact":"As leis matemáticas descrevem com alta precisão movimentos orbitais em condições relevantes e apoiaram explicações posteriores.","caution":"Kepler não derivou sozinho a lei física da gravidade; suas leis são aproximações excelentes no problema de dois corpos, com refinamentos para perturbações e relatividade.","motif":"ellipse","source":"NASA · Planetary Motion: History of an Idea","url":"https://science.nasa.gov/earth/earth-observatory/planetary-motion/"},{"id":"galileo","year":1610,"date":"1610","short":"Galileu observa luas de Júpiter","era":"revolucao","classification":"registro","place":"Itália","title":"Telescópios ampliam o repertório de evidências","what":"Galileu registrou observações telescópicas como satélites orbitando Júpiter e detalhes da Lua, mostrando que nem todo corpo celeste orbitava a Terra.","impact":"Observações independentes ajudaram a contestar aspectos do modelo geocêntrico tradicional.","caution":"As observações das luas de Júpiter refutam a ideia de que tudo gira em torno da Terra, mas, isoladamente, não comprovam todas as partes de um sistema heliocêntrico.","motif":"jupiter","source":"Agência Espacial Canadense · Breve história da astronomia","url":"https://www.asc-csa.gc.ca/eng/astronomy/basics/brief-history-astronomy.asp"},{"id":"newton","year":1687,"date":"1687","short":"Gravitação universal e mecânica","era":"revolucao","classification":"modelo","place":"Inglaterra","title":"Uma explicação dinâmica das órbitas","what":"Nos Principia, Isaac Newton apresentou leis do movimento e gravitação capazes de explicar por que trajetórias planetárias obedecem aproximadamente às leis de Kepler.","impact":"A astronomia passou a conectar observações, modelos matemáticos e mecanismos físicos testáveis.","caution":"A mecânica newtoniana é extraordinariamente útil em muitas escalas, mas a relatividade geral aprimora sua descrição em situações específicas.","motif":"gravity","source":"NASA · Planetary Motion: History of an Idea","url":"https://science.nasa.gov/earth/earth-observatory/planetary-motion/"},{"id":"uranus","year":1781,"date":"1781","short":"Urano amplia o Sistema Solar conhecido","era":"revolucao","classification":"registro","place":"Reino Unido","title":"Um planeta descoberto por telescópio","what":"William Herschel identificou Urano como um novo planeta, ampliando o conjunto de mundos conhecidos no Sistema Solar.","impact":"Observações telescópicas sucessivas permitiram reconhecer objetos além dos planetas conhecidos desde a Antiguidade.","caution":"Urano tinha sido observado anteriormente sem ser reconhecido como planeta; o marco é a identificação e divulgação de sua natureza.","motif":"uranus","source":"Agência Espacial Canadense · Breve história da astronomia","url":"https://www.asc-csa.gc.ca/eng/astronomy/basics/brief-history-astronomy.asp"},{"id":"spectra","year":1859,"date":"1859–1860","short":"Espectroscopia revela composição","era":"cosmos","classification":"instrumento","place":"Europa","title":"A luz carrega assinaturas químicas","what":"Trabalhos de Gustav Kirchhoff e Robert Bunsen consolidaram métodos de análise espectral. Linhas na luz solar e estelar puderam ser relacionadas a elementos químicos.","impact":"Astrônomos puderam investigar composição física de objetos que não são acessíveis a amostras diretas.","caution":"As linhas espectrais precisam ser interpretadas com modelos físicos e calibragem: o desenho de um espectro não é um teste químico completo.","motif":"spectrum","source":"Cambridge UP · Astronomical spectroscopy (história)","url":"https://assets.cambridge.org/97811076/01796/excerpt/9781107601796_excerpt.pdf"},{"id":"leavitt","year":1912,"date":"1912","short":"Henrietta Leavitt mede ritmos estelares","era":"cosmos","classification":"registro","place":"Harvard College Observatory, EUA","title":"Estrelas variáveis como réguas cósmicas","what":"Henrietta Swan Leavitt estabeleceu uma relação entre período e luminosidade de variáveis cefeidas, permitindo que outras equipes estimassem distâncias astronômicas.","impact":"A relação período-luminosidade ajudou a ampliar a escala das distâncias medidas além do Sistema Solar.","caution":"O cálculo de distância exige calibração e correções; a descoberta não significou que Leavitt tenha medido todas as galáxias pessoalmente.","motif":"cepheid","source":"Harvard-Smithsonian · Variable Stars (Henrietta Leavitt)","url":"https://library.cfa.harvard.edu/henrietta-swan-leavitt/variable-stars"},{"id":"andromeda","year":1923,"date":"1923–1924","short":"Andrômeda é outra galáxia","era":"cosmos","classification":"registro","place":"Mount Wilson, EUA","title":"A Via Láctea não é o Universo inteiro","what":"Edwin Hubble identificou cefeidas na nebulosa de Andrômeda e, usando a técnica de distâncias desenvolvida por Leavitt e outras contribuições, mostrou que o objeto está fora da Via Láctea.","impact":"A escala conhecida do cosmos expandiu-se radicalmente com medições de distância.","caution":"A conclusão dependia do trabalho de diversas pessoas e da calibração da escala de distâncias; 'nebula' era classificação histórica, não o entendimento moderno.","motif":"galaxies","source":"NASA · Galaxies Over Time","url":"https://science.nasa.gov/mission/webb/galaxies-over-time/"},{"id":"expansion","year":1929,"date":"1929","short":"A expansão cósmica ganha evidência","era":"cosmos","classification":"modelo","place":"Observatórios dos EUA e cosmologia","title":"Galáxias distantes se afastam","what":"Relações entre distâncias galácticas e deslocamentos espectrais, desenvolvidas a partir de observações de Vesto Slipher, Hubble e trabalho teórico de outros pesquisadores, sustentaram a descrição de expansão cósmica.","impact":"O universo passou a ser estudado como uma estrutura em evolução, não necessariamente estática.","caution":"A relação distância–velocidade não atribui isoladamente a descoberta a uma só pessoa; interpretações exigem cosmologia e medições independentes.","motif":"expansion","source":"NASA · Edwin Hubble","url":"https://science.nasa.gov/people/edwin-hubble/"},{"id":"radio","year":1932,"date":"1932","short":"Radioastronomia detecta o cosmos","era":"cosmos","classification":"instrumento","place":"Bell Labs, EUA","title":"O céu também emite ondas de rádio","what":"Karl Jansky identificou sinais de rádio de origem extraterrestre, abrindo a radioastronomia, desenvolvida posteriormente por observatórios e pesquisadores como Grote Reber.","impact":"Diferentes comprimentos de onda revelam regiões e processos invisíveis a telescópios de luz visível.","caution":"Ondas de rádio são radiação eletromagnética real, não mensagens inteligentes por definição nem 'sons' que viajam pelo vácuo.","motif":"radio","source":"NASA · Radio Waves","url":"https://science.nasa.gov/ems/05_radiowaves/"},{"id":"cmb","year":1965,"date":"1965","short":"Radiação cósmica de fundo detectada","era":"cosmos","classification":"registro","place":"Estados Unidos","title":"Um sinal do universo primordial","what":"Arno Penzias e Robert Wilson identificaram um ruído de micro-ondas de origem cósmica, interpretado com trabalhos teóricos como evidência decisiva para um universo primordial quente.","impact":"A radiação cósmica de fundo pode ser medida, analisada e confrontada com previsões cosmológicas.","caution":"A emissão é luz de micro-ondas, não fotografia comum do instante inicial do Big Bang. Descoberta e interpretação envolveram equipes distintas.","motif":"microwave","source":"ESA · Radiação cósmica de fundo","url":"https://www.esa.int/articles/about-us/directorates/science/cosmic-microwave-background-cmb-radiation"},{"id":"hubble-space","year":1990,"date":"1990","short":"Hubble começa a observar acima da atmosfera","era":"multimensageiro","classification":"instrumento","place":"Órbita terrestre","title":"Telescópio espacial abre novas janelas","what":"O lançamento do telescópio espacial Hubble levou observações de luz visível, ultravioleta e infravermelho próximo acima de parte das limitações da atmosfera terrestre.","impact":"Observações espaciais complementam telescópios no solo e ajudaram a investigar estrelas, galáxias e expansão cósmica.","caution":"O Hubble inicialmente exigiu correção óptica; não observa todas as bandas do espectro nem substitui todos os observatórios terrestres.","motif":"hubble","source":"NASA · Hubble History Timeline","url":"https://science.nasa.gov/mission/hubble/overview/hubble-timeline/hubble-history-timeline-full-text/"},{"id":"exoplanet","year":1995,"date":"1995","short":"51 Pegasi b confirma outro tipo de sistema","era":"multimensageiro","classification":"registro","place":"Europa e cooperação internacional","title":"Um planeta em torno de estrela parecida com o Sol","what":"Michel Mayor e Didier Queloz anunciaram a detecção de 51 Pegasi b, planeta em torno de uma estrela semelhante ao Sol, confirmada por observações independentes.","impact":"A descoberta fortaleceu a pesquisa de exoplanetas com técnicas indiretas, como velocidades radiais.","caution":"Não foi o primeiro exoplaneta de qualquer tipo já identificado; antes haviam sido detectados planetas em torno de pulsares.","motif":"planet","source":"NASA · 51 Pegasi b e os primeiros exoplanetas","url":"https://science.nasa.gov/universe/exoplanets/will-the-real-first-exoplanet-please-stand-up/"},{"id":"gravitational","year":2015,"date":"2015 (anunciado em 2016)","short":"Ondas gravitacionais são detectadas","era":"multimensageiro","classification":"registro","place":"Detectores LIGO, EUA","title":"Além da luz: perturbações do espaço-tempo","what":"Detectores do LIGO registraram o sinal GW150914, produzido pela fusão de dois buracos negros. O resultado confirmou diretamente a presença de ondas gravitacionais previstas pela relatividade geral.","impact":"Novos instrumentos permitiram estudar eventos cósmicos por sinais diferentes da radiação eletromagnética.","caution":"O sinal não é som propagado no vácuo: visualizações sonoras são conversões de dados. A detecção ocorreu em 2015; o anúncio veio em 2016.","motif":"waves","source":"LIGO · Primeira detecção direta de ondas gravitacionais","url":"https://ligo.org/science-summaries/gw150914/"},{"id":"black-hole","year":2019,"date":"2019","short":"Imagem da sombra de M87*","era":"multimensageiro","classification":"registro","place":"Rede global Event Horizon Telescope","title":"Radiointerferometria em escala planetária","what":"O Event Horizon Telescope combinou observações de radiotelescópios de vários países para produzir a primeira imagem da região ao redor de um buraco negro, em M87.","impact":"Os dados mostraram um anel de emissão e uma região escura compatíveis com previsões da relatividade geral.","caution":"Não é uma fotografia da superfície do buraco negro nem imagem de luz visível: usa interferometria e processamento de rádio.","motif":"blackhole","source":"ESO · Primeira imagem de um buraco negro","url":"https://www.hq.eso.org/public/news/eso1907/"},{"id":"webb","year":2022,"date":"2022","short":"Webb publica primeiras imagens científicas","era":"multimensageiro","classification":"instrumento","place":"Observatório espacial no ponto L2","title":"Infravermelho investiga o cosmos","what":"NASA, ESA, CSA e equipes internacionais divulgaram as primeiras imagens e espectros científicos do James Webb Space Telescope em julho de 2022.","impact":"Observações em infravermelho ampliaram a análise de galáxias remotas, formação estelar e atmosferas de exoplanetas.","caution":"O Webb não é uma máquina do tempo literal e não substitui todos os telescópios; imagens podem combinar bandas invisíveis aos olhos em cores representativas.","motif":"webb","source":"NASA · Primeiras imagens do Webb","url":"https://science.nasa.gov/mission/webb/webbs-first-images/"}],"models":[{"id":"geocentric","name":"Geocêntrico histórico","caption":"Terra no centro do esquema","description":"Um arranjo usado em tradições antigas e sintetizado por Ptolomeu para calcular posições aparentes. Epicíclos e deferentes tornavam o modelo numericamente útil em seu contexto.","status":"Modelo físico superado","caution":"O desenho não reproduz as equações históricas nem deve ser usado para prever posições reais."},{"id":"heliocentric","name":"Heliocentrismo circular","caption":"O Sol organiza os planetas","description":"Copérnico recolocou os planetas em órbitas em torno do Sol, mas manteve movimentos circulares. Essa etapa histórica reorganizou o problema sem ser o modelo dinâmico completo.","status":"Modelo precursor aprimorado","caution":"O movimento real não consiste em círculos perfeitos ao redor de um centro geométrico único."},{"id":"kepler","name":"Órbitas elípticas","caption":"Elipse com Sol em um foco","description":"As leis de Kepler descrevem órbitas elípticas e velocidades variáveis. A gravitação newtoniana explicou boa parte dessas trajetórias, posteriormente refinadas pela relatividade.","status":"Modelo validado com limites","caution":"Esta elipse foi exagerada para mostrar o foco: órbitas planetárias reais podem ser quase circulares e sofrem perturbações."}],"signals":[{"id":"visible","name":"Luz visível","kind":"Eletromagnética","description":"Telescópios e espectrógrafos medem a radiação visível emitida, absorvida ou refletida. Podem revelar movimentos, temperatura e composição quando há calibração e modelos.","caution":"Uma imagem bonita não é, sozinha, prova de distância, massa ou idade."},{"id":"radio","name":"Ondas de rádio","kind":"Eletromagnética","description":"Antenas e redes interferométricas medem radiação de rádio emitida por fontes cósmicas. O EHT combinou esses sinais para reconstruir a estrutura ao redor de M87*.","caution":"Mapas de rádio podem ser coloridos artificialmente para visualização; não são fotografias de luz visível."},{"id":"infrared","name":"Infravermelho","kind":"Eletromagnética","description":"Detectores como os do Webb captam comprimentos de onda infravermelhos e ajudam a observar regiões obscurecidas por poeira e fontes distantes.","caution":"Cores de imagens infravermelhas são representações escolhidas para tornar visíveis dados que os olhos não percebem."},{"id":"gravity","name":"Ondas gravitacionais","kind":"Perturbação do espaço-tempo","description":"Interferômetros como LIGO medem variações ínfimas de distância associadas à passagem de ondas gravitacionais produzidas por eventos extremos.","caution":"Não são luz, rádio nem som propagado pelo vácuo. Quando se ouve um 'chirp', é uma sonificação de dados."}],"quiz":[{"id":"q1","question":"O que é um exemplo de modelo físico histórico superado?","options":["A geometria geocêntrica usada como descrição física de órbitas planetárias","A existência observável das luas de Júpiter","A detecção de ondas de rádio de fontes cósmicas"],"answer":0,"feedback":"O sistema geocêntrico foi importante como modelo preditivo histórico, mas deixou de ser aceito como explicação física das órbitas planetárias."},{"id":"q2","question":"Por que foram importantes as observações de Tycho Brahe?","options":["Porque dispensaram totalmente os cálculos","Porque forneceram medidas usadas por Kepler para testar órbitas","Porque provaram diretamente a relatividade geral"],"answer":1,"feedback":"Kepler comparou modelos às posições observadas, e as medições de Tycho Brahe ajudaram a revelar trajetórias elípticas."},{"id":"q3","question":"Qual contribuição de Henrietta Leavitt influenciou a escala cósmica?","options":["Uma primeira foto de buraco negro","A identificação de Urano","A relação entre períodos e luminosidade das cefeidas"],"answer":2,"feedback":"O período de pulsação de cefeidas relaciona-se à luminosidade, permitindo estimar distâncias depois de calibrar a relação."},{"id":"q4","question":"O que a imagem divulgada pelo EHT em 2019 realmente representa?","options":["Um anel de emissão e sombra inferida ao redor de M87*, obtidos por radiointerferometria","Uma fotografia visível da superfície sólida de um buraco negro","Uma gravação sonora propagada pelo vácuo"],"answer":0,"feedback":"O EHT combinou sinais de rádio de diferentes antenas, reconstruindo um anel de emissão e a região escura associada à sombra do buraco negro."},{"id":"q5","question":"Que sinal abriu uma janela observacional diferente da luz eletromagnética?","options":["Luz infravermelha","Ondas gravitacionais detectadas pelo LIGO","Luz de estrelas observada por Galileu"],"answer":1,"feedback":"Ondas gravitacionais são perturbações do espaço-tempo; não são ondas eletromagnéticas."},{"id":"q6","question":"O que é uma conclusão científica cuidadosa sobre o Webb?","options":["Ele vê diretamente todo o passado do Universo","Seu infravermelho elimina a necessidade de outros telescópios","Ele observa radiação infravermelha de fontes distantes, interpretada com modelos físicos"],"answer":2,"feedback":"O Webb coleta dados infravermelhos que permitem investigar objetos distantes; a interpretação exige calibração e análise, e outros instrumentos continuam relevantes."}]};
+const events=data.events,models=data.models,signals=data.signals,questions=data.quiz;
+const categories=[
+{id:"all",label:"Todos",name:"Todas as épocas"},
+{id:"antiga",label:"Antiguidade",name:"Registros antigos"},
+{id:"global",label:"Rotas culturais",name:"Tradições globais"},
+{id:"revolucao",label:"Revolução",name:"Revolução científica"},
+{id:"cosmos",label:"Cosmos",name:"Cosmologia e observatórios"},
+{id:"multimensageiro",label:"Múltiplos sinais",name:"Astronomia moderna"}
+];
+const evidence={
+registro:{label:"Registro ou descoberta observacional",description:"Observações podem ser testadas ou reinterpretadas em modelos novos."},
+modelo:{label:"Modelo ou explicação teórica",description:"Uma descrição matemática precisa ser comparada aos dados; modelos podem ser substituídos e refinados."},
+instrumento:{label:"Instrumento ou método de observação",description:"Novas ferramentas ampliam quais sinais podemos medir e quais conclusões são possíveis."}
+};
+const waveforms={
+visible:"M30 145 Q60 62 90 145 T150 145 T210 145 T270 145 T330 145 T390 145 T450 145",
+radio:"M30 145 C100 45 150 45 220 145 S340 245 410 145 S460 93 470 145",
+infrared:"M30 145 C68 83 110 83 149 145 S230 207 270 145 S350 83 391 145 S444 193 470 145",
+gravity:"M30 145 Q90 140 130 145 T180 145 Q195 126 210 145 T240 145 Q250 100 262 145 T283 145 Q294 68 305 145 T325 145 Q334 50 343 145 T359 145 Q365 25 371 145 T383 145 Q390 95 399 145 T421 145 Q437 135 470 145"
+};
+const byId=id=>document.getElementById(id);
+const state={filter:"all",event:events[0].id,seen:new Set([events[0].id]),model:"geocentric",signal:"visible",answers:new Map()};
+const visible=()=>events.filter(e=>state.filter==="all"||e.era===state.filter);
+function drawFilters(){
+ const host=byId("filters");host.replaceChildren();
+ categories.forEach(c=>{
+  const b=document.createElement("button");b.type="button";b.className="filter";b.textContent=c.label;
+  b.setAttribute("aria-pressed",String(state.filter===c.id));
+  b.addEventListener("click",()=>filterTo(c.id));host.append(b);
+ });
+}
+function drawTimeline(){
+ const host=byId("timeline"),list=visible();host.replaceChildren();
+ list.forEach((e,index)=>{
+  const b=document.createElement("button");b.type="button";b.className="stop";
+  b.classList.toggle("visited",state.seen.has(e.id));
+  b.setAttribute("aria-current",String(e.id===state.event));
+  b.setAttribute("aria-label",e.date+": "+e.short);
+  const date=document.createElement("span");date.className="when";date.textContent=e.date;
+  const title=document.createElement("span");title.className="label";title.textContent=e.short;
+  b.append(date,title);
+  b.addEventListener("click",()=>selectEvent(e.id));
+  b.addEventListener("keydown",event=>{
+   let target=null;
+   if(event.key==="ArrowRight"||event.key==="ArrowDown")target=Math.min(list.length-1,index+1);
+   if(event.key==="ArrowLeft"||event.key==="ArrowUp")target=Math.max(0,index-1);
+   if(event.key==="Home")target=0;if(event.key==="End")target=list.length-1;
+   if(target!==null){event.preventDefault();selectEvent(list[target].id);const control=host.querySelectorAll(".stop")[target];if(control)control.focus();}
+  });
+  host.append(b);
+ });
+}
+function selectEvent(id){
+ const list=visible(),index=list.findIndex(e=>e.id===id);if(index<0)return;
+ const e=list[index];state.event=id;state.seen.add(id);
+ const values={
+  "event-index":"OBSERVAÇÃO "+String(events.indexOf(e)+1).padStart(2,"0")+" / "+events.length,
+  "event-place":e.place,"event-title":e.title,"event-date":e.date,
+  "event-what":e.what,"event-impact":e.impact,"event-caution":e.caution,
+  "event-source":e.source,"evidence-label":evidence[e.classification].label,
+  "evidence-explain":evidence[e.classification].description,
+  "illustration-title":"Gravura original: "+e.short,
+  "illustration-desc":"Ilustração didática original do marco "+e.short+"; sem escala nem representação exata de dados ou instrumentos.",
+  "progress-label":state.seen.size+" de "+events.length+" marcos explorados"
+ };
+ for(const [key,value] of Object.entries(values))byId(key).textContent=value;
+ byId("event-source").href=e.url;
+ byId("illustration-use").setAttribute("href","#obs-"+e.motif);
+ byId("previous").disabled=index===0;byId("next").disabled=index===list.length-1;
+ byId("progress").setAttribute("aria-valuenow",String(state.seen.size));
+ byId("progress-fill").style.width=100*state.seen.size/events.length+"%";
+ drawTimeline();
+ const nav=byId("timeline"),b=nav.querySelectorAll(".stop")[index];
+ if(b){
+  const behavior=window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
+  if(window.matchMedia("(max-width:1080px)").matches)nav.scrollTo({left:Math.max(0,b.offsetLeft-nav.offsetLeft-nav.clientWidth/2+b.clientWidth/2),behavior});
+  else nav.scrollTo({top:Math.max(0,b.offsetTop-nav.offsetTop-nav.clientHeight/2+b.clientHeight/2),behavior});
+ }
+ byId("announcement").textContent="Marco "+(events.indexOf(e)+1)+" de "+events.length+": "+e.short+", "+e.date+".";
+}
+function filterTo(id){
+ if(!categories.some(c=>c.id===id))return;
+ state.filter=id;drawFilters();
+ const list=visible();if(!list.some(e=>e.id===state.event))state.event=list[0].id;
+ selectEvent(state.event);
+ byId("announcement").textContent="Filtro "+categories.find(c=>c.id===id).name+": "+list.length+" marcos.";
+}
+byId("previous").addEventListener("click",()=>{const list=visible(),index=list.findIndex(x=>x.id===state.event);if(index>0)selectEvent(list[index-1].id);});
+byId("next").addEventListener("click",()=>{const list=visible(),index=list.findIndex(x=>x.id===state.event);if(index>=0&&index<list.length-1)selectEvent(list[index+1].id);});
+function drawModelControls(){
+ const host=byId("model-controls");host.replaceChildren();
+ models.forEach(m=>{
+  const b=document.createElement("button");b.type="button";b.textContent=m.name;
+  b.setAttribute("aria-pressed",String(m.id===state.model));
+  b.addEventListener("click",()=>selectModel(m.id));host.append(b);
+ });
+}
+function selectModel(id){
+ const m=models.find(x=>x.id===id);if(!m)return;
+ state.model=id;drawModelControls();
+ const panel=byId("model-description");panel.replaceChildren();
+ const h=document.createElement("strong");h.textContent=m.name+" · "+m.status;
+ const p=document.createElement("span");p.textContent=m.description;
+ const caveat=document.createElement("em");caveat.textContent="Limite: "+m.caution;
+ panel.append(h,p,caveat);
+ for(const item of models){
+  const el=byId("model-"+item.id);el.style.display=item.id===id?"":"none";el.setAttribute("aria-hidden",String(item.id!==id));
+ }
+ byId("models-art-desc").textContent=m.caption+". "+m.caution+" Representação conceitual sem escala.";
+}
+function drawSignalControls(){
+ const host=byId("signal-controls");host.replaceChildren();
+ signals.forEach(s=>{
+  const b=document.createElement("button");b.type="button";b.textContent=s.name;
+  b.setAttribute("aria-pressed",String(s.id===state.signal));
+  b.addEventListener("click",()=>selectSignal(s.id));host.append(b);
+ });
+}
+function selectSignal(id){
+ const s=signals.find(x=>x.id===id);if(!s)return;
+ state.signal=id;drawSignalControls();
+ byId("signal-path").setAttribute("d",waveforms[id]);
+ byId("signal-graphic-label").textContent=s.name+": traço ilustrativo, não dados reais";
+ byId("signal-art-title").textContent="Representação do sinal: "+s.name;
+ byId("signal-art-desc").textContent=s.description+" Desenho abstrato, sem frequência, amplitude, escala nem dados medidos.";
+ const panel=byId("signal-description");panel.replaceChildren();
+ const head=document.createElement("strong");head.textContent=s.name+" · "+s.kind;
+ const body=document.createElement("span");body.textContent=s.description;
+ const caution=document.createElement("em");caution.textContent="Atenção: "+s.caution;
+ panel.append(head,body,caution);
+}
+function updateScore(){
+ let correct=0;for(const [index,answer] of state.answers)if(questions[index].answer===answer)correct++;
+ byId("score").textContent=state.answers.size+" de "+questions.length+" respondidas · "+correct+(correct===1?" acerto":" acertos");
+}
+function drawQuiz(){
+ const host=byId("questions");host.replaceChildren();
+ questions.forEach((q,index)=>{
+  const group=document.createElement("fieldset");group.className="question";
+  const legend=document.createElement("legend");legend.textContent=(index+1)+". "+q.question;
+  const options=document.createElement("div");options.className="options";
+  const feedback=document.createElement("p");feedback.className="feedback";feedback.setAttribute("aria-live","polite");
+  feedback.textContent="Escolha uma alternativa.";
+  const buttons=q.options.map((text,i)=>{
+   const b=document.createElement("button");b.type="button";b.className="option";b.textContent=text;b.setAttribute("aria-pressed",String(state.answers.get(index)===i));
+   b.addEventListener("click",()=>{
+    state.answers.set(index,i);
+    buttons.forEach((other,j)=>other.setAttribute("aria-pressed",String(j===i)));
+    const right=i===q.answer;feedback.textContent=(right?"Correto. ":"Reveja. ")+q.feedback;
+    feedback.classList.toggle("correct",right);updateScore();
+   });
+   options.append(b);return b;
+  });
+  group.append(legend,options,feedback);host.append(group);
+ });
+ updateScore();
+}
+byId("reset-history").addEventListener("click",()=>{
+ state.filter="all";state.event=events[0].id;state.seen.clear();state.seen.add(state.event);
+ drawFilters();selectEvent(state.event);byId("announcement").textContent="Linha do tempo reiniciada.";
+});
+byId("reset-quiz").addEventListener("click",()=>{
+ state.answers.clear();drawQuiz();byId("announcement").textContent="Perguntas reiniciadas.";
+});
+drawFilters();selectEvent(state.event);selectModel(state.model);selectSignal(state.signal);drawQuiz();
+</script>
+</body></html>
