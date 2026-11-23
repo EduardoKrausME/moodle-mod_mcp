@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Quiz ilustrado com 12 desafios sobre ilhas de calor urbanas, albedo, evapotranspiração, temperatura de superfície e do ar, calor noturno, conforto e planejamento de cidades.">
+<title>Por que algumas cidades são tão quentes? | Quiz Atlas dos Microclimas</title>
+<style>
+:root{color-scheme:light;--papyrus:#f6eedb;--paper:#fffaf0;--ink:#3d2c29;--muted:#6b5b4f;--brick:#a54232;--brick2:#7f2d29;--gold:#c39c5b;--navy:#303b50;--olive:#677154;--line:#d3bea0;--mono:Consolas,"Liberation Mono",monospace;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--serif:Georgia,"Times New Roman",serif;background:var(--papyrus);color:var(--ink);font-family:var(--sans)}
+*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:290px;line-height:1.74;background:radial-gradient(ellipse at 20% 3%,#fae7c5,transparent 39%),var(--papyrus)}
+a{color:#79352a;text-underline-offset:4px}a:hover{color:#4d3627}button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}:focus-visible{outline:3px solid #2b6192;outline-offset:4px}[hidden]{display:none!important}
+.wrap{width:min(1170px,calc(100% - 44px));margin:auto}.skip{position:absolute;left:12px;top:-110px;padding:12px 17px;color:var(--ink);background:white;z-index:20}.skip:focus{top:12px}.kicker{font:850 .75rem/1.6 var(--sans);color:#8c392f;letter-spacing:.13em;text-transform:uppercase}
+.masthead{background:linear-gradient(135deg,#a04437,#642826);color:#fff3db;position:relative;overflow:hidden}.masthead:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,#e0a06a55,transparent 51%),repeating-linear-gradient(35deg,transparent 0 14px,#ffe8bf0a 14px 15px);pointer-events:none}
+.folio{position:relative;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center;border-bottom:1px solid #e2b67b99;padding:22px 0;color:#f9e2c7;font:800 .72rem/1.5 var(--sans);letter-spacing:.09em;text-transform:uppercase}.folio strong{color:#fff1c6}
+.hero-grid{position:relative;display:grid;grid-template-columns:.94fr 1.06fr;gap:32px;align-items:center;min-height:475px;padding:50px 0 43px}.masthead .kicker{color:#ffe0ab}.hero-title{font:normal clamp(2.65rem,6vw,6rem)/1.02 var(--serif);letter-spacing:-.06em;margin:18px 0 28px}.hero-title em{font-style:italic;font-weight:normal;color:#ffe0a8}.hero-lead{max-width:560px;color:#ffe8d1;line-height:1.86;font-size:1.07rem}.hero-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:23px}.hero-tags span{background:#fff3d51c;border:1px solid #f7d8aa9c;color:#fff0d7;padding:8px 12px;font:760 .76rem/1.4 var(--sans)}.hero-plate{min-width:0;margin:0}.hero-plate svg{display:block;width:100%;height:auto;filter:drop-shadow(8px 14px 16px #53231f4e)}.hero-plate figcaption{font-size:.8rem;line-height:1.7;color:#fbe0c0;margin-top:12px}
+.color-band{height:16px;background-color:#e5c899;background-image:linear-gradient(45deg,#874a38 25%,transparent 25%),linear-gradient(-45deg,#874a38 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#874a38 75%),linear-gradient(-45deg,transparent 75%,#874a38 75%);background-position:0 0,0 8px,8px -8px,-8px 0;background-size:16px 16px}
+.progress-section{padding:26px 0 19px}.progress-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font:760 .78rem var(--sans);color:#79503f;margin-bottom:10px}.progress-track{height:10px;background:#e6d2b4;border:1px solid #bea480;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#667451,#a54232);transition:width .25s ease}.progress-caption{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:11px;color:#745542;font:.83rem/1.6 var(--sans)}.notice{background:#efe1c9;border-left:4px solid #667451;padding:14px 17px;color:#563e30;font-size:.88rem;line-height:1.8}
+.main-shell{padding:25px 0 67px}.question-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:24px;align-items:start}.plate{margin:0;padding:17px;background:#eadcc4;border:1px solid #c3ad8b}.plate-number{display:flex;justify-content:space-between;gap:11px;flex-wrap:wrap;padding-bottom:13px;margin-bottom:12px;border-bottom:1px solid #c9b08b;color:#843d30;font:800 .73rem var(--sans);letter-spacing:.06em}.plate-picture{min-height:340px;background:#f6e8d0;display:grid;place-items:center}.plate-picture svg{display:block;width:100%;height:auto;max-height:450px}.plate figcaption{border-top:1px solid #cbb18e;padding-top:12px;margin-top:12px;color:#65503f;font-size:.82rem;line-height:1.76}.plate-note{margin-top:11px;color:#6c5541;font:.76rem var(--sans)}
+.question-card{min-height:567px;padding:clamp(20px,3vw,33px);background:#fffbf1;border:1px solid #c7ac88;display:flex;flex-direction:column}.question-index{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#8e3b30;border-bottom:1px solid #d2b99a;padding-bottom:16px;font:800 .75rem var(--sans)}.question-card h2{font:normal clamp(1.62rem,2.95vw,2.5rem)/1.21 var(--serif);letter-spacing:-.025em;margin:20px 0 15px}.question-instruction{color:#614d40;line-height:1.8;font-size:.94rem;margin-bottom:18px}
+.answers{margin:0;padding:0;border:0;min-width:0}.answers legend{font:800 .8rem var(--sans);color:#824332;margin-bottom:10px}.options{display:grid;gap:9px}.option{display:flex;align-items:center;gap:12px;padding:11px 13px;min-height:59px;background:#fff7e6;border:1px solid #d4bea0;cursor:pointer}.option:hover{background:#f5e5d0;border-color:#a54232}.option.selected{border:2px solid #923f33;background:#f5decb;padding:10px 12px}.option input{width:20px;height:20px;flex:none;accent-color:#8c3a2f}.option-copy{min-width:0;overflow-wrap:anywhere;color:#463127;font-size:.9rem;line-height:1.57}.option-art{flex:none;display:grid;place-items:center;width:76px;height:56px;background:#eddfc8;border:1px solid #bea17b}.option-art svg{width:74px;height:54px}
+.sequence{list-style:none;padding:0;margin:0;display:grid;gap:8px}.sequence-item{display:grid;grid-template-columns:27px minmax(0,1fr) auto;gap:9px;align-items:center;background:#fff6e2;border:1px solid #d7bea0;padding:10px}.sequence-item .num{font:.84rem var(--mono);color:#8a3c2e}.sequence-item .label{font-size:.9rem;line-height:1.48}.order-buttons{display:flex;gap:5px}.order-buttons button{border:1px solid #bba184;color:#704032;background:#fff8eb;width:35px;height:35px}.order-buttons button:not(:disabled):hover{background:#ead5b9}.answer-help{font-size:.84rem;color:#76604e;line-height:1.78;margin:13px 0 0}
+.feedback{border-left:5px solid #bd8f55;background:#f1e3cc;color:#5b4030;padding:16px 18px;margin:20px 0 0;line-height:1.78}.feedback.correct{border-color:#677154;background:#e0e9d6;color:#3c563b}.feedback strong{display:block;font:780 1.04rem var(--serif);margin-bottom:7px}.feedback p{margin:0}.feedback .feedback-extra{font-size:.83rem;margin-top:8px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto;padding-top:24px}.btn{background:#8e3b30;color:#fff8ed;border:1px solid #8e3b30;font:800 .9rem var(--sans);min-height:45px;padding:11px 15px}.btn:hover:not(:disabled){background:#6d2e27}.btn.secondary{background:#fff8e8;color:#713a2e;border-color:#ad8966}.btn.secondary:hover:not(:disabled){background:#efdfc8}.btn.teal{background:#4b614d;color:#fff9ed;border-color:#4b614d}.btn.teal:hover:not(:disabled){background:#384d3a}.btn.next{margin-left:auto}
+.tips{margin:20px 0;padding:15px 19px;background:#efe1cb;border-left:4px solid #a54232;color:#574334;font-size:.9rem}.tips b{color:#863a30}
+.summary{max-width:975px;margin:auto;background:#fffbf1;border:1px solid #c6ad89;padding:clamp(23px,4vw,48px)}.summary h2{font:normal clamp(2.1rem,4vw,3.6rem)/1.12 var(--serif);letter-spacing:-.04em;margin:14px 0 19px}.summary>p{color:#645241}.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:22px 0}.stat{background:#f0e2cb;padding:14px;border-top:4px solid #a54232}.stat:nth-child(2){border-color:#677154}.stat:nth-child(3){border-color:#c39c5b}.stat b{display:block;color:#7c392f;font:normal 2.5rem var(--serif)}.stat span{font:800 .75rem var(--sans);color:#6b5241}
+.review-list{list-style:none;display:grid;gap:11px;padding:0}.review-item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:#fbf1df;border:1px solid #d5bb9b;padding:13px 15px}.review-item strong{font-size:.95rem}.review-item p{font-size:.84rem;color:#66513f;margin:4px 0 0}.review-item button{border:1px solid #b69674;background:#fff8ed;color:#7e3c2e;padding:10px 12px}
+.references{border-top:1px solid #d3bea0;color:#65513f;padding:36px 0 53px;font-size:.85rem;line-height:1.8}.references h2{font:normal 1.65rem var(--serif)}.references p{margin:11px 0}
+.motion-reduce *,.motion-reduce *:before,.motion-reduce *:after{animation:none!important;transition:none!important}
+@media(max-width:950px){.hero-grid{grid-template-columns:1fr .85fr;min-height:0}.question-grid{grid-template-columns:1fr}.plate-picture{min-height:230px}.question-card{min-height:0}}
+@media(max-width:620px){.wrap{width:calc(100% - 28px)}.hero-grid{grid-template-columns:1fr;gap:19px;padding:31px 0;min-height:0}.hero-title{font-size:clamp(2.5rem,10vw,4.4rem)}.hero-plate{max-width:420px}.plate{padding:10px}.plate-picture{min-height:0}.question-card{padding:17px}.btn{flex:1 1 40%}.btn.next{margin-left:0}.option-art{width:61px;height:44px}.option-art svg{width:59px;height:42px}.summary-stats{grid-template-columns:1fr}.review-item{grid-template-columns:1fr}.sequence-item{grid-template-columns:23px minmax(0,1fr) 76px}.order-buttons button{width:33px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+/* Atlas dos Microclimas: papel quente, gradiente de calor e infraestrutura verde */
+:root{--papyrus:#f6f3e7;--paper:#fffdf5;--ink:#2b3437;--muted:#5e6563;--brick:#b64b37;--brick2:#8e362e;--gold:#f6bd78;--navy:#273d50;--olive:#247568;--cream:#f0e6d1;--line:#d0caba}
+body{background:radial-gradient(ellipse at 6% 0%,#f8e7cd 0%,transparent 31%),#f6f3e7;color:#2b3437}a{color:#8c382c}a:hover{color:#155d54}:focus-visible{outline:3px solid #2677aa;outline-offset:4px}
+.kicker{color:#a34b38}.masthead{background:#f6e8d2;color:#2b3437}.masthead:before{background:radial-gradient(ellipse at 79% 19%,#f9bb8060,transparent 46%),linear-gradient(143deg,#f7f2df 5%,#edd1b0 100%);opacity:1}
+.folio{color:#725246;border-color:#bda58a;font:800 .74rem/1.5 var(--mono)}.folio strong{color:#913e33}.masthead .kicker{color:#a34b38}
+.hero-title{font-family:Georgia,"Times New Roman",serif;color:#293336;font-weight:700;letter-spacing:-.072em}.hero-title em{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:400;color:#bb4c33}
+.hero-lead{color:#5d5146;line-height:1.89}.hero-tags span{border:1px solid #b7a38c;color:#7b5948;background:#fffaf080;font-family:var(--mono)}.hero-plate{transform:none}.hero-plate svg{filter:drop-shadow(8px 17px 18px #77593c26)}.hero-plate figcaption{background:transparent;padding:0;color:#735f4f}
+.color-band{height:13px;background:linear-gradient(90deg,#286e81 0 17%,#74b7a7 17% 34%,#d7d58f 34% 50%,#f0b267 50% 68%,#cf6c4f 68% 83%,#963c37 83%)}
+.progress-track{background:#e4ddd0;border-color:#c8bcac}.progress-fill{background:linear-gradient(90deg,#287a76,#d77551)}.progress-meta,.progress-caption{color:#765b4d}
+.notice{background:#eee2cc;color:#594b40;border-left-color:#ba5c3d}
+.plate{background:#f3eee4;border-color:#d0c3ae}.plate-number{color:#a54a39;border-color:#c9bdac}.plate-picture{background:#f4eddf}.plate figcaption{color:#5f615b;border-color:#cbbfae}.plate-note{color:#765d4e}
+.question-card{background:#fffdf5;border-color:#d0c3ae}.question-index{color:#a54b38;border-color:#cbbda9}.question-card h2{font-family:Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:-.045em;color:#2b3437}.question-instruction,.answer-help{color:#5c615c}.answers legend{color:#99503b}
+.option,.sequence-item{background:#f8f2e7;border-color:#cabba7;color:#3c413c}.option:hover{border-color:#3b8479;background:#edf1e5}.option.selected{border-color:#247568;background:#e5f0e6}.option input{accent-color:#247568}
+.option-art{background:#f6ebd9;border-color:#d0baa3}.sequence-item .num{color:#a34c36}
+.order-buttons button{background:#fffbf2;border-color:#b7a993;color:#536455}.order-buttons button:not(:disabled):hover{background:#edf1e4}
+.feedback{background:#f5e8d2;color:#734d3c;border-left-color:#df8a60}.feedback.correct{background:#e2f0e6;color:#265e53;border-left-color:#247568}
+.btn{background:#247568;border-color:#247568;color:#fffef6}.btn:hover:not(:disabled){background:#155d54}.btn.secondary{background:#fffbf2;border-color:#bc9e86;color:#7b5143}.btn.secondary:hover:not(:disabled){background:#f3e4d3}
+.btn.teal{background:#ae4f3b;border-color:#ae4f3b;color:#fff9ee}.btn.teal:hover:not(:disabled){background:#8e362e}
+.tips{background:#e7ebe0;border-left-color:#247568;color:#425952}.tips b{color:#155d54}
+.summary{background:#fffdf5;border-color:#d0c3ae}.summary h2{font-family:Georgia,"Times New Roman",serif;font-weight:700}.summary-stats .stat{background:#f3e9d8;border-color:#c6664d}.summary-stats .stat:nth-child(2){border-color:#247568}.summary-stats .stat:nth-child(3){border-color:#d7b46b}.stat b{color:#a94c38}
+.review-item{background:#f4ecde;border-color:#d0c3ae}.review-item button{background:#247568;border-color:#247568;color:#fffdf6}
+.references{color:#5f635b;border-color:#d0caba}.references a{color:#8c382c}
+@media(max-width:650px){.hero-grid{grid-template-columns:1fr}.hero-plate{max-width:540px}.hero-title{font-size:clamp(2.75rem,10.7vw,4.6rem)}.option-art{width:64px;height:48px}.option-art svg{width:62px;height:46px}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#atividade">Ir para a questão</a>
+<header class="masthead"><div class="wrap">
+<div class="folio"><strong>ATLAS DOS MICROCLIMAS · EXPEDIÇÃO 09 / 10</strong><span>URBANISMO · AMBIENTE · ENERGIA · CLIMA</span></div>
+<div class="hero-grid"><div><div class="kicker">Investigue as temperaturas da cidade</div>
+<h1 class="hero-title">Por que algumas cidades<br><em>são tão quentes?</em></h1>
+<p class="hero-lead">Por que o asfalto exposto, a praça sombreada e uma rua estreita podem oferecer experiências tão diferentes? Analise doze pranchas de microclima, compare superfícies e medições e escolha soluções que reduzam calor e desigualdades.</p>
+<div class="hero-tags"><span>12 investigações comentadas</span><span>Ilustrações SVG originais</span><span>Sem temperaturas inventadas</span></div></div>
+<figure class="hero-plate"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="urbanHeroTitle urbanHeroDesc" viewBox="0 0 620 434">
+<title id="urbanHeroTitle">Comparação de rua asfaltada ensolarada e parque arborizado</title>
+<desc id="urbanHeroDesc">Ilustração original dividida em dois ambientes urbanos sob o mesmo sol. À esquerda, prédios, asfalto escuro e flechas de calor; à direita, árvores, sombra, gramado e caminhos de evapotranspiração. As cores são conceituais e não representam medição de temperatura.</desc>
+<defs><linearGradient id="heroHeatSky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f2bd86"/><stop offset="1" stop-color="#f9e7cf"/></linearGradient><linearGradient id="heroCoolSky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b8dfd2"/><stop offset="1" stop-color="#e2eacb"/></linearGradient></defs>
+<rect width="310" height="434" rx="6" fill="url(#heroHeatSky)"/><rect x="310" width="310" height="434" rx="6" fill="url(#heroCoolSky)"/>
+<path d="M310 0V434" stroke="#fff7e8" stroke-width="8" stroke-dasharray="14 9"/>
+<circle cx="300" cy="78" r="42" fill="#f6bd78" stroke="#f9d6a4" stroke-width="7"/>
+<g fill="#c59b80" stroke="#b28569" stroke-width="3"><rect x="22" y="133" width="97" height="173"/><rect x="127" y="92" width="116" height="214"/><rect x="248" y="165" width="58" height="141"/></g>
+<g fill="#ede0c3"><rect x="41" y="155" width="20" height="24"/><rect x="79" y="155" width="20" height="24"/><rect x="41" y="204" width="20" height="24"/><rect x="79" y="204" width="20" height="24"/><rect x="148" y="121" width="26" height="31"/><rect x="196" y="121" width="26" height="31"/><rect x="148" y="176" width="26" height="31"/><rect x="196" y="176" width="26" height="31"/></g>
+<path d="M0 310H310V434H0Z" fill="#5e6570"/><path d="M0 364H310" stroke="#d7c2a1" stroke-width="5" stroke-dasharray="22 16"/>
+<path d="M313 306H620V434H313Z" fill="#83ab87"/><path d="M343 368Q477 352 620 381" fill="none" stroke="#ead9bc" stroke-width="23"/>
+<g stroke="#6b684c" stroke-width="13" stroke-linecap="round"><path d="M420 324V213"/><path d="M536 324V229"/></g>
+<g fill="#5c9870" stroke="#3d805e" stroke-width="3"><ellipse cx="386" cy="205" rx="53" ry="47"/><ellipse cx="444" cy="185" rx="65" ry="57"/><ellipse cx="527" cy="216" rx="59" ry="54"/><ellipse cx="561" cy="190" rx="39" ry="44"/></g>
+<g stroke="#ba5a3d" stroke-width="6" fill="none" stroke-linecap="round"><path d="M50 306Q28 262 54 232" stroke-dasharray="9 9"/><path d="M116 307Q92 251 125 221" stroke-dasharray="9 9"/><path d="M236 303Q216 268 252 235" stroke-dasharray="9 9"/></g>
+<g stroke="#3b998d" stroke-width="5" fill="none" stroke-linecap="round"><path d="M426 167Q405 113 425 93" stroke-dasharray="8 9"/><path d="M526 166Q507 120 526 99" stroke-dasharray="8 9"/></g>
+<g font-family="Consolas,monospace" font-size="17" font-weight="bold"><text x="22" y="410" fill="#fff4dd">ASFALTO EXPOSTO</text><text x="359" y="410" fill="#24554b">SOMBRA E VEGETAÇÃO</text></g>
+</svg><figcaption>Ilustração comparativa, não termografia: o efeito térmico depende do horário, clima, materiais, vento e umidade.</figcaption></figure>
+</div></div></header>
+<div class="color-band" aria-hidden="true"></div>
+<div class="wrap">
+ <section class="progress-section" aria-label="Acompanhamento do quiz">
+  <div class="progress-meta"><span id="progressStep">QUESTÃO 01 / 12</span><span id="progressDone">0 de 12 conferidas</span></div>
+  <div class="progress-track" id="progressBar" role="progressbar" aria-label="Questões conferidas" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-caption"><span id="progressTopic">Energia, superfícies e sombra</span><button class="btn secondary" type="button" id="motionToggle" aria-pressed="false">Reduzir movimentos</button></div>
+  <p class="notice">Quiz formativo, com correção local: não envia respostas ao Moodle nem lança notas oficiais. Os mapas, as cores e as pranchas são conceituais, não medições, previsões meteorológicas ou recomendações específicas para uma cidade.</p>
+ </section>
+ <main id="atividade" class="main-shell">
+  <section id="questionScreen" class="question-grid" aria-label="Questão atual">
+   <figure class="plate">
+    <div class="plate-number"><span id="plateNum">PRANCHA 01</span><span id="plateLabel">ESTRUTURA</span></div>
+    <div id="platePicture" class="plate-picture"></div>
+    <figcaption id="plateCaption">Diagrama original de um microclima urbano.</figcaption>
+    <div class="plate-note">SVG original · Esquema urbano conceitual, sem medições</div>
+   </figure>
+   <div class="question-card">
+    <div class="question-index"><span id="questionSection">01 / ESTRUTURA</span><span id="questionType">ESCOLHA ÚNICA</span></div>
+    <h2 id="questionTitle" tabindex="-1">Carregando a primeira questão…</h2>
+    <p id="questionInstruction" class="question-instruction"></p>
+    <div id="answerMount"></div>
+    <p class="answer-help" id="answerHelp"></p>
+    <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+    <div class="actions">
+     <button type="button" id="previousButton" class="btn secondary">Anterior</button>
+     <button type="button" id="checkButton" class="btn">Conferir resposta</button>
+     <button type="button" id="nextButton" class="btn teal next">Próxima questão →</button>
+    </div>
+   </div>
+  </section>
+  <section id="summaryScreen" class="summary" hidden aria-labelledby="summaryTitle">
+   <div class="kicker">Conclusão / revisão comentada</div>
+   <h2 id="summaryTitle" tabindex="-1">Você consegue interpretar o calor urbano?</h2>
+   <p>Esta revisão descreve apenas sua tentativa local. Volte às pranchas para distinguir temperatura do ar e de superfícies, calor noturno, exposição e vulnerabilidade, e para combinar soluções de adaptação conforme o contexto.</p>
+   <div class="summary-stats">
+    <div class="stat"><b id="totalReviewed">0</b><span>QUESTÕES CONFERIDAS</span></div>
+    <div class="stat"><b id="totalMastered">0</b><span>RESPOSTAS CORRETAS AO FINAL</span></div>
+    <div class="stat"><b id="totalFirst">0</b><span>ACERTOS NA PRIMEIRA TENTATIVA</span></div>
+   </div>
+   <h3 style="font:normal 1.65rem Georgia,serif;margin:22px 0 14px">Revisitar pranchas</h3>
+   <ol id="reviewList" class="review-list"></ol>
+   <div class="actions"><button class="btn secondary" type="button" id="restartButton">Recomeçar do zero</button><button class="btn teal" type="button" id="reviewFirstButton">Rever a primeira questão</button></div>
+  </section>
+ </main>
+ <aside class="tips" aria-label="Como explorar os microclimas"><b>Como investigar:</b> observe os diagramas e compare as alternativas; marque uma ou mais opções e confira para ler a explicação. Na última questão, use ↑ e ↓ para organizar uma avaliação de projeto. Você pode voltar, revisar e reiniciar sem salvar respostas no Moodle.</aside>
+ <section class="references" aria-labelledby="sourcesTitle"><h2 id="sourcesTitle">Fontes e transparência das ilustrações</h2>
+<p>As 12 pranchas SVG, o panorama urbano e os ícones nas alternativas são desenhos originais e esquemáticos. Cores, flechas, mapas e escalas representam relações qualitativas, não imagens térmicas de satélite, medições do ar, dados de um bairro real, previsão de temperatura ou modelos calibrados. As diferenças térmicas dependem de hora, clima, materiais, umidade, vento, geometria, cobertura vegetal e uso do espaço. Não se deve concluir risco individual ou desempenho numérico de uma intervenção apenas pelo desenho.</p>
+<p>Referências científicas: <a href="https://www.epa.gov/heatislands/what-are-heat-islands" target="_blank" rel="noopener noreferrer">EPA - Ilhas de calor</a>; <a href="https://www.epa.gov/heatislands/measuring-heat-islands" target="_blank" rel="noopener noreferrer">EPA - Medição de ilhas de calor</a>; <a href="https://www.epa.gov/heatislands/benefits-trees-and-vegetation" target="_blank" rel="noopener noreferrer">EPA - Árvores e vegetação</a>; <a href="https://www.epa.gov/heatislands/using-cool-roofs-reduce-heat-islands" target="_blank" rel="noopener noreferrer">EPA - Coberturas refletivas</a>; <a href="https://science.nasa.gov/earth/earth-observatory/global-maps/land-surface-temperature-vegetation/" target="_blank" rel="noopener noreferrer">NASA - Temperatura de superfície e vegetação</a>; <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-10/" target="_blank" rel="noopener noreferrer">IPCC AR6 - Informações climáticas regionais</a>; <a href="https://www.ipcc.ch/report/ar6/wg2/chapter/chapter-6/" target="_blank" rel="noopener noreferrer">IPCC AR6 - Cidades e infraestrutura</a>.</p></section>
+</div>
+<script>
+(function(){
+'use strict';
+var root=document, total=12;
+var $=function(id){return root.getElementById(id);};
+var questions=[{"section":"Ilha de calor urbana","figure":"island","type":"single","title":"O que caracteriza uma ilha de calor urbana?","instruction":"Compare áreas construídas e áreas menos urbanizadas, levando em conta condições semelhantes de observação.","options":[["a","Uma área urbana pode apresentar temperatura do ar maior que áreas vizinhas, dependendo de clima, horário e uso do solo"],["b","Toda cidade tem sempre a mesma temperatura em todos os bairros"],["c","O fenômeno ocorre apenas em países de clima desértico"],["d","A ilha de calor significa que a cidade cria energia solar adicional"]],"correct":"a","hint":"A urbanização modifica armazenamento, troca e circulação de energia; o efeito varia no espaço e no tempo.","explain":"Ilhas de calor atmosféricas são diferenças térmicas entre ambientes urbanizados e referências menos urbanizadas, frequentemente marcantes à noite. Há também ilhas de calor de superfície; não são a mesma variável e o efeito depende de contexto e condições meteorológicas.","caption":"Esquema de centro construído e entorno verde, com curva térmica qualitativa sem escala.","figureTitle":"Ilha de calor urbana · Prancha 01"},{"section":"Superfície, ar e conforto","figure":"measure","type":"single","title":"Uma imagem de satélite mostra um telhado muito quente. Isso informa diretamente a temperatura do ar que uma pessoa respira?","instruction":"Separe temperatura radiométrica de superfície, temperatura do ar e conforto térmico.","options":[["a","Sim, as três temperaturas são idênticas por definição","same"],["b","Não; a imagem estima temperatura de superfície, e o ar e o conforto exigem outras medidas e variáveis","different"],["c","Sim, uma imagem quente determina exatamente a temperatura corporal","person"]],"correct":"b","hint":"A pele, o ar a uma altura padronizada e o telhado são elementos diferentes.","explain":"Sensores térmicos por satélite podem estimar temperatura radiométrica da superfície sob condições e correções específicas. Temperatura do ar é medida de outra forma, e conforto ou estresse térmico também envolvem radiação, umidade, vento, atividade e características das pessoas.","caption":"Três instrumentos conceituais distinguem telhado, termômetro do ar e sensação térmica.","figureTitle":"Superfície, ar e conforto · Prancha 02"},{"section":"Balanço de energia","figure":"energy","type":"multiple","title":"Quais fluxos ajudam a explicar o aquecimento de uma superfície urbana?","instruction":"Marque os processos coerentes com a troca de energia no ambiente.","options":[["a","Parte da radiação solar recebida pode ser refletida"],["b","Outra parte pode ser absorvida e transformada em calor"],["c","A evaporação de água pode consumir energia na forma de calor latente"],["d","Todo material urbano devolve 100% da radiação recebida sem absorver nada"],["e","O calor armazenado nunca pode ser liberado mais tarde"]],"correct":["a","b","c"],"hint":"A energia recebida pode seguir rotas diferentes: reflexão, calor sensível, calor latente e armazenamento.","explain":"A superfície reflete ou absorve parte da radiação incidente e troca energia por radiação, convecção, evaporação e armazenamento. As proporções dependem de material, umidade, vento, vegetação, horário e geometria. O esquema não apresenta balanço quantitativo.","caption":"Setas coloridas dividem energia incidente em reflexão, armazenamento, calor sensível e evaporação.","figureTitle":"Balanço de energia · Prancha 03"},{"section":"Albedo e materiais","figure":"albedo","type":"single","title":"Sob condições comparáveis de sol, qual superfície tende a refletir mais radiação solar de onda curta?","instruction":"Compare as cores e a reflexão sem assumir que isso prevê sozinho o conforto.","options":[["a","Cobertura escura com baixa refletância","darkroof"],["b","Cobertura clara projetada com maior refletância solar","coolroof"],["c","As duas sempre refletem a mesma fração, independentemente do material","neutral"]],"correct":"b","hint":"Albedo é a fração refletida da radiação solar incidente.","explain":"Em condições equivalentes, uma cobertura de maior refletância solar tende a devolver mais radiação de onda curta e pode reduzir seu aquecimento. O efeito no ar e nas pessoas depende de isolamento, emissividade, orientação, sombreamento e entorno; reflexos também precisam ser avaliados.","caption":"Duas coberturas idealizadas com quantidades distintas de flechas refletidas.","figureTitle":"Albedo e materiais · Prancha 04"},{"section":"Sombra e evapotranspiração","figure":"trees","type":"multiple","title":"De que maneiras árvores bem posicionadas podem modificar o microclima urbano?","instruction":"Considere mecanismos diferentes, evitando afirmar resfriamento idêntico em qualquer situação.","options":[["a","A copa intercepta parte da radiação solar e fornece sombra"],["b","A evapotranspiração pode transferir energia para a mudança de fase da água"],["c","A vegetação pode melhorar condições térmicas locais, dependendo da disponibilidade de água e desenho urbano"],["d","Toda árvore reduz exatamente a mesma quantidade de graus em qualquer bairro"],["e","Sombra e evapotranspiração são exatamente o mesmo processo"]],"correct":["a","b","c"],"hint":"Sombreamento reduz a incidência direta; transpiração atua no balanço de energia.","explain":"Sombra e evapotranspiração são mecanismos complementares. A primeira reduz radiação incidente sobre superfícies e pessoas; a segunda usa energia para evaporar água. Benefícios reais variam com espécie, copa, irrigação ou chuva, vento, estação e disposição das árvores.","caption":"Uma árvore sombreia o passeio e libera vapor de água esquematicamente.","figureTitle":"Sombra e evapotranspiração · Prancha 05"},{"section":"Calor depois do pôr do sol","figure":"night","type":"single","title":"Por que algumas áreas muito construídas permanecem quentes à noite?","instruction":"Observe a energia acumulada durante o dia e as trocas noturnas.","options":[["a","Materiais podem liberar à noite parte do calor armazenado durante o dia, entre outros fatores"],["b","O Sol continua aquecendo diretamente todas as ruas após se pôr"],["c","Todo asfalto deixa de emitir calor imediatamente após o anoitecer"],["d","A temperatura noturna só depende da cor do céu"]],"correct":"a","hint":"A energia absorvida não precisa ser devolvida instantaneamente.","explain":"Superfícies e edificações podem armazenar energia e liberá-la depois, afetando temperaturas noturnas. Geometria urbana, circulação do ar, nebulosidade, materiais e calor gerado por atividades humanas também influenciam. Não há horário universal de máximo efeito.","caption":"Metade do desenho mostra absorção diurna; outra mostra liberação gradual durante a noite.","figureTitle":"Calor depois do pôr do sol · Prancha 06"},{"section":"Mapa de um bairro","figure":"map","type":"single","title":"Num mapa ilustrativo, qual área merece ser investigada primeiro para avaliar possível maior aquecimento superficial diurno?","instruction":"Compare cobertura do solo e insolação, sem deduzir valores em graus Celsius.","options":[["a","A: Parque com copas densas e gramado sombreado","park"],["b","B: Grande estacionamento asfaltado e sem árvores sob sol direto","parking"],["c","C: Jardim com solo permeável e sombra parcial","garden"]],"correct":"b","hint":"Superfícies escuras e expostas podem absorver radiação e aquecer bastante.","explain":"Em um cenário comparável, um estacionamento escuro e exposto é um candidato plausível a temperaturas superficiais elevadas, mas medições ainda seriam necessárias. O mapa ilustrado não permite inferir temperatura do ar, conforto individual ou diferença exata entre áreas.","caption":"Mapa fictício de parque, estacionamento e jardim, sem dados térmicos ou geográficos reais.","figureTitle":"Mapa de um bairro · Prancha 07"},{"section":"Ler uma imagem térmica","figure":"satellite","type":"multiple","title":"Quais cuidados são necessários antes de interpretar um mapa de temperatura de superfície?","instruction":"Selecione as verificações que evitam confundir cores e variáveis.","options":[["a","Conferir data, horário, resolução espacial e legenda da imagem"],["b","Examinar nuvens, método de medição e incertezas do produto"],["c","Reconhecer que temperatura de superfície não substitui automaticamente temperatura do ar e exposição humana"],["d","Usar cor vermelha para afirmar a temperatura exata de cada pessoa no bairro"],["e","Ignorar a escala e comparar imagens de horários diferentes como se fossem equivalentes"]],"correct":["a","b","c"],"hint":"Uma legenda e a descrição do sensor são tão importantes quanto as cores.","explain":"Dados térmicos precisam de contexto espacial, temporal e instrumental. Temperatura radiométrica, temperatura do ar e risco térmico têm métodos distintos; sem escala, metadados e limitações, um mapa colorido pode induzir conclusões incorretas.","caption":"Monitor de satélite esquemático, legenda abstrata e termômetro de ar; não são dados reais.","figureTitle":"Ler uma imagem térmica · Prancha 08"},{"section":"Ventos e cânions urbanos","figure":"canyon","type":"single","title":"Como a geometria de ruas e prédios pode modificar o calor percebido pelos pedestres?","instruction":"Considere sombra, troca radiativa e circulação do ar.","options":[["a","Pode gerar sombra e modificar vento e troca de radiação; o efeito líquido depende da orientação e do clima"],["b","Prédios altos sempre resfriam a rua, independentemente do contexto"],["c","A distância entre edifícios nunca modifica circulação ou radiação"],["d","Ruas estreitas tornam o ar imune a qualquer variação de temperatura"]],"correct":"a","hint":"O mesmo cânion urbano pode sombrear e também limitar ventilação ou perda radiativa.","explain":"A geometria urbana pode proteger do Sol em certos horários, mas também reduzir ventilação e alterar trocas de radiação de onda longa. Orientação, altura, materiais, vento e horário definem resultados; não há ganho universal.","caption":"Corte de duas ruas com alturas diferentes, flechas de vento e faixas de sombra.","figureTitle":"Ventos e cânions urbanos · Prancha 09"},{"section":"Exposição e vulnerabilidade","figure":"equity","type":"multiple","title":"Quais elementos precisam entrar numa avaliação justa do risco de calor para a população?","instruction":"Diferencie a presença do calor das condições para enfrentá-lo.","options":[["a","Exposição em rotas de trabalho, estudo e transporte"],["b","Condições de saúde, idade, moradia e acesso a ambientes seguros"],["c","Disponibilidade real de sombra, água, áreas verdes e informação acessível"],["d","Apenas a cor do mapa, desconsiderando quem vive e circula no local"],["e","Somente a temperatura de uma cobertura vista do satélite"]],"correct":["a","b","c"],"hint":"Risco envolve perigo, exposição e vulnerabilidade, não apenas uma superfície quente.","explain":"Uma avaliação de calor precisa considerar onde as pessoas estão, sua vulnerabilidade e capacidade de adaptação. O mapa térmico é uma evidência parcial; moradia, trabalho, desigualdade, acesso a sombra e água e participação social importam.","caption":"Três personagens conceituais em deslocamentos e moradias diferentes; sem dados pessoais reais.","figureTitle":"Exposição e vulnerabilidade · Prancha 10"},{"section":"Respostas combinadas","figure":"solutions","type":"multiple","title":"Quais ações formam um plano de adaptação ao calor urbano mais robusto?","instruction":"Escolha intervenções combinadas e avaliação contínua, não uma solução milagrosa.","options":[["a","Ampliar árvores e sombra em espaços de uso público, com manejo e água quando necessário"],["b","Avaliar coberturas mais refletivas e desempenho térmico dos edifícios"],["c","Planejar ventilação, drenagem, infraestrutura verde e acesso equitativo a ambientes frescos"],["d","Substituir toda praça vegetada por pavimento escuro para eliminar manutenção"],["e","Aplicar uma única medida sem medir efeitos nem ouvir moradores"]],"correct":["a","b","c"],"hint":"Calor urbano exige medidas físicas, infraestrutura e políticas que alcancem pessoas vulneráveis.","explain":"Sombreamento, materiais apropriados, vegetação, desenho urbano, manejo hídrico e planos de resposta ao calor podem se complementar. É necessário medir resultados e impactos sociais, adaptar soluções à região e considerar manutenção e efeitos colaterais.","caption":"Quatro peças de um plano urbano: árvores, cobertura, ventilação e ponto de acolhimento.","figureTitle":"Respostas combinadas · Prancha 11"},{"section":"Investigar antes de intervir","figure":"workflow","type":"sequence","title":"Ordene as etapas de um estudo de microclima para orientar uma intervenção urbana.","instruction":"Use ↑ e ↓ para montar um processo plausível, da pergunta inicial ao monitoramento.","items":[["track","Acompanhar resultados, efeitos indesejados e necessidade de ajustes"],["compare","Comparar dados de superfície, ar, sombra, vento e horários com as incertezas registradas"],["question","Definir o problema, a área, o período e as populações potencialmente afetadas"],["design","Propor medidas com participação local e critérios de avaliação"],["observe","Reunir observações, medições e informações sobre usos e coberturas do solo"],["implement","Executar uma ação-piloto com manutenção e responsabilidade definidas"]],"correct":["question","observe","compare","design","implement","track"],"hint":"Comece definindo o que investigar; depois meça, compare, projete com a comunidade, implemente e monitore.","explain":"Um processo responsável define perguntas e pessoas afetadas, reúne e interpreta dados, escolhe soluções contextuais, testa ou implementa medidas e acompanha resultados. A sequência é pedagógica; na prática, etapas podem ser iterativas e revisadas.","caption":"Fluxograma de seis etapas com retorno de monitoramento ao diagnóstico.","figureTitle":"Investigar antes de intervir · Prancha 12"}];
+var answer=Object.create(null),checked=Object.create(null),firstTry=Object.create(null),index=0,reduceMotion=false;
+function svgFrame(t,d,b){return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 390" role="img" aria-labelledby="cityFigTitle cityFigDesc"><title id="cityFigTitle">'+t+'</title><desc id="cityFigDesc">'+d+'</desc><defs><marker id="cityArrowRed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#ba573d"/></marker><marker id="cityArrowGreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#298779"/></marker></defs><rect x="1" y="1" width="578" height="388" fill="#f0e8da" stroke="#c4b8a9" stroke-width="2"/><rect x="16" y="17" width="548" height="324" fill="#fffaf0" stroke="#d2c8b8"/><path d="M30 54H550M30 327H550" stroke="#c6b9a6" stroke-width="1"/><text x="30" y="39" fill="#a34f39" font-family="Consolas,monospace" font-size="12">ATLAS DOS MICROCLIMAS / PRANCHA ORIGINAL</text>'+b+'<text x="30" y="369" fill="#766d61" font-family="Consolas,monospace" font-size="11">DESENHO CONCEITUAL / SEM ESCALA NEM DADOS REAIS</text></svg>';}
+function tx(x,y,s,z,c){return '<text x="'+x+'" y="'+y+'" font-family="Consolas,monospace" font-size="'+(z||15)+'" fill="'+(c||'#43534d')+'">'+s+'</text>';}
+function rect(x,y,w,h,fill,stroke){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3" fill="'+(fill||'#fbf5e7')+'" stroke="'+(stroke||'#b7a994')+'" stroke-width="2"/>';}
+function go(d,c){return '<path d="'+d+'" stroke="'+(c==='green'?'#298779':'#ba573d')+'" stroke-width="5" fill="none" stroke-linecap="round" marker-end="url(#'+(c==='green'?'cityArrowGreen':'cityArrowRed')+')"/>';}
+function sun(x,y,r){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="#f3bf73" stroke="#e6a95d" stroke-width="3"/>';}
+function building(x,y,w,h,col){var b=rect(x,y,w,h,col||'#be9b86','#a38272');for(var u=x+13;u<x+w-8;u+=27)for(var v=y+20;v<y+h-12;v+=37)b+='<rect x="'+u+'" y="'+v+'" width="13" height="17" fill="#eedec0" opacity=".84"/>';return b;}
+function tree(x,y,s){return '<g transform="translate('+x+' '+y+') scale('+s+')"><path d="M0 50V-15" stroke="#80674e" stroke-width="10"/><ellipse cx="-27" cy="-22" rx="37" ry="32" fill="#6fa882" stroke="#438469" stroke-width="3"/><ellipse cx="24" cy="-41" rx="46" ry="39" fill="#65a27c" stroke="#438469" stroke-width="3"/><path d="M-16 51H17" stroke="#426754" stroke-width="2"/></g>';}
+function label(x,y,w,h,s,color){return rect(x,y,w,h,color||'#fffbf2')+tx(x+10,y+Math.floor(h/2)+5,s,13);}
+function icon(k){var out='',red='#c06443',green='#318778';
+if(k==='same'||k==='different'||k==='person'){out='<rect x="4" y="5" width="72" height="48" fill="#fffbf1" stroke="#b8ab98" stroke-width="2"/>';
+if(k==='same')out+='<path d="M12 21H68M12 37H68" stroke="'+red+'" stroke-width="5"/><text x="15" y="17" font-size="7" font-family="Consolas,monospace">IGUAL</text>';
+if(k==='different')out+='<path d="M13 20H65" stroke="'+red+'" stroke-width="5"/><path d="M13 38H65" stroke="'+green+'" stroke-width="5"/>';
+if(k==='person')out+='<circle cx="40" cy="20" r="10" fill="'+red+'"/><path d="M26 47Q26 30 40 30Q54 30 54 47" fill="'+red+'"/>';}
+if(k==='darkroof'||k==='coolroof'||k==='neutral'){out='<rect x="5" y="26" width="70" height="25" fill="#b6b2a1"/><path d="M5 26L40 8L75 26Z" fill="'+(k==='darkroof'?'#585657':k==='coolroof'?'#e8e7d7':'#a99c86')+'" stroke="#716d65" stroke-width="2"/>';if(k==='coolroof')out+='<path d="M41 20V5M58 20L69 7" stroke="'+green+'" stroke-width="3"/>';else if(k==='darkroof')out+='<path d="M34 5V20" stroke="'+red+'" stroke-width="3"/>';}
+if(k==='park'||k==='parking'||k==='garden'){out='<rect width="80" height="58" fill="'+(k==='parking'?'#747a78':'#a3c39b')+'"/>';if(k==='parking')out+='<rect x="7" y="9" width="66" height="10" rx="3" fill="#cbb39c"/><rect x="7" y="37" width="66" height="10" rx="3" fill="#cbb39c"/>';else{out+='<circle cx="28" cy="26" r="17" fill="#4b8c63"/><circle cx="56" cy="23" r="15" fill="#569772"/>';if(k==='garden')out+='<path d="M5 52H75" stroke="#eee0ba" stroke-width="7"/>';}}
+return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 58" aria-hidden="true" focusable="false">'+out+'</svg>';}
+function art(k){var b='',red='#ba573d',green='#298779';
+if(k==='island'){b=rect(29,101,522,207,'#f6ead2')+building(65,202,68,70)+building(162,160,69,112)+building(271,131,76,141)+building(386,174,67,98)+tree(488,220,.55)+'<path d="M40 299Q93 284 151 286T273 230T385 265T545 290" stroke="'+red+'" stroke-width="7" fill="none"/>'+tx(66,131,'BAIRROS / PERFIL TÉRMICO',16)+tx(206,327,'VARIA COM O HORÁRIO',14);}
+if(k==='measure'){b=rect(32,104,161,211)+rect(208,104,160,211)+rect(381,104,161,211)+building(70,159,84,96,'#bda089')+'<path d="M53 160H171" stroke="'+red+'" stroke-width="9"/><rect x="283" y="160" width="15" height="109" rx="6" fill="#fffdf0" stroke="#739d9a" stroke-width="4"/><circle cx="290" cy="267" r="14" fill="'+green+'"/><path d="M290 187V263" stroke="'+green+'" stroke-width="8"/><circle cx="462" cy="192" r="23" fill="#bd7f61"/><path d="M426 283Q426 221 462 221Q499 221 499 283" fill="#8aada1"/>'+tx(42,140,'SUPERFÍCIE',15)+tx(237,140,'AR',19)+tx(391,140,'PESSOA',17)+tx(389,299,'CONFORTO',14);}
+if(k==='energy'){b=rect(36,94,505,222,'#eff0dd')+sun(275,136,34)+go('M275 172V222')+go('M255 227Q189 211 144 158','green')+go('M297 231Q364 207 425 165')+go('M257 246Q192 280 150 292')+go('M295 246Q360 283 426 294','green')+label(47,132,145,34,'REFLEXÃO')+label(367,131,157,34,'CALOR SENSÍVEL')+label(40,278,179,31,'ARMAZENAMENTO')+label(360,278,170,31,'EVAPORAÇÃO','#d8eae0')+tx(233,267,'ENERGIA',14);}
+if(k==='albedo'){b=rect(26,107,245,203,'#f8e6cf')+rect(303,107,243,203,'#e0ecdb')+sun(148,152,27)+sun(426,152,27)+'<path d="M64 244L151 198L239 244Z" fill="#4c4b4d"/><path d="M336 244L426 198L515 244Z" fill="#fffaf0" stroke="#c6c7bc" stroke-width="2"/>'+go('M148 166V210')+go('M417 214Q390 181 386 141','green')+go('M439 214Q477 183 489 139','green')+tx(55,287,'TELHADO ESCURO',15)+tx(337,287,'TELHADO CLARO',15);}
+if(k==='trees'){b=rect(28,101,515,216,'#edf0dd')+sun(89,150,29)+tree(297,230,1.02)+'<path d="M170 289H479" stroke="#c4a47d" stroke-width="15"/><path d="M228 295H383" stroke="#688b74" stroke-width="12" opacity=".45"/>'+go('M275 168Q244 135 258 101','green')+go('M338 171Q357 128 349 91','green')+tx(52,289,'SOL DIRETO',14,red)+tx(363,277,'SOMBRA',15,green)+tx(358,109,'TRANSPIRAÇÃO',13,green);}
+if(k==='night'){b=rect(28,100,248,221,'#f5dfbb')+rect(295,100,245,221,'#283c4b')+sun(85,147,28)+'<path d="M417 121a25 25 0 1 0 20 40a25 25 0 1 1 -20 -40Z" fill="#d6e6dc"/>'+building(100,181,95,109,'#b79c83')+building(349,181,95,109,'#83919b')+go('M198 232Q224 199 220 165')+go('M454 270Q489 218 493 176')+tx(57,306,'ARMAZENAR',15,red)+tx(352,306,'LIBERAR',15,'#b4e3d8');}
+if(k==='map'){b=rect(30,96,516,226,'#e0ead8')+'<rect x="48" y="117" width="145" height="184" fill="#8db78d"/><rect x="217" y="117" width="147" height="184" fill="#797d79"/><rect x="390" y="117" width="137" height="184" fill="#b3c998"/>'+tree(115,224,.42)+tree(450,228,.43)+'<path d="M237 169H343M237 248H343" stroke="#d8c6b8" stroke-width="15"/><path d="M50 271H189M393 274H523" stroke="#eadfc4" stroke-width="6"/>'+tx(90,145,'A',24,'#fffdf5')+tx(270,145,'B',24,'#fffdf5')+tx(446,145,'C',24,'#fffdf5')+tx(57,315,'PARQUE',13)+tx(214,315,'ESTACIONAMENTO',13)+tx(421,315,'JARDIM',13);}
+if(k==='satellite'){b=rect(28,100,255,216,'#f4e9d9')+rect(300,100,243,216,'#e5ebdd');
+for(var y=0;y<3;y++)for(var x=0;x<4;x++){var colors=['#548b76','#a8b27a','#e0ad73','#cc7653','#ae5e48','#ecc58b'];b+='<rect x="'+(45+x*54)+'" y="'+(120+y*55)+'" width="51" height="52" fill="'+colors[(x*2+y)%6]+'"/>';}
+b+='<rect x="366" y="133" width="18" height="129" rx="7" fill="#fafdf4" stroke="#8ca4a1" stroke-width="4"/><circle cx="375" cy="263" r="19" fill="'+green+'"/><path d="M375 156V254" stroke="'+green+'" stroke-width="9"/>'+tx(60,305,'SUPERFÍCIE',15)+tx(328,305,'MEDIÇÃO DO AR',15);}
+if(k==='canyon'){b=rect(24,102,530,218,'#f1e8d6')+building(44,134,145,163,'#b7a08a')+building(383,121,143,176,'#ba9e87')+'<rect x="191" y="289" width="190" height="22" fill="#727a77"/>'+sun(278,151,33)+'<path d="M193 279L256 281L193 203Z" fill="#b9a18a" opacity=".45"/>'+go('M268 238Q315 207 359 235','green')+go('M358 258Q311 279 271 264','green')+tx(207,118,'SOMBRA',14)+tx(214,313,'VENTILAÇÃO VARIÁVEL',14);}
+if(k==='equity'){b=rect(27,102,166,217,'#f0e9d9')+rect(205,102,165,217,'#e9e2d0')+rect(382,102,165,217,'#dfebdf');
+for(var p=0;p<3;p++){var base=49+p*177;b+='<circle cx="'+(base+60)+'" cy="175" r="27" fill="'+(p===2?'#629a81':'#c58869')+'"/><path d="M'+(base+18)+' 282Q'+(base+18)+' 204 '+(base+60)+' 204Q'+(base+102)+' 204 '+(base+102)+' 282Z" fill="'+(p===2?'#7ab0a0':'#9ca5a0')+'"/>';}
+b+=tx(47,140,'TRABALHO',13)+tx(221,140,'MORADIA',13)+tx(406,140,'ACESSO',13)+tx(48,307,'EXPOSIÇÃO',12)+tx(209,307,'VULNERABILIDADE',11)+tx(398,307,'ADAPTAÇÃO',12);}
+if(k==='solutions'){b=rect(28,101,247,105,'#dfe9dc')+rect(295,101,246,105,'#f8e4cb')+rect(28,219,247,106,'#e0e9e4')+rect(295,219,246,106,'#eef0db')+tree(101,172,.46)+'<path d="M341 176L410 134L489 176Z" fill="#fff8ed" stroke="#bda691" stroke-width="3"/>'+go('M80 265Q121 248 162 264','green')+'<rect x="367" y="248" width="99" height="47" rx="7" fill="#72a19a"/>'+tx(146,163,'ÁRVORES',13,green)+tx(346,195,'COBERTURA',14)+tx(75,306,'VENTILAÇÃO',14)+tx(319,313,'ACOLHIMENTO',14);}
+if(k==='workflow'){var steps=['PERGUNTA','OBSERVAÇÃO','COMPARAÇÃO','PROJETO','PILOTO','MONITORAR'];for(var j=0;j<6;j++){var xx=27+(j%3)*181,yy=102+Math.floor(j/3)*109;b+=label(xx,yy,165,91,(j+1)+'. '+steps[j],j===5?'#d8e9dc':'#fcf6e8');}b+='<path d="M477 300Q563 341 300 341T112 300" stroke="#298779" stroke-width="3" fill="none" stroke-dasharray="9 9"/>';}
+return svgFrame(questions[index].figureTitle,questions[index].caption,b);}
+function chosen(q){
+ if(q.type==='sequence'){return (answer[index]||q.items.map(function(x){return x[0];})).slice();}
+ return q.type==='multiple'?(answer[index]||[]).slice():(answer[index]||'');
+}
+function equal(a,b){
+ if(Array.isArray(a)&&Array.isArray(b)){
+  if(a.length!==b.length)return false;
+  return a.slice().sort().join('|')===b.slice().sort().join('|');
+ }
+ return a===b;
+}
+function correctCount(){return questions.filter(function(q,i){return checked[i]&&checked[i].ok;}).length;}
+function reviewedCount(){return Object.keys(checked).length;}
+function updateProgress(){
+ var done=reviewedCount();
+ $('progressStep').textContent='QUESTÃO '+String(index+1).padStart(2,'0')+' / '+total;
+ $('progressDone').textContent=done+' de '+total+' conferidas';
+ $('progressFill').style.width=(done*100/total)+'%';
+ $('progressBar').setAttribute('aria-valuenow',String(done));
+ $('progressTopic').textContent=questions[index].section;
+}
+function updateSelections(){
+ Array.prototype.forEach.call($('answerMount').querySelectorAll('.option'),function(el){el.classList.toggle('selected',!!el.querySelector('input').checked);});
+}
+function render(focus){
+ var q=questions[index],isSequence=q.type==='sequence';
+ $('summaryScreen').hidden=true;$('questionScreen').hidden=false;
+ $('plateNum').textContent='PRANCHA '+String(index+1).padStart(2,'0');
+ $('plateLabel').textContent=q.section.toUpperCase();
+ $('platePicture').innerHTML=art(q.figure);
+ $('plateCaption').textContent=q.caption;
+ $('questionSection').textContent=String(index+1).padStart(2,'0')+' / '+q.section.toUpperCase();
+ $('questionType').textContent=isSequence?'ORDENAÇÃO':q.type==='multiple'?'MÚLTIPLA SELEÇÃO':'ESCOLHA ÚNICA';
+ $('questionTitle').textContent=q.title;
+ $('questionInstruction').textContent=q.instruction;
+ $('answerHelp').textContent=isSequence?'Use ↑ e ↓ para mover cada etapa.':q.type==='multiple'?'Marque uma ou mais alternativas antes de conferir.':'Escolha uma única alternativa e confira.';
+ var mount=$('answerMount');mount.replaceChildren();
+ if(isSequence){
+  var ul=document.createElement('ol');ul.className='sequence';ul.setAttribute('aria-label','Etapas em ordem editável');
+  var current=chosen(q);
+  current.forEach(function(id,j){
+   var li=document.createElement('li');li.className='sequence-item';
+   var n=document.createElement('span');n.className='num';n.textContent=String(j+1).padStart(2,'0');
+   var lab=document.createElement('span');lab.className='label';lab.textContent=q.items.find(function(it){return it[0]===id;})[1];
+   var group=document.createElement('span');group.className='order-buttons';
+   [-1,1].forEach(function(delta){
+    var b=document.createElement('button');b.type='button';b.textContent=delta<0?'↑':'↓';b.disabled=delta<0?j===0:j===current.length-1;
+    b.dataset.position=String(j);b.dataset.delta=String(delta);
+    b.setAttribute('aria-label',(delta<0?'Subir: ':'Descer: ')+lab.textContent);
+    group.appendChild(b);
+   });
+   li.appendChild(n);li.appendChild(lab);li.appendChild(group);ul.appendChild(li);
+  });mount.appendChild(ul);
+ }else{
+  var field=document.createElement('fieldset');field.className='answers';
+  var legend=document.createElement('legend');legend.textContent=q.type==='multiple'?'Selecione todas as respostas corretas':'Escolha a resposta';field.appendChild(legend);
+  var opts=document.createElement('div');opts.className='options';
+  q.options.forEach(function(opt){
+   var lab=document.createElement('label');lab.className='option';
+   var inp=document.createElement('input');inp.type=q.type==='multiple'?'checkbox':'radio';inp.name='q'+index;inp.value=opt[0];
+   inp.checked=q.type==='multiple'?chosen(q).indexOf(opt[0])!==-1:chosen(q)===opt[0];
+   var label=document.createElement('span');label.className='option-copy';label.textContent=opt[1];
+   lab.appendChild(inp);if(opt[2]){var artwork=document.createElement('span');artwork.className='option-art';artwork.innerHTML=icon(opt[2]);lab.appendChild(artwork);}lab.appendChild(label);opts.appendChild(lab);
+  });field.appendChild(opts);mount.appendChild(field);updateSelections();
+ }
+ var state=checked[index];var fb=$('feedback');
+ fb.hidden=!state;fb.className='feedback'+(state&&state.ok?' correct':'');
+ if(state){
+  fb.replaceChildren();
+  var strong=document.createElement('strong');strong.textContent=state.ok?'Correto: você identificou a relação essencial.':'Ainda não. Examine novamente a prancha.';
+  var detail=document.createElement('p');detail.textContent=state.ok?q.explain:q.hint+' '+q.explain;
+  fb.appendChild(strong);fb.appendChild(detail);
+  var small=document.createElement('p');small.className='feedback-extra';small.textContent=state.ok?'Resposta conferida. Você pode avançar ou voltar para revisar.':'Você pode alterar a resposta e conferir novamente, ou avançar e revisar depois.';
+  fb.appendChild(small);
+ }
+ $('previousButton').disabled=index===0;
+ $('checkButton').textContent=state?'Tentar novamente':'Conferir resposta';
+ $('nextButton').disabled=!state;
+ $('nextButton').textContent=index===total-1?'Ver resultado →':'Próxima questão →';
+ updateProgress();
+ if(focus){$('questionTitle').focus();$('questionScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});}
+}
+function invalidate(){if(checked[index])delete checked[index];$('feedback').hidden=true;$('checkButton').textContent='Conferir resposta';$('nextButton').disabled=true;updateProgress();}
+$('answerMount').addEventListener('change',function(e){
+ var input=e.target;
+ if(!input.matches('input'))return;
+ var q=questions[index];
+ if(q.type==='multiple'){answer[index]=Array.prototype.map.call($('answerMount').querySelectorAll('input:checked'),function(it){return it.value;});}
+ else{answer[index]=input.value;}
+ invalidate();updateSelections();
+});
+$('answerMount').addEventListener('click',function(e){
+ var b=e.target.closest('button[data-position]');if(!b)return;
+ var q=questions[index],current=chosen(q);
+ var pos=Number(b.dataset.position),next=pos+Number(b.dataset.delta);
+ if(next<0||next>=current.length)return;
+ var temp=current[pos];current[pos]=current[next];current[next]=temp;answer[index]=current;
+ invalidate();render(false);
+ var selector='button[data-position="'+next+'"][data-delta="'+b.dataset.delta+'"]';
+ var focusButton=$('answerMount').querySelector(selector);if(focusButton&&!focusButton.disabled)focusButton.focus();
+});
+$('checkButton').addEventListener('click',function(){
+ if(checked[index]){invalidate();$('questionTitle').focus();return;}
+ var q=questions[index],value=chosen(q),missing=q.type==='sequence'?false:q.type==='multiple'?value.length===0:!value;
+ if(missing){$('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Selecione uma resposta antes de conferir.';return;}
+ var ok=q.type==='sequence'?value.join('|')===q.correct.join('|'):equal(value,q.correct);
+ if(firstTry[index]===undefined)firstTry[index]=ok;
+ checked[index]={ok:ok};
+ render(false);
+});
+$('previousButton').addEventListener('click',function(){if(index>0){index--;render(true);}});
+$('nextButton').addEventListener('click',function(){
+ if(!checked[index])return;
+ if(index===total-1){showSummary();return;}
+ index++;render(true);
+});
+function showSummary(){
+ $('questionScreen').hidden=true;$('summaryScreen').hidden=false;
+ $('progressStep').textContent='REVISÃO CONCLUÍDA';
+ $('progressTopic').textContent='Conclusão / leitura do calor urbano';
+ $('totalReviewed').textContent=String(reviewedCount())+' / '+total;
+ $('totalMastered').textContent=String(correctCount())+' / '+total;
+ $('totalFirst').textContent=String(Object.keys(firstTry).filter(function(k){return firstTry[k]===true;}).length)+' / '+total;
+ var list=$('reviewList');list.replaceChildren();
+ questions.forEach(function(q,i){
+  var li=document.createElement('li');li.className='review-item';
+  var block=document.createElement('div');
+  var strong=document.createElement('strong');strong.textContent=String(i+1).padStart(2,'0')+'. '+q.section;
+  var p=document.createElement('p');p.textContent=checked[i]?(checked[i].ok?'Correta. ':'A revisar. ')+q.explain:'Ainda não conferida. '+q.explain;
+  block.appendChild(strong);block.appendChild(p);
+  var b=document.createElement('button');b.type='button';b.textContent='Rever prancha';b.dataset.review=String(i);
+  li.appendChild(block);li.appendChild(b);list.appendChild(li);
+ });
+ $('summaryTitle').focus();$('summaryScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});
+}
+$('reviewList').addEventListener('click',function(e){var b=e.target.closest('button[data-review]');if(!b)return;index=Number(b.dataset.review);render(true);});
+$('restartButton').addEventListener('click',function(){answer=Object.create(null);checked=Object.create(null);firstTry=Object.create(null);index=0;render(true);});
+$('reviewFirstButton').addEventListener('click',function(){index=0;render(true);});
+$('motionToggle').addEventListener('click',function(){reduceMotion=!reduceMotion;document.body.classList.toggle('motion-reduce',reduceMotion);this.setAttribute('aria-pressed',String(reduceMotion));this.textContent=reduceMotion?'Restaurar movimentos':'Reduzir movimentos';});
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){reduceMotion=true;document.body.classList.add('motion-reduce');$('motionToggle').setAttribute('aria-pressed','true');$('motionToggle').textContent='Restaurar movimentos';}
+if(questions.length!==total){throw new Error('Total de questões inconsistente');}
+render(false);
+})();
+</script>
+</body>
+</html>
