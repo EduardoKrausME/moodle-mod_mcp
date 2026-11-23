@@ -10,8 +10,10 @@ this file. Implementations live in `sdk.js`, `classes/runtime/api.php`,
 Published HTML receives the `window.MoodleMCP` JavaScript SDK automatically.
 In the Moodle browser, the host bridge also copies the computed CSS custom
 properties from the iframe element into a dedicated `:root` stylesheet in
-the sandbox, including `--bs-primary`, `--bs-secondary`, and theme-specific
-properties when present. The values follow the active theme and its explicit
+the sandbox, prioritising `--bs-primary`, `--bs-accent`, `--bs-primary-rgb`
+and `--bs-accent-rgb` when present, followed by other inherited theme variables.
+For themes without these tokens, the bridge also transmits `--bs-secondary`
+and other computed custom properties. The values follow the active theme and its explicit
 light/dark mode; this transfer does not grant DOM access to the parent.
 Use `var(--bs-primary, #0d6efd)` in authored CSS. Standalone previews and
 mobile hosts without this bridge still need those fallbacks.
