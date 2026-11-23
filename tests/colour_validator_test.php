@@ -30,6 +30,8 @@ use mod_mcp\content\service;
 use moodle_exception;
 
 /**
+ * Verify forbidden fixed colours and permitted CSS theme tokens.
+ *
  * @covers \mod_mcp\content\colour_validator
  */
 final class colour_validator_test extends advanced_testcase {

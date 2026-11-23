@@ -142,6 +142,8 @@ final class activity {
                 "variables" => implode(", ", $cssvariables),
                 "primary" => $cssvariables[0],
                 "complementary" => $cssvariables[1],
+                "primaryrgb" => $cssvariables[2],
+                "complementaryrgb" => $cssvariables[3],
             ];
             $instructions[] = get_string("promptcolours", "mcp", $args);
         }

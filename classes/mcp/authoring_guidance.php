@@ -69,14 +69,14 @@ final class authoring_guidance {
      * Return the effective brand variable names for a theme.
      *
      * @param string $theme Moodle theme shortname.
-     * @return string[] Brand CSS variables.
+     * @return string[] Brand CSS variables, including RGB channel tokens.
      */
     public static function css_variables(string $theme): array {
         $theme = strtolower(preg_replace('/^theme_/', '', $theme));
         if (strpos($theme, "learnlingo") !== false) {
-            return ["--bs-primary", "--bs-accent"];
+            return ["--bs-primary", "--bs-accent", "--bs-primary-rgb", "--bs-accent-rgb"];
         }
-        return ["--bs-primary", "--bs-secondary"];
+        return ["--bs-primary", "--bs-secondary", "--bs-primary-rgb", "--bs-secondary-rgb"];
     }
 
     /**
@@ -89,11 +89,20 @@ final class authoring_guidance {
         $variables = self::css_variables($theme);
         $primary = $variables[0];
         $accent = $variables[1];
+        $primaryrgb = $variables[2];
+        $accentrgb = $variables[3];
 
-        $rules = "Theme: {$theme}. Brand colour variables: {$primary} and {$accent}. "
+        $rules = "Theme: {$theme}. Brand colour variables: {$primary}, {$accent}, "
+            . "{$primaryrgb} and {$accentrgb}. "
             . "Use var({$primary}, #0d6efd) and var({$accent}, var({$primary}, #0d6efd)) "
             . "for ALL brand colours, including hero backgrounds, every gradient stop, "
             . "buttons, links, borders, icons, cards, hover/focus states and pseudo-elements. "
+            . "For transparency, use the RGB channel tokens inside rgba(): "
+            . "rgba(var({$primaryrgb}, 13, 110, 253), 0.2) or "
+            . "rgba(var({$accentrgb}, var({$primaryrgb}, 13, 110, 253)), 0.2). "
+            . "RGB tokens are channels, not complete CSS colours. Never use "
+            . "var({$primaryrgb}) alone as a background, or var({$primary}) "
+            . "inside rgba(). "
             . "Do NOT invent a separate palette or use fixed hex/rgb/hsl/named brand colours. "
             . "Only neutral and semantic accessibility colours, and literal fallbacks inside "
             . "var(), are permitted. Derive intermediate shades with color-mix() of these "

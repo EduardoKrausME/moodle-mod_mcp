@@ -55,7 +55,8 @@ final class mcp_authoring_guidance_test extends advanced_testcase {
             foreach ([
                 "Bloom", "mcp_get_activity", "window.MoodleMCP", "mcp_save_information",
                 "JSON", "server", "approval", "Theme: learnlingo", "--bs-primary",
-                "--bs-accent", "gradient", "Do NOT invent", "SITE DEFAULT",
+                "--bs-accent", "--bs-primary-rgb", "--bs-accent-rgb", "rgba(",
+                "gradient", "Do NOT invent", "SITE DEFAULT",
             ] as $required) {
                 $this->assertStringContainsString($required, $description,
                     $tool->get_name() . ": " . $required);
@@ -67,6 +68,9 @@ final class mcp_authoring_guidance_test extends advanced_testcase {
         $description = (new create_activity())->get_description();
         $this->assertStringContainsString("Theme: eadflix.", $description);
         $this->assertStringContainsString("--bs-secondary", $description);
+        $this->assertStringContainsString("--bs-primary-rgb", $description);
+        $this->assertStringContainsString("--bs-secondary-rgb", $description);
+        $this->assertStringContainsString("rgba(var(--bs-secondary-rgb", $description);
         $this->assertStringNotContainsString("--bs-accent", $description);
     }
 
@@ -84,14 +88,16 @@ final class mcp_authoring_guidance_test extends advanced_testcase {
 
         $context = authoring_guidance::course_context((int)$course->id);
         $this->assertSame("learnlingo", $context["theme"]);
-        $this->assertSame(["--bs-primary", "--bs-accent"], $context["brandcssvariables"]);
+        $this->assertSame(["--bs-primary", "--bs-accent", "--bs-primary-rgb", "--bs-accent-rgb"],
+            $context["brandcssvariables"]);
         $this->assertStringContainsString("Bloom", $context["instructions"]);
         $this->assertStringContainsString("Theme: learnlingo.", $context["instructions"]);
 
         $CFG->allowcoursethemes = 0;
         $context = authoring_guidance::course_context((int)$course->id);
         $this->assertSame("boost", $context["theme"]);
-        $this->assertSame(["--bs-primary", "--bs-secondary"], $context["brandcssvariables"]);
+        $this->assertSame(["--bs-primary", "--bs-secondary", "--bs-primary-rgb", "--bs-secondary-rgb"],
+            $context["brandcssvariables"]);
     }
 
     /**
@@ -102,13 +108,17 @@ final class mcp_authoring_guidance_test extends advanced_testcase {
 
         $this->resetAfterTest();
         $CFG->theme = "theme_learnlingo";
-        $this->assertSame(["--bs-primary", "--bs-accent"],
+        $this->assertSame(["--bs-primary", "--bs-accent", "--bs-primary-rgb", "--bs-accent-rgb"],
             authoring_guidance::css_variables($CFG->theme));
         $this->assertStringContainsString("var(--bs-accent",
+            authoring_guidance::tool_description("Create activity."));
+        $this->assertStringContainsString("rgba(var(--bs-accent-rgb",
             authoring_guidance::tool_description("Create activity."));
 
         $CFG->theme = "boost_magnific";
         $this->assertStringContainsString("var(--bs-secondary",
+            authoring_guidance::tool_description("Create activity."));
+        $this->assertStringContainsString("rgba(var(--bs-secondary-rgb",
             authoring_guidance::tool_description("Create activity."));
     }
 }
