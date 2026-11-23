@@ -194,9 +194,9 @@ test("create, edit, keyboard and touch moves, progress, undo, delete and reset",
 });
 test("catalog preserves six prior entries and begins prompt with teacher question",async()=>{
   const catalog=JSON.parse(await read("custom/examples.json"));
-  assert.equal(catalog.examples.length,7);
+  assert.ok(catalog.examples.length>=7,"O catálogo pode receber exemplos posteriores ao quadro.");
   const expected=["flashcards-de-revisao","mapa-mental-exploravel","roteiro-de-estudo-personalizado","votacao-rapida","comparador-de-tecnicas","mapa-conceitual-interativo","quadro-de-organizacao-de-ideias"];
-  assert.deepEqual(catalog.examples.map(e=>e.id),expected);
+  assert.deepEqual(catalog.examples.slice(0,7).map(e=>e.id),expected);
   const example=catalog.examples[6];
   assert.equal(example.path,"custom/quadro-de-organizacao-de-ideias.html");
   assert.ok(example.prompt.includes("Qual tipo de conteúdo você deseja trabalhar"));

@@ -194,7 +194,7 @@ test("catalog adds one new entry without modifying the previous nine",async()=>{
   const previous=["flashcards-de-revisao","mapa-mental-exploravel","roteiro-de-estudo-personalizado","votacao-rapida","comparador-de-tecnicas","mapa-conceitual-interativo","quadro-de-organizacao-de-ideias","construtor-de-fluxogramas","matriz-de-decisao-interativa"];
   assert.equal(catalog.category,"custom");
   assert.equal(catalog.version,1);
-  assert.equal(catalog.examples.length,10);
+  assert.ok(catalog.examples.length>=10,"Exemplos posteriores não invalidam o décimo registro.");
   assert.deepEqual(catalog.examples.slice(0,9).map(e=>e.id),previous);
   const item=catalog.examples[9];
   assert.equal(item.id,"explorador-de-imagens-com-pontos-interativos");

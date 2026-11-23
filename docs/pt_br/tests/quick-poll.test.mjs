@@ -110,7 +110,8 @@ test("select, confirm, edit, cancel, reconfirm, reset and chart invariants",asyn
 test("manifest preserves other examples and teacher-first prompt",async()=>{
   const manifest=JSON.parse(await read("custom/examples.json"));
   const item=manifest.examples.find(e=>e.id==="votacao-rapida");
-  assert.equal(manifest.examples.length,5);
+  assert.ok(manifest.examples.length>=4,"Exemplos posteriores não invalidam o quarto registro.");
+  assert.equal(manifest.examples[3].id,"votacao-rapida");
   assert.ok(item&&item.path==="custom/votacao-rapida.html");
   assert.ok(item.prompt.includes("Qual tipo de conteúdo você deseja trabalhar"));
   assert.ok(item.prompt.includes("Aguarde a resposta"));

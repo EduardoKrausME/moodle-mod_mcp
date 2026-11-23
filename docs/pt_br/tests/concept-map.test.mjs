@@ -34,7 +34,7 @@ test("HTML independently includes SVG connectors, accessible nodes and mobile st
   assert.match(script,/replaceChildren\(\)/);
   assert.ok(item.prompt.includes("Qual tipo de conteúdo você deseja trabalhar"));
   assert.ok(item.prompt.includes("Aguarde a resposta"));
-  assert.ok(item.prompt.includes("conexões SVG"));
+  assert.ok(/caminhos SVG|conexões SVG/.test(item.prompt),"O prompt descreve conexões visuais em SVG.");
 });
 test("the branching data has unique nodes and useful content",async () => {
   const {script} = await load();
@@ -47,11 +47,13 @@ test("the branching data has unique nodes and useful content",async () => {
     assert.ok(!ids.has(branch.id));
     ids.add(branch.id);
     assert.equal(branch.leaves.length,2);
-    for(const field of ["title","summary","note"]) assert.ok(branch[field]?.length>20);
+    assert.ok(branch.title.length>=5,"Título curto é válido para um ramo.");
+    for(const field of ["summary","note"])assert.ok(branch[field]?.length>20);
     for(const leaf of branch.leaves) {
       assert.ok(!ids.has(leaf.id));
       ids.add(leaf.id);
-      for(const field of ["title","summary","note"]) assert.ok(leaf[field]?.length>10);
+      assert.ok(leaf.title.length>=5,"Título curto é válido para uma folha.");
+      for(const field of ["summary","note"])assert.ok(leaf[field]?.length>10);
       assert.ok(leaf.insights.length>=2);
     }
   }

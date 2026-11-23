@@ -106,7 +106,8 @@ test("only the target manifest entry changes and prompt waits for the teacher",a
   assert.ok(e.prompt.includes("Aguarde a resposta"));
   assert.match(e.prompt,/checklist/);
   assert.match(e.prompt,/percursos alternativos/);
-  assert.equal(manifest.examples.length,5);
+  assert.ok(manifest.examples.length>=3,"Exemplos posteriores não invalidam o terceiro registro.");
+  assert.equal(manifest.examples[2].id,"roteiro-de-estudo-personalizado");
   assert.ok(manifest.examples.find(x=>x.id==="flashcards-de-revisao").features.includes("Frente e verso 3D"));
   assert.ok(manifest.examples.find(x=>x.id==="mapa-mental-exploravel").features.includes("Conexões SVG"));
 });

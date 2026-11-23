@@ -104,7 +104,8 @@ test("select two to four, prevent fewer, update matrix and criterion, reset with
 test("only comparator catalog entry is updated and prompt asks teacher first",async()=>{
   const catalog=JSON.parse(await read("custom/examples.json"));
   const item=catalog.examples.find(e=>e.id==="comparador-de-tecnicas");
-  assert.equal(catalog.examples.length,5);
+  assert.ok(catalog.examples.length>=5,"O catálogo pode receber novos exemplos.");
+  assert.equal(catalog.examples[4].id,"comparador-de-tecnicas");
   assert.ok(item);
   assert.ok(item.prompt.includes("Qual tipo de conteúdo você deseja trabalhar"));
   assert.ok(item.prompt.includes("Aguarde a resposta"));
