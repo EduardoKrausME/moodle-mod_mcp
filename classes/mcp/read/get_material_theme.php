@@ -21,6 +21,7 @@
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace mod_mcp\mcp\read;
 
 use context;
@@ -30,15 +31,33 @@ use local_mcp\security\authenticated_identity;
 use mod_mcp\authoring\material_theme;
 use mod_mcp\mcp\authoring_guidance;
 
+/**
+ * Read reusable visual themes before authoring in an individual course.
+ */
 final class get_material_theme extends base_tool {
+    /**
+     * Return the MCP read-tool identifier.
+     *
+     * @return string Tool name.
+     */
     public function get_name(): string {
         return "mcp_get_material_theme";
     }
 
+    /**
+     * Return the human-readable tool title.
+     *
+     * @return string Tool title.
+     */
     public function get_title(): string {
         return "MCP activity: read material theme";
     }
 
+    /**
+     * Describe prerequisite material-theme lookup.
+     *
+     * @return string Tool description.
+     */
     public function get_description(): string {
         return "Check whether a visual material theme is registered for a Moodle course "
             . "before creating any activity. Course overrides take precedence over "
@@ -46,18 +65,43 @@ final class get_material_theme extends base_tool {
             . "first and do not generate HTML, CSS, JavaScript or questions.";
     }
 
+    /**
+     * Specify the required course management capability.
+     *
+     * @return string Required capability.
+     */
     public function get_required_capability(): string {
         return "moodle/course:manageactivities";
     }
 
+    /**
+     * Describe the course ID parameter.
+     *
+     * @return array Input schema.
+     */
     public function get_input_schema(): array {
         return $this->object_schema(["courseid" => ["type" => "integer", "minimum" => 1]], ["courseid"]);
     }
 
+    /**
+     * Resolve the requested course's context.
+     *
+     * @param array $arguments Tool arguments.
+     *
+     * @return context Course context.
+     */
     public function resolve_context(array $arguments): context {
         return context_course::instance((int)$arguments["courseid"], MUST_EXIST);
     }
 
+    /**
+     * Return the effective material theme and authoring instructions.
+     *
+     * @param array $arguments Tool arguments.
+     * @param authenticated_identity $identity Authenticated user.
+     *
+     * @return array Course theme configuration.
+     */
     public function execute(array $arguments, authenticated_identity $identity): array {
         $courseid = (int)$arguments["courseid"];
         require_capability("moodle/course:manageactivities",

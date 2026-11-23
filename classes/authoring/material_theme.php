@@ -21,6 +21,7 @@
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace mod_mcp\authoring;
 
 use moodle_exception;
@@ -30,7 +31,10 @@ use moodle_exception;
  * These are visual styles for materials, not installed Moodle interface themes.
  */
 final class material_theme {
+    /** @var string Plugin configuration key for the default visual material theme. */
     private const DEFAULT_KEY = "materialtheme_default";
+
+    /** @var string Plugin configuration key prefix for course visual styles. */
     private const COURSE_PREFIX = "materialtheme_course_";
 
     /**
@@ -50,10 +54,22 @@ final class material_theme {
         return ["name" => $value["name"], "style" => $value["style"]];
     }
 
+    /**
+     * Read the Moodle-wide default material theme.
+     *
+     * @return ?array Site style or null if unconfigured.
+     */
     public static function site_default(): ?array {
         return self::read(self::DEFAULT_KEY);
     }
 
+    /**
+     * Read a course-specific material theme.
+     *
+     * @param int $courseid Course identifier.
+     *
+     * @return ?array Course style or null if unconfigured.
+     */
     public static function course_override(int $courseid): ?array {
         if ($courseid <= 0) {
             throw new moodle_exception("invalidcourseid");
@@ -61,6 +77,13 @@ final class material_theme {
         return self::read(self::COURSE_PREFIX . $courseid);
     }
 
+    /**
+     * Prefer the course-specific style over the Moodle-wide default.
+     *
+     * @param int $courseid Course identifier.
+     *
+     * @return ?array Effective style and scope or null.
+     */
     public static function effective(int $courseid): ?array {
         $course = self::course_override($courseid);
         if ($course !== null) {
@@ -70,6 +93,13 @@ final class material_theme {
         return $site === null ? null : ["scope" => "site"] + $site;
     }
 
+    /**
+     * Block authoring when no visual style is configured.
+     *
+     * @param int $courseid Course identifier.
+     *
+     * @return array Effective material theme.
+     */
     public static function require_for_course(int $courseid): array {
         $theme = self::effective($courseid);
         if ($theme === null) {
@@ -78,6 +108,14 @@ final class material_theme {
         return $theme;
     }
 
+    /**
+     * Normalize a reusable visual style before storing it.
+     *
+     * @param string $name Material theme name.
+     * @param string $style Material style instructions.
+     *
+     * @return array Validated material theme.
+     */
     public static function definition(string $name, string $style): array {
         $name = trim(clean_param($name, PARAM_TEXT));
         $style = trim(clean_param($style, PARAM_TEXT));

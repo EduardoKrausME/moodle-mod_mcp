@@ -21,6 +21,7 @@
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace mod_mcp;
 
 use advanced_testcase;
@@ -32,6 +33,8 @@ use mod_mcp\mcp\write\configure_material_theme;
 use moodle_exception;
 
 /**
+ * Test reusable material themes and the first-use configuration requirement.
+ *
  * @covers \mod_mcp\authoring\material_theme
  */
 final class material_theme_test extends advanced_testcase {
