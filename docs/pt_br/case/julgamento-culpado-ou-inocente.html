@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>O Julgamento: Culpado ou Inocente? - Estudo de caso</title>
+<style>
+:root{color-scheme:light;--paper:#fbf9f4;--ground:#eeeae2;--ink:#2a3438;--muted:#58676a;--line:#d7d4ca;--accent:#385d59;--button:#244f4b;--button-on:#fff;--gold:#a87836;--warning:#975137;--focus:#114bca;--shadow:0 12px 34px #26372c15}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.54;cursor:not-allowed}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+[hidden]{display:none!important}
+main{max-width:1200px;margin:auto;padding:clamp(12px,3vw,32px)}
+.hero{display:grid;grid-template-columns:1fr .93fr;overflow:hidden;border-radius:23px;background:#263d41;color:#fef8ee;box-shadow:var(--shadow)}
+.hero-copy{padding:clamp(25px,4.4vw,49px);align-self:center}.eyebrow{font-size:.77rem;letter-spacing:.13em;font-weight:850;text-transform:uppercase;color:#edc894;margin:0 0 16px}
+h1,h2{font-family:Georgia,"Times New Roman",serif;letter-spacing:-.025em;line-height:1.12;font-weight:500}
+h1{font-size:clamp(2.45rem,5vw,4.5rem);margin:0 0 20px}h2{font-size:clamp(1.75rem,3vw,2.45rem);margin:0 0 14px}h3{font-size:1.08rem;margin:0 0 9px}
+.hero p:not(.eyebrow){color:#dee8e4;max-width:49ch}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chips span{border:1px solid #9eadaa;border-radius:20px;padding:5px 11px;font-size:.78rem;font-weight:750;color:#f4e0bb}
+.hero-art{display:grid;place-items:center;background:#354a4c;min-height:250px}.hero-art svg{display:block;width:100%;height:100%;max-height:430px}
+.disclaimer,.footer-note{font-size:.84rem;color:var(--muted);margin:16px 3px 24px}
+.steps{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0}
+.step{padding:8px 12px;background:var(--paper);border:1px solid var(--line);border-radius:30px;color:var(--muted);font-size:.82rem;font-weight:800}
+.step.active{color:var(--button-on);border-color:var(--button);background:var(--button)}.step.done{border-color:var(--accent);color:var(--accent)}
+.panel{padding:clamp(18px,3vw,33px);background:var(--paper);border:1px solid var(--line);border-radius:19px;box-shadow:var(--shadow)}
+.sub{font-size:.76rem;font-weight:850;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px}
+.lead{color:var(--muted);max-width:80ch;margin:0 0 18px}.topline{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap}
+.count{background:#e5efeb;color:#295a4e;border-radius:11px;padding:9px 13px;font-size:.86rem;font-weight:800}
+.list-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:19px 0}
+.card-button{display:grid;gap:8px;text-align:left;min-height:143px;padding:17px;border:1px solid var(--line);border-radius:13px;background:#f5f5ee;color:var(--ink)}
+.card-button:hover:not(:disabled){border-color:var(--accent)}.card-button[aria-pressed="true"]{background:#e9f2eb;border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.card-button .tag{font-size:.74rem;letter-spacing:.07em;color:var(--accent);text-transform:uppercase;font-weight:850}
+.card-button .caption{font-size:.82rem;color:var(--muted);margin-top:auto}.card-button strong{font-size:.99rem}
+.document{padding:19px;background:#e8f0e9;border-left:5px solid var(--accent);border-radius:0 13px 13px 0;min-height:140px}
+.document h3{margin:0 0 6px}.document blockquote{font-family:Georgia,serif;font-size:1.05rem;margin:13px 0;padding:12px 15px;border-left:3px solid #baa077;background:#faf9f3}
+.document p{margin:9px 0}.document small{font-size:.78rem;color:var(--muted);font-weight:750}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;align-items:center}
+.primary,.secondary{border-radius:10px;padding:10px 16px;min-height:46px;font-weight:850}
+.primary{color:var(--button-on);background:var(--button);border:1px solid var(--button)}
+.secondary{color:var(--button);background:transparent;border:1px solid var(--button)}
+.primary:not(:disabled):hover{filter:brightness(1.15)}.hint{font-size:.84rem;color:var(--muted)}
+.witness-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:19px 0}
+.witness{display:grid;gap:7px;padding:15px;min-height:130px;border-radius:13px;background:#f6f4ef;border:1px solid var(--line);text-align:left;color:var(--ink)}
+.witness:hover{border-color:var(--accent)}.witness[aria-pressed="true"]{background:#e8f2eb;border-color:var(--accent)}
+.witness .letter{font:500 1.55rem Georgia,serif;color:var(--accent)}.witness small{font-size:.76rem;color:var(--muted)}.witness strong{font-size:.98rem}
+.questions{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.question{min-height:43px;border:1px solid var(--accent);color:var(--button);padding:9px 12px;border-radius:9px;background:var(--paper);text-align:left}
+.question[aria-pressed="true"]{background:#dbece2;border-color:var(--button)}.question:hover{background:#ecf3ea}
+.answer{background:#f5eee1;border-left:4px solid #b68d54;padding:11px 15px;border-radius:0 9px 9px 0;margin:12px 0}
+.chain{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0}
+.chain-button{background:#f4f3ed;border:1px solid var(--line);border-radius:12px;text-align:left;padding:15px;min-height:135px;color:var(--ink)}
+.chain-button strong,.chain-button small{display:block}.chain-button small{margin-top:8px;color:var(--muted)}.chain-button[aria-pressed="true"]{border-color:var(--accent);background:#e5f1e9}
+.chain-button .chain-state{font-size:.74rem;color:#8e543d;font-weight:850;letter-spacing:.02em}
+fieldset{border:0;margin:20px 0 26px;padding:0}legend{font-weight:850;font-size:1.08rem;margin-bottom:11px}
+.options{display:grid;gap:10px}.option{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:13px 15px;cursor:pointer}
+.option:has(input:checked){background:#e8f1e8;border-color:var(--accent)}.option input{width:19px;height:19px;margin:3px 0 0;flex:0 0 auto;accent-color:var(--accent)}
+.option strong,.option small{display:block}.option strong{font-size:.94rem}.option small{font-size:.82rem;color:var(--muted);margin-top:4px}
+.citations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.error{color:#ae4039;font-weight:800;min-height:20px}.result{background:#e2f1e6;border:1px solid #93b6a0;border-radius:15px;padding:20px}
+.result.partial{background:#fcf0dc;border-color:#d4af75}.result.review{background:#f7e2dc;border-color:#c8978b}
+.result h3{font:500 1.67rem Georgia,serif}.result p{margin:10px 0}.report-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:17px 0}
+.report-columns section{padding:16px;border:1px solid var(--line);border-radius:12px}
+.report-columns p{font-size:.89rem;margin:8px 0}
+details{border:1px solid var(--line);border-radius:13px;margin-top:15px;padding:14px 17px}summary{cursor:pointer;font-weight:850}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-art svg{max-height:250px}.chain,.witness-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:570px){main{padding:11px}.hero,.panel{border-radius:14px}.list-grid,.chain,.witness-grid,.citations,.report-columns{grid-template-columns:1fr}.actions>button{flex:1 1 auto}.card-button,.witness,.chain-button{min-height:90px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--paper:#213138;--ground:#121e25;--ink:#f2f2eb;--muted:#c1cdd0;--line:#465b60;--accent:#91d9c0;--button:#95dfc8;--button-on:#19382f;--gold:#e9bd79;--focus:#ffe1a1;--shadow:none}.hero{background:#172f37}.count{background:#2a4b43;color:#d3f5e5}.card-button,.witness,.chain-button{background:#293b3d}.card-button[aria-pressed="true"],.witness[aria-pressed="true"],.chain-button[aria-pressed="true"],.option:has(input:checked){background:#2c4b42}.document{background:#274338}.document blockquote{background:#355047}.question{background:#21343a;color:var(--accent)}.question:hover,.question[aria-pressed="true"]{background:#355648}.answer{background:#443b30}.result{background:#244635}.result.partial{background:#453b2b}.result.review{background:#473131}.chain-button .chain-state{color:#f0ba9e}.error{color:#ffb1aa}}
+</style>
+</head>
+<body>
+<main>
+<section class="hero" aria-labelledby="title">
+ <div class="hero-copy"><p class="eyebrow">Processo fictício 017 · Teatro Aurora</p><h1 id="title">O Julgamento:<br>Culpado ou Inocente?</h1>
+ <p>O sistema de iluminação falhou durante um espetáculo. Uma técnica foi acusada de sabotagem, mas os registros não contam todos a mesma história. Você deverá avaliar confiabilidade, contradições e dúvida razoável antes de decidir.</p>
+ <div class="chips"><span>6 documentos</span><span>4 testemunhas</span><span>4 elos de custódia</span><span>5 etapas</span></div>
+ </div>
+ <div class="hero-art"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 425" role="img" aria-labelledby="court-svg-title court-svg-desc">
+<title id="court-svg-title">Audiência fictícia no Teatro Aurora</title>
+<desc id="court-svg-desc">Desenho vetorial original de uma sala de audiência com uma magistrada sentada ao centro, uma pessoa acusada à esquerda e uma testemunha à direita, diante de mesas e de um painel ilustrativo. As figuras não representam pessoas reais nem revelam nada sobre culpa.</desc>
+<defs><linearGradient id="courtwall" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4d4543"/><stop offset="1" stop-color="#1f3336"/></linearGradient><linearGradient id="courtwood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b78b58"/><stop offset="1" stop-color="#76583f"/></linearGradient></defs>
+<rect width="700" height="425" fill="url(#courtwall)"/><path d="M0 45h700M60 0v282M640 0v282" stroke="#bd9e70" stroke-opacity=".35" stroke-width="8"/>
+<circle cx="350" cy="100" r="80" fill="#ad9773" opacity=".18"/><path d="M350 38v117M298 82h104M317 150h66" stroke="#d9b67c" stroke-width="7" stroke-linecap="round"/><path d="M299 89 315 127h-34ZM401 89l18 38h-35Z" fill="none" stroke="#d9b67c" stroke-width="5"/>
+<path d="M0 322h700v103H0Z" fill="#182a2e"/><path d="M196 278h310l40 125H155Z" fill="url(#courtwood)" stroke="#e7c294" stroke-width="5"/>
+<rect x="233" y="218" width="235" height="85" rx="8" fill="#75543e" stroke="#bc956b" stroke-width="5"/>
+<circle cx="348" cy="171" r="39" fill="#d2ad8b"/><path d="M309 160q9-52 67-41l11 27-17-9-12-12-35 26Z" fill="#394046"/>
+<path d="M302 196q46-25 89 0l27 75H278Z" fill="#222e36"/><path d="M328 197h44l-22 60Z" fill="#e7eee6"/><path d="M333 199l17 11 17-11-17 50Z" fill="#b7bac0"/>
+<g transform="translate(40 158)"><rect x="0" y="138" width="165" height="82" rx="7" fill="#966d4f" stroke="#c49b71" stroke-width="5"/><circle cx="83" cy="79" r="35" fill="#e0b08c"/><path d="M48 76q5-52 66-41l11 38-14-23-49 11Z" fill="#2d3335"/><path d="M40 111q40-18 82 0l21 43H20Z" fill="#526f70"/><rect x="25" y="161" width="115" height="11" rx="4" fill="#c7ac7d"/></g>
+<g transform="translate(502 155)"><rect x="0" y="140" width="164" height="83" rx="6" fill="#986e4c" stroke="#c49b71" stroke-width="5"/><circle cx="81" cy="81" r="34" fill="#ad846c"/><path d="M44 80q-7-50 40-48 42 4 40 45l-12-30q-30 21-60 12Z" fill="#3c3839"/><path d="M39 109q40-17 87 0l24 45H14Z" fill="#84654e"/><rect x="25" y="163" width="116" height="10" rx="4" fill="#ceb087"/></g>
+<g fill="#f1dbb9" font-family="system-ui" font-size="13" font-weight="800" text-anchor="middle"><text x="350" y="283">PRESIDÊNCIA</text><text x="122" y="396">PESSOA ACUSADA</text><text x="583" y="398">TESTEMUNHA</text></g>
+</svg></div>
+</section>
+<p class="disclaimer">Audiência e personagens inteiramente fictícios. Esta é uma atividade de raciocínio sobre prova e presunção de inocência, não um modelo de julgamento real, instrução jurídica ou descrição do procedimento de determinada jurisdição. Concluir que a acusação não foi provada não demonstra que todos os fatos estejam esclarecidos. Respostas não geram nota oficial Moodle.</p>
+<div class="steps" aria-label="Etapas da atividade"><span id="step1" class="step active">01 · Dossiê</span><span id="step2" class="step">02 · Testemunhas</span><span id="step3" class="step">03 · Custódia</span><span id="step4" class="step">04 · Decisão</span><span id="step5" class="step">05 · Parecer</span></div>
+<section id="evidence-panel" class="panel" aria-labelledby="evidence-title">
+ <div class="topline"><div><p class="sub">Etapa 1 · Documentos</p><h2 id="evidence-title" tabindex="-1">O que realmente aconteceu?</h2></div><strong class="count" id="evidence-count" aria-live="polite">0 de 6 documentos lidos</strong></div>
+ <p class="lead">A queda de iluminação ocorreu às 20h14. Consulte pelo menos quatro registros e observe que uma evidência pode apoiar várias hipóteses sem demonstrar autoria ou intenção.</p>
+ <div id="exhibit-list" class="list-grid"></div>
+ <div id="exhibit-detail" class="document" role="region" aria-live="polite" aria-label="Documento selecionado" aria-atomic="true"><h3>Escolha um documento</h3><p>O registro, suas contribuições e limites serão apresentados aqui.</p></div>
+ <div class="actions"><button type="button" class="primary" id="to-witness" disabled>Ouvir testemunhas</button><span class="hint" id="evidence-hint">Leia pelo menos 4 documentos.</span></div>
+</section>
+<section id="witness-panel" class="panel" hidden aria-labelledby="witness-title">
+ <div class="topline"><div><p class="sub">Etapa 2 · Depoimentos e perguntas</p><h2 id="witness-title" tabindex="-1">O que cada pessoa realmente viu?</h2></div><strong id="witness-count" class="count" aria-live="polite">0 depoimentos · 0 perguntas</strong></div>
+ <p class="lead">Ouça pelo menos três testemunhas e faça no mínimo duas perguntas de esclarecimento. Depoimentos são relatos sujeitos a percepção, memória, contexto e confronto com outros registros.</p>
+ <div id="witness-list" class="witness-grid"></div>
+ <div id="witness-detail" class="document" role="region" aria-label="Depoimento selecionado" aria-live="polite" aria-atomic="true"><h3>Selecione uma testemunha</h3><p>Você poderá fazer perguntas e conhecer as limitações do relato.</p></div>
+ <div id="question-buttons" class="questions" aria-label="Perguntas de esclarecimento"></div>
+ <div class="actions"><button type="button" class="secondary" id="witness-back">Rever documentos</button><button type="button" class="primary" id="to-chain" disabled>Inspecionar cadeia de custódia</button></div>
+</section>
+<section id="chain-panel" class="panel" hidden aria-labelledby="chain-title">
+ <p class="sub">Etapa 3 · Integridade e peso das provas</p><h2 id="chain-title" tabindex="-1">O vídeo percorreu qual caminho?</h2>
+ <p class="lead">Investigue pelo menos três dos quatro elos da circulação do vídeo. Um controle implementado depois do recebimento não reconstitui automaticamente a autenticidade do arquivo original.</p>
+ <div id="chain-list" class="chain" aria-label="Etapas da custódia digital"></div>
+ <div id="chain-detail" class="document" role="region" aria-live="polite" aria-label="Cadeia de custódia" aria-atomic="true"><h3>Selecione um elo</h3><p>Cada elo descreve uma informação documentada ou uma lacuna.</p></div>
+ <p class="hint" id="chain-count" aria-live="polite">0 de 4 elos consultados</p>
+ <fieldset><legend>Classifique a confiabilidade de cada evidência para a afirmação indicada</legend>
+  <p class="hint">“Bem documentada” significa apenas forte para a afirmação específica. Não transforma a evidência em prova de culpa, inocência ou causa do incidente.</p>
+  <div id="reliability" class="options"></div>
+ </fieldset>
+ <div class="actions"><button type="button" class="secondary" id="chain-back">Rever testemunhas</button><button type="button" class="primary" id="to-decision" disabled>Preparar decisão</button></div>
+</section>
+<section id="decision-panel" class="panel" hidden aria-labelledby="decision-title">
+ <p class="sub">Etapa 4 · Hipóteses, argumentação e decisão</p><h2 id="decision-title" tabindex="-1">Qual conclusão é defensável?</h2>
+ <p class="lead">Não confunda hipótese técnica, autoria, intenção e decisão sobre a acusação. A avaliação desta atividade segue o princípio didático de não reconhecer culpa quando as provas não afastam uma dúvida razoável.</p>
+ <form id="decision-form" novalidate>
+  <fieldset><legend>1. Qual hipótese explica melhor o conjunto de dados sem ir além dele?</legend><div class="options" id="hypotheses"></div></fieldset>
+  <fieldset><legend>2. Cite exatamente dois documentos lidos que sustentem uma análise crítica</legend><div class="citations" id="citation-options"></div></fieldset>
+  <fieldset><legend>3. Qual decisão você emitiria diante deste dossiê?</legend><div class="options" id="verdicts"></div></fieldset>
+  <fieldset><legend>4. Qual fundamentação respeita melhor o ônus da prova?</legend><div class="options" id="reasons"></div></fieldset>
+  <fieldset><legend>5. Que próxima providência reduziria as incertezas?</legend><div class="options" id="next-steps"></div></fieldset>
+  <p id="form-error" class="error" role="alert"></p>
+  <div class="actions"><button type="button" class="secondary" id="decision-back">Rever custódia</button><button type="submit" class="primary">Emitir parecer fundamentado</button></div>
+ </form>
+</section>
+<section id="report-panel" class="panel" hidden aria-labelledby="report-title">
+ <p class="sub">Etapa 5 · Análise formativa</p><h2 id="report-title" tabindex="-1">Sua decisão e as dúvidas restantes</h2>
+ <div id="report-content" class="result" aria-live="polite"></div>
+ <div id="report-details" class="report-columns"></div>
+ <details><summary>Consultar uma interpretação de referência</summary>
+ <p>A falha do circuito foi registrada, mas o uso da credencial TX-17 não identifica necessariamente sua portadora (E-02), o vídeo reenviado não permite autenticar a origem nem o horário (E-05), e há uma hipótese técnica anterior documentada (E-04 e E-06). Isso não prova que uma intervenção deliberada seja impossível, mas impede que o dossiê, por si só, estabeleça autoria e intenção com segurança. No julgamento fictício, a acusação de sabotagem intencional não está demonstrada além de dúvida razoável; portanto, a decisão prudente é não reconhecer culpa por insuficiência de provas, mantendo investigação técnica e preservação de evidências, sem afirmação de inocência factual absoluta ou culpa de terceiros.</p></details>
+ <div class="actions"><button type="button" class="secondary" id="review-decision">Revisar argumentos</button><button type="button" class="secondary" id="review-exhibits">Rever dossiê</button><button type="button" class="primary" id="restart">Recomeçar audiência</button></div>
+</section>
+<p class="footer-note">Conteúdo e personagens fictícios, com ilustração SVG original criada para esta atividade. As provas simuladas não correspondem a processos reais. Análise formativa local, sem registro de notas, dados pessoais, armazenamento permanente ou dependências externas.</p>
+</main>
+<script id="case-data" type="application/json">{"title":"O Julgamento: Culpado ou Inocente?","caseId":"Processo 017 · Teatro Aurora","exhibits":[{"id":"e1","name":"Relatório do apagão","type":"Registro operacional","stamp":"20h14 · Noite do espetáculo","excerpt":"O circuito de luzes do palco apresentou sobrecarga. A proteção desligou os refletores e a equipe evacuou a área técnica sem vítimas.","supports":"Confirma a falha e suas consequências operacionais.","limits":"Não identifica quem provocou a falha nem se houve intenção de causar dano."},{"id":"e2","name":"Uso da credencial TX-17","type":"Registro eletrônico","stamp":"19h42 · Porta de serviço","excerpt":"A credencial TX-17, cadastrada para a técnica Luísa, foi utilizada na porta do depósito elétrico.","supports":"O sistema registrou a apresentação de uma credencial vinculada à técnica.","limits":"O equipamento não identificou biometricamente quem utilizou o crachá; a equipe mantinha uma credencial reserva para situações de urgência."},{"id":"e3","name":"Fotografia do painel","type":"Imagem de inspeção","stamp":"20h32 · Após o apagão","excerpt":"A fotografia mostra um conector escurecido e cabos com desgaste aparente. Não há imagem do painel antes do incidente.","supports":"Documenta uma condição observável do equipamento após a falha.","limits":"A imagem não distingue, sozinha, desgaste anterior de dano produzido no momento do incidente."},{"id":"e4","name":"Chamado de manutenção","type":"Registro técnico assinado","stamp":"Dez dias antes da apresentação","excerpt":"O chamado 41-AC informa piscadas intermitentes na mesma linha de refletores e recomenda substituir um relé. Assinatura e horário constam do sistema interno.","supports":"Mostra que a possibilidade de uma falha técnica já era conhecida antes do apagão.","limits":"Não demonstra que o relé causou este evento, nem prova que qualquer pessoa específica seja inocente."},{"id":"e5","name":"Vídeo encaminhado","type":"Cópia digital sem origem preservada","stamp":"Horário não verificável","excerpt":"Um trecho de seis segundos mostra uma pessoa de uniforme perto da entrada técnica. O arquivo foi reenviado em aplicativo de mensagens e chegou sem metadados originais.","supports":"Pode indicar presença de uma pessoa em uma área próxima.","limits":"O rosto não é identificável e não se confirmou origem, integridade, sequência completa ou horário do registro."},{"id":"e6","name":"Pedido de peça de reposição","type":"Documento administrativo","stamp":"Três dias antes da apresentação","excerpt":"O setor de compras registrou solicitação de um relé compatível com o sistema de iluminação. A entrega estava prevista para a semana seguinte.","supports":"Há um registro administrativo de reposição solicitada antes do incidente.","limits":"Não comprova instalação, diagnóstico final nem quem teve acesso ao painel durante a apresentação."}],"witnesses":[{"id":"joana","name":"Joana","role":"Diretora de palco","opening":"Vi alguém de casaco vermelho perto da porta técnica antes de apagarem as luzes. Pensei que fosse a Luísa.","questions":[{"id":"angle","label":"De qual posição observou?","answer":"Eu estava atrás da cortina lateral. A porta ficava parcialmente encoberta por uma estrutura; não vi o rosto.","lesson":"Condições de observação limitam a identificação."},{"id":"time","label":"Como registrou o horário?","answer":"Não olhei o relógio naquele instante. Estimei pela sequência da apresentação.","lesson":"Memória temporal aproximada não equivale a carimbo de registro."}]},{"id":"raul","name":"Raul","role":"Responsável pela manutenção","opening":"O circuito vinha piscando havia dias. A troca do relé foi solicitada, mas a peça não tinha chegado.","questions":[{"id":"test","label":"Você testou o circuito antes do show?","answer":"Fiz uma inspeção visual e encontrei a luz estável naquele momento; não executei ensaio completo de carga.","lesson":"Inspeção limitada não elimina falhas intermitentes."},{"id":"record","label":"Existe registro anterior à falha?","answer":"Sim, o chamado 41-AC foi criado dez dias antes e assinado no sistema interno.","lesson":"Documentação anterior é relevante para hipóteses alternativas, sem provar a causa final."}]},{"id":"bia","name":"Bia","role":"Técnica de som","opening":"Eu vi Luísa trabalhando no corredor mais cedo, mas não a vi tocar no quadro elétrico.","questions":[{"id":"badge","label":"Como eram controladas as credenciais?","answer":"A equipe tinha crachás individuais e uma credencial reserva em envelope lacrado; o controle de retirada estava incompleto naquele dia.","lesson":"Uma credencial vinculada não autentica automaticamente a pessoa que a utilizou."},{"id":"direct","label":"Você viu alguém manipular o painel?","answer":"Não. Eu estava na cabine de som quando as luzes falharam.","lesson":"Ausência de observação direta não prova nem exclui uma intervenção."}]},{"id":"tiago","name":"Tiago","role":"Operador de mídia","opening":"Recebi pelo celular um vídeo curto da porta de serviço. Não sei quem fez a gravação original.","questions":[{"id":"source","label":"Você conseguiu obter o arquivo original?","answer":"Não. A pessoa me enviou apenas o vídeo já repassado em conversa de grupo.","lesson":"A origem não verificada enfraquece a análise de integridade e cronologia."},{"id":"hash","label":"Havia registro de integridade na chegada?","answer":"Não houve cálculo de hash na origem. Só documentamos e preservamos a cópia quando foi entregue para a apuração.","lesson":"Preservar uma cópia hoje não recupera lacunas anteriores da cadeia de custódia."}]}],"chain":[{"id":"capture","label":"1. Captação","state":"não comprovada","summary":"A pessoa e o dispositivo que produziram a gravação não foram identificados.","meaning":"Sem original e identificação da origem, não se pode confirmar horário, contexto e autenticidade da captação."},{"id":"transfer","label":"2. Compartilhamento","state":"lacuna documentada","summary":"O vídeo passou por mensagens e reenquadramento antes de chegar ao operador.","meaning":"Compressão e cortes podem suprimir partes do contexto, e não há registro verificável das transferências."},{"id":"receipt","label":"3. Recebimento","state":"registro parcial","summary":"O operador registrou data e origem declarada da cópia recebida.","meaning":"O registro permite descrever a chegada da cópia, mas não autenticar a fonte original."},{"id":"sealed","label":"4. Preservação da cópia","state":"documentada","summary":"A cópia entregue foi armazenada com identificação e resumo criptográfico calculado depois do recebimento.","meaning":"O controle protege comparações futuras dessa cópia; não valida retroativamente a integridade do vídeo original."}],"reliability":[{"id":"e2","label":"Credencial TX-17 (E-02)","prompt":"Que força tem o registro para identificar quem entrou?","best":"limited","rationale":"Comprova uso de um cartão, não a identidade de quem o apresentou."},{"id":"e4","label":"Chamado de manutenção (E-04)","prompt":"Que força tem o documento para mostrar falhas anteriores?","best":"supported","rationale":"Há registro contemporâneo, com assinatura e data, sustentando o histórico de falha; isso não confirma a causa do apagão."},{"id":"e5","label":"Vídeo encaminhado (E-05)","prompt":"Que força tem a cópia para identificar a pessoa e o momento?","best":"inconclusive","rationale":"Sem origem, metadados ou identificação, o vídeo não sustenta identificação segura nem hora."}],"hypotheses":[{"id":"sabotage","title":"Sabotagem intencional praticada por Luísa","detail":"Atribuição direta a uma pessoa com base nos registros disponíveis."},{"id":"fault","title":"Falha técnica anterior pode explicar o apagão","detail":"Hipótese alternativa plausível, sem afirmar que a causa está definitivamente comprovada."},{"id":"unknown","title":"A causa exata permanece indeterminada","detail":"Reconhece a falha, as limitações de identificação e a necessidade de investigação complementar."}],"verdicts":[{"id":"guilty","title":"Condenar por sabotagem intencional","detail":"Atribuir autoria e intenção com base no que foi coletado."},{"id":"notproven","title":"Não reconhecer a culpa por insuficiência de prova","detail":"A acusação não supera as dúvidas razoáveis do dossiê fictício; isso não declara a causa técnica definitivamente estabelecida."},{"id":"innocentfact","title":"Declarar comprovado que Luísa não esteve no local","detail":"Concluir ausência de presença ou participação como um fato já demonstrado."}],"reasons":[{"id":"presumption","title":"A acusação precisa superar a dúvida razoável com evidência confiável; registros compatíveis com várias explicações não bastam.","detail":"Distingue ônus da prova, hipótese de causa e demonstração de autoria e intenção."},{"id":"badgeproof","title":"O cadastro do crachá é suficiente para demonstrar quem entrou e com qual intenção.","detail":"Transforma uso de credencial em identificação e prova de intenção."},{"id":"faultproof","title":"O defeito anterior prova que toda hipótese de intervenção humana é impossível.","detail":"Trata uma causa alternativa como se tivesse excluído todos os outros cenários."}],"steps":[{"id":"preserve","title":"Preservar arquivos originais, auditar controles de acesso e obter perícia técnica independente, sem imputar autoria antes da verificação.","detail":"Procedimento neutro para reduzir incertezas."},{"id":"publish","title":"Divulgar a identidade da acusada como responsável antes de novas verificações.","detail":"Antecipação de atribuição ainda não sustentada."},{"id":"discard","title":"Eliminar os documentos incompletos e encerrar a apuração sem explicar as lacunas.","detail":"Perde possibilidade de revisão técnica."}]}</script>
+<script>
+"use strict";
+const caseData=JSON.parse(document.getElementById("case-data").textContent);
+(function(){
+ const $=id=>document.getElementById(id),text=(tag,value,cls)=>{const el=document.createElement(tag);el.textContent=value;if(cls)el.className=cls;return el};
+ const seenExhibits=new Set(),seenWitnesses=new Set(),asked=new Set(),seenChain=new Set();
+ let activeExhibit=null,activeWitness=null,activeChain=null,step=1,refs=[];
+ function validate(){
+  for(const group of [caseData.exhibits,caseData.witnesses,caseData.chain,caseData.reliability,caseData.hypotheses,caseData.verdicts,caseData.reasons,caseData.steps]){
+   if(new Set(group.map(x=>x.id)).size!==group.length)throw Error("IDs duplicados no caso");
+  }
+  if(caseData.exhibits.length!==6||caseData.witnesses.length!==4||caseData.chain.length!==4)throw Error("Dossiê incompleto");
+ }
+ function focus(id){const node=$(id);node.focus({preventScroll:true});node.scrollIntoView({block:"start",behavior:"auto"});}
+ function navigate(next){
+  if(next===2&&seenExhibits.size<4)return;
+  if(next===3&&(seenWitnesses.size<3||asked.size<2))return;
+  if(next===4&&(seenChain.size<3||!validReliability()))return;
+  step=next;
+  for(const [i,id] of ["evidence-panel","witness-panel","chain-panel","decision-panel","report-panel"].entries()){
+   $(id).hidden=i+1!==next;
+   $("step"+(i+1)).className="step"+(i+1===next?" active":i+1<next?" done":"");
+  }
+  if(next===1){renderExhibits();focus("evidence-title");}
+  if(next===2){renderWitnesses();focus("witness-title");}
+  if(next===3){renderChain();focus("chain-title");}
+  if(next===4){renderCitations();focus("decision-title");}
+  if(next===5)focus("report-title");
+ }
+ function renderExhibits(){
+  const root=$("exhibit-list");root.replaceChildren();
+  for(const exhibit of caseData.exhibits){
+   const btn=text("button","","card-button");btn.type="button";btn.setAttribute("aria-pressed",String(activeExhibit===exhibit.id));
+   btn.append(text("span",exhibit.id.toUpperCase()+" · "+exhibit.type,"tag"),text("strong",exhibit.name),text("span",seenExhibits.has(exhibit.id)?"Documento examinado":"Ainda não examinado","caption"));
+   btn.addEventListener("click",()=>openExhibit(exhibit.id));root.append(btn);
+  }
+  $("evidence-count").textContent=seenExhibits.size+" de 6 documentos lidos";
+  $("to-witness").disabled=seenExhibits.size<4;
+  $("evidence-hint").textContent=seenExhibits.size>=4?"Você pode continuar consultando ou ouvir os depoimentos.":"Consulte mais "+(4-seenExhibits.size)+" documento(s).";
+ }
+ function openExhibit(id){
+  const item=caseData.exhibits.find(x=>x.id===id);if(!item)return;
+  activeExhibit=id;seenExhibits.add(id);renderExhibits();
+  $("exhibit-detail").replaceChildren(text("h3",item.id.toUpperCase()+" · "+item.name),text("small",item.type+" · "+item.stamp),text("blockquote",item.excerpt),text("p","O que sustenta: "+item.supports),text("p","Limite: "+item.limits));
+ }
+ function renderWitnesses(){
+  const root=$("witness-list");root.replaceChildren();
+  for(const witness of caseData.witnesses){
+   const btn=text("button","","witness");btn.type="button";btn.setAttribute("aria-pressed",String(activeWitness===witness.id));
+   btn.append(text("span",witness.name.slice(0,1),"letter"),text("strong",witness.name),text("small",witness.role+(seenWitnesses.has(witness.id)?" · Ouvido":" · Não ouvido")));
+   btn.addEventListener("click",()=>openWitness(witness.id));root.append(btn);
+  }
+  $("witness-count").textContent=seenWitnesses.size+" depoimentos · "+asked.size+" perguntas";
+  $("to-chain").disabled=seenWitnesses.size<3||asked.size<2;
+ }
+ function openWitness(id){
+  const witness=caseData.witnesses.find(x=>x.id===id);if(!witness)return;
+  activeWitness=id;seenWitnesses.add(id);renderWitnesses();
+  $("witness-detail").replaceChildren(text("h3",witness.name+" · "+witness.role),text("blockquote",witness.opening),text("p","O relato inicial descreve uma percepção; perguntas de esclarecimento ajudam a avaliar seus limites."));
+  renderQuestions();
+ }
+ function renderQuestions(){
+  const root=$("question-buttons");root.replaceChildren();
+  const w=caseData.witnesses.find(x=>x.id===activeWitness);if(!w)return;
+  for(const question of w.questions){
+   const key=w.id+":"+question.id,btn=text("button",question.label,"question");btn.type="button";btn.setAttribute("aria-pressed",String(asked.has(key)));
+   btn.addEventListener("click",()=>questionWitness(w.id,question.id));root.append(btn);
+  }
+  for(const question of w.questions){
+   if(!asked.has(w.id+":"+question.id))continue;
+   const block=text("section","","answer");
+   block.append(text("strong","Pergunta: "+question.label),text("p","Resposta: "+question.answer),text("p","Avaliação: "+question.lesson));
+   root.append(block);
+  }
+ }
+ function questionWitness(id,questionId){
+  if(step!==2||id!==activeWitness)return;
+  const w=caseData.witnesses.find(x=>x.id===id),q=w?.questions.find(x=>x.id===questionId);if(!q)return;
+  asked.add(id+":"+questionId);renderWitnesses();renderQuestions();
+ }
+ function renderChain(){
+  const root=$("chain-list");root.replaceChildren();
+  for(const link of caseData.chain){
+   const btn=text("button","","chain-button");btn.type="button";btn.setAttribute("aria-pressed",String(activeChain===link.id));
+   btn.append(text("strong",link.label),text("small",link.state,"chain-state"),text("small",seenChain.has(link.id)?"Elo examinado":"Selecione para examinar"));
+   btn.addEventListener("click",()=>openChain(link.id));root.append(btn);
+  }
+  $("chain-count").textContent=seenChain.size+" de 4 elos consultados";
+  $("to-decision").disabled=seenChain.size<3||!validReliability();
+ }
+ function openChain(id){
+  const link=caseData.chain.find(x=>x.id===id);if(!link)return;
+  activeChain=id;seenChain.add(id);renderChain();
+  $("chain-detail").replaceChildren(text("h3",link.label),text("small",link.state),text("blockquote",link.summary),text("p","Consequência para a interpretação: "+link.meaning));
+ }
+ function renderReliability(){
+  const root=$("reliability");root.replaceChildren();
+  for(const item of caseData.reliability){
+   const field=document.createElement("fieldset");
+   field.append(text("legend",item.label+" · "+item.prompt));
+   const options=text("div","","options");
+   for(const [id,label] of [["supported","Bem documentada para essa afirmação"],["limited","Limitada: requer cautela na inferência"],["inconclusive","Inconclusiva para essa afirmação"]]){
+    const row=text("label","","option"),input=document.createElement("input");
+    input.type="radio";input.name="reliability-"+item.id;input.value=id;
+    row.append(input,text("span",label));options.append(row);
+   }
+   field.append(options);root.append(field);
+  }
+ }
+ function selectedRadio(name){return document.querySelector('input[name="'+name+'"]:checked')?.value||null;}
+ function validReliability(){return caseData.reliability.every(item=>Boolean(selectedRadio("reliability-"+item.id)));}
+ function renderOptions(rootId,options,name){
+  const root=$(rootId);root.replaceChildren();
+  for(const item of options){
+   const label=text("label","","option"),input=document.createElement("input"),body=text("span");
+   input.type="radio";input.name=name;input.value=item.id;
+   body.append(text("strong",item.title),text("small",item.detail));
+   label.append(input,body);root.append(label);
+  }
+ }
+ function renderCitations(){
+  refs=Array.from(document.querySelectorAll('input[name="cite"]:checked')).map(i=>i.value);
+  const root=$("citation-options");root.replaceChildren();
+  for(const item of caseData.exhibits.filter(x=>seenExhibits.has(x.id))){
+   const label=text("label","","option"),input=document.createElement("input"),body=text("span");
+   input.type="checkbox";input.name="cite";input.value=item.id;input.checked=refs.includes(item.id);
+   body.append(text("strong",item.id.toUpperCase()+" · "+item.name),text("small",item.type));label.append(input,body);root.append(label);
+  }
+ }
+ function assessment(choices){
+  let rating=0;
+  for(const item of caseData.reliability)if(choices.reliability[item.id]===item.best)rating++;
+  const useful=choices.citations.includes("e4")&&(choices.citations.includes("e2")||choices.citations.includes("e5"));
+  const score=rating+(choices.hypothesis==="unknown"||choices.hypothesis==="fault"?1:0)+(choices.verdict==="notproven"?1:0)+(choices.reason==="presumption"?1:0)+(choices.next==="preserve"?1:0)+(useful?1:0);
+  const tier=score>=7?"well":score>=4?"partial":"review";
+  return {rating,useful,score,tier};
+ }
+ function renderReport(choices){
+  const evaluation=assessment(choices),root=$("report-content");
+  root.className="result"+(evaluation.tier==="well"?"":evaluation.tier==="partial"?" partial":" review");
+  root.replaceChildren(
+   text("p",evaluation.tier==="well"?"Argumentação bem fundamentada":evaluation.tier==="partial"?"Conclusão com pontos para revisão":"Fundamentação ainda insuficiente","sub"),
+   text("h3",evaluation.tier==="well"?"Você analisou provas e incertezas de modo consistente.":evaluation.tier==="partial"?"Parte do raciocínio é adequada, mas há inferências a revisar.":"É preciso distinguir suspeita, documento e comprovação."),
+   text("p",choices.verdict==="notproven"?"Você não reconheceu culpa sem prova suficiente da autoria e da intenção. Isso não significa que tenha sido demonstrada ausência de participação.":"O material reunido não permite demonstrar com segurança quem causou a falha ou se houve sabotagem intencional; a conclusão escolhida extrapola essas provas."),
+   text("p",choices.reason==="presumption"?"Você considerou o ônus da prova e a possibilidade de explicações concorrentes.":"O princípio da presunção de inocência não permite converter um crachá ou uma causa alternativa em demonstração completa."),
+   text("p",evaluation.useful?"Os documentos citados incluem um histórico técnico (E-04) e um registro com limitações de identificação ou integridade (E-02/E-05).":"E-04, E-02 e E-05 ajudam a mostrar simultaneamente a hipótese técnica anterior e os limites das evidências de presença ou autoria."),
+   text("p","Avaliações de confiabilidade coerentes com os limites do dossiê: "+evaluation.rating+" de 3. O resultado é apenas formativo, não uma nota judicial ou acadêmica.")
+  );
+  const cols=$("report-details");cols.replaceChildren();
+  function card(title,body){const section=document.createElement("section");section.append(text("h3",title),text("p",body));cols.append(section);}
+  card("Documentos que você citou",choices.citations.map(id=>{const item=caseData.exhibits.find(x=>x.id===id);return item.id.toUpperCase()+": "+item.supports+" Limite: "+item.limits;}).join(" "));
+  card("Pontos não resolvidos","A identidade da pessoa na gravação, a origem do vídeo, a utilização da credencial e a causa material definitiva da falha permanecem sem demonstração suficiente.");
+  card("Seu caminho de investigação",seenExhibits.size+" documentos lidos, "+seenWitnesses.size+" depoimentos, "+asked.size+" perguntas e "+seenChain.size+" elos de custódia examinados. Sua hipótese escolhida: "+caseData.hypotheses.find(x=>x.id===choices.hypothesis).title);
+  card("Próxima providência",caseData.steps.find(x=>x.id===choices.next).title+" A medida deve reduzir incertezas sem antecipar a responsabilização.");
+ }
+ function submit(event){
+  event.preventDefault();if(step!==4)return;
+  const hypothesis=selectedRadio("hypothesis"),verdict=selectedRadio("verdict"),reason=selectedRadio("reason"),next=selectedRadio("next");
+  const citations=Array.from(document.querySelectorAll('input[name="cite"]:checked')).map(input=>input.value);
+  if(!hypothesis||!verdict||!reason||!next||citations.length!==2||!citations.every(id=>seenExhibits.has(id))){
+   $("form-error").textContent="Escolha uma hipótese, exatamente dois documentos examinados, um veredito, uma fundamentação e uma providência.";return;
+  }
+  $("form-error").textContent="";refs=citations;
+  const reliability=Object.fromEntries(caseData.reliability.map(item=>[item.id,selectedRadio("reliability-"+item.id)]));
+  renderReport({hypothesis,verdict,reason,next,citations,reliability});navigate(5);
+ }
+ function reset(){
+  seenExhibits.clear();seenWitnesses.clear();asked.clear();seenChain.clear();
+  activeExhibit=null;activeWitness=null;activeChain=null;refs=[];
+  $("decision-form").reset();
+  document.querySelectorAll('input[name^="reliability-"]').forEach(input=>{input.checked=false;});
+  $("exhibit-detail").replaceChildren(text("h3","Escolha um documento"),text("p","O registro, suas contribuições e limites serão apresentados aqui."));
+  $("witness-detail").replaceChildren(text("h3","Selecione uma testemunha"),text("p","Você poderá fazer perguntas e conhecer as limitações do relato."));
+  $("chain-detail").replaceChildren(text("h3","Selecione um elo"),text("p","Cada elo descreve uma informação documentada ou uma lacuna."));
+  $("question-buttons").replaceChildren();$("form-error").textContent="";
+  renderExhibits();renderWitnesses();renderChain();navigate(1);
+ }
+ validate();
+ renderReliability();
+ renderOptions("hypotheses",caseData.hypotheses,"hypothesis");
+ renderOptions("verdicts",caseData.verdicts,"verdict");
+ renderOptions("reasons",caseData.reasons,"reason");
+ renderOptions("next-steps",caseData.steps,"next");
+ $("to-witness").addEventListener("click",()=>navigate(2));
+ $("witness-back").addEventListener("click",()=>navigate(1));
+ $("to-chain").addEventListener("click",()=>navigate(3));
+ $("chain-back").addEventListener("click",()=>navigate(2));
+ $("to-decision").addEventListener("click",()=>navigate(4));
+ $("decision-back").addEventListener("click",()=>navigate(3));
+ $("reliability").addEventListener("change",renderChain);
+ $("decision-form").addEventListener("change",()=>{$("form-error").textContent="";});
+ $("decision-form").addEventListener("submit",submit);
+ $("review-decision").addEventListener("click",()=>navigate(4));
+ $("review-exhibits").addEventListener("click",()=>navigate(1));
+ $("restart").addEventListener("click",reset);
+ renderExhibits();renderWitnesses();renderChain();
+})();
+</script>
+</body>
+</html>
