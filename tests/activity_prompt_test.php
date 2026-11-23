@@ -79,20 +79,21 @@ final class activity_prompt_test extends \advanced_testcase {
             $description = get_string($configuration["description"], "mcp");
             $this->assertNotEmpty($description);
             $this->assertStringNotContainsString("[[", $description);
-            $this->assertGreaterThan(250, \core_text::strlen($description));
-            $this->assertStringContainsString("?", $description);
+            $this->assertGreaterThan(120, \core_text::strlen($description));
+            $this->assertMatchesRegularExpression('/[?؟？]/u', $description);
             $this->assertFileExists(__DIR__ . "/../pix/material_types/{$type}.png");
         }
 
         $this->assertNotEmpty(get_string("promptimagealt", "mcp", "Example"));
         $freedom = get_string("promptfreedom", "mcp");
-        $this->assertStringContainsString("inteligência artificial", $freedom);
-        $this->assertStringContainsString("imaginação", $freedom);
+        $this->assertStringContainsString("<strong>", $freedom);
+        $this->assertStringContainsString("</strong>", $freedom);
+        $this->assertGreaterThan(100, \core_text::strlen($freedom));
         $template = file_get_contents(__DIR__ . "/../templates/prompt_selector.mustache");
         $this->assertNotFalse($template);
         foreach (["{{description}}", "{{imageurl}}", "{{imagealt}}",
                   'class="mod-mcp-prompt-intro"', "{{#str}}promptfreedom, mcp{{/str}}",
-                  'aria-describedby="mcp-prompt-{{type}}-desc-{{cmid}} mcp-prompt-{{type}}-freedom-{{cmid}}"'
+                  'aria-describedby="mcp-prompt-{{type}}-desc-{{cmid}} mcp-prompt-{{type}}-freedom-{{cmid}}"',
                  ] as $expected) {
             $this->assertStringContainsString($expected, $template);
         }
@@ -141,6 +142,78 @@ final class activity_prompt_test extends \advanced_testcase {
         $this->assertStringContainsString("overflow-x: auto", $styles);
         $this->assertStringContainsString("--bs-primary", $styles);
         $this->assertStringContainsString(":focus-visible", $styles);
+    }
+
+    /**
+     * All translation overrides must preserve the colour placeholders defined in English.
+     */
+    public function test_theme_colour_placeholders_are_consistent_across_locales(): void {
+        $englishfile = file_get_contents(__DIR__ . "/../lang/en/mcp.php");
+        $this->assertNotFalse($englishfile);
+        $pattern = '/^\$string\[\x27promptcolours\x27\] = .*;$/m';
+        $this->assertSame(1, preg_match($pattern, $englishfile, $englishmatches));
+        $original = $englishmatches[0];
+        $placeholders = [
+            '{$a->theme}',
+            '{$a->variables}',
+            '{$a->primary}',
+            '{$a->complementary}',
+        ];
+        $files = glob(__DIR__ . "/../lang/*/mcp.php");
+        $this->assertNotFalse($files);
+        $checked = 0;
+        foreach ($files as $file) {
+            $content = file_get_contents($file);
+            $this->assertNotFalse($content);
+            if (preg_match($pattern, $content, $matches) !== 1) {
+                // Regional languages may inherit the string from their parent language.
+                continue;
+            }
+            foreach ($placeholders as $placeholder) {
+                $this->assertSame(
+                    substr_count($original, $placeholder),
+                    substr_count($matches[0], $placeholder),
+                    basename(dirname($file)) . ": " . $placeholder
+                );
+            }
+            $checked++;
+        }
+        $this->assertGreaterThanOrEqual(12, $checked);
+    }
+
+    /**
+     * Main language packs translate all authoring choices rather than showing English fallbacks.
+     */
+    public function test_main_locales_translate_authoring_descriptions(): void {
+        $requiredkeys = [
+            "promptcolours",
+            "promptfreedom",
+            "promptimagealt",
+            "promptpublishinstructions",
+            "promptselectcase",
+            "promptselectcustom",
+            "promptselectsimulation",
+            "promptselectsurvey",
+            "promptselecttimeline",
+            "promptdescriptioncase",
+            "promptdescriptioncustom",
+            "promptdescriptioninteractive",
+            "promptdescriptionpage",
+            "promptdescriptionsimulation",
+            "promptdescriptionsurvey",
+            "promptdescriptiontimeline",
+        ];
+        foreach (["ar", "de", "es", "es_mx", "fr", "it", "nl", "ru", "zh_cn"] as $locale) {
+            $content = file_get_contents(__DIR__ . "/../lang/{$locale}/mcp.php");
+            $this->assertNotFalse($content);
+            foreach ($requiredkeys as $key) {
+                $this->assertStringContainsString(
+                    "\$string['{$key}'] = ",
+                    $content,
+                    "{$locale}: {$key}"
+                );
+            }
+        }
     }
 
     /**

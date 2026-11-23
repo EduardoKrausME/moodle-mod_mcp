@@ -28,6 +28,7 @@ use advanced_testcase;
 use moodle_url;
 use navigation_node;
 use settings_navigation;
+
 use function mcp_extend_settings_navigation;
 
 defined('MOODLE_INTERNAL') || die();
