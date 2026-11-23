@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Herbário de Viagens · História da Banana pelo Mundo</title>
+<style>
+:root{color-scheme:light;--forest:#173f30;--green:#226247;--lime:#e6f2cd;--cream:#f8f2e5;--paper:#fffdf5;--ink:#203d2c;--muted:#53695b;--gold:#f0bc53;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--cream);color:var(--ink)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{min-width:320px;margin:0;background:repeating-linear-gradient(135deg,#e9e3d7 0 1px,transparent 1px 21px),var(--cream)}
+button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #c27b1e;outline-offset:4px}button:disabled{cursor:not-allowed;opacity:.4}
+.page{max-width:1380px;margin:0 auto;padding:clamp(14px,2.7vw,38px)}
+.mast{background:radial-gradient(circle at 87% 45%,#3b765345 0,transparent 45%),var(--forest);color:#fffdeb;border-radius:25px;padding:clamp(24px,4vw,48px);position:relative;overflow:hidden;isolation:isolate}
+.mast:after{content:"";position:absolute;width:320px;height:440px;right:-65px;top:-125px;border:2px solid #a4d29235;border-radius:100% 5% 90% 10%;transform:rotate(-35deg);box-shadow:-20px 20px 0 8px #bddb8430;pointer-events:none;z-index:-1}
+.kicker{font:800 .72rem ui-monospace,Consolas,monospace;letter-spacing:.18em;text-transform:uppercase;color:#bee4af;margin:0 0 12px}
+.mast h1{font-family:Georgia,serif;letter-spacing:-.04em;line-height:1.1;font-size:clamp(2rem,4.9vw,4.4rem);max-width:810px;margin:0}
+.mast .lead{max-width:760px;line-height:1.65;color:#e4f2db;margin:16px 0 0}
+.header-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}
+.header-tags span{font-size:.73rem;font-weight:800;border:1px solid #bdd5ae7a;border-radius:100px;padding:7px 12px;color:#e7f5d8}
+.main-grid{display:grid;grid-template-columns:minmax(210px,285px) minmax(0,1fr);gap:19px;align-items:start;margin-top:22px}
+.index{border:1px solid #d2d7c1;background:#eaf0dc;border-radius:17px;padding:19px 14px}
+.index h2,.routes h2,.cultivars h2,.review h2{font-size:1.13rem;margin:0 0 7px}
+.index>p,.routes>p,.cultivars>p,.review>p{color:#566958;font-size:.85rem;line-height:1.6;margin:5px 0 14px}
+.chapters{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 13px}
+.chapter{border:1px solid #91aa86;border-radius:100px;background:#f9fdf0;color:#36513b;font-size:.74rem;font-weight:800;min-height:37px;padding:6px 11px}
+.chapter[aria-pressed="true"]{background:#285d3d;border-color:#285d3d;color:#fff}
+.journey{display:grid;gap:6px;max-height:660px;overflow-y:auto;padding:5px 3px 9px 13px;scrollbar-color:#96b28b transparent}
+.stop{position:relative;border:1px solid #c7d5b8;border-left:5px solid #b0c987;border-radius:10px;min-height:64px;display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:9px 8px;background:var(--paper);color:#254934}
+.stop:before{content:"";position:absolute;left:-15px;width:9px;height:9px;border:2px solid #819e7b;background:#f0f5e4;border-radius:50%}
+.stop[aria-current="true"]{border-color:#257044;background:#d8eabd;box-shadow:inset 4px 0 #306744}
+.stop[aria-current="true"]:before,.stop.seen:before{background:#3d8251;border-color:#3d8251}
+.stop .stamp{font:800 .68rem ui-monospace,Consolas,monospace;color:#536d53;min-width:61px}
+.stop .label{font-size:.82rem;line-height:1.28;font-weight:850}
+.index-bottom{border-top:1px solid #b8c6ae;padding:13px 2px 0;margin-top:12px}
+.count{font-size:.79rem;font-weight:800;color:#436149}
+.bar{height:8px;border-radius:100px;background:#c4d4ae;overflow:hidden;margin:10px 0}
+.bar-fill{width:6.7%;height:100%;background:#337b4b;transition:width .2s}
+.reset{border:0;text-decoration:underline;padding:10px 1px;background:transparent;color:#215a3f;font-size:.81rem;font-weight:800}
+.story{background:var(--paper);border:1px solid #dad7c5;border-radius:17px;overflow:hidden;box-shadow:7px 8px 0 #d8d1bf55}
+.story-head{padding:clamp(19px,2.8vw,33px) clamp(19px,2.8vw,35px) 0}
+.overline{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font:800 .75rem ui-monospace,Consolas,monospace;letter-spacing:.09em;color:#557452}
+.overline .region{border:1px solid #bdd3a9;background:#e9f1d8;border-radius:100px;padding:7px 12px;font:800 .76rem system-ui,sans-serif;color:#336543;letter-spacing:0}
+.story h2{font:normal clamp(1.8rem,3.4vw,3.2rem)/1.12 Georgia,serif;letter-spacing:-.03em;color:#1a4632;margin:19px 0 8px}
+.date{font:800 .86rem ui-monospace,Consolas,monospace;color:#8c5b29;margin:0 0 19px}
+.illustration{position:relative;display:grid;place-items:center;min-height:280px;border-block:1px solid #c9d9b4;background:radial-gradient(circle at 50% 43%,#f8f0c4 0,transparent 51%),repeating-linear-gradient(0deg,#f1f5e9 0 29px,#d5e5c5 30px 31px)}
+.illustration:before{content:"";position:absolute;inset:15px;border:1px dashed #a6c09c;border-radius:47% 54% 43% 50%;pointer-events:none}
+.illustration svg{width:min(94%,485px);height:275px;position:relative;z-index:1;color:#2b7750;filter:drop-shadow(5px 6px 0 #93aa6540)}
+.plate-label{position:absolute;top:13px;left:18px;color:#496c4b;font:850 .69rem ui-monospace,Consolas,monospace;letter-spacing:.1em}
+.plate-label.end{top:auto;bottom:14px;left:auto;right:17px}
+.body{padding:clamp(19px,2.8vw,33px)}
+.body .summary{font-size:1rem;line-height:1.75;margin:0 0 20px;color:#3c5145}
+.critical{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.critical div{background:#f0f6e9;border:1px solid #d8e2cd;border-radius:11px;padding:15px}
+.critical b{display:block;font-size:.71rem;letter-spacing:.08em;text-transform:uppercase;color:#317049;margin-bottom:8px}
+.critical p{line-height:1.6;font-size:.88rem;color:#4b5c51;margin:0}
+.critical .caution{background:#fff2df;border-color:#e9d4ac}
+.critical .caution b{color:#925c26}
+.references{font-size:.82rem;color:#5c6b5d;line-height:1.6;margin:17px 0}
+.references a{color:#1b6249;font-weight:850;overflow-wrap:anywhere}
+.actions{display:flex;justify-content:space-between;gap:12px}
+.actions button{min-height:46px;border-radius:9px;padding:11px 16px;background:transparent;border:1px solid #387552;color:#276042;font-weight:850}
+.actions button:last-child{background:#286647;color:white}
+.understory{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:19px;margin-top:22px}
+.routes,.cultivars,.review{border:1px solid #d7d5c2;border-radius:17px;background:#fffdf7;padding:clamp(17px,2.4vw,27px)}
+.route-graphic{width:100%;height:226px;background:#e8f3db;border:1px solid #d4e0c4;border-radius:12px;display:block}
+.route-buttons{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 11px}
+.route-button{border:1px solid #a6bea2;background:#f0f7e7;color:#285744;border-radius:8px;min-height:44px;padding:8px 11px;font-size:.82rem;font-weight:820}
+.route-button[aria-pressed="true"]{background:#236443;color:#fff}
+.route-copy,.cultivar-copy{margin:0;color:#4d6555;line-height:1.63;min-height:70px;font-size:.87rem;background:#f0f6e8;border-left:4px solid #66a16d;padding:12px}
+.route-caveat{color:#6c6d56;font-size:.78rem;line-height:1.58;margin:12px 0 0}
+.cultivar-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cultivar{border:1px solid #b7c9aa;border-radius:11px;background:#eef5e4;padding:8px 5px;min-height:108px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#35513a}
+.cultivar[aria-pressed="true"]{background:#d8eab3;border:2px solid #39704a}
+.cultivar svg{width:75px;height:58px;color:#487d48}.cultivar b{font-size:.76rem;text-align:center;line-height:1.3}
+.cultivar-copy{margin-top:13px}
+.cultivar-copy strong{display:block;margin:0 0 5px;color:#25583f}
+.review{margin-top:22px}
+.questions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.question{border:1px solid #d6e1cd;border-radius:12px;min-width:0;padding:15px;margin:0}
+.question legend{font-size:.88rem;font-weight:850;line-height:1.43;padding:0 4px;color:#285339}
+.options{display:grid;gap:8px;margin:12px 0 0}
+.option{border:1px solid #9db9a2;background:#f2f7ee;color:#28513c;min-height:44px;border-radius:8px;padding:10px;text-align:left;font-size:.84rem}
+.option[aria-pressed="true"]{background:#276647;border-color:#276647;color:#fff}
+.feedback{font-size:.83rem;line-height:1.5;color:#95632f;min-height:43px;margin:12px 0 0}
+.feedback.correct{color:#267244}
+.note{font-size:.8rem;line-height:1.7;color:#607063;margin:20px 2px 8px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:995px){.main-grid{grid-template-columns:1fr}.journey{display:flex;overflow-x:auto;overflow-y:hidden;max-height:none;padding:10px 3px 16px;scroll-snap-type:x proximity}.stop{flex:0 0 153px;flex-direction:column;align-items:flex-start;justify-content:center;scroll-snap-align:start}.stop:before{display:none}.understory{grid-template-columns:1fr}}
+@media(max-width:640px){.page{padding:12px}.mast{border-radius:14px;padding:23px 18px}.story-head,.body{padding:18px}.story h2{font-size:2rem}.illustration{min-height:200px}.illustration svg{height:195px}.critical{grid-template-columns:1fr}.questions{grid-template-columns:1fr}.actions button{padding:11px 10px}.route-graphic{height:198px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}.journey{scroll-snap-type:none}}
+</style>
+</head>
+<body>
+<main class="page">
+<header class="mast">
+<p class="kicker">Herbário viajante · História botânica ilustrada</p>
+<h1>História da Banana pelo Mundo</h1>
+<p class="lead">Uma fruta, muitos caminhos. Explore a seleção de variedades, as viagens entre continentes, a agricultura e os desafios de proteger as bananeiras de hoje. Nem toda banana é igual, nem toda rota antiga está comprovada.</p>
+<div class="header-tags"><span>15 marcos históricos</span><span>Mapa esquemático das viagens</span><span>3 variedades para comparar</span></div>
+</header>
+<div class="main-grid">
+ <aside class="index" aria-label="Índice histórico botânico">
+  <h2>Cacho do tempo</h2><p>Escolha uma época ou use as setas do teclado na lista. Filtros mudam a seleção, mas não apagam o progresso.</p>
+  <div id="chapters" class="chapters" role="group" aria-label="Filtrar períodos históricos"></div>
+  <nav id="journey" class="journey" aria-label="Marcos cronológicos da história da banana"></nav>
+  <div class="index-bottom"><span class="count" id="count">1 de 15 marcos explorados</span><div id="meter" class="bar" role="progressbar" aria-label="Marcos visitados" aria-valuemin="0" aria-valuemax="15" aria-valuenow="1"><div class="bar-fill" id="meter-fill"></div></div><button type="button" class="reset" id="reset">Recomeçar exploração</button></div>
+ </aside>
+ <section class="story" aria-labelledby="event-title">
+  <div class="story-head"><div class="overline"><span id="folio">LÂMINA 01 / 15</span><span class="region" id="region">Terras altas da Nova Guiné</span></div><h2 id="event-title">Pistas de cultivo na Nova Guiné</h2><p id="event-date" class="date">c. 5000–4500 a.C.</p></div>
+  <div class="illustration"><span class="plate-label">ILUSTRAÇÃO BOTÂNICA ORIGINAL</span><svg viewBox="0 0 420 290" role="img" aria-labelledby="illustration-title illustration-desc"><title id="illustration-title">Ilustração do marco histórico</title><desc id="illustration-desc">Desenho esquemático autoral.</desc><defs>
+<symbol id="ban-swamp" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linecap="round"><path d="M46 235q43-25 85 0t85 0t85 0t76 0M55 261q42-18 84 0t84 0t83 0t69 0M199 236V91m0 78q-75-89-110-44 57 42 110 44zm0-15q63-100 116-61-57 40-116 61zM199 110q-32-76-7-88 37 27 7 88zM166 227l-21-45m90 49 20-39"/></g></symbol>
+<symbol id="ban-seed" viewBox="0 0 420 290"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M73 92q70-59 130-22 43 21 30 83-14 44-98 70-50 9-62-32 27-38 0-99zM225 83q91-48 120 8 27 56-31 112-48 36-94 5 30-61 5-125z"/><circle cx="132" cy="137" r="13"/><circle cx="173" cy="166" r="12"/><circle cx="287" cy="128" r="12"/><path d="M67 246h286m-217-23v21m149-41v43"/></g></symbol>
+<symbol id="ban-basket" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linejoin="round"><path d="M88 137h240l-32 124H121zM122 137q-20-66 40-91m128 91q-4-75-64-95M107 168h201m-194 38h184m-162-69 17 122m57-122v124m57-124-13 124M147 109q-7-51 30-62m29 72q8-70 43-72"/><path d="M167 42q14-23 27 0m31 7q14-25 26-4"/></g></symbol>
+<symbol id="ban-sail" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M77 197h260l-45 38H116zM201 195V36m-12 17L94 179h95zm24-3 113 130H213zM38 256q42-18 84 0t84 0t84 0t89 0M201 37l38 16-38 9"/><path d="M97 130q-35-11-48 18m277-48q26-13 47 3"/></g></symbol>
+<symbol id="ban-ship" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linejoin="round"><path d="M70 203h281l-45 41H111zM100 167h219v36H100zM133 148h153v19H133zM170 148V51h81v97m-81-58h81M198 51V29M52 262q37-16 74 0t74 0t74 0t94 0"/><path d="M287 82l39-24M93 103 64 83"/></g></symbol>
+<symbol id="ban-greenhouse" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linejoin="round"><path d="M50 253V119l159-83 161 83v134zM209 36v217m-159-134h320M99 95v158m219-158v158M130 253V146h159v107M78 253h275"/><path d="M211 240V133m0 55q-43-70-70-29 26 25 70 29zm0-23q42-68 69-23-25 25-69 23z"/></g></symbol>
+<symbol id="ban-display" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M69 241h280M99 240v-78h222v78M123 163v-19h173v19M106 130q52-8 95-60m-10 60q34-14 57-60m-37 70q58-2 90-50"/><path d="M88 96q51-19 71 30m48-49q42-20 64 29m-80 30q49-24 78-1"/><circle cx="145" cy="112" r="5"/></g></symbol>
+<symbol id="ban-crates" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linejoin="round"><path d="M68 122h132v114H68zM205 92h147v144H205zM117 58h103v64H117zM68 143h132m-132 68h132m137-99H218m-13 99h147M88 122l91 114m0-114L88 236m141-144 100 144m0-144-100 144"/><path d="M69 253h287"/></g></symbol>
+<symbol id="ban-cold" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M62 203h285l-45 42H108zM100 137h212v66H100zM157 137V64h98v73M147 100h120M195 47v109m-34-81 69 55m0-55-69 55M50 259q39-15 78 0t78 0t79 0t84 0"/></g></symbol>
+<symbol id="ban-fungus" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M210 241V103m0 64q-64-70-97-38 45 40 97 38zm0-23q59-79 95-39-45 38-95 39M210 102q-19-60-44-54m44 54q18-66 48-55M61 246h302"/><circle cx="104" cy="83" r="12"/><circle cx="309" cy="65" r="16"/><circle cx="322" cy="194" r="10"/><circle cx="93" cy="202" r="9"/><path d="M133 83h32m144 30 23 28m-208 37-19-22" stroke-dasharray="8 10"/></g></symbol>
+<symbol id="ban-lab" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linejoin="round"><path d="M93 64h234v198H93zM93 115h234M135 118v144m81-144v144m77-144v144M163 58V35h92v23m-91 106v58m0-31q-33-43-43-10 19 19 43 10m0-14q35-41 43-11-16 21-43 11"/><path d="M94 260h233"/></g></symbol>
+<symbol id="ban-spores" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linejoin="round"><path d="M61 243h295m-146-1V112m0 71q-78-75-108-34 50 43 108 34zm0-26q73-88 110-49-45 50-110 49z"/><circle cx="95" cy="67" r="23"/><circle cx="285" cy="63" r="15"/><circle cx="326" cy="211" r="15"/><circle cx="86" cy="210" r="11"/><circle cx="312" cy="137" r="8"/><path d="M173 89 151 57m117 37 21 23m-110 113-24 17"/></g></symbol>
+<symbol id="ban-shield" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linejoin="round"><path d="M210 29q-62 40-133 41v85q3 73 133 120 129-47 133-120V70q-71-1-133-41z"/><path d="M155 151l38 41 78-86M114 98q46-5 90-27m104 27q-40-6-76-23"/></g></symbol>
+<symbol id="ban-field" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linecap="round"><path d="M50 253q76-31 153 0t164 0M101 252V101m0 83q-75-88-78-36 28 46 78 36zm0-18q81-96 109-44-35 42-109 44zM311 253V100m0 79q-66-89-87-43 31 49 87 43zm0-19q67-81 94-35-29 37-94 35z"/><path d="M101 101q-10-49-30-49m240 48q-17-49-34-50"/></g></symbol>
+<symbol id="ban-diversity" viewBox="0 0 420 290"><g stroke="currentColor" fill="none" stroke-width="5" stroke-linejoin="round"><path d="M209 257V123m0 56q-66-52-100-35 26 43 100 35zm0-38q77-57 110-22-25 42-110 22zM209 123q-32-53-3-85 29 32 3 85zM63 257h294M105 241q-50-55-41-79 50 7 65 70m185 9q39-55 46-82-49 5-66 68"/><circle cx="209" cy="89" r="10"/></g></symbol>
+<symbol id="banana-fruit" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M25 23q-18 48 8 56 33 8 49-46-24 25-45 26-11-11-12-36zM15 19l10 4m57 10 8-7"/></g></symbol>
+</defs><use id="drawing-use" href="#ban-swamp"></use></svg><span class="plate-label end">LÂMINA DIDÁTICA · SEM ESCALA</span></div>
+  <div class="body">
+   <p class="summary" id="event-what"></p>
+   <div class="critical"><div><b>O que mudou</b><p id="event-change"></p></div><div class="caution"><b>Olhar crítico</b><p id="event-care"></p></div></div>
+   <p class="references">Fonte para aprofundar: <a id="event-source" href="https://genebanks.cgiar.org/resources/crops/banana/" target="_blank" rel="noopener noreferrer">Referência</a></p>
+   <div class="actions"><button type="button" id="previous">← Anterior</button><button type="button" id="next">Próximo marco →</button></div>
+  </div>
+ </section>
+</div>
+<div class="understory">
+<section class="routes" aria-labelledby="routes-title"><h2 id="routes-title">Rotas de uma planta viajante</h2><p>Selecione uma rota para explorar como bananeiras e pessoas circularam em diferentes épocas. As linhas representam conexões amplas, nunca trajetos únicos comprovados.</p>
+ <svg class="route-graphic" role="img" viewBox="0 0 620 240" aria-labelledby="map-title map-desc">
+ <title id="map-title">Mapa conceitual original das grandes conexões históricas da banana</title><desc id="map-desc">Mapa esquemático com quatro áreas: Nova Guiné e Sudeste Asiático, Sul da Ásia, África e Américas, ligados por três grandes rotas conceituais de dispersão agrícola. Não é um mapa geográfico com coordenadas.</desc>
+ <g stroke="#a7c399" stroke-width="2" fill="none" stroke-dasharray="5 8"><path d="M30 55h550m-550 60h550m-550 60h550"/></g>
+ <g stroke="#4c9369" stroke-width="6" stroke-linecap="round" fill="none"><path id="route-path-pacifico" d="M475 49q-45-40-122 50" stroke-dasharray="11 9"/><path id="route-path-indico" d="M351 122q-115-37-172 43" stroke-dasharray="11 9"/><path id="route-path-atlantico" d="M180 177q-58-92-136-20" stroke-dasharray="11 9"/></g>
+ <g fill="#f9f6e9" stroke="#4f8c62" stroke-width="3"><circle cx="493" cy="47" r="19"/><circle cx="355" cy="116" r="19"/><circle cx="176" cy="178" r="19"/><circle cx="45" cy="161" r="19"/></g>
+ <g fill="#24513a" font-family="system-ui,sans-serif" font-weight="800" font-size="15"><text x="428" y="84">Nova Guiné /</text><text x="428" y="102">Sudeste Asiático</text><text x="314" y="156">Sul da Ásia</text><text x="141" y="216">África</text><text x="13" y="197">Américas</text></g>
+ <g fill="#e0ae45"><circle cx="493" cy="47" r="7"/><circle cx="355" cy="116" r="7"/><circle cx="176" cy="178" r="7"/><circle cx="45" cy="161" r="7"/></g>
+ </svg>
+ <div id="route-buttons" class="route-buttons" role="group" aria-label="Explorar rotas de dispersão"></div>
+ <p id="route-copy" class="route-copy" aria-live="polite">Selecione uma conexão para ler o contexto histórico.</p>
+ <p class="route-caveat">O diagrama não representa continentes em escala, fronteiras, fluxos comerciais exatos ou a totalidade das migrações. Algumas hipóteses de dispersão continuam em debate.</p>
+</section>
+<section class="cultivars" aria-labelledby="cultivars-title"><h2 id="cultivars-title">Três bananas, três histórias</h2><p>Compare grupos de cultivares. A cor e o formato dos desenhos são estilizados; não são critérios seguros de identificação agronômica.</p>
+ <div id="cultivar-buttons" class="cultivar-buttons" role="group" aria-label="Comparar grupos de banana"></div>
+ <div class="cultivar-copy" id="cultivar-copy" role="status" aria-live="polite"><strong>Escolha uma variedade.</strong>Veja as principais diferenças históricas e de uso.</div>
+</section>
+</div>
+<section class="review" aria-labelledby="review-title"><h2 id="review-title">Caderno de observação</h2><p>Três questões sobre botânica, diversidade e fitossanidade. A correção é somente formativa e não grava notas.</p><div class="questions" id="questions"></div></section>
+<p class="note">Esta é uma seleção didática, com datas aproximadas onde indicado. Desenhos SVG autorais incorporados ao arquivo, nenhuma imagem ou biblioteca remota, nenhuma coleta de dados de alunos e nenhum registro de nota no Moodle. Ao reiniciar, respostas e progresso são apagados da memória desta página.</p>
+<p class="sr-only" id="announcement" aria-live="polite" aria-atomic="true"></p>
+</main>
+<script>
+"use strict";
+const events=[{"id":"kuk","year":-5000,"date":"c. 5000–4500 a.C.","title":"Pistas de cultivo na Nova Guiné","short":"Kuk: cultivo antigo","region":"Terras altas da Nova Guiné","chapter":"origens","subject":"domesticação","motif":"swamp","route":"pacifico","what":"No sítio arqueológico de Kuk, evidências de manejo agrícola indicam o cultivo de plantas, incluindo bananeiras, há cerca de sete mil anos. Agricultores de diferentes gerações transformaram o ambiente para produzir alimentos.","change":"A relação entre agricultores e plantas do gênero Musa iniciou uma longa história de seleção e propagação, sem a participação de um inventor único.","care":"Cultivo, domesticação e origem biológica da banana não são o mesmo evento. A data é aproximada e interpretações arqueológicas continuam sendo refinadas.","source":"Antiquity · Agricultura antiga na Nova Guiné","url":"https://www.cambridge.org/core/journals/antiquity/article/abs/new-evidence-and-revised-interpretations-of-early-agriculture-in-highland-new-guinea/ED9F4A5DE31A96D8273A6B41E96F1BC3"},{"id":"hybrids","year":-3000,"date":"Ao longo do 3º–2º milênios a.C.","title":"O encontro de parentes silvestres","short":"Diversidade genética","region":"Sudeste Asiático e ilhas","chapter":"origens","subject":"genética","motif":"seed","route":"pacifico","what":"Bananas cultivadas resultaram de seleção humana e de cruzamentos e recombinações entre linhagens silvestres, principalmente Musa acuminata e Musa balbisiana. Diferentes combinações genéticas deram origem a frutos e usos variados.","change":"A seleção de frutos com pouca ou nenhuma semente favoreceu o consumo e a multiplicação vegetativa de plantas apreciadas por comunidades locais.","care":"As combinações genéticas não surgiram em um ano definido. Esta posição cronológica apenas representa processos prolongados, cuja sequência exata ainda é pesquisada.","source":"CGIAR Genebanks · Diversidade genética de banana","url":"https://genebanks.cgiar.org/resources/crops/banana/"},{"id":"india","year":-500,"date":"c. século V a.C.","title":"A banana integra cultivos no sul da Ásia","short":"Cultivo no sul da Ásia","region":"Sul da Ásia","chapter":"rotas","subject":"alimentação","motif":"basket","route":"indico","what":"A banana fazia parte de tradições agrícolas e alimentares em regiões do sul da Ásia. Ao longo de muitos séculos, tipos de banana se espalharam e foram adaptados a ambientes e preparações diferentes.","change":"A fruta e as variedades de cozimento passaram a compor dietas, sistemas agrícolas e usos culturais diversos.","care":"A referência a aproximadamente 500 a.C. não é a primeira chegada comprovada a toda a Índia; variedades e regiões possuem histórias diferentes.","source":"FAO · Origens e distribuição das bananas","url":"https://www.fao.org/4/t0207e/T0207E01.htm"},{"id":"africa","year":600,"date":"1º milênio d.C. (recorte)","title":"As rotas do Índico e a África","short":"Caminhos até a África","region":"Oceano Índico e África","chapter":"rotas","subject":"migração de cultivos","motif":"sail","route":"indico","what":"Bananas e outras plantas do Sudeste Asiático circularam por redes humanas ligadas ao oceano Índico. Pesquisas arqueobotânicas e genéticas investigam como cultivares chegaram a regiões da África e a Madagascar.","change":"Em diferentes regiões africanas, bananas de cozinhar e de sobremesa tornaram-se parte importante da alimentação e de sistemas de cultivo.","care":"Não existe uma rota única nem uma data consensual para todas as introduções. A posição aqui serve como janela histórica, e há hipóteses de dispersões anteriores ou posteriores.","source":"Journal of Archaeological Research · Dispersão de cultivos asiáticos na África","url":"https://link.springer.com/article/10.1007/s10963-019-09136-x"},{"id":"atlantic","year":1500,"date":"séculos XV–XVI","title":"Bananas cruzam o Atlântico","short":"Travessias atlânticas","region":"Atlântico e Américas","chapter":"rotas","subject":"disseminação","motif":"ship","route":"atlantico","what":"A expansão das navegações, das colônias e das trocas transatlânticas levou bananeiras a regiões das Américas. Cultivos tropicais passaram a integrar paisagens e economias locais em circunstâncias coloniais.","change":"Bananas foram adaptadas às condições de várias partes das Américas, onde coexistem hoje muitas variedades e práticas alimentares.","care":"O processo esteve ligado ao colonialismo e ao trabalho coercitivo em diversos territórios. Não foi uma viagem isolada de uma única variedade.","source":"FAO · Origens e distribuição","url":"https://www.fao.org/4/t0207e/T0207E01.htm"},{"id":"cavendish","year":1835,"date":"década de 1830","title":"Uma banana ganha nome na horticultura britânica","short":"Origem da Cavendish","region":"Reino Unido / circulação colonial","chapter":"comercio","subject":"cultivar","motif":"greenhouse","route":"atlantico","what":"Bananeiras relacionadas ao grupo Cavendish foram cultivadas em coleções botânicas britânicas no século XIX, incluindo a propriedade associada ao nome Cavendish. O grupo já tinha ancestrais agrícolas asiáticos.","change":"Décadas depois, bananas desse grupo ganhariam destaque em cadeias comerciais por características agronômicas e tolerância a uma linhagem importante da doença-do-Panamá.","care":"O nome europeu não significa que a banana tenha sido domesticada na Europa, nem que Cavendish corresponda a uma única planta geneticamente idêntica em todo o mundo.","source":"UCSC · Modern History of the Banana","url":"https://humwp.ucsc.edu/cwh/bananas/Site/Modern%20History%20of%20the%20Banana.html"},{"id":"expo","year":1876,"date":"1876","title":"A banana aparece em uma grande exposição","short":"Bananas em exposição","region":"Filadélfia / Estados Unidos","chapter":"comercio","subject":"mercado","motif":"display","route":"atlantico","what":"Durante a exposição internacional de Filadélfia, bananas fizeram parte do contato de novos consumidores norte-americanos com frutas tropicais. O comércio ainda enfrentava dificuldades de transporte e conservação.","change":"A procura por frutas tropicais cresceu à medida que redes comerciais e técnicas logísticas se expandiram.","care":"Exposições ajudam a contar a história do consumo, mas não representam a primeira vez que bananas chegaram à América do Norte.","source":"Yale National Initiative · A história da banana","url":"https://teachers.yale.edu/curriculum/units/2022/2/1/3"},{"id":"trade","year":1899,"date":"1899","title":"Grandes empresas controlam cadeias de exportação","short":"Comércio em larga escala","region":"Caribe e América Central","chapter":"comercio","subject":"economia","motif":"crates","route":"atlantico","what":"No fim do século XIX, a indústria de exportação se concentrou em empresas com controle sobre terras, transporte e distribuição. A United Fruit Company surgiu em 1899, em um contexto de forte poder empresarial.","change":"Bananas se tornaram uma mercadoria internacional de grande escala, mas a expansão esteve ligada a assimetrias de poder, conflitos trabalhistas e impactos socioambientais.","care":"O aumento do comércio não significou benefícios igualmente distribuídos para trabalhadores, populações locais e governos.","source":"FAO · The World Banana Economy","url":"https://www.fao.org/4/y5102e/y5102e09.htm"},{"id":"coldship","year":1910,"date":"início do século XX","title":"Vapor e refrigeração ampliam as viagens","short":"Navios refrigerados","region":"Rotas marítimas globais","chapter":"comercio","subject":"logística","motif":"cold","route":"atlantico","what":"Navios a vapor, logística organizada e transporte refrigerado permitiram levar grandes volumes de bananas por distâncias maiores com menor perda de qualidade.","change":"O abastecimento de mercados distantes ficou mais regular, transformando a fruta em produto frequente nos centros urbanos importadores.","care":"A refrigeração não surgiu em um único ano nem foi adotada ao mesmo tempo em todas as frotas.","source":"FAO · Banana trade and transportation","url":"https://www.fao.org/4/y5102e/y5102e09.htm"},{"id":"panama","year":1950,"date":"meados do século XX","title":"Doença-do-Panamá muda as plantações","short":"Crise da Gros Michel","region":"América Central e Caribe","chapter":"saude","subject":"fitossanidade","motif":"fungus","route":"atlantico","what":"A murcha de Fusarium, conhecida como doença-do-Panamá, devastou muitas plantações de Gros Michel (AAA). O setor exportador ampliou o uso de bananas Cavendish, resistentes à chamada raça 1 do fungo.","change":"A mudança de cultivar mostrou como monocultivos geneticamente semelhantes podem ser vulneráveis a doenças.","care":"A Gros Michel não desapareceu do planeta; o que mudou foi seu papel dominante no mercado de exportação. Resistência à raça 1 não significa resistência a todas as variantes.","source":"FAO · Manual sobre murcha de Fusarium","url":"https://www.fao.org/fileadmin/templates/banana/documents/Docs_Resources_2015/13ManualFusarium.pdf"},{"id":"genebank","year":1985,"date":"décadas finais do século XX","title":"Bancos de germoplasma ajudam a preservar Musa","short":"Conservação de variedades","region":"Redes internacionais","chapter":"futuro","subject":"biodiversidade","motif":"lab","route":"pacifico","what":"Coleções de germoplasma e técnicas de cultivo in vitro foram ampliadas para conservar variedades, espécies silvestres e material genético de bananeiras, apoiando estudos e melhoramento.","change":"A conservação ex situ protege recursos genéticos úteis para alimentos, pesquisa e resposta a doenças.","care":"O marco temporal é ilustrativo do fortalecimento de redes e técnicas, não da criação de um único banco em 1985. Conservação em fazendas e territórios também importa.","source":"CGIAR Genebanks · Banana","url":"https://genebanks.cgiar.org/resources/crops/banana/"},{"id":"tr4","year":1990,"date":"desde a década de 1990","title":"Uma nova ameaça atinge a Cavendish","short":"Fusarium TR4","region":"Ásia e expansão posterior","chapter":"saude","subject":"fitossanidade","motif":"spores","route":"pacifico","what":"A variante Tropical Race 4 (TR4) do fungo causador da murcha de Fusarium se espalhou a partir de focos na Ásia, afetando cultivares do grupo Cavendish e outras bananas.","change":"O risco impulsiona vigilância, quarentena, diversificação agrícola e pesquisas sobre cultivares e resistência.","care":"TR4 é um patógeno do solo e não equivale a um risco de contaminação alimentar para quem consome bananas. Seu controle exige medidas fitossanitárias.","source":"FAO · Fusarium Wilt and TR4","url":"https://www.fao.org/fileadmin/templates/banana/documents/Docs_Resources_2015/13ManualFusarium.pdf"},{"id":"colombia","year":2019,"date":"2019","title":"TR4 é confirmado na América Latina","short":"Alerta na Colômbia","region":"Colômbia","chapter":"saude","subject":"vigilância","motif":"shield","route":"atlantico","what":"Autoridades confirmaram em 2019 a presença de TR4 na Colômbia, um marco para o monitoramento sanitário das plantações de banana na América Latina.","change":"A identificação reforçou medidas de prevenção e cooperação regional para diminuir a dispersão de solo e materiais vegetais contaminados.","care":"Uma detecção em uma região não significa que todas as plantações do continente estejam infectadas.","source":"ProMusa · Tropical race 4","url":"https://www.promusa.org/Tropical%20race%204%20-%20TR4"},{"id":"peru","year":2021,"date":"2021","title":"O alerta fitossanitário alcança o Peru","short":"TR4 no Peru","region":"Peru","chapter":"saude","subject":"vigilância","motif":"field","route":"atlantico","what":"A FAO publicou um alerta após a confirmação da presença de TR4 em plantações no Peru, destacando a necessidade de fortalecer a cooperação e os sistemas de vigilância.","change":"A cadeia de produção depende tanto de medidas preventivas como de pesquisas agronômicas e organização dos produtores.","care":"Respostas devem ser guiadas por órgãos oficiais e medidas locais; a doença é problema agronômico, não motivo para evitar o consumo da fruta.","source":"FAO · Alerta fitossanitário TR4 no Peru","url":"https://www.fao.org/world-banana-forum/news/detail-events/en/c/1400204/"},{"id":"future","year":2025,"date":"década de 2020","title":"Diversidade genética para um futuro resiliente","short":"Cultivares e pesquisa","region":"Cooperação mundial","chapter":"futuro","subject":"biodiversidade","motif":"diversity","route":"pacifico","what":"Equipes de pesquisa investigam variedades tradicionais, parentes silvestres, novos sistemas de cultivo e técnicas genéticas para reduzir vulnerabilidades e ampliar opções alimentares.","change":"Uma produção mais resiliente depende de biodiversidade, manejo do solo, medidas contra patógenos e condições justas de trabalho e comércio.","care":"Não existe uma solução universal ou uma banana única 'imune a tudo'. Tecnologias, políticas e práticas precisam ser avaliadas conforme cada região.","source":"CGIAR · Recursos genéticos de banana","url":"https://genebanks.cgiar.org/resources/crops/banana/"}];
+const chapters=[
+{id:"all",label:"Todas",name:"Todos os períodos"},
+{id:"origens",label:"Origens",name:"Seleção e domesticação"},
+{id:"rotas",label:"Rotas",name:"Dispersão por regiões"},
+{id:"comercio",label:"Comércio",name:"Exportação e logística"},
+{id:"saude",label:"Saúde da lavoura",name:"Fitossanidade"},
+{id:"futuro",label:"Diversidade",name:"Preservação e pesquisa"}
+];
+const routes=[
+{id:"pacifico",label:"Ilhas e diversidade",text:"A Nova Guiné e o Sudeste Asiático concentraram importantes linhagens silvestres e práticas agrícolas antigas. Mudanças genéticas e circulação entre ilhas contribuíram para a diversidade atual; não se conhece um trajeto único para todas as variedades."},
+{id:"indico",label:"Índico e África",text:"O deslocamento de plantas entre regiões asiáticas e africanas envolveu diferentes comunidades e períodos. Há hipóteses variadas sobre o papel de Madagascar, das rotas marítimas e de outras conexões regionais."},
+{id:"atlantico",label:"Atlântico e Américas",text:"A circulação atlântica durante o período colonial levou bananeiras para diversas regiões das Américas. Depois, redes de exportação ligaram áreas produtoras a mercados distantes, com relações econômicas e sociais desiguais."}
+];
+const cultivars=[
+{id:"cavendish",name:"Cavendish",genome:"AAA",color:"#e9ca5e",desc:"Grupo de bananas doces importante nas exportações. Foi favorecido por resistir à raça 1 da doença-do-Panamá, mas pode ser afetado por TR4. O grupo não representa toda a diversidade de bananas."},
+{id:"gros",name:"Gros Michel",genome:"AAA",color:"#dba94e",desc:"Grupo de bananas doces que dominou parte importante das antigas exportações e sofreu grandes perdas com a doença-do-Panamá. Não está extinto, mas perdeu a posição comercial dominante."},
+{id:"plantain",name:"Banana-da-terra",genome:"AAB (grupo comum)",color:"#82a75a",desc:"Muitas bananas de cozinhar conhecidas como plantains pertencem a grupos genéticos AAB e são alimentos básicos em diferentes regiões. O nome popular varia; nem toda banana de cozinhar tem o mesmo genoma."}
+];
+const questions=[
+{question:"Por que uma bananeira não é uma árvore?",options:["Porque é uma grande planta herbácea com pseudocaule","Porque todas as bananas crescem de sementes","Porque é uma trepadeira"],right:0,why:"A bananeira é uma erva de grande porte. O pseudocaule é formado pela sobreposição de bases de folhas."},
+{question:"Como muitas bananas comerciais sem sementes são multiplicadas?",options:["Por brotos e mudas vegetativas","Apenas por sementes maduras","Por germinação de cascas"],right:0,why:"Muitas bananas cultivadas são partenocárpicas e são propagadas vegetativamente por rebentos e técnicas de cultura de tecidos."},
+{question:"Por que a passagem de Gros Michel para Cavendish não resolveu todos os riscos?",options:["A Cavendish é imune a todos os fungos","A raça 1 perdeu importância, mas TR4 pode afetar Cavendish","As bananas pararam de ser cultivadas"],right:1,why:"A Cavendish resiste à raça 1, mas a variante TR4 pode afetá-la. Diversidade e manejo fitossanitário continuam importantes."}
+];
+const byId=id=>document.getElementById(id);
+const state={filter:"all",active:events[0].id,seen:new Set([events[0].id]),route:null,cultivar:null,answers:new Map()};
+const visible=()=>events.filter(e=>state.filter==="all"||e.chapter===state.filter);
+function drawFilters(){
+ const host=byId("chapters");host.replaceChildren();
+ for(const chapter of chapters){
+  const button=document.createElement("button");button.className="chapter";button.type="button";button.textContent=chapter.label;
+  button.setAttribute("aria-pressed",String(chapter.id===state.filter));
+  button.addEventListener("click",()=>filterTo(chapter.id));
+  host.append(button);
+ }
+}
+function drawStops(){
+ const host=byId("journey"),list=visible();host.replaceChildren();
+ list.forEach((event,index)=>{
+  const button=document.createElement("button");button.type="button";button.className="stop";
+  button.classList.toggle("seen",state.seen.has(event.id));
+  button.setAttribute("aria-current",String(event.id===state.active));
+  button.setAttribute("aria-label",event.date+": "+event.short);
+  const stamp=document.createElement("span");stamp.className="stamp";stamp.textContent=event.date;
+  const label=document.createElement("span");label.className="label";label.textContent=event.short;
+  button.append(stamp,label);
+  button.addEventListener("click",()=>select(event.id));
+  button.addEventListener("keydown",e=>{
+   let n=null;
+   if(e.key==="ArrowDown"||e.key==="ArrowRight")n=Math.min(list.length-1,index+1);
+   if(e.key==="ArrowUp"||e.key==="ArrowLeft")n=Math.max(0,index-1);
+   if(e.key==="Home")n=0;
+   if(e.key==="End")n=list.length-1;
+   if(n!==null){e.preventDefault();select(list[n].id);host.querySelectorAll(".stop")[n].focus();}
+  });
+  host.append(button);
+ });
+}
+function select(id){
+ const list=visible(),index=list.findIndex(e=>e.id===id);
+ if(index<0)return;
+ const event=list[index];state.active=id;state.seen.add(id);
+ const values={
+  folio:"LÂMINA "+String(events.indexOf(event)+1).padStart(2,"0")+" / "+events.length,
+  region:event.region,
+  "event-title":event.title,
+  "event-date":event.date,
+  "event-what":event.what,
+  "event-change":event.change,
+  "event-care":event.care,
+  "event-source":event.source,
+  "illustration-title":"Ilustração: "+event.short,
+  "illustration-desc":"Ilustração original esquemática do assunto "+event.short+"; não é registro arqueológico nem fotografia.",
+  count:state.seen.size+" de "+events.length+" marcos explorados"
+ };
+ for(const [id,value] of Object.entries(values))byId(id).textContent=value;
+ byId("event-source").href=event.url;
+ byId("drawing-use").setAttribute("href","#ban-"+event.motif);
+ byId("previous").disabled=index===0;
+ byId("next").disabled=index===list.length-1;
+ byId("meter").setAttribute("aria-valuenow",String(state.seen.size));
+ byId("meter-fill").style.width=100*state.seen.size/events.length+"%";
+ drawStops();
+ if(event.route!==state.route)showRoute(event.route);
+ const host=byId("journey"),target=host.querySelectorAll(".stop")[index];
+ if(target){
+  const behavior=window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
+  if(window.matchMedia("(max-width:995px)").matches)host.scrollTo({left:Math.max(0,target.offsetLeft-host.offsetLeft-host.clientWidth/2+target.clientWidth/2),behavior});
+  else host.scrollTo({top:Math.max(0,target.offsetTop-host.offsetTop-host.clientHeight/2+target.clientHeight/2),behavior});
+ }
+ byId("announcement").textContent="Marco "+(events.indexOf(event)+1)+": "+event.short+", "+event.date+".";
+}
+function filterTo(id){
+ if(!chapters.some(c=>c.id===id))return;
+ state.filter=id;drawFilters();
+ const list=visible();if(!list.some(e=>e.id===state.active))state.active=list[0].id;
+ select(state.active);
+ byId("announcement").textContent="Filtro "+chapters.find(c=>c.id===id).name+": "+list.length+" marcos.";
+}
+byId("previous").addEventListener("click",()=>{const list=visible(),i=list.findIndex(e=>e.id===state.active);if(i>0)select(list[i-1].id);});
+byId("next").addEventListener("click",()=>{const list=visible(),i=list.findIndex(e=>e.id===state.active);if(i>=0&&i<list.length-1)select(list[i+1].id);});
+function drawRoutes(){
+ const host=byId("route-buttons");host.replaceChildren();
+ routes.forEach(route=>{
+  const button=document.createElement("button");button.type="button";button.className="route-button";button.textContent=route.label;
+  button.setAttribute("aria-pressed",String(state.route===route.id));
+  button.addEventListener("click",()=>showRoute(route.id));
+  host.append(button);
+ });
+}
+function showRoute(id){
+ const route=routes.find(x=>x.id===id);if(!route)return;
+ state.route=id;drawRoutes();
+ byId("route-copy").textContent=route.text;
+ for(const item of routes){
+  const path=byId("route-path-"+item.id);
+  path.style.opacity=item.id===id?"1":".18";
+  path.style.strokeWidth=item.id===id?"8":"5";
+ }
+}
+function drawCultivars(){
+ const host=byId("cultivar-buttons");host.replaceChildren();
+ cultivars.forEach((item,index)=>{
+  const button=document.createElement("button");button.type="button";button.className="cultivar";
+  button.setAttribute("aria-pressed",String(state.cultivar===item.id));
+  button.setAttribute("aria-label","Comparar "+item.name+", "+item.genome);
+  const art=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  art.setAttribute("viewBox","0 0 100 100");
+  art.setAttribute("role","img");
+  art.setAttribute("aria-label","Ilustração esquemática original de uma banana do grupo "+item.name);
+  const line=document.createElementNS("http://www.w3.org/2000/svg","path");
+  line.setAttribute("d",index===2?"M21 23Q8 61 28 77Q55 93 86 35Q56 57 37 57Q24 42 21 23Z":index===1?"M19 22Q4 62 33 75Q67 82 84 31Q58 56 40 57Q29 37 19 22Z":"M25 23Q7 66 36 79Q72 82 83 34Q57 59 39 60Q30 38 25 23Z");
+  line.setAttribute("fill",item.color);line.setAttribute("stroke","#3e6843");line.setAttribute("stroke-width","5");line.setAttribute("stroke-linejoin","round");
+  art.append(line);
+  const label=document.createElement("b");label.textContent=item.name;button.append(art,label);
+  button.addEventListener("click",()=>showCultivar(item.id));host.append(button);
+ });
+}
+function showCultivar(id){
+ const item=cultivars.find(c=>c.id===id);if(!item)return;
+ state.cultivar=id;drawCultivars();
+ const host=byId("cultivar-copy");host.replaceChildren();
+ const title=document.createElement("strong");title.textContent=item.name+" · "+item.genome;
+ const description=document.createElement("span");description.textContent=item.desc;
+ host.append(title,description);
+}
+function drawQuestions(){
+ const host=byId("questions");host.replaceChildren();
+ questions.forEach((question,index)=>{
+  const fieldset=document.createElement("fieldset");fieldset.className="question";
+  const legend=document.createElement("legend");legend.textContent=(index+1)+". "+question.question;
+  const options=document.createElement("div");options.className="options";
+  const feedback=document.createElement("p");feedback.className="feedback";feedback.setAttribute("aria-live","polite");feedback.textContent="Escolha uma alternativa.";
+  const buttons=question.options.map((choice,i)=>{
+   const button=document.createElement("button");button.type="button";button.className="option";button.textContent=choice;button.setAttribute("aria-pressed","false");
+   button.addEventListener("click",()=>{
+    state.answers.set(index,i);
+    buttons.forEach((b,k)=>b.setAttribute("aria-pressed",String(i===k)));
+    const correct=i===question.right;feedback.textContent=(correct?"Correto. ":"Reveja. ")+question.why;
+    feedback.classList.toggle("correct",correct);
+   });
+   options.append(button);return button;
+  });
+  fieldset.append(legend,options,feedback);host.append(fieldset);
+ });
+}
+byId("reset").addEventListener("click",()=>{
+ state.filter="all";state.active=events[0].id;state.seen.clear();state.seen.add(events[0].id);
+ state.cultivar=null;state.route=null;state.answers.clear();
+ drawFilters();drawQuestions();drawCultivars();select(events[0].id);
+ byId("cultivar-copy").replaceChildren();
+ const prompt=document.createElement("span");prompt.textContent="Escolha uma variedade para conhecer suas diferenças.";byId("cultivar-copy").append(prompt);
+ byId("announcement").textContent="Exploração reiniciada; primeiro marco selecionado.";
+});
+drawFilters();drawQuestions();drawCultivars();select(events[0].id);
+</script>
+</body>
+</html>
