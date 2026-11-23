@@ -48,9 +48,9 @@ test('14 marcos históricos em ordem, com metadados e um SVG por missão',()=>{
  assert.deepEqual([...new Set(missions.map(m=>m.group))].sort(),['observatorios','orbita','pioneiros','sondas']);
 });
 
-test('manifesto contém os dois exemplos, sem duplicar caminhos e perguntando antes de criar',()=>{
- assert.deepEqual(manifest.examples.map(e=>e.id),['historia-do-mundo','corrida-espacial']);
- assert.equal(new Set(manifest.examples.map(e=>e.path)).size,2);
+test('manifesto preserva os dois exemplos originais e admite novos registros',()=>{
+ assert.deepEqual(manifest.examples.slice(0,2).map(e=>e.id),['historia-do-mundo','corrida-espacial']);
+ assert.equal(new Set(manifest.examples.map(e=>e.path)).size,manifest.examples.length);
  const entry=manifest.examples[1];
  assert.equal(entry.path,'timeline/corrida-espacial.html');
  assert.ok(entry.prompt.includes('Qual tipo de conteúdo você deseja trabalhar'));
