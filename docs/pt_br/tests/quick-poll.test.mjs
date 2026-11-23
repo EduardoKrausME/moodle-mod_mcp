@@ -56,6 +56,10 @@ test("select, confirm, edit, cancel, reconfirm, reset and chart invariants",asyn
   }
   const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
   const nodes=new Map(ids.map(id=>[id,new Element("div",id)]));
+  // Reflect the initial HTML's hidden attributes in the lightweight DOM.
+  for(const tag of html.matchAll(/<[^>]+\bid="([^"]+)"[^>]*>/g)) {
+    if(/\shidden(?:\s|>)/.test(tag[0])) nodes.get(tag[1]).hidden=true;
+  }
   const document={
     getElementById(id){const result=nodes.get(id);assert.ok(result,"DOM "+id);return result;},
     createElement(tag){return new Element(tag);}
