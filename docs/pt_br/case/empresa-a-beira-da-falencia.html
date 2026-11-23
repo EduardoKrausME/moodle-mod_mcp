@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>A Empresa à Beira da Falência - Estudo de caso interativo</title>
+<style>
+:root{color-scheme:light;--bg:#eff1ef;--paper:#fffefa;--ink:#24343a;--muted:#53636b;--line:#d1dcd8;--deep:#193a48;--accent:#1b6960;--on-accent:#fff;--blue:#357b97;--gold:#b97c3b;--bad:#b14e46;--good:#2c806a;--focus:#1856c3;--shadow:0 13px 33px #152e2515}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+button{font:inherit;cursor:pointer}button:disabled{opacity:.53;cursor:not-allowed}:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+[hidden]{display:none!important}
+.main{max-width:1260px;margin:auto;padding:clamp(12px,2.8vw,30px)}
+.hero{display:grid;grid-template-columns:1fr .88fr;border-radius:24px;overflow:hidden;background:var(--deep);color:#fdfcf6;box-shadow:var(--shadow)}
+.hero-copy{padding:clamp(24px,4.5vw,48px);align-self:center}
+.eyebrow{font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:850;color:#f1cb9a;margin:0 0 17px}
+h1,h2{font-family:Georgia,"Times New Roman",serif;line-height:1.1;font-weight:500;letter-spacing:-.025em}
+h1{font-size:clamp(2.5rem,5.4vw,4.8rem);margin:0 0 20px}
+h2{font-size:clamp(1.8rem,3vw,2.42rem);margin:0 0 14px}
+h3{font-size:1.07rem;margin:0 0 10px}
+.hero p:not(.eyebrow){max-width:50ch;color:#d8e7e3;margin:0}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:23px}
+.chips span{border:1px solid #8ca9ae;border-radius:22px;color:#f6dfbe;font-size:.79rem;font-weight:750;padding:6px 11px}
+.illustration{display:grid;place-items:center;background:#2a4551;min-height:240px}.illustration svg{display:block;width:100%;height:100%;max-height:440px}
+.notice,.fine,.footer-note{color:var(--muted);font-size:.83rem}.notice{margin:17px 2px 25px}
+.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.8fr);gap:18px;align-items:start}
+.panel{padding:clamp(19px,2.8vw,30px);background:var(--paper);border:1px solid var(--line);border-radius:20px;min-width:0;box-shadow:var(--shadow)}
+.dashboard{position:sticky;top:14px}
+.topline{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap}
+.kicker{color:var(--accent);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;font-weight:850;margin:0 0 9px}
+.month-number{display:inline-block;padding:7px 12px;border-radius:12px;background:#e3f1eb;font-weight:800;color:#206655;font-variant-numeric:tabular-nums}
+.lead{color:var(--muted);max-width:72ch;margin:0 0 18px}
+.steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;list-style:none;padding:0;margin:18px 0 25px}
+.steps li{height:8px;border-radius:10px;background:#d5e1da}
+.steps li.done{background:#58a18c}.steps li.current{background:#d19a58}
+.choices{display:grid;gap:11px;margin-top:20px}
+.choice{width:100%;text-align:left;border:1.5px solid var(--line);background:#f6f9f5;color:var(--ink);border-radius:15px;padding:17px;display:grid;gap:9px;min-height:124px}
+.choice:hover:not(:disabled){border-color:var(--accent);background:#edf5ef}
+.choice strong{font-size:1.02rem;line-height:1.3}.choice small{font-size:.86rem;color:var(--muted)}
+.choice-index{font-size:.76rem;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);font-weight:850}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:19px;align-items:center}
+.primary,.secondary{min-height:46px;padding:10px 16px;border-radius:10px;font-weight:850}
+.primary{background:var(--accent);color:var(--on-accent);border:1px solid var(--accent)}
+.secondary{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.primary:not(:disabled):hover{filter:brightness(1.1)}
+.outcome{padding:20px;background:#e7f2e9;border:1px solid #a0c6ae;border-radius:14px}
+.outcome h3{margin-bottom:8px}
+.outcome p{margin:10px 0}
+.outcome .formula{font-variant-numeric:tabular-nums;font-size:.9rem;background:#f6faf4;border-radius:9px;padding:11px;line-height:1.7}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{padding:13px;border-radius:13px;border:1px solid var(--line);background:#f2f6f2}
+.metric label{display:block;color:var(--muted);font-size:.79rem}
+.metric strong{display:block;font-size:1.4rem;font-weight:850;font-variant-numeric:tabular-nums}
+.metric small{display:block;font-size:.75rem;color:var(--muted)}
+.metric.negative strong{color:var(--bad)}
+.asset{padding:13px 15px;border:1px solid var(--line);background:#f1f5f2;border-radius:12px;margin-top:14px;font-size:.82rem}
+.asset p{margin:3px 0}
+.asset strong{color:var(--ink)}
+.status{padding:13px 14px;background:#e6f0e8;border-left:4px solid var(--accent);border-radius:0 10px 10px 0;font-size:.88rem;margin-top:15px}
+.recap{display:grid;gap:7px;margin:13px 0 0;padding-left:21px}
+.recap li{font-size:.84rem;color:var(--muted)}
+.assumptions{padding:13px;border-radius:12px;border:1px solid var(--line);background:#f7f7ef;font-size:.81rem;color:var(--muted)}
+.assumptions p{margin:6px 0}.assumptions strong{color:var(--ink)}
+.confirm{border:1px solid #d1ac70;background:#fff3de;border-radius:12px;padding:14px;margin-top:12px}
+.confirm p{font-weight:800;margin:0 0 9px}
+.chart-panel{margin-top:18px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.graph{border-radius:14px;border:1px solid var(--line);background:#f8faf6;padding:14px;min-width:0}
+.graph svg{width:100%;height:auto;display:block;overflow:visible}
+.graph h3{margin:0 0 7px}
+.graph .svg-grid{stroke:#c8d8d0;stroke-width:1}
+.graph .svg-zero{stroke:#b87865;stroke-width:2;stroke-dasharray:6 5}
+.graph .svg-axis-label{fill:#566a69;font:12px system-ui}
+.graph .cash-line{fill:none;stroke:#287f73;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.graph .cash-dot{fill:#287f73;stroke:#fff;stroke-width:2}
+.graph .preview-line{fill:none;stroke:#b07842;stroke-width:2.8;stroke-dasharray:8 6}
+.graph .revenue-bar{fill:#4b9c84}.graph .outflow-bar{fill:#d19b5b}
+.legend{font-size:.8rem;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:7px}.legend b{width:13px;height:7px;display:inline-block;background:#287f73}.legend b.alt{background:#b07842}.legend b.rev{background:#4b9c84}.legend b.out{background:#d19b5b}
+.table-scroll{overflow-x:auto;margin:20px 0 0}
+table{border-collapse:collapse;width:100%;min-width:1020px;font-size:.83rem}
+th,td{padding:11px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{background:#e3f1e8;color:#2b6053;font-weight:850}
+tbody tr:nth-child(even){background:#f1f5f2}
+td{font-variant-numeric:tabular-nums}
+.scenarios{margin-top:18px}
+.scenario-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.scenario{display:grid;gap:10px;text-align:left;background:#f5f7f2;border:1px solid var(--line);color:var(--ink);padding:17px;border-radius:14px;min-height:175px}
+.scenario[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:#e7f3eb}
+.scenario strong{font-size:.97rem}.scenario small{color:var(--muted);font-size:.82rem}
+.scenario .result-tag{font-size:.76rem;font-weight:850;color:var(--accent)}
+.scenario-feedback{margin-top:13px;border-left:4px solid #b48246;padding:12px 14px;background:#f6eee1;border-radius:0 10px 10px 0}
+.ending{padding:20px;background:#e4f2e8;border:1px solid #9dbba4;border-radius:14px}
+.ending.fragile{background:#fcf0d9;border-color:#d1b077}.ending.critical{background:#f8e2de;border-color:#c6938d}
+.ending h3{font:500 1.7rem Georgia,serif}
+.ending p{margin:8px 0}
+.report-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}
+.report-cell{padding:12px;border:1px solid var(--line);border-radius:11px}
+.report-cell small,.report-cell strong{display:block}.report-cell small{color:var(--muted)}.report-cell strong{font-size:1.35rem;font-variant-numeric:tabular-nums}
+.ledger-list{padding-left:23px;margin:10px 0}
+.ledger-list li{margin-bottom:12px}
+@media(max-width:950px){.layout,.hero{grid-template-columns:1fr}.dashboard{position:static}.chart-grid{grid-template-columns:1fr}.illustration svg{max-height:275px}}
+@media(max-width:600px){.main{padding:11px}.panel,.hero{border-radius:14px}.scenario-grid,.report-grid{grid-template-columns:1fr}.actions>button{flex:1 1 auto}.metrics{grid-template-columns:1fr 1fr}.metric strong{font-size:1.2rem}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#101e27;--paper:#22343d;--ink:#edf4ec;--muted:#c5d3d4;--line:#49616a;--accent:#95dfca;--on-accent:#11352c;--focus:#ffe29e;--shadow:none}.hero{background:#162f3b}.month-number{background:#274f42;color:#d0f3e4}.steps li{background:#47615b}.choice,.metric,.asset,.graph,.scenario{background:#2b4044}.choice:hover:not(:disabled),.scenario[aria-pressed="true"]{background:#304e44}.outcome{background:#244b3c;border-color:#568873}.outcome .formula{background:#2d5145}.status{background:#285044}.assumptions{background:#2c423e}.confirm{background:#4a3d2a}.graph .svg-grid{stroke:#4a6265}.graph .svg-axis-label{fill:#c6d5cf}.graph .cash-dot{stroke:#21333a}.graph .cash-line{stroke:#9be7cf}.graph .cash-dot{fill:#9be7cf}.graph .revenue-bar{fill:#83cdb4}.graph .outflow-bar{fill:#e8b277}.legend b{background:#9be7cf}.legend b.rev{background:#83cdb4}.legend b.out{background:#e8b277}thead th{background:#285346;color:#dcf5e8}tbody tr:nth-child(even){background:#2a4342}.scenario-feedback{background:#443d32}.ending{background:#244b3b}.ending.fragile{background:#4c3f2d}.ending.critical{background:#502f2e}}
+</style>
+</head>
+<body>
+<main class="main">
+<section class="hero" aria-labelledby="title">
+ <div class="hero-copy">
+  <p class="eyebrow">Dossiê empresarial 006 · Oficina Nova Rota</p>
+  <h1 id="title">A Empresa à Beira da Falência</h1>
+  <p>Uma oficina de bicicletas tem clientes, equipamentos e funcionários, mas as saídas mensais ameaçam consumir o caixa. Como recuperar o negócio sem transferir todos os problemas para o próximo semestre?</p>
+  <div class="chips"><span>6 meses de decisões</span><span>18 alternativas</span><span>Fluxo de caixa verificável</span></div>
+ </div>
+ <div class="illustration"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 690 425" role="img" aria-labelledby="work-svg-title work-svg-desc">
+<title id="work-svg-title">Oficina de bicicletas Nova Rota ao fim do expediente</title>
+<desc id="work-svg-desc">Ilustração vetorial original de oficina fictícia com bicicleta sobre suporte de manutenção, um balcão com livro-caixa, caixas de peças e uma janela que mostra a cidade ao entardecer. A ilustração não contém valores financeiros ocultos.</desc>
+<defs><linearGradient id="wall" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#344d5a"/><stop offset="1" stop-color="#182d39"/></linearGradient><linearGradient id="sunset" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#d6a369"/><stop offset="1" stop-color="#6c7774"/></linearGradient></defs>
+<rect width="690" height="425" fill="url(#wall)"/>
+<rect x="56" y="46" width="578" height="292" rx="13" fill="#264453" stroke="#7e9590" stroke-width="5"/>
+<rect x="75" y="64" width="181" height="170" rx="5" fill="url(#sunset)" stroke="#9bb2ab" stroke-width="6"/>
+<path d="M77 195h179v39H77Z" fill="#465b5c"/><path d="M78 194l33-49 22 22 27-57 39 48 22-31 35 47" fill="#58635f"/>
+<path d="M165 65v168M76 146h181" stroke="#c0c8b9" stroke-width="5"/>
+<path d="M0 331h690v94H0Z" fill="#1b2d32"/><path d="M25 339h637" stroke="#8c7358" stroke-width="9"/>
+<circle cx="259" cy="305" r="78" fill="none" stroke="#d1cdb6" stroke-width="11"/>
+<circle cx="495" cy="305" r="78" fill="none" stroke="#d1cdb6" stroke-width="11"/>
+<circle cx="259" cy="305" r="65" fill="none" stroke="#67797b" stroke-width="3"/>
+<circle cx="495" cy="305" r="65" fill="none" stroke="#67797b" stroke-width="3"/>
+<path d="M259 305L335 208L397 305H259L350 305L335 208L495 305L439 211" fill="none" stroke="#e9ae66" stroke-width="11" stroke-linejoin="round"/>
+<path d="M495 305l-30-96 40-9M321 208h34" stroke="#e6ebde" stroke-width="9" stroke-linecap="round"/>
+<path d="M420 196h44l12 14M296 197h35" fill="none" stroke="#2a2c35" stroke-width="13" stroke-linecap="round"/>
+<path d="M337 181v35M309 181h56" stroke="#c3d1c6" stroke-width="5"/>
+<circle cx="259" cy="305" r="7" fill="#eed8ac"/><circle cx="397" cy="305" r="7" fill="#eed8ac"/><circle cx="495" cy="305" r="7" fill="#eed8ac"/>
+<rect x="524" y="107" width="93" height="64" rx="7" fill="#ae9069" stroke="#f0d3a7" stroke-width="4"/>
+<rect x="530" y="128" width="81" height="37" fill="#614d40"/>
+<path d="M536 138h69M536 150h47" stroke="#ebcb91" stroke-width="4"/>
+<rect x="105" y="268" width="115" height="68" rx="6" fill="#ab845c" stroke="#d8b082" stroke-width="5"/>
+<path d="M106 293h113M161 270v64" stroke="#74573e" stroke-width="5"/>
+<text x="165" y="312" font-family="system-ui" text-anchor="middle" font-size="12" fill="#fff1d5" font-weight="750">PEÇAS</text>
+<path d="M600 226v110M581 243h39" stroke="#d8e6d7" stroke-width="7"/><path d="M586 225q14-25 28 0" fill="none" stroke="#f5d59c" stroke-width="5"/>
+</svg></div>
+</section>
+<p class="notice">Estudo de caso inteiramente fictício. Valores, juros, índices de confiança e respostas de vendas são premissas criadas para uma atividade formativa, não previsão de mercado, diagnóstico contábil, recomendação financeira, trabalhista ou jurídica. Não gera nota oficial do Moodle nem envia dados pessoais.</p>
+<div class="layout">
+ <section class="panel" aria-labelledby="month-heading">
+  <div class="topline"><div><p class="kicker" id="month-kicker">Mês 1 · Decisão estratégica</p><h2 id="month-heading" tabindex="-1">O caixa não chega ao fim do mês</h2></div><span class="month-number" id="month-marker" aria-live="polite">01 / 06</span></div>
+  <ol id="progress" class="steps" aria-label="Seis meses da simulação"></ol>
+  <div id="decision-view">
+   <p class="lead" id="scene"></p>
+   <h3 id="question"></h3>
+   <div class="choices" id="choices" aria-label="Ações para o mês atual"></div>
+   <div class="outcome" id="consequence" hidden aria-live="polite">
+    <p class="kicker">Consequência da escolha</p>
+    <h3 id="choice-title" tabindex="-1"></h3>
+    <p id="effect"></p>
+    <p class="fine" id="learning"></p>
+    <p class="formula" id="month-formula"></p>
+   </div>
+   <div class="actions"><button type="button" class="secondary" id="undo" disabled>Voltar uma decisão</button><button type="button" class="primary" id="continue" hidden>Próximo mês</button></div>
+   <p class="fine">Voltar descarta a última escolha, seus lançamentos e seus efeitos. O histórico é sempre recalculado, sem sobrescrever as decisões dos outros meses.</p>
+  </div>
+  <section id="report" hidden aria-labelledby="report-heading">
+   <p class="kicker">Relatório final · Semestre encerrado</p><h2 id="report-heading" tabindex="-1">O negócio ainda pode continuar?</h2>
+   <div id="ending" class="ending" aria-live="polite"></div>
+   <div id="report-metrics" class="report-grid"></div>
+   <h3>Decisões e impactos no caixa</h3><ol id="report-ledger" class="ledger-list"></ol>
+   <div class="actions"><button type="button" class="secondary" id="report-undo">Refazer último mês</button><button type="button" class="primary" id="report-reset">Tentar outra estratégia</button></div>
+  </section>
+ </section>
+ <aside class="panel dashboard" aria-labelledby="dashboard-heading">
+  <p class="kicker">Painel financeiro da oficina</p><h2 id="dashboard-heading">Posição acumulada</h2>
+  <p class="fine">Valores ao fim do último mês decidido. Saldos negativos de caixa representam um déficit sem financiamento automático.</p>
+  <div class="metrics">
+   <div class="metric" id="cash-metric"><label>Caixa disponível</label><strong id="cash-value">R$ 36.000</strong><small id="cash-sub">Início da simulação</small></div>
+   <div class="metric"><label>Saldo devedor</label><strong id="debt-value">R$ 132.000</strong><small>Juros sobre dívida antes da parcela do mês</small></div>
+   <div class="metric"><label>Receita do último mês</label><strong id="revenue-value">—</strong><small>Vendas operacionais após ajuste de demanda</small></div>
+   <div class="metric"><label>Despesas fixas mensais</label><strong id="fixed-value">R$ 52.000</strong><small>Incluem salários; excluem custos variáveis e dívida</small></div>
+   <div class="metric"><label>Funcionários</label><strong id="people-value">14</strong><small>Quantidade fictícia de postos</small></div>
+   <div class="metric"><label>Confiança comercial</label><strong id="trust-value">60 / 100</strong><small>Índice didático que influencia as vendas</small></div>
+  </div>
+  <div class="asset" id="assets">
+   <p><strong>Recebíveis:</strong> <span id="receivable-value"></span> · <strong>Estoque:</strong> <span id="inventory-value"></span></p>
+   <p><strong>Custos variáveis:</strong> <span id="variable-rate"></span> da receita · <strong>Taxa de juros:</strong> <span id="interest-rate"></span> ao mês</p>
+   <p><strong>Amortização regular:</strong> <span id="principal-value"></span> por mês</p>
+  </div>
+  <div class="status" id="status" role="status" aria-live="polite">Aguardando a primeira decisão.</div>
+  <h3 style="margin-top:22px">Histórico das escolhas</h3><ol class="recap" id="recap"><li>Nenhuma decisão registrada.</li></ol>
+  <div class="actions"><button type="button" class="secondary" id="restart">Reiniciar simulação</button></div>
+  <div id="confirm" class="confirm" hidden><p>Descartar todas as decisões deste percurso?</p><div class="actions"><button type="button" class="secondary" id="cancel-reset">Cancelar</button><button type="button" class="primary" id="confirm-reset">Sim, recomeçar</button></div></div>
+  <details class="assumptions" style="margin-top:18px" open>
+   <summary><strong>Premissas e fórmulas do modelo</strong></summary>
+   <p>Receita-base inicial: R$ 78.000/mês. Fator fictício de demanda = 80% + confiança × 0,2 ponto percentual (confiança entre 0 e 100). Receita = (R$ 78.000 + acréscimos comerciais acumulados) × fator, arredondada para reais inteiros.</p>
+   <p>Custo variável = receita × taxa variável; fixos incluem os custos da equipe. Juros = dívida vigente após a decisão extraordinária e antes da amortização mensal × taxa de juros. Amortização regular = menor valor entre parcela programada e saldo devedor.</p>
+   <p>Fluxo mensal = receita − custos variáveis − fixos − juros − amortização + movimento extraordinário de caixa. Caixa final = caixa inicial + fluxo mensal; dívida final = dívida antes da parcela − amortização.</p>
+   <p>Cobrança de recebíveis, venda de estoque, crédito novo e amortização extraordinária são lançados separadamente da receita de vendas. O modelo simplifica esses movimentos e não calcula impostos, competência, depreciação, passivos trabalhistas ou balanço completo.</p>
+  </details>
+ </aside>
+</div>
+<section class="panel chart-panel" aria-labelledby="chart-heading">
+ <p class="kicker">Evolução dos resultados</p><h2 id="chart-heading">O que mudou mês a mês?</h2>
+ <div class="chart-grid">
+  <div class="graph"><h3>Saldo de caixa</h3>
+   <svg id="cash-chart" viewBox="0 0 720 270" role="img" aria-labelledby="cash-svg-title cash-svg-desc">
+    <title id="cash-svg-title">Evolução do caixa ao longo do semestre</title>
+    <desc id="cash-svg-desc">Gráfico dinâmico. Os mesmos valores aparecem na tabela de lançamentos abaixo.</desc>
+    <g id="cash-plot"></g></svg>
+   <div class="legend"><span><b></b> Seu percurso</span><span><b class="alt"></b> Estratégia comparada (tracejada)</span></div>
+  </div>
+  <div class="graph"><h3>Receita versus saídas regulares</h3>
+   <svg id="flow-chart" viewBox="0 0 720 270" role="img" aria-labelledby="flow-svg-title flow-svg-desc">
+    <title id="flow-svg-title">Receita e saídas financeiras regulares por mês</title>
+    <desc id="flow-svg-desc">Gráfico de barras que compara receita com custo variável, custo fixo, juros e amortização regular. Movimentos extraordinários aparecem somente na tabela.</desc>
+    <g id="flow-plot"></g></svg>
+   <div class="legend"><span><b class="rev"></b> Vendas operacionais</span><span><b class="out"></b> Custos + juros + amortização</span></div>
+  </div>
+ </div>
+ <p class="fine">Os gráficos são ilustrações SVG originais geradas pelos valores calculados e não substituem a tabela numérica. A curva tracejada, quando ativada, representa uma estratégia hipotética completa e não altera seu percurso.</p>
+ <div class="table-scroll">
+  <table aria-label="Lançamentos mensais verificáveis"><thead><tr>
+   <th scope="col">Mês / decisão</th><th scope="col">Receita</th><th scope="col">Variáveis</th><th scope="col">Fixos</th><th scope="col">Juros</th><th scope="col">Amortização</th><th scope="col">Extraordinário</th><th scope="col">Variação do caixa</th><th scope="col">Caixa final</th><th scope="col">Dívida final</th>
+  </tr></thead><tbody id="ledger"><tr><td colspan="10">Nenhum mês decidido.</td></tr></tbody></table>
+ </div>
+</section>
+<section class="panel scenarios" aria-labelledby="scenarios-title">
+ <p class="kicker">Laboratório de estratégias</p><h2 id="scenarios-title">Três caminhos possíveis</h2>
+ <p class="lead">Cada cenário começa com os mesmos números e escolhe uma ação em cada um dos seis meses. Compare projeções calculadas pelo mesmo modelo, sem substituir suas decisões. Clique novamente para retirar uma curva do gráfico.</p>
+ <div id="preset-list" class="scenario-grid"></div>
+ <div class="scenario-feedback" id="preset-feedback" role="status" aria-live="polite">Escolha uma estratégia para sobrepor o saldo projetado ao gráfico de caixa.</div>
+</section>
+<p class="footer-note">Oficina Nova Rota, decisões, clientes, equipe e valores são inteiramente fictícios. O cenário usa aritmética verificável em reais inteiros; não é balanço patrimonial, demonstração contábil completa, aconselhamento financeiro, estimativa econômica, análise trabalhista ou promessa de resultado. Nenhum dado pessoal é coletado; o progresso permanece em memória até fechar a atividade.</p>
+</main>
+<script type="application/json" id="business-data">{"title":"A Empresa à Beira da Falência","company":"Oficina Nova Rota","baseRevenue":78000,"initial":{"cash":36000,"debt":132000,"receivable":30000,"inventory":48000,"fixed":52000,"salesBoost":0,"variableBP":2800,"rateBP":120,"principal":4500,"employees":14,"trust":60},"labels":{"cash":"Caixa","debt":"Dívida","receivable":"A receber","inventory":"Estoque","fixed":"Custos fixos","salesBoost":"Receita-base adicional","variableBP":"Custo variável","rateBP":"Juros","principal":"Amortização mensal","employees":"Equipe","trust":"Confiança"},"months":[{"id":"liquidity","label":"Mês 1","title":"O caixa não chega ao fim do mês","scene":"Três clientes atrasaram pagamentos, o estoque está alto e fornecedores exigem previsibilidade. A equipe terá de escolher entre obter liquidez imediata e reduzir despesas recorrentes.","question":"Qual medida abre espaço para os próximos meses?","options":[{"id":"collect","title":"Antecipar cobrança de recebíveis","subtitle":"Entram R$ 14 mil no caixa e saem R$ 15 mil de créditos a receber; R$ 1 mil representa desconto financeiro embutido.","change":{"cash":14000,"receivable":-15000},"effect":"O caixa melhora agora, mas os recebíveis futuros diminuem. Os R$ 14 mil não são uma nova receita de vendas.","lesson":"Receber um crédito antigo muda o momento da entrada de dinheiro, não cria faturamento novo."},{"id":"stock","title":"Liquidar parte do estoque","subtitle":"Vender ativos de estoque por R$ 18 mil; o mesmo valor sai do saldo de estoque, em uma operação extraordinária simplificada.","change":{"cash":18000,"inventory":-18000,"trust":-5},"effect":"O caixa aumenta por conversão de estoque em dinheiro. A disponibilidade de produtos e a confiança comercial diminuem um pouco.","lesson":"Venda extraordinária de ativos não deve ser confundida com receita operacional recorrente."},{"id":"supplier","title":"Renegociar contratos de serviços","subtitle":"Pagar R$ 3,5 mil pela transição para reduzir custos fixos em R$ 4,5 mil por mês.","change":{"cash":-3500,"fixed":-4500},"effect":"A transição exige desembolso agora, mas melhora o custo fixo em todos os meses seguintes.","lesson":"Poupança recorrente pode ter custo inicial e precisa ser avaliada ao longo do tempo."}]},{"id":"market","label":"Mês 2","title":"Como recuperar vendas sem destruir margem?","scene":"A empresa perdeu contratos e precisa decidir como estimular procura. Reduzir preços pode elevar volume, mas também encarece o custo variável relativo.","question":"Qual estratégia comercial parece mais sustentável?","options":[{"id":"price","title":"Reposicionar preços e mix de produtos","subtitle":"Aumenta a base de vendas em R$ 6 mil por mês e reduz a confiança em 6 pontos.","change":{"salesBoost":6000,"trust":-6},"effect":"O ticket médio cresce, mas a percepção de preço pressiona a demanda simulada.","lesson":"Receita nominal e procura não evoluem necessariamente na mesma direção."},{"id":"loyalty","title":"Investir em relacionamento com clientes","subtitle":"Aplicar R$ 4 mil agora; elevar a base de vendas em R$ 10 mil por mês e confiança em 8 pontos.","change":{"cash":-4000,"salesBoost":10000,"trust":8},"effect":"O programa de relacionamento exige caixa, mas melhora a confiança e o potencial de vendas recorrentes.","lesson":"Investimento comercial deve ser comparado com seu efeito no caixa e na margem depois dos custos variáveis."},{"id":"promotion","title":"Promover descontos agressivos","subtitle":"Campanha de R$ 6,5 mil; base de vendas +R$ 17 mil/mês, confiança −7 e custo variável +2,5 pontos percentuais.","change":{"cash":-6500,"salesBoost":17000,"trust":-7,"variableBP":250},"effect":"As vendas brutas sobem, mas o peso dos custos variáveis também aumenta.","lesson":"Crescer receita sem controlar custo marginal não garante geração de caixa."}]},{"id":"people","label":"Mês 3","title":"O que fazer com a equipe?","scene":"O volume de serviços continua irregular. Pessoas, qualidade de atendimento e despesas precisam entrar no mesmo cálculo, sem tratar a equipe como um número descartável.","question":"Que medida de operação você aplicaria?","options":[{"id":"training","title":"Capacitar técnicos e redesenhar atendimento","subtitle":"Desembolso de R$ 6 mil; confiança +12 e base de vendas +R$ 4 mil por mês.","change":{"cash":-6000,"trust":12,"salesBoost":4000},"effect":"A equipe mantém seu tamanho e ganha capacidade de atender melhor, com investimento inicial.","lesson":"Ganhos de qualidade não eliminam o custo inicial da capacitação."},{"id":"layoffs","title":"Reduzir três postos com custo de desligamento","subtitle":"Desembolso extraordinário de R$ 9 mil; custo fixo −R$ 10 mil/mês; equipe −3; confiança −12; base de vendas −R$ 5 mil/mês.","change":{"cash":-9000,"fixed":-10000,"employees":-3,"trust":-12,"salesBoost":-5000},"effect":"As despesas fixas caem, mas o desligamento custa caixa, reduz capacidade e prejudica a confiança comercial.","lesson":"Corte de pessoas afeta custo, demanda e continuidade; não é uma melhoria automática."},{"id":"shifts","title":"Reorganizar escalas e horas extras","subtitle":"Desembolso de R$ 1,8 mil; custo fixo −R$ 3,5 mil/mês; confiança +3; equipe preservada.","change":{"cash":-1800,"fixed":-3500,"trust":3},"effect":"A empresa reduz horas adicionais sem eliminar postos e melhora levemente o atendimento.","lesson":"Redesenhar processos pode reduzir desperdício sem comprometer diretamente o quadro de pessoas."}]},{"id":"finance","label":"Mês 4","title":"A dívida passou a comandar o orçamento","scene":"Juros e amortizações mensais disputam caixa com operação, fornecedores e salários. Uma negociação financeira pode dar fôlego, mas também introduzir encargos novos.","question":"Qual resposta ao endividamento faz sentido agora?","options":[{"id":"refinance","title":"Renegociar condições da dívida","subtitle":"Taxa mensal passa de 1,2% para 0,75%; amortização mensal de R$ 4,5 mil para R$ 2,1 mil; custo extraordinário de R$ 3,2 mil.","change":{"cash":-3200},"set":{"rateBP":75,"principal":2100},"effect":"O serviço mensal da dívida diminui, com alongamento implícito do pagamento e custo de renegociação.","lesson":"Uma parcela menor alivia o caixa, mas não significa que a dívida desapareceu."},{"id":"paydown","title":"Amortizar R$ 18 mil extraordinariamente","subtitle":"Dívida −R$ 18 mil e caixa −R$ 18 mil; taxa e parcela regular permanecem.","change":{"cash":-18000,"debt":-18000},"effect":"O saldo devedor cai e os juros futuros passam a incidir sobre uma base menor, mas a liquidez imediata encolhe.","lesson":"Reduzir principal diminui juros futuros, embora possa comprometer obrigações de curto prazo."},{"id":"borrow","title":"Contratar financiamento de emergência","subtitle":"Dívida +R$ 30 mil; entrada líquida de R$ 28 mil (R$ 2 mil de encargos); taxa mensal 1,5%; amortização R$ 5 mil.","change":{"cash":28000,"debt":30000},"set":{"rateBP":150,"principal":5000},"effect":"O dinheiro cobre parte das necessidades imediatas, mas os encargos e compromissos futuros crescem.","lesson":"Crédito novo não é receita operacional e pode transferir o problema para períodos posteriores."}]},{"id":"production","label":"Mês 5","title":"O gargalo de serviço voltou","scene":"A oficina enfrenta atrasos e reclamações. A direção pode investir, reforçar relacionamento ou poupar gastos afetando a experiência dos clientes.","question":"Como equilibrar produtividade e qualidade?","options":[{"id":"automation","title":"Automatizar agendamento e estoque","subtitle":"Investimento de R$ 9,5 mil; custo fixo −R$ 7 mil/mês; equipe −1 vaga por reorganização; confiança +3.","change":{"cash":-9500,"fixed":-7000,"employees":-1,"trust":3},"effect":"A operação reduz tarefas repetitivas, mas exige investimento e altera o quadro de funcionários.","lesson":"Eficiência envolve custo de implantação, impactos no trabalho e riscos de execução."},{"id":"customer","title":"Criar programa de qualidade e pós-venda","subtitle":"Investir R$ 4 mil; confiança +10 e base de vendas +R$ 6,5 mil/mês.","change":{"cash":-4000,"trust":10,"salesBoost":6500},"effect":"A fidelização melhora a procura e a reputação, mas aumenta a necessidade imediata de caixa.","lesson":"Receita futura deve ser contrastada com investimento e despesas existentes."},{"id":"squeeze","title":"Cortar inspeções e suporte ao cliente","subtitle":"Custo fixo −R$ 6,5 mil/mês; confiança −15 e base de vendas −R$ 4,5 mil/mês.","change":{"fixed":-6500,"trust":-15,"salesBoost":-4500},"effect":"Os custos caem, mas problemas no atendimento desestimulam novas vendas.","lesson":"Cortar qualidade pode gerar economia aparente e reduzir capacidade competitiva."}]},{"id":"closure","label":"Mês 6","title":"A decisão que define o próximo trimestre","scene":"A empresa chega ao último mês da análise. Agora, além do caixa, importam a dívida remanescente, o tamanho da equipe e a confiança que sustentará a operação após o exercício.","question":"Como fechar o semestre?","options":[{"id":"contract","title":"Buscar contrato corporativo com implantação","subtitle":"Desembolso de R$ 5,5 mil; base de vendas +R$ 14 mil/mês e confiança +3.","change":{"cash":-5500,"salesBoost":14000,"trust":3},"effect":"O novo cliente aumenta receitas neste mês, mas exige capital de implantação e cria concentração comercial não modelada.","lesson":"Contratos grandes podem recuperar receita e trazer dependência de poucos compradores."},{"id":"discipline","title":"Consolidar rotina e reduzir desperdícios","subtitle":"Desembolso de R$ 1,5 mil; custo fixo −R$ 2,5 mil/mês e confiança +5.","change":{"cash":-1500,"fixed":-2500,"trust":5},"effect":"A companhia reforça controles e economiza sem reduzir pessoas, mas o ganho comercial é gradual.","lesson":"Disciplina operacional frequentemente melhora margens sem produzir uma explosão de vendas."},{"id":"slash","title":"Executar redução ampla e emergencial","subtitle":"Custo de desligamentos de R$ 12 mil; fixos −R$ 12,5 mil/mês; equipe −4, confiança −20 e base de vendas −R$ 7 mil/mês.","change":{"cash":-12000,"fixed":-12500,"employees":-4,"trust":-20,"salesBoost":-7000},"effect":"O custo fixo recua, mas liquidez, quadro e fidelidade dos clientes sofrem forte pressão.","lesson":"Economia agressiva pode comprometer a capacidade de geração de receita e de atendimento."}]}],"scenarios":[{"id":"balanced","name":"Eficiência com proteção","summary":"Contratos de serviços, fidelização, escalas, renegociação, automação e disciplina.","choices":["supplier","loyalty","shifts","refinance","automation","discipline"]},{"id":"expansion","name":"Crescimento sem proteção da qualidade","summary":"Cobrança, promoção, treinamento e crédito novo, mas corte de suporte antes de expandir contratos.","choices":["collect","promotion","training","borrow","squeeze","contract"]},{"id":"cutting","name":"Cortes concentrados","summary":"Liquidação de estoque, preços, desligamentos, amortização, menos suporte e novas demissões.","choices":["stock","price","layoffs","paydown","squeeze","slash"]}]}</script>
+<script>
+"use strict";
+const DATA=JSON.parse(document.getElementById("business-data").textContent);
+
+const moneyValue=n=>Math.round(n);
+function validData(d){
+ if(!d||d.months.length!==6||d.scenarios.length!==3)throw Error("Estrutura do caso inválida");
+ const seen=new Set();
+ for(const month of d.months){
+  if(month.options.length!==3)throw Error("Número inválido de escolhas");
+  for(const option of month.options){
+   if(seen.has(option.id))throw Error("ID de opção duplicado");
+   seen.add(option.id);
+   for(const [key,val] of Object.entries(option.change||{})){
+    if(!["cash","debt","receivable","inventory","fixed","salesBoost","variableBP","employees","trust"].includes(key)||!Number.isInteger(val))throw Error("Efeito inválido");
+   }
+   for(const [key,val] of Object.entries(option.set||{})){
+    if(!["rateBP","principal"].includes(key)||!Number.isInteger(val))throw Error("Regra financeira inválida");
+   }
+  }
+ }
+ for(const preset of d.scenarios)if(preset.choices.length!==6||preset.choices.some((id,i)=>!d.months[i].options.some(o=>o.id===id)))throw Error("Estratégia inválida");
+}
+function calculateMonth(state,month,option,d=DATA){
+ let s={...state};
+ for(const [key,value] of Object.entries(option.change||{}))s[key]+=value;
+ for(const [key,value] of Object.entries(option.set||{}))s[key]=value;
+ s.trust=Math.max(0,Math.min(100,s.trust));
+ if(s.receivable<0||s.inventory<0||s.debt<0||s.fixed<0||s.employees<1||s.variableBP<0||s.variableBP>10000||s.rateBP<0||s.principal<0)throw Error("Estado financeiro inválido");
+ const factorBP=8000+s.trust*20;
+ const gross=moneyValue(Math.max(0,d.baseRevenue+s.salesBoost)*factorBP/10000);
+ const variable=moneyValue(gross*s.variableBP/10000);
+ const interest=moneyValue(s.debt*s.rateBP/10000);
+ const amortization=Math.min(s.debt,s.principal);
+ const cashAction=option.change?.cash||0;
+ const monthlyOperating=gross-variable-s.fixed;
+ const financeOut=interest+amortization;
+ const cashMovement=cashAction+monthlyOperating-financeOut;
+ const cashStart=state.cash;
+ s.cash=cashStart+cashMovement;
+ s.debt=s.debt-amortization;
+ return {state:s,month:month.label,monthId:month.id,choiceId:option.id,choice:option,openingCash:cashStart,actionCash:cashAction,revenue:gross,variable,fixed:s.fixed,interest,amortization,operating:monthlyOperating,financeOut,cashMovement,closingCash:s.cash,closingDebt:s.debt,trust:s.trust,employees:s.employees,factorBP,rateBP:s.rateBP,variableBP:s.variableBP};
+}
+function replay(path,d=DATA){
+ if(!Array.isArray(path)||path.length>d.months.length)throw Error("Percurso inválido");
+ let s={...d.initial},months=[],lowestCash=s.cash;
+ for(let i=0;i<path.length;i++){
+  const month=d.months[i],choice=month.options.find(x=>x.id===path[i]);
+  if(!choice)throw Error("Escolha inexistente no mês");
+  const result=calculateMonth(s,month,choice,d);
+  s=result.state;months.push(result);
+  lowestCash=Math.min(lowestCash,s.cash);
+ }
+ return {state:s,months,lowestCash,path:[...path]};
+}
+function evaluate(result,d=DATA){
+ const s=result.state,months=result.months,last=months[months.length-1];
+ if(!last)return {kind:"pending",title:"Em análise",description:"Nenhum mês encerrado."};
+ if(result.lowestCash<0||s.cash<0||s.employees<7||s.trust<32){
+  return {kind:"critical",title:"Ruptura financeira ou operacional",description:"O percurso apresenta saldo de caixa negativo em algum mês, equipe muito reduzida ou confiança comercial insuficiente. Saldo negativo representa necessidade de financiamento não modelado, não um empréstimo automático.",recommendation:"Identifique o primeiro mês com déficit e compare medidas de liquidez com a manutenção de vendas e capacidade de atendimento."};
+ }
+ const lastMonths=months.slice(-2);
+ if(s.cash>=26000&&s.debt<=142000&&s.employees>=10&&s.trust>=54&&lastMonths.every(m=>m.operating>0)){
+  return {kind:"stable",title:"Continuidade com margem de segurança",description:"O exercício termina com caixa positivo acima da reserva didática, dívida contida, confiança preservada e margem operacional positiva nos últimos dois meses.",recommendation:"Mesmo nesse resultado, o negócio ainda deve acompanhar impostos, prazos de recebimento, investimentos e riscos ausentes da simulação."};
+ }
+ return {kind:"fragile",title:"Sobrevivência ainda vulnerável",description:"A empresa mantém saldo não negativo, mas não reúne todas as reservas, condições de dívida e estabilidade comercial exigidas pelo cenário para uma continuidade confortável.",recommendation:"Compare o caixa final, os meses de maior saída e a margem operacional recente; um único indicador favorável não garante resiliência."};
+}
+function money(n){const value=Math.round(n),negative=value<0;return (negative?"−":"")+ "R$ "+Math.abs(value).toLocaleString("pt-BR");}
+
+(function(){
+const $=id=>document.getElementById(id);
+const NS="http://www.w3.org/2000/svg";
+const node=(tag,content,cls)=>{const el=document.createElement(tag);el.textContent=content??"";if(cls)el.className=cls;return el;};
+const svg=(tag,attrs={},content)=>{const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));if(content!==undefined)el.textContent=content;return el;};
+const moneyFmt=n=>money(n);
+const shortMoney=n=>{const v=Math.round(n);return (v<0?"−":"")+"R$ "+(Math.abs(v)/1000).toLocaleString("pt-BR",{maximumFractionDigits:0})+" mil";};
+let path=[],pending=false,previewId=null,resetOpen=false,resetSource="restart";
+function focus(id){const target=$(id);target.focus({preventScroll:true});target.scrollIntoView({block:"start",behavior:"auto"});}
+function validateChoice(id){
+ const i=path.length;
+ return i<DATA.months.length&&DATA.months[i].options.some(option=>option.id===id);
+}
+function choose(id){
+ if(pending||path.length>=6||resetOpen||!validateChoice(id))return;
+ path.push(id);pending=true;
+ render();
+ focus("choice-title");
+}
+function advance(){
+ if(!pending||resetOpen)return;
+ pending=false;render();
+ focus(path.length===6?"report-heading":"month-heading");
+}
+function back(){
+ if(resetOpen||!path.length)return;
+ path.pop();pending=false;render();focus("month-heading");
+}
+function requestReset(source){
+ resetSource=source;resetOpen=true;$("confirm").hidden=false;$("cancel-reset").focus();
+}
+function cancelReset(){resetOpen=false;$("confirm").hidden=true;$(resetSource).focus();}
+function restart(){
+ path=[];pending=false;previewId=null;resetOpen=false;render();focus("month-heading");
+}
+function renderProgress(){
+ const list=$("progress");list.replaceChildren();
+ const current=pending?path.length-1:path.length;
+ for(let i=0;i<DATA.months.length;i++){
+  const li=node("li");li.className=i<current?"done":i===current?"current":"";
+  li.setAttribute("aria-label","Mês "+(i+1)+(i<current?" concluído":i===current?" atual":" futuro"));
+  list.append(li);
+ }
+}
+function renderMonth(result){
+ const isReport=path.length===6&&!pending;
+ $("decision-view").hidden=isReport;$("report").hidden=!isReport;
+ if(isReport){renderFinal(result);return;}
+ const index=pending?path.length-1:path.length;
+ const month=DATA.months[index];
+ $("month-kicker").textContent=month.label+" · Decisão estratégica";
+ $("month-marker").textContent=String(index+1).padStart(2,"0")+" / 06";
+ $("month-heading").textContent=month.title;
+ $("scene").textContent=month.scene;
+ $("question").textContent=month.question;
+ $("continue").hidden=!pending;
+ $("continue").textContent=path.length===6?"Ver relatório":"Próximo mês";
+ $("undo").disabled=!path.length;
+ $("undo").textContent=pending?"Refazer decisão deste mês":"Voltar ao mês anterior";
+ const root=$("choices");root.replaceChildren();
+ if(!pending){
+  $("consequence").hidden=true;
+  for(const [j,choice] of month.options.entries()){
+   const btn=node("button","","choice");btn.type="button";
+   btn.append(node("span","Alternativa "+(j+1),"choice-index"),node("strong",choice.title),node("small",choice.subtitle));
+   btn.addEventListener("click",()=>choose(choice.id));
+   root.append(btn);
+  }
+ }else{
+  $("consequence").hidden=false;
+  const row=result.months[result.months.length-1];
+  $("choice-title").textContent=row.choice.title;
+  $("effect").textContent=row.choice.effect;
+  $("learning").textContent="Para refletir: "+row.choice.lesson;
+  $("month-formula").textContent=
+   "Receita "+moneyFmt(row.revenue)+" − variáveis "+moneyFmt(row.variable)+" − fixos "+moneyFmt(row.fixed)+
+   " − juros "+moneyFmt(row.interest)+" − amortização "+moneyFmt(row.amortization)+
+   " + extraordinário "+moneyFmt(row.actionCash)+" = variação "+moneyFmt(row.cashMovement)+
+   ". Caixa: "+moneyFmt(row.openingCash)+" → "+moneyFmt(row.closingCash)+".";
+ }
+}
+function renderDashboard(result){
+ const s=result.state,last=result.months[result.months.length-1];
+ $("cash-value").textContent=moneyFmt(s.cash);
+ $("cash-sub").textContent=result.months.length? "Ao fim do mês "+result.months.length:"Saldo inicial do exercício";
+ $("cash-metric").classList.toggle("negative",s.cash<0);
+ $("debt-value").textContent=moneyFmt(s.debt);
+ $("revenue-value").textContent=last?moneyFmt(last.revenue):"—";
+ $("fixed-value").textContent=moneyFmt(s.fixed);
+ $("people-value").textContent=String(s.employees);
+ $("trust-value").textContent=s.trust+" / 100";
+ $("receivable-value").textContent=moneyFmt(s.receivable);
+ $("inventory-value").textContent=moneyFmt(s.inventory);
+ $("variable-rate").textContent=(s.variableBP/100).toLocaleString("pt-BR",{maximumFractionDigits:2})+"%";
+ $("interest-rate").textContent=(s.rateBP/100).toLocaleString("pt-BR",{maximumFractionDigits:2})+"%";
+ $("principal-value").textContent=moneyFmt(s.principal);
+ const status=result.months.length===0?"Aguardando decisão inicial. O caixa começa em "+moneyFmt(s.cash)+" com dívida de "+moneyFmt(s.debt)+".":
+    "Após "+result.months.length+" mês(es): "+(s.cash<0?"déficit de caixa não financiado":"caixa não negativo")+"; menor saldo observado "+moneyFmt(result.lowestCash)+
+    ". "+(last.operating>0?"Margem operacional positiva":"Margem operacional não positiva")+" no último mês.";
+ $("status").textContent=status;
+ const recap=$("recap");recap.replaceChildren();
+ if(!result.months.length){recap.append(node("li","Nenhuma decisão registrada."));return;}
+ for(const row of result.months){
+  recap.append(node("li",row.month+": "+row.choice.title+"; caixa "+moneyFmt(row.closingCash)+", dívida "+moneyFmt(row.closingDebt)+"."));
+ }
+}
+function renderLedger(result){
+ const body=$("ledger");body.replaceChildren();
+ if(!result.months.length){
+  const tr=node("tr"),td=node("td","Nenhum mês decidido.");td.colSpan=10;tr.append(td);body.append(tr);return;
+ }
+ for(const row of result.months){
+  const tr=node("tr");
+  for(const label of [row.month+": "+row.choice.title,moneyFmt(row.revenue),moneyFmt(row.variable),moneyFmt(row.fixed),moneyFmt(row.interest),moneyFmt(row.amortization),moneyFmt(row.actionCash),moneyFmt(row.cashMovement),moneyFmt(row.closingCash),moneyFmt(row.closingDebt)]){
+   tr.append(node("td",label));
+  }
+  body.append(tr);
+ }
+}
+function cashSeries(result){return [DATA.initial.cash,...result.months.map(row=>row.closingCash)];}
+function drawCash(result){
+ const svgRoot=$("cash-plot");svgRoot.replaceChildren();
+ const current=cashSeries(result);
+ const preset=DATA.scenarios.find(s=>s.id===previewId);
+ const other=preset?cashSeries(replay(preset.choices)):null;
+ const values=[0,...current,...(other||[])];
+ const min=Math.min(...values),max=Math.max(...values);
+ const lo=Math.floor(min/10000)*10000;
+ const hi=Math.ceil((max+5000)/10000)*10000;
+ const x=index=>69+(index/6)*618;
+ const y=value=>27+(hi-value)/(hi-lo)*201;
+ const ticks=4;
+ for(let j=0;j<=ticks;j++){
+  const v=lo+(hi-lo)*j/ticks,yy=y(v);
+  svgRoot.append(svg("line",{x1:69,y1:yy,x2:689,y2:yy,class:v===0?"svg-zero":"svg-grid"}));
+  svgRoot.append(svg("text",{x:62,y:yy+4,"text-anchor":"end",class:"svg-axis-label"},shortMoney(v)));
+ }
+ for(let i=0;i<=6;i++)svgRoot.append(svg("text",{x:x(i),y:255,"text-anchor":"middle",class:"svg-axis-label"},i===0?"Início":"M"+i));
+ const points=arr=>arr.map((value,i)=>x(i).toFixed(1)+","+y(value).toFixed(1));
+ if(other){
+  svgRoot.append(svg("polyline",{points:points(other).join(" "),class:"preview-line"}));
+ }
+ svgRoot.append(svg("polyline",{points:points(current).join(" "),class:"cash-line"}));
+ current.forEach((value,i)=>svgRoot.append(svg("circle",{cx:x(i),cy:y(value),r:4.8,class:"cash-dot"})));
+ $("cash-svg-desc").textContent="Seu percurso: "+current.map((n,i)=>(i===0?"início":"mês "+i)+" "+moneyFmt(n)).join("; ")+
+ (other?"; cenário "+preset.name+": "+other.map((n,i)=>(i===0?"início":"mês "+i)+" "+moneyFmt(n)).join("; "):"")+". Valores repetidos na tabela.";
+}
+function drawFlows(result){
+ const svgRoot=$("flow-plot");svgRoot.replaceChildren();
+ const rows=result.months;
+ const max=Math.max(100000,...rows.flatMap(r=>[r.revenue,r.variable+r.fixed+r.interest+r.amortization]));
+ const ceiling=Math.ceil(max/20000)*20000;
+ const y=v=>227-v/ceiling*194;
+ for(let j=0;j<=4;j++){
+  const v=ceiling*j/4,yy=y(v);
+  svgRoot.append(svg("line",{x1:69,y1:yy,x2:689,y2:yy,class:"svg-grid"}));
+  svgRoot.append(svg("text",{x:62,y:yy+4,"text-anchor":"end",class:"svg-axis-label"},shortMoney(v)));
+ }
+ for(let i=0;i<6;i++){
+  const row=rows[i],x=96+i*98;
+  if(row){
+   svgRoot.append(svg("rect",{x:x,y:y(row.revenue),width:34,height:Math.max(0,227-y(row.revenue)),rx:3,class:"revenue-bar"}));
+   const out=row.variable+row.fixed+row.interest+row.amortization;
+   svgRoot.append(svg("rect",{x:x+37,y:y(out),width:34,height:Math.max(0,227-y(out)),rx:3,class:"outflow-bar"}));
+  }
+  svgRoot.append(svg("text",{x:x+33,y:255,"text-anchor":"middle",class:"svg-axis-label"},"M"+(i+1)));
+ }
+ $("flow-svg-desc").textContent=rows.length?rows.map(r=>r.month+": receita "+moneyFmt(r.revenue)+", saídas regulares "+moneyFmt(r.variable+r.fixed+r.interest+r.amortization)).join("; ")+". Movimentos extraordinários estão na tabela.":"Nenhum mês decidido. Gráfico vazio.";
+}
+function renderScenarios(){
+ const box=$("preset-list");box.replaceChildren();
+ for(const [presetIndex,preset] of DATA.scenarios.entries()){
+  const projection=replay(preset.choices),ending=evaluate(projection);
+  const btn=node("button","","scenario");btn.type="button";btn.setAttribute("aria-pressed",String(previewId===preset.id));
+  btn.append(node("strong",preset.name),node("small",preset.summary),node("span",ending.title,"result-tag"),node("small","Caixa "+moneyFmt(projection.state.cash)+" · Dívida "+moneyFmt(projection.state.debt)+" · "+projection.state.employees+" funcionários."));
+  btn.addEventListener("click",()=>{previewId=previewId===preset.id?null:preset.id;render();$("preset-list").children[presetIndex].focus();});
+  box.append(btn);
+ }
+ const selected=DATA.scenarios.find(p=>p.id===previewId);
+ if(!selected){$("preset-feedback").textContent="Selecione uma estratégia para sobrepor a trajetória completa de caixa; sua sequência de decisões não será alterada.";return;}
+ const projection=replay(selected.choices);
+ $("preset-feedback").textContent=selected.name+": "+evaluate(projection).title+". Caixa final "+moneyFmt(projection.state.cash)+", dívida final "+moneyFmt(projection.state.debt)+", confiança "+projection.state.trust+"/100 e equipe de "+projection.state.employees+". Menor caixa no caminho: "+moneyFmt(projection.lowestCash)+".";
+}
+function renderFinal(result){
+ const info=evaluate(result),root=$("ending");
+ root.className="ending"+(info.kind==="stable"?"":info.kind==="fragile"?" fragile":" critical");
+ root.replaceChildren(node("h3",info.title),node("p",info.description),node("p","Para analisar: "+info.recommendation));
+ const container=$("report-metrics");container.replaceChildren();
+ const s=result.state;
+ const rows=[["Caixa final",moneyFmt(s.cash)],["Dívida restante",moneyFmt(s.debt)],["Menor caixa",moneyFmt(result.lowestCash)],["Equipe",s.employees+" pessoas"],["Confiança",s.trust+" / 100"],["Margem operacional",moneyFmt(result.months[result.months.length-1].operating)]];
+ for(const [label,value] of rows){const div=node("div","","report-cell");div.append(node("small",label),node("strong",value));container.append(div);}
+ const list=$("report-ledger");list.replaceChildren();
+ for(const row of result.months){
+  const li=node("li");
+  li.append(node("strong",row.month+": "+row.choice.title),node("p",row.choice.effect),node("span","Vendas "+moneyFmt(row.revenue)+"; saídas recorrentes "+moneyFmt(row.variable+row.fixed+row.interest+row.amortization)+"; movimento extraordinário "+moneyFmt(row.actionCash)+"; caixa "+moneyFmt(row.closingCash)+"; dívida "+moneyFmt(row.closingDebt)+"."));
+  list.append(li);
+ }
+}
+function render(){
+ const result=replay(path);
+ $("confirm").hidden=!resetOpen;
+ renderProgress();renderMonth(result);renderDashboard(result);renderLedger(result);renderScenarios();drawCash(result);drawFlows(result);
+}
+validData(DATA);
+$("continue").addEventListener("click",advance);
+$("undo").addEventListener("click",back);
+$("report-undo").addEventListener("click",back);
+$("restart").addEventListener("click",()=>requestReset("restart"));
+$("report-reset").addEventListener("click",()=>requestReset("report-reset"));
+$("cancel-reset").addEventListener("click",cancelReset);
+$("confirm-reset").addEventListener("click",restart);
+render();
+})();
+</script>
+</body>
+</html>
