@@ -25,7 +25,6 @@
 use mod_mcp\grade\service;
 use mod_mcp\output\activity;
 
-
 /**
  * Feature support required by Moodle.
  * @param $feature
