@@ -25,17 +25,19 @@
 }}
 <div id="mcp-prompt-selector-{{cmid}}" class="mod-mcp-prompt-selector mb-3">
     <p class="mb-2 fw-bold">{{#str}}promptselecttitle, mcp{{/str}}</p>
-    <div class="d-flex flex-wrap mb-2" role="group" aria-label="{{#str}}promptselecttitle, mcp{{/str}}">
+    <div class="nav nav-tabs flex-nowrap overflow-auto mb-3" role="tablist"
+         aria-label="{{#str}}promptselecttitle, mcp{{/str}}">
         {{#promptoptions}}
-            <button type="button" class="btn btn-outline-primary m-1" data-prompt-choice="{{type}}"
-                    aria-pressed="false" aria-controls="mcp-prompt-{{type}}-{{cmid}}">
+            <button type="button" id="mcp-prompt-tab-{{type}}-{{cmid}}" class="nav-link text-nowrap"
+                    role="tab" data-prompt-choice="{{type}}" aria-selected="false" tabindex="-1"
+                    aria-controls="mcp-prompt-{{type}}-{{cmid}}">
                 {{label}}
             </button>
         {{/promptoptions}}
     </div>
-    <p class="text-muted small">{{#str}}promptselecthelp, mcp{{/str}}</p>
     {{#promptoptions}}
-        <div id="mcp-prompt-{{type}}-{{cmid}}" data-prompt-panel="{{type}}" hidden>
+        <div id="mcp-prompt-{{type}}-{{cmid}}" role="tabpanel" tabindex="0"
+             aria-labelledby="mcp-prompt-tab-{{type}}-{{cmid}}" data-prompt-panel="{{type}}" hidden>
             <label class="form-label" for="mcp-prompt-{{type}}-text-{{cmid}}">
                 {{#str}}copyinstructions, mcp{{/str}}
             </label>
@@ -60,24 +62,55 @@ require([], function() {
 
     var choices = root.querySelectorAll('[data-prompt-choice]');
     var panels = root.querySelectorAll('[data-prompt-panel]');
-    Array.prototype.forEach.call(choices, function(button) {
+    function activateTab(button, moveFocus) {
+        var selected = button.getAttribute('data-prompt-choice');
+        Array.prototype.forEach.call(choices, function(choice) {
+            var active = choice === button;
+            choice.setAttribute('aria-selected', active ? 'true' : 'false');
+            choice.setAttribute('tabindex', active ? '0' : '-1');
+            choice.classList.toggle('active', active);
+        });
+        Array.prototype.forEach.call(panels, function(panel) {
+            panel.hidden = panel.getAttribute('data-prompt-panel') !== selected;
+            var status = panel.querySelector('[data-copy-status]');
+            if (status) {
+                status.textContent = '';
+            }
+        });
+        if (moveFocus) {
+            button.focus();
+        }
+    }
+
+    Array.prototype.forEach.call(choices, function(button, index) {
         button.addEventListener('click', function() {
-            var selected = button.getAttribute('data-prompt-choice');
-            Array.prototype.forEach.call(choices, function(choice) {
-                var active = choice.getAttribute('data-prompt-choice') === selected;
-                choice.setAttribute('aria-pressed', active ? 'true' : 'false');
-                choice.classList.toggle('btn-primary', active);
-                choice.classList.toggle('btn-outline-primary', !active);
-            });
-            Array.prototype.forEach.call(panels, function(panel) {
-                panel.hidden = panel.getAttribute('data-prompt-panel') !== selected;
-                var status = panel.querySelector('[data-copy-status]');
-                if (status) {
-                    status.textContent = '';
-                }
-            });
+            activateTab(button, false);
+        });
+        button.addEventListener('keydown', function(event) {
+            var next;
+            switch (event.key) {
+                case 'ArrowRight':
+                    next = (index + 1) % choices.length;
+                    break;
+                case 'ArrowLeft':
+                    next = (index - 1 + choices.length) % choices.length;
+                    break;
+                case 'Home':
+                    next = 0;
+                    break;
+                case 'End':
+                    next = choices.length - 1;
+                    break;
+                default:
+                    return;
+            }
+            event.preventDefault();
+            activateTab(choices[next], true);
         });
     });
+    if (choices.length) {
+        activateTab(choices[0], false);
+    }
 
     // Copy only the selected mode's complete prompt, never the label or other panels.
     function copyFallback(field) {

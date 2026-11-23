@@ -83,6 +83,22 @@ final class activity_prompt_test extends \advanced_testcase {
     }
 
     /**
+     * Prompt choices use accessible tabs and do not show the redundant helper text.
+     */
+    public function test_prompt_selector_uses_accessible_tabs(): void {
+        $template = file_get_contents(__DIR__ . "/../templates/prompt_selector.mustache");
+        $this->assertNotFalse($template);
+        foreach (['class="nav nav-tabs', 'role="tablist"', 'role="tab"', 'role="tabpanel"',
+                  'aria-selected="false"', 'aria-controls=', 'aria-labelledby=',
+                  "ArrowRight", "ArrowLeft", "Home", "End"] as $expected) {
+            $this->assertStringContainsString($expected, $template);
+        }
+        $this->assertStringContainsString("activateTab(choices[0], false)", $template);
+        $this->assertStringNotContainsString("promptselecthelp", $template);
+        $this->assertStringNotContainsString("aria-pressed", $template);
+    }
+
+    /**
      * An unknown type must not silently turn into a quiz.
      */
     public function test_unknown_prompt_type_is_rejected(): void {
