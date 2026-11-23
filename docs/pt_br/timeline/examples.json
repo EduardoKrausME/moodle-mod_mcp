@@ -3,5 +3,23 @@
   "category": "timeline",
   "title": "Linha do tempo",
   "description": "Linhas cronológicas navegáveis com detalhes por marco.",
-  "examples": []
+  "examples": [
+    {
+      "id": "historia-do-mundo",
+      "title": "História do Mundo: 12 marcos para explorar",
+      "description": "Viagem ilustrada por 12 marcos de sociedades, trocas, conflitos e transformações globais, da Mesopotâmia à Web.",
+      "howItWorks": "Selecione marcos na faixa cronológica ou avance pelas setas; observe ilustrações SVG autorais, leia contexto, impacto e limites históricos, acompanhe marcos visitados e responda três perguntas com feedback formativo.",
+      "features": [
+        "12 marcos históricos em diferentes regiões",
+        "12 ilustrações SVG autorais e descritas",
+        "Navegação por teclado, toque e botões",
+        "Contexto e olhar crítico em cada época",
+        "Progresso local reiniciável",
+        "3 perguntas de revisão com feedback"
+      ],
+      "minutes": 12,
+      "path": "timeline/historia-do-mundo.html",
+      "prompt": "Crie uma atividade do tipo linha do tempo para o mod_mcp, tomando \"História do Mundo: 12 marcos para explorar\" apenas como referência de interação, profundidade pedagógica e qualidade visual, nunca como tema obrigatório.\n\nNa sua PRIMEIRA resposta, antes de gerar HTML, CSS, JavaScript, imagens, textos da atividade ou usar qualquer ferramenta de gravação, pergunte exatamente: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" Aguarde a resposta do professor; não reutilize automaticamente o tema do exemplo.\n\nApós a resposta, esclareça somente dúvidas indispensáveis, use fontes confiáveis e as referências fornecidas. Produza um recorte cronológico adequado ao assunto escolhido, com datas ou fases claras, contexto, efeitos, limites das interpretações, conexões entre acontecimentos e perguntas de revisão com feedback explicativo. Evite teleologia, eurocentrismo, anacronismos, datas inventadas e tratar hipóteses como fatos estabelecidos.\n\nReproduza a mecânica pedagógica, não a aparência: faixa de marcos selecionáveis e rolável, detalhes contextuais por marco, navegação Anterior/Próximo, suporte a teclado (setas, Home e End), indicador de marcos visitados, reinício e três ou mais perguntas formativas. Construa um design visual ORIGINAL adequado ao conteúdo escolhido, com ilustrações SVG autorais pertinentes, cada uma com title e desc; declare a natureza esquemática das imagens. Não dependa de imagens externas ou CDN.\n\nEntregue um único HTML completo, autossuficiente, com CSS e JavaScript internos, responsivo, acessível, com foco visível, contraste, aria-live nos feedbacks, suporte a prefers-reduced-motion e elementos semânticos. Use textContent para dados e não exponha credenciais. A atividade deve conter exclusivamente seu conteúdo pedagógico, sem menus, cabeçalho institucional, rodapé ou navegação externa.\n\nO progresso de exploração e as respostas formativas desta demonstração ficam apenas na memória da página; não finja persistência nem atribua nota oficial por JavaScript. Se a atividade real precisar armazenar respostas, use somente as APIs oficiais do SDK MoodleMCP efetivamente disponíveis, respeitando permissões e privacidade. Sem conexão com ChatGPT ou Claude (usando o protocolo MCP), entregue o HTML pronto para copiar e colar no gerenciador; com conexão, utilize as APIs reais, rascunho e prévia, sem publicar antes de aprovação explícita."
+    }
+  ]
 }

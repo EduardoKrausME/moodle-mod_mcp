@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>História do Mundo: 12 marcos para explorar</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f2f7ff;background:#081426;--accent:#79e6dc;--border:rgba(207,228,253,.18)}
+*{box-sizing:border-box}body{margin:0;min-width:320px;background:radial-gradient(ellipse at 80% 0%,#173659 0%,transparent 43%),#081426;color:#f2f7ff}
+button{font:inherit}button:focus-visible,a:focus-visible{outline:3px solid #f8dc82;outline-offset:4px}button:disabled{cursor:not-allowed;opacity:.36}
+.atlas{max-width:1280px;margin:0 auto;padding:clamp(16px,3.2vw,42px)}.masthead{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:26px}.kicker{text-transform:uppercase;font-size:.75rem;font-weight:850;letter-spacing:.22em;color:#97dae9;margin:0 0 8px}.masthead h1{font-size:clamp(1.8rem,3.7vw,3.35rem);letter-spacing:-.05em;line-height:1.06;margin:0;max-width:700px}.masthead p{max-width:730px;color:#b7cbe1;font-size:1rem;line-height:1.65;margin:13px 0 0}
+.masthead .stamp{border:1px solid var(--border);color:#c6e1ee;border-radius:999px;padding:10px 14px;font-weight:800;white-space:nowrap;font-size:.78rem;margin-top:10px}
+.panorama{display:grid;grid-template-columns:minmax(260px,.88fr) minmax(0,1.2fr);border:1px solid var(--border);border-radius:24px;overflow:hidden;min-height:410px;background:linear-gradient(120deg,rgba(25,45,76,.88),rgba(10,24,45,.96));box-shadow:0 22px 58px #0004}
+.art-side{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;min-height:380px;background:radial-gradient(circle at 55% 42%,color-mix(in srgb,var(--accent) 23%,transparent),transparent 50%),linear-gradient(140deg,#183a59,#0b1b33);padding:24px;isolation:isolate}
+.art-side:before{content:"";position:absolute;inset:0;opacity:.27;background-image:radial-gradient(#e8f8ff 1px,transparent 1px);background-size:29px 29px;pointer-events:none;z-index:-1}
+.art-tag{align-self:flex-start;border:1px solid #eef8ff55;border-radius:999px;padding:8px 12px;background:#071c32a8;color:#e2f6ff;font-size:.78rem;letter-spacing:.07em;font-weight:780}
+.artwork{width:min(100%,380px);max-height:260px;margin:auto;display:block;color:var(--accent);filter:drop-shadow(0 18px 26px #01070f7a)}
+.art-footer{display:flex;gap:14px;align-items:center;justify-content:space-between;font-size:.73rem;color:#d7e7f2;letter-spacing:.05em}.art-footer .line{height:1px;background:#dceaff3b;flex:1}
+.story{display:flex;flex-direction:column;padding:clamp(22px,3.7vw,44px)}.era{display:flex;align-items:center;gap:10px;color:var(--accent);font-size:.89rem;font-weight:800;letter-spacing:.08em}.era .point{width:9px;height:9px;border-radius:50%;background:currentColor;box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 12%,transparent)}
+.story h2{font-size:clamp(1.65rem,3.3vw,2.8rem);line-height:1.1;letter-spacing:-.037em;margin:16px 0 8px}.subtitle{font-size:1rem;font-weight:680;color:#d3e3f4;margin:0 0 15px}.summary{line-height:1.72;color:#d5dfed;margin:0 0 18px;font-size:1rem}
+.insights{display:grid;gap:12px;margin:0 0 18px}.insight{border-left:3px solid var(--accent);padding:7px 12px;background:#ffffff0a;border-radius:0 9px 9px 0}.insight small{display:block;font-size:.69rem;font-weight:850;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin:0 0 5px}.insight p{margin:0;color:#c5d5e6;line-height:1.55;font-size:.88rem}
+.actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:auto;padding-top:12px}.action{border:1px solid #6f8fad;border-radius:11px;color:#f3fbff;background:transparent;padding:11px 17px;min-height:44px;cursor:pointer;font-weight:780}.action.primary{color:#071a2b;background:var(--accent);border-color:var(--accent)}.action:not(:disabled):hover{background:#264460}.action.primary:not(:disabled):hover{filter:brightness(1.08);background:var(--accent)}
+.timeline-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:25px 0 12px}.timeline-heading h2,.review h2{font-size:1.1rem;letter-spacing:-.02em;margin:0}.timeline-heading p{margin:0;color:#aec1d5;font-size:.8rem}.track{display:flex;gap:8px;overflow-x:auto;padding:18px 2px 20px;scrollbar-color:#6286a8 #14283e;scroll-snap-type:x proximity}.stop{position:relative;border:1px solid #38546c;border-radius:12px;background:#10233a;color:#c9dcef;padding:15px 12px;min-width:145px;max-width:145px;text-align:left;cursor:pointer;scroll-snap-align:center;transition:background .15s ease,border-color .15s ease}.stop:before{content:"";width:8px;height:8px;display:inline-block;margin-right:8px;border:2px solid #95b9cf;border-radius:50%;vertical-align:middle}.stop .stop-date{display:block;font-size:.72rem;color:#a7bfd2;margin-top:8px}.stop .stop-name{display:block;font-size:.85rem;font-weight:750;line-height:1.3;margin-top:5px;min-height:34px}.stop.current{background:#1e4258;border-color:var(--accent);color:#fff;box-shadow:inset 0 3px 0 var(--accent)}.stop.current:before,.stop.visited:before{background:var(--accent);border-color:var(--accent)}.stop:hover{border-color:#e8f7ff}
+.progress-area{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 0 20px;color:#c3d7e9;font-size:.84rem}.meter{height:7px;border-radius:999px;background:#26415e;overflow:hidden;flex:1;min-width:100px}.meter-fill{height:100%;width:8.33%;background:linear-gradient(90deg,#5bb0cd,#8de5d8);transition:width .2s ease}.reset{background:none;border:0;color:#bfeae7;text-decoration:underline;cursor:pointer;padding:9px 3px}
+.review{border:1px solid var(--border);background:#0d2137;border-radius:20px;padding:clamp(17px,2.8vw,30px);margin-top:8px}.review-intro{color:#b9cee0;font-size:.9rem;line-height:1.5;margin:8px 0 18px}.questions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.question{min-width:0;border:1px solid #3b5871;border-radius:13px;padding:16px;margin:0}.question legend{font-weight:760;line-height:1.4;font-size:.92rem;padding:0 5px}.choices{display:flex;flex-direction:column;gap:8px;margin-top:14px}.choice{width:100%;min-height:44px;text-align:left;border:1px solid #536d86;border-radius:9px;background:#18304a;color:#eaf7ff;padding:9px 11px;cursor:pointer}.choice:hover{border-color:#cde9f6}.choice[aria-pressed=true]{border-color:#91dec9;background:#235147}.feedback{min-height:40px;font-size:.83rem;line-height:1.45;color:#e9e1b3;margin:12px 0 0}.feedback.correct{color:#9ce7bf}.afterword{font-size:.8rem;line-height:1.6;color:#a7c2d6;margin:22px 0 0;border-top:1px solid #ffffff23;padding-top:16px}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:850px){.panorama{grid-template-columns:1fr}.art-side{min-height:275px}.artwork{max-height:175px}.masthead{flex-direction:column;gap:8px}.masthead .stamp{margin:0}.questions{grid-template-columns:1fr}.story{min-height:370px}}
+@media(max-width:500px){.atlas{padding:14px}.panorama{border-radius:15px}.story{padding:22px 17px}.art-side{min-height:230px}.artwork{max-height:135px}.story h2{font-size:1.85rem}.timeline-heading{align-items:flex-start;flex-direction:column;gap:6px}.stop{min-width:132px;max-width:132px}.actions .action{padding:10px 13px}.stamp{font-size:.72rem}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.track{scroll-snap-type:none}}
+</style>
+</head>
+<body>
+<main class="atlas">
+  <div class="masthead">
+    <div><p class="kicker">Atlas do tempo / História global</p><h1>12 viradas que conectam o mundo</h1><p>Do crescimento das cidades à circulação digital de ideias. Explore cada marco, compare contextos e descubra por que a história não cabe numa única linha reta.</p></div>
+    <span class="stamp" aria-label="12 marcos para explorar">12 marcos · 5 continentes em diálogo</span>
+  </div>
+  <section class="panorama" aria-labelledby="event-title">
+    <div class="art-side" id="art-side">
+      <span class="art-tag" id="region-tag">Ásia Ocidental</span>
+      <svg class="artwork" viewBox="0 0 420 285" role="img" aria-labelledby="art-title art-desc">
+        <title id="art-title">Ilustração do marco histórico</title><desc id="art-desc">Desenho vetorial original e esquemático; não é uma reconstrução histórica.</desc>
+        <defs>
+          <symbol id="art-cities" viewBox="0 0 420 285"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M39 242h345M63 242V125h70v117m0-85h72v85m0-149h70v149m0-112h80v112M76 103l20-29 22 29M212 73l31-43 27 43"/><path d="M93 153v27m0 14v22m70-43v20m38-58v20m36-40v24m0 23v30m74-37v25m22-32v33"/><path d="M30 245q40 24 80 0t80 0t80 0t80 0"/></g></symbol>
+          <symbol id="art-indus" viewBox="0 0 420 285"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M55 225h305V68H55zM55 125h305M55 175h305M125 68v157m83-157v157m85-157v157M37 242h345"/><path d="M74 90h35m38 0h41m41 0h44m34 0h34M76 147h29m41 0h40m45 0h39m45 0h28M75 198h35m38 0h39m41 0h40m41 0h32" opacity=".6"/><path d="M34 260q30-16 60 0t60 0t60 0t60 0t60 0t60 0"/></g></symbol>
+          <symbol id="art-qin" viewBox="0 0 420 285"><g stroke="currentColor" stroke-width="5" fill="none" stroke-linejoin="round"><path d="M47 235V126h48v109m230 0V126h48v109M90 142V92h239v50M78 91l16-24h231l17 24M90 142h239v93H90z"/><path d="M173 235v-66a35 35 0 0 1 70 0v66M115 161h26m141 0h25M103 191h40m137 0h40M37 235h344"/><path d="M96 67h226M208 67V34m-13 16h26"/></g></symbol>
+          <symbol id="art-hegira" viewBox="0 0 420 285"><g stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M266 39a57 57 0 1 0 52 80 64 64 0 1 1-52-80z"/><path d="M31 220q50-43 94 0t95-5t169 5M33 249q63-23 124 0t122 0t112 0M154 224q20-40 42-64t53-39"/><circle cx="147" cy="154" r="7"/><path d="M146 166l-6 25m8-17l17 15m-19-17l-14 14"/></g></symbol>
+          <symbol id="art-mali" viewBox="0 0 420 285"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><circle cx="321" cy="79" r="36"/><path d="M28 235q55-40 111 0t111-7t143 7M99 191l9-66 38-17 27 15 27-10 37 29 19 47m-133-56 18 29 34-2 21-18m-83 48-8 46m48-46v46m49-46 9 46m47-46 13 46"/><path d="M244 145l27 4 12 23-11 15-28-10m-112-69q20-35 43 10m-85 55-28 7-18 20"/><path d="M70 236h299"/></g></symbol>
+          <symbol id="art-printing" viewBox="0 0 420 285"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M49 86q87-18 161 13 74-31 161-13v150q-90-17-161 14-76-31-161-14zM210 99v151M72 115q60-7 114 10m-114 22q60-8 114 9m-114 24q60-7 114 10m45-65q58-17 114-10m-114 43q58-17 114-10m-114 43q58-17 114-10"/><path d="M141 51h140m-18-15v31m-112-31v31"/></g></symbol>
+          <symbol id="art-atlantic" viewBox="0 0 420 285"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M54 218h298l-30 32H92zM207 59v159M202 71l-108 121h107m18-124 91 124h-91M49 257q27-13 54 0t54 0t54 0t54 0t54 0t54 0"/><path d="M207 57l47 13-47 10M66 61q55-30 109 0M298 54q36 22 61 0"/></g></symbol>
+          <symbol id="art-industry" viewBox="0 0 420 285"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M39 243V134l79 40v-40l77 40v-40l78 40v-40l87 42v67zM99 136V47h48v101m130-49V41h44v100M87 205h30m26 0h28m25 0h30m22 0h30m22 0h29"/><path d="M115 38q-19-25 12-34m170 25q-17-14 1-26" opacity=".7"/></g></symbol>
+          <symbol id="art-haiti" viewBox="0 0 420 285"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"><circle cx="210" cy="106" r="49"/><path d="M210 24v14m0 137v14M130 106h-14m188 0h-14m-136-57-12-12m136 137 12 12m0-149-12 12M142 174l12-12"/><path d="M62 215c12-15 35-18 50-4l16 14c14 13 33 13 46 0l15-15m169 5c-12-15-35-18-50-4l-16 14c-14 13-33 13-46 0l-15-15M189 209l-13-19m43 35 13 22M48 255h324"/></g></symbol>
+          <symbol id="art-un" viewBox="0 0 420 285"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><circle cx="211" cy="134" r="94"/><ellipse cx="211" cy="134" rx="42" ry="94"/><path d="M117 134h188M134 81h154M134 187h154M211 41v187"/><path d="M95 80q-61 55 3 145m230-145q62 55-3 145M91 96l-31-10m28 38-27-3m28 38-29 5m37 31-25 12m252-111 31-10m-28 38 27-3m-28 38 29 5m-37 31 25 12"/></g></symbol>
+          <symbol id="art-moon" viewBox="0 0 420 285"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="318" cy="86" r="57"/><circle cx="293" cy="74" r="12"/><circle cx="338" cy="104" r="8"/><path d="M37 243q75-31 143-5t202-5M183 213l8-92 18-35 18 35 9 92zM191 138h36M190 190h45M183 170l-26 39h26m53-39 26 39h-26M208 217l-12 28m21-28 12 28M208 78V57"/></g></symbol>
+          <symbol id="art-web" viewBox="0 0 420 285"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M75 74 207 141 344 70M75 74l11 142 121-75 122 77 15-148M86 216l243 2M207 141 207 32m0 109 5 104M75 74l132-42 137 38M86 216l126 29 117-27"/><circle cx="75" cy="74" r="16" fill="#0d243a"/><circle cx="207" cy="141" r="23" fill="#0d243a"/><circle cx="344" cy="70" r="16" fill="#0d243a"/><circle cx="86" cy="216" r="16" fill="#0d243a"/><circle cx="329" cy="218" r="16" fill="#0d243a"/><circle cx="207" cy="32" r="11" fill="#0d243a"/><circle cx="212" cy="245" r="11" fill="#0d243a"/></g></symbol>
+        </defs>
+        <use id="art-use" href="#art-cities"></use>
+      </svg>
+      <div class="art-footer"><span>ILUSTRAÇÃO VETORIAL ORIGINAL</span><span class="line"></span><span id="art-index">01 / 12</span></div>
+    </div>
+    <article class="story">
+      <div class="era"><span class="point" aria-hidden="true"></span><span id="event-date">c. 3500 a.C.</span></div>
+      <h2 id="event-title">As cidades transformam a vida coletiva</h2>
+      <p class="subtitle" id="event-subtitle">Mesopotâmia, entre os rios Tigre e Eufrates</p>
+      <p class="summary" id="event-summary"></p>
+      <div class="insights">
+        <div class="insight"><small>Por que isso importa?</small><p id="event-impact"></p></div>
+        <div class="insight"><small>Olhar crítico</small><p id="event-nuance"></p></div>
+      </div>
+      <div class="actions">
+        <button type="button" class="action" id="previous" aria-label="Voltar ao marco anterior">← Anterior</button>
+        <button type="button" class="action primary" id="next" aria-label="Avançar ao próximo marco">Próximo →</button>
+      </div>
+    </article>
+  </section>
+  <div class="timeline-heading"><h2>Escolha um momento da história</h2><p>Use as setas do teclado na faixa para percorrer os marcos.</p></div>
+  <nav class="track" id="track" aria-label="Marcos históricos em ordem cronológica"></nav>
+  <div class="progress-area"><span id="progress-label">1 de 12 marcos explorados</span><div class="meter" role="progressbar" aria-label="Marcos explorados" aria-valuemin="0" aria-valuemax="12" aria-valuenow="1" id="meter"><div class="meter-fill" id="meter-fill"></div></div><button type="button" class="reset" id="reset">Recomeçar exploração</button></div>
+  <section class="review" aria-labelledby="review-title">
+    <h2 id="review-title">Teste suas conexões</h2>
+    <p class="review-intro">Três perguntas curtas para ligar períodos e continentes. O retorno é apenas formativo, nesta página; não gera nota nem registro no Moodle.</p>
+    <div class="questions" id="questions"></div>
+    <p class="afterword">Este é um recorte didático, não uma classificação de povos por importância. Datas com “c.” são aproximadas, os desenhos são simbólicos e processos históricos longos foram representados por marcos de referência. A exploração fica somente na memória desta página e pode ser reiniciada.</p>
+  </section>
+  <p class="sr-only" id="announcement" aria-live="polite" aria-atomic="true"></p>
+</main>
+<script>
+"use strict";
+const milestones = [{"date":"c. 3500 a.C.","sort":-3500,"region":"Ásia Ocidental","short":"Primeiras cidades","title":"As cidades transformam a vida coletiva","subtitle":"Mesopotâmia, entre os rios Tigre e Eufrates","summary":"Centros urbanos como Uruk reuniram agricultura, especialização do trabalho, circulação de bens e estruturas de governo. A urbanização surgiu em ritmos diferentes em outras regiões, e não a partir de uma única cidade que inventou tudo.","impact":"Viver em cidades ampliou a coordenação de obras, trocas e decisões, mas também trouxe disputas por recursos e desigualdades.","nuance":"Data aproximada: não há um único ano de nascimento das cidades. A organização urbana tem histórias independentes pelo planeta.","art":"cities","color":"#79E6DC"},{"date":"c. 2600 a.C.","sort":-2600,"region":"Sul da Ásia","short":"Vale do Indo","title":"O planejamento urbano no Vale do Indo","subtitle":"Harappa e Mohenjo-daro","summary":"Grandes centros da civilização do Indo apresentavam traçados planejados, redes de drenagem e complexas formas de produção e troca. Sua escrita ainda não foi decifrada de modo consensual.","impact":"Essas cidades mostram como infraestrutura e gestão da água já eram desafios centrais da vida urbana muito antes das metrópoles atuais.","nuance":"Não confunda a escrita do Indo com textos já traduzidos: várias interpretações sobre sua organização política continuam em debate.","art":"indus","color":"#FFC98B"},{"date":"221 a.C.","sort":-221,"region":"Leste Asiático","short":"China Qin","title":"A dinastia Qin unifica reinos","subtitle":"Formação do primeiro império Qin","summary":"Após o período dos Reinos Combatentes, Qin Shi Huang consolidou a unificação política de grandes territórios chineses. A padronização de medidas, escrita e administração teve efeitos duradouros.","impact":"A reorganização do território e da administração influenciou instituições imperiais posteriores, embora o governo Qin tenha durado pouco.","nuance":"Unificação política não significou uniformidade cultural, nem ausência de violência e resistência.","art":"qin","color":"#FFB3C7"},{"date":"622 d.C.","sort":622,"region":"Península Arábica","short":"Hégira","title":"A Hégira marca uma nova era","subtitle":"Migração de Maomé de Meca para Medina","summary":"A Hégira, em 622, tornou-se o ponto de referência do calendário islâmico. Nas décadas seguintes, sociedades sob diferentes governos islâmicos desenvolveram importantes redes de intercâmbio cultural, econômico e intelectual.","impact":"Calendários também expressam referências históricas e culturais: a contagem dos anos depende de convenções compartilhadas.","nuance":"O calendário islâmico é lunar; suas datas não correspondem de forma fixa às datas do calendário gregoriano.","art":"hegira","color":"#B4B9FF"},{"date":"c. 1235 d.C.","sort":1235,"region":"África Ocidental","short":"Império do Mali","title":"O Império do Mali ganha força","subtitle":"Rotas comerciais e centros de aprendizagem","summary":"A tradição histórica situa a ascensão de Sundiata Keita no século XIII. O Império do Mali consolidou redes de comércio transaariano, enquanto cidades como Tombuctu se tornaram centros importantes de estudo em períodos posteriores.","impact":"Ouro, sal, livros e ideias circularam em redes africanas e intercontinentais, contrariando a ideia de uma África isolada da história mundial.","nuance":"As datas iniciais do império e alguns episódios da vida de Sundiata variam conforme fontes orais e registros escritos.","art":"mali","color":"#F6D97D"},{"date":"c. 1450 d.C.","sort":1450,"region":"Europa / Ásia","short":"Tipos móveis","title":"Impressão e circulação de ideias","subtitle":"Expansão da imprensa de Gutenberg na Europa","summary":"Na Europa, as técnicas de Gutenberg ampliaram a produção de livros impressos com tipos móveis metálicos. A impressão e os tipos móveis tinham antecedentes importantes na China e na Coreia, que não devem ser apagados dessa história.","impact":"A multiplicação de exemplares favoreceu a circulação de debates e conhecimentos, embora acesso à leitura e poder editorial continuassem desiguais.","nuance":"A data é aproximada e se refere à expansão europeia, não à invenção mundial da impressão.","art":"printing","color":"#A8E9A0"},{"date":"1492 d.C.","sort":1492,"region":"Atlântico / Américas","short":"Atlântico","title":"Travessias atlânticas mudam o planeta","subtitle":"Conquistas, contatos e colonização","summary":"A viagem de Colombo em 1492 integra o avanço europeu pelo Atlântico. Povos indígenas já habitavam as Américas havia milênios; os contatos que se seguiram envolveram intercâmbio biológico e cultural, conquistas, escravização e epidemias.","impact":"As conexões atlânticas reconfiguraram populações, economias e ecossistemas em vários continentes, com efeitos profundamente desiguais.","nuance":"1492 não representa a 'descoberta' de terras vazias. O marco é usado para examinar processos globais e seus custos humanos.","art":"atlantic","color":"#89C6FF"},{"date":"c. 1760 d.C.","sort":1760,"region":"Reino Unido / Mundo","short":"Indústria","title":"Produção mecanizada ganha escala","subtitle":"Primeira Revolução Industrial","summary":"A industrialização britânica acelerou a mecanização de setores como o têxtil, com uso crescente do carvão e da máquina a vapor. O processo se espalhou em tempos e condições diferentes pelo mundo.","impact":"Mudaram as relações de trabalho, as cidades e o consumo de energia, enquanto aumentaram a poluição e diversas formas de exploração laboral.","nuance":"Revolução Industrial é um processo prolongado, não um evento iniciado universalmente em um único ano.","art":"industry","color":"#FFAD89"},{"date":"1804 d.C.","sort":1804,"region":"Caribe","short":"Haiti","title":"O Haiti conquista a independência","subtitle":"Revolução e ruptura com a escravidão colonial","summary":"Em 1804, após uma revolução liderada por pessoas escravizadas e libertas, o Haiti declarou independência da França. Foi um acontecimento central na história do abolicionismo e das lutas anticoloniais.","impact":"A revolução desafiou diretamente o sistema escravista atlântico e transformou debates sobre liberdade e cidadania.","nuance":"A independência não encerrou os desafios: isolamento diplomático, pressões externas e obrigações financeiras marcaram o país.","art":"haiti","color":"#FF9BB5"},{"date":"1945 d.C.","sort":1945,"region":"Mundo","short":"ONU","title":"Guerra mundial termina; ONU é fundada","subtitle":"Reconstrução e cooperação internacional","summary":"A Segunda Guerra Mundial terminou em 1945. No mesmo ano, entrou em vigor a Carta das Nações Unidas, criada com o objetivo de fortalecer a cooperação e a paz internacional após uma catástrofe global.","impact":"O período reorganizou relações entre Estados e impulsionou debates sobre direitos humanos, descolonização e ordem internacional.","nuance":"A fundação da ONU não eliminou guerras, conflitos ou desigualdades entre os países.","art":"un","color":"#8CD8F5"},{"date":"1969 d.C.","sort":1969,"region":"Lua","short":"Chegada à Lua","title":"Pessoas caminham na superfície lunar","subtitle":"Missão Apollo 11","summary":"Em julho de 1969, Neil Armstrong e Buzz Aldrin caminharam na Lua, enquanto Michael Collins permaneceu em órbita lunar. A missão envolveu décadas de pesquisa e grandes equipes de engenharia.","impact":"A exploração espacial mobilizou ciência, tecnologia, comunicação e imaginação coletiva durante a corrida espacial.","nuance":"O feito foi resultado de trabalho coletivo e ocorreu no contexto de disputa geopolítica da Guerra Fria.","art":"moon","color":"#D2BAFF"},{"date":"1991 d.C.","sort":1991,"region":"Redes globais","short":"World Wide Web","title":"A Web começa a se abrir ao mundo","subtitle":"Documentos conectados por hiperlinks","summary":"Tim Berners-Lee propôs a Web em 1989 no CERN, e a tecnologia passou a ser disponibilizada publicamente em 1991. Ela funciona sobre a internet, que já existia antes da Web.","impact":"Páginas ligadas por hiperlinks transformaram publicação, pesquisa, comércio e circulação de informações em escala global.","nuance":"Internet e Web não são sinônimos. O acesso foi desigual e a expansão trouxe novos desafios de privacidade e desinformação.","art":"web","color":"#8BE9C1"}];
+const checks = [
+ {question:"Qual evento ocorreu primeiro?",options:["Independência do Haiti","Unificação Qin","Fundação da ONU"],answer:1,why:"A unificação Qin ocorreu em 221 a.C.; Haiti em 1804 e ONU em 1945."},
+ {question:"Qual afirmação sobre a impressão é correta?",options:["Gutenberg inventou toda a impressão mundial","A impressão existia na Ásia antes de Gutenberg","A impressão surgiu depois da Web"],answer:1,why:"A China e a Coreia desenvolveram tradições de impressão e tipos móveis antes da expansão europeia no século XV."},
+ {question:"O que diferencia Web e internet?",options:["A Web é um serviço que usa a internet","São duas palavras para a mesma tecnologia","A internet só passou a existir em 1991"],answer:0,why:"A internet já existia; a Web organiza recursos ligados por hiperlinks sobre essa infraestrutura."}
+];
+const byId = id => document.getElementById(id);
+const track = byId("track");
+const state = {current:0,visited:new Set([0]),answers:new Map()};
+const nodes = milestones.map((item,index)=>{
+  const button=document.createElement("button");
+  button.type="button";button.className="stop";
+  const date=document.createElement("span");date.className="stop-date";date.textContent=item.date;
+  const name=document.createElement("span");name.className="stop-name";name.textContent=item.short;
+  button.append(date,name);
+  button.setAttribute("aria-label",item.date+": "+item.title);
+  button.addEventListener("click",()=>select(index));
+  button.addEventListener("keydown",e=>{
+    let target=null;
+    if(e.key==="ArrowRight")target=Math.min(index+1,milestones.length-1);
+    if(e.key==="ArrowLeft")target=Math.max(index-1,0);
+    if(e.key==="Home")target=0;
+    if(e.key==="End")target=milestones.length-1;
+    if(target!==null){e.preventDefault();select(target);nodes[target].focus();}
+  });
+  track.append(button);
+  return button;
+});
+function select(index){
+  if(!Number.isInteger(index)||index<0||index>=milestones.length)return;
+  state.current=index;state.visited.add(index);
+  const item=milestones[index];
+  document.documentElement.style.setProperty("--accent",item.color);
+  byId("region-tag").textContent=item.region;
+  byId("event-date").textContent=item.date;
+  byId("event-title").textContent=item.title;
+  byId("event-subtitle").textContent=item.subtitle;
+  byId("event-summary").textContent=item.summary;
+  byId("event-impact").textContent=item.impact;
+  byId("event-nuance").textContent=item.nuance;
+  byId("art-title").textContent="Ilustração esquemática: "+item.title;
+  byId("art-desc").textContent="Arte vetorial simbólica original referente a "+item.short+". Não representa uma reconstrução histórica.";
+  byId("art-use").setAttribute("href","#art-"+item.art);
+  byId("art-index").textContent=String(index+1).padStart(2,"0")+" / "+milestones.length;
+  byId("previous").disabled=index===0;byId("next").disabled=index===milestones.length-1;
+  nodes.forEach((node,i)=>{
+    node.classList.toggle("current",i===index);
+    node.classList.toggle("visited",state.visited.has(i));
+    node.setAttribute("aria-current",i===index?"true":"false");
+  });
+  byId("progress-label").textContent=state.visited.size+" de "+milestones.length+" marcos explorados";
+  byId("meter").setAttribute("aria-valuenow",String(state.visited.size));
+  byId("meter-fill").style.width=(state.visited.size*100/milestones.length)+"%";
+  byId("announcement").textContent="Marco "+(index+1)+" de "+milestones.length+": "+item.date+", "+item.title;
+  track.scrollTo({left:Math.max(0,nodes[index].offsetLeft-track.offsetLeft-track.clientWidth/2+nodes[index].clientWidth/2),behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+}
+byId("previous").addEventListener("click",()=>select(state.current-1));
+byId("next").addEventListener("click",()=>select(state.current+1));
+byId("reset").addEventListener("click",()=>{
+  state.visited.clear();state.visited.add(0);state.answers.clear();
+  document.querySelectorAll(".choice").forEach(button=>{button.setAttribute("aria-pressed","false");});
+  document.querySelectorAll(".feedback").forEach(p=>{p.textContent="Escolha uma resposta para receber uma explicação.";p.classList.remove("correct");});
+  select(0);
+  byId("announcement").textContent="Exploração reiniciada. Primeiro marco disponível.";
+});
+function showChecks(){
+  checks.forEach((check,q)=>{
+    const fieldset=document.createElement("fieldset");fieldset.className="question";
+    const legend=document.createElement("legend");legend.textContent=(q+1)+". "+check.question;
+    const choices=document.createElement("div");choices.className="choices";
+    const feedback=document.createElement("p");feedback.className="feedback";feedback.setAttribute("aria-live","polite");
+    feedback.textContent="Escolha uma resposta para receber uma explicação.";
+    const buttons=check.options.map((text,choice)=>{
+      const btn=document.createElement("button");btn.className="choice";btn.type="button";btn.textContent=text;
+      btn.setAttribute("aria-pressed","false");
+      btn.addEventListener("click",()=>{
+        state.answers.set(q,choice);
+        buttons.forEach((other,i)=>other.setAttribute("aria-pressed",i===choice?"true":"false"));
+        const good=choice===check.answer;
+        feedback.textContent=(good?"Correto. ":"Ainda não. ")+check.why;
+        feedback.classList.toggle("correct",good);
+      });
+      choices.append(btn);return btn;
+    });
+    fieldset.append(legend,choices,feedback);byId("questions").append(fieldset);
+  });
+}
+showChecks();select(0);
+</script>
+</body>
+</html>
