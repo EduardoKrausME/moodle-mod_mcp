@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Do Cacau ao Chocolate · Ateliê Interativo</title>
+<style>
+:root{color-scheme:light;--cocoa:#35201c;--plum:#493028;--copper:#b86b43;--sand:#f8efe1;--paper:#fffcf6;--ink:#3d2b29;--secondary:#715d56;--lime:#e4c986;--edge:#e1cdb9;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--sand)}
+*{box-sizing:border-box}body{margin:0;min-width:320px;background:repeating-linear-gradient(90deg,transparent 0 46px,#e5d5c32a 47px 48px),#f8efe1}
+button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #196d86;outline-offset:3px}button:disabled{opacity:.43;cursor:not-allowed}
+.page{max-width:1360px;margin:auto;padding:clamp(13px,2.6vw,35px)}
+.hero{background:radial-gradient(circle at 81% 35%,#8e513e 0,transparent 37%),#36211e;color:#fff5e9;border-radius:22px;padding:clamp(22px,4.2vw,50px);display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.37fr);gap:20px;align-items:center;overflow:hidden}
+.kicker{font:850 .71rem ui-monospace,Consolas,monospace;letter-spacing:.18em;color:#e8be88;text-transform:uppercase;margin:0 0 14px}
+.hero h1{font:normal clamp(2.15rem,5vw,4.65rem)/1.05 Georgia,serif;letter-spacing:-.05em;margin:0}
+.hero p:last-child{line-height:1.62;color:#f1ddca;max-width:800px;font-size:.95rem;margin:15px 0 0}
+.hero svg{display:block;width:min(100%,235px);height:auto;max-height:230px;color:#ffce83;margin:auto;transform:rotate(-13deg)}
+.hero-seal{font:800 .68rem ui-monospace,monospace;letter-spacing:.1em;color:#f8d3a6;border:1px solid #cf9f6f;border-radius:30px;padding:7px 12px;display:inline-block;margin-top:17px}
+.mode-nav{display:flex;gap:10px;margin:20px 0 18px;flex-wrap:wrap}
+.mode-nav button{border:1px solid #c8a88c;border-radius:12px;background:#fffbf3;color:#5c3932;padding:13px 17px;min-height:48px;font-weight:830}
+.mode-nav button[aria-pressed="true"]{color:#fff;background:#653c32;border-color:#653c32}
+.mode{display:none}.mode.is-active{display:block}
+.workspace{display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;align-items:start}
+.timeline-sidebar{border:1px solid #d6bc9f;background:#f4e5d1;border-radius:17px;padding:18px 14px}
+.timeline-sidebar h2,.lab-sidebar h2{font-size:1.07rem;margin:0 0 8px}.muted{font-size:.84rem;color:#716158;line-height:1.56;margin:0 0 12px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.filter{border:1px solid #bb9c7c;background:#fffcf5;color:#5d483b;border-radius:999px;min-height:38px;padding:8px 11px;font-size:.74rem;font-weight:780}
+.filter[aria-pressed="true"]{background:#684033;color:white;border-color:#684033}
+.timeline{display:grid;max-height:640px;overflow-y:auto;gap:7px;padding:3px 3px 12px;scrollbar-color:#b08a72 transparent}
+.stop{display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid #d6b99d;border-left:5px solid #b68e6d;background:#fffaf2;border-radius:9px;min-height:61px;text-align:left;padding:8px 11px;color:#4a332c}
+.stop[aria-current="true"]{background:#f0d4b4;border-color:#884e37;border-left-width:7px}
+.stop.visited:not([aria-current="true"]){background:#fbf1e0}
+.stop time{font:800 .71rem ui-monospace,Consolas,monospace;color:#805940}
+.stop b{font-size:.84rem;line-height:1.3}
+.progress{margin-top:14px;padding-top:13px;border-top:1px solid #c9ad91;font-size:.83rem;color:#5e4941;font-weight:800}
+.meter{height:9px;overflow:hidden;background:#e1c8ac;border-radius:99px;margin-top:9px}
+.meter span{height:100%;width:7%;display:block;background:#8c4d39;transition:width .18s}
+.reset{padding:10px 0;border:0;text-decoration:underline;background:transparent;color:#7e412d;font-size:.83rem;font-weight:800}
+.story-card{border:1px solid #dac5b1;background:var(--paper);border-radius:17px;overflow:hidden;box-shadow:7px 8px 0 #a98c7222}
+.story-intro{padding:clamp(18px,2.8vw,30px) clamp(18px,3vw,34px) 0}
+.folio{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font:850 .73rem ui-monospace,monospace;letter-spacing:.09em;color:#885441}
+.folio strong{background:#f4ddbe;color:#76412e;border-radius:100px;padding:8px 12px;letter-spacing:0;font-family:system-ui,sans-serif;font-size:.73rem}
+.story-card h2{font:normal clamp(1.75rem,3.4vw,3rem)/1.13 Georgia,serif;margin:17px 0 8px;letter-spacing:-.027em}
+.story-date{font:830 .83rem ui-monospace,monospace;color:#965633;margin:0 0 16px}
+.illustration{position:relative;display:grid;place-items:center;min-height:285px;border-block:1px solid #dfd2c0;background:radial-gradient(circle at center,#fce7c5 0,transparent 50%),repeating-linear-gradient(0deg,#f1e4d0 0 32px,#e9d8c0 33px 34px)}
+.illustration:before{content:"";position:absolute;inset:18px;border:1px dashed #bb906b;border-radius:50% 45% 48% 50%;pointer-events:none}
+.illustration svg{width:min(92%,520px);height:275px;position:relative;z-index:1;color:#855239}
+.illus-label{position:absolute;top:15px;left:18px;font:800 .7rem ui-monospace,monospace;letter-spacing:.08em;color:#8d6554}
+.illus-label:last-child{top:auto;left:auto;bottom:14px;right:18px}
+.story-details{padding:clamp(18px,2.8vw,31px)}
+.story-details>p:first-child{line-height:1.72;font-size:1rem;color:#4e4139;margin:0 0 19px}
+.fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fact{background:#f8ecdb;border:1px solid #e3ceb4;border-radius:11px;padding:14px}
+.fact.risk{background:#fff2e5}
+.fact b{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#89512f;margin-bottom:7px}
+.fact p{font-size:.87rem;line-height:1.59;color:#625148;margin:0}
+.source{line-height:1.6;font-size:.81rem;color:#65584f;margin:16px 0}
+.source a{color:#80482c;font-weight:850;overflow-wrap:anywhere}
+.story-actions{display:flex;justify-content:space-between;gap:10px}
+.story-actions button{border-radius:9px;padding:11px 15px;background:transparent;color:#713d30;border:1px solid #97674f;min-height:44px;font-weight:850}
+.story-actions button:last-child{background:#6d3b30;color:white}
+.process-workspace{display:grid;grid-template-columns:260px minmax(0,1fr);gap:18px}
+.lab-sidebar{border:1px solid #d7bda1;background:#f4e5d1;border-radius:17px;padding:18px 14px}
+.steps{display:grid;gap:7px;margin-bottom:14px}
+.step{display:flex;align-items:center;gap:11px;text-align:left;min-height:54px;border:1px solid #d5b79a;background:#fffaf0;border-radius:9px;padding:10px;color:#594031}
+.step[aria-current="true"]{background:#6f4032;color:white;border-color:#6f4032}
+.step .number{font:900 1.05rem ui-monospace,monospace;opacity:.8}
+.step b{font-size:.83rem}
+.lab-body{border:1px solid #d8bca0;background:var(--paper);border-radius:17px;padding:clamp(18px,3vw,34px)}
+.lab-top{display:flex;justify-content:space-between;gap:9px;align-items:center;flex-wrap:wrap;color:#90583a;font:850 .73rem ui-monospace,monospace;letter-spacing:.1em}
+.lab-body h2{font:normal clamp(1.75rem,3vw,2.9rem)/1.15 Georgia,serif;margin:17px 0 9px}
+.lab-body .subtitle{color:#80553f;margin:0 0 17px;font-size:.88rem;font-weight:820}
+.lab-art{background:radial-gradient(circle at center,#f6dfbc,#f4e6d2 65%);border:1px dashed #c49c77;border-radius:14px;min-height:255px;display:grid;place-items:center}
+.lab-art svg{width:min(94%,480px);height:245px;color:#87533c}
+.lab-description{font-size:1.01rem;line-height:1.7;color:#55463d}
+.lab-facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:15px 0}
+.lab-facts div{background:#f8eedf;border-left:4px solid #a56848;padding:14px;border-radius:0 9px 9px 0;font-size:.88rem;line-height:1.6}
+.lab-facts b{display:block;margin-bottom:6px;color:#88482e}
+.lab-facts p{margin:0;color:#604d42}
+.lab-actions{display:flex;justify-content:space-between;gap:9px}
+.lab-actions button{min-height:44px;padding:11px 15px;background:#fffaf2;color:#6e4435;border:1px solid #a47a5a;border-radius:9px;font-weight:850}
+.lab-actions button:last-child{background:#6b4032;color:white}
+.quiz{border:1px solid #d4bc9f;background:#fffcf7;border-radius:17px;padding:clamp(18px,2.6vw,29px);margin-top:20px}
+.quiz h2{margin:0 0 9px;font-size:1.16rem}.quiz>p{font-size:.85rem;color:#705a4e;line-height:1.56}
+.question-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+.question{margin:0;padding:14px;border:1px solid #ddc7ac;border-radius:11px;min-width:0}
+.question legend{padding:0 4px;font-size:.88rem;font-weight:850;line-height:1.45}
+.options{display:grid;gap:8px;margin-top:11px}
+.option{min-height:44px;border:1px solid #bc9d83;border-radius:8px;background:#faf1e4;color:#634739;text-align:left;padding:9px 11px;font-size:.84rem}
+.option[aria-pressed="true"]{background:#6c4132;color:#fff}
+.feedback{margin:10px 0 0;min-height:50px;font-size:.82rem;line-height:1.53;color:#9b542e}
+.feedback.good{color:#316847}
+.disclaimer{font-size:.79rem;line-height:1.7;color:#776258;margin:17px 3px 0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:920px){.workspace,.process-workspace{grid-template-columns:1fr}.timeline{display:flex;overflow-x:auto;overflow-y:hidden;max-height:none;scroll-snap-type:x proximity;padding-bottom:13px}.stop{flex:0 0 165px;scroll-snap-align:start}.steps{display:flex;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x proximity}.step{flex:0 0 147px;scroll-snap-align:start}}
+@media(max-width:650px){.page{padding:12px}.hero{grid-template-columns:1fr;border-radius:14px}.hero svg{width:135px;height:100px}.hero h1{font-size:2.4rem}.mode-nav button{flex:1;padding:11px 10px}.story-intro,.story-details{padding:18px}.illustration{min-height:220px}.illustration svg{height:205px}.fact-grid,.lab-facts,.question-grid{grid-template-columns:1fr}.lab-body{padding:17px}.story-actions button,.lab-actions button{padding:11px 10px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.steps,.timeline{scroll-snap-type:none}}
+</style>
+</head><body>
+<main class="page">
+<header class="hero">
+ <div><p class="kicker">Ateliê de sabores · expedição histórica e científica</p>
+ <h1>Do Cacau<br>ao Chocolate</h1>
+ <p>Viaje pelas culturas do cacau e depois atravesse uma fábrica imaginária, acompanhando a semente, a fermentação, a torra e o nascimento de uma barra. Uma história coletiva, com ciência, trabalho e muitas transformações.</p>
+ <span class="hero-seal">14 MARCOS HISTÓRICOS · 9 ETAPAS DE PROCESSAMENTO</span></div>
+ <svg viewBox="0 0 400 260" role="img" aria-label="Ilustração original de um fruto de cacau estilizado"><use href="#cacao-pod"></use><defs>
+<symbol id="cacao-origin" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M50 224h300M145 221V72m0 58q-60-64-93-28 41 34 93 28zm0-33q63-68 97-32-45 36-97 32"/><path d="M141 177q-52-27-54 24 5 46 57 42 53-1 53-48-12-39-56-18z"/><path d="M141 173v70m-20-67 8 63m36-63-8 63m-28-112 17-36"/><path d="M243 223q30-56 64-25m-5-38 40 41"/></g></symbol>
+<symbol id="cacao-cup" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M91 106h188v100q0 34-87 34t-101-34zM280 132h43q35 2 25 31-8 23-62 22M72 242h241"/><path d="M126 82q-24-24 0-45m61 45q-25-24 0-45m60 45q-23-24 0-45M90 116q92 20 187 0"/></g></symbol>
+<symbol id="cacao-maya" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M88 226h222M121 226V110h155v116M100 110h196l-25-23H125zM145 138h109m-109 28h109m-109 28h109M173 87V43h53v44"/><circle cx="198" cy="61" r="8"/></g></symbol>
+<symbol id="cacao-market" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M51 108h296l-32-53H85zM78 108v126m242-126v126M50 234h298M104 138h189v71H104zM143 138v71m111-71v71M94 108l29-53m23 53 16-53m22 53 13-53m26 53 15-53m19 53 26-53"/><circle cx="192" cy="179" r="17"/></g></symbol>
+<symbol id="cacao-ship" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M46 201h308l-49 40H95zM96 166h201v35H96M197 166V32m-15 17L90 156h92zm30 10 99 97h-99zM39 250q45-21 90 0t90 0t90 0t49 0"/></g></symbol>
+<symbol id="cacao-pot" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M113 98h167l-9 113q-66 46-149 0zM281 122h39q22 0 21 28-3 32-65 27M101 91h191m-128-10q-19-26 0-47m41 47q-21-26 0-47m40 47q-20-26 0-47M99 242h198"/></g></symbol>
+<symbol id="cacao-leaf" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M202 221V60M202 132Q115 34 72 105q44 91 130 27zm0-23q91-98 141-28-43 91-141 28M202 173q-73-46-105 10 43 48 105-10zm0-32q58-48 103 4-48 39-103-4zM202 60 178 29"/></g></symbol>
+<symbol id="cacao-press" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><path d="M93 233V60h213v173M84 233h232M124 143h155m-155 18h155M201 60v78M164 45h73m-37 0V23M146 180h111l-16 40h-79zM201 220v17M70 233h260"/></g></symbol>
+<symbol id="cacao-bar" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="72" y="50" width="255" height="165" rx="9"/><path d="M157 50v165m85-165v165M72 105h255m-255 55h255"/><path d="M118 50q6-21 34-22"/></g></symbol>
+<symbol id="cacao-milk" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M79 69h104v162H79zM79 69l51-35 53 35m-53-35v54m-51-19 51 19 53-19M222 89h114v143H222zM260 89v143m37-143v143m-75-72h114"/><path d="M79 232h257"/></g></symbol>
+<symbol id="cacao-conche" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M61 108h277v107H61zM101 89h198v19M196 65v126M159 65h74M196 65V29M98 143q26 20 52 0t52 0t52 0t50 0M95 180q26 20 52 0t52 0t52 0t51 0M101 214v28m199-28v28"/></g></symbol>
+<symbol id="cacao-farm" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M55 242h290M118 242V82m0 60q-74-63-85-19 50 31 85 19zm0-31q62-72 101-34-47 37-101 34M273 241V77m0 61q-60-65-93-27 53 28 93 27zm0-27q66-65 99-29-49 33-99 29M148 242l-15-51m170 51 18-58"/></g></symbol>
+<symbol id="cacao-trace" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M101 67h194v150H101zM136 67V37h124v30M132 111h124m-124 31h83m-83 30h121M71 231h260"/><circle cx="273" cy="175" r="28"/><path d="m261 176 10 10 17-22"/></g></symbol>
+<symbol id="cacao-forest" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M64 238h277M124 235V78m0 72q-65-77-96-34 50 41 96 34zm0-28q81-75 105-28-58 37-105 28M269 235V87m0 66q-63-66-89-26 47 36 89 26zm0-31q70-80 103-33-56 46-103 33M124 83q-20-40 1-52m144 54q-18-38 1-53"/></g></symbol>
+<symbol id="cacao-pod" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M106 159q0-103 96-117 101 19 95 117-9 74-95 83-86-9-96-83zM202 44v198m-58-170q-30 101 0 145m114-145q31 97 0 145m-74-174q-23 114 0 187m36-186q21 112 0 186M202 43l-6-25"/></g></symbol>
+<symbol id="cacao-seeds" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M69 223q18-63 74-71t84 42q46-70 91-31t29 60z"/><ellipse cx="133" cy="126" rx="35" ry="52" transform="rotate(-18 133 126)"/><ellipse cx="208" cy="110" rx="33" ry="50"/><ellipse cx="285" cy="124" rx="36" ry="50" transform="rotate(14 285 124)"/><path d="M133 77v96m75-112v96m77-84v100"/></g></symbol>
+<symbol id="cacao-ferment" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M73 134h252l-20 100H94zM73 134l34-25h184l34 25M105 164q38-35 76 0t75 0t62 0M115 201q41-33 84 0t85 0M143 91q-25-31 0-58m56 58q-24-31 0-58m56 58q-24-31 0-58M54 239h292"/></g></symbol>
+<symbol id="cacao-sun" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><circle cx="288" cy="68" r="35"/><path d="M288 12v15m0 83v15m-57-57h16m83 0h16m-98-41-11-11m93 93 12 12M244 110l-12 12m95-95 11-11M45 221h306M64 191h285v30H64zM87 191l18-45h201l20 45M115 170h167m-137 50v23m136-23v23"/></g></symbol>
+<symbol id="cacao-roast" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="66" y="89" width="269" height="149" rx="13"/><path d="M85 180h232m-210 58v20m194-20v20M131 90V52m67 38V40m70 50V52"/><ellipse cx="139" cy="149" rx="20" ry="13"/><ellipse cx="201" cy="147" rx="20" ry="13"/><ellipse cx="261" cy="149" rx="20" ry="13"/></g></symbol>
+<symbol id="cacao-nibs" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M61 230q60-45 121 0t112 0 46 0"/><path d="M101 88q31-41 63 0l-32 59zM223 65q36-33 67 14l-28 54zM151 160q29-28 55 18l-46 46zM279 161q34-35 64 17l-51 44z"/><path d="m132 95 0 42m126-59 0 45m-92 59 4 30"/></g></symbol>
+<symbol id="cacao-grind" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><circle cx="183" cy="143" r="75"/><circle cx="183" cy="143" r="27"/><path d="M184 68v149M108 143h150M125 90l116 106M240 90 125 196M259 183h61l-17 49h-45zM320 183l20-25M64 242h278"/></g></symbol>
+<symbol id="cacao-mix" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M91 136h219l-20 103H112zM205 136V37m-43-7h87m-86 109q42 37 84 0M129 180q30 32 62 0t57 0 44 0M73 242h260"/></g></symbol>
+<symbol id="cacao-mold" viewBox="0 0 400 260"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="66" y="65" width="268" height="167" rx="12"/><path d="M155 65v167m90-167v167M66 121h268m-268 56h268M79 246h242"/></g></symbol>
+</defs></svg>
+</header>
+<div id="mode-buttons" class="mode-nav" role="group" aria-label="Escolher parte da atividade">
+ <button type="button" id="mode-history" aria-pressed="true" aria-controls="history-view">01 · História do cacau</button>
+ <button type="button" id="mode-process" aria-pressed="false" aria-controls="process-view">02 · Do fruto à barra</button>
+</div>
+<section id="history-view" class="mode is-active" aria-label="Linha do tempo histórica">
+ <div class="workspace"><aside class="timeline-sidebar"><h2>Arquivo do cacau</h2><p class="muted">Filtre uma época e escolha um marco. Use setas, Home e End para navegar na lista.</p>
+ <div id="filters" class="filters" role="group" aria-label="Filtrar marcos históricos"></div>
+ <nav id="timeline" class="timeline" aria-label="Linha do tempo do cacau"></nav>
+ <div class="progress"><span id="progress-label">1 de 14 marcos visitados</span><div class="meter" role="progressbar" id="history-progress" aria-label="Progresso histórico" aria-valuemin="0" aria-valuemax="14" aria-valuenow="1"><span id="progress-fill"></span></div><button type="button" class="reset" id="reset-history">Reiniciar história</button></div>
+ </aside>
+ <article class="story-card" aria-labelledby="history-title">
+ <div class="story-intro"><div class="folio"><span id="folio">DOCUMENTO 01 / 14</span><strong id="place">Alta Amazônia</strong></div><h2 id="history-title">A semente já tinha história</h2><p class="story-date" id="history-date">c. 3300 a.C.</p></div>
+ <div class="illustration"><span class="illus-label">DESENHO DE CAMPO</span><svg viewBox="0 0 400 260" role="img" aria-labelledby="history-art-title history-art-desc"><title id="history-art-title">Desenho da etapa histórica</title><desc id="history-art-desc">Ilustração esquemática original.</desc><use id="history-use" href="#cacao-origin"></use></svg><span class="illus-label">VETOR ORIGINAL · NÃO É FOTOGRAFIA</span></div>
+ <div class="story-details"><p id="history-description"></p><div class="fact-grid"><div class="fact"><b>Por que importa</b><p id="history-impact"></p></div><div class="fact risk"><b>Precisão histórica</b><p id="history-caveat"></p></div></div>
+ <p class="source">Referência para aprofundar: <a id="history-source" href="https://www.nature.com/articles/s41559-018-0697-x" target="_blank" rel="noopener noreferrer">Fonte histórica</a></p>
+ <div class="story-actions"><button type="button" id="history-prev">← Anterior</button><button type="button" id="history-next">Próximo marco →</button></div>
+ </div></article></div>
+</section>
+<section id="process-view" class="mode" aria-label="Laboratório de processamento" hidden>
+ <div class="process-workspace">
+ <aside class="lab-sidebar"><h2>Trilha de transformação</h2><p class="muted">Nove etapas educativas do fruto à barra. Selecione com toque, mouse ou teclado.</p>
+ <nav id="process-steps" class="steps" aria-label="Etapas do processamento do cacau"></nav>
+ <button type="button" class="reset" id="reset-process">Recomeçar laboratório</button></aside>
+ <article class="lab-body" aria-labelledby="process-title"><div class="lab-top"><span id="process-index">ETAPA 01 / 09</span><span>CIÊNCIA E PROCESSO</span></div><h2 id="process-title">Colheita</h2><p id="process-subtitle" class="subtitle">Fruto e plantio</p>
+ <div class="lab-art"><svg viewBox="0 0 400 260" role="img" aria-labelledby="process-art-title process-art-desc"><title id="process-art-title">Desenho da etapa</title><desc id="process-art-desc">Ilustração original sem escala.</desc><use id="process-use" href="#cacao-pod"></use></svg></div>
+ <p class="lab-description" id="process-description"></p><div class="lab-facts"><div><b>O que essa etapa produz</b><p id="process-why"></p></div><div><b>Não confunda</b><p id="process-caveat"></p></div></div>
+ <div class="lab-actions"><button type="button" id="process-prev">← Etapa anterior</button><button type="button" id="process-next">Próxima etapa →</button></div></article>
+ </div>
+</section>
+<section class="quiz" aria-labelledby="quiz-title"><h2 id="quiz-title">Caderno de degustação científica</h2><p>Responda às três questões e receba explicações. A avaliação é formativa; não produz nota nem grava dados no Moodle.</p><div class="question-grid" id="questions"></div><button type="button" id="reset-questions" class="reset">Recomeçar perguntas</button></section>
+<p class="disclaimer">Esta experiência apresenta recortes históricos e etapas industriais de forma esquemática. Datas antigas são aproximadas e receitas, tempos e temperaturas reais dependem de protocolos técnicos e controle sanitário. As ilustrações são SVG originais, não representações exatas de equipamentos. Progresso e respostas permanecem apenas em memória, sem persistência.</p>
+<p id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+</main>
+<script>
+"use strict";
+const records=[{"id":"equador","year":-3300,"date":"c. 3300 a.C.","short":"Vestígios na alta Amazônia","category":"origens","place":"Equador · cultura Mayo-Chinchipe","title":"A semente já tinha história","description":"Em Santa Ana-La Florida, no sudeste do Equador, análises de resíduos de teobromina, amido e DNA vegetal identificaram uso de cacau de cerca de 5.300 anos atrás.","impact":"O achado ampliou a compreensão do uso antigo do cacau para além da Mesoamérica.","caveat":"O vestígio de uso não prova, sozinho, uma receita idêntica ao chocolate atual nem a primeira domesticação absoluta.","sourceLabel":"Nature Ecology & Evolution · Zarrillo et al. (2018)","sourceUrl":"https://www.nature.com/articles/s41559-018-0697-x","motif":"origin"},{"id":"meso","year":-1500,"date":"c. 1500 a.C.","short":"Cacau na Mesoamérica","category":"origens","place":"Mesoamérica","title":"Bebidas e tradições antigas","description":"O cacau foi usado por diferentes populações mesoamericanas em bebidas e práticas sociais, com evidências arqueológicas de longa duração.","impact":"O ingrediente adquiriu significados que iam além de seu valor alimentar.","caveat":"Registros antigos e cronologias variam por povo e sítio; não se deve tratar todas as culturas como uma única tradição.","sourceLabel":"HISTORY · History of Chocolate","sourceUrl":"https://www.history.com/articles/history-of-chocolate","motif":"cup"},{"id":"maia","year":600,"date":"c. séculos III–IX","short":"Usos entre os maias","category":"culturas","place":"Terras maias","title":"Uma bebida com significado social","description":"Em sociedades maias, o cacau integrou práticas alimentares, cerimônias e objetos registrados em imagens e textos.","impact":"A história do chocolate inclui relações culturais e conhecimentos locais anteriores à industrialização.","caveat":"Receitas e usos variavam; bebidas antigas não eram necessariamente doces nem equivalentes a uma barra moderna.","sourceLabel":"HISTORY · History of Chocolate","sourceUrl":"https://www.history.com/articles/history-of-chocolate","motif":"maya"},{"id":"mexica","year":1450,"date":"século XV","short":"Cacau em redes mesoamericanas","category":"culturas","place":"Vale do México e Mesoamérica","title":"Troca, tributos e prestígio","description":"Entre povos da Mesoamérica, inclusive no contexto do Império Mexica, sementes de cacau circularam como mercadoria e em relações de tributo.","impact":"Sua circulação mostra como uma planta podia reunir valor alimentar, cultural e econômico.","caveat":"Não se deve dizer que o cacau foi universalmente moeda em todos os povos ou em todas as épocas.","sourceLabel":"HISTORY · History of Chocolate","sourceUrl":"https://www.history.com/articles/history-of-chocolate","motif":"market"},{"id":"europa","year":1550,"date":"século XVI","short":"Travessias coloniais","category":"culturas","place":"Américas e Europa","title":"O cacau atravessa o Atlântico","description":"A circulação colonial levou o cacau e modos de preparo à Europa, onde a bebida foi adaptada com novos ingredientes e hábitos de consumo.","impact":"A expansão conectou mercados e transformou a forma como a bebida era preparada e distribuída.","caveat":"A circulação ocorreu em um contexto de conquista, exploração e desigualdades; a história não começou na Europa.","sourceLabel":"HISTORY · History of Chocolate","sourceUrl":"https://www.history.com/articles/history-of-chocolate","motif":"ship"},{"id":"casas","year":1650,"date":"meados do século XVII","short":"Chocolate nas casas europeias","category":"culturas","place":"Europa","title":"Bebida, comércio e encontros","description":"Bebidas de chocolate adoçadas ganharam espaço em círculos urbanos e comerciais europeus, com casas especializadas e receitas variadas.","impact":"O chocolate passou a circular em novos contextos de sociabilidade e consumo.","caveat":"O acesso era desigual, e açúcar e cacau estavam ligados a sistemas coloniais de trabalho.","sourceLabel":"HISTORY · History of Chocolate","sourceUrl":"https://www.history.com/articles/history-of-chocolate","motif":"pot"},{"id":"nome","year":1753,"date":"1753","short":"O nome Theobroma cacao","category":"culturas","place":"Classificação botânica","title":"A planta recebe um nome científico","description":"Carl Linnaeus publicou a classificação Theobroma cacao no século XVIII, aplicando um nome binomial à espécie.","impact":"A nomenclatura ajudou a organizar o estudo científico e a comunicação sobre a planta.","caveat":"Nomear cientificamente não significa descobrir a planta: diferentes povos a conheciam havia milênios.","sourceLabel":"Scientific Reports · História genética do cacau (2024)","sourceUrl":"https://www.nature.com/articles/s41598-024-53010-6","motif":"leaf"},{"id":"prensa","year":1828,"date":"1828","short":"A prensagem amplia possibilidades","category":"industria","place":"Países Baixos","title":"Separar componentes da massa","description":"Inovações de prensa associadas à família Van Houten permitiram separar mais facilmente parte da manteiga de cacau da massa, produzindo uma torta que podia ser pulverizada.","impact":"A separação abriu possibilidades para bebidas em pó, receitas e formulações de chocolate.","caveat":"A atribuição exata envolve contribuições de Casparus e Coenraad van Houten; não foi a primeira utilização do cacau.","sourceLabel":"HISTORY · History of Chocolate","sourceUrl":"https://www.history.com/articles/history-of-chocolate","motif":"press"},{"id":"barra","year":1847,"date":"1847","short":"Chocolate sólido moldado","category":"industria","place":"Reino Unido","title":"Uma nova maneira de comer chocolate","description":"A empresa J. S. Fry & Sons desenvolveu uma formulação de chocolate para consumo sólido usando massa de cacau, açúcar e manteiga de cacau.","impact":"Barras tornaram-se um formato comercial importante e ampliaram possibilidades de consumo.","caveat":"A data não significa que ninguém antes tivesse preparado alimentos sólidos contendo cacau.","sourceLabel":"HISTORY · History of Chocolate","sourceUrl":"https://www.history.com/articles/history-of-chocolate","motif":"bar"},{"id":"leite","year":1875,"date":"1875","short":"Chocolate ao leite","category":"industria","place":"Suíça","title":"Novas formulações","description":"Daniel Peter desenvolveu uma formulação histórica de chocolate ao leite, associada a avanços na produção e conservação de leite.","impact":"O uso de leite mudou sabor, textura e o alcance comercial de certos chocolates.","caveat":"Há antecedentes e contribuições técnicas de outras pessoas, incluindo o desenvolvimento de ingredientes lácteos.","sourceLabel":"HISTORY · History of Chocolate","sourceUrl":"https://www.history.com/articles/history-of-chocolate","motif":"milk"},{"id":"concha","year":1879,"date":"1879","short":"Conchagem do chocolate","category":"industria","place":"Suíça","title":"Refinar aroma e textura","description":"Rodolphe Lindt é associado ao desenvolvimento da conchagem, etapa de mistura e trabalho prolongado da massa para obter características sensoriais desejadas.","impact":"O processo ajudou a desenvolver chocolates mais homogêneos e com sensação suave na boca.","caveat":"Conchagem não substitui fermentação, secagem, torra ou controle de formulação.","sourceLabel":"HISTORY · History of Chocolate","sourceUrl":"https://www.history.com/articles/history-of-chocolate","motif":"conche"},{"id":"africa","year":1900,"date":"fim do séc. XIX e início do XX","short":"Cultivo e comércio se expandem","category":"comercio","place":"África Ocidental e mercados globais","title":"Do cacaueiro à cadeia internacional","description":"O cultivo de cacau ampliou-se em diferentes regiões tropicais, incluindo a África Ocidental, enquanto a indústria e as redes de transporte cresceram.","impact":"O chocolate passou a depender de uma cadeia que conecta produtores, transportadores e fábricas.","caveat":"A expansão comercial também envolve disputas por renda, condições de trabalho e impactos ambientais.","sourceLabel":"ICCO · Processing Cocoa","sourceUrl":"https://www.icco.org/processing-cocoa/","motif":"farm"},{"id":"origem","year":2000,"date":"início do século XXI","short":"Interesse por origem e rastreabilidade","category":"comercio","place":"Diversas regiões produtoras","title":"Saber de onde vem cada lote","description":"Iniciativas de rastreabilidade e valorização de origem buscam relacionar qualidade, variedades, manejo e condições de produção.","impact":"Consumidores e fabricantes passaram a discutir mais diretamente a origem do ingrediente e a remuneração de produtores.","caveat":"Rótulos e certificações não garantem, isoladamente, ausência de problemas sociais ou ambientais.","sourceLabel":"European Cocoa Association · Cocoa Supply Chain","sourceUrl":"https://www.eurococoa.com/the-cocoa-supply-chain/","motif":"trace"},{"id":"desafios","year":2020,"date":"década de 2020","short":"Cacau e desafios atuais","category":"comercio","place":"Produção global","title":"Biodiversidade, clima e trabalho","description":"Pesquisas e iniciativas do setor discutem alterações climáticas, doenças, diversidade genética, desmatamento e condições de vida de produtores.","impact":"A sustentabilidade depende da combinação de políticas, pesquisa, manejo e relações comerciais responsáveis.","caveat":"Não existe uma solução única aplicável a todas as paisagens, cultivares e comunidades.","sourceLabel":"ICCO · Processing Cocoa","sourceUrl":"https://www.icco.org/processing-cocoa/","motif":"forest"}];
+const phases=[{"id":"colheita","n":"01","name":"Colheita","subtitle":"Fruto e plantio","description":"Frutos maduros de cacaueiros cultivados são colhidos e abertos com cuidado para retirar sementes envoltas em polpa branca.","why":"O fruto é uma cápsula com sementes; cacau não nasce como chocolate doce pronto.","caveat":"O ponto de maturação varia entre cultivares e condições de cultivo.","motif":"pod"},{"id":"abertura","n":"02","name":"Extração","subtitle":"Sementes e polpa","description":"A abertura do fruto revela as sementes recobertas de polpa açucarada, que serão encaminhadas para as próximas etapas.","why":"A polpa alimenta microrganismos que participam da fermentação.","caveat":"Não confunda a polpa clara com manteiga de cacau, produto obtido posteriormente.","motif":"seeds"},{"id":"fermentacao","n":"03","name":"Fermentação","subtitle":"Transformação bioquímica","description":"As sementes com polpa são mantidas em condições apropriadas para a ação de leveduras, bactérias e reações químicas.","why":"Essa etapa cria precursores de sabor e altera características internas das sementes.","caveat":"Não é uma receita caseira com tempo e temperatura universais; manejo inadequado compromete qualidade.","motif":"ferment"},{"id":"secagem","n":"04","name":"Secagem","subtitle":"Redução de umidade","description":"Após a fermentação, a secagem reduz a umidade para favorecer armazenamento e transporte, usando métodos controlados.","why":"Ajuda a preservar o lote e permite que a cadeia prossiga.","caveat":"Secagem insuficiente aumenta riscos de deterioração; exposição e duração dependem do clima e do método.","motif":"sun"},{"id":"torra","n":"05","name":"Torra","subtitle":"Aromas se desenvolvem","description":"A torra, conduzida conforme o perfil sensorial desejado, transforma compostos e favorece aromas característicos de chocolate.","why":"Aquece e desenvolve sabores, complementando mudanças iniciadas na fermentação.","caveat":"Não há um único binômio tempo/temperatura adequado a todos os lotes.","motif":"roast"},{"id":"descasque","n":"06","name":"Quebra e separação","subtitle":"Nibs de cacau","description":"As sementes torradas passam por quebra e separação de cascas, originando fragmentos chamados nibs.","why":"Os nibs concentram a parte útil para a moagem e a formulação.","caveat":"Limpeza e controle de qualidade devem acompanhar as etapas, não apenas o descarte de cascas.","motif":"nibs"},{"id":"moagem","n":"07","name":"Moagem","subtitle":"Massa de cacau","description":"Os nibs são moídos, liberando gordura natural e formando massa de cacau, também chamada liquor de cacau.","why":"A massa pode ser usada diretamente em formulações ou prensada para separar manteiga e torta de cacau.","caveat":"Liquor de cacau não é bebida alcoólica; o termo designa massa fluida de cacau.","motif":"grind"},{"id":"formulacao","n":"08","name":"Formulação e refino","subtitle":"Mistura e textura","description":"Massa, manteiga de cacau, açúcar e eventualmente ingredientes lácteos passam por mistura, refino e conchagem, conforme a receita.","why":"O equilíbrio entre ingredientes, tamanho de partículas e processamento define parte da experiência sensorial.","caveat":"Não existe uma receita universal: chocolates diferentes exigem composições e processos distintos.","motif":"mix"},{"id":"temperagem","n":"09","name":"Temperagem e moldagem","subtitle":"Uma barra estável","description":"A cristalização controlada da manteiga de cacau, seguida de moldagem e resfriamento, ajuda a obter brilho, ruptura e estabilidade adequados.","why":"Uma barra pode apresentar textura e aparência mais consistentes.","caveat":"O processo exige controle industrial e sanitário; a ilustração é educativa, não instrução de fabricação.","motif":"mold"}];
+const filters=[["all","Todas"],["origens","Origens"],["culturas","Culturas"],["industria","Inovações"],["comercio","Produção"]];
+const questions=[
+{ask:"Onde foram identificados vestígios de uso do cacau com aproximadamente 5.300 anos?",options:["Alta Amazônia do Equador","Fábricas suíças do século XIX","Europa medieval"],right:0,why:"As evidências arqueológicas de Santa Ana-La Florida, no Equador, incluem amido, teobromina e DNA antigo."},
+{ask:"Qual etapa ajuda a formar precursores de sabor ainda na propriedade rural?",options:["Somente moldagem","Fermentação","Apenas a embalagem"],right:1,why:"A fermentação envolve microrganismos e reações que ajudam a formar precursores; a torra contribui posteriormente para o sabor."},
+{ask:"O que significa liquor de cacau no processamento?",options:["Uma bebida alcoólica","A polpa fresca do fruto","Uma massa resultante da moagem dos nibs"],right:2,why:"Liquor é outro nome usado para massa de cacau, formada pela moagem dos nibs; não indica álcool."}
+];
+const get=id=>document.getElementById(id);
+const state={mode:"history",filter:"all",active:records[0].id,visited:new Set([records[0].id]),phase:0,answers:new Map()};
+const filtered=()=>records.filter(r=>state.filter==="all"||r.category===state.filter);
+function showMode(name){
+ if(name!=="history"&&name!=="process")return;
+ state.mode=name;
+ for(const mode of ["history","process"]){
+  const active=mode===name;
+  get("mode-"+mode).setAttribute("aria-pressed",String(active));
+  const region=get(mode+"-view");region.hidden=!active;region.classList.toggle("is-active",active);
+ }
+ get("announcement").textContent=name==="history"?"Exibindo linha do tempo histórica.":"Exibindo laboratório do fruto à barra.";
+}
+function renderFilters(){
+ const host=get("filters");host.replaceChildren();
+ for(const [id,label] of filters){
+  const btn=document.createElement("button");btn.type="button";btn.className="filter";btn.textContent=label;btn.setAttribute("aria-pressed",String(id===state.filter));
+  btn.addEventListener("click",()=>applyFilter(id));host.append(btn);
+ }
+}
+function renderTimeline(){
+ const host=get("timeline"),visible=filtered();host.replaceChildren();
+ visible.forEach((r,index)=>{
+  const btn=document.createElement("button");btn.type="button";btn.className="stop";
+  btn.setAttribute("aria-current",String(r.id===state.active));
+  btn.setAttribute("aria-label",r.date+": "+r.short);
+  btn.classList.toggle("visited",state.visited.has(r.id));
+  const date=document.createElement("time");date.textContent=r.date;
+  const title=document.createElement("b");title.textContent=r.short;
+  btn.append(date,title);
+  btn.addEventListener("click",()=>chooseRecord(r.id));
+  btn.addEventListener("keydown",event=>{
+   let target=null;
+   if(event.key==="ArrowRight"||event.key==="ArrowDown")target=Math.min(index+1,visible.length-1);
+   if(event.key==="ArrowLeft"||event.key==="ArrowUp")target=Math.max(index-1,0);
+   if(event.key==="Home")target=0;
+   if(event.key==="End")target=visible.length-1;
+   if(target!==null){event.preventDefault();chooseRecord(visible[target].id);const b=host.querySelectorAll(".stop")[target];if(b)b.focus();}
+  });
+  host.append(btn);
+ });
+}
+function chooseRecord(id){
+ const list=filtered(),index=list.findIndex(r=>r.id===id);
+ if(index<0)return;
+ const r=list[index];state.active=r.id;state.visited.add(r.id);
+ const values={
+  folio:"DOCUMENTO "+String(records.indexOf(r)+1).padStart(2,"0")+" / "+records.length,
+  place:r.place,"history-title":r.title,"history-date":r.date,"history-description":r.description,
+  "history-impact":r.impact,"history-caveat":r.caveat,
+  "history-source":r.sourceLabel,
+  "history-art-title":"Ilustração original: "+r.short,
+  "history-art-desc":"Esquema artístico sobre "+r.short+". Não é fotografia nem reconstrução fiel.",
+  "progress-label":state.visited.size+" de "+records.length+" marcos visitados"
+ };
+ for(const [key,value] of Object.entries(values))get(key).textContent=value;
+ get("history-source").href=r.sourceUrl;
+ get("history-use").setAttribute("href","#cacao-"+r.motif);
+ get("history-prev").disabled=index===0;
+ get("history-next").disabled=index===list.length-1;
+ get("history-progress").setAttribute("aria-valuenow",String(state.visited.size));
+ get("progress-fill").style.width=100*state.visited.size/records.length+"%";
+ renderTimeline();
+ const host=get("timeline"),btn=host.querySelectorAll(".stop")[index];
+ if(btn){
+  const behavior=window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
+  if(window.matchMedia("(max-width:920px)").matches)host.scrollTo({left:Math.max(0,btn.offsetLeft-host.offsetLeft-host.clientWidth/2+btn.clientWidth/2),behavior});
+  else host.scrollTo({top:Math.max(0,btn.offsetTop-host.offsetTop-host.clientHeight/2+btn.clientHeight/2),behavior});
+ }
+ get("announcement").textContent="Documento "+(records.indexOf(r)+1)+": "+r.short+", "+r.date;
+}
+function applyFilter(id){
+ if(!filters.some(([key])=>key===id))return;
+ state.filter=id;renderFilters();
+ const list=filtered();
+ if(!list.some(r=>r.id===state.active))state.active=list[0].id;
+ chooseRecord(state.active);
+ get("announcement").textContent="Filtro "+filters.find(([key])=>key===id)[1]+": "+list.length+" registros.";
+}
+function renderPhaseList(){
+ const host=get("process-steps");host.replaceChildren();
+ phases.forEach((phase,i)=>{
+  const btn=document.createElement("button");btn.type="button";btn.className="step";
+  btn.setAttribute("aria-current",String(state.phase===i));
+  btn.setAttribute("aria-label","Etapa "+phase.n+": "+phase.name);
+  const n=document.createElement("span");n.className="number";n.textContent=phase.n;
+  const title=document.createElement("b");title.textContent=phase.name;
+  btn.append(n,title);
+  btn.addEventListener("click",()=>choosePhase(i));
+  btn.addEventListener("keydown",event=>{
+    let target=null;
+    if(event.key==="ArrowRight"||event.key==="ArrowDown")target=Math.min(i+1,phases.length-1);
+    if(event.key==="ArrowLeft"||event.key==="ArrowUp")target=Math.max(i-1,0);
+    if(event.key==="Home")target=0;
+    if(event.key==="End")target=phases.length-1;
+    if(target!==null){event.preventDefault();choosePhase(target);const control=host.querySelectorAll(".step")[target];if(control)control.focus();}
+  });
+  host.append(btn);
+ });
+}
+function choosePhase(i){
+ if(i<0||i>=phases.length)return;
+ state.phase=i;
+ const p=phases[i];
+ const fields={"process-index":"ETAPA "+p.n+" / 09","process-title":p.name,"process-subtitle":p.subtitle,
+ "process-description":p.description,"process-why":p.why,"process-caveat":p.caveat,
+ "process-art-title":"Ilustração original: "+p.name,
+ "process-art-desc":"Desenho vetorial esquemático da etapa "+p.name+", sem escala."};
+ for(const [key,value] of Object.entries(fields))get(key).textContent=value;
+ get("process-use").setAttribute("href","#cacao-"+p.motif);
+ get("process-prev").disabled=i===0;
+ get("process-next").disabled=i===phases.length-1;
+ renderPhaseList();
+ get("announcement").textContent="Etapa "+p.n+" de 09: "+p.name;
+}
+function drawQuestions(){
+ const host=get("questions");host.replaceChildren();
+ questions.forEach((q,index)=>{
+  const group=document.createElement("fieldset");group.className="question";
+  const heading=document.createElement("legend");heading.textContent=(index+1)+". "+q.ask;
+  const buttons=document.createElement("div");buttons.className="options";
+  const feedback=document.createElement("p");feedback.className="feedback";feedback.setAttribute("aria-live","polite");feedback.textContent="Escolha uma resposta.";
+  const choices=q.options.map((text,i)=>{
+    const b=document.createElement("button");b.type="button";b.className="option";b.textContent=text;b.setAttribute("aria-pressed","false");
+    b.addEventListener("click",()=>{
+      state.answers.set(index,i);
+      choices.forEach((other,j)=>other.setAttribute("aria-pressed",String(i===j)));
+      const correct=i===q.right;
+      feedback.textContent=(correct?"Correto. ":"Reveja. ")+q.why;
+      feedback.classList.toggle("good",correct);
+    });
+    buttons.append(b);return b;
+  });
+  group.append(heading,buttons,feedback);host.append(group);
+ });
+}
+get("mode-history").addEventListener("click",()=>showMode("history"));
+get("mode-process").addEventListener("click",()=>showMode("process"));
+get("history-prev").addEventListener("click",()=>{
+ const list=filtered(),i=list.findIndex(r=>r.id===state.active);if(i>0)chooseRecord(list[i-1].id);
+});
+get("history-next").addEventListener("click",()=>{
+ const list=filtered(),i=list.findIndex(r=>r.id===state.active);if(i>=0&&i<list.length-1)chooseRecord(list[i+1].id);
+});
+get("process-prev").addEventListener("click",()=>choosePhase(state.phase-1));
+get("process-next").addEventListener("click",()=>choosePhase(state.phase+1));
+get("reset-history").addEventListener("click",()=>{
+ state.filter="all";state.active=records[0].id;state.visited.clear();state.visited.add(state.active);
+ renderFilters();chooseRecord(state.active);
+ get("announcement").textContent="História reiniciada no primeiro marco.";
+});
+get("reset-process").addEventListener("click",()=>{choosePhase(0);get("announcement").textContent="Laboratório reiniciado.";});
+get("reset-questions").addEventListener("click",()=>{state.answers.clear();drawQuestions();get("announcement").textContent="Perguntas reiniciadas.";});
+renderFilters();chooseRecord(records[0].id);choosePhase(0);drawQuestions();showMode("history");
+</script>
+</body></html>
