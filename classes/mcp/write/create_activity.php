@@ -26,6 +26,7 @@ namespace mod_mcp\mcp\write;
 
 use context;
 use context_course;
+use mod_mcp\mcp\authoring_guidance;
 use local_mcp\security\authenticated_identity;
 use local_mcp\write\tool\base_tool;
 use moodle_url;
@@ -58,7 +59,8 @@ final class create_activity extends base_tool {
      * @return string Result.
      */
     public function get_description(): string {
-        return "Create an unpublished, hidden mod_mcp activity and return the real cmid.";
+        return authoring_guidance::tool_description(
+            "Create an unpublished, hidden mod_mcp activity and return the real cmid.");
     }
 
     /**
@@ -116,6 +118,7 @@ final class create_activity extends base_tool {
         $created = add_moduleinfo($info, $course);
         return ["cmid" => (int)$created->coursemodule, "instanceid" => (int)$created->instance,
             "courseid" => (int)$course->id,
+            "authoring" => authoring_guidance::course_context((int)$course->id),
             "url" => (new moodle_url("/mod/mcp/view.php",
                 ["id" => $created->coursemodule]))->out(false)];
     }

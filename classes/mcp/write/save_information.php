@@ -26,6 +26,7 @@ namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
 use mod_mcp\content\metadata;
+use mod_mcp\mcp\authoring_guidance;
 use moodle_exception;
 
 /**
@@ -57,8 +58,10 @@ final class save_information extends activity_tool {
      * @return string Result.
      */
     public function get_description(): string {
-        return "Save nullable type and JSON information, including quiz questions and answer keys. " .
-            "Use mcp_get_activity to obtain expectedhash before writing. Confirmation required.";
+        return authoring_guidance::tool_description(
+            "Save nullable activity type and private JSON information, including graded quiz "
+            . "questions and answer keys. Use mcp_get_activity to obtain expectedhash first; "
+            . "never embed answer keys in HTML or grade client-side. Confirmation required.");
     }
 
     /**

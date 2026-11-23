@@ -26,6 +26,7 @@ namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
 use mod_mcp\content\service;
+use mod_mcp\mcp\authoring_guidance;
 
 /**
  * Explicit publish operation, separate from editing HTML.
@@ -55,7 +56,10 @@ final class publish extends activity_tool {
      * @return string Result.
      */
     public function get_description(): string {
-        return "Publish exactly the expected draft revision to students, and unhide the module.";
+        return authoring_guidance::tool_description(
+            "Publish exactly the expected draft revision, then unhide the module. Obtain "
+            . "explicit teacher approval for the preview and publish confirmation; do not "
+            . "publish while the teacher is still reviewing or correcting the activity.");
     }
 
     /**

@@ -31,6 +31,7 @@ use local_mcp\security\authenticated_identity;
 use local_mcp\security\untrusted_content;
 use mod_mcp\content\metadata;
 use mod_mcp\content\service;
+use mod_mcp\mcp\authoring_guidance;
 
 /**
  * Manager-only read access to HTML and authored JSON, including answer keys.
@@ -60,7 +61,8 @@ final class get_activity extends base_tool {
      * @return string Result.
      */
     public function get_description(): string {
-        return "Read activity type, editable JSON information, selection settings and HTML revisions.";
+        return authoring_guidance::tool_description(
+            "Read an existing mod_mcp activity, its effective course theme, editable JSON, revisions and settings hash.");
     }
 
     /**
@@ -108,6 +110,7 @@ final class get_activity extends base_tool {
         return [
             "cmid" => (int)$cm->id,
             "courseid" => (int)$mcp->course,
+            "authoring" => authoring_guidance::course_context((int)$mcp->course),
             "name" => $mcp->name,
             "draftrevision" => (int)$mcp->draftrevision,
             "publishedrevision" => (int)$mcp->publishedrevision,

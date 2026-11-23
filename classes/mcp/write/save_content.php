@@ -26,6 +26,7 @@ namespace mod_mcp\mcp\write;
 
 use local_mcp\security\authenticated_identity;
 use mod_mcp\content\service;
+use mod_mcp\mcp\authoring_guidance;
 
 /**
  * Save a new revision without making it visible to students.
@@ -55,7 +56,10 @@ final class save_content extends activity_tool {
      * @return string Result.
      */
     public function get_description(): string {
-        return "Save one complete HTML document with inline CSS and JavaScript, without publishing.";
+        return authoring_guidance::tool_description(
+            "Save one complete HTML draft with inline CSS/JS, without publishing. First call "
+            . "mcp_get_activity and follow its course-specific authoring instructions. The "
+            . "server rejects hard-coded brand colours; fix errors and retry.");
     }
 
     /**
