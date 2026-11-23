@@ -133,6 +133,8 @@ final class activity {
             $args = (object)[
                 "theme" => $themename,
                 "variables" => implode(", ", $cssvariables),
+                "primary" => $cssvariables[0],
+                "complementary" => $cssvariables[1],
             ];
             $instructions[] = get_string("promptcolours", "mcp", $args);
         }

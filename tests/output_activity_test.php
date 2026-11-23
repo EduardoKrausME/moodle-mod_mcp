@@ -185,6 +185,21 @@ final class output_activity_test extends advanced_testcase {
     }
 
     /**
+     * Theme brand colours must also control gradients and hover states, not just plain backgrounds.
+     */
+    public function test_css_guidance_forbids_invented_brand_gradients(): void {
+        foreach (["learnlingo" => "--bs-accent", "eadflix" => "--bs-secondary"] as $theme => $accent) {
+            $guidance = activity::css_instructions($theme);
+            $expected = "background: linear-gradient(123deg, var(--bs-primary, #0d6efd), " .
+                "var({$accent}, var(--bs-primary, #0d6efd)));";
+            $this->assertStringContainsString($expected, $guidance);
+            $this->assertStringContainsString("color-mix()", $guidance);
+            $this->assertSame(1, preg_match("/(NÃO invente|Do not invent)/i", $guidance));
+            $this->assertSame(1, preg_match("/(revise TODO o CSS|audit the entire CSS)/i", $guidance));
+        }
+    }
+
+    /**
      * Connections must belong to this user and have active grant and client states.
      */
     public function test_only_enabled_nonrevoked_own_connections_count(): void {
