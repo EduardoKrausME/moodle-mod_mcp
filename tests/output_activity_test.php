@@ -75,6 +75,10 @@ final class output_activity_test extends advanced_testcase {
     public function test_page_provides_revision_pluginfile_url(): void {
         global $DB;
         $this->resetAfterTest();
+        set_config("materialtheme_default", json_encode([
+            "name" => "Test theme",
+            "style" => "Use spacious cards and readable typography.",
+        ]), "mod_mcp");
         $course = $this->getDataGenerator()->create_course();
         $module = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id]);
         $cm = get_coursemodule_from_instance("mcp", $module->id);

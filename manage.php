@@ -24,6 +24,7 @@
 
 use mod_mcp\content\service;
 use mod_mcp\content\metadata;
+use mod_mcp\authoring\material_theme;
 use mod_mcp\output\activity;
 
 require_once(__DIR__ . "/../../config.php");
@@ -76,7 +77,9 @@ $data = [
     "promptoptions" => activity::prompt_options($mcp, $cm),
     "previewurl" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id, "preview" => 1]))->out(false),
     "actionurl" => (new moodle_url("/mod/mcp/manage.php"))->out(false),
-    "canpublish" => !empty($mcp->draftrevision),
+    "canpublish" => !empty($mcp->draftrevision) && material_theme::effective((int)$mcp->course) !== null,
+    "materialthemeconfigured" => material_theme::effective((int)$mcp->course) !== null,
+    "themeconfigurl" => (new moodle_url("/mod/mcp/theme.php", ["courseid" => $mcp->course]))->out(false),
     "revision" => (int)$mcp->draftrevision,
     "sesskey" => sesskey(),
     "cmid" => (int)$cm->id,

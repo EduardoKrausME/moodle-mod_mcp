@@ -44,6 +44,10 @@ final class assessment_test extends advanced_testcase {
     public function test_json_grading_and_private_answers(): void {
         global $DB, $USER;
         $this->resetAfterTest();
+        set_config("materialtheme_default", json_encode([
+            "name" => "Test theme",
+            "style" => "Use spacious cards and readable typography.",
+        ]), "mod_mcp");
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
         $mcp = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id, "grade" => 10]);

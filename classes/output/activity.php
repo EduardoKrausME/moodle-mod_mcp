@@ -27,6 +27,7 @@ namespace mod_mcp\output;
 use context_module;
 use coding_exception;
 use mod_mcp\content\service;
+use mod_mcp\authoring\material_theme;
 use moodle_url;
 use stdClass;
 
@@ -105,8 +106,14 @@ final class activity {
         }
         $apireference = get_string("promptapireference", "mcp",
             "https://github.com/EduardoKrausME/moodle-mod_mcp/blob/master/.chatgpt/API.md");
+        $visual = material_theme::effective((int)$mcp->course);
+        $materialinstruction = $visual === null ?
+            get_string("materialthemerequired", "mcp") :
+            "Reusable material visual design: " . $visual["name"] . ". Follow its visual "
+            . "style for every new material: " . $visual["style"] . ". ";
         return get_string("promptinstructions", "mcp") . " " .
-            $apireference . " " . $prompt . " " . self::css_instructions($PAGE->theme->name);
+            $apireference . " " . $prompt . " " . self::css_instructions($PAGE->theme->name)
+            . " " . $materialinstruction;
     }
 
     /**

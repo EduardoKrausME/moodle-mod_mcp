@@ -40,6 +40,10 @@ final class content_service_test extends advanced_testcase {
     public function test_immutable_revisions_and_optimistic_locking(): void {
         global $DB;
         $this->resetAfterTest();
+        set_config("materialtheme_default", json_encode([
+            "name" => "Test theme",
+            "style" => "Use spacious cards and readable typography.",
+        ]), "mod_mcp");
         $course = $this->getDataGenerator()->create_course();
         $module = $this->getDataGenerator()->create_module("mcp", [
             "course" => $course->id, "name" => "HTML exercise",
@@ -59,6 +63,10 @@ final class content_service_test extends advanced_testcase {
      */
     public function test_normalizes_typographic_punctuation_before_saving_and_hashing(): void {
         $this->resetAfterTest();
+        set_config("materialtheme_default", json_encode([
+            "name" => "Test theme",
+            "style" => "Use spacious cards and readable typography.",
+        ]), "mod_mcp");
         $course = $this->getDataGenerator()->create_course();
         $module = $this->getDataGenerator()->create_module("mcp", [
             "course" => $course->id, "name" => "Typography normalization",

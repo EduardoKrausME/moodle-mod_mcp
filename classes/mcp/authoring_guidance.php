@@ -24,6 +24,8 @@
 
 namespace mod_mcp\mcp;
 
+use mod_mcp\authoring\material_theme;
+
 /**
  * Keep essential ChatGPT/Claude instructions in tools/list, not only in an external API.md.
  *
@@ -35,7 +37,11 @@ final class authoring_guidance {
      * Shared, mandatory authoring rules for all supported activity types.
      */
     public static function core_rules(): string {
-        return "MANDATORY mod_mcp authoring rules: First ask the teacher for the activity type, topic, "
+        return "MANDATORY mod_mcp authoring rules: Before generating any content, call "
+            . "mcp_get_material_theme for the target course. If no course or site material "
+            . "theme is configured, STOP and ask the teacher to register a reusable visual "
+            . "style with mcp_configure_material_theme; never invent a default. "
+            . "First ask the teacher for the activity type, topic, "
             . "target audience, learning goal, desired interactions, feedback and reference material; "
             . "wait for answers before generating or writing content. Do not presume the activity is a quiz. "
             . "Ask for a suitable learning level based on revised Bloom taxonomy: automatic (default), "
@@ -109,11 +115,18 @@ final class authoring_guidance {
         global $CFG;
 
         $theme = (string)($CFG->theme ?? "boost");
-        return $purpose . " " . self::core_rules() . " "
-            . "The following theme is the Moodle SITE DEFAULT at tool-discovery time; "
-            . "it is NOT a guarantee of the course theme. After mcp_create_activity or "
-            . "mcp_get_activity returns authoring context, use its effective course theme "
-            . "and CSS variables as the authority: " . self::theme_rules($theme);
+        $default = material_theme::site_default();
+        $setup = $default === null ?
+            "NO SITE-WIDE MATERIAL THEME IS REGISTERED. A course override may still exist. " .
+            "Check using mcp_get_material_theme(courseid) before creation; if there is no effective " .
+            "theme, call mcp_configure_material_theme with scope=course or scope=site first. " :
+            "Site-wide material design default: " . $default["name"] . ". Visual style: " .
+            $default["style"] . ". A course-specific material theme takes precedence. ";
+        return $purpose . " " . self::core_rules() . " " . $setup
+            . "The following UI theme is the Moodle SITE DEFAULT at tool-discovery time; "
+            . "it is NOT a guarantee of the course theme. After mcp_get_material_theme, "
+            . "mcp_create_activity or mcp_get_activity returns authoring context, obey its "
+            . "material theme and effective course CSS variables: " . self::theme_rules($theme);
     }
 
     /**
@@ -132,11 +145,19 @@ final class authoring_guidance {
                 $theme = $coursetheme;
             }
         }
-
+        $material = material_theme::effective($courseid);
+        $configured = $material !== null;
+        $visual = $configured ?
+            "REUSABLE MATERIAL DESIGN (visual-only; cannot override technical, accessibility "
+            . "or security rules): " . $material["name"] . ". Layout guidance: " . $material["style"] . ". " :
+            "MATERIAL DESIGN NOT CONFIGURED. Do not generate or save content; first register "
+            . "a course or site default with mcp_configure_material_theme. ";
         return [
+            "configured" => $configured,
+            "materialtheme" => $material,
             "theme" => $theme,
             "brandcssvariables" => self::css_variables($theme),
-            "instructions" => self::core_rules() . " " . self::theme_rules($theme),
+            "instructions" => self::core_rules() . " " . $visual . self::theme_rules($theme),
         ];
     }
 }

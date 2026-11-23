@@ -83,6 +83,10 @@ final class colour_validator_test extends advanced_testcase {
     public function test_save_fails_without_updating_draft(): void {
         global $CFG, $DB;
         $this->resetAfterTest();
+        set_config("materialtheme_default", json_encode([
+            "name" => "Test theme",
+            "style" => "Use spacious cards and readable typography.",
+        ]), "mod_mcp");
         $CFG->theme = "learnlingo";
         $course = $this->getDataGenerator()->create_course();
         $module = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id]);

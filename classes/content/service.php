@@ -25,6 +25,7 @@
 namespace mod_mcp\content;
 
 use context_module;
+use mod_mcp\authoring\material_theme;
 use moodle_exception;
 use stdClass;
 
@@ -97,6 +98,7 @@ final class service {
      */
     public static function validate_theme_colours(int $courseid, string $html): void {
         global $CFG, $DB;
+        material_theme::require_for_course($courseid);
         $theme = (string)($CFG->theme ?? "");
         if (!empty($CFG->allowcoursethemes)) {
             $coursetheme = $DB->get_field("course", "theme", ["id" => $courseid]);

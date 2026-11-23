@@ -26,6 +26,7 @@ namespace mod_mcp\mcp\write;
 
 use context;
 use context_course;
+use mod_mcp\authoring\material_theme;
 use mod_mcp\mcp\authoring_guidance;
 use local_mcp\security\authenticated_identity;
 use local_mcp\write\tool\base_tool;
@@ -96,6 +97,26 @@ final class create_activity extends base_tool {
     }
 
     /**
+     * Reject creation during preview too: first set a course or site material theme.
+     *
+     * @param array $arguments Input arguments.
+     * @param authenticated_identity $identity Authenticated teacher.
+     * @return array Safe preview.
+     */
+    public function preview(array $arguments, authenticated_identity $identity): array {
+        $ctx = $this->resolve_context($arguments);
+        require_capability("mod/mcp:addinstance", $ctx, $identity->userid);
+        $theme = material_theme::require_for_course((int)$arguments["courseid"]);
+        return [
+            "courseid" => (int)$arguments["courseid"],
+            "sectionnum" => (int)$arguments["sectionnum"],
+            "name" => clean_param($arguments["name"], PARAM_TEXT),
+            "materialtheme" => $theme,
+            "will_create_hidden_activity" => true,
+        ];
+    }
+
+    /**
      * execute.
      *
      * @param mixed $arguments Input arguments.
@@ -107,6 +128,7 @@ final class create_activity extends base_tool {
         require_once($CFG->dirroot . "/course/modlib.php");
         $ctx = $this->resolve_context($arguments);
         require_capability("mod/mcp:addinstance", $ctx, $identity->userid);
+        material_theme::require_for_course((int)$arguments["courseid"]);
         $course = get_course((int)$arguments["courseid"]);
         [$module, $context, $section, $cm, $info] = prepare_new_moduleinfo_data(
             $course, "mcp", (int)$arguments["sectionnum"]);

@@ -37,7 +37,7 @@ final class provider implements read_provider_interface, write_provider_interfac
      * @return array READ tools.
      */
     public function get_read_tools(): array {
-        return [new read\get_activity()];
+        return [new read\get_material_theme(), new read\get_activity()];
     }
 
     /**
@@ -47,6 +47,7 @@ final class provider implements read_provider_interface, write_provider_interfac
      */
     public function get_write_tools(): array {
         return [
+            new write\configure_material_theme(),
             new write\create_activity(),
             new write\save_content(),
             new write\save_information(),

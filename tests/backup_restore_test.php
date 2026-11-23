@@ -51,6 +51,10 @@ final class backup_restore_test extends advanced_testcase {
         global $DB, $USER;
 
         $this->resetAfterTest(true);
+        set_config("materialtheme_default", json_encode([
+            "name" => "Test theme",
+            "style" => "Use spacious cards and readable typography.",
+        ]), "mod_mcp");
         $this->setAdminUser();
 
         $course = $this->getDataGenerator()->create_course();
