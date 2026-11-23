@@ -1,11 +1,329 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Votação rápida</title><style>
-:root{font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#26334e;background:#fff2f8;--accent:#a25383}*{box-sizing:border-box}body{margin:0;padding:42px 35px}main{max-width:850px;margin:auto}.eyebrow{letter-spacing:1.5px;font-size:11px;font-weight:800;color:var(--accent)}h1{font-size:39px;line-height:1.15;letter-spacing:-1px;margin:7px 0 14px}h2{font-size:22px;margin:9px 0 16px}p{color:#65728b;margin:10px 0 17px}header p{max-width:650px;font-size:15px}.panel{margin-top:25px;padding:28px;background:#fff;border:1px solid #e1e3f0;border-radius:18px;box-shadow:0 10px 26px #28324c0c}.label{display:inline-block;color:var(--accent);font-size:11px;font-weight:800;background:#f4f1ff;border-radius:6px;padding:7px 10px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:19px 0}.choice{font:inherit;font-weight:660;text-align:left;border:1px solid #d9dcea;background:#fff;border-radius:12px;padding:17px;min-height:72px;cursor:pointer;color:#364361}.choice:hover,.choice[aria-pressed=true]{border-color:var(--accent);background:#f4f1ff}.btn{border:1px solid var(--accent);background:var(--accent);color:white;font:inherit;font-weight:750;font-size:13px;border-radius:10px;padding:12px 17px;cursor:pointer}.btn.light{color:var(--accent);background:#fff}.callout{background:#f2efff;border-left:4px solid var(--accent);border-radius:0 12px 12px 0;padding:16px;margin:20px 0;color:#435273}.row{padding:15px 0;border-bottom:1px solid #eceef5}.range-title{display:flex;justify-content:space-between;gap:10px;color:#45526c;font-weight:700}.range-title output{color:var(--accent)}input[type=range]{display:block;width:100%;margin:15px 0;accent-color:var(--accent)}.metric{background:#f4f2ff;padding:22px;border-radius:13px;margin-top:22px}.metric strong{display:block;font-size:32px;color:var(--accent)}.meter{height:9px;background:#e3e1f2;border-radius:5px;overflow:hidden;margin:12px 0}.meter span{height:100%;display:block;background:var(--accent)}.branch{display:block;width:100%;text-align:left;margin:9px 0;padding:17px;border:1px solid #e1e3ee;background:#fff;border-radius:12px;cursor:pointer}.branch[aria-expanded=true]{border-color:var(--accent);background:#f4f1ff}.branch strong,.branch span{display:block}.branch span{font-size:13px;color:#68738a;margin-top:7px}.flash{background:var(--accent);border:0;border-radius:17px;min-height:230px;width:100%;color:white;font:inherit;font-size:24px;font-weight:750;padding:30px;cursor:pointer}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.small{font-size:12px;color:#778198}button:focus-visible,input:focus-visible{outline:3px solid #9b8ff2;outline-offset:3px}@media(max-width:630px){body{padding:25px 17px}h1{font-size:30px}.panel{padding:19px}.choices{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}</style></head><body><main><header><span class="eyebrow">EU ESCOLHO · ENQUETE</span><h1>Votação rápida</h1><p>Experimente uma enquete local com retorno contextualizado.</p></header><div id="app"></div></main><script>(function customRender(c){
-const r=document.querySelector("#app");let i=0,revealed=false,chosen=-1,open=[];
-const esc=x=>{const n=document.createElement("div");n.textContent=x;return n.innerHTML;};
-function render(){
-if(c.mode==="flash"){const x=c.items[i];r.innerHTML=`<section class="panel"><span class="label">CARTÃO ${i+1} DE ${c.items.length}</span><p>Toque no cartão para revelar a resposta.</p><button class="flash" id="reveal">${esc(revealed?x[1]:x[0])}</button><div class="actions"><button id="prev" class="btn light" ${i===0?"disabled":""}>Anterior</button><button id="next" class="btn">${i===c.items.length-1?"Recomeçar":"Próximo"}</button></div></section>`;r.querySelector("#reveal").onclick=()=>{revealed=!revealed;render();};r.querySelector("#prev").onclick=()=>{i--;revealed=false;render();};r.querySelector("#next").onclick=()=>{i=(i+1)%c.items.length;revealed=false;render();};return;}
-if(c.mode==="map"){r.innerHTML=`<section class="panel"><span class="label">MAPA MENTAL</span><h2>Explore os ramos de ${esc(c.topic)}</h2>${c.items.map((x,n)=>`<button class="branch" data-i="${n}" aria-expanded="${open.includes(n)}"><strong>${esc(x[0])}</strong><span>${open.includes(n)?esc(x[1]):"Clique para expandir"}</span></button>`).join("")}</section>`;r.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const k=+b.dataset.i;open=open.includes(k)?open.filter(n=>n!==k):[...open,k];render();});return;}
-if(chosen>=0&&c.mode==="route"){const x=c.items[chosen];r.innerHTML=`<section class="panel"><span class="label">TRILHA SUGERIDA</span><h2>${esc(x[0])}</h2><p>${esc(x[1])}</p><button class="btn" id="again">Escolher novamente</button></section>`;r.querySelector("#again").onclick=()=>{chosen=-1;render();};return;}
-r.innerHTML=`<section class="panel"><span class="label">${esc(c.mode==="vote"?"ENQUETE LOCAL":c.mode==="compare"?"COMPARADOR":"ESCOLHA SUA TRILHA")}</span><h2>${esc(c.question)}</h2><div class="choices">${c.items.map((x,n)=>`<button class="choice" data-i="${n}" aria-pressed="${chosen===n}">${esc(x[0])}</button>`).join("")}</div>${chosen>=0?`<div class="callout">${esc(c.items[chosen][1])}</div>`:""}<p class="small">Esta interação é demonstrativa e não envia dados ao Moodle.</p></section>`;r.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{chosen=+b.dataset.i;render();});
-}render();
-})({"title":"Votação rápida","subtitle":"Experimente uma enquete local com retorno contextualizado.","kicker":"EU ESCOLHO · ENQUETE","color":"#a25383","bg":"#fff2f8","mode":"vote","question":"O que você prefere na próxima aula?","topic":"O que você prefere na próxima aula?","items":[["Simulação","Você escolheu aprender por cenários e parâmetros."],["Game educativo","Você escolheu aprender por desafios."],["Estudo de caso","Você escolheu analisar decisões."],["Tutorial","Você escolheu seguir um passo a passo."]]});</script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Votação rápida - Escolha sua próxima experiência</title>
+<style>
+:root{color-scheme:light;font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;color:#28344d;background:#f8f4fa;--ink:#263149;--muted:#637088;--accent:#974b87;--deep:#77336a;--line:#e6dce9;--paper:#fff;--success:#207a65}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(16px,4vw,46px);background:radial-gradient(circle at 84% 1%,#f1dfea,transparent 44%),#f8f4fa}
+button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}
+button:focus-visible,input:focus-visible{outline:3px solid #dc8e29;outline-offset:4px}
+[hidden]{display:none!important}
+main{max-width:1120px;margin:0 auto}
+.kicker{font-size:12px;font-weight:850;letter-spacing:.11em;text-transform:uppercase;color:var(--deep)}
+.intro{margin-bottom:26px}.intro h1{font-size:clamp(31px,4.5vw,47px);letter-spacing:-.04em;line-height:1.13;margin:10px 0 12px}.intro p{color:var(--muted);max-width:780px;margin:0}
+.layout{display:grid;grid-template-columns:minmax(0,1.26fr) minmax(300px,.9fr);gap:18px;align-items:start}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:clamp(18px,3vw,30px);box-shadow:0 14px 40px #543f5c0e;min-width:0}
+.illustration{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:23px;border-radius:18px;padding:20px 23px;background:linear-gradient(125deg,#803d7e,#bc6495);color:#fff}
+.illustration span{font-size:11px;letter-spacing:.12em;font-weight:800;text-transform:uppercase;color:#ffe5f7}
+.illustration strong{display:block;font-size:clamp(19px,2.8vw,27px);line-height:1.17;letter-spacing:-.025em;margin:7px 0}
+.illustration svg{width:120px;max-width:30%;flex:none;fill:none;stroke:#fff;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.step-indicator{display:flex;gap:8px;align-items:center;color:#7b6480;font-size:12px;font-weight:800;margin-bottom:13px}
+.step-indicator span:first-child{display:inline-grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#f4e7f2;color:var(--deep)}
+form{margin:0}fieldset{margin:0;padding:0;border:0;min-width:0}legend{font-size:clamp(20px,2.6vw,25px);font-weight:850;line-height:1.25;letter-spacing:-.025em;padding:0;margin-bottom:8px;color:var(--ink)}
+.helper{font-size:14px;color:var(--muted);margin:2px 0 17px}
+.choices{display:grid;gap:10px}
+.choice{position:relative;display:flex;gap:12px;align-items:center;border:2px solid #e4deeb;background:#fff;border-radius:14px;padding:16px 15px;min-height:83px;cursor:pointer;transition:background .2s,border-color .2s,box-shadow .2s}
+.choice:hover{background:#fdf9fd;border-color:#c5a7c4}
+.choice:has(input:checked){border-color:var(--accent);background:#fbf2f9;box-shadow:0 0 0 2px #b36aa023}
+.choice:focus-within{outline:3px solid #dc8e29;outline-offset:2px}
+.choice input{width:20px;height:20px;accent-color:var(--accent);flex:none;margin:0}
+.choice-copy{display:grid;gap:2px;flex:1;min-width:0}.choice-copy strong{font-size:16px;line-height:1.25}.choice-copy small{font-size:13px;color:var(--muted)}
+.choice-icon{display:grid;place-items:center;width:43px;height:43px;border-radius:12px;background:#f5eaf4;color:var(--deep);font-size:23px;font-weight:700;flex:none}
+.choice:nth-child(2) .choice-icon{background:#ebf4ff;color:#3367a7}
+.choice:nth-child(3) .choice-icon{background:#eaf8ed;color:#317858}
+.choice:nth-child(4) .choice-icon{background:#fff0e6;color:#ac6437}
+.choice-icon svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.preview{border-left:3px solid #b976a6;padding:11px 15px;margin:17px 0 0;background:#fdf7fb;border-radius:0 10px 10px 0}
+.preview strong{font-size:13px;color:#743b67}.preview p{font-size:13px;color:#624c65;margin:3px 0 0}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:19px}
+.btn{border:1px solid var(--accent);border-radius:11px;padding:11px 18px;min-height:47px;background:var(--accent);color:#fff;font-weight:800;font-size:14px}
+.btn:hover:not(:disabled){filter:brightness(.96)}.btn.light{background:#fff;color:var(--deep);border-color:#d8c3d6}
+.btn.danger{background:#95435a;border-color:#95435a}
+.status-line{min-height:23px;margin:12px 0 0;color:var(--muted);font-size:13px}
+.voted-banner{display:flex;align-items:flex-start;gap:13px;border:1px solid #b0d9c9;border-radius:14px;background:#f0faf5;padding:17px;color:#1f6c59;margin:18px 0}
+.voted-banner svg{flex:none;width:27px;height:27px;fill:none;stroke:#24816a;stroke-width:2.7}
+.voted-banner strong{display:block;font-size:16px}.voted-banner p{margin:4px 0 0;font-size:13px;color:#386b5c}
+.feedback{margin-top:18px;border-radius:14px;border:1px solid #e3d5e6;background:#faf4fc;padding:18px}
+.feedback h3{font-size:17px;line-height:1.25;margin:0 0 8px;color:var(--deep)}
+.feedback p{margin:0;font-size:14px;color:#655169}
+.feedback .prompt{margin-top:13px;padding-top:12px;border-top:1px solid #e8d9eb;font-weight:650;color:#5a4264}
+.results h2{font-size:clamp(20px,2.7vw,26px);margin:8px 0;letter-spacing:-.025em}
+.results>p{font-size:14px;color:var(--muted);margin:0 0 14px}
+.caution{border:1px solid #e8c69e;background:#fff8ef;color:#76552b;border-radius:13px;padding:14px 15px;font-size:13px;line-height:1.4;margin:18px 0}
+.caution strong{display:block;color:#79532a;margin-bottom:4px}
+.chart{list-style:none;padding:0;margin:0;display:grid;gap:21px}
+.chart-label{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:7px}
+.chart-label strong{font-size:14px;color:#314056}.chart-label .figure{color:#5d4362;font-weight:850;font-size:15px;white-space:nowrap}
+.track{height:13px;width:100%;border-radius:99px;background:#f0eaf2;overflow:hidden}
+.bar{height:100%;width:0;border-radius:99px;background:#b268a0;transition:width .5s ease}
+.chart li:nth-child(2) .bar{background:#739ac7}
+.chart li:nth-child(3) .bar{background:#61aa8f}
+.chart li:nth-child(4) .bar{background:#e1a36f}
+.chart li[data-selected=true] .track{outline:2px solid #7a497e;outline-offset:3px}
+.chart-sub{font-size:12px;color:var(--muted);margin-top:5px}
+.chart-note{padding-top:19px;margin-top:19px;border-top:1px solid #e9e3ec;font-size:12px;color:var(--muted)}
+.confirm-reset{margin-top:15px;background:#fff8f3;border:1px solid #e8c8aa;padding:14px;border-radius:13px}
+.confirm-reset p{font-size:13px;color:#795739;margin:0 0 9px}
+.confirm-reset .actions{margin-top:0}
+.empty-graphic{display:grid;place-items:center;min-height:300px;text-align:center;padding:26px;border:1px dashed #d7c6dd;background:#fbf9fc;border-radius:17px;color:#7b6485}
+.empty-graphic svg{width:93px;height:93px;fill:none;stroke:#b7a2c2;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.empty-graphic strong{display:block;color:#62446b;font-size:18px;margin:13px 0 7px}
+.empty-graphic p{max-width:280px;font-size:13px;margin:0}
+.note{margin-top:21px;font-size:12px;color:var(--muted)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:920px){.layout{grid-template-columns:1fr}.results{position:static}.empty-graphic{min-height:230px}}
+@media(max-width:520px){.panel{border-radius:17px;padding:17px}.illustration{padding:15px}.illustration svg{max-width:25%}.choice{padding:13px;gap:9px}.choice-icon{width:37px;height:37px}.choice-copy strong{font-size:14px}.choice-copy small{font-size:12px}.actions .btn{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<header class="intro">
+<span class="kicker">Eu escolho · Enquete demonstrativa</span>
+<h1>Votação rápida</h1>
+<p>Escolha o formato de uma próxima aula, confirme a preferência e explore um gráfico de exemplo. É uma experiência local, sem votos reais de colegas ou registro no Moodle.</p>
+</header>
+<div class="layout">
+<section class="panel" aria-labelledby="pollTitle">
+<div class="illustration">
+<div><span>Escolha uma experiência</span><strong>Que aula você gostaria de experimentar?</strong></div>
+<svg viewBox="0 0 136 110" aria-hidden="true" focusable="false">
+<rect x="29" y="51" width="82" height="48" rx="9"></rect><path d="M48 65h43M48 80h32"></path>
+<path d="M46 12h48v47H46z" fill="#ffffff1a"></path><path d="m57 34 9 9 17-20"></path><path d="M36 8h68"></path>
+</svg>
+</div>
+<div class="step-indicator"><span id="stepNumber">1</span><span id="stepText">Selecione uma alternativa</span></div>
+<form id="pollForm" novalidate>
+<fieldset id="pollFieldset">
+<legend id="pollTitle">O que você prefere na próxima aula?</legend>
+<p class="helper">Selecione apenas uma opção. Use Tab para entrar e as setas para mudar a seleção.</p>
+<div class="choices" id="choices"></div>
+</fieldset>
+<div class="preview" id="selectionPreview" hidden>
+<strong>Escolha atual</strong>
+<p id="previewText"></p>
+</div>
+<div class="actions">
+<button type="submit" class="btn" id="confirmVote" disabled>Confirmar minha escolha</button>
+<button type="button" class="btn light" id="cancelEdit" hidden>Cancelar alteração</button>
+</div>
+<p class="status-line" id="selectionStatus">Selecione uma opção para continuar.</p>
+</form>
+<section id="confirmed" hidden aria-labelledby="confirmedTitle">
+<div class="voted-banner">
+<svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11"></circle><path d="m8 14 4 4 8-9"></path></svg>
+<div><strong id="confirmedTitle" tabindex="-1">Escolha confirmada nesta página</strong><p id="confirmedCopy"></p></div>
+</div>
+<div class="feedback" aria-labelledby="feedbackTitle">
+<h3 id="feedbackTitle">O que essa escolha permite explorar?</h3>
+<p id="feedbackCopy"></p><p class="prompt" id="reflectionPrompt"></p>
+</div>
+<div class="actions">
+<button class="btn light" id="editVote" type="button">Alterar minha escolha</button>
+<button class="btn light" id="restart" type="button">Reiniciar</button>
+</div>
+</section>
+<div class="confirm-reset" id="resetConfirmation" hidden>
+<p>Reiniciar limpa somente a sua escolha nesta demonstração. O gráfico ilustrativo continua igual.</p>
+<div class="actions"><button type="button" class="btn light" id="cancelRestart">Cancelar</button><button type="button" class="btn danger" id="confirmRestart">Sim, reiniciar</button></div>
+</div>
+<div class="note">Nenhum voto é enviado, armazenado permanentemente ou somado ao gráfico. A confirmação vale apenas enquanto a página estiver aberta.</div>
+</section>
+<aside class="panel results" aria-labelledby="resultsTitle">
+<div class="kicker">Visualização ilustrativa</div>
+<h2 id="resultsTitle">Como seriam os resultados?</h2>
+<p>Confira um exemplo de apresentação de percentuais. Estes números não representam alunos reais.</p>
+<div class="empty-graphic" id="emptyResults">
+<div>
+<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M14 80h70M23 75V55M45 75V24M67 75V39M89 75V14"></path><circle cx="45" cy="24" r="4"></circle><circle cx="89" cy="14" r="4"></circle></svg>
+<strong>Primeiro, escolha sua opção</strong>
+<p>O gráfico ilustrativo aparecerá depois da confirmação, sem alterar os números de exemplo.</p>
+</div>
+</div>
+<div id="resultContent" hidden>
+<div class="caution"><strong>100 respostas fictícias, criadas para demonstração</strong>Não são votos de colegas, não representam uma turma e não incluem a sua escolha.</div>
+<ol class="chart" id="chart" aria-label="Exemplo fictício de distribuição entre quatro formatos de aula"></ol>
+<div class="chart-note">Os percentuais são fixos e somam 100%. Alterar sua escolha não muda os dados ilustrativos.</div>
+</div>
+</aside>
+</div>
+<div class="sr-only" role="status" aria-live="polite" aria-atomic="true" id="announcer"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  const options = [
+    {id:"simulacao",title:"Simulação",subtitle:"Experimentar variáveis e cenários",symbol:"◉",sample:37,
+      feedback:"Uma simulação permite ajustar parâmetros, observar consequências e comparar diferentes cenários sem risco real.",
+      prompt:"Que variável você mudaria primeiro para investigar um problema?"},
+    {id:"game",title:"Jogo educativo",subtitle:"Aprender com desafios",symbol:"✦",sample:29,
+      feedback:"Um jogo educativo pode transformar um conteúdo em desafios progressivos, com objetivos claros e retorno sobre as ações.",
+      prompt:"Qual conceito se tornaria mais interessante com uma missão ou desafio?"},
+    {id:"caso",title:"Estudo de caso",subtitle:"Analisar escolhas e consequências",symbol:"◇",sample:21,
+      feedback:"Um estudo de caso apresenta um problema contextualizado para avaliar alternativas, justificativas e seus possíveis efeitos.",
+      prompt:"Que situação concreta ajudaria a praticar uma decisão bem fundamentada?"},
+    {id:"tutorial",title:"Tutorial interativo",subtitle:"Acompanhar um procedimento",symbol:"▤",sample:13,
+      feedback:"Um tutorial interativo conduz o aluno por etapas com verificações e orientações para aplicar uma tarefa na prática.",
+      prompt:"Que procedimento seria mais fácil aprender seguindo etapas ilustradas?"}
+  ];
+  const $ = id => document.getElementById(id);
+  const optionById = new Map(options.map(item => [item.id,item]));
+  let draft = null;
+  let confirmed = null;
+  let editing = false;
+  const radios = new Map();
+  const bars = new Map();
+  const create = (tag,className,text) => {
+    const el=document.createElement(tag);
+    if (className) el.className=className;
+    if (text!==undefined) el.textContent=text;
+    return el;
+  };
+  function announce(text){$("announcer").textContent=text;}
+  function createOptions(){
+    const group=$("choices");
+    options.forEach(option => {
+      const label=create("label","choice");
+      const radio=create("input");
+      radio.type="radio";
+      radio.name="preferred-format";
+      radio.value=option.id;
+      radio.required=true;
+      radio.setAttribute("aria-describedby","pollTitle");
+      radio.addEventListener("change",() => select(option.id));
+      const copy=create("span","choice-copy");
+      copy.append(create("strong","",option.title),create("small","",option.subtitle));
+      const symbol=create("span","choice-icon",option.symbol);
+      symbol.setAttribute("aria-hidden","true");
+      label.append(radio,copy,symbol);
+      group.appendChild(label);
+      radios.set(option.id,radio);
+    });
+  }
+  function createResults(){
+    const chart=$("chart");
+    options.forEach(option => {
+      const row=create("li");
+      row.dataset.selected="false";
+      const heading=create("div","chart-label");
+      heading.append(create("strong","",option.title),create("span","figure",option.sample+"%"));
+      const track=create("div","track");
+      track.setAttribute("aria-hidden","true");
+      const bar=create("div","bar");
+      bar.style.width=option.sample+"%";
+      track.appendChild(bar);
+      row.append(heading,track,create("div","chart-sub",option.sample+" de 100 respostas fictícias"));
+      row.setAttribute("aria-label",option.title+": "+option.sample+" por cento, "+option.sample+" respostas fictícias");
+      chart.appendChild(row);
+      bars.set(option.id,row);
+    });
+  }
+  function showResults(){
+    $("emptyResults").hidden=true;
+    $("resultContent").hidden=false;
+    bars.forEach((row,id)=>row.dataset.selected=String(id===confirmed));
+  }
+  function showChoices(){
+    $("pollForm").hidden=false;
+    $("confirmed").hidden=true;
+    $("stepNumber").textContent="1";
+    $("stepText").textContent=editing?"Altere a alternativa":"Selecione uma alternativa";
+    radios.forEach((radio,id)=>radio.checked=id===draft);
+    $("selectionPreview").hidden=!draft;
+    $("previewText").textContent=draft ? optionById.get(draft).title+" - "+optionById.get(draft).subtitle : "";
+    $("confirmVote").disabled=!draft;
+    $("confirmVote").textContent=editing?"Confirmar nova escolha":"Confirmar minha escolha";
+    $("cancelEdit").hidden=!editing;
+    $("selectionStatus").textContent=draft ? "Confira sua escolha e confirme para ver o gráfico ilustrativo." : "Selecione uma opção para continuar.";
+  }
+  function select(id){
+    if (!optionById.has(id)) return;
+    draft=id;
+    showChoices();
+    radios.get(id).focus();
+    announce("Selecionado: "+optionById.get(id).title+". Confirme para continuar.");
+  }
+  function confirmChoice(){
+    if (!draft || !optionById.has(draft)) {
+      $("selectionStatus").textContent="Selecione uma alternativa antes de confirmar.";
+      radios.get(options[0].id).focus();
+      announce("Escolha obrigatória.");
+      return;
+    }
+    confirmed=draft;
+    editing=false;
+    $("pollForm").hidden=true;
+    $("confirmed").hidden=false;
+    $("stepNumber").textContent="2";
+    $("stepText").textContent="Escolha confirmada";
+    const chosen=optionById.get(confirmed);
+    $("confirmedCopy").textContent="Você escolheu "+chosen.title+". Esta decisão foi confirmada apenas nesta demonstração, sem envio ao Moodle.";
+    $("feedbackCopy").textContent=chosen.feedback;
+    $("reflectionPrompt").textContent=chosen.prompt;
+    showResults();
+    $("confirmedTitle").focus();
+    announce("Escolha confirmada: "+chosen.title+". O gráfico apresenta somente dados fictícios e não inclui seu voto.");
+  }
+  function beginEdit(){
+    if (!confirmed) return;
+    editing=true;
+    draft=confirmed;
+    showChoices();
+    $("cancelEdit").focus();
+    announce("Você pode alterar sua escolha ou cancelar para manter a anterior.");
+  }
+  function cancelEdit(){
+    editing=false;
+    draft=confirmed;
+    showConfirmed();
+    $("editVote").focus();
+    announce("Alteração cancelada. Sua escolha anterior foi mantida.");
+  }
+  function showConfirmed(){
+    $("pollForm").hidden=true;
+    $("confirmed").hidden=false;
+    $("stepNumber").textContent="2";
+    $("stepText").textContent="Escolha confirmada";
+    showResults();
+  }
+  function requestReset(){
+    $("resetConfirmation").hidden=false;
+    $("cancelRestart").focus();
+    announce("Confirme ou cancele o reinício da demonstração.");
+  }
+  function cancelReset(){
+    $("resetConfirmation").hidden=true;
+    $("restart").focus();
+    announce("Reinício cancelado.");
+  }
+  function reset(){
+    draft=null;
+    confirmed=null;
+    editing=false;
+    $("resetConfirmation").hidden=true;
+    $("resultContent").hidden=true;
+    $("emptyResults").hidden=false;
+    bars.forEach(row=>row.dataset.selected="false");
+    showChoices();
+    radios.get(options[0].id).focus();
+    announce("Enquete reiniciada. Nenhuma escolha confirmada nesta página.");
+  }
+  createOptions();
+  createResults();
+  $("pollForm").addEventListener("submit",event=>{
+    event.preventDefault();
+    confirmChoice();
+  });
+  $("editVote").addEventListener("click",beginEdit);
+  $("cancelEdit").addEventListener("click",cancelEdit);
+  $("restart").addEventListener("click",requestReset);
+  $("cancelRestart").addEventListener("click",cancelReset);
+  $("confirmRestart").addEventListener("click",reset);
+  showChoices();
+})();
+</script>
+</body>
+</html>
