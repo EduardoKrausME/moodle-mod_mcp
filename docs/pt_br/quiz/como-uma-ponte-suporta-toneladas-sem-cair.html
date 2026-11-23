@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Quiz ilustrado com 12 desafios sobre cargas, equilíbrio, forças, tipos de pontes, fundações e durabilidade de estruturas.">
+<title>Como uma ponte suporta toneladas sem cair? | Caderno de Estruturas · Quiz 8</title>
+<style>
+:root{color-scheme:light;--papyrus:#f6eedb;--paper:#fffaf0;--ink:#3d2c29;--muted:#6b5b4f;--brick:#a54232;--brick2:#7f2d29;--gold:#c39c5b;--navy:#303b50;--olive:#677154;--line:#d3bea0;--mono:Consolas,"Liberation Mono",monospace;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--serif:Georgia,"Times New Roman",serif;background:var(--papyrus);color:var(--ink);font-family:var(--sans)}
+*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:290px;line-height:1.74;background:radial-gradient(ellipse at 20% 3%,#fae7c5,transparent 39%),var(--papyrus)}
+a{color:#79352a;text-underline-offset:4px}a:hover{color:#4d3627}button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}:focus-visible{outline:3px solid #2b6192;outline-offset:4px}[hidden]{display:none!important}
+.wrap{width:min(1170px,calc(100% - 44px));margin:auto}.skip{position:absolute;left:12px;top:-110px;padding:12px 17px;color:var(--ink);background:white;z-index:20}.skip:focus{top:12px}.kicker{font:850 .75rem/1.6 var(--sans);color:#8c392f;letter-spacing:.13em;text-transform:uppercase}
+.masthead{background:linear-gradient(135deg,#a04437,#642826);color:#fff3db;position:relative;overflow:hidden}.masthead:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,#e0a06a55,transparent 51%),repeating-linear-gradient(35deg,transparent 0 14px,#ffe8bf0a 14px 15px);pointer-events:none}
+.folio{position:relative;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center;border-bottom:1px solid #e2b67b99;padding:22px 0;color:#f9e2c7;font:800 .72rem/1.5 var(--sans);letter-spacing:.09em;text-transform:uppercase}.folio strong{color:#fff1c6}
+.hero-grid{position:relative;display:grid;grid-template-columns:.94fr 1.06fr;gap:32px;align-items:center;min-height:475px;padding:50px 0 43px}.masthead .kicker{color:#ffe0ab}.hero-title{font:normal clamp(2.65rem,6vw,6rem)/1.02 var(--serif);letter-spacing:-.06em;margin:18px 0 28px}.hero-title em{font-style:italic;font-weight:normal;color:#ffe0a8}.hero-lead{max-width:560px;color:#ffe8d1;line-height:1.86;font-size:1.07rem}.hero-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:23px}.hero-tags span{background:#fff3d51c;border:1px solid #f7d8aa9c;color:#fff0d7;padding:8px 12px;font:760 .76rem/1.4 var(--sans)}.hero-plate{min-width:0;margin:0}.hero-plate svg{display:block;width:100%;height:auto;filter:drop-shadow(8px 14px 16px #53231f4e)}.hero-plate figcaption{font-size:.8rem;line-height:1.7;color:#fbe0c0;margin-top:12px}
+.color-band{height:16px;background-color:#e5c899;background-image:linear-gradient(45deg,#874a38 25%,transparent 25%),linear-gradient(-45deg,#874a38 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#874a38 75%),linear-gradient(-45deg,transparent 75%,#874a38 75%);background-position:0 0,0 8px,8px -8px,-8px 0;background-size:16px 16px}
+.progress-section{padding:26px 0 19px}.progress-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font:760 .78rem var(--sans);color:#79503f;margin-bottom:10px}.progress-track{height:10px;background:#e6d2b4;border:1px solid #bea480;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#667451,#a54232);transition:width .25s ease}.progress-caption{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:11px;color:#745542;font:.83rem/1.6 var(--sans)}.notice{background:#efe1c9;border-left:4px solid #667451;padding:14px 17px;color:#563e30;font-size:.88rem;line-height:1.8}
+.main-shell{padding:25px 0 67px}.question-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:24px;align-items:start}.plate{margin:0;padding:17px;background:#eadcc4;border:1px solid #c3ad8b}.plate-number{display:flex;justify-content:space-between;gap:11px;flex-wrap:wrap;padding-bottom:13px;margin-bottom:12px;border-bottom:1px solid #c9b08b;color:#843d30;font:800 .73rem var(--sans);letter-spacing:.06em}.plate-picture{min-height:340px;background:#f6e8d0;display:grid;place-items:center}.plate-picture svg{display:block;width:100%;height:auto;max-height:450px}.plate figcaption{border-top:1px solid #cbb18e;padding-top:12px;margin-top:12px;color:#65503f;font-size:.82rem;line-height:1.76}.plate-note{margin-top:11px;color:#6c5541;font:.76rem var(--sans)}
+.question-card{min-height:567px;padding:clamp(20px,3vw,33px);background:#fffbf1;border:1px solid #c7ac88;display:flex;flex-direction:column}.question-index{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#8e3b30;border-bottom:1px solid #d2b99a;padding-bottom:16px;font:800 .75rem var(--sans)}.question-card h2{font:normal clamp(1.62rem,2.95vw,2.5rem)/1.21 var(--serif);letter-spacing:-.025em;margin:20px 0 15px}.question-instruction{color:#614d40;line-height:1.8;font-size:.94rem;margin-bottom:18px}
+.answers{margin:0;padding:0;border:0;min-width:0}.answers legend{font:800 .8rem var(--sans);color:#824332;margin-bottom:10px}.options{display:grid;gap:9px}.option{display:flex;align-items:center;gap:12px;padding:11px 13px;min-height:59px;background:#fff7e6;border:1px solid #d4bea0;cursor:pointer}.option:hover{background:#f5e5d0;border-color:#a54232}.option.selected{border:2px solid #923f33;background:#f5decb;padding:10px 12px}.option input{width:20px;height:20px;flex:none;accent-color:#8c3a2f}.option-copy{min-width:0;overflow-wrap:anywhere;color:#463127;font-size:.9rem;line-height:1.57}.option-art{flex:none;display:grid;place-items:center;width:76px;height:56px;background:#eddfc8;border:1px solid #bea17b}.option-art svg{width:74px;height:54px}
+.sequence{list-style:none;padding:0;margin:0;display:grid;gap:8px}.sequence-item{display:grid;grid-template-columns:27px minmax(0,1fr) auto;gap:9px;align-items:center;background:#fff6e2;border:1px solid #d7bea0;padding:10px}.sequence-item .num{font:.84rem var(--mono);color:#8a3c2e}.sequence-item .label{font-size:.9rem;line-height:1.48}.order-buttons{display:flex;gap:5px}.order-buttons button{border:1px solid #bba184;color:#704032;background:#fff8eb;width:35px;height:35px}.order-buttons button:not(:disabled):hover{background:#ead5b9}.answer-help{font-size:.84rem;color:#76604e;line-height:1.78;margin:13px 0 0}
+.feedback{border-left:5px solid #bd8f55;background:#f1e3cc;color:#5b4030;padding:16px 18px;margin:20px 0 0;line-height:1.78}.feedback.correct{border-color:#677154;background:#e0e9d6;color:#3c563b}.feedback strong{display:block;font:780 1.04rem var(--serif);margin-bottom:7px}.feedback p{margin:0}.feedback .feedback-extra{font-size:.83rem;margin-top:8px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto;padding-top:24px}.btn{background:#8e3b30;color:#fff8ed;border:1px solid #8e3b30;font:800 .9rem var(--sans);min-height:45px;padding:11px 15px}.btn:hover:not(:disabled){background:#6d2e27}.btn.secondary{background:#fff8e8;color:#713a2e;border-color:#ad8966}.btn.secondary:hover:not(:disabled){background:#efdfc8}.btn.teal{background:#4b614d;color:#fff9ed;border-color:#4b614d}.btn.teal:hover:not(:disabled){background:#384d3a}.btn.next{margin-left:auto}
+.tips{margin:20px 0;padding:15px 19px;background:#efe1cb;border-left:4px solid #a54232;color:#574334;font-size:.9rem}.tips b{color:#863a30}
+.summary{max-width:975px;margin:auto;background:#fffbf1;border:1px solid #c6ad89;padding:clamp(23px,4vw,48px)}.summary h2{font:normal clamp(2.1rem,4vw,3.6rem)/1.12 var(--serif);letter-spacing:-.04em;margin:14px 0 19px}.summary>p{color:#645241}.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:22px 0}.stat{background:#f0e2cb;padding:14px;border-top:4px solid #a54232}.stat:nth-child(2){border-color:#677154}.stat:nth-child(3){border-color:#c39c5b}.stat b{display:block;color:#7c392f;font:normal 2.5rem var(--serif)}.stat span{font:800 .75rem var(--sans);color:#6b5241}
+.review-list{list-style:none;display:grid;gap:11px;padding:0}.review-item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:#fbf1df;border:1px solid #d5bb9b;padding:13px 15px}.review-item strong{font-size:.95rem}.review-item p{font-size:.84rem;color:#66513f;margin:4px 0 0}.review-item button{border:1px solid #b69674;background:#fff8ed;color:#7e3c2e;padding:10px 12px}
+.references{border-top:1px solid #d3bea0;color:#65513f;padding:36px 0 53px;font-size:.85rem;line-height:1.8}.references h2{font:normal 1.65rem var(--serif)}.references p{margin:11px 0}
+.motion-reduce *,.motion-reduce *:before,.motion-reduce *:after{animation:none!important;transition:none!important}
+@media(max-width:950px){.hero-grid{grid-template-columns:1fr .85fr;min-height:0}.question-grid{grid-template-columns:1fr}.plate-picture{min-height:230px}.question-card{min-height:0}}
+@media(max-width:620px){.wrap{width:calc(100% - 28px)}.hero-grid{grid-template-columns:1fr;gap:19px;padding:31px 0;min-height:0}.hero-title{font-size:clamp(2.5rem,10vw,4.4rem)}.hero-plate{max-width:420px}.plate{padding:10px}.plate-picture{min-height:0}.question-card{padding:17px}.btn{flex:1 1 40%}.btn.next{margin-left:0}.option-art{width:61px;height:44px}.option-art svg{width:59px;height:42px}.summary-stats{grid-template-columns:1fr}.review-item{grid-template-columns:1fr}.sequence-item{grid-template-columns:23px minmax(0,1fr) 76px}.order-buttons button{width:33px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+/* Caderno de estruturas · desenho técnico azul e laranja */
+:root{--papyrus:#f5f1e6;--paper:#fcfbf4;--ink:#203a45;--muted:#4f6370;--brick:#216881;--brick2:#153b58;--gold:#ffb260;--navy:#102b46;--olive:#3e7480;--cream:#e5ece9;--line:#b4c8c8}
+body{background:#f5f1e6;color:#203a45}a{color:#175e79}a:hover{color:#a24b2e}:focus-visible{outline:3px solid #d98541;outline-offset:4px}
+.kicker{color:#26778b}.masthead{background-color:#102b46;background-image:linear-gradient(#7fb4c012 1px,transparent 1px),linear-gradient(90deg,#7fb4c012 1px,transparent 1px),linear-gradient(#7fb4c018 1px,transparent 1px),linear-gradient(90deg,#7fb4c018 1px,transparent 1px);background-size:20px 20px,20px 20px,100px 100px,100px 100px;color:#edf8f7}
+.masthead:before{background:radial-gradient(ellipse at 70% 16%,#2b71904f,transparent 44%),linear-gradient(135deg,#081f37bd,#17395777);opacity:1}
+.folio{color:#c4e8ef;border-color:#7aa2b464;font:800 .74rem/1.5 var(--mono)}.folio strong{color:#a3e3eb}.masthead .kicker{color:#99d6e3}
+.hero-title{font-family:"Trebuchet MS",system-ui,-apple-system,"Segoe UI",sans-serif;color:#fffdf3;font-weight:800;letter-spacing:-.064em}.hero-title em{font-style:normal;font-weight:800;color:#ffbd70}.hero-lead{color:#d0e8ed;line-height:1.9}
+.hero-tags span{background:#143853;color:#c8e4e9;border:1px solid #76a2b2;font-family:var(--mono)}.hero-plate{transform:none}.hero-plate svg{filter:drop-shadow(10px 12px 16px #081f3790)}.hero-plate figcaption{background:transparent;padding:0;color:#add0da}
+.color-band{height:12px;background:repeating-linear-gradient(90deg,#ffb260 0 28px,#173650 28px 39px,#a1dbe1 39px 52px)}
+.progress-track{background:#e0e9e6;border-color:#b3c7c8}.progress-fill{background:linear-gradient(90deg,#216b83,#78b9b7)}.progress-meta,.progress-caption{color:#2b647a}.notice{background:#e5ebe8;border-left-color:#b16a48;color:#37545b}
+.plate{background:#e5eeed;border-color:#b6c9c8}.plate-number{color:#266985;border-color:#adc5c5}.plate-picture{background:#e8f1f0}.plate figcaption{color:#4d6670;border-color:#b2c6c8}.plate-note{color:#3e6473}
+.question-card{background:#fcfcf7;border-color:#adbec2}.question-index{color:#17627f;border-color:#a7c1c5}.question-card h2{font-family:"Trebuchet MS",system-ui,-apple-system,"Segoe UI",sans-serif;color:#1b3e53;font-weight:800;letter-spacing:-.04em}
+.question-instruction,.answer-help{color:#53676e}.answers legend{color:#1d6d81}.option,.sequence-item{background:#f2f7f3;border-color:#b5c9c7;color:#263d48}.option:hover{border-color:#28708c;background:#e5f2f1}.option.selected{border-color:#246b84;background:#e0eef0}.option input{accent-color:#216d87}.option-art{background:#e3eff1;border-color:#aac7ce}.sequence-item .num{color:#216e83}
+.order-buttons button{background:#fafcf8;border-color:#8bb3bc;color:#24516b}.order-buttons button:not(:disabled):hover{background:#dcebef}
+.feedback{border-left-color:#d2894b;background:#f5e9d9;color:#674b35}.feedback.correct{background:#deefe9;border-color:#377e76;color:#245e5c}
+.btn{background:#205f79;border-color:#205f79;color:#fffdf5}.btn:hover:not(:disabled){background:#153d59}.btn.secondary{background:#f7faf7;border-color:#85acb5;color:#1e627b}.btn.secondary:hover:not(:disabled){background:#e2edef}.btn.teal{background:#a45c39;border-color:#a45c39;color:#fffdf5}.btn.teal:hover:not(:disabled){background:#814329}
+.tips{background:#e3ebea;border-color:#438296;color:#385c67}.tips b{color:#215f7c}.summary{background:#fcfcf7;border-color:#b0c6c8}.summary h2{font-family:"Trebuchet MS",system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:800}
+.summary-stats .stat{background:#e3eeed;border-color:#287a90}.summary-stats .stat:nth-child(2){border-color:#5a9c9b}.summary-stats .stat:nth-child(3){border-color:#e3a265}.stat b{color:#236e82}.review-item{background:#e7eeec;border-color:#bed0ce}.review-item button{background:#23667b;border-color:#23667b;color:#fffdf5}.references{color:#4c6368;border-color:#bacaca}.references a{color:#175e79}
+@media(max-width:650px){.hero-grid{grid-template-columns:1fr}.hero-plate{max-width:560px}.hero-title{font-size:clamp(2.6rem,10vw,4.45rem)}.option-art{width:65px;height:46px}.option-art svg{width:63px;height:44px}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#atividade">Ir para a questão</a>
+<header class="masthead"><div class="wrap">
+<div class="folio"><strong>CADERNO DE ESTRUTURAS · QUIZ 08 / 10</strong><span>FORÇAS / EQUILÍBRIO / ESTABILIDADE</span></div>
+<div class="hero-grid"><div><div class="kicker">Laboratório interativo de pontes</div><h1 class="hero-title">Como uma ponte suporta<br><em>toneladas sem cair?</em></h1>
+<p class="hero-lead">Acompanhe o caminho das cargas do caminhão até o terreno, calcule reações idealizadas e descubra como tração, compressão, cortante, momento, fundações e durabilidade se combinam.</p><div class="hero-tags"><span>12 desafios comentados</span><span>12 pranchas SVG originais</span><span>Equilíbrio não é capacidade</span></div></div>
+<figure class="hero-plate"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 610 410" role="img" aria-labelledby="bhT bhD"><title id="bhT">Desenho técnico de ponte treliçada carregada</title><desc id="bhD">Ponte de treliça ilustrada com um caminhão, setas verticais de carga e reações nos apoios sobre grade técnica. Não é uma ponte real ou simulação validada.</desc><defs><marker id="mh1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#ffb260"/></marker><marker id="mh2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9fe7d6"/></marker></defs>
+<rect width="610" height="410" rx="8" fill="#0f2d49" stroke="#7ba0b1" stroke-width="3"/>
+<g stroke="#6c98a8" stroke-width="1" opacity=".25"><path d="M25 0V410M65 0V410M105 0V410M145 0V410M185 0V410M225 0V410M265 0V410M305 0V410M345 0V410M385 0V410M425 0V410M465 0V410M505 0V410M545 0V410M585 0V410M0 25H610M0 65H610M0 105H610M0 145H610M0 185H610M0 225H610M0 265H610M0 305H610M0 345H610M0 385H610"/></g>
+<text x="23" y="34" fill="#d7eff2" font-size="14" font-family="Consolas,monospace">PRANCHA 08 / DISTRIBUIÇÃO DE CARGA</text>
+<g stroke="#b6d8e3" stroke-width="7" fill="none" stroke-linecap="round"><path d="M64 236H548M64 157H548M64 236L134 157L204 236L274 157L344 236L414 157L484 236L548 157M64 157L134 236L204 157L274 236L344 157L414 236L484 157L548 236"/></g>
+<path d="M57 244H556" stroke="#80b1c6" stroke-width="20"/><path d="M57 244H556" stroke="#fff7e9" stroke-width="2" stroke-dasharray="22 13"/>
+<g transform="translate(268 192)"><rect width="91" height="34" rx="5" fill="#efa961" stroke="#ffe0ad" stroke-width="3"/><rect x="58" y="4" width="27" height="22" fill="#bedce5"/><g fill="#18334b"><circle cx="20" cy="36" r="11"/><circle cx="72" cy="36" r="11"/></g></g>
+<path d="M312 71V177" stroke="#ffb260" stroke-width="6" fill="none" marker-end="url(#mh1)"/>
+<g fill="#a9cddb"><path d="M75 262l-30 42h60Z"/><path d="M535 262l-30 42h60Z"/></g>
+<g fill="#7a99a9"><rect x="32" y="305" width="86" height="15"/><rect x="492" y="305" width="86" height="15"/></g><g fill="#b8a58b"><rect x="21" y="322" width="112" height="39"/><rect x="478" y="322" width="112" height="39"/></g>
+<g stroke="#9fe7d6" stroke-width="6" fill="none" marker-end="url(#mh2)"><path d="M75 348V273"/><path d="M535 348V273"/></g>
+<text x="26" y="393" fill="#b6ece3" font-family="Consolas,monospace" font-size="16">REAÇÃO A</text><text x="482" y="393" fill="#b6ece3" font-family="Consolas,monospace" font-size="16">REAÇÃO B</text>
+</svg><figcaption>Esquema autoral de ponte treliçada com trajetórias de cargas qualitativas, sem escala ou verificação de resistência.</figcaption></figure>
+</div></div></header>
+<div class="color-band" aria-hidden="true"></div>
+<div class="wrap">
+ <section class="progress-section" aria-label="Acompanhamento do quiz">
+  <div class="progress-meta"><span id="progressStep">QUESTÃO 01 / 12</span><span id="progressDone">0 de 12 conferidas</span></div>
+  <div class="progress-track" id="progressBar" role="progressbar" aria-label="Questões conferidas" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-caption"><span id="progressTopic">Cargas, esforços e apoios</span><button class="btn secondary" type="button" id="motionToggle" aria-pressed="false">Reduzir movimentos</button></div>
+  <p class="notice">Modelos e valores inteiramente didáticos. Correção local: não envia respostas ao Moodle nem lança notas oficiais. Os desenhos e os cálculos não servem para dimensionar, inspecionar ou aprovar pontes reais.</p>
+ </section>
+ <main id="atividade" class="main-shell">
+  <section id="questionScreen" class="question-grid" aria-label="Questão atual">
+   <figure class="plate">
+    <div class="plate-number"><span id="plateNum">PRANCHA 01</span><span id="plateLabel">ESTRUTURA</span></div>
+    <div id="platePicture" class="plate-picture"></div>
+    <figcaption id="plateCaption">Prancha original com esforços e trajetória de carga.</figcaption>
+    <div class="plate-note">SVG original · Modelo estrutural sem escala</div>
+   </figure>
+   <div class="question-card">
+    <div class="question-index"><span id="questionSection">01 / ESTRUTURA</span><span id="questionType">ESCOLHA ÚNICA</span></div>
+    <h2 id="questionTitle" tabindex="-1">Carregando a primeira questão…</h2>
+    <p id="questionInstruction" class="question-instruction"></p>
+    <div id="answerMount"></div>
+    <p class="answer-help" id="answerHelp"></p>
+    <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+    <div class="actions">
+     <button type="button" id="previousButton" class="btn secondary">Anterior</button>
+     <button type="button" id="checkButton" class="btn">Conferir resposta</button>
+     <button type="button" id="nextButton" class="btn teal next">Próxima questão →</button>
+    </div>
+   </div>
+  </section>
+  <section id="summaryScreen" class="summary" hidden aria-labelledby="summaryTitle">
+   <div class="kicker">Conclusão / revisão comentada</div>
+   <h2 id="summaryTitle" tabindex="-1">Você encontrou o caminho das cargas?</h2>
+   <p>Revisão local, sem nota oficial. Um sistema em equilíbrio pode ainda apresentar problemas de resistência, estabilidade, durabilidade ou fundação. Use os comentários para compreender essas diferenças.</p>
+   <div class="summary-stats">
+    <div class="stat"><b id="totalReviewed">0</b><span>QUESTÕES CONFERIDAS</span></div>
+    <div class="stat"><b id="totalMastered">0</b><span>RESPOSTAS CORRETAS AO FINAL</span></div>
+    <div class="stat"><b id="totalFirst">0</b><span>ACERTOS NA PRIMEIRA TENTATIVA</span></div>
+   </div>
+   <h3 style="font:normal 1.65rem Georgia,serif;margin:22px 0 14px">Revisitar pranchas</h3>
+   <ol id="reviewList" class="review-list"></ol>
+   <div class="actions"><button class="btn secondary" type="button" id="restartButton">Recomeçar do zero</button><button class="btn teal" type="button" id="reviewFirstButton">Rever a primeira questão</button></div>
+  </section>
+ </main>
+ <aside class="tips" aria-label="Como usar o quiz"><b>Laboratório:</b> observe cada prancha, marque as alternativas e confira para ler o feedback. Na questão final, use ↑ e ↓ para ordenar a sequência. Há navegação Anterior/Próxima, revisão e reinício.</aside>
+ <section class="references" aria-labelledby="sourcesTitle"><h2 id="sourcesTitle">Fontes, ilustrações e limites do modelo</h2><p>Todos os 12 diagramas SVG e as miniaturas de alternativas são originais, sem medidas, ensaios, inspeções, especificações, capacidade declarada ou elementos de projeto real. Reações numéricas supõem vigas simplesmente apoiadas, carregamentos verticais estáticos e condições ideais. Engenharia de pontes exige projeto segundo normas aplicáveis, verificação de resistência, serviço, estabilidade, durabilidade, dinâmica e fundações.</p><p>Referências técnicas: <a href="https://www.fhwa.dot.gov/bridge/steel.cfm" target="_blank" rel="noopener noreferrer">FHWA - Steel bridges</a>; <a href="https://www.fhwa.dot.gov/bridge/lrfd/lrfdtoc.cfm" target="_blank" rel="noopener noreferrer">FHWA - LRFD</a>; <a href="https://www.fhwa.dot.gov/BRIDGE/" target="_blank" rel="noopener noreferrer">FHWA - Bridge</a>; <a href="https://www.teachengineering.org/activities/cub_brid_lesson01_activity1" target="_blank" rel="noopener noreferrer">TeachEngineering - Bridges</a>; <a href="https://rosap.ntl.bts.gov/view/dot/43721" target="_blank" rel="noopener noreferrer">National Transportation Library</a>.</p></section>
+</div>
+<script>
+(function(){
+'use strict';
+var root=document, total=12;
+var $=function(id){return root.getElementById(id);};
+var questions=[{"section":"Trajetória de forças","figure":"path","figureTitle":"Trajetória de forças · Prancha 01","type":"single","title":"Por qual caminho o peso de um caminhão chega ao terreno numa ponte de viga?","instruction":"Rastreie as forças do tabuleiro até as fundações.","options":[["a","Caminhão → tabuleiro/vigas → apoios/pilares → fundações → terreno"],["b","Caminhão → ar → solo, sem apoios"],["c","Caminhão → vento → rio, sempre"],["d","Caminhão → guarda-corpo → atmosfera"]],"correct":"a","hint":"A carga deve atravessar elementos resistentes até o solo.","explain":"O tabuleiro distribui ações às vigas, os apoios recebem reações e as fundações transmitem esforços ao terreno. A trajetória exata depende do sistema e das ligações.","caption":"Flechas indicam transferência para apoios e fundações, sem medições reais."},{"section":"Equilíbrio vertical","figure":"center","figureTitle":"Equilíbrio vertical · Prancha 02","type":"single","title":"Uma viga simplesmente apoiada recebe 60 kN no centro. Sem outras ações, quais são as reações?","instruction":"Adote dois apoios ideais e uma carga vertical centrada.","options":[["a","30 kN para cima em cada apoio"],["b","60 kN para cima em cada apoio"],["c","60 kN apenas no apoio da esquerda"],["d","30 kN para baixo em cada apoio"]],"correct":"a","hint":"Use simetria e soma vertical de forças.","explain":"Em equilíbrio, R_A + R_B = 60 kN. Como a carga está no centro do vão ideal, R_A = R_B = 30 kN, ambas para cima. Isso não verifica a capacidade da estrutura.","caption":"Caminhão substituído por força pontual P = 60 kN no meio do vão."},{"section":"Carga fora do centro","figure":"offcenter","figureTitle":"Carga fora do centro · Prancha 03","type":"single","title":"Uma carga de 80 kN está a L/4 de A em uma viga biapoiada. Quais reações verticais são esperadas?","instruction":"Considere apenas a carga pontual e momento de equilíbrio em A.","options":[["a","R_A = 40 kN; R_B = 40 kN"],["b","R_A = 60 kN; R_B = 20 kN"],["c","R_A = 20 kN; R_B = 60 kN"],["d","R_A = 80 kN; R_B = 80 kN"]],"correct":"b","hint":"Em torno de A, R_B · L = 80 · L/4.","explain":"O equilíbrio de momentos fornece R_B = 20 kN. Pela soma das forças verticais, R_A = 80 − 20 = 60 kN. Outras ações e condições de apoio mudariam o resultado.","caption":"A carga encontra-se a um quarto da distância entre A e B."},{"section":"Carga distribuída","figure":"distributed","figureTitle":"Carga distribuída · Prancha 04","type":"single","title":"Uma carga uniforme de 5 kN/m atua sobre 12 m. Qual sua força total resultante?","instruction":"Multiplique intensidade por comprimento.","options":[["a","5 kN"],["b","17 kN"],["c","60 kN"],["d","120 kN"]],"correct":"c","hint":"5 kN/m × 12 m.","explain":"A resultante é 60 kN. Sob essa carga simétrica e sem ações adicionais, reações em apoios ideais iguais seriam de 30 kN em cada extremidade.","caption":"Onze setas representam uma carga uniformemente distribuída de maneira esquemática."},{"section":"Tração versus compressão","figure":"bending","figureTitle":"Tração versus compressão · Prancha 05","type":"single","title":"Para flexão positiva em uma viga biapoiada sob carga para baixo, o que ocorre nas fibras?","instruction":"Compare encurtamento e alongamento acima e abaixo da linha neutra.","options":[["a","Topo comprimido e base tracionada","right"],["b","Topo e base somente tracionados","both"],["c","Topo tracionado e base comprimida, nesse caso","flip"]],"correct":"a","hint":"Na flexão positiva típica, as fibras superiores encurtam e as inferiores alongam.","explain":"A região acima da linha neutra trabalha predominantemente à compressão e a inferior à tração. A distribuição se inverte quando muda o sinal do momento, como em outras condições de vínculos ou carregamento.","caption":"Um esquema bicolor mostra zonas típicas de compressão e tração."},{"section":"Esforço cortante e momento","figure":"shear","figureTitle":"Esforço cortante e momento · Prancha 06","type":"single","title":"Na viga biapoiada com uma carga pontual central, o que acontece com V e M?","instruction":"Compare o degrau de cortante e a evolução do momento.","options":[["a","V tem um salto na carga; M atinge máximo em módulo no centro"],["b","V e M possuem sempre a mesma unidade"],["c","M precisa ser zero no centro"],["d","V é zero ao longo de todo o vão"]],"correct":"a","hint":"Uma força concentrada causa uma descontinuidade no cortante.","explain":"O cortante é +P/2 antes e −P/2 depois da carga central, enquanto o momento máximo vale P·L/4 no modelo ideal. Esforços cortantes têm unidade de força e momentos, de força × comprimento.","caption":"Diagramas conceituais de cortante em degrau e momento triangular."},{"section":"Arcos, cabos e treliças","figure":"types","figureTitle":"Arcos, cabos e treliças · Prancha 07","type":"multiple","title":"Quais associações entre pontes e seus mecanismos principais são coerentes?","instruction":"Marque todas as adequadas.","options":[["a","Um arco pode conduzir parte relevante da carga por compressão"],["b","Cabos principais de uma ponte pênsil trabalham predominantemente por tração"],["c","Treliças trianguladas transmitem esforços principalmente por barras axiais"],["d","Vigas não apresentam compressão ou esforço cortante"],["e","Cabos flexíveis resistem a compressão como pilares"]],"correct":["a","b","c"],"hint":"Considere o trabalho de arcos, cabos e barras trianguladas.","explain":"Arcos podem atuar com forte compressão, cabos com tração e treliças com barras principalmente axiais. Sistemas reais têm forças combinadas e dependem de vínculos, conexões e geometria.","caption":"Três tipologias simplificadas: arco, pênsil e treliça."},{"section":"Estabilidade e carregamento cíclico","figure":"failure","figureTitle":"Estabilidade e carregamento cíclico · Prancha 08","type":"multiple","title":"Quais fenômenos precisam de avaliação além do equilíbrio estático?","instruction":"Selecione todas as afirmações corretas.","options":[["a","Flambagem é uma forma de instabilidade de elementos comprimidos"],["b","Fadiga pode resultar de ciclos repetidos de tensões"],["c","Vibrações decorrem de respostas dinâmicas e podem afetar serviço ou segurança"],["d","Equilíbrio estático impede qualquer fadiga"],["e","Um elemento comprimido nunca apresenta instabilidade"]],"correct":["a","b","c"],"hint":"Estar em equilíbrio não elimina diferentes mecanismos de falha.","explain":"Flambagem, fadiga e vibração são efeitos diferentes, e a presença de equilíbrio de forças não garante a resistência, a vida útil ou a estabilidade da estrutura.","caption":"Barra deformada, ciclos de carregamento e onda representam fenômenos distintos."},{"section":"Fundações e solo","figure":"foundation","figureTitle":"Fundações e solo · Prancha 09","type":"single","title":"Por que dimensionar a viga não basta para comprovar a segurança de uma ponte?","instruction":"Observe o encontro das fundações com o terreno.","options":[["a","As cargas chegam a fundações e solo, onde resistência, recalques e erosão também importam"],["b","A fundação faz desaparecer todas as cargas verticais"],["c","O solo só importa para pontes de madeira"],["d","Socavamento e deformações do terreno são sempre irrelevantes"]],"correct":"a","hint":"Toda reação estrutural precisa ser suportada por outro elemento e, ao final, pelo terreno.","explain":"O terreno deve receber esforços da fundação com capacidade e deformações admissíveis. É necessário estudar recalques, estabilidade, erosão e socavamento, além da superestrutura.","caption":"Diagrama em corte de fundações transferindo esforços a camadas de solo."},{"section":"Material, protensão e manutenção","figure":"materials","figureTitle":"Material, protensão e manutenção · Prancha 10","type":"multiple","title":"Quais associações de materiais e durabilidade são tecnicamente válidas?","instruction":"Marque todas as escolhas fundamentadas.","options":[["a","Protensão pode introduzir compressão prévia favorável ao concreto"],["b","Aço exposto pode exigir proteção anticorrosiva e inspeção"],["c","Materiais dependem das solicitações, do ambiente e dos requisitos do projeto"],["d","Concreto não apresenta fissuras sob nenhuma situação"],["e","Pontes em serviço nunca precisam de inspeções"]],"correct":["a","b","c"],"hint":"Resistência e durabilidade dependem de detalhes, ambiente e manutenção.","explain":"Protensão altera o estado de tensões no concreto, e aços podem necessitar de proteção e inspeções, conforme o ambiente. A seleção de materiais não substitui análise das ações nem a manutenção.","caption":"Três quadros representam concreto com protensão, perfis de aço e proteção superficial."},{"section":"Unidades dos esforços","figure":"units","figureTitle":"Unidades dos esforços · Prancha 11","type":"single","title":"Qual conjunto associa corretamente força, carga distribuída linear e momento?","instruction":"Separe as três grandezas físicas.","options":[["a","kN; kN/m; kN·m"],["b","kN/m; kN·m; kN"],["c","kN; kN; kN"],["d","Toneladas para todas as grandezas, sem conversão"]],"correct":"a","hint":"Momento combina força e distância, enquanto carga distribuída usa força por comprimento.","explain":"A unidade de força pode ser kN, de intensidade distribuída kN/m e de momento kN·m. Tonelada é uma unidade de massa, não diretamente de força.","caption":"Três cartões com símbolos F, w, M e suas unidades."},{"section":"Do caminhão ao terreno","figure":"sequence","figureTitle":"Do caminhão ao terreno · Prancha 12","type":"sequence","title":"Ordene o caminho idealizado de uma carga vertical em uma ponte de viga.","instruction":"Use ↑ e ↓ para colocar os seis elementos em uma sequência possível.","items":[["soil","O solo ou rocha recebe os esforços das fundações"],["support","Os apoios e pilares recebem as reações"],["vehicle","Um veículo aplica carga ao tabuleiro"],["beam","Vigas conduzem as ações aos apoios"],["deck","O tabuleiro distribui a carga para as vigas"],["footing","As fundações transferem os esforços ao terreno"]],"correct":["vehicle","deck","beam","support","footing","soil"],"hint":"Comece onde a carga é aplicada e siga cada elemento de transmissão até o terreno.","explain":"Caminho didático: veículo, tabuleiro, vigas, apoios/pilares, fundações e solo. Outras tipologias de pontes podem ter caminhos diferentes, e essa sequência não verifica capacidade de carga real.","caption":"Seis blocos representam a transmissão progressiva de ações."}];
+var answer=Object.create(null),checked=Object.create(null),firstTry=Object.create(null),index=0,reduceMotion=false;
+function svgFrame(title,desc,b){return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 570 380" role="img" aria-labelledby="bft bfd"><title id="bft">'+title+'</title><desc id="bfd">'+desc+'</desc><defs><marker id="ma1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#ffb260"/></marker><marker id="ma2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9fe7d6"/></marker></defs><rect width="570" height="380" fill="#102b46" stroke="#7ca1b1" stroke-width="3"/><g opacity=".2" stroke="#72a7bb"><path d="M20 0V380M60 0V380M100 0V380M140 0V380M180 0V380M220 0V380M260 0V380M300 0V380M340 0V380M380 0V380M420 0V380M460 0V380M500 0V380M540 0V380M0 20H570M0 60H570M0 100H570M0 140H570M0 180H570M0 220H570M0 260H570M0 300H570M0 340H570"/></g><text x="25" y="36" font-family="Consolas,monospace" font-size="12" fill="#bce9ec">CADERNO DE ESTRUTURAS · PRANCHA ORIGINAL</text>'+b+'<text x="25" y="361" font-family="Consolas,monospace" font-size="11" fill="#bfd9e0">MODELO DIDÁTICO, NÃO UM PROJETO OU ENSAIO</text></svg>';}
+function t(x,y,s,z,c){return '<text x="'+x+'" y="'+y+'" font-family="Consolas,monospace" font-size="'+(z||16)+'" fill="'+(c||'#e5f1f2')+'">'+s+'</text>';}
+function beam(x,y,w){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="18" rx="3" fill="#83b5c6" stroke="#c5e9eb" stroke-width="2"/>';}
+function sup(x,y){return '<path d="M'+x+' '+y+'l-28 42h56Z" fill="#81a7b9"/><rect x="'+(x-34)+'" y="'+(y+43)+'" width="68" height="12" fill="#557a90"/>';}
+function arrow(d,g){return '<path d="'+d+'" fill="none" stroke="'+(g?'#9fe7d6':'#ffb260')+'" stroke-width="5" stroke-linecap="round" marker-end="url(#'+(g?'ma2':'ma1')+')"/>';}
+function panel(x,y,w,h,s){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="6" fill="#214661" stroke="#84b6c7" stroke-width="2"/>'+t(x+9,y+h/2+5,s,14);}
+function icon(k){var b='';if(['right','both','flip'].includes(k)){b='<rect x="7" y="14" width="66" height="26" fill="#7caabf" stroke="#c4e5ed" stroke-width="2"/><path d="M11 10H69" stroke="'+(k==='flip'?'#9fe7d6':'#ffb260')+'" stroke-width="6"/><path d="M11 45H69" stroke="'+(k==='flip'?'#ffb260':'#9fe7d6')+'" stroke-width="6"/>';}return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 58" aria-hidden="true" focusable="false">'+b+'</svg>';}
+function art(k){var b='',o='#ffb260',g='#9fe7d6';
+if(k==='path')b=beam(50,150,468)+sup(91,176)+sup(475,176)+arrow('M286 71V136')+arrow('M91 303V198',true)+arrow('M475 303V198',true)+'<rect x="47" y="253" width="88" height="71" fill="#9d9887"/><rect x="431" y="253" width="88" height="71" fill="#9d9887"/>'+t(53,341,'FUNDAÇÃO A',13)+t(437,341,'FUNDAÇÃO B',13);
+if(k==='center')b=beam(60,199,449)+sup(73,224)+sup(496,224)+arrow('M286 81V184')+arrow('M73 313V238',true)+arrow('M496 313V238',true)+t(307,106,'P = 60 kN',20,o)+t(30,337,'Rₐ = ?',17,g)+t(448,337,'Rᵦ = ?',17,g);
+if(k==='offcenter')b=beam(59,201,449)+sup(72,226)+sup(495,226)+arrow('M178 82V184')+arrow('M72 311V238',true)+arrow('M495 311V238',true)+t(194,103,'80 kN',20,o)+'<path d="M72 283H495M178 275V295" stroke="#bad3dc" stroke-width="2"/>'+t(94,308,'L/4',16)+t(327,308,'3L/4',16);
+if(k==='distributed'){b=beam(55,222,461)+sup(69,248)+sup(502,248);for(var n=0;n<11;n++)b+=arrow('M'+(67+n*44)+' 125V210');b+=t(170,96,'w = 5 kN/m',21,o)+t(185,327,'L = 12 m',18,g);}
+if(k==='bending')b=beam(54,202,459)+sup(68,226)+sup(500,226)+'<rect x="91" y="193" width="389" height="9" fill="'+o+'"/><rect x="91" y="211" width="389" height="8" fill="'+g+'"/>'+arrow('M287 87V181')+t(142,155,'COMPRESSÃO NO TOPO',17,o)+t(151,312,'TRAÇÃO NA BASE',17,g);
+if(k==='shear')b=beam(51,119,466)+sup(65,143)+sup(500,143)+arrow('M283 55V106')+'<path d="M50 240H527M50 215V277" stroke="#b1c9d5" stroke-width="2"/><path d="M52 227H286V266H526" fill="none" stroke="'+o+'" stroke-width="5"/><path d="M52 334L286 278L526 334" fill="none" stroke="'+g+'" stroke-width="5"/>'+t(90,210,'V(x)',15,o)+t(269,313,'M(x)',15,g);
+if(k==='types'){b='<path d="M26 216H178M205 216H366M390 216H548" stroke="#bce0e9" stroke-width="8"/><path d="M26 216Q102 70 178 216" stroke="'+o+'" stroke-width="9" fill="none"/><path d="M205 122Q285 182 366 122" stroke="'+g+'" stroke-width="7" fill="none"/><path d="M205 216V122M366 216V122" stroke="#b3d6e4" stroke-width="8"/>';for(var m=227;m<=346;m+=30)b+='<path d="M'+m+' 142V216" stroke="'+g+'" stroke-width="3"/>';b+='<path d="M390 216L418 122L446 216L474 122L502 216L530 122L548 216M390 122H548" stroke="#b2dce6" stroke-width="6" fill="none"/>'+t(65,276,'ARCO',16)+t(234,276,'PÊNSIL',16)+t(433,276,'TRELIÇA',15);}
+if(k==='failure')b=panel(25,98,166,215,'FLAMBAGEM')+panel(202,98,166,215,'FADIGA')+panel(379,98,167,215,'VIBRAÇÃO')+'<path d="M110 161Q149 218 110 274" fill="none" stroke="'+o+'" stroke-width="10"/><path d="M229 229H343M276 182l22 24l-19 20l17 20" fill="none" stroke="'+g+'" stroke-width="5"/><path d="M393 232Q416 165 438 232T483 232T541 232" fill="none" stroke="#a9d3df" stroke-width="5"/>';
+if(k==='foundation')b=beam(52,110,462)+sup(104,134)+sup(470,134)+'<rect x="22" y="229" width="526" height="108" fill="#b9a98e"/><path d="M22 273H548M22 308H548" stroke="#7c766a" stroke-width="4" stroke-dasharray="8 9"/><rect x="71" y="179" width="69" height="114" fill="#7694a5"/><rect x="434" y="179" width="71" height="114" fill="#7694a5"/>'+arrow('M104 146V209')+arrow('M470 146V209')+t(214,291,'SOLO / ROCHA',18,o);
+if(k==='materials')b=panel(23,98,167,220,'CONCRETO')+panel(202,98,166,220,'AÇO')+panel(380,98,165,220,'PROTEÇÃO')+'<rect x="55" y="175" width="103" height="55" fill="#afbec4"/><path d="M61 198H154" stroke="'+o+'" stroke-width="6" stroke-dasharray="9 6"/><path d="M242 170V261M214 170H350M214 261H350" stroke="#a4d1e0" stroke-width="12"/><path d="M463 169V261" stroke="#a4c0ce" stroke-width="17"/><path d="M463 169V261" stroke="'+g+'" stroke-width="6" stroke-dasharray="8 7"/>'+t(38,289,'PROTENSÃO',12,o)+t(246,289,'PERFIL',13)+t(396,289,'ANTICORROSÃO',12,g);
+if(k==='units')b=panel(22,103,165,213,'FORÇA F')+panel(202,103,164,213,'CARGA w')+panel(381,103,164,213,'MOMENTO M')+t(59,242,'kN',37,o)+t(216,242,'kN/m',29,g)+t(391,242,'kN·m',28,o);
+if(k==='sequence'){var names=['VEÍCULO','TABULEIRO','VIGAS','APOIOS','FUNDAÇÃO','SOLO'];for(var x=0;x<6;x++)b+=panel(20+(x%3)*183,100+Math.floor(x/3)*108,166,84,(x+1)+'. '+names[x]);b+=t(82,334,'UM CAMINHO POSSÍVEL DE TRANSMISSÃO',14,o);}
+return svgFrame(questions[index].figureTitle,questions[index].caption,b);}
+function chosen(q){
+ if(q.type==='sequence'){return (answer[index]||q.items.map(function(x){return x[0];})).slice();}
+ return q.type==='multiple'?(answer[index]||[]).slice():(answer[index]||'');
+}
+function equal(a,b){
+ if(Array.isArray(a)&&Array.isArray(b)){
+  if(a.length!==b.length)return false;
+  return a.slice().sort().join('|')===b.slice().sort().join('|');
+ }
+ return a===b;
+}
+function correctCount(){return questions.filter(function(q,i){return checked[i]&&checked[i].ok;}).length;}
+function reviewedCount(){return Object.keys(checked).length;}
+function updateProgress(){
+ var done=reviewedCount();
+ $('progressStep').textContent='QUESTÃO '+String(index+1).padStart(2,'0')+' / '+total;
+ $('progressDone').textContent=done+' de '+total+' conferidas';
+ $('progressFill').style.width=(done*100/total)+'%';
+ $('progressBar').setAttribute('aria-valuenow',String(done));
+ $('progressTopic').textContent=questions[index].section;
+}
+function updateSelections(){
+ Array.prototype.forEach.call($('answerMount').querySelectorAll('.option'),function(el){el.classList.toggle('selected',!!el.querySelector('input').checked);});
+}
+function render(focus){
+ var q=questions[index],isSequence=q.type==='sequence';
+ $('summaryScreen').hidden=true;$('questionScreen').hidden=false;
+ $('plateNum').textContent='PRANCHA '+String(index+1).padStart(2,'0');
+ $('plateLabel').textContent=q.section.toUpperCase();
+ $('platePicture').innerHTML=art(q.figure);
+ $('plateCaption').textContent=q.caption;
+ $('questionSection').textContent=String(index+1).padStart(2,'0')+' / '+q.section.toUpperCase();
+ $('questionType').textContent=isSequence?'ORDENAÇÃO':q.type==='multiple'?'MÚLTIPLA SELEÇÃO':'ESCOLHA ÚNICA';
+ $('questionTitle').textContent=q.title;
+ $('questionInstruction').textContent=q.instruction;
+ $('answerHelp').textContent=isSequence?'Use ↑ e ↓ para mover cada etapa.':q.type==='multiple'?'Marque uma ou mais alternativas antes de conferir.':'Escolha uma única alternativa e confira.';
+ var mount=$('answerMount');mount.replaceChildren();
+ if(isSequence){
+  var ul=document.createElement('ol');ul.className='sequence';ul.setAttribute('aria-label','Etapas em ordem editável');
+  var current=chosen(q);
+  current.forEach(function(id,j){
+   var li=document.createElement('li');li.className='sequence-item';
+   var n=document.createElement('span');n.className='num';n.textContent=String(j+1).padStart(2,'0');
+   var lab=document.createElement('span');lab.className='label';lab.textContent=q.items.find(function(it){return it[0]===id;})[1];
+   var group=document.createElement('span');group.className='order-buttons';
+   [-1,1].forEach(function(delta){
+    var b=document.createElement('button');b.type='button';b.textContent=delta<0?'↑':'↓';b.disabled=delta<0?j===0:j===current.length-1;
+    b.dataset.position=String(j);b.dataset.delta=String(delta);
+    b.setAttribute('aria-label',(delta<0?'Subir: ':'Descer: ')+lab.textContent);
+    group.appendChild(b);
+   });
+   li.appendChild(n);li.appendChild(lab);li.appendChild(group);ul.appendChild(li);
+  });mount.appendChild(ul);
+ }else{
+  var field=document.createElement('fieldset');field.className='answers';
+  var legend=document.createElement('legend');legend.textContent=q.type==='multiple'?'Selecione todas as respostas corretas':'Escolha a resposta';field.appendChild(legend);
+  var opts=document.createElement('div');opts.className='options';
+  q.options.forEach(function(opt){
+   var lab=document.createElement('label');lab.className='option';
+   var inp=document.createElement('input');inp.type=q.type==='multiple'?'checkbox':'radio';inp.name='q'+index;inp.value=opt[0];
+   inp.checked=q.type==='multiple'?chosen(q).indexOf(opt[0])!==-1:chosen(q)===opt[0];
+   var label=document.createElement('span');label.className='option-copy';label.textContent=opt[1];
+   lab.appendChild(inp);if(opt[2]){var artwork=document.createElement('span');artwork.className='option-art';artwork.innerHTML=icon(opt[2]);lab.appendChild(artwork);}lab.appendChild(label);opts.appendChild(lab);
+  });field.appendChild(opts);mount.appendChild(field);updateSelections();
+ }
+ var state=checked[index];var fb=$('feedback');
+ fb.hidden=!state;fb.className='feedback'+(state&&state.ok?' correct':'');
+ if(state){
+  fb.replaceChildren();
+  var strong=document.createElement('strong');strong.textContent=state.ok?'Correto: você identificou a relação essencial.':'Ainda não. Examine novamente a prancha.';
+  var detail=document.createElement('p');detail.textContent=state.ok?q.explain:q.hint+' '+q.explain;
+  fb.appendChild(strong);fb.appendChild(detail);
+  var small=document.createElement('p');small.className='feedback-extra';small.textContent=state.ok?'Resposta conferida. Você pode avançar ou voltar para revisar.':'Você pode alterar a resposta e conferir novamente, ou avançar e revisar depois.';
+  fb.appendChild(small);
+ }
+ $('previousButton').disabled=index===0;
+ $('checkButton').textContent=state?'Tentar novamente':'Conferir resposta';
+ $('nextButton').disabled=!state;
+ $('nextButton').textContent=index===total-1?'Ver resultado →':'Próxima questão →';
+ updateProgress();
+ if(focus){$('questionTitle').focus();$('questionScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});}
+}
+function invalidate(){if(checked[index])delete checked[index];$('feedback').hidden=true;$('checkButton').textContent='Conferir resposta';$('nextButton').disabled=true;updateProgress();}
+$('answerMount').addEventListener('change',function(e){
+ var input=e.target;
+ if(!input.matches('input'))return;
+ var q=questions[index];
+ if(q.type==='multiple'){answer[index]=Array.prototype.map.call($('answerMount').querySelectorAll('input:checked'),function(it){return it.value;});}
+ else{answer[index]=input.value;}
+ invalidate();updateSelections();
+});
+$('answerMount').addEventListener('click',function(e){
+ var b=e.target.closest('button[data-position]');if(!b)return;
+ var q=questions[index],current=chosen(q);
+ var pos=Number(b.dataset.position),next=pos+Number(b.dataset.delta);
+ if(next<0||next>=current.length)return;
+ var temp=current[pos];current[pos]=current[next];current[next]=temp;answer[index]=current;
+ invalidate();render(false);
+ var selector='button[data-position="'+next+'"][data-delta="'+b.dataset.delta+'"]';
+ var focusButton=$('answerMount').querySelector(selector);if(focusButton&&!focusButton.disabled)focusButton.focus();
+});
+$('checkButton').addEventListener('click',function(){
+ if(checked[index]){invalidate();$('questionTitle').focus();return;}
+ var q=questions[index],value=chosen(q),missing=q.type==='sequence'?false:q.type==='multiple'?value.length===0:!value;
+ if(missing){$('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Selecione uma resposta antes de conferir.';return;}
+ var ok=q.type==='sequence'?value.join('|')===q.correct.join('|'):equal(value,q.correct);
+ if(firstTry[index]===undefined)firstTry[index]=ok;
+ checked[index]={ok:ok};
+ render(false);
+});
+$('previousButton').addEventListener('click',function(){if(index>0){index--;render(true);}});
+$('nextButton').addEventListener('click',function(){
+ if(!checked[index])return;
+ if(index===total-1){showSummary();return;}
+ index++;render(true);
+});
+function showSummary(){
+ $('questionScreen').hidden=true;$('summaryScreen').hidden=false;
+ $('progressStep').textContent='REVISÃO CONCLUÍDA';
+ $('progressTopic').textContent='Conclusão / cargas e estabilidade';
+ $('totalReviewed').textContent=String(reviewedCount())+' / '+total;
+ $('totalMastered').textContent=String(correctCount())+' / '+total;
+ $('totalFirst').textContent=String(Object.keys(firstTry).filter(function(k){return firstTry[k]===true;}).length)+' / '+total;
+ var list=$('reviewList');list.replaceChildren();
+ questions.forEach(function(q,i){
+  var li=document.createElement('li');li.className='review-item';
+  var block=document.createElement('div');
+  var strong=document.createElement('strong');strong.textContent=String(i+1).padStart(2,'0')+'. '+q.section;
+  var p=document.createElement('p');p.textContent=checked[i]?(checked[i].ok?'Correta. ':'A revisar. ')+q.explain:'Ainda não conferida. '+q.explain;
+  block.appendChild(strong);block.appendChild(p);
+  var b=document.createElement('button');b.type='button';b.textContent='Rever prancha';b.dataset.review=String(i);
+  li.appendChild(block);li.appendChild(b);list.appendChild(li);
+ });
+ $('summaryTitle').focus();$('summaryScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});
+}
+$('reviewList').addEventListener('click',function(e){var b=e.target.closest('button[data-review]');if(!b)return;index=Number(b.dataset.review);render(true);});
+$('restartButton').addEventListener('click',function(){answer=Object.create(null);checked=Object.create(null);firstTry=Object.create(null);index=0;render(true);});
+$('reviewFirstButton').addEventListener('click',function(){index=0;render(true);});
+$('motionToggle').addEventListener('click',function(){reduceMotion=!reduceMotion;document.body.classList.toggle('motion-reduce',reduceMotion);this.setAttribute('aria-pressed',String(reduceMotion));this.textContent=reduceMotion?'Restaurar movimentos':'Reduzir movimentos';});
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){reduceMotion=true;document.body.classList.add('motion-reduce');$('motionToggle').setAttribute('aria-pressed','true');$('motionToggle').textContent='Restaurar movimentos';}
+if(questions.length!==total){throw new Error('Total de questões inconsistente');}
+render(false);
+})();
+</script>
+</body>
+</html>
