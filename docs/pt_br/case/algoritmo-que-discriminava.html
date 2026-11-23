@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>O Algoritmo que Discriminava - Estudo de caso</title>
+<style>
+:root{color-scheme:light;--bg:#eaf0ee;--paper:#fffcf6;--ink:#213942;--muted:#566b72;--line:#ccdcd9;--navy:#102f39;--accent:#1c6661;--on-accent:#fff;--teal:#238678;--gold:#b7813b;--warning:#b25749;--focus:#1550ba;--shadow:0 14px 35px #1e414029}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.54 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+[hidden]{display:none!important}main{max-width:1250px;margin:auto;padding:clamp(12px,2.8vw,30px)}
+.hero{display:grid;grid-template-columns:1fr .9fr;border-radius:24px;overflow:hidden;background:var(--navy);color:#fff;box-shadow:var(--shadow)}
+.hero-copy{padding:clamp(27px,4.4vw,50px);align-self:center}
+.kicker{font-size:.76rem;letter-spacing:.12em;font-weight:850;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+.hero .kicker{color:#efd49e}h1,h2{font-family:Georgia,"Times New Roman",serif;line-height:1.12;letter-spacing:-.025em;font-weight:500}
+h1{font-size:clamp(2.55rem,5.1vw,4.6rem);margin:0 0 19px}h2{font-size:clamp(1.75rem,3.1vw,2.5rem);margin:0 0 12px}
+h3{font-size:1.07rem;margin:0 0 10px}.hero-copy>p:not(.kicker){color:#d9e9e4;max-width:52ch}
+.hero-art{min-height:240px;background:#1e4650;display:grid;place-items:center}.hero-art svg{display:block;width:100%;height:100%;max-height:420px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}.chips span{padding:6px 11px;border:1px solid #8ca8a7;border-radius:23px;font-size:.78rem;font-weight:800;color:#f7e2b5}
+.disclaimer,.fine,.footnote{font-size:.84rem;color:var(--muted)}.disclaimer{margin:17px 3px 24px}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.steps span{padding:7px 12px;background:var(--paper);border:1px solid var(--line);border-radius:26px;font-size:.81rem;color:var(--muted);font-weight:800}
+.steps span.active{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}.steps span.done{color:var(--accent);border-color:var(--accent)}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:clamp(18px,2.8vw,31px);box-shadow:var(--shadow);min-width:0}
+.topline{display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:12px}
+.count{padding:8px 13px;border-radius:11px;background:#e0f0e8;color:#236453;font-size:.83rem;font-weight:850}
+.lead{max-width:82ch;color:var(--muted);margin:0 0 19px}
+.first-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(290px,.8fr);gap:17px}
+.feature-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:17px}
+.feature-btn,.profile-btn,.metric-btn,.pair-btn,.preset-btn{border:1px solid var(--line);background:#f6f8f4;border-radius:12px;text-align:left;color:var(--ink);padding:13px;display:grid;gap:6px}
+.feature-btn[aria-pressed="true"],.profile-btn[aria-pressed="true"],.metric-btn[aria-pressed="true"],.pair-btn[aria-pressed="true"],.preset-btn[aria-pressed="true"]{background:#e4f1e9;border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.feature-btn:hover,.profile-btn:hover,.metric-btn:hover,.pair-btn:hover,.preset-btn:hover{border-color:var(--accent)}
+.feature-btn strong,.profile-btn strong,.metric-btn strong,.pair-btn strong,.preset-btn strong{font-size:.92rem;line-height:1.35}
+.feature-btn small,.profile-btn small,.metric-btn small,.pair-btn small,.preset-btn small{font-size:.79rem;color:var(--muted)}
+.profile-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;max-height:390px;overflow-y:auto;padding:3px;scrollbar-color:#609487 transparent}
+.profile-btn{min-height:81px}.profile-btn .state{font-size:.75rem;color:var(--accent);font-weight:850}
+.preview{background:#eef4ed;border:1px solid var(--line);border-radius:14px;padding:17px}
+.preview h3{font:500 1.36rem Georgia,serif}.preview p{margin:10px 0}.preview .detail{padding:13px;background:#dfeee4;border-left:4px solid var(--accent);border-radius:0 10px 10px 0}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:13px 0}
+.controls label{font-size:.83rem;font-weight:850}
+select{border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--paper);color:var(--ink)}
+.foot{margin:14px 0 0;font-size:.8rem;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:20px}
+.primary,.secondary{border-radius:10px;min-height:46px;padding:10px 16px;font-weight:850}
+.primary{background:var(--accent);color:var(--on-accent);border:1px solid var(--accent)}.secondary{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.primary:not(:disabled):hover{filter:brightness(1.12)}
+.chart-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:17px}
+.chart-box{border:1px solid var(--line);border-radius:14px;background:#f7faf6;padding:15px;min-width:0}
+.chart-box svg{width:100%;height:auto;display:block;overflow:visible}
+.chart-box .grid-line{stroke:#cbdad5;stroke-width:1.3}
+.chart-box .chart-axis{fill:#566e6c;font:13px system-ui}
+.chart-box .chart-label{fill:#28463e;font:800 15px system-ui}
+.chart-box .partner-bar{fill:#267d74}.chart-box .open-bar{fill:#bd945d}
+.chart-box .bar-base{fill:#a9bbc0}.chart-box .bar-open{fill:#bd945d}.chart-box .bar-partner{fill:#267d74}
+.legend{display:flex;gap:15px;flex-wrap:wrap;color:var(--muted);font-size:.8rem;margin-top:12px}
+.legend span{display:flex;gap:7px;align-items:center}.legend b{width:14px;height:8px;background:#267d74;display:inline-block}.legend b.open{background:#bd945d}
+.metric-list,.pair-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:17px 0}
+.metric-btn,.pair-btn{min-height:86px}.pair-list{grid-template-columns:repeat(4,minmax(0,1fr))}
+.metric-detail{background:#e5f1e8;border:1px solid var(--line);padding:15px;border-radius:13px;margin:10px 0}
+.metric-detail p{margin:7px 0}
+.table-scroll{overflow-x:auto;margin:14px 0 0}
+table{border-collapse:collapse;min-width:650px;width:100%;font-size:.85rem}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{background:#e5f1e9;color:#265b4d}
+tbody tr:nth-child(even){background:#f1f6f1}
+td{font-variant-numeric:tabular-nums}
+.pair-detail{padding:15px;border-radius:12px;border-left:4px solid var(--accent);background:#e9f2e6;min-height:128px}
+.pair-detail p{margin:8px 0}
+.sim-layout{display:grid;grid-template-columns:1fr .9fr;gap:17px}
+.slider-list{display:grid;gap:17px;margin:20px 0}
+.range-wrap{border:1px solid var(--line);background:#f3f7f2;border-radius:13px;padding:15px}
+.range-wrap label{font-weight:850;display:flex;gap:12px;justify-content:space-between}
+.range-wrap input{width:100%;margin-top:10px;accent-color:var(--accent);min-height:27px}
+.range-wrap small{display:block;color:var(--muted);font-size:.79rem}
+.presets{display:grid;gap:10px}
+.preset-btn{min-height:92px}.summary{background:#e5f2e7;border:1px solid var(--line);border-radius:13px;padding:16px;margin-top:16px}
+.summary p{margin:8px 0}.tested-list{margin:12px 0 0;padding-left:21px;font-size:.84rem}
+.tested-list li{margin-bottom:7px}.compare-table{min-width:550px}
+.options{display:grid;gap:10px}
+.option{display:flex;align-items:start;gap:12px;border:1px solid var(--line);border-radius:12px;padding:13px 15px;cursor:pointer}
+.option:has(input:checked){background:#e6f2e9;border-color:var(--accent)}
+.option input{width:19px;height:19px;margin:3px 0 0;flex:0 0 auto;accent-color:var(--accent)}
+.option strong,.option small{display:block}.option strong{font-size:.94rem}.option small{font-size:.8rem;margin-top:5px;color:var(--muted)}
+fieldset{border:0;padding:0;margin:21px 0 25px}legend{font-size:1.1rem;font-weight:850;margin-bottom:11px}
+.sources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.error{color:var(--warning);min-height:22px;font-weight:850}
+.report-result{border:1px solid #8ebba5;border-radius:14px;background:#e4f2e7;padding:20px}
+.report-result.partial{background:#fbefd7;border-color:#d1b07b}.report-result.review{background:#f9e3df;border-color:#cb988f}
+.report-result h3{font:500 1.65rem Georgia,serif}
+.report-result p{margin:9px 0}
+.report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:17px 0}
+.report-card{border:1px solid var(--line);border-radius:13px;padding:16px}
+.report-card p{font-size:.87rem;color:var(--muted);margin:9px 0}
+.reset-box{background:#fff0da;border:1px solid #cfa66c;border-radius:13px;padding:14px;margin:0 0 18px}
+.reset-box p{margin:0;font-weight:800}
+details{border:1px solid var(--line);border-radius:13px;padding:14px 18px;margin:17px 0}summary{font-weight:850;cursor:pointer}
+@media(max-width:980px){.hero,.first-layout,.chart-layout,.sim-layout{grid-template-columns:1fr}.hero-art svg{max-height:260px}.metric-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:570px){main{padding:11px}.hero,.panel{border-radius:14px}.feature-list,.profile-list,.metric-list,.pair-list,.sources,.report-grid{grid-template-columns:1fr}.actions>button{flex:1 1 auto}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#111e25;--paper:#21343b;--ink:#f0f5ee;--muted:#bfd0d1;--line:#465f64;--accent:#9be1c9;--on-accent:#14362e;--focus:#ffda95;--shadow:none;--warning:#ffbea8}.hero{background:#112e37}.count{background:#275144;color:#d0f5df}.feature-btn,.profile-btn,.metric-btn,.pair-btn,.preset-btn,.chart-box,.range-wrap,.preview{background:#293e42}.feature-btn[aria-pressed="true"],.profile-btn[aria-pressed="true"],.metric-btn[aria-pressed="true"],.pair-btn[aria-pressed="true"],.preset-btn[aria-pressed="true"],.option:has(input:checked){background:#2b4f45}.preview .detail,.metric-detail,.summary,.pair-detail{background:#29493b}.chart-box .grid-line{stroke:#47615f}.chart-box .chart-axis{fill:#bfd2ce}.chart-box .chart-label{fill:#e1f3eb}.chart-box .partner-bar,.chart-box .bar-partner{fill:#93e1cc}.chart-box .open-bar,.chart-box .bar-open{fill:#e2b777}.legend b{background:#93e1cc}.legend b.open{background:#e2b777}thead th{background:#295044;color:#dbf6e8}tbody tr:nth-child(even){background:#283f40}.report-result{background:#244738}.report-result.partial{background:#473a27}.report-result.review{background:#4b3030}.reset-box{background:#44392b}}
+</style>
+</head>
+<body>
+<main>
+<section class="hero" aria-labelledby="case-title">
+ <div class="hero-copy">
+  <p class="kicker">Auditoria de modelo 008 · Simulação fictícia</p>
+  <h1 id="case-title">O Algoritmo que Discriminava</h1>
+  <p>Dois canais de inscrição apresentam qualificações equivalentes, mas um sistema de triagem seleciona pessoas em proporções diferentes. Qual regra explica essa disparidade, o que os números provam e o que ainda precisa ser investigado?</p>
+  <div class="chips"><span>24 perfis anônimos inventados</span><span>12 pares comparáveis</span><span>3 métricas de equidade</span></div>
+ </div><div class="hero-art"><svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="hero-svg-title hero-svg-desc">
+<title id="hero-svg-title">Caminhos de decisão de um algoritmo fictício</title>
+<desc id="hero-svg-desc">Ilustração vetorial autoral com doze fichas abstratas em dois canais de inscrição, setas para uma caixa de processamento e duas saídas distintas. O desenho não contém pessoas identificáveis nem codifica grupos protegidos reais.</desc>
+<defs><linearGradient id="diagram-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#173c49"/><stop offset="1" stop-color="#09262f"/></linearGradient><linearGradient id="card-fill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#bddfd8"/><stop offset="1" stop-color="#76a8a9"/></linearGradient></defs>
+<rect width="700" height="420" fill="url(#diagram-bg)"/>
+<g fill="none" stroke="#779ba2" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"><path d="M169 134H271L299 184"/><path d="M169 287H271L299 235"/><path d="M442 211H492L523 127"/><path d="M442 211H492L523 295"/></g>
+<g fill="#e8d49d" opacity=".7"><circle cx="169" cy="134" r="7"/><circle cx="169" cy="287" r="7"/><circle cx="523" cy="127" r="7"/><circle cx="523" cy="295" r="7"/></g>
+<rect x="36" y="62" width="140" height="150" rx="15" fill="#285868" stroke="#91b5ae" stroke-width="3"/>
+<rect x="36" y="218" width="140" height="147" rx="15" fill="#285868" stroke="#91b5ae" stroke-width="3"/>
+<g fill="url(#card-fill)"><rect x="60" y="85" width="39" height="29" rx="5"/><rect x="111" y="85" width="39" height="29" rx="5"/><rect x="60" y="125" width="39" height="29" rx="5"/><rect x="111" y="125" width="39" height="29" rx="5"/><rect x="60" y="242" width="39" height="29" rx="5"/><rect x="111" y="242" width="39" height="29" rx="5"/><rect x="60" y="282" width="39" height="29" rx="5"/><rect x="111" y="282" width="39" height="29" rx="5"/></g>
+<rect x="284" y="147" width="171" height="133" rx="18" fill="#e8d5ad" stroke="#f8e6c7" stroke-width="5"/>
+<rect x="307" y="170" width="125" height="83" rx="11" fill="#263c48"/>
+<path d="M330 197h79M330 215h59M330 232h72" stroke="#8ed4ba" stroke-width="7" stroke-linecap="round"/>
+<g fill="#387469"><rect x="520" y="51" width="145" height="142" rx="14"/><rect x="520" y="223" width="145" height="142" rx="14"/></g>
+<g fill="#c2e7da"><circle cx="592" cy="98" r="21"/><path d="m578 98 10 12 22-28" fill="none" stroke="#1d5d4b" stroke-width="6" stroke-linejoin="round"/><circle cx="592" cy="277" r="21"/><path d="M582 267l20 20m0-20-20 20" stroke="#1d5d4b" stroke-width="6" stroke-linecap="round"/></g>
+<g font-family="system-ui,sans-serif" font-size="15" font-weight="800" fill="#f5e8cf" text-anchor="middle"><text x="106" y="185">CANAL A</text><text x="106" y="343">CANAL B</text><text x="592" y="156">SELECIONA</text><text x="592" y="331">NÃO SELECIONA</text><text x="369" y="303">REGRAS E PESOS</text></g>
+</svg></div>
+</section>
+<p class="disclaimer">Esta é uma auditoria didática de uma regra inventada, sem dados pessoais, atributos protegidos ou pessoas reais. "Canal parceiro" e "Canal aberto" são rotas administrativas fictícias, não identidades sociais. O rótulo de aptidão, os resultados e a regra são sintéticos. Diferenças estatísticas podem indicar necessidade de auditoria, mas não demonstram, isoladamente, discriminação legal, causalidade social ou injustiça contra grupos reais.</p>
+<nav class="steps" aria-label="Progresso da investigação">
+ <span class="active" id="step-1">01 · Dados</span><span id="step-2">02 · Métricas e pares</span><span id="step-3">03 · Mitigações</span><span id="step-4">04 · Decisão</span><span id="step-5">05 · Relatório</span>
+</nav>
+<div class="actions" style="margin:0 0 15px"><button type="button" class="secondary" id="reset-button">Reiniciar auditoria</button></div>
+<div class="reset-box" id="reset-dialog" hidden role="group" aria-label="Confirmar reinício">
+ <p>Descartar as explorações, testes e respostas e recomeçar a auditoria?</p>
+ <div class="actions"><button type="button" class="secondary" id="reset-cancel">Cancelar</button><button type="button" class="primary" id="reset-confirm">Sim, reiniciar</button></div>
+</div>
+<section class="panel" id="data-panel" aria-labelledby="data-title">
+ <div class="topline"><div><p class="kicker">Etapa 1 · Entenda as variáveis</p><h2 id="data-title" tabindex="-1">Quem entrou no modelo?</h2></div><strong class="count" id="data-count" aria-live="polite">0 perfis · 0 variáveis</strong></div>
+ <p class="lead">Analise pelo menos quatro perfis, incluindo os dois canais, e três variáveis. Há 12 pares com avaliação prática, portfólio e aptidão de referência iguais; o que muda entre os integrantes é o selo de indicação.</p>
+ <div class="first-layout">
+  <div>
+   <h3>Variáveis e suposições</h3><div id="feature-list" class="feature-list"></div>
+   <h3>Base sintética de candidaturas</h3>
+   <div class="controls"><label for="profile-filter">Filtrar perfis</label><select id="profile-filter">
+    <option value="all">Todos os 24 perfis</option><option value="partner">Canal parceiro</option><option value="open">Canal aberto</option><option value="selected">Selecionados na regra atual</option><option value="rejected">Não selecionados na regra atual</option>
+   </select></div>
+   <div class="profile-list" id="profile-list" aria-label="Candidaturas fictícias"></div>
+   <p class="foot">Não há nomes, contatos, origem geográfica nem atributos sensíveis reais. Cada código identifica somente um perfil sintético para esta atividade.</p>
+  </div>
+  <aside class="preview">
+   <p class="kicker">Detalhes examinados</p><h3 id="profile-title" tabindex="-1">Selecione um perfil ou variável</h3>
+   <div id="profile-detail" aria-live="polite"><p>A auditoria começa na fórmula: pontuação de mérito = arredondar(teste × 0,6 + portfólio × 0,4); decisão = mérito + bônus de indicação ≥ corte.</p></div>
+   <div class="detail" id="feature-detail" tabindex="-1" aria-live="polite"><strong>Pergunta de auditoria</strong><p>Quais escolhas de variáveis podem alterar uma decisão sem medir melhor a competência?</p></div>
+  </aside>
+ </div>
+ <div class="actions"><button type="button" class="primary" id="to-metrics" disabled>Auditar disparidades e pares</button><span class="fine" id="data-hint">Examine 4 perfis dos dois canais e 3 variáveis.</span></div>
+</section>
+<section class="panel" id="metrics-panel" hidden aria-labelledby="metrics-title">
+ <div class="topline"><div><p class="kicker">Etapa 2 · Leitura de indicadores</p><h2 id="metrics-title" tabindex="-1">Onde aparece a diferença?</h2></div><strong class="count" id="metric-count" aria-live="polite">0 métricas · 0 pares</strong></div>
+ <p class="lead">Examine pelo menos duas métricas e dois pares. A base foi pareada por construção; comparar a mesma qualificação com e sem o selo permite observar o efeito da regra no sistema fictício, mas não estabelecer discriminação social real.</p>
+ <div class="chart-layout">
+  <div class="chart-box">
+   <h3>Indicadores por canal</h3>
+   <svg id="metrics-svg" viewBox="0 0 760 330" role="img" aria-labelledby="metrics-svg-title metrics-svg-desc" xmlns="http://www.w3.org/2000/svg">
+    <title id="metrics-svg-title">Comparação de seleção, sensibilidade e falsos positivos por canal</title><desc id="metrics-svg-desc">Gráfico SVG calculado a partir dos perfis; os mesmos valores estão na tabela.</desc><g id="metric-plot"></g>
+   </svg>
+   <div class="legend"><span><b></b> Canal parceiro</span><span><b class="open"></b> Canal aberto</span></div>
+  </div>
+  <div class="chart-box">
+   <h3>Fórmula em uso</h3>
+   <p class="fine" id="formula-current">Teste 60% + portfólio 40% + indicação de 12 pontos; corte 70.</p>
+   <p id="gap-summary"></p>
+   <p class="fine">Números arredondados e denominadores podem ser conferidos na tabela. O rótulo "apto" é uma referência inventada, não a verdade de candidatos reais.</p>
+  </div>
+ </div>
+ <div class="table-scroll"><table aria-label="Tabela calculada das métricas por canal"><thead><tr><th scope="col">Métrica</th><th scope="col">Canal parceiro</th><th scope="col">Canal aberto</th><th scope="col">Diferença (p.p.)</th></tr></thead><tbody id="metrics-table"></tbody></table></div>
+ <h3 style="margin-top:24px">Inspecione as métricas</h3>
+ <div class="metric-list" id="metric-list"></div><div class="metric-detail" id="metric-detail" tabindex="-1" aria-live="polite"><p>Escolha um indicador para ver fórmula, numeradores e limitações.</p></div>
+ <h3 style="margin-top:23px">Pares de candidatos equivalentes</h3>
+ <div class="pair-list" id="pair-list"></div>
+ <div class="chart-layout">
+  <div class="pair-detail" id="pair-detail" tabindex="-1" aria-live="polite"><h3>Selecione um par</h3><p>Os dois perfis têm as mesmas qualificações e diferem apenas no canal e na indicação.</p></div>
+  <div class="chart-box">
+   <svg id="pair-svg" viewBox="0 0 600 210" role="img" aria-labelledby="pair-svg-title pair-svg-desc" xmlns="http://www.w3.org/2000/svg">
+    <title id="pair-svg-title">Pontuação dos dois perfis de um par</title>
+    <desc id="pair-svg-desc">Escolha um par para comparar pontuações e decisões; valores também serão exibidos por texto.</desc><g id="pair-plot"></g>
+   </svg>
+  </div>
+ </div>
+ <div class="actions"><button type="button" class="secondary" id="metrics-back">Rever os dados</button><button type="button" class="primary" id="to-mitigation" disabled>Testar alternativas</button></div>
+</section>
+<section class="panel" id="mitigation-panel" hidden aria-labelledby="mitigation-title">
+ <div class="topline"><div><p class="kicker">Etapa 3 · Laboratório de políticas</p><h2 id="mitigation-title" tabindex="-1">Que regra você testaria?</h2></div><strong class="count" id="sim-count" aria-live="polite">0 configurações testadas</strong></div>
+ <p class="lead">Use as configurações sugeridas ou altere o corte e o bônus de indicação. Compare pelo menos duas configurações diferentes com a regra original. Um resultado bom para um indicador pode exigir verificar outros indicadores, os rótulos e o contexto real.</p>
+ <div class="sim-layout">
+  <div>
+   <h3>Políticas iniciais</h3><div class="presets" id="preset-list"></div>
+   <h3 style="margin-top:23px">Ajustar a simulação</h3>
+   <div class="slider-list">
+    <div class="range-wrap"><label for="threshold">Corte para selecionar <output id="threshold-output" for="threshold">70</output></label><input id="threshold" type="range" min="50" max="85" step="1" value="70"><small>O perfil será selecionado se a pontuação atingir ou superar o corte.</small></div>
+    <div class="range-wrap"><label for="bonus">Bônus pelo selo de indicação <output id="bonus-output" for="bonus">12 pontos</output></label><input id="bonus" type="range" min="0" max="18" step="1" value="12"><small>Os dois canais têm competências pareadas; o bônus é aplicado somente ao canal parceiro.</small></div>
+   </div>
+   <div class="actions"><button type="button" class="primary" id="test-config">Testar esta configuração</button></div>
+   <div id="simulation-message" class="summary" aria-live="polite">A regra original é exibida; execute o teste para registrá-la no histórico de políticas.</div>
+  </div>
+  <aside class="preview">
+   <h3>Resultado previsto desta configuração</h3>
+   <div id="live-summary" aria-live="polite"></div>
+   <h3 style="margin-top:23px">Configurações efetivamente testadas</h3>
+   <ol class="tested-list" id="tested-list"><li>Nenhuma política registrada.</li></ol>
+   <p class="fine">Um teste é uma execução local do mesmo algoritmo sobre as mesmas 24 linhas; não é avaliação de campo nem validação de justiça para uma população.</p>
+  </aside>
+ </div>
+ <div class="table-scroll"><table class="compare-table" aria-label="Métricas da regra original e da configuração atual"><thead><tr><th scope="col">Indicador</th><th scope="col">Regra original</th><th scope="col">Configuração atual</th></tr></thead><tbody id="comparison-table"></tbody></table></div>
+ <div class="actions"><button type="button" class="secondary" id="mitigation-back">Rever métricas e pares</button><button type="button" class="primary" id="to-judgment" disabled>Preparar parecer</button></div>
+</section>
+<section class="panel" id="judgment-panel" hidden aria-labelledby="judgment-title">
+ <p class="kicker">Etapa 4 · Interpretação fundamentada</p><h2 id="judgment-title" tabindex="-1">O que o experimento permite afirmar?</h2>
+ <p class="lead">Fundamente uma decisão com exatamente duas fontes que você realmente examinou, incluindo se possível uma métrica agregada e um par controlado. Examine a diferença entre efeito de uma regra fictícia e demonstração jurídica de discriminação.</p>
+ <form id="decision-form" novalidate>
+  <fieldset><legend>1. Qual conclusão provisória é apropriada?</legend><div class="options" id="hypotheses"></div></fieldset>
+  <fieldset><legend>2. Escolha exatamente duas evidências que você examinou</legend><div class="sources" id="source-options"></div></fieldset>
+  <fieldset><legend>3. Qual limitação é mais importante ao interpretar os resultados?</legend><div class="options" id="limitations"></div></fieldset>
+  <fieldset><legend>4. Qual seria a medida de mitigação responsável?</legend><div class="options" id="mitigations"></div></fieldset>
+  <fieldset><legend>5. Qual seria o próximo passo de investigação?</legend><div class="options" id="next-steps"></div></fieldset>
+  <p class="error" id="form-error" role="alert"></p>
+  <div class="actions"><button type="button" class="secondary" id="judgment-back">Rever simulações</button><button type="submit" class="primary">Emitir relatório de auditoria</button></div>
+ </form>
+</section>
+<section class="panel" id="report-panel" hidden aria-labelledby="report-title">
+ <p class="kicker">Etapa 5 · Resultado formativo</p><h2 id="report-title" tabindex="-1">O que foi demonstrado e o que falta?</h2>
+ <div class="report-result" id="report-result" aria-live="polite"></div>
+ <div class="report-grid" id="report-details"></div>
+ <details><summary>Consultar interpretação de referência</summary>
+  <p>No modelo fictício, o bônus ligado ao canal de inscrição altera scores e pode mudar decisões entre candidatos com teste, portfólio e aptidão de referência idênticos. No modelo original, as taxas de seleção são distintas; removido o bônus, esse contraste desaparece por construção. Isso estabelece um efeito causal da variável dentro da fórmula simulada, mas não demonstra discriminação social ou jurídica, nem diz que grupos protegidos reais tiveram resultados semelhantes. Taxa de seleção, TPR e FPR avaliam aspectos diferentes, dependem do rótulo de aptidão e podem entrar em tensão; a avaliação responsável exige justificativa das variáveis, representatividade, acesso a contestação, validação técnica e revisão de efeitos reais antes de qualquer declaração de justiça ou culpa.</p>
+ </details>
+ <div class="actions"><button type="button" class="secondary" id="report-back">Rever justificativa</button><button type="button" class="secondary" id="report-data">Rever a base</button><button type="button" class="primary" id="report-restart">Reiniciar a auditoria</button></div>
+</section>
+<p class="footnote">Estudo de caso original com dados sintéticos em memória, SVGs autorais, indicadores e decisão didáticos. Não há dados pessoais, gravação, pontuação Moodle, chamadas externas ou classificação de pessoas reais.</p>
+</main>
+<script id="case-data" type="application/json">{"context":"Triagem fictícia de candidaturas a um programa de capacitação","groups":[{"id":"partner","name":"Canal parceiro","short":"Parceiro","description":"Candidaturas recebidas por instituições conveniadas. Na base sintética, todas têm selo de indicação."},{"id":"open","name":"Canal aberto","short":"Aberto","description":"Candidaturas independentes. Na base sintética, nenhuma tem selo de indicação."}],"profiles":[{"id":"P01-A","pair":"P01","group":"partner","test":92,"portfolio":90,"qualified":true,"referral":1},{"id":"P01-B","pair":"P01","group":"open","test":92,"portfolio":90,"qualified":true,"referral":0},{"id":"P02-A","pair":"P02","group":"partner","test":84,"portfolio":82,"qualified":true,"referral":1},{"id":"P02-B","pair":"P02","group":"open","test":84,"portfolio":82,"qualified":true,"referral":0},{"id":"P03-A","pair":"P03","group":"partner","test":75,"portfolio":70,"qualified":true,"referral":1},{"id":"P03-B","pair":"P03","group":"open","test":75,"portfolio":70,"qualified":true,"referral":0},{"id":"P04-A","pair":"P04","group":"partner","test":68,"portfolio":67,"qualified":true,"referral":1},{"id":"P04-B","pair":"P04","group":"open","test":68,"portfolio":67,"qualified":true,"referral":0},{"id":"P05-A","pair":"P05","group":"partner","test":64,"portfolio":61,"qualified":true,"referral":1},{"id":"P05-B","pair":"P05","group":"open","test":64,"portfolio":61,"qualified":true,"referral":0},{"id":"P06-A","pair":"P06","group":"partner","test":60,"portfolio":55,"qualified":false,"referral":1},{"id":"P06-B","pair":"P06","group":"open","test":60,"portfolio":55,"qualified":false,"referral":0},{"id":"P07-A","pair":"P07","group":"partner","test":57,"portfolio":60,"qualified":false,"referral":1},{"id":"P07-B","pair":"P07","group":"open","test":57,"portfolio":60,"qualified":false,"referral":0},{"id":"P08-A","pair":"P08","group":"partner","test":51,"portfolio":50,"qualified":false,"referral":1},{"id":"P08-B","pair":"P08","group":"open","test":51,"portfolio":50,"qualified":false,"referral":0},{"id":"P09-A","pair":"P09","group":"partner","test":90,"portfolio":75,"qualified":true,"referral":1},{"id":"P09-B","pair":"P09","group":"open","test":90,"portfolio":75,"qualified":true,"referral":0},{"id":"P10-A","pair":"P10","group":"partner","test":72,"portfolio":62,"qualified":true,"referral":1},{"id":"P10-B","pair":"P10","group":"open","test":72,"portfolio":62,"qualified":true,"referral":0},{"id":"P11-A","pair":"P11","group":"partner","test":65,"portfolio":52,"qualified":false,"referral":1},{"id":"P11-B","pair":"P11","group":"open","test":65,"portfolio":52,"qualified":false,"referral":0},{"id":"P12-A","pair":"P12","group":"partner","test":78,"portfolio":58,"qualified":false,"referral":1},{"id":"P12-B","pair":"P12","group":"open","test":78,"portfolio":58,"qualified":false,"referral":0}],"features":[{"id":"test","title":"Avaliação prática (0–100)","kind":"Competência simulada","detail":"Pontuação sintética de uma atividade técnica, idêntica nos dois integrantes de cada par. Peso de 60% na fórmula.","risk":"O teste poderia sofrer diferenças de acesso, desenho ou mensuração, mas a base fictícia não estabelece isso.","question":"O teste tem validade, acessibilidade e relação com as tarefas?"},{"id":"portfolio","title":"Portfólio (0–100)","kind":"Evidência de projetos","detail":"Pontuação sintética de projetos. Peso de 40% na fórmula.","risk":"Avaliações de portfólio podem refletir oportunidades desiguais e rubricas subjetivas; isso não está demonstrado por esta amostra.","question":"Há rubrica auditável, revisores independentes e verificação de consistência?"},{"id":"referral","title":"Selo de indicação (bônus)","kind":"Variável de origem","detail":"O algoritmo adiciona pontos a perfis que chegam pelo canal parceiro. Nesta base, a variável coincide exatamente com o canal.","risk":"Candidaturas com atributos de mérito idênticos podem receber resultados diferentes. O efeito é demonstrável dentro deste modelo, sem comprovar discriminação jurídica ou social.","question":"O selo é relevante para o objetivo ou reforça uma vantagem de acesso?"},{"id":"group","title":"Canal de inscrição","kind":"Comparação agregada","detail":"Os grupos Parceiro e Aberto têm 12 pessoas cada e exatamente as mesmas pontuações e rótulos de aptidão, por construção.","risk":"São categorias administrativas inventadas, não grupos protegidos reais; o exercício ensina auditoria quantitativa, não classificação de pessoas.","question":"A diferença persiste controlando pontuações?"},{"id":"review","title":"Aptidão de referência","kind":"Rótulo fictício independente","detail":"Uma revisão humana hipotética atribuiu 7 aptos e 5 não aptos em cada grupo; isso permite calcular sensibilidade e falsos positivos.","risk":"Em sistemas reais o rótulo pode ser enviesado ou incorreto e precisa de auditoria própria.","question":"Como o rótulo foi criado e verificado?"}],"base":{"threshold":70,"bonus":12},"presets":[{"id":"baseline","title":"Regra original","threshold":70,"bonus":12,"detail":"Corte 70 e indicação +12; regra questionada."},{"id":"neutral","title":"Sem indicação","threshold":70,"bonus":0,"detail":"Remove o bônus sem alterar o corte; isola o efeito da variável."},{"id":"calibrated","title":"Sem indicação, corte revisado","threshold":62,"bonus":0,"detail":"Retira o bônus e reduz o corte a 62; mostra trocas entre alcance e erros."}],"metrics":[{"id":"selection","title":"Taxa de seleção","formula":"selecionados / total do grupo","description":"Mede paridade estatística. Diferença de taxas não comprova discriminação e taxas iguais não garantem justiça."},{"id":"tpr","title":"Sensibilidade (TPR)","formula":"selecionados entre os aptos / total de aptos no grupo","description":"Mede oportunidades entre aptos segundo a referência simulada e depende da qualidade desse rótulo."},{"id":"fpr","title":"Falsos positivos (FPR)","formula":"selecionados entre não aptos / total de não aptos no grupo","description":"Mede seleções de perfis classificados como não aptos pela referência fictícia."}],"hypotheses":[{"id":"cautious","title":"Há disparidade e efeito do bônus por canal, mas a base não demonstra discriminação jurídica ou social.","detail":"Pede verificar justificativa, qualidade dos rótulos e representatividade antes de atribuir responsabilidade."},{"id":"guilty","title":"Diferença de seleção comprova automaticamente discriminação contra pessoas reais.","detail":"Transforma números inventados em conclusão sobre direitos de pessoas não estudadas."},{"id":"blind","title":"Sem atributo pessoal protegido explícito, não pode haver injustiça algorítmica.","detail":"Ignora variáveis substitutas e decisões humanas sobre critérios e dados."},{"id":"perfect","title":"Igualar uma taxa basta para declarar o sistema inteiramente justo.","detail":"Um indicador não resume todos os erros, objetivos e grupos possíveis."}],"nextSteps":[{"id":"validate","title":"Auditar o selo, revisar rótulos e representatividade, testar resultados e permitir revisão humana das negativas contestadas.","detail":"Propõe verificação do critério e canais de contestação, sem concluir antes de investigar."},{"id":"hide","title":"Manter a regra sem publicar métricas, porque os dados são apenas de grupos administrativos.","detail":"Não trata o efeito já observado nem melhora a governança."},{"id":"promise","title":"Prometer imparcialidade total ao igualar uma única taxa.","detail":"Promessa não sustentada pela multiplicidade de métricas e limitações."}],"mitigations":[{"id":"remove","title":"Suspender o bônus e monitorar impactos","detail":"Remove o efeito artificial no par controlado, com avaliação de precisão, finalidade e contexto."},{"id":"review","title":"Revisão humana, contestação e auditoria permanente","detail":"Cria controle e transparência, sem supor que revisores humanos sejam infalíveis."},{"id":"deny","title":"Manter a regra sem supervisão porque a decisão é matemática","detail":"Ignora que pesos, objetivos e dados são escolhas humanas."}]}</script>
+<script>
+"use strict";
+const DATA=JSON.parse(document.getElementById("case-data").textContent);
+
+function scoreProfile(p,config){
+ const skill=Math.round((p.test*60+p.portfolio*40)/100);
+ const score=Math.max(0,Math.min(100,skill+p.referral*config.bonus));
+ const selected=score>=config.threshold;
+ return {...p,skill,score,selected,correct:selected===p.qualified};
+}
+function model(config,DATA){
+ if(!Number.isInteger(config.threshold)||config.threshold<50||config.threshold>85||!Number.isInteger(config.bonus)||config.bonus<0||config.bonus>18)throw Error("Parâmetros inválidos");
+ const rows=DATA.profiles.map(p=>scoreProfile(p,config)),groups={};
+ for(const g of DATA.groups){
+  const arr=rows.filter(p=>p.group===g.id);
+  const tp=arr.filter(p=>p.selected&&p.qualified).length,fp=arr.filter(p=>p.selected&&!p.qualified).length;
+  const fn=arr.filter(p=>!p.selected&&p.qualified).length,tn=arr.filter(p=>!p.selected&&!p.qualified).length;
+  const selected=tp+fp,qualified=tp+fn;
+  const rate=(a,b)=>b?a/b*100:null;
+  groups[g.id]={total:arr.length,selected,qualified,notQualified:fp+tn,tp,fp,fn,tn,selection:rate(selected,arr.length),tpr:rate(tp,qualified),fpr:rate(fp,fp+tn),precision:rate(tp,selected)};
+ }
+ const a=groups.partner,b=groups.open;
+ return {config:{...config},rows,groups,gaps:{selection:a.selection-b.selection,tpr:a.tpr-b.tpr,fpr:a.fpr-b.fpr},
+  total:rows.length,correct:rows.filter(p=>p.correct).length,accuracy:rows.filter(p=>p.correct).length/rows.length*100};
+}
+function paired(pair,config,DATA){
+ const arr=DATA.profiles.filter(p=>p.pair===pair);
+ if(arr.length!==2)throw Error("Par inexistente");
+ const a=arr.find(p=>p.group==="partner"),b=arr.find(p=>p.group==="open");
+ if(!a||!b||a.test!==b.test||a.portfolio!==b.portfolio||a.qualified!==b.qualified)throw Error("Par inconsistente");
+ const partner=scoreProfile(a,config),open=scoreProfile(b,config);
+ return {pair,partner,open,difference:partner.score-open.score,differentDecisions:partner.selected!==open.selected};
+}
+function percent(v){return v===null?"n/d":v.toFixed(1).replace(".",",")+"%";}
+function points(v){return (v>0?"+":"")+v.toFixed(1).replace(".",",")+" p.p.";}
+function assess(a){
+ const flags={hypothesis:a.hypothesis==="cautious",limit:a.limit==="methodology",next:a.next==="validate",mitigation:["remove","review"].includes(a.mitigation),
+  sources:a.refs.some(r=>r.startsWith("metric:"))&&a.refs.some(r=>r.startsWith("pair:"))};
+ const score=Object.values(flags).filter(Boolean).length;
+ return {flags,score,tier:score>=4?"strong":score>=2?"partial":"review"};
+}
+
+(function(){
+ const $=id=>document.getElementById(id),NS="http://www.w3.org/2000/svg";
+ const make=(tag,content,cls)=>{const e=document.createElement(tag);e.textContent=content??"";if(cls)e.className=cls;return e};
+ const svg=(tag,attrs={},value)=>{const e=document.createElementNS(NS,tag);for(const [key,val] of Object.entries(attrs))e.setAttribute(key,String(val));if(value!==undefined)e.textContent=value;return e};
+ const profiles=Object.fromEntries(DATA.profiles.map(p=>[p.id,p]));
+ const seenProfiles=new Set(),seenFeatures=new Set(),seenMetrics=new Set(),seenPairs=new Set(),tested=new Map();
+ let step=1,activeProfile=null,activeFeature=null,activeMetric=null,activePair=null,config={...DATA.base},activePreset="baseline",resetPending=false,selectedRefs=[],lastTest=null,filter="all";
+ function focus(id){const e=$(id);e.focus({preventScroll:true});e.scrollIntoView({block:"start",behavior:"auto"});}
+ function inspectReady(){return seenProfiles.size>=4&&seenFeatures.size>=3&&["partner","open"].every(g=>[...seenProfiles].some(id=>profiles[id].group===g));}
+ function metricsReady(){return seenMetrics.size>=2&&seenPairs.size>=2;}
+ function simulationReady(){return tested.size>=2;}
+ function canEnter(to){
+  if(to===2)return inspectReady();
+  if(to===3)return inspectReady()&&metricsReady();
+  if(to===4)return metricsReady()&&simulationReady();
+  return true;
+ }
+ function navigate(to){
+  if(to>1&&to<5&&!canEnter(to))return;
+  step=to;
+  ["data-panel","metrics-panel","mitigation-panel","judgment-panel","report-panel"].forEach((id,i)=>{
+   $(id).hidden=i!==to-1;
+   $("step-"+(i+1)).className=(i===to-1?"active":i<to-1?"done":"");
+  });
+  if(to===1){renderProfiles();renderFeatures();focus("data-title");}
+  if(to===2){renderMetrics();renderPairs();focus("metrics-title");}
+  if(to===3){renderSimulations();focus("mitigation-title");}
+  if(to===4){renderReferences();focus("judgment-title");}
+  if(to===5)focus("report-title");
+ }
+ function renderProgress(){
+  $("data-count").textContent=seenProfiles.size+" perfis · "+seenFeatures.size+" variáveis";
+  $("to-metrics").disabled=!inspectReady();
+  $("data-hint").textContent=inspectReady()?"Você pode examinar disparidades e pares equivalentes.":"Examine 4 perfis dos dois canais e 3 variáveis. Ainda vistos: "+seenProfiles.size+" perfis, "+seenFeatures.size+" variáveis.";
+ }
+ function renderFeatures(){
+  const root=$("feature-list");root.replaceChildren();
+  for(const item of DATA.features){
+   const b=make("button","","feature-btn");b.type="button";b.setAttribute("aria-pressed",String(activeFeature===item.id));
+   b.append(make("strong",item.title),make("small",seenFeatures.has(item.id)?"Examinada":"Não examinada"));
+   b.addEventListener("click",()=>inspectFeature(item.id));root.append(b);
+  }
+  renderProgress();
+ }
+ function inspectFeature(id){
+  const item=DATA.features.find(f=>f.id===id);if(!item)return;
+  seenFeatures.add(id);activeFeature=id;
+  const root=$("feature-detail");root.replaceChildren();
+  root.append(make("strong",item.title),make("p",item.detail),make("p","Limite: "+item.risk),make("p","Pergunta: "+item.question));
+  renderFeatures();focus("feature-detail");
+ }
+ function renderProfiles(){
+  const root=$("profile-list");root.replaceChildren();
+  const current=model(config,DATA).rows;
+  const filtered=current.filter(p=>filter==="all"||filter===p.group||filter==="selected"&&p.selected||filter==="rejected"&&!p.selected);
+  for(const p of filtered){
+   const b=make("button","","profile-btn");b.type="button";b.setAttribute("aria-pressed",String(activeProfile===p.id));
+   b.append(make("strong",p.id+" · "+(p.group==="partner"?"Parceiro":"Aberto")),make("small","Teste "+p.test+" · Portfólio "+p.portfolio),
+    make("span",(p.selected?"Selecionado":"Não selecionado")+" · "+(seenProfiles.has(p.id)?"Examinado":"Não examinado"),"state"));
+   b.addEventListener("click",()=>inspectProfile(p.id));root.append(b);
+  }
+  renderProgress();
+ }
+ function showProfile(){
+  if(!activeProfile)return;
+  const p=scoreProfile(profiles[activeProfile],config);
+  $("profile-title").textContent="Perfil "+p.id;
+  $("profile-detail").replaceChildren(
+   make("p","Canal: "+(p.group==="partner"?"Parceiro":"Aberto")+". Par equivalente "+p.pair+"."),
+   make("p","Avaliação prática "+p.test+"/100; portfólio "+p.portfolio+"/100; aptidão de referência fictícia: "+(p.qualified?"sim":"não")+"; selo de indicação: "+(p.referral?"sim":"não")+"."),
+   make("p","Cálculo: arredondar("+p.test+" × 0,6 + "+p.portfolio+" × 0,4) = "+p.skill+"; bônus "+(p.referral*config.bonus)+"; pontuação final "+p.score+". Corte "+config.threshold+" => "+(p.selected?"selecionado":"não selecionado")+"; segundo o rótulo fictício, "+(p.correct?"decisão concordante":"decisão discordante")+" ."),
+   make("p","Esta ficha não representa uma pessoa real nem prova competência ou discriminação."));
+ }
+ function inspectProfile(id){
+  if(!profiles[id])return;
+  activeProfile=id;seenProfiles.add(id);
+  showProfile();renderProfiles();focus("profile-title");
+ }
+ function renderMetricChart(result){
+  const root=$("metric-plot");root.replaceChildren();
+  const keys=["selection","tpr","fpr"];
+  for(let tick=0;tick<=4;tick++){
+   const y=257-tick*54;
+   root.append(svg("line",{x1:72,y1:y,x2:733,y2:y,class:"grid-line"}),svg("text",{x:62,y:y+5,"text-anchor":"end",class:"chart-axis"},(tick*25)+"%"));
+  }
+  for(let i=0;i<keys.length;i++){
+   const k=keys[i],baseX=141+i*214;
+   for(const [j,group] of ["partner","open"].entries()){
+    const value=result.groups[group][k];
+    const h=value===null?0:value/100*216;
+    root.append(svg("rect",{x:baseX+j*61,y:257-h,width:51,height:h,rx:4,class:group==="partner"?"partner-bar":"open-bar"}));
+    root.append(svg("text",{x:baseX+j*61+25.5,y:Math.max(22,249-h),"text-anchor":"middle",class:"chart-label"},percent(value)));
+   }
+   root.append(svg("text",{x:baseX+56,y:287,"text-anchor":"middle",class:"chart-label"},k==="selection"?"Seleção":k==="tpr"?"TPR":"FPR"));
+  }
+  $("metrics-svg-desc").textContent="Canal parceiro: seleção "+percent(result.groups.partner.selection)+", TPR "+percent(result.groups.partner.tpr)+", FPR "+percent(result.groups.partner.fpr)+
+  ". Canal aberto: seleção "+percent(result.groups.open.selection)+", TPR "+percent(result.groups.open.tpr)+", FPR "+percent(result.groups.open.fpr)+". Mesmos valores na tabela.";
+ }
+ function renderMetrics(){
+  const result=model(config,DATA);
+  renderMetricChart(result);
+  const rows=$("metrics-table");rows.replaceChildren();
+  for(const item of DATA.metrics){
+   const key=item.id,partner=result.groups.partner,open=result.groups.open;
+   const row=make("tr"),head=make("th",item.title);head.scope="row";row.append(head);
+   const numerator=key==="selection"?["selected","total"]:key==="tpr"?["tp","qualified"]:["fp","notQualified"];
+   for(const g of [partner,open])row.append(make("td",g[numerator[0]]+"/"+g[numerator[1]]+" · "+percent(g[key])));
+   row.append(make("td",points(result.gaps[key])));rows.append(row);
+  }
+  $("formula-current").textContent="Pontuação simulada: arredondar(teste × 60% + portfólio × 40%) + "+config.bonus+" pontos pelo selo. Corte "+config.threshold+".";
+  $("gap-summary").textContent="Diferença de seleção Parceiro − Aberto: "+points(result.gaps.selection)+". Acertos relativos ao rótulo fictício: "+result.correct+"/"+result.total+" ("+percent(result.accuracy)+").";
+  const root=$("metric-list");root.replaceChildren();
+  for(const item of DATA.metrics){
+   const b=make("button","","metric-btn");b.type="button";b.setAttribute("aria-pressed",String(activeMetric===item.id));
+   b.append(make("strong",item.title),make("small",seenMetrics.has(item.id)?"Examinada":"Selecionar para examinar"));
+   b.addEventListener("click",()=>openMetric(item.id));root.append(b);
+  }
+  $("metric-count").textContent=seenMetrics.size+" métricas · "+seenPairs.size+" pares";
+  $("to-mitigation").disabled=!metricsReady();
+  if(activeMetric)renderMetricDetail(activeMetric);
+ }
+ function renderMetricDetail(id){
+  const item=DATA.metrics.find(m=>m.id===id);if(!item)return;
+  const result=model(config,DATA),key=item.id,a=result.groups.partner,b=result.groups.open;
+  const numerator=key==="selection"?["selected","total"]:key==="tpr"?["tp","qualified"]:["fp","notQualified"];
+  $("metric-detail").replaceChildren(make("h3",item.title),make("p","Fórmula: "+item.formula),
+   make("p","Parceiro "+a[numerator[0]]+"/"+a[numerator[1]]+" = "+percent(a[key])+"; Aberto "+b[numerator[0]]+"/"+b[numerator[1]]+" = "+percent(b[key])+". Diferença "+points(result.gaps[key])+"."),
+   make("p","Limitação: "+item.description));
+ }
+ function openMetric(id){if(!DATA.metrics.some(m=>m.id===id))return;activeMetric=id;seenMetrics.add(id);renderMetrics();focus("metric-detail");}
+ function renderPairPlot(){
+  const root=$("pair-plot");root.replaceChildren();
+  if(!activePair){$("pair-svg-desc").textContent="Nenhum par selecionado. Selecione um para comparar pontuações e decisões.";return;}
+  const res=paired(activePair,config,DATA),list=[res.partner,res.open];
+  for(let tick=0;tick<=4;tick++){
+   const x=128+tick*109;root.append(svg("line",{x1:x,y1:27,x2:x,y2:159,class:"grid-line"}),svg("text",{x,y:187,"text-anchor":"middle",class:"chart-axis"},String(tick*25)));
+  }
+  list.forEach((p,i)=>{
+   const y=53+i*75;
+   root.append(svg("text",{x:110,y:y+17,"text-anchor":"end",class:"chart-label"},p.group==="partner"?"Parceiro":"Aberto"));
+   root.append(svg("rect",{x:128,y,width:p.score/100*436,height:29,rx:5,class:p.group==="partner"?"bar-partner":"bar-open"}));
+   root.append(svg("text",{x:Math.min(577,137+p.score/100*436),y:y+20,class:"chart-label"},String(p.score)));
+  });
+  root.append(svg("line",{x1:128+config.threshold/100*436,y1:28,x2:128+config.threshold/100*436,y2:169,stroke:"#995444","stroke-width":2,"stroke-dasharray":"5 5"}));
+  $("pair-svg-desc").textContent="Par "+activePair+": Parceiro pontuação "+res.partner.score+" ("+(res.partner.selected?"selecionado":"não selecionado")+"); Aberto pontuação "+res.open.score+" ("+(res.open.selected?"selecionado":"não selecionado")+"); corte "+config.threshold+". Diferença de "+res.difference+" pontos.";
+ }
+ function renderPairs(){
+  const root=$("pair-list");root.replaceChildren();
+  const ids=[...new Set(DATA.profiles.map(p=>p.pair))];
+  for(const id of ids){
+   const res=paired(id,config,DATA),b=make("button","","pair-btn");b.type="button";b.setAttribute("aria-pressed",String(activePair===id));
+   b.append(make("strong","Par "+id),make("small","Teste "+res.partner.test+" · Portfólio "+res.partner.portfolio),
+     make("small",(seenPairs.has(id)?"Examinado · ":"")+((res.differentDecisions)?"Decisões distintas":"Mesma decisão")));
+   b.addEventListener("click",()=>openPair(id));root.append(b);
+  }
+  if(activePair)renderPairDetail(activePair);
+  renderPairPlot();
+  $("metric-count").textContent=seenMetrics.size+" métricas · "+seenPairs.size+" pares";
+  $("to-mitigation").disabled=!metricsReady();
+ }
+ function renderPairDetail(id){
+  const p=paired(id,config,DATA);
+  $("pair-detail").replaceChildren(make("h3","Par "+id+" · comparação controlada"),
+   make("p","Ambos: teste "+p.partner.test+", portfólio "+p.partner.portfolio+", aptidão de referência "+(p.partner.qualified?"sim":"não")+"."),
+   make("p","Parceiro: "+p.partner.score+" ("+(p.partner.selected?"selecionado":"não selecionado")+"); Aberto: "+p.open.score+" ("+(p.open.selected?"selecionado":"não selecionado")+"). Diferença "+p.difference+" pontos."),
+   make("p",p.differentDecisions?"O selo muda a decisão deste par sob esta regra.":"A diferença de pontuação não muda a decisão deste par sob esta regra."),
+   make("p","Controle de atributos no modelo sintético permite atribuir a diferença de score ao bônus; não demonstra consequências sociais ou legais reais."));
+ }
+ function openPair(id){if(!DATA.profiles.some(p=>p.pair===id))return;activePair=id;seenPairs.add(id);renderPairs();focus("pair-detail");}
+ function configKey(c){return c.threshold+":"+c.bonus;}
+ function changeConfig(to){
+  config={threshold:to.threshold,bonus:to.bonus};
+  activePreset=DATA.presets.find(p=>p.threshold===config.threshold&&p.bonus===config.bonus)?.id||null;
+  $("threshold").value=String(config.threshold);$("bonus").value=String(config.bonus);
+  renderSimulations();
+ }
+ function renderSimulations(){
+  $("threshold-output").textContent=String(config.threshold);
+  $("bonus-output").textContent=config.bonus+" pontos";
+  const root=$("preset-list");root.replaceChildren();
+  for(const [i,preset] of DATA.presets.entries()){
+   const b=make("button","","preset-btn");b.type="button";b.setAttribute("aria-pressed",String(activePreset===preset.id));
+   b.append(make("strong",preset.title),make("small",preset.detail));
+   b.addEventListener("click",()=>{changeConfig(preset);$("preset-list").children[i].focus();});root.append(b);
+  }
+  const actual=model(config,DATA),base=model(DATA.base,DATA);
+  const summary=$("live-summary");summary.replaceChildren();
+  summary.append(make("p","Canal parceiro: "+actual.groups.partner.selected+"/12 selecionados ("+percent(actual.groups.partner.selection)+"); canal aberto: "+actual.groups.open.selected+"/12 ("+percent(actual.groups.open.selection)+")."),
+   make("p","Diferença na seleção "+points(actual.gaps.selection)+"; diferença TPR "+points(actual.gaps.tpr)+"; diferença FPR "+points(actual.gaps.fpr)+"."),
+   make("p","Concordância com referência simulada: "+actual.correct+"/24 ("+percent(actual.accuracy)+")."),
+   make("p","Retirar um bônus pode igualar pares, mas não resolve validade dos rótulos, finalidade, acesso ou representatividade."));
+  const comparison=$("comparison-table");comparison.replaceChildren();
+  for(const [label,fn] of [["Seleção parceiro",r=>percent(r.groups.partner.selection)],["Seleção aberto",r=>percent(r.groups.open.selection)],["Diferença seleção",r=>points(r.gaps.selection)],["Diferença TPR",r=>points(r.gaps.tpr)],["Diferença FPR",r=>points(r.gaps.fpr)],["Concordância com rótulo",r=>r.correct+"/24"]]){
+   const tr=make("tr"),th=make("th",label);th.scope="row";tr.append(th,make("td",fn(base)),make("td",fn(actual)));comparison.append(tr);
+  }
+  const history=$("tested-list");history.replaceChildren();
+  if(!tested.size)history.append(make("li","Nenhuma política registrada."));
+  for(const [key,run] of tested){
+   history.append(make("li","Corte "+run.config.threshold+", bônus "+run.config.bonus+": parceiro "+run.groups.partner.selected+"/12, aberto "+run.groups.open.selected+"/12, diferença "+points(run.gaps.selection)+", concordância "+percent(run.accuracy)+"."));
+  }
+  $("sim-count").textContent=tested.size+" configurações testadas";
+  $("to-judgment").disabled=!simulationReady();
+  renderMetrics();renderPairs();renderProfiles();showProfile();
+ }
+ function testConfig(){
+  if(resetPending)return;
+  const result=model(config,DATA),key=configKey(config);
+  tested.set(key,result);lastTest={...config};
+  $("simulation-message").textContent="Configuração registrada: corte "+config.threshold+", bônus "+config.bonus+
+   ". Seleção parceiro "+result.groups.partner.selected+"/12, canal aberto "+result.groups.open.selected+"/12; diferença "+points(result.gaps.selection)+".";
+  renderSimulations();$("test-config").focus();
+ }
+ function choices(id,items,name){
+  const root=$(id);root.replaceChildren();
+  for(const item of items){
+   const label=make("label","","option"),input=document.createElement("input"),body=make("span");
+   input.type="radio";input.name=name;input.value=item.id;
+   body.append(make("strong",item.title),make("small",item.detail));label.append(input,body);root.append(label);
+  }
+ }
+ function evidenceList(){
+  const arr=[];
+  for(const id of seenProfiles)arr.push({id:"profile:"+id,title:"Perfil "+id,limit:"Ficha sintética de um candidato, sem validade individual para pessoas reais."});
+  for(const id of seenFeatures){
+   const f=DATA.features.find(x=>x.id===id);
+   arr.push({id:"feature:"+id,title:"Variável: "+f.title,limit:f.risk});
+  }
+  for(const id of seenMetrics){
+   const m=DATA.metrics.find(x=>x.id===id);
+   arr.push({id:"metric:"+id,title:"Métrica: "+m.title,limit:m.description});
+  }
+  for(const id of seenPairs)arr.push({id:"pair:"+id,title:"Par controlado "+id,limit:"Mesmo mérito e aptidão simulados, canal diferente; efeito limitado ao modelo fictício."});
+  for(const key of tested.keys()){
+   arr.push({id:"test:"+key,title:"Experimento: corte "+key.split(":")[0]+", bônus "+key.split(":")[1],limit:"Resultado dependente desta base e dos rótulos sintéticos."});
+  }
+  return arr;
+ }
+ function renderReferences(){
+  const root=$("source-options");root.replaceChildren();
+  const sources=evidenceList(),ids=new Set(sources.map(x=>x.id));
+  selectedRefs=selectedRefs.filter(x=>ids.has(x));
+  for(const source of sources){
+   const label=make("label","","option"),input=document.createElement("input"),body=make("span");
+   input.type="checkbox";input.name="references";input.value=source.id;input.checked=selectedRefs.includes(source.id);
+   body.append(make("strong",source.title),make("small",source.limit));label.append(input,body);root.append(label);
+  }
+ }
+ function radio(name){return document.querySelector('input[name="'+name+'"]:checked')?.value||null;}
+ function renderReport(a){
+  const result=assess(a),root=$("report-result");root.className="report-result"+(result.tier==="strong"?"":result.tier==="partial"?" partial":" review");
+  root.replaceChildren(
+   make("p",result.tier==="strong"?"Auditoria fundamentada":result.tier==="partial"?"Auditoria com lacunas":"Conclusões que excedem os dados","kicker"),
+   make("h3",result.tier==="strong"?"Você distinguiu a regra, a disparidade e seus limites.":result.tier==="partial"?"Alguns pontos precisam de análise adicional.":"O modelo não autoriza a conclusão proposta."),
+   make("p",result.flags.hypothesis?"A conclusão reconhece diferença de seleção sem imputação jurídica.":"Diferença estatística, ausência de atributo protegido ou igualdade de taxas não determinam sozinhas a justiça de um sistema."),
+   make("p",result.flags.limit?"Você distinguiu o efeito matemático da indicação entre pares do que ainda exigiria evidência contextual e social.":"Os perfis pareados demonstram o efeito do bônus neste algoritmo, mas não representam causalidade social nem direitos de populações reais."),
+   make("p",result.flags.sources?"Suas fontes juntam métrica agregada e comparação controlada.":"Uma métrica agregada e um par controlado são complementares para examinar a disparidade e o mecanismo."),
+   make("p",result.flags.mitigation?"A mitigação proposta reconhece limitações e a necessidade de monitoramento.":"Retirar supervisão ou declarar um sistema perfeito não é justificável pelo experimento."),
+   make("p",result.flags.next?"A próxima verificação inclui rótulos, representatividade, explicabilidade e contestação.":"A próxima etapa escolhida não é suficiente para verificar a finalidade e os efeitos reais da regra."),
+   make("p","Resultado exclusivamente formativo; não é laudo jurídico, auditoria de sistema real ou nota Moodle.")
+  );
+  const cards=$("report-details");cards.replaceChildren();
+  function card(title,content){const section=make("section","","report-card");section.append(make("h3",title),make("p",content));cards.append(section);}
+  const base=model(DATA.base,DATA),alt=lastTest?model(lastTest,DATA):base,src=Object.fromEntries(evidenceList().map(x=>[x.id,x]));
+  card("Disparidade da regra original","Parceiro "+base.groups.partner.selected+"/12; aberto "+base.groups.open.selected+"/12; diferença "+points(base.gaps.selection)+". Sensibilidade e falsos positivos também devem ser lidos com seus denominadores.");
+  card("Última política testada","Corte "+alt.config.threshold+", indicação +"+alt.config.bonus+"; seleção "+alt.groups.partner.selected+"/12 no parceiro e "+alt.groups.open.selected+"/12 no aberto; diferença "+points(alt.gaps.selection)+"; concordância com rótulo "+percent(alt.accuracy)+".");
+  card("Evidências citadas",a.refs.map(id=>src[id].title+". Limite: "+src[id].limit).join(" "));
+  card("Riscos de generalização","A base tem apenas 24 perfis construídos em pares; canais não são grupos protegidos, a aptidão de referência pode ser falha e não há dados de população real, validade do teste, acesso ao programa ou processos de contestação.");
+  card("Próxima providência",DATA.nextSteps.find(x=>x.id===a.next).title);
+  card("Trajeto investigado",seenProfiles.size+" perfis, "+seenFeatures.size+" variáveis, "+seenMetrics.size+" métricas, "+seenPairs.size+" pares e "+tested.size+" configurações diferentes.");
+ }
+ function submit(event){
+  event.preventDefault();if(step!==4)return;
+  const hypothesis=radio("hypothesis"),limit=radio("limit"),mitigation=radio("mitigation"),next=radio("next");
+  const refs=Array.from(document.querySelectorAll('input[name="references"]:checked')).map(x=>x.value);
+  const valid=new Set(evidenceList().map(x=>x.id));
+  if(!hypothesis||!limit||!mitigation||!next||refs.length!==2||!refs.every(id=>valid.has(id))){
+   $("form-error").textContent="Selecione uma hipótese, exatamente duas fontes examinadas, uma limitação, uma mitigação e uma providência.";return;
+  }
+  selectedRefs=refs;$("form-error").textContent="";
+  renderReport({hypothesis,limit,mitigation,next,refs});navigate(5);
+ }
+ function restart(){
+  seenProfiles.clear();seenFeatures.clear();seenMetrics.clear();seenPairs.clear();tested.clear();
+  activeProfile=null;activeFeature=null;activeMetric=null;activePair=null;config={...DATA.base};lastTest=null;activePreset="baseline";filter="all";
+  selectedRefs=[];resetPending=false;$("reset-dialog").hidden=true;
+  $("profile-filter").value="all";$("threshold").value=String(config.threshold);$("bonus").value=String(config.bonus);
+  $("decision-form").reset();$("form-error").textContent="";
+  $("profile-title").textContent="Selecione um perfil ou variável";
+  $("profile-detail").replaceChildren(make("p","A auditoria começa na fórmula. Escolha um perfil para examinar os cálculos."));
+  $("feature-detail").replaceChildren(make("strong","Pergunta de auditoria"),make("p","Quais escolhas de variáveis podem alterar a decisão sem medir melhor a competência?"));
+  $("metric-detail").replaceChildren(make("p","Escolha um indicador para ver fórmula, numeradores e limitações."));
+  $("pair-detail").replaceChildren(make("h3","Selecione um par"),make("p","Os dois perfis têm pontuações equivalentes."));
+  $("simulation-message").textContent="A regra original é exibida; execute o teste para registrá-la.";
+  renderFeatures();renderProfiles();renderMetrics();renderPairs();renderSimulations();navigate(1);
+ }
+ function requestReset() {resetPending=true;$("reset-dialog").hidden=false;$("reset-cancel").focus();}
+ function cancelReset(){resetPending=false;$("reset-dialog").hidden=true;$("reset-button").focus();}
+ function setup(){
+  const limits=[
+   {id:"methodology",title:"Os pares isolam o efeito da regra fictícia, mas não demonstram discriminação em pessoas ou populações reais.",detail:"Faltam qualidade e representatividade das amostras, verificação dos rótulos, contexto social, finalidade e efeitos externos."},
+   {id:"naive",title:"Diferenças no gráfico são prova da causa de qualquer desigualdade social.",detail:"Confunde mecânica do modelo e interpretação causal sobre populações não estudadas."},
+   {id:"one",title:"Uma taxa agregada é suficiente para julgar justiça, precisão e direitos de todos.",detail:"Ignora diferentes erros, tamanhos amostrais, finalidades e restrições."}
+  ];
+  choices("hypotheses",DATA.hypotheses,"hypothesis");
+  choices("limitations",limits,"limit");
+  choices("mitigations",DATA.mitigations,"mitigation");
+  choices("next-steps",DATA.nextSteps,"next");
+  $("profile-filter").addEventListener("change",()=>{filter=$("profile-filter").value;renderProfiles();});
+  $("to-metrics").addEventListener("click",()=>navigate(2));
+  $("metrics-back").addEventListener("click",()=>navigate(1));
+  $("to-mitigation").addEventListener("click",()=>navigate(3));
+  $("mitigation-back").addEventListener("click",()=>navigate(2));
+  $("threshold").addEventListener("input",()=>changeConfig({threshold:Number($("threshold").value),bonus:config.bonus}));
+  $("bonus").addEventListener("input",()=>changeConfig({threshold:config.threshold,bonus:Number($("bonus").value)}));
+  $("test-config").addEventListener("click",testConfig);
+  $("to-judgment").addEventListener("click",()=>navigate(4));
+  $("judgment-back").addEventListener("click",()=>navigate(3));
+  $("source-options").addEventListener("change",()=>{
+   selectedRefs=Array.from(document.querySelectorAll('input[name="references"]:checked')).map(x=>x.value);
+  });
+  $("decision-form").addEventListener("change",()=>{$("form-error").textContent="";});
+  $("decision-form").addEventListener("submit",submit);
+  $("report-back").addEventListener("click",()=>navigate(4));
+  $("report-data").addEventListener("click",()=>navigate(1));
+  $("report-restart").addEventListener("click",requestReset);
+  $("reset-button").addEventListener("click",requestReset);
+  $("reset-cancel").addEventListener("click",cancelReset);
+  $("reset-confirm").addEventListener("click",restart);
+  renderFeatures();renderProfiles();renderMetrics();renderPairs();renderSimulations();
+ }
+ setup();
+})();
+</script>
+</body>
+</html>
