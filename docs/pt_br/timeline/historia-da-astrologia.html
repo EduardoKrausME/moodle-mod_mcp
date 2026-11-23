@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>História da Astrologia | Atlas de Ideias Celestes</title>
+<style>
+:root{color-scheme:dark;--night:#101829;--deep:#172239;--panel:#223149;--pale:#e6dfc9;--muted:#b6bfd0;--copper:#e5ba78;--border:#4a5872;--sky:#83cada;--success:#9de1be;--warning:#f2c6a6;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#101829;color:var(--pale)}
+*{box-sizing:border-box}body{margin:0;min-width:320px;background:radial-gradient(ellipse at 72% 7%,#345075 0,transparent 45%),radial-gradient(circle at 19% 25%,#22344a 0,transparent 45%),#101829}
+button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #f4c876;outline-offset:3px}button:disabled{opacity:.38;cursor:not-allowed}
+a{color:#9ce3ec;text-decoration-thickness:1.5px;text-underline-offset:3px}
+.skip{position:absolute;top:-90px;left:10px;z-index:5;padding:11px;background:#fff6db;color:#1e2834;border-radius:6px}.skip:focus{top:10px}
+.wrap{max-width:1430px;margin:0 auto;padding:clamp(12px,2.5vw,38px)}
+.banner{position:relative;background:linear-gradient(115deg,#131d30 0%,#26354e 67%,#30344d);border:1px solid #677391;border-radius:22px;min-height:230px;padding:clamp(22px,4vw,46px);overflow:hidden;isolation:isolate}
+.banner:before{content:"";position:absolute;right:-125px;top:-155px;width:450px;height:450px;border:1px solid #c5ad7666;border-radius:50%;box-shadow:0 0 0 35px #c5ad761a,0 0 0 78px #c5ad760e;pointer-events:none;z-index:-1}
+.banner:after{content:"✦   ·    ✧          ·    ✦       ·    ✧";position:absolute;right:1%;bottom:12%;width:260px;line-height:3;color:#bfcdeb50;letter-spacing:13px;pointer-events:none}
+.kicker{text-transform:uppercase;letter-spacing:.23em;color:#e8c68e;font:800 .72rem ui-monospace,Consolas,monospace;margin:0 0 15px}
+.banner h1{font:normal clamp(2.1rem,4.8vw,4.6rem)/1.07 Georgia,serif;letter-spacing:-.046em;margin:0;max-width:890px;color:#f6e9ce}
+.banner p:last-child{max-width:830px;line-height:1.7;font-size:.94rem;color:#d3d4da;margin:15px 0 0}
+.scope{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0;padding:13px 17px;background:#24354d;border:1px solid #526780;border-radius:11px;font-size:.82rem;line-height:1.55;color:#d5e3e7}
+.scope strong{color:#e6c486}.scope span{flex:1;min-width:260px}
+.layout{display:grid;grid-template-columns:285px minmax(0,1fr);gap:17px;align-items:start}
+.sidebar{background:#1a283c;border:1px solid #4f607a;border-radius:15px;padding:17px 12px}
+.sidebar h2,.research h2,.glossary h2{font-size:1.07rem;margin:0 5px 8px;color:#e9d7b7}
+.sidebar>p,.research>p,.glossary>p{font-size:.85rem;color:#bfc7d5;line-height:1.6;margin:0 5px 13px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.filter{border:1px solid #66748e;background:#2a3a50;color:#e5e7ee;border-radius:999px;padding:9px 10px;min-height:40px;font-size:.72rem;font-weight:820}
+.filter[aria-pressed="true"]{background:#dbc091;border-color:#dbc091;color:#263248}
+.timeline{display:grid;gap:6px;max-height:630px;overflow-y:auto;padding:3px 2px 10px;scrollbar-color:#718399 transparent}
+.stop{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid #465a70;border-left:5px solid #788fa7;background:#24344b;color:#e2e2df;border-radius:9px;padding:9px 8px;min-height:62px}
+.stop[aria-current="true"]{background:#45536d;border-left-color:#e9be77;border-color:#d0ad77;color:white}
+.stop.seen:not([aria-current="true"]){background:#2b4556}
+.stop .year{font:850 .72rem ui-monospace,Consolas,monospace;min-width:66px;color:#e7c58c}
+.stop .short{font-size:.81rem;font-weight:800;line-height:1.34}
+.visit{border-top:1px solid #51627a;padding:12px 3px 0;margin-top:9px}
+.visit strong{font-size:.79rem;color:#d6dddf}
+.meter{height:8px;background:#354960;border-radius:50px;overflow:hidden;margin:11px 0}
+.meter span{display:block;background:#e0bb83;height:100%;width:6.25%;transition:width .18s}
+.reset{background:transparent;border:0;color:#aaddeb;font-size:.82rem;text-decoration:underline;padding:10px 0;font-weight:770}
+.archive{border:1px solid #566780;border-radius:15px;background:linear-gradient(145deg,#25344a,#1b293d);overflow:hidden;box-shadow:8px 8px 0 #0a152340}
+.archive-head{padding:clamp(18px,2.8vw,33px) clamp(18px,3vw,36px) 0}
+.archive-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;color:#e6c992;letter-spacing:.08em;font:800 .73rem ui-monospace,monospace}
+.geo{font-family:system-ui,sans-serif;color:#eddfc6;background:#554963;border:1px solid #8c7393;border-radius:100px;letter-spacing:0;padding:7px 12px;font-size:.76rem}
+.archive h2{font:normal clamp(1.7rem,3.8vw,3.25rem)/1.13 Georgia,serif;letter-spacing:-.031em;color:#f2e0be;margin:19px 0 8px}
+.archive-date{font:800 .85rem ui-monospace,monospace;color:#e8be79;margin:0 0 17px}
+.plate{min-height:290px;position:relative;display:grid;place-items:center;background:radial-gradient(circle at center,#43526b 0,#1a2a41 65%),repeating-radial-gradient(circle at center,transparent 0 20px,#94aec022 21px 22px);border-block:1px solid #56677e}
+.plate:before{content:"";position:absolute;inset:16px;border:1px dashed #8295aa77;border-radius:50%;pointer-events:none}
+.plate svg{width:min(95%,505px);height:270px;color:#d3b384;position:relative;z-index:1}
+.plate-label{position:absolute;left:17px;top:14px;font:800 .7rem ui-monospace,monospace;color:#d7c5a7;letter-spacing:.12em}
+.plate-label.end{top:auto;left:auto;right:17px;bottom:13px}
+.archive-body{padding:clamp(18px,2.8vw,32px)}
+.archive-body .summary{font-size:1rem;line-height:1.7;color:#e1dfdf;margin:0 0 18px}
+.fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fact{background:#283d4d;border:1px solid #4b6971;border-radius:10px;padding:15px}
+.fact.caveat{background:#3c3545;border-color:#776079}
+.fact b{display:block;margin-bottom:7px;color:#b6e5db;font-size:.73rem;letter-spacing:.08em;text-transform:uppercase}
+.fact.caveat b{color:#f0c394}
+.fact p{font-size:.88rem;line-height:1.58;color:#d2d6d9;margin:0}
+.source{font-size:.83rem;line-height:1.6;color:#c8d1d5;margin:16px 0}
+.source a{overflow-wrap:anywhere}
+.actions{display:flex;justify-content:space-between;gap:10px}
+.actions button{min-height:44px;padding:11px 14px;border:1px solid #b7a183;background:transparent;color:#f2d69a;border-radius:9px;font-weight:810}
+.actions button:last-child{background:#debf8c;color:#1b293a}
+.extensions{display:grid;grid-template-columns:1.2fr .8fr;gap:17px;margin-top:18px}
+.research,.glossary,.quiz{background:#1a293e;border:1px solid #50627b;border-radius:15px;padding:clamp(18px,2.4vw,28px)}
+.research h2,.glossary h2,.quiz h2{font-size:1.2rem;margin:0 0 9px;color:#f2dec0}
+.wheel{display:grid;grid-template-columns:minmax(250px,.95fr) minmax(0,1fr);align-items:center;gap:14px}
+.wheel svg{display:block;width:100%;height:auto;max-height:300px;background:radial-gradient(circle,#2f3e56,#151f32);border:1px solid #506783;border-radius:12px}
+.wheel-controls{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 15px}
+.wheel-controls button{border:1px solid #9c8e95;background:#29374e;color:#e9decb;border-radius:8px;padding:10px;font-size:.8rem;min-height:44px}
+.wheel-controls button[aria-pressed="true"]{background:#d9bf92;color:#283043;border-color:#d9bf92;font-weight:850}
+.description-panel,.gloss-info{background:#253a4b;border-left:4px solid #d6b077;border-radius:0 9px 9px 0;padding:14px;color:#d7e2e4;line-height:1.62;font-size:.87rem;min-height:105px;margin:0}
+.description-panel b,.gloss-info b{display:block;color:#f3d19b;margin-bottom:5px}
+.gloss-buttons{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:15px}
+.gloss-buttons button{min-height:44px;background:#273b4d;color:#dce6e4;border:1px solid #73909d;border-radius:8px;padding:10px;font-size:.8rem;font-weight:790}
+.gloss-buttons button[aria-pressed="true"]{background:#bdcea6;color:#182b3a;border-color:#bdcea6}
+.quiz{margin-top:18px}
+.quiz>p{font-size:.85rem;color:#c8d0dc;line-height:1.62;margin:0 0 14px}
+.score{border:1px solid #58747a;background:#283c4f;border-radius:10px;padding:12px 15px;font-size:.84rem;font-weight:850;color:#c6e9e0;display:inline-block;margin:0 0 14px}
+.claims{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.claim{border:1px solid #52637a;border-radius:11px;padding:16px;margin:0;min-width:0}
+.claim legend{font-size:.92rem;line-height:1.53;font-weight:820;color:#f3e2c8;padding:0 5px}
+.claim-buttons{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.claim-buttons button{border:1px solid #70829c;background:#30435c;color:#ebebea;border-radius:7px;min-height:44px;padding:10px 11px;font-size:.78rem;font-weight:790}
+.claim-buttons button[aria-pressed="true"]{background:#d9bd88;color:#1a2736;border-color:#d9bd88}
+.feedback{font-size:.83rem;line-height:1.55;color:#efc5a3;min-height:50px;margin:0}
+.feedback.good{color:#a7e5c4}
+.note{font-size:.79rem;color:#b2bfca;line-height:1.73;margin:20px 3px 6px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:1080px){.layout{grid-template-columns:1fr}.timeline{display:flex;overflow-x:auto;overflow-y:hidden;max-height:none;padding:7px 2px 16px;scroll-snap-type:x proximity}.stop{flex:0 0 174px;flex-direction:column;align-items:flex-start;scroll-snap-align:center}.sidebar{padding:15px}}
+@media(max-width:900px){.extensions{grid-template-columns:1fr}}
+@media(max-width:650px){.wrap{padding:11px}.banner{border-radius:14px}.banner h1{font-size:2.45rem}.archive-head,.archive-body{padding:18px}.archive h2{font-size:2rem}.plate{min-height:210px}.plate svg{height:200px}.fact-grid,.claims,.wheel{grid-template-columns:1fr}.wheel svg{max-height:250px}.scope{padding:12px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}.timeline{scroll-snap-type:none}}
+</style></head>
+<body>
+<a class="skip" href="#archive">Pular para a ficha histórica</a>
+<main class="wrap">
+<header class="banner"><p class="kicker">Atlas de ideias celestes · História cultural do céu</p><h1>História da Astrologia</h1><p>De tabuletas mesopotâmicas aos aplicativos atuais, descubra como diferentes sociedades observaram o céu e criaram interpretações sobre a vida. A história dessas crenças é real; suas previsões sobre personalidade e destino não são cientificamente comprovadas.</p></header>
+<div class="scope"><strong>Três camadas de conhecimento</strong><span>História cultural: documentos e práticas do passado. Astronomia: observações, cálculos e modelos físicos testáveis. Astrologia: tradições que interpretam posições celestes sem validação científica para prever destinos individuais.</span></div>
+<div class="layout">
+<aside class="sidebar" aria-label="Navegação cronológica">
+<h2>Arquivo das épocas</h2><p>Filtre tradições, selecione um marco ou use as setas, Home e End. No celular, deslize a sequência.</p>
+<div class="filters" id="filters" role="group" aria-label="Filtrar períodos e tradições"></div>
+<nav id="timeline" class="timeline" aria-label="Linha do tempo da história da astrologia"></nav>
+<div class="visit"><strong id="visited-label">1 de 16 documentos explorados</strong><div class="meter" id="visited-meter" role="progressbar" aria-valuemin="0" aria-valuemax="16" aria-valuenow="1" aria-label="Documentos explorados"><span id="visited-fill"></span></div><button class="reset" type="button" id="reset-history">Reiniciar linha do tempo</button></div>
+</aside>
+<article id="archive" class="archive" aria-labelledby="archive-title" tabindex="-1">
+<div class="archive-head"><div class="archive-top"><span id="archive-index">CÓDICE 01 / 16</span><span class="geo" id="archive-place">Mesopotâmia</span></div><h2 id="archive-title">Observação e adivinhação</h2><p id="archive-date" class="archive-date">c. 2º milênio a.C.</p></div>
+<div class="plate"><span class="plate-label">GRAVURA ORIGINAL</span><svg viewBox="0 0 440 300" role="img" aria-labelledby="art-title art-desc"><title id="art-title">Ilustração histórica</title><desc id="art-desc">Ilustração esquemática, não reprodução de fonte arqueológica real.</desc><defs>
+<symbol id="astro-tablet" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="110" y="27" width="222" height="238" rx="25"/><path d="M149 90l24-24 20 22m31-22 23 25m34-19 26 22M150 132l34-12 16 18m36-20 20 27m32-30 16 20M149 185l18-22 27 24m30-16 26 22m25-26 25 18M159 220l34-11m49 0 34 11"/></g></symbol>
+<symbol id="astro-crescent" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M259 37q-75 35-68 110 10 74 94 96-84 31-149-40-57-72-10-138Q175 6 259 37z"/><path d="M291 48l10 24 25 7-25 10-10 25-9-25-25-10 25-7zM338 162l8 22 21 8-21 9-8 22-8-22-21-9 21-8z"/><circle cx="137" cy="67" r="5"/><circle cx="104" cy="241" r="5"/></g></symbol>
+<symbol id="astro-zodiac" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="4"><circle cx="220" cy="150" r="117"/><circle cx="220" cy="150" r="88"/><circle cx="220" cy="150" r="39"/><path d="M220 33v78m0 78v78M103 150h78m78 0h78M137 67l55 55m56 56 55 55M303 67l-55 55m-56 56-55 55M161 49l40 68m38 66 40 68M279 49l-40 68m-38 66-40 68"/><path d="M220 132l7 13 15 2-11 10 2 15-13-8-13 8 2-15-11-10 15-2z"/></g></symbol>
+<symbol id="astro-birth" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><circle cx="220" cy="154" r="112"/><circle cx="220" cy="154" r="69"/><path d="M220 42v224M108 154h224M141 75l158 158m0-158L141 233M220 120l12 24 26 4-18 18 4 27-24-12-24 12 4-27-18-18 26-4z"/><circle cx="171" cy="101" r="11"/><circle cx="283" cy="178" r="9"/><circle cx="200" cy="223" r="6"/></g></symbol>
+<symbol id="astro-column" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M95 259h251M109 231h224v28H109zM127 89h36v142h-36zm67 0h36v142h-36zm68 0h36v142h-36zM113 67h211v22H113zM99 67l119-47 121 47z"/><path d="M134 112h20m50 0h16m50 0h18"/></g></symbol>
+<symbol id="astro-scroll" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M114 75h213v153H113q-30 0-30-30 0-25 29-25t30 25q0 17-16 25m201-148q21 0 21 25-1 22-21 23M114 75q-30 0-30 25 0 24 30 23"/><path d="M154 119h135m-135 34h116m-116 34h131m-125 35h69"/><circle cx="302" cy="225" r="13"/></g></symbol>
+<symbol id="astro-lotus" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M220 224q-60-58-40-123 46 24 40 123zm0 0q54-65 43-122-46 25-43 122zM220 224Q142 194 133 131q66 10 87 93zm0 0q79-30 89-93-67 10-89 93zM220 223q-93 0-119-57 67-9 119 57zm0 0q90 0 117-57-67-9-117 57zM113 247q106 19 215 0M220 243v29"/></g></symbol>
+<symbol id="astro-manuscript" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M220 55q-66-43-141-10v196q78-37 141 9 64-46 141-9V45q-75-33-141 10zM220 55v195M112 95q40-17 77 1m-77 32q40-15 77 1m-77 31q40-15 77 1m-77 30q40-13 77 1m65-96q39-17 76 0m-76 31q38-13 76 1m-76 30q38-12 76 2m-76 30q38-12 76 2"/></g></symbol>
+<symbol id="astro-astrolabe" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M220 26v22m-20-23q20-22 40 0m-20 23a104 104 0 1 0 0 208 104 104 0 1 0 0-208"/><circle cx="220" cy="152" r="74"/><path d="M220 48v208M116 152h208M152 79l136 147m0-147L152 226M220 152l61-57m-61 57-48 60"/><circle cx="220" cy="152" r="11"/></g></symbol>
+<symbol id="astro-arabic" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M93 236V87l125-56 129 56v149zM110 237h222M142 109q75-56 152 0M142 154q73-50 152 0M156 193q68-42 133 0M220 31v208"/><path d="M197 86l13 19 18-17m-26 59 21 16 19-22m-39 51 18 16 20-18"/></g></symbol>
+<symbol id="astro-translation" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M70 65h128v160H70zM242 84h130v161H242zM100 101h70m-70 32h70m-70 32h61m109-46h67m-67 35h67m-67 36h60M182 254q34-42 76 0M210 134h40m-11-12 12 12-12 12"/></g></symbol>
+<symbol id="astro-print" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M90 93h258v134H90zM111 68h217v25H111zM149 41h145v27H149zM104 227h230v28H104zM136 128h170m-170 28h170m-170 29h170m-164 42v29m154-29v29"/></g></symbol>
+<symbol id="astro-telescope" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M117 123 283 64l30 79-167 60zM283 64l35-12 33 89-38 2M166 195l15 28M219 183l8 31M214 211v61m0-61-72 61m72-61 72 61M90 274h250"/><circle cx="93" cy="57" r="9"/><path d="M92 30v13m0 27v13m-27-26h15m27 0h15"/></g></symbol>
+<symbol id="astro-newspaper" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M85 56h273v183q-27 16-52-1-26 16-52 1-24 16-48 0-25 16-49 0-37 13-72-1zM120 91h195m-195 30h195M120 149h85v68h-85zM227 149h91m-91 22h91m-91 22h91m-91 22h61"/><circle cx="163" cy="183" r="18"/></g></symbol>
+<symbol id="astro-screen" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="78" y="34" width="285" height="206" rx="17"/><path d="M188 240v28m-36 0h110M112 72h217m-188 44h65m-65 35h65m-65 35h65"/><circle cx="278" cy="165" r="48"/><path d="M278 117v96m-48-48h96m-14-34-68 68m0-68 68 68"/></g></symbol>
+<symbol id="astro-compass" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><circle cx="220" cy="149" r="108"/><circle cx="220" cy="149" r="75"/><path d="m220 70 23 56 53 23-53 23-23 55-23-55-54-23 54-23zM220 17v24m0 216v24M89 149H65m286 0h24"/><circle cx="220" cy="149" r="13"/></g></symbol>
+</defs><use id="art-use" href="#astro-tablet"></use></svg><span class="plate-label end">ESTUDO VISUAL · NÃO É UM ARTEFATO REAL</span></div>
+<div class="archive-body"><p class="summary" id="archive-description"></p><div class="fact-grid"><div class="fact"><b>Importância histórica</b><p id="archive-impact"></p></div><div class="fact caveat"><b>Limite da evidência</b><p id="archive-caution"></p></div></div>
+<p class="source">Referência verificável: <a id="archive-source" href="https://iep.utm.edu/hellenistic-astrology/" target="_blank" rel="noopener noreferrer">Fonte histórica</a></p><div class="actions"><button type="button" id="prev">← Marco anterior</button><button type="button" id="next">Próximo marco →</button></div>
+</div></article></div>
+<div class="extensions">
+<section class="research" aria-labelledby="research-title"><h2 id="research-title">Laboratório: zodíaco e céu observável</h2><p>Três formas de olhar o mesmo diagrama. Não é um mapa astronômico, e os desenhos não incluem a localização verdadeira de estrelas.</p>
+<div class="wheel">
+<svg id="zodiac-diagram" viewBox="0 0 440 310" role="img" aria-labelledby="wheel-title wheel-desc"><title id="wheel-title">Comparação didática de signos, constelações e precessão</title><desc id="wheel-desc">Doze divisões iguais de um círculo zodiacal, comparadas com estrelas irregulares e o deslocamento lento de um referencial. Esquema conceitual, não mapa celeste real.</desc>
+<g fill="none" stroke="#b6a57f" stroke-width="2"><circle cx="220" cy="155" r="132"/><circle cx="220" cy="155" r="86"/><line x1="220.0" y1="69.0" x2="220.0" y2="23.0"/><line x1="263.0" y1="80.5" x2="286.0" y2="40.7"/><line x1="294.5" y1="112.0" x2="334.3" y2="89.0"/><line x1="306.0" y1="155.0" x2="352.0" y2="155.0"/><line x1="294.5" y1="198.0" x2="334.3" y2="221.0"/><line x1="263.0" y1="229.5" x2="286.0" y2="269.3"/><line x1="220.0" y1="241.0" x2="220.0" y2="287.0"/><line x1="177.0" y1="229.5" x2="154.0" y2="269.3"/><line x1="145.5" y1="198.0" x2="105.7" y2="221.0"/><line x1="134.0" y1="155.0" x2="88.0" y2="155.0"/><line x1="145.5" y1="112.0" x2="105.7" y2="89.0"/><line x1="177.0" y1="80.5" x2="154.0" y2="40.7"/></g>
+<g id="wheel-signs" fill="none" stroke="#e7c77d" stroke-width="4"><circle cx="220" cy="155" r="109"/><path d="M220 110v90m-45-45h90"/></g>
+<g id="wheel-stars" fill="#d8e9f0" stroke="#d8e9f0" stroke-width="2" opacity=".12"><circle cx="102" cy="103" r="5"/><circle cx="131" cy="87" r="3"/><circle cx="172" cy="55" r="3"/><circle cx="218" cy="25" r="5"/><circle cx="255" cy="60" r="3"/><circle cx="294" cy="75" r="3"/><circle cx="332" cy="102" r="5"/><circle cx="366" cy="158" r="3"/><circle cx="328" cy="198" r="3"/><circle cx="298" cy="238" r="5"/><circle cx="261" cy="262" r="3"/><circle cx="221" cy="279" r="3"/><circle cx="187" cy="246" r="5"/><circle cx="142" cy="229" r="3"/><circle cx="101" cy="197" r="3"/><circle cx="75" cy="148" r="5"/><circle cx="96" cy="130" r="3"/><path d="M102 103 131 87 172 55 218 25 255 60 294 75 332 102 366 158 328 198 298 238 261 262 221 279 187 246 142 229 101 197 75 148 96 130" fill="none" stroke-dasharray="5 9"/></g>
+<g id="wheel-drift" stroke="#e7b36f" stroke-width="5" fill="none" opacity=".12"><path d="M220 35a120 120 0 0 1 118 99"/><path d="M321 121l17 13 12-16"/></g>
+<circle cx="220" cy="155" r="14" fill="#ddbb80"/><text x="220" y="297" text-anchor="middle" fill="#dccfb8" font-size="14" font-family="system-ui,sans-serif">Diagrama ilustrativo · não representa posições reais do céu</text></svg>
+<div><div id="wheel-buttons" class="wheel-controls" role="group" aria-label="Escolher representação celeste"></div><p id="wheel-explain" class="description-panel" aria-live="polite"><b>Escolha uma representação.</b>Setores convencionais, constelações e precessão não são conceitos intercambiáveis.</p></div>
+</div></section>
+<section class="glossary" aria-labelledby="glossary-title"><h2 id="glossary-title">Glossário do observador</h2><p>Escolha um conceito para comparar linguagem histórica e linguagem científica.</p><div id="gloss-buttons" class="gloss-buttons" role="group" aria-label="Selecionar conceito"></div>
+<div id="gloss-info" class="gloss-info" role="status" aria-live="polite"><b>Selecione um conceito</b>Entenda o significado antes de julgar uma afirmação.</div></section>
+</div>
+<section class="quiz" aria-labelledby="quiz-title"><h2 id="quiz-title">Oficina de leitura crítica</h2><p>Classifique cada frase como observação científica, afirmação histórica documentada ou crença astrológica sem validação. A classificação se refere ao tipo de afirmação, não ao valor cultural de quem a produziu.</p>
+<div class="score" id="score" role="status" aria-live="polite">0 de 6 afirmações classificadas · 0 acertos</div>
+<div class="claims" id="claims"></div>
+<button class="reset" type="button" id="reset-claims">Reiniciar classificações</button>
+</section>
+<p class="note">Material didático com datas aproximadas e fontes para leitura adicional. Uma previsão astrológica não se torna científica por usar cálculos astronômicos; o valor histórico de uma crença não confirma sua eficácia causal. Nenhum dado pessoal, mapa natal real, classificação ou progresso é armazenado no Moodle. Imagens SVG são originais, sem recursos remotos.</p>
+<p id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+</main>
+<script>
+"use strict";
+const model={"milestones":[{"id":"omen","year":-1800,"date":"c. 2º milênio a.C.","short":"Observar o céu como presságio","era":"mesopotamia","place":"Mesopotâmia","title":"Observação e adivinhação","description":"Na Mesopotâmia, observações de eclipses, Lua e planetas eram registradas e relacionadas a interpretações de presságios para reis e comunidades.","impact":"O registro sistemático de fenômenos celestes contribuiu para tradições de observação e cálculo astronômico.","caution":"Não se tratava ainda do horóscopo popular por signo solar, e a atribuição de presságios é uma crença histórica, não causalidade demonstrada.","motif":"tablet","source":"Cambridge University Press · The Babylonian Science of Celestial Signs","url":"https://www.cambridge.org/core/elements/babylonian-science-of-celestial-signs/C42DD52A47ED4C5D276A5BF0574D1F51"},{"id":"omen-corpus","year":-700,"date":"c. 1º milênio a.C.","short":"Compilações de presságios astralizados","era":"mesopotamia","place":"Babilônia e Assíria","title":"Tradições escritas","description":"Séries eruditas de presságios, como Enūma Anu Enlil, organizaram associações entre acontecimentos no céu e interpretações terrestres.","impact":"As tabuletas preservam práticas históricas e dados sobre o interesse por ciclos astronômicos.","caution":"A compilação ocorreu ao longo de períodos, não em um único ano nem por um autor conhecido.","motif":"crescent","source":"Cambridge University Press · The Babylonian Science of Celestial Signs","url":"https://www.cambridge.org/core/elements/babylonian-science-of-celestial-signs/C42DD52A47ED4C5D276A5BF0574D1F51"},{"id":"zodiac","year":-500,"date":"c. século V a.C.","short":"O zodíaco de doze divisões","era":"mesopotamia","place":"Babilônia","title":"Modelo convencional do céu","description":"Eruditos babilônicos desenvolveram um zodíaco de doze setores iguais ao longo da eclíptica, útil para expressar posições celestes.","impact":"Uma convenção de coordenadas ajudava a comunicar e calcular posições de corpos astronômicos.","caution":"Os doze setores de 30 graus são divisões convencionais, diferentes dos limites e tamanhos das constelações observadas.","motif":"zodiac","source":"Cambridge University Press · The Babylonian Science of Celestial Signs","url":"https://www.cambridge.org/core/elements/babylonian-science-of-celestial-signs/C42DD52A47ED4C5D276A5BF0574D1F51"},{"id":"natal","year":-400,"date":"c. séculos V–IV a.C.","short":"Horóscopos individuais na Babilônia","era":"mesopotamia","place":"Babilônia","title":"Do Estado à pessoa","description":"Documentos de época tardia mostram o aparecimento de horóscopos referentes ao nascimento de indivíduos, com posições planetárias em um momento.","impact":"O uso astrológico ampliou-se para interpretações relacionadas à vida pessoal.","caution":"A existência do texto demonstra a prática cultural, não que o conteúdo preditivo seja verdadeiro.","motif":"birth","source":"Cambridge University Press · The Babylonian Science of Celestial Signs","url":"https://www.cambridge.org/core/elements/babylonian-science-of-celestial-signs/C42DD52A47ED4C5D276A5BF0574D1F51"},{"id":"hellenistic","year":-200,"date":"c. séculos III–I a.C.","short":"Sínteses no Egito helenístico","era":"helenistica","place":"Egito helenístico","title":"Tradições em contato","description":"Ideias mesopotâmicas se encontraram com matemática, filosofia grega e práticas egípcias, consolidando formas de astrologia horoscópica.","impact":"A circulação de conhecimentos contribuiu para métodos de representação e interpretação de mapas natais.","caution":"Não é correto atribuir todo o sistema a uma única pessoa ou cidade nem considerá-lo um método científico comprovado.","motif":"column","source":"Internet Encyclopedia of Philosophy · Hellenistic Astrology","url":"https://iep.utm.edu/hellenistic-astrology/"},{"id":"ptolemy","year":150,"date":"c. século II d.C.","short":"Ptolomeu e o Tetrabiblos","era":"helenistica","place":"Alexandria, Egito romano","title":"Um tratado influente","description":"Cláudio Ptolomeu sistematizou argumentos astrológicos no Tetrabiblos, distinto do Almagesto, sua obra de astronomia matemática.","impact":"Os textos ajudam a entender a conexão histórica entre cálculo do céu e interpretações culturais.","caution":"O prestígio histórico do autor não valida previsões pessoais; astronomia e astrologia são avaliadas hoje de maneiras diferentes.","motif":"scroll","source":"Internet Encyclopedia of Philosophy · Hellenistic Astrology","url":"https://iep.utm.edu/hellenistic-astrology/"},{"id":"india-transfer","year":250,"date":"primeiros séculos d.C.","short":"Traduções e adaptações na Índia","era":"india","place":"Sul da Ásia","title":"Jyotiṣa em transformação","description":"Tradições indianas de calendário e observação receberam e adaptaram componentes horoscópicos greco-babilônicos, formando diferentes escolas de jyotiṣa.","impact":"A história mostra uma troca intelectual multidirecional e reelaborações locais.","caution":"O jyotiṣa não pode ser reduzido a uma simples cópia da astrologia grega, nem suas vertentes são idênticas.","motif":"lotus","source":"Pustakālaya · Jyotiṣa and its History","url":"https://pustakalaya-org.github.io/vol12_jyotisa/chapter01_introduction.html"},{"id":"varahamihira","year":550,"date":"século VI d.C.","short":"Textos sânscritos e síntese erudita","era":"india","place":"Índia","title":"Conhecimento astral em sânscrito","description":"Obras associadas a Varāhamihira ilustram a tradição indiana de astronomia matemática, calendários, astrologia e interpretação de sinais.","impact":"Diferentes textos foram lidos e comentados durante muitos séculos, contribuindo para a história da matemática e da cultura.","caution":"Precisão de calendários ou cálculos astronômicos não implica comprovação de interpretações sobre destinos pessoais.","motif":"manuscript","source":"Pustakālaya · Jyotiṣa and its History","url":"https://pustakalaya-org.github.io/vol12_jyotisa/chapter01_introduction.html"},{"id":"baghdad","year":800,"date":"séculos VIII–IX","short":"Circulação de textos em árabe","era":"islamica","place":"Bagdá e outros centros","title":"Conhecimentos traduzidos","description":"Redes de estudiosos em territórios islâmicos traduziram, preservaram e transformaram obras gregas, persas e indianas ligadas à astronomia e astrologia.","impact":"A tradução facilitou a circulação de tabelas, métodos matemáticos e tradições interpretativas.","caution":"O mundo islâmico não era intelectualmente uniforme, e matemática astronômica não é evidência de eficácia astrológica.","motif":"astrolabe","source":"Oxford Academic · Astrology in Ancient Greek and Roman Culture","url":"https://academic.oup.com/edited-volume/62111/chapter/549096059"},{"id":"abumashar","year":875,"date":"século IX","short":"Abū Maʿshar e a astrologia medieval","era":"islamica","place":"Mundo abássida","title":"Tratados e circulação intelectual","description":"Textos de Abū Maʿshar (Albumasar) participaram da transmissão de sistemas astrológicos em árabe que depois circularam também em traduções latinas.","impact":"Sua recepção é parte da história intelectual medieval em diferentes regiões.","caution":"Referência e influência histórica não conferem poder preditivo demonstrado aos modelos.","motif":"arabic","source":"History Compass · Astrology in the Middle Ages","url":"https://compass.onlinelibrary.wiley.com/doi/abs/10.1111/j.1478-0542.2010.00703.x"},{"id":"toledo","year":1150,"date":"século XII","short":"Traduções latinas na Europa","era":"europa","place":"Península Ibérica e Europa latina","title":"Rotas de livros e conceitos","description":"Movimentos de tradução de obras árabes e gregas ampliaram a circulação de conhecimentos astronômicos e astrológicos em escolas e cortes da Europa latina.","impact":"O processo ajudou a reconstruir repertórios de matemática e cosmologia.","caution":"A difusão foi gradual e envolveu muitos tradutores e centros, não uma transação única.","motif":"translation","source":"History Compass · Astrology in the Middle Ages","url":"https://compass.onlinelibrary.wiley.com/doi/abs/10.1111/j.1478-0542.2010.00703.x"},{"id":"renaissance","year":1500,"date":"séculos XV–XVI","short":"Astrologia nas cortes renascentistas","era":"europa","place":"Europa renascentista","title":"Prestígio, patronato e debate","description":"Efemérides, calendários e interpretações astrológicas circularam em cortes, oficinas de impressão e contextos acadêmicos, ao lado de estudos astronômicos.","impact":"Parte dessas demandas motivou a produção de tabelas e observações precisas do céu.","caution":"Havia críticas e divergências já na época; não era um consenso universal sobre a influência dos astros.","motif":"print","source":"Oxford Academic · Astrology in Ancient Greek and Roman Culture","url":"https://academic.oup.com/edited-volume/62111/chapter/549096059"},{"id":"separation","year":1650,"date":"séculos XVII–XVIII","short":"Métodos e campos se diferenciam","era":"europa","place":"Europa","title":"Mudanças científicas","description":"A astronomia passou a explicar e prever movimentos celestes com observações, matemática e modelos físicos testáveis, afastando-se gradualmente da astrologia.","impact":"A distinção metodológica ganhou força, embora práticas culturais de astrologia tenham continuado.","caution":"A separação não aconteceu de uma vez e foi diferente em regiões e instituições.","motif":"telescope","source":"OpenStax Astronomy 2e · Astrology and Astronomy","url":"https://openstax.org/books/astronomy-2e/pages/2-3-astrology-and-astronomy"},{"id":"newspapers","year":1930,"date":"1930 e décadas seguintes","short":"Horóscopos chegam à imprensa popular","era":"moderna","place":"Reino Unido e outros países","title":"A coluna para grandes públicos","description":"Uma publicação de 1930 de R. H. Naylor sobre o nascimento da princesa Margaret tornou-se um marco na popularização de colunas que depois passaram a organizar previsões por signos solares.","impact":"O formato permitiu distribuir textos semelhantes a amplos públicos por jornais e revistas.","caution":"A data não marca a invenção do zodíaco ou de todos os horóscopos; a forma jornalística se desenvolveu ao longo de anos.","motif":"newspaper","source":"Columbia Journalism Review · Why horoscopes and media are a match","url":"https://www.cjr.org/analysis/horoscopes_astrology.php"},{"id":"digital","year":2000,"date":"final do século XX e início do XXI","short":"Do papel aos sites e aplicativos","era":"moderna","place":"Circulação digital","title":"Interpretações em novas mídias","description":"Com a internet e depois os celulares, textos e ferramentas astrológicas ganharam distribuição digital e personalização.","impact":"O tema permaneceu relevante para estudos de mídia, religião, cultura e comportamento.","caution":"Disponibilidade, popularidade e personalização não demonstram acerto científico de previsões.","motif":"screen","source":"OpenStax Astronomy 2e · Astrology and Astronomy","url":"https://openstax.org/books/astronomy-2e/pages/2-3-astrology-and-astronomy"},{"id":"critical","year":2020,"date":"século XXI","short":"Astronomia, cultura e teste de evidências","era":"moderna","place":"Debate científico e cultural","title":"Como ler uma afirmação sobre o céu","description":"Historiadores estudam a astrologia como prática cultural, enquanto a astronomia investiga fenômenos físicos por métodos verificáveis; testes não sustentam previsões astrológicas sobre destino ou personalidade.","impact":"Separar o objeto histórico da avaliação científica permite compreender tradições sem transformar crenças em resultados de pesquisa.","caution":"O movimento real dos astros é observável, mas não é evidência de que signos determinem pessoas ou eventos.","motif":"compass","source":"OpenStax Astronomy 2e · Astrology and Astronomy","url":"https://openstax.org/books/astronomy-2e/pages/2-3-astrology-and-astronomy"}],"claims":[{"id":"orbit","text":"A Terra completa uma volta em torno do Sol em aproximadamente um ano.","answer":"observacao","why":"O movimento orbital é descrito por modelos físicos e sustentado por medições astronômicas."},{"id":"traits","text":"A posição do Sol em um signo no nascimento determina a personalidade de alguém.","answer":"crenca","why":"Essa é uma afirmação interpretativa da astrologia, sem evidência científica confiável de efeito preditivo."},{"id":"tablets","text":"Existem tabuletas mesopotâmicas contendo interpretações de presságios celestes.","answer":"historia","why":"Trata-se de uma afirmação histórica sobre documentos e práticas que podem ser pesquisados."},{"id":"eclipse","text":"É possível prever a ocorrência de eclipses com cálculos astronômicos.","answer":"observacao","why":"Eclipses dependem de alinhamentos físicos e órbitas calculáveis, não de interpretações sobre destino."},{"id":"triumph","text":"O êxito de uma pessoa em determinada profissão depende do seu mapa astral.","answer":"crenca","why":"Essa associação não dispõe de validação estatística robusta e não deve ser apresentada como fato."},{"id":"translation","text":"Tratados de astrologia circularam entre o mundo árabe e a Europa latina medieval.","answer":"historia","why":"Há registros de traduções e transmissão de textos; isso não comprova suas alegações preditivas."}],"glossary":[{"id":"ecliptica","name":"Eclíptica","description":"Trajetória aparente anual do Sol em relação ao fundo de estrelas, vista da Terra. O plano orbital terrestre fornece a referência geométrica."},{"id":"signo","name":"Signo zodiacal","description":"Setor convencional de 30° em muitos sistemas astrológicos do zodíaco de doze partes; não corresponde necessariamente a uma constelação astronômica."},{"id":"constelacao","name":"Constelação","description":"Área reconhecida da esfera celeste, com limites astronômicos convencionais; as constelações zodiacais não possuem todas a mesma extensão."},{"id":"precessao","name":"Precessão","description":"Mudança lenta na orientação do eixo terrestre, com ciclo aproximado de 26 mil anos, que desloca a referência equinocial em relação às estrelas."},{"id":"mapa","name":"Mapa natal","description":"Representação usada em tradições astrológicas para interpretar posições de astros num nascimento; não é ferramenta comprovada para prever personalidade ou destino."}]};
+const milestones=model.milestones,claims=model.claims,glossary=model.glossary;
+const eras=[{id:"all",label:"Todas",name:"Todas as épocas"},{id:"mesopotamia",label:"Mesopotâmia",name:"Mesopotâmia"},{id:"helenistica",label:"Helenismo",name:"Mundo helenístico"},{id:"india",label:"Índia",name:"Tradições indianas"},{id:"islamica",label:"Mundo islâmico",name:"Tradições islâmicas"},{id:"europa",label:"Europa",name:"Europa"},{id:"moderna",label:"Moderna",name:"Mundo contemporâneo"}];
+const wheelViews=[
+{id:"signs",label:"Signos: 12 setores",heading:"Uma divisão convencional",description:"Em muitos sistemas astrológicos, o círculo é dividido em doze signos de 30 graus cada. Esse é um sistema de coordenadas convencional; não equivale ao contorno real das constelações no céu."},
+{id:"stars",label:"Constelações",heading:"O céu não tem doze áreas iguais",description:"As constelações são regiões convencionadas pela astronomia com extensões diferentes ao longo da eclíptica. Pontos do desenho são ilustrativos, não posições ou limites astronômicos reais."},
+{id:"drift",label:"Precessão",heading:"Referências mudam lentamente",description:"A precessão do eixo terrestre altera lentamente a relação entre a referência equinocial e as estrelas, num ciclo próximo de 26 mil anos. Esse efeito é medido pela astronomia; não valida previsões de personalidade."}
+];
+const categories=[{id:"observacao",label:"Observação científica"},{id:"historia",label:"História documentada"},{id:"crenca",label:"Crença astrológica"}];
+const byId=id=>document.getElementById(id);
+const state={filter:"all",active:milestones[0].id,visited:new Set([milestones[0].id]),wheel:"signs",gloss:null,answers:new Map()};
+const visible=()=>milestones.filter(e=>state.filter==="all"||e.era===state.filter);
+function filterRender(){
+ const host=byId("filters");host.replaceChildren();
+ eras.forEach(e=>{
+  const b=document.createElement("button");b.type="button";b.className="filter";b.textContent=e.label;
+  b.setAttribute("aria-pressed",String(state.filter===e.id));
+  b.addEventListener("click",()=>setFilter(e.id));host.append(b);
+ });
+}
+function listRender(){
+ const list=visible(),host=byId("timeline");host.replaceChildren();
+ list.forEach((entry,index)=>{
+  const b=document.createElement("button");b.type="button";b.className="stop";
+  b.setAttribute("aria-current",String(entry.id===state.active));
+  b.classList.toggle("seen",state.visited.has(entry.id));
+  b.setAttribute("aria-label",entry.date+": "+entry.short);
+  const year=document.createElement("span");year.className="year";year.textContent=entry.date;
+  const name=document.createElement("span");name.className="short";name.textContent=entry.short;b.append(year,name);
+  b.addEventListener("click",()=>choose(entry.id));
+  b.addEventListener("keydown",event=>{
+   let target=null;
+   if(event.key==="ArrowDown"||event.key==="ArrowRight")target=Math.min(index+1,list.length-1);
+   if(event.key==="ArrowUp"||event.key==="ArrowLeft")target=Math.max(index-1,0);
+   if(event.key==="Home")target=0;if(event.key==="End")target=list.length-1;
+   if(target!==null){event.preventDefault();choose(list[target].id);const next=host.querySelectorAll(".stop")[target];if(next)next.focus();}
+  });
+  host.append(b);
+ });
+}
+function choose(id){
+ const list=visible(),index=list.findIndex(x=>x.id===id);if(index<0)return;
+ const item=list[index];state.active=id;state.visited.add(id);
+ const values={
+  "archive-index":"CÓDICE "+String(milestones.indexOf(item)+1).padStart(2,"0")+" / "+milestones.length,
+  "archive-place":item.place,"archive-title":item.title,"archive-date":item.date,
+  "archive-description":item.description,"archive-impact":item.impact,"archive-caution":item.caution,
+  "archive-source":item.source,"art-title":"Gravura original: "+item.short,
+  "art-desc":"Ilustração didática original de "+item.short+", não é reprodução fiel de objeto histórico.",
+  "visited-label":state.visited.size+" de "+milestones.length+" documentos explorados"
+ };
+ for(const [key,value] of Object.entries(values))byId(key).textContent=value;
+ byId("archive-source").href=item.url;byId("art-use").setAttribute("href","#astro-"+item.motif);
+ byId("prev").disabled=index===0;byId("next").disabled=index===list.length-1;
+ byId("visited-meter").setAttribute("aria-valuenow",String(state.visited.size));
+ byId("visited-fill").style.width=state.visited.size/milestones.length*100+"%";
+ listRender();
+ const host=byId("timeline"),button=host.querySelectorAll(".stop")[index];
+ if(button){
+  const behavior=window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
+  if(window.matchMedia("(max-width:1080px)").matches)host.scrollTo({left:Math.max(0,button.offsetLeft-host.offsetLeft-host.clientWidth/2+button.clientWidth/2),behavior});
+  else host.scrollTo({top:Math.max(0,button.offsetTop-host.offsetTop-host.clientHeight/2+button.clientHeight/2),behavior});
+ }
+ byId("announcement").textContent="Documento "+(milestones.indexOf(item)+1)+": "+item.short+", "+item.date;
+}
+function setFilter(id){
+ if(!eras.some(x=>x.id===id))return;
+ state.filter=id;filterRender();
+ const entries=visible();if(!entries.some(x=>x.id===state.active))state.active=entries[0].id;
+ choose(state.active);
+ byId("announcement").textContent="Filtro "+eras.find(x=>x.id===id).name+": "+entries.length+" documentos.";
+}
+byId("prev").addEventListener("click",()=>{const list=visible(),i=list.findIndex(x=>x.id===state.active);if(i>0)choose(list[i-1].id);});
+byId("next").addEventListener("click",()=>{const list=visible(),i=list.findIndex(x=>x.id===state.active);if(i>=0&&i<list.length-1)choose(list[i+1].id);});
+function wheelRender(){
+ const host=byId("wheel-buttons");host.replaceChildren();
+ wheelViews.forEach(view=>{
+  const button=document.createElement("button");button.type="button";button.textContent=view.label;
+  button.setAttribute("aria-pressed",String(state.wheel===view.id));
+  button.addEventListener("click",()=>showWheel(view.id));host.append(button);
+ });
+}
+function showWheel(id){
+ const view=wheelViews.find(x=>x.id===id);if(!view)return;
+ state.wheel=id;wheelRender();
+ const box=byId("wheel-explain");box.replaceChildren();
+ const strong=document.createElement("b");strong.textContent=view.heading;
+ const description=document.createElement("span");description.textContent=view.description;
+ box.append(strong,description);
+ byId("wheel-signs").style.opacity=id==="signs"?"1":".14";
+ byId("wheel-stars").style.opacity=id==="stars"?"1":".20";
+ byId("wheel-drift").style.opacity=id==="drift"?"1":".12";
+ byId("wheel-desc").textContent=view.heading+". "+view.description+" Esquema ilustrativo sem posições reais.";
+}
+function glossRender(){
+ const host=byId("gloss-buttons");host.replaceChildren();
+ glossary.forEach(term=>{
+  const b=document.createElement("button");b.type="button";b.textContent=term.name;
+  b.setAttribute("aria-pressed",String(state.gloss===term.id));
+  b.addEventListener("click",()=>chooseGloss(term.id));host.append(b);
+ });
+}
+function chooseGloss(id){
+ const term=glossary.find(x=>x.id===id);if(!term)return;
+ state.gloss=id;glossRender();
+ const host=byId("gloss-info");host.replaceChildren();
+ const head=document.createElement("b");head.textContent=term.name;
+ const p=document.createElement("span");p.textContent=term.description;
+ host.append(head,p);
+}
+function scoreRender(){
+ const evaluated=[...state.answers.entries()];
+ const correct=evaluated.filter(([i,answer])=>claims[i].answer===answer).length;
+ byId("score").textContent=evaluated.length+" de "+claims.length+" afirmações classificadas · "+correct+(correct===1?" acerto":" acertos");
+}
+function claimsRender(){
+ const host=byId("claims");host.replaceChildren();
+ claims.forEach((claim,index)=>{
+  const block=document.createElement("fieldset");block.className="claim";
+  const legend=document.createElement("legend");legend.textContent=(index+1)+". "+claim.text;
+  const controls=document.createElement("div");controls.className="claim-buttons";
+  const feedback=document.createElement("p");feedback.className="feedback";feedback.setAttribute("aria-live","polite");
+  feedback.textContent="Escolha uma categoria.";
+  const buttons=categories.map(cat=>{
+   const b=document.createElement("button");b.type="button";b.textContent=cat.label;
+   b.setAttribute("aria-pressed",String(state.answers.get(index)===cat.id));
+   b.addEventListener("click",()=>{
+     state.answers.set(index,cat.id);
+     buttons.forEach((other,i)=>other.setAttribute("aria-pressed",String(categories[i].id===cat.id)));
+     const right=cat.id===claim.answer;
+     feedback.textContent=(right?"Correto. ":"Reveja. ")+claim.why;
+     feedback.classList.toggle("good",right);
+     scoreRender();
+   });
+   controls.append(b);return b;
+  });
+  block.append(legend,controls,feedback);host.append(block);
+ });
+ scoreRender();
+}
+byId("reset-history").addEventListener("click",()=>{
+ state.filter="all";state.active=milestones[0].id;state.visited.clear();state.visited.add(state.active);
+ filterRender();choose(state.active);byId("announcement").textContent="História reiniciada na primeira época.";
+});
+byId("reset-claims").addEventListener("click",()=>{
+ state.answers.clear();claimsRender();byId("announcement").textContent="Classificações reiniciadas.";
+});
+filterRender();choose(state.active);showWheel(state.wheel);glossRender();claimsRender();
+</script></body></html>
