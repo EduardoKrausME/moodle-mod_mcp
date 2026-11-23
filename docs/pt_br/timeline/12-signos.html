@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12 Signos | Atlas do Zodíaco Cultural</title>
+<style>
+:root{color-scheme:light;--ink:#342b43;--muted:#645c73;--plum:#47305a;--plum-dark:#281c3e;--paper:#fffaf1;--cream:#f5ecdf;--border:#d8cbbb;--gold:#c28a44;--tint:#ede4f1;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--cream);color:var(--ink)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px;background:radial-gradient(circle at 90% 0%,#e2d4ec 0,transparent 31%),radial-gradient(circle at 3% 39%,#f1dacd 0,transparent 43%),var(--cream)}
+button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #10658a;outline-offset:3px}button:disabled{opacity:.42;cursor:not-allowed}a{color:#67508e;font-weight:780;overflow-wrap:anywhere}
+.skip{position:absolute;top:-100px;left:10px;z-index:9;background:#fff;padding:11px}.skip:focus{top:10px}
+.wrap{max-width:1460px;margin:0 auto;padding:clamp(12px,2.6vw,38px)}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,270px);gap:25px;align-items:center;background:linear-gradient(125deg,#352343,#584061 73%,#826479);color:#fff8ed;padding:clamp(24px,4.5vw,52px);border:1px solid #a88e97;border-radius:25px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-110px;top:-140px;width:460px;height:460px;border:2px solid #eed6a53d;border-radius:50%;box-shadow:0 0 0 30px #e5cdab14,0 0 0 70px #e5cdab0d;pointer-events:none}
+.hero h1{font:normal clamp(2.2rem,5vw,4.6rem)/1.05 Georgia,serif;letter-spacing:-.05em;margin:0;max-width:840px}
+.eyebrow{font:850 .73rem ui-monospace,Consolas,monospace;letter-spacing:.21em;text-transform:uppercase;color:#ead2a4;margin:0 0 13px}
+.hero .lead{font-size:.96rem;line-height:1.7;max-width:770px;color:#ece0e6;margin:16px 0 0}
+.hero svg{display:block;width:min(100%,260px);height:auto;max-height:260px;position:relative;z-index:1;color:#f1d3a4}
+.context{margin:18px 0 19px;border-radius:11px;padding:15px 18px;background:#fffaf1;border:1px solid #d6be9e;color:#51475a;line-height:1.65;font-size:.88rem}
+.context strong{color:#644170}
+.grid{display:grid;grid-template-columns:minmax(255px,310px) minmax(0,1fr);gap:17px;align-items:start}
+.selector{background:#f3e9ec;border:1px solid #d7c7d5;border-radius:17px;padding:18px 15px}
+.selector h2,.comparator h2,.chronicle h2,.quiz h2{font-size:1.16rem;margin:0 0 8px;color:#503a61}
+.selector p,.comparator>p,.chronicle>p,.quiz>p{color:#6f6076;font-size:.86rem;line-height:1.65;margin:0 0 13px}
+.sign-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.sign-button{display:flex;align-items:center;gap:9px;border-radius:11px;border:1px solid #c7b1c5;background:#fffaf6;color:#59445c;min-height:64px;text-align:left;padding:9px}
+.sign-button .glyph{display:grid;place-items:center;flex:0 0 36px;height:36px;font-size:1.55rem;background:#f3e3d4;border-radius:9px;color:#705074}
+.sign-button .sign-name{font-size:.84rem;font-weight:870;line-height:1.2}
+.sign-button .range{font:800 .66rem ui-monospace,monospace;color:#8a7088;display:block;margin-top:5px}
+.sign-button[aria-current="true"]{background:#5b4269;color:#fff;border-color:#5b4269;box-shadow:inset 0 0 0 1px #f2d69a}
+.sign-button[aria-current="true"] .glyph{background:#edd5a5;color:#553d56}
+.sign-button[aria-current="true"] .range{color:#e7d4e7}
+.progress{margin-top:17px;border-top:1px solid #d5c5d2;padding-top:14px}
+.progress strong{font-size:.82rem;color:#71547a}
+.meter{height:8px;border-radius:99px;overflow:hidden;background:#dfd0da;margin:10px 0}
+.meter span{display:block;height:100%;width:8.333%;background:#876394;transition:width .18s}
+.reset{padding:9px 2px;border:0;background:transparent;text-decoration:underline;color:#70527d;font-size:.85rem;font-weight:850}
+.feature{background:var(--paper);border:1px solid #d9cbb9;border-radius:17px;overflow:hidden;box-shadow:7px 8px 0 #a28b9d1f}
+.feature-head{padding:clamp(18px,2.7vw,30px) clamp(18px,2.8vw,33px) 0}
+.feature-meta{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:10px;font:850 .73rem ui-monospace,Consolas,monospace;color:#89648c;letter-spacing:.07em}
+.figure-label{border-radius:99px;padding:7px 11px;background:#ece1f1;color:#614d75;font:800 .74rem system-ui,sans-serif;letter-spacing:0}
+.feature h2{font:normal clamp(2rem,4vw,3.25rem)/1.1 Georgia,serif;letter-spacing:-.04em;color:#4c355d;margin:18px 0 8px}
+.feature .degrees{color:#9a633b;font:850 .86rem ui-monospace,Consolas,monospace;margin:0 0 18px}
+.illumination{display:grid;place-items:center;position:relative;min-height:285px;background:radial-gradient(circle at center,#eee0c7 0,transparent 56%),repeating-linear-gradient(0deg,#f8efe4 0 31px,#e7dae8 32px 33px);border-block:1px solid #ded3c7}
+.illumination:before{content:"";position:absolute;inset:16px;border:1px dashed #baa3b7;border-radius:51% 44% 49% 47%;pointer-events:none}
+.illumination svg{position:relative;z-index:1;color:#755176;width:min(93%,485px);height:267px}
+.plate-id{position:absolute;top:13px;left:17px;font:800 .69rem ui-monospace,monospace;letter-spacing:.09em;color:#86657d}
+.plate-id.end{top:auto;left:auto;right:17px;bottom:13px}
+.feature-body{padding:clamp(18px,2.9vw,31px)}
+.feature-body .cultural{line-height:1.75;color:#5e5361;font-size:1rem;margin:0 0 16px}
+.fact-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fact{background:#eeeaf6;border:1px solid #ddd6e5;padding:14px;border-radius:10px}
+.fact.warning{background:#faeedf;border-color:#e8d6bd}
+.fact b{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px;color:#71538b}
+.fact.warning b{color:#98663d}
+.fact p{font-size:.88rem;color:#665c69;line-height:1.61;margin:0}
+.source{font-size:.8rem;margin:15px 0;color:#766a6d;line-height:1.6}
+.actions{display:flex;justify-content:space-between;gap:9px}
+.actions button{border:1px solid #84628c;color:#694c75;background:#fffdf8;border-radius:9px;min-height:44px;padding:11px 15px;font-weight:840}
+.actions button:last-child{background:#5f456e;border-color:#5f456e;color:white}
+.exploration{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:17px;margin-top:18px}
+.wheel-card,.comparator,.chronicle,.quiz{border:1px solid #d9cbbf;border-radius:17px;background:#fffaf2;padding:clamp(17px,2.5vw,27px)}
+.wheel-card h2{font-size:1.16rem;margin:0 0 7px;color:#574069}.wheel-card>p{color:#76687a;font-size:.84rem;line-height:1.58;margin:0 0 8px}
+.wheel-grid{display:grid;grid-template-columns:minmax(220px,.9fr) minmax(0,1fr);gap:12px;align-items:center}
+.zodiac-wheel{width:100%;height:auto;max-height:350px;display:block;border-radius:11px}
+.wheel-note{background:#f0e7ed;border-left:4px solid #9b7595;padding:13px;color:#64576b;border-radius:0 9px 9px 0;font-size:.87rem;line-height:1.64}
+.wheel-note b{color:#5b406c;display:block;margin-bottom:5px}
+.compare-buttons{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0}
+.compare-buttons button{border:1px solid #b39cab;border-radius:8px;background:#fffdf7;color:#6a4d6e;padding:10px 12px;min-height:44px;font-size:.81rem;font-weight:830}
+.compare-buttons button[aria-pressed="true"]{background:#675074;color:white;border-color:#675074}
+.compare-panel{background:#efedf4;border-left:4px solid #8a78a8;padding:14px;border-radius:0 10px 10px 0;color:#605b69;font-size:.86rem;line-height:1.65;min-height:107px}
+.compare-panel b{color:#4f3f70;display:block;margin-bottom:5px}
+.band-scroll{overflow-x:auto;margin:14px 0 8px;padding-bottom:6px;scrollbar-color:#bea8bc transparent}
+.band{min-width:610px;display:flex;border-radius:8px;overflow:hidden;border:1px solid #c5b5c8;min-height:68px}
+.band-item{display:grid;place-items:center;flex:1;min-width:0;gap:2px;text-align:center;padding:7px 3px;background:#e3d8e6;border-right:1px solid #baadbf;color:#574463}
+.band-item:nth-child(even){background:#f0e4d7}
+.band-item.active{background:#6e557d;color:#fff}
+.band-item .symbol{font-size:1.15rem;font-weight:850}
+.band-item .name{font-size:.67rem;line-height:1.2;font-weight:800}
+.band-item .range{font:700 .62rem ui-monospace,monospace}
+.band-item.ophiuchus{background:#eed2b4;color:#6b4628}
+.diagram-caution{font-size:.76rem;color:#74637c;line-height:1.59;margin:9px 0}
+.chronicle{margin-top:18px}
+.history-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:14px 0 15px}
+.history-button{border:1px solid #c1b0c2;border-radius:9px;background:#f7f0f4;text-align:left;padding:12px;min-height:79px;color:#60496c}
+.history-button[aria-pressed="true"]{background:#5b476d;color:#fff;border-color:#5b476d}
+.history-button .when{display:block;font:850 .74rem ui-monospace,Consolas,monospace;margin-bottom:5px;color:#9c6b6a}
+.history-button[aria-pressed="true"] .when{color:#f4d3a7}
+.history-button b{font-size:.81rem;line-height:1.36}
+.history-desc{background:#f4ebf3;border-radius:10px;border-left:4px solid #a382ab;padding:15px;min-height:115px;font-size:.87rem;color:#62566a;line-height:1.63}
+.history-desc b{display:block;font-size:.92rem;color:#5b4777;margin-bottom:7px}
+.history-desc p{margin:0 0 8px}
+.quiz{margin-top:18px}
+.quiz h2{font-size:1.2rem;margin:0 0 6px;color:#5a3d6c}
+.quiz>p{font-size:.86rem;line-height:1.64;color:#71637a;margin:0 0 14px}
+.score{font:850 .79rem ui-monospace,Consolas,monospace;background:#e9e1ee;border:1px solid #d4c2d9;color:#634678;display:inline-block;padding:10px 13px;border-radius:10px;margin:0 0 15px}
+.questions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.question{border:1px solid #d9ccdc;border-radius:11px;min-width:0;padding:14px;margin:0}
+.question legend{font-size:.88rem;line-height:1.49;color:#503a65;font-weight:850;padding:0 3px}
+.options{display:grid;gap:8px;margin:12px 0}
+.option{min-height:44px;background:#f5edf3;border:1px solid #b7a6bb;color:#57445d;border-radius:8px;text-align:left;font-size:.83rem;padding:10px 11px}
+.option[aria-pressed="true"]{background:#694b76;color:#fff;border-color:#694b76}
+.feedback{font-size:.81rem;color:#986348;line-height:1.57;margin:9px 0 0;min-height:44px}
+.feedback.good{color:#37654a}
+.note{font-size:.8rem;color:#7b6a77;line-height:1.73;margin:18px 3px 4px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:1160px){.grid{grid-template-columns:1fr}.sign-list{grid-template-columns:repeat(4,minmax(0,1fr))}.selector{padding:17px}}
+@media(max-width:1050px){.exploration{grid-template-columns:1fr}.wheel-grid{grid-template-columns:minmax(200px,320px) 1fr}}
+@media(max-width:750px){.hero{grid-template-columns:1fr}.hero svg{display:none}.history-list{grid-template-columns:1fr 1fr}.sign-list{grid-template-columns:repeat(3,minmax(0,1fr))}.questions{grid-template-columns:1fr}}
+@media(max-width:550px){.wrap{padding:11px}.hero{padding:24px 18px;border-radius:14px}.hero h1{font-size:2.55rem}.sign-list{grid-template-columns:1fr 1fr}.sign-button{min-height:58px}.feature-head,.feature-body{padding:18px}.feature h2{font-size:2rem}.illumination{min-height:210px}.illumination svg{height:195px}.fact-pair,.wheel-grid{grid-template-columns:1fr}.zodiac-wheel{max-height:275px}.history-list{grid-template-columns:1fr 1fr}.actions button{padding:10px 9px}.history-button{min-height:68px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style></head>
+<body>
+<a class="skip" href="#sign-feature">Ir para a ficha do signo</a>
+<main class="wrap">
+<header class="hero">
+<div><p class="eyebrow">Atlas cultural · círculo zodiacal</p><h1>12 Signos</h1><p class="lead">Descubra os símbolos e as histórias que acompanharam o zodíaco tradicional. Explore cada uma das doze figuras, compare o sistema convencional com as constelações oficiais e investigue o que podemos afirmar com base em evidências.</p></div>
+<svg viewBox="0 0 300 300" role="img" aria-labelledby="hero-title hero-desc"><title id="hero-title">Emblema de uma roda zodiacal</title><desc id="hero-desc">Roda decorativa dividida em doze partes iguais, sem representar constelações reais.</desc><g fill="none" stroke="currentColor" stroke-width="3"><circle cx="150" cy="150" r="131"/><circle cx="150" cy="150" r="92"/><circle cx="150" cy="150" r="43"/><path d="M150 19v262M19 150h262M58 58l184 184M242 58 58 242M85 37l130 226M215 37 85 263"/></g><circle cx="150" cy="150" r="17" fill="#eadab0"/></svg>
+</header>
+<div class="context"><strong>História não é previsão científica.</strong> Os signos tradicionais são doze setores iguais de 30° e seus símbolos têm importância cultural. As constelações reconhecidas pela União Astronômica Internacional são regiões desiguais do céu; nenhuma dessas representações estabelece que signos determinem personalidade, destino ou acontecimentos.</div>
+<div class="grid">
+<aside class="selector" aria-label="Catálogo de doze signos">
+<h2>As doze figuras</h2><p>Escolha um signo ou use as setas, Home e End. A ordem segue os setores convencionais, não datas fixas de nascimento.</p>
+<nav id="sign-list" class="sign-list" aria-label="Selecionar signo"></nav>
+<div class="progress"><strong id="visited-label">1 de 12 figuras exploradas</strong><div id="meter" class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="12" aria-valuenow="1" aria-label="Figuras visitadas"><span id="meter-fill"></span></div><button class="reset" type="button" id="reset-all">Reiniciar exploração</button></div>
+</aside>
+<section id="sign-feature" class="feature" aria-labelledby="sign-title" tabindex="-1">
+<div class="feature-head"><div class="feature-meta"><span id="sign-index">PRANCHA 01 / 12</span><span id="sign-figure" class="figure-label">Carneiro</span></div><h2 id="sign-title">Áries</h2><p id="sign-degrees" class="degrees">Setor convencional: 0°–30°</p></div>
+<div class="illumination"><span class="plate-id">ILUSTRAÇÃO ORIGINAL · SÍMBOLO CULTURAL</span>
+<svg viewBox="0 0 440 300" role="img" aria-labelledby="art-title art-desc"><title id="art-title">Carneiro, símbolo de Áries</title><desc id="art-desc">Ilustração artística do carneiro, não um mapa fiel de estrelas.</desc><defs>
+<symbol id="z-ram" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+<path d="M180 258q-42-40-40-105 2-81 81-89 80 8 79 89 2 65-40 105M192 116q29-23 57 0M193 184q28 18 55 0M220 184v45"/>
+<path d="M179 128q-59 5-87-37-20-48 25-69 42-18 69 17 22 28 1 57-19 27-46 11-17-10-11-29"/>
+<path d="M261 128q59 5 87-37 20-48-25-69-42-18-69 17-22 28-1 57 19 27 46 11 17-10 11-29"/>
+<circle cx="193" cy="145" r="5"/><circle cx="247" cy="145" r="5"/></g></symbol>
+<symbol id="z-bull" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+<path d="M144 119Q99 110 78 55q-8-32 7-41 24 61 104 69M296 119q45-9 66-64 8-32-7-41-24 61-104 69"/>
+<path d="M137 106q83-61 166 0l18 109q-15 52-101 58-86-6-101-58zM175 185q45-24 90 0M187 226q32 16 66 0"/>
+<circle cx="169" cy="157" r="7"/><circle cx="271" cy="157" r="7"/>
+<ellipse cx="165" cy="216" rx="14" ry="10"/><ellipse cx="275" cy="216" rx="14" ry="10"/></g></symbol>
+<symbol id="z-twins" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round">
+<circle cx="155" cy="79" r="33"/><circle cx="285" cy="79" r="33"/>
+<path d="M155 115v106m-50-69 50-23 50 23m-50 69-37 59m37-59 38 59M285 115v106m-50-69 50-23 50 23m-50 69-37 59m37-59 38 59M195 146l50 0M219 35v29"/>
+<path d="M125 49q30-20 57 1m72-1q30-22 58 1"/></g></symbol>
+<symbol id="z-crab" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="220" cy="164" rx="91" ry="62"/><path d="M148 127l-42-33m41 62-64 0m64 34-52 35m197-98 42-33m-41 62 64 0m-64 34 52 35M193 117l-12-40m63 40 12-40"/>
+<circle cx="181" cy="74" r="12"/><circle cx="256" cy="74" r="12"/>
+<path d="M105 94q-38 5-55-41 41-23 65 8l-9 35M335 94q38 5 55-41-41-23-65 8l9 35"/>
+<path d="M174 175q46 22 92 0"/></g></symbol>
+<symbol id="z-lion" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round">
+<path d="M220 25q36 14 52 5 28 39 55 34 8 47 34 61-10 41 8 68-40 30-45 60-49 4-65 25-50-20-79 0-32-19-65-25-7-34-42-60 19-31 6-68 29-15 34-61 28 5 53-34 33 7 54-5z"/>
+<path d="M166 106q53-48 108 0l17 99q-36 51-71 51-35 0-71-51zM168 150q18-10 38 0m28 0q18-10 38 0M206 189l14 15 14-15M220 205v20m-21-1 21 9 21-9"/>
+<circle cx="185" cy="153" r="5"/><circle cx="254" cy="153" r="5"/></g></symbol>
+<symbol id="z-maiden" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round">
+<circle cx="197" cy="70" r="36"/><path d="M164 49q29-48 70 0M197 111v107m0-88-59 72m59-72 72 45M197 218l-42 58m42-58 53 58"/>
+<path d="M271 265V67m0 60q-40-50-75-28 22 40 75 28zm0-27q46-50 79-27-24 44-79 27zm0 67q-42-50-80-29 27 46 80 29zm0-26q47-50 78-26-27 44-78 26"/>
+<path d="M168 92q-39 40-34 75"/></g></symbol>
+<symbol id="z-scales" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+<path d="M220 52v194M130 257h180M165 242h110M113 111h214M220 51l-21-22m21 22 21-22"/>
+<path d="m128 112-56 90 55 0-55 0q-6 28 54 38 59-10 54-38h-108l56-90M312 112l-56 90h108l-52-90m-56 90q-6 28 55 38 60-10 53-38"/>
+<circle cx="220" cy="111" r="13"/></g></symbol>
+<symbol id="z-scorpion" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+<path d="M220 101q-65 5-62 69 13 72 62 77 49-5 62-77 3-64-62-69zM220 101V49m-34 73-58-46m-17 45 43 26m-43 43 46-21m172-93-58 46m72-1-43 26m43 43-46-21"/>
+<path d="M121 76q-55-40-73 10 4 48 58 51l15-61M319 76q55-40 73 10-4 48-58 51l-15-61"/>
+<path d="M220 48q-10-55 41-48 56 24 27 80l-25 16m25-16 25-12"/>
+<path d="M191 158h58m-61 34h64M213 220h14"/></g></symbol>
+<symbol id="z-archer" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+<path d="M136 40q-73 108 0 220M136 40q85 109 0 220M136 40v220"/>
+<path d="M101 168h236m-20-20 20 20-20 20M136 168l151-111m-25 2 25-2-5 28"/>
+<circle cx="217" cy="139" r="12"/><path d="M220 150l-20 65m20-66 48 23m-68 43-31 48m31-48 37 48"/></g></symbol>
+<symbol id="z-seagoat" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+<path d="M135 122q-37-37-14-81 43-35 69 2 19 28-4 54m71 25q37-37 14-81-43-35-69 2-19 28 4 54"/>
+<path d="M162 118q54-33 104 0l9 74q-29 34-53 41-48-2-68-40zM173 147q48 19 95 0"/>
+<path d="M221 231q2 54 49 46 62-10 79-67-54 23-73-14m73 14q-4 52-27 69"/>
+<circle cx="187" cy="145" r="5"/><circle cx="245" cy="145" r="5"/><path d="M165 188q58 30 108 0"/></g></symbol>
+<symbol id="z-waterbearer" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round">
+<circle cx="168" cy="59" r="32"/><path d="M168 92v101m0-69-51 48m51-48 58 18m-58 51-35 77m35-77 50 77"/>
+<path d="M222 116h80l13 85h-91zM222 116l15-37h46l19 37M235 139h67"/>
+<path d="M278 208q12 17 37 21 26 2 43 24m-91-27q-35 6-49 28m83-13q-41 1-58 33" stroke-dasharray="9 10"/></g></symbol>
+<symbol id="z-fish" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round">
+<path d="M79 102q77-83 158 0-81 84-158 0zM81 102l-42-39v78zM236 196q77-82 156 0-79 83-156 0zM392 196l41-39v78z"/>
+<circle cx="195" cy="101" r="6"/><circle cx="350" cy="196" r="6"/>
+<path d="M145 67q7 35 0 70m157 22q7 35 0 72M223 108q53-20 24 35-19 38 22 42" stroke-dasharray="9 9"/>
+<path d="M105 103h70m104 93h72"/></g></symbol>
+</defs><use id="sign-use" href="#z-ram"></use></svg><span class="plate-id end">DESENHO AUTORAL · SEM POSIÇÕES ASTRAIS</span></div>
+<div class="feature-body"><p id="sign-cultural" class="cultural"></p>
+<div class="fact-pair"><div class="fact"><b>Nome astronômico oficial</b><p id="sign-astronomy"></p></div><div class="fact warning"><b>Associações tradicionais, não científicas</b><p id="sign-tradition"></p></div></div>
+<p class="source">Para conferir as constelações reconhecidas: <a id="sign-reference" target="_blank" rel="noopener noreferrer" href="https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx">União Astronômica Internacional</a>.</p>
+<div class="actions"><button type="button" id="previous">← Anterior</button><button type="button" id="next">Próximo signo →</button></div>
+</div></section></div>
+<div class="exploration">
+<section class="wheel-card" aria-labelledby="wheel-heading"><h2 id="wheel-heading">Uma roda, doze setores</h2><p>A roda representa a divisão convencional da eclíptica, com Áries começando em 0° de longitude tropical. Não é uma simulação das posições atuais do Sol ou das estrelas.</p><div class="wheel-grid"><svg class="zodiac-wheel" viewBox="0 0 480 480" role="img" aria-labelledby="wheel-title wheel-desc">
+<title id="wheel-title">Roda de doze signos convencionais</title>
+<desc id="wheel-desc">Círculo dividido em doze setores iguais de 30 graus, com símbolos tradicionais. Esta representação não indica limites de constelações astronômicas.</desc>
+<circle cx="240" cy="240" r="226" fill="#1c243b" stroke="#b89b6d" stroke-width="2"/>
+<circle cx="240" cy="240" r="214" fill="none" stroke="#a8c3d1" stroke-width="1"/>
+<path id="wheel-selected" d="" fill="#ca9e5930" stroke="#e8cc89" stroke-width="3"/>
+<circle cx="240" cy="240" r="156" fill="#252d4a" stroke="#978c9b" stroke-width="2"/>
+<g stroke="#c8af86" stroke-width="1.5" opacity=".8"><line x1="240.00" y1="84.00" x2="240.00" y2="25.00"/><line x1="318.00" y1="104.90" x2="347.50" y2="53.80"/><line x1="375.10" y1="162.00" x2="426.20" y2="132.50"/><line x1="396.00" y1="240.00" x2="455.00" y2="240.00"/><line x1="375.10" y1="318.00" x2="426.20" y2="347.50"/><line x1="318.00" y1="375.10" x2="347.50" y2="426.20"/><line x1="240.00" y1="396.00" x2="240.00" y2="455.00"/><line x1="162.00" y1="375.10" x2="132.50" y2="426.20"/><line x1="104.90" y1="318.00" x2="53.80" y2="347.50"/><line x1="84.00" y1="240.00" x2="25.00" y2="240.00"/><line x1="104.90" y1="162.00" x2="53.80" y2="132.50"/><line x1="162.00" y1="104.90" x2="132.50" y2="53.80"/></g><text x="287.9" y="66.3" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♈</text><text x="370.8" y="114.2" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♉</text><text x="418.7" y="197.1" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♊</text><text x="418.7" y="292.9" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♋</text><text x="370.8" y="375.8" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♌</text><text x="287.9" y="423.7" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♍</text><text x="192.1" y="423.7" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♎</text><text x="109.2" y="375.8" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♏</text><text x="61.3" y="292.9" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♐</text><text x="61.3" y="197.1" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♑</text><text x="109.2" y="114.2" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♒</text><text x="192.1" y="66.3" font-size="29" text-anchor="middle" fill="#f6e2ab" font-family="serif">♓</text>
+<circle cx="240" cy="240" r="114" fill="none" stroke="#997d9d" stroke-width="2" stroke-dasharray="5 11"/>
+<circle cx="240" cy="240" r="95" fill="#283351" stroke="#e3c38c" stroke-width="2"/>
+<text id="wheel-glyph" x="240" y="240" fill="#f7dc9b" font-size="64" text-anchor="middle" dominant-baseline="middle">♈</text>
+<text id="wheel-name" x="240" y="283" fill="#e8ece8" font-size="18" text-anchor="middle" font-family="system-ui,sans-serif">Áries</text>
+<text x="240" y="348" fill="#c0c8d5" font-size="12" text-anchor="middle" font-family="system-ui,sans-serif">12 setores iguais · modelo convencional</text>
+</svg>
+<div class="wheel-note"><b>Observe o que muda</b><span id="wheel-note">Áries corresponde ao setor convencional entre 0° e 30° de longitude eclíptica tropical. Um setor não coincide necessariamente com uma constelação oficial.</span></div></div>
+</section>
+<section class="comparator" aria-labelledby="compare-heading"><h2 id="compare-heading">Doze signos × céu astronômico</h2><p>Alterne os modelos para comparar uma convenção geométrica com regiões oficiais do céu. As representações esquemáticas não servem como efemérides.</p>
+<div class="compare-buttons" id="compare-buttons" role="group" aria-label="Selecionar modelo para comparar"></div>
+<div id="compare-panel" class="compare-panel" aria-live="polite"></div>
+<div class="band-scroll"><div class="band" id="compare-band" role="img" aria-label="Comparação esquemática de divisões zodiacais"></div></div>
+<p class="diagram-caution" id="compare-caution">A ilustração não indica datas de nascimento nem posições exatas das constelações. Para limites oficiais, consulte a IAU.</p>
+</section></div>
+<section class="chronicle" aria-labelledby="history-heading"><h2 id="history-heading">Quatro marcos na história das ideias</h2><p>Como uma representação cultural do céu se relacionou com métodos astronômicos? Explore a cronologia e consulte as fontes.</p>
+<div class="history-list" id="history-list" role="group" aria-label="Quatro marcos históricos"></div>
+<div class="history-desc"><b id="history-title">Doze setores ganham uso como referência</b><p id="history-detail"></p><a id="history-source" href="https://www.iranicaonline.org/articles/zodiac/" target="_blank" rel="noopener noreferrer">Ler referência histórica</a></div>
+</section>
+<section class="quiz" aria-labelledby="quiz-heading"><h2 id="quiz-heading">Caderno de verificação</h2><p>Cinco questões com explicação para diferenciar símbolos tradicionais, medidas angulares e regiões astronômicas, sem atribuir características pessoais aos estudantes.</p><div class="score" id="score" role="status" aria-live="polite">0 de 5 respondidas · 0 acertos</div>
+<div id="questions" class="questions"></div><button class="reset" type="button" id="reset-quiz">Reiniciar questões</button>
+</section>
+<p class="note">Os doze nomes e ícones são representações culturais históricas, não avaliações de personalidade. O diagrama de constelações é deliberadamente ilustrativo: para localizar corpos no céu use coordenadas astronômicas e fontes atuais. Todas as ilustrações são SVG originais; não há bibliotecas, imagens remotas, dados pessoais, notas ou persistência Moodle nesta demonstração.</p>
+<p id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+</main>
+<script>
+"use strict";
+const model={"signs":[{"id":"aries","name":"Áries","latin":"Aries","glyph":"♈","figure":"Carneiro","element":"Fogo","mode":"Cardinal","cultural":"O nome tradicional representa um carneiro, imagem presente em repertórios culturais antigos transmitidos por diferentes sociedades.","astronomy":"A constelação de Aries é uma área da esfera celeste reconhecida pela IAU, não um setor de exatamente 30°.","motif":"ram","index":1,"start":0,"end":30,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"taurus","name":"Touro","latin":"Taurus","glyph":"♉","figure":"Touro","element":"Terra","mode":"Fixo","cultural":"A figura de um touro aparece em tradições do céu e na iconografia de diferentes culturas; o nome latino é Taurus.","astronomy":"A constelação de Taurus contém muitas estrelas e sua área oficial não tem tamanho igual à das demais constelações zodiacais.","motif":"bull","index":2,"start":30,"end":60,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"gemini","name":"Gêmeos","latin":"Gemini","glyph":"♊","figure":"Gêmeos","element":"Ar","mode":"Mutável","cultural":"Os gêmeos formam a imagem histórica associada a Gemini, interpretada em tradições e mitos de modos diferentes.","astronomy":"Gemini é uma das constelações oficiais, com limites definidos pela astronomia e não pelos meses dos horóscopos.","motif":"twins","index":3,"start":60,"end":90,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"cancer","name":"Câncer","latin":"Cancer","glyph":"♋","figure":"Caranguejo","element":"Água","mode":"Cardinal","cultural":"O símbolo cultural de Cancer é um caranguejo; sua representação como figura celeste pertence à história da iconografia.","astronomy":"Cancer é uma região astronômica definida por limites oficiais; a extensão da eclíptica dentro dela não é um signo de 30°.","motif":"crab","index":4,"start":90,"end":120,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"leo","name":"Leão","latin":"Leo","glyph":"♌","figure":"Leão","element":"Fogo","mode":"Fixo","cultural":"O leão é a figura tradicional associada ao nome latino Leo; a imagem aparece em cartografias e relatos clássicos.","astronomy":"A constelação Leo é observável e cartografável, mas isso não estabelece relação com temperamento humano.","motif":"lion","index":5,"start":120,"end":150,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"virgo","name":"Virgem","latin":"Virgo","glyph":"♍","figure":"Figura feminina","element":"Terra","mode":"Mutável","cultural":"Virgo foi representada tradicionalmente como uma figura feminina, às vezes associada a uma espiga ou à colheita.","astronomy":"A região oficial da constelação Virgo possui limites astronômicos que não seguem divisões exatas de 30°.","motif":"maiden","index":6,"start":150,"end":180,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"libra","name":"Libra","latin":"Libra","glyph":"♎","figure":"Balança","element":"Ar","mode":"Cardinal","cultural":"O nome latino significa balança; essa imagem passou a representar o signo em tradições zodiacais.","astronomy":"Libra é uma constelação oficial com limites próprios; o símbolo não demonstra equilíbrio de personalidade.","motif":"scales","index":7,"start":180,"end":210,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"scorpio","name":"Escorpião","latin":"Scorpius","glyph":"♏","figure":"Escorpião","element":"Água","mode":"Fixo","cultural":"A figura do escorpião aparece em tradições muito antigas; a constelação astronômica usa o nome latino Scorpius.","astronomy":"A eclíptica atravessa Scorpius e também Ophiuchus, mostrando por que a contagem astronômica não coincide com doze signos.","motif":"scorpion","index":8,"start":210,"end":240,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"sagittarius","name":"Sagitário","latin":"Sagittarius","glyph":"♐","figure":"Arqueiro","element":"Fogo","mode":"Mutável","cultural":"O arqueiro é uma representação difundida em cartografia zodiacal e aparece com variações culturais.","astronomy":"A região de Sagittarius tem suas próprias estrelas e limites; não equivale a um intervalo uniforme de 30°.","motif":"archer","index":9,"start":240,"end":270,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"capricorn","name":"Capricórnio","latin":"Capricornus","glyph":"♑","figure":"Cabra marinha","element":"Terra","mode":"Cardinal","cultural":"Capricornus é associado historicamente a uma figura híbrida de cabra e peixe, uma imagem simbólica, não uma espécie real.","astronomy":"A constelação oficial Capricornus possui fronteiras astronômicas diferentes do setor chamado Capricórnio.","motif":"seagoat","index":10,"start":270,"end":300,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"aquarius","name":"Aquário","latin":"Aquarius","glyph":"♒","figure":"Portador de água","element":"Ar","mode":"Fixo","cultural":"Aquarius é representado tradicionalmente por uma figura que verte água, com narrativas que variaram ao longo da história.","astronomy":"A constelação Aquarius pode ser localizada por observações, mas isso não valida previsões ligadas ao signo.","motif":"waterbearer","index":11,"start":300,"end":330,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"pisces","name":"Peixes","latin":"Pisces","glyph":"♓","figure":"Dois peixes","element":"Água","mode":"Mutável","cultural":"A representação dos dois peixes está ligada à iconografia zodiacal clássica e a diferentes narrativas tradicionais.","astronomy":"Pisces é uma região oficial do céu; sua extensão na eclíptica não é uma divisão fixa de 30°.","motif":"fish","index":12,"start":330,"end":360,"url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"}],"history":[{"id":"babylon","date":"c. século V a.C.","title":"Doze setores ganham uso como referência","detail":"Em tradições astronômicas babilônicas, o zodíaco de doze partes iguais passou a servir de referência para posições ao longo da eclíptica. Dividir o círculo é uma convenção útil para calcular e registrar, não uma prova de efeitos sobre pessoas.","url":"https://www.iranicaonline.org/articles/zodiac/"},{"id":"hellenic","date":"séculos II a.C.–II d.C.","title":"Circulação e interpretação helenística","detail":"Conhecimentos babilônicos, egípcios e gregos foram combinados em tradições helenísticas que ampliaram a interpretação horoscópica. A documentação histórica comprova a existência das práticas, não suas previsões.","url":"https://iep.utm.edu/hellenistic-astrology/"},{"id":"iau-list","date":"1922","title":"A IAU reconhece 88 constelações","detail":"A União Astronômica Internacional acordou uma lista de 88 constelações. São regiões reconhecidas da esfera celeste, não doze faixas astrológicas.","url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"},{"id":"iau-limits","date":"1928–1930","title":"Limites científicos das constelações","detail":"A IAU aprovou os limites oficiais em 1928 e os publicou em 1930, delimitando áreas com extensões diferentes. A eclíptica atravessa também Ophiuchus (Ofiúco).","url":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx"}],"quiz":[{"id":"q-sectors","question":"No zodíaco convencional de doze signos, qual é a medida angular de cada signo?","options":["30 graus","30 dias obrigatórios","A extensão real de sua constelação"],"right":0,"why":"O círculo de 360° dividido em doze partes iguais produz 30° por signo. Essa divisão é convencional."},{"id":"q-ophiuchus","question":"Por que Ofiúco aparece em estudos astronômicos do zodíaco?","options":["Porque a IAU mudou obrigatoriamente todos os horóscopos","Porque a eclíptica atravessa sua constelação","Porque existe uma décima terceira personalidade cientificamente comprovada"],"right":1,"why":"Ofiúco é uma das áreas oficialmente reconhecidas atravessadas pela trajetória aparente do Sol. Isso não cria um novo signo obrigatório."},{"id":"q-symbol","question":"O que uma ilustração histórica de Leão demonstra?","options":["Que todas as pessoas desse signo têm a mesma personalidade","Que uma figura de leão foi usada como símbolo cultural","Que estrelas de Leo estão todas à mesma distância"],"right":1,"why":"A imagem documenta convenções e repertórios simbólicos; ela não comprova influência sobre personalidade."},{"id":"q-iau","question":"Qual é o critério atual para um objeto celeste pertencer a uma constelação oficial?","options":["Nascer sob um mês específico","Seu alinhamento com um signo convencional","Estar dentro dos limites de coordenadas definidos para aquela região"],"right":2,"why":"A IAU usa regiões com fronteiras definidas por coordenadas; desenhos de estrelas são ilustrações históricas."},{"id":"q-evidence","question":"Qual conclusão respeita as evidências científicas?","options":["Cálculos astronômicos existem, mas não validam previsões astrológicas sobre destino","A repetição de horóscopos prova que eles preveem eventos","As constelações são blocos físicos de estrelas no mesmo plano"],"right":0,"why":"A astronomia usa observações e modelos testáveis; afirmações astrológicas sobre personalidade e destino não têm validação científica confiável."}],"sources":{"iau":"https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx","faq":"https://www.iau.org/IAU/IAU/Astronomy-FAQs/FAQs.aspx","nasa":"https://nightsky.jpl.nasa.gov/media/documents/resources/0SolSysManual.pdf","history":"https://iep.utm.edu/hellenistic-astrology/","zodiac":"https://www.iranicaonline.org/articles/zodiac/"}};
+const signs=model.signs,history=model.history,quiz=model.quiz;
+const constellations=[
+{name:"Áries",abbr:"Ari",size:2},{name:"Touro",abbr:"Tau",size:4},
+{name:"Gêmeos",abbr:"Gem",size:2.8},{name:"Câncer",abbr:"Cnc",size:1.5},
+{name:"Leão",abbr:"Leo",size:3.4},{name:"Virgem",abbr:"Vir",size:5.2},
+{name:"Libra",abbr:"Lib",size:1.9},{name:"Escorpião",abbr:"Sco",size:1.5},
+{name:"Ofiúco",abbr:"Oph",size:2.6,ophiuchus:true},{name:"Sagitário",abbr:"Sgr",size:3.5},
+{name:"Capricórnio",abbr:"Cap",size:2},{name:"Aquário",abbr:"Aqr",size:4},
+{name:"Peixes",abbr:"Psc",size:4.1}
+];
+const comparisons=[
+{id:"signs",label:"12 × 30°",title:"Setores iguais por convenção",description:"O zodíaco de doze signos é uma divisão geométrica com exatamente 30° por setor. Seus nomes correspondem a figuras históricas, mas a medida angular não é a extensão real da constelação de mesmo nome.",caution:"Esta faixa é angularmente uniforme por definição; não indica as posições atuais do Sol nas constelações."},
+{id:"iau",label:"13 constelações",title:"Constelações: áreas desiguais e Ofiúco",description:"A eclíptica atravessa treze constelações reconhecidas pela IAU, incluindo Ofiúco (Ophiuchus). As áreas têm limites e extensões diferentes e não equivalem a doze setores iguais.",caution:"As larguras variadas abaixo são apenas ilustrativas, NÃO representam extensões reais, limites de coordenadas nem tempo de permanência do Sol."},
+{id:"precession",label:"Precessão",title:"Duas referências não permanecem alinhadas",description:"O eixo de rotação terrestre muda lentamente de orientação, em um ciclo de cerca de 26 mil anos. A precessão altera a relação dos equinócios com estrelas de fundo, mas não muda os limites convencionais de 30° dos signos tropicais.",caution:"A faixa abaixo mostra a convenção dos signos. Nenhum deslocamento angular real foi calculado nesta atividade."}
+];
+const dom=id=>document.getElementById(id);
+const state={index:0,seen:new Set([signs[0].id]),comparison:"signs",history:0,answers:new Map()};
+function renderSigns(){
+ const host=dom("sign-list");host.replaceChildren();
+ signs.forEach((sign,i)=>{
+  const b=document.createElement("button");b.type="button";b.className="sign-button";
+  b.setAttribute("aria-current",String(i===state.index));b.setAttribute("aria-label",sign.name+", setor convencional "+sign.start+" a "+sign.end+" graus");
+  const symbol=document.createElement("span");symbol.className="glyph";symbol.textContent=sign.glyph;symbol.setAttribute("aria-hidden","true");
+  const wrapper=document.createElement("span");
+  const name=document.createElement("span");name.className="sign-name";name.textContent=sign.name;
+  const degrees=document.createElement("span");degrees.className="range";degrees.textContent=sign.start+"°–"+sign.end+"°";
+  wrapper.append(name,degrees);b.append(symbol,wrapper);
+  b.addEventListener("click",()=>selectSign(i));
+  b.addEventListener("keydown",event=>{
+    let target=null;
+    if(event.key==="ArrowRight"||event.key==="ArrowDown")target=Math.min(signs.length-1,i+1);
+    if(event.key==="ArrowLeft"||event.key==="ArrowUp")target=Math.max(0,i-1);
+    if(event.key==="Home")target=0;
+    if(event.key==="End")target=signs.length-1;
+    if(target!==null){event.preventDefault();selectSign(target);const buttons=host.querySelectorAll(".sign-button");if(buttons[target])buttons[target].focus();}
+  });
+  host.append(b);
+ });
+}
+function polar(r,degree){
+ const theta=(degree-90)*Math.PI/180;
+ return [(240+r*Math.cos(theta)).toFixed(2),(240+r*Math.sin(theta)).toFixed(2)];
+}
+function arc(start){
+ const a=polar(213,start),b=polar(213,start+30),c=polar(156,start+30),d=polar(156,start);
+ return "M"+a[0]+" "+a[1]+" A213 213 0 0 1 "+b[0]+" "+b[1]+" L"+c[0]+" "+c[1]+" A156 156 0 0 0 "+d[0]+" "+d[1]+" Z";
+}
+function selectSign(i){
+ if(i<0||i>=signs.length)return;
+ state.index=i;const sign=signs[i];state.seen.add(sign.id);
+ const values={
+  "sign-index":"PRANCHA "+String(i+1).padStart(2,"0")+" / 12",
+  "sign-figure":sign.figure,"sign-title":sign.name,"sign-degrees":"Setor convencional: "+sign.start+"°–"+sign.end+"°",
+  "sign-cultural":sign.cultural,"sign-astronomy":sign.astronomy+" Nome latino: "+sign.latin+".",
+  "sign-tradition":"Elemento "+sign.element+" e modalidade "+sign.mode+" são classificações astrológicas tradicionais, não características cientificamente demonstradas das pessoas.",
+  "art-title":"Ilustração original: "+sign.figure,
+  "art-desc":"Desenho autoral do símbolo cultural de "+sign.name+"; não reproduz a posição real de estrelas.",
+  "visited-label":state.seen.size+" de "+signs.length+" figuras exploradas",
+  "wheel-glyph":sign.glyph,"wheel-name":sign.name,
+  "wheel-note":sign.name+" ocupa por convenção "+sign.start+"°–"+sign.end+"° de longitude tropical. A constelação "+sign.latin+" possui limites astronômicos próprios."
+ };
+ for(const [id,value] of Object.entries(values))dom(id).textContent=value;
+ dom("sign-use").setAttribute("href","#z-"+sign.motif);
+ dom("sign-reference").href=sign.url;
+ dom("wheel-selected").setAttribute("d",arc(sign.start));
+ dom("wheel-desc").textContent="Roda dividida em doze setores iguais de 30 graus. Selecionado: "+sign.name+" ("+sign.start+" a "+sign.end+" graus). Não representa posições reais das constelações.";
+ dom("previous").disabled=i===0;dom("next").disabled=i===signs.length-1;
+ dom("meter").setAttribute("aria-valuenow",String(state.seen.size));
+ dom("meter-fill").style.width=100*state.seen.size/signs.length+"%";
+ renderSigns();renderBand();
+ dom("announcement").textContent="Signo "+(i+1)+" de doze: "+sign.name+". "+sign.start+" a "+sign.end+" graus.";
+}
+dom("previous").addEventListener("click",()=>selectSign(state.index-1));
+dom("next").addEventListener("click",()=>selectSign(state.index+1));
+function renderCompareButtons(){
+ const host=dom("compare-buttons");host.replaceChildren();
+ comparisons.forEach(view=>{
+  const b=document.createElement("button");b.type="button";b.textContent=view.label;
+  b.setAttribute("aria-pressed",String(state.comparison===view.id));
+  b.addEventListener("click",()=>setComparison(view.id));host.append(b);
+ });
+}
+function renderBand(){
+ const host=dom("compare-band");host.replaceChildren();
+ const astronomical=state.comparison==="iau";
+ if(astronomical){
+  constellations.forEach(c=>{
+   const cell=document.createElement("div");cell.className="band-item";
+   cell.style.flexGrow=String(c.size);cell.classList.toggle("ophiuchus",!!c.ophiuchus);
+   const title=document.createElement("span");title.className="symbol";title.textContent=c.abbr;
+   const label=document.createElement("span");label.className="name";label.textContent=c.name;
+   cell.append(title,label);host.append(cell);
+  });
+ }else{
+  signs.forEach((sign,i)=>{
+   const cell=document.createElement("div");cell.className="band-item";
+   cell.classList.toggle("active",i===state.index);
+   const icon=document.createElement("span");icon.className="symbol";icon.textContent=sign.glyph;
+   const degree=document.createElement("span");degree.className="range";degree.textContent="30°";
+   cell.append(icon,degree);host.append(cell);
+  });
+ }
+ host.setAttribute("aria-label",astronomical?"Treze constelações astronômicas atravessadas pela eclíptica, incluindo Ofiúco, com larguras simbólicas sem escala":"Doze signos tradicionais iguais, cada um com trinta graus");
+}
+function setComparison(id){
+ const view=comparisons.find(x=>x.id===id);if(!view)return;
+ state.comparison=id;renderCompareButtons();
+ const host=dom("compare-panel");host.replaceChildren();
+ const title=document.createElement("b");title.textContent=view.title;
+ const description=document.createElement("span");description.textContent=view.description;host.append(title,description);
+ dom("compare-caution").textContent=view.caution;renderBand();
+ dom("announcement").textContent="Comparação selecionada: "+view.label+". "+view.title;
+}
+function renderHistory(){
+ const host=dom("history-list");host.replaceChildren();
+ history.forEach((item,i)=>{
+  const b=document.createElement("button");b.type="button";b.className="history-button";
+  b.setAttribute("aria-pressed",String(i===state.history));
+  const date=document.createElement("span");date.className="when";date.textContent=item.date;
+  const title=document.createElement("b");title.textContent=item.title;
+  b.append(date,title);b.addEventListener("click",()=>chooseHistory(i));host.append(b);
+ });
+}
+function chooseHistory(i){
+ if(i<0||i>=history.length)return;
+ state.history=i;const h=history[i];
+ dom("history-title").textContent=h.title;dom("history-detail").textContent=h.detail;
+ dom("history-source").href=h.url;renderHistory();
+}
+function renderQuiz(){
+ const host=dom("questions");host.replaceChildren();
+ quiz.forEach((q,index)=>{
+  const group=document.createElement("fieldset");group.className="question";
+  const title=document.createElement("legend");title.textContent=(index+1)+". "+q.question;
+  const choices=document.createElement("div");choices.className="options";
+  const feedback=document.createElement("p");feedback.className="feedback";feedback.setAttribute("aria-live","polite");feedback.textContent="Escolha uma alternativa.";
+  const buttons=q.options.map((answer,i)=>{
+   const b=document.createElement("button");b.type="button";b.className="option";b.textContent=answer;b.setAttribute("aria-pressed",String(state.answers.get(index)===i));
+   b.addEventListener("click",()=>{
+    state.answers.set(index,i);buttons.forEach((other,j)=>other.setAttribute("aria-pressed",String(i===j)));
+    const correct=i===q.right;feedback.textContent=(correct?"Correto. ":"Reveja. ")+q.why;feedback.classList.toggle("good",correct);
+    updateScore();
+   });
+   choices.append(b);return b;
+  });
+  group.append(title,choices,feedback);host.append(group);
+ });
+ updateScore();
+}
+function updateScore(){
+ let correct=0;for(const [index,answer] of state.answers)if(quiz[index].right===answer)correct++;
+ dom("score").textContent=state.answers.size+" de "+quiz.length+" respondidas · "+correct+(correct===1?" acerto":" acertos");
+}
+dom("reset-quiz").addEventListener("click",()=>{state.answers.clear();renderQuiz();dom("announcement").textContent="Questões reiniciadas.";});
+dom("reset-all").addEventListener("click",()=>{
+ state.index=0;state.seen.clear();state.seen.add(signs[0].id);state.comparison="signs";state.history=0;state.answers.clear();
+ selectSign(0);setComparison("signs");chooseHistory(0);renderQuiz();
+ dom("announcement").textContent="Exploração reiniciada em Áries.";
+});
+selectSign(0);setComparison("signs");chooseHistory(0);renderQuiz();
+</script>
+</body></html>
