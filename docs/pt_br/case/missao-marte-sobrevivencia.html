@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>Missão Marte: Sobrevivência - Estudo de caso interativo</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1420;--surface:#172331;--surface2:#1d2d3a;--text:#f4f5ee;--muted:#bec9d1;--line:#3c5060;--accent:#ffb17e;--good:#9fe6c2;--warning:#ffd394;--bad:#ffaaa4;--focus:#ffdc78}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.56 system-ui,-apple-system,"Segoe UI",sans-serif}
+button{font:inherit;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+[hidden]{display:none!important}
+.shell{max-width:1200px;padding:clamp(12px,2.8vw,30px);margin:auto}
+.hero{background:#182633;border:1px solid var(--line);border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1.05fr .95fr}
+.hero-copy{padding:clamp(23px,4vw,46px);display:flex;flex-direction:column;justify-content:center}
+.overline{color:var(--accent);font-size:.76rem;font-weight:850;text-transform:uppercase;letter-spacing:.14em;margin:0 0 17px}
+h1,h2{font-family:Georgia,"Times New Roman",serif;line-height:1.1;letter-spacing:-.025em;font-weight:500}
+h1{font-size:clamp(2.7rem,5.2vw,4.8rem);margin:0 0 20px}
+h2{font-size:clamp(1.75rem,3vw,2.5rem);margin:0 0 12px}
+h3{margin:0 0 10px;font-size:1.07rem}
+.hero p:not(.overline){color:var(--muted);margin:0;max-width:52ch}
+.tagline{display:flex;gap:8px;flex-wrap:wrap;margin-top:23px}
+.tagline span{border:1px solid #66798a;padding:6px 11px;border-radius:30px;color:#f3d8be;font-size:.77rem;font-weight:750}
+.hero-art{background:#111e30;display:grid;place-items:center;min-height:245px}
+.hero-art svg{width:100%;height:100%;display:block}
+.notice{font-size:.84rem;color:var(--muted);margin:17px 4px 25px}
+.mission-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(275px,.75fr);gap:19px;align-items:start}
+.panel,.console{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:clamp(20px,3vw,32px)}
+.console{position:sticky;top:14px}
+.minor{color:var(--accent);text-transform:uppercase;letter-spacing:.11em;font-size:.74rem;font-weight:850;margin:0 0 10px}
+.lead{color:var(--muted);max-width:68ch;margin:0 0 22px}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap;margin-bottom:13px}
+.pill{background:#263d4a;color:#eac89f;border:1px solid #53646c;padding:5px 10px;border-radius:30px;font-size:.79rem;font-weight:800}
+.steps{display:flex;gap:7px;margin:16px 0 25px;list-style:none;padding:0}
+.steps li{flex:1;min-width:0;height:7px;background:#3a4e5a;border-radius:10px}
+.steps li.done{background:#7acfae}.steps li.current{background:#ffb17e}
+.options{display:grid;gap:12px;margin:19px 0 0}
+.option{width:100%;background:var(--surface2);border:1px solid #516477;color:var(--text);border-radius:16px;text-align:left;padding:17px 19px;display:grid;gap:8px}
+.option:not(:disabled):hover{border-color:var(--accent);background:#293b47}
+.option-title{font-weight:850;font-size:1.03rem}
+.option-detail{font-size:.89rem;color:var(--muted)}
+.deltas{display:flex;gap:7px;flex-wrap:wrap}
+.delta{font-size:.75rem;padding:4px 9px;background:#1a2935;border:1px solid #556c78;border-radius:20px;font-variant-numeric:tabular-nums}
+.delta.plus{color:var(--good)}.delta.minus{color:var(--bad)}
+button.primary,button.secondary{border-radius:11px;min-height:47px;padding:10px 17px;font-weight:800}
+button.primary{background:var(--accent);border:1px solid var(--accent);color:#24202a}
+button.secondary{background:transparent;border:1px solid #a3b4c2;color:var(--text)}
+button.primary:not(:disabled):hover{background:#ffd09d}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.feedback{border-left:4px solid var(--accent);padding:16px 18px;background:#293845;border-radius:0 12px 12px 0}
+.feedback p{margin:9px 0}.feedback h3{margin:0 0 6px}
+.resources{display:grid;gap:21px;margin-top:17px}
+.resource{display:grid;gap:8px}
+.resource-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.resource-head span:first-child{font-weight:800}
+.resource-head strong{font-size:1.27rem;font-variant-numeric:tabular-nums}
+.resource small,.fine{color:var(--muted);font-size:.79rem}
+.track{background:#405160;height:11px;border-radius:25px;overflow:hidden}
+.fill{height:100%;background:var(--good);width:0%;transition:width .3s ease}
+.fill.warn{background:var(--warning)}.fill.low{background:var(--bad)}
+.threshold{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#1c303d;margin-top:21px;font-size:.79rem;color:var(--muted)}
+.threshold strong{display:block;color:var(--text);margin-bottom:6px}
+.status{font-weight:750;margin:17px 0 0;padding:12px;background:#253642;border-radius:12px;color:var(--text)}
+.log{margin:20px 0 0;padding:0;list-style:none;display:grid;gap:9px}
+.log li{border-left:3px solid #719b9e;padding:5px 0 5px 12px;font-size:.82rem}
+.log strong{display:block;color:#f3d9b9}.log span{color:var(--muted)}
+.report-panel{margin:18px 0 0}
+.ending{border-radius:16px;padding:20px;background:#173a32;border:1px solid #54967b}
+.ending.caution{background:#3b3126;border-color:#b68d60}
+.ending.alert{background:#44292d;border-color:#a36569}
+.ending h3{font-size:1.45rem;line-height:1.25}
+.ending p{margin:9px 0}
+.report-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}
+.mini{padding:13px;background:#1f3040;border:1px solid var(--line);border-radius:12px}
+.mini span{display:block;font-size:.82rem;color:var(--muted)}
+.mini strong{font-size:1.5rem;font-variant-numeric:tabular-nums}
+.report-log{margin:14px 0;padding-left:22px}
+.report-log li{margin:8px 0}
+.confirm{border:1px solid #dfbd7c;background:#332e29;border-radius:12px;margin-top:18px;padding:14px}
+.confirm p{margin:0 0 9px;font-weight:750}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.footer-note{font-size:.8rem;color:var(--muted);margin:25px 4px}
+@media(max-width:910px){.mission-layout{grid-template-columns:1fr}.console{position:static}.hero{grid-template-columns:1fr}.hero-art svg{max-height:270px}}
+@media(max-width:540px){.shell{padding:10px}.panel,.console{padding:17px;border-radius:14px}.hero{border-radius:14px}.option{padding:14px}.report-grid{grid-template-columns:1fr}.actions>button{flex:1 1 auto}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-color-scheme:light){:root{color-scheme:light;--bg:#f2f1ed;--surface:#fffdfa;--surface2:#f2f5f2;--text:#20313c;--muted:#4e5d67;--line:#ced8d7;--accent:#a44923;--good:#20654d;--warning:#a36b25;--bad:#a62f35;--focus:#0646af}.hero,.hero-copy{background:#172837;color:#fff}.hero-copy p:not(.overline){color:#d9e2e6}.tagline span{color:#f9e0c8}.pill{background:#e9f0ed;color:#355347;border-color:#cbd9d3}.steps li{background:#d4d9d6}.steps li.done{background:#398769}.steps li.current{background:#aa572b}.option{border-color:#bfcfcb}.option:not(:disabled):hover{background:#e9efe9}.delta{background:#fff;border-color:#c1ceca}button.primary{color:#fff}button.primary:not(:disabled):hover{background:#8c3919}.feedback{background:#f0e9dc}.track{background:#d5ddd9}.threshold{background:#eff2ef}.status{background:#f2eee5}.log strong{color:#7c471e}.log span{color:var(--muted)}.ending{background:#e6f3eb}.ending.caution{background:#fff0da}.ending.alert{background:#fae4e1}.mini{background:#f0f4f1}.confirm{background:#fff0dd}}
+</style>
+</head>
+<body>
+<main class="shell">
+<section class="hero" aria-labelledby="mission-title">
+ <div class="hero-copy">
+  <p class="overline">Centro de operações · Sol 41 · Simulação didática</p>
+  <h1 id="mission-title">Missão Marte:<br>Sobrevivência</h1>
+  <p>Uma base de pesquisa enfrenta cinco incidentes encadeados. Cada decisão modifica oxigênio, energia e comunicação. O que parece uma boa solução isolada pode se tornar um problema duas etapas depois.</p>
+  <div class="tagline"><span>05 incidentes</span><span>03 sistemas interdependentes</span><span>12–18 minutos</span></div>
+ </div>
+ <div class="hero-art">
+  <svg viewBox="0 0 680 445" role="img" aria-labelledby="mars-title mars-desc" xmlns="http://www.w3.org/2000/svg">
+   <title id="mars-title">Base científica na superfície de Marte</title>
+   <desc id="mars-desc">Ilustração vetorial original de uma base marciana, com dois módulos conectados, antena parabólica, painéis solares, colinas avermelhadas e uma pequena Terra ao fundo. A imagem é decorativa e não contém dados da missão.</desc>
+   <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#14283e"/><stop offset=".8" stop-color="#b25b45"/><stop offset="1" stop-color="#cc815b"/></linearGradient><linearGradient id="hill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ad604b"/><stop offset="1" stop-color="#633b39"/></linearGradient><linearGradient id="dome" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d6e5dd"/><stop offset="1" stop-color="#657d8b"/></linearGradient></defs>
+   <rect width="680" height="445" fill="url(#sky)"/>
+   <circle cx="551" cy="74" r="7" fill="#91d5f0"/><circle cx="550" cy="73" r="2.5" fill="#c3f5c6"/>
+   <circle cx="98" cy="73" r="1.5" fill="#fff3d5"/><circle cx="184" cy="98" r="1" fill="#fff3d5"/><circle cx="435" cy="41" r="1.7" fill="#fff3d5"/>
+   <path d="M0 260 108 208 180 234 281 199 371 228 451 183 550 228 680 190V445H0Z" fill="url(#hill)"/>
+   <path d="M0 308 79 293 198 315 299 280 382 314 504 292 621 310 680 288V445H0Z" fill="#bd7454"/>
+   <path d="M0 354Q157 317 337 360T680 349V445H0Z" fill="#ca855d"/>
+   <path d="M0 405Q175 369 344 405T680 390" fill="none" stroke="#d99b70" stroke-width="4" opacity=".6"/>
+   <ellipse cx="356" cy="351" rx="245" ry="35" fill="#3e3336" opacity=".28"/>
+   <rect x="228" y="292" width="203" height="48" rx="16" fill="#667c84" stroke="#d1e8e1" stroke-width="4"/>
+   <path d="M241 292Q248 206 331 206T420 292Z" fill="url(#dome)" stroke="#e3ece6" stroke-width="5"/>
+   <path d="M269 291Q273 250 305 241" fill="none" stroke="#ffffff" stroke-width="5" opacity=".55"/>
+   <rect x="304" y="270" width="57" height="69" rx="7" fill="#2c4958" stroke="#a7c9d0" stroke-width="3"/>
+   <circle cx="333" cy="299" r="9" fill="#8ccbc1"/>
+   <rect x="425" y="302" width="64" height="17" fill="#8c9f9f"/>
+   <rect x="471" y="267" width="107" height="69" rx="12" fill="#b9c9c3" stroke="#e7e5d5" stroke-width="4"/>
+   <rect x="489" y="283" width="37" height="22" rx="3" fill="#315260"/><rect x="532" y="283" width="28" height="22" rx="3" fill="#315260"/>
+   <path d="M478 336v13m94-13v13" stroke="#344b56" stroke-width="6"/>
+   <path d="M204 330 142 330 128 347M431 324 447 324" fill="none" stroke="#ced1bb" stroke-width="10"/>
+   <g stroke="#b3cddb" stroke-width="4"><path d="M110 340H204L193 306H99Z" fill="#163b65"/><path d="M110 340L99 306M133 340L125 306M157 340L150 306M181 340L176 306"/></g>
+   <g stroke="#9bbdc7" stroke-width="3"><path d="M120 322H193M105 314H197"/></g>
+   <path d="M507 267 505 197" stroke="#d6e6df" stroke-width="7"/>
+   <path d="M462 185Q508 249 553 182Z" fill="#a6c1c3" stroke="#e4ede5" stroke-width="5"/>
+   <path d="M505 211 529 174" stroke="#f7d9aa" stroke-width="5" stroke-linecap="round"/>
+   <circle cx="527" cy="171" r="7" fill="#f7d9aa"/>
+   <path d="M526 171q32 -21 53 1M532 161q44 -36 67 9" fill="none" stroke="#f2d2ab" stroke-width="3" opacity=".6"/>
+   <rect x="265" y="333" width="45" height="13" rx="4" fill="#ebc38d"/>
+   <text x="287" y="342" fill="#3c3b45" font-size="8" text-anchor="middle" font-family="system-ui">ARES-7</text>
+  </svg>
+ </div>
+</section>
+<p class="notice">Todos os eventos, índices de 0 a 100, variações e limites são fictícios e servem ao exercício de decisão. Não representam percentuais reais de oxigênio, autonomia de bateria, intensidade de sinal, dados de engenharia ou protocolos operacionais. Esta demonstração não registra nota ou conclusão oficial no Moodle.</p>
+
+<div class="mission-layout">
+ <section class="panel" aria-labelledby="stage-title">
+  <div class="meta"><p class="minor" id="stage-number">Incidente 01 / 05</p><span class="pill" id="sol">Sol 41</span></div>
+  <ol class="steps" id="steps" aria-label="Progresso dos cinco incidentes"></ol>
+  <div id="stage">
+    <h2 id="stage-title" tabindex="-1">Preparando a simulação</h2>
+    <p class="lead" id="stage-description"></p>
+    <div id="choices" class="options"></div>
+    <section class="feedback" id="consequence" hidden aria-labelledby="consequence-title">
+      <h3 id="consequence-title">Consequência desta decisão</h3>
+      <p id="consequence-text"></p>
+      <p id="learning-text" class="fine"></p>
+    </section>
+    <div class="actions" id="stage-actions">
+      <button type="button" class="secondary" id="undo" disabled>Rever decisão anterior</button>
+      <button type="button" class="primary" id="next" hidden>Continuar</button>
+    </div>
+  </div>
+  <section id="report" class="report-panel" hidden aria-labelledby="report-heading">
+    <h2 id="report-heading" tabindex="-1">Relatório da missão</h2>
+    <div id="ending" class="ending" aria-live="polite"></div>
+    <div id="report-metrics" class="report-grid"></div>
+    <h3>Sequência das suas decisões</h3>
+    <ol id="report-steps" class="report-log"></ol>
+    <div class="actions"><button type="button" id="change-last" class="secondary">Alterar última decisão</button><button type="button" id="report-restart" class="primary">Tentar outro percurso</button></div>
+  </section>
+ </section>
+ <aside class="console" aria-labelledby="console-title">
+  <p class="minor">Telemetria pedagógica</p>
+  <h2 id="console-title">Painel da base</h2>
+  <p class="fine">Reservas em pontos de um índice didático (0 a 100), não unidades físicas.</p>
+  <div class="resources">
+    <div class="resource"><div class="resource-head"><span>Oxigênio</span><strong id="oxygen-value">58 / 100</strong></div><div class="track" role="progressbar" id="oxygen-bar" aria-label="Índice da reserva de oxigênio" aria-valuemin="0" aria-valuemax="100" aria-valuenow="58"><div id="oxygen-fill" class="fill"></div></div><small>Margem de suporte à vida</small></div>
+    <div class="resource"><div class="resource-head"><span>Energia</span><strong id="power-value">58 / 100</strong></div><div class="track" role="progressbar" id="power-bar" aria-label="Índice da reserva de energia" aria-valuemin="0" aria-valuemax="100" aria-valuenow="58"><div id="power-fill" class="fill"></div></div><small>Disponibilidade elétrica</small></div>
+    <div class="resource"><div class="resource-head"><span>Comunicação</span><strong id="signal-value">14 / 100</strong></div><div class="track" role="progressbar" id="signal-bar" aria-label="Índice da qualidade de comunicação" aria-valuemin="0" aria-valuemax="100" aria-valuenow="14"><div id="signal-fill" class="fill"></div></div><small>Confiabilidade simulada do enlace</small></div>
+  </div>
+  <p class="status" id="status" role="status" aria-live="polite">Base em avaliação. Escolha a primeira ação.</p>
+  <div class="threshold"><strong>Objetivos fictícios do exercício</strong>Conclusão estabilizada: oxigênio ≥ 45, energia ≥ 24 e comunicação ≥ 60. Situação crítica: oxigênio abaixo de 38 ou energia abaixo de 18. Os demais resultados exigem medidas de acompanhamento.</div>
+  <h3 style="margin-top:26px">Registro de decisões</h3>
+  <ol class="log" id="log"><li><span>Nenhuma ação registrada.</span></li></ol>
+  <button type="button" class="secondary" id="restart" style="margin-top:20px">Reiniciar missão</button>
+  <div class="confirm" id="confirm" hidden role="group" aria-label="Confirmar reinício"><p>Descartar todas as decisões desta tentativa?</p><div class="actions"><button type="button" class="secondary" id="cancel-reset">Cancelar</button><button type="button" class="primary" id="confirm-reset">Sim, recomeçar</button></div></div>
+ </aside>
+</div>
+<p class="footer-note">Cenário e ilustração SVG originais, exclusivamente fictícios. Resultados calculados no navegador, sem armazenamento permanente, coleta de dados pessoais, chamadas externas ou integração de notas. Use as decisões para discutir prioridades e compromissos, não como instruções para operações espaciais reais.</p>
+</main>
+<script id="mission-data" type="application/json">{"start":{"oxygen":58,"power":58,"signal":14},"thresholds":{"oxygen":45,"power":24,"signal":60,"criticalOxygen":38,"criticalPower":18},"phases":[{"id":"air","stage":"SOL 41 · 06h12","title":"O ar da estufa mudou","subtitle":"Sensores detectam partículas no circuito de filtragem.","situation":"Uma vedação do módulo botânico foi danificada durante a madrugada. O sistema de purificação opera abaixo do planejado, enquanto o consumo de energia está próximo do limite de conforto.","question":"Como recuperar a reserva de oxigênio sem comprometer os outros sistemas?","illustration":"habitat","choices":[{"id":"scrub","title":"Revisar os filtros e purgar o circuito","detail":"Prioriza qualidade do ar, com gasto adicional de energia.","delta":{"oxygen":15,"power":-11,"signal":0},"consequence":"Os filtros ficam livres da maior parte das partículas e a reserva de oxigênio aumenta. A equipe registra o consumo extra das bombas.","learning":"Uma solução local pode melhorar um recurso e pressionar outro; avaliar o saldo do sistema é parte da decisão."},{"id":"seal","title":"Isolar a estufa e reduzir circulação","detail":"Estabiliza o habitat gastando menos energia, mas limita a infraestrutura.","delta":{"oxygen":10,"power":-5,"signal":-4},"consequence":"O isolamento conserva parte da reserva de ar. A antena secundária da estufa fica indisponível, reduzindo um pouco a qualidade do sinal.","learning":"Isolar sistemas afetados limita riscos, mas reduz redundância e pode repercutir na comunicação."},{"id":"delay","title":"Manter o fluxo mínimo e monitorar","detail":"Poupa energia agora, deixando o problema do ar em aberto.","delta":{"oxygen":-9,"power":3,"signal":0},"consequence":"As bombas consomem menos energia, porém a reserva de oxigênio cai enquanto a filtragem permanece comprometida.","learning":"Adiar manutenção pode preservar energia no curto prazo e transferir a pressão para o suprimento de ar."}]},{"id":"power","stage":"SOL 41 · 08h40","title":"A distribuição elétrica oscila","subtitle":"Uma bateria recebe carga de maneira irregular.","situation":"A estação solar externa foi parcialmente coberta por poeira e o barramento principal apresenta oscilações. Sem energia, a filtragem e o transmissor perderão desempenho.","question":"Que estratégia energética oferece o melhor compromisso para este momento?","illustration":"solar","choices":[{"id":"reroute","title":"Reconfigurar o campo solar","detail":"Recupera geração após desvio de carga para painéis preservados.","delta":{"oxygen":0,"power":20,"signal":1},"consequence":"O fornecimento se estabiliza e a reserva elétrica recupera margem. O enlace recebe pequena melhora graças à alimentação mais regular.","learning":"Redistribuir carga pode recuperar disponibilidade sem buscar potência máxima em equipamentos degradados."},{"id":"reduce","title":"Suspender cargas não essenciais","detail":"Recupera energia e reduz demanda de ar, com perda de redundância no enlace.","delta":{"oxygen":5,"power":13,"signal":-9},"consequence":"Iluminação e aquecimento auxiliares são reduzidos. A reserva sobe, mas o repetidor secundário fica desligado.","learning":"Economizar energia exige declarar quais capacidades foram sacrificadas e verificar se ainda serão necessárias."},{"id":"diagnose","title":"Executar diagnóstico de potência total","detail":"Coleta mais dados e ajuda o transmissor, mas pressiona as reservas.","delta":{"oxygen":-5,"power":-12,"signal":10},"consequence":"A telemetria elétrica ganha precisão e uma interface do transmissor é recuperada, mas o teste consome energia e recursos de suporte.","learning":"Instrumentação pode ser valiosa, mas um diagnóstico intensivo não é gratuito em sistemas limitados."}]},{"id":"contact","stage":"SOL 41 · 11h05","title":"A Terra não responde","subtitle":"O enlace principal entrou em modo degradado.","situation":"Após uma rajada de interferência simulada, os pacotes enviados à central de apoio não recebem confirmação. A equipe precisa aumentar a qualidade do enlace antes da janela de contato se encerrar.","question":"Qual plano de comunicação adotar?","illustration":"dish","choices":[{"id":"dish","title":"Reposicionar a antena de alto ganho","detail":"Ganhe um sinal mais confiável com consumo moderado.","delta":{"oxygen":-3,"power":-12,"signal":42},"consequence":"A antena é recalibrada para a janela de contato e o índice de comunicação cresce bastante. A operação requer energia e suporte de vida.","learning":"Uma boa correção técnica pode melhorar o enlace, mas deve ser sustentada pelos recursos restantes."},{"id":"buffer","title":"Preparar mensagens em fila e calibrar o repetidor","detail":"Melhora o enlace com custo elétrico contido.","delta":{"oxygen":0,"power":-7,"signal":28},"consequence":"O repetidor é estabilizado e mensagens curtas podem ser preparadas para transmissão assim que a janela permitir.","learning":"Redução de taxa e preparação de pacotes são alternativas de compromisso quando a infraestrutura é limitada."},{"id":"distress","title":"Transmitir um chamado em potência máxima","detail":"Aumenta muito o sinal, porém retira margem de outros sistemas.","delta":{"oxygen":-8,"power":-17,"signal":55},"consequence":"O sinal de emergência atravessa o ruído, mas a operação intensiva reduz drasticamente a reserva do conjunto.","learning":"Um recurso extremo pode ser justificado em emergência, desde que seu custo para a sobrevivência seja considerado."}]},{"id":"storm","stage":"SOL 41 · 14h20","title":"Tempestade de poeira no horizonte","subtitle":"O abrigo e o sistema externo exigem proteção.","situation":"A previsão ficcional indica aumento de poeira nas próximas horas. A tripulação precisa proteger equipamentos sem consumir suas últimas reservas de operação.","question":"Qual procedimento mantém a base mais resiliente?","illustration":"storm","choices":[{"id":"protect","title":"Recolher e proteger a antena exposta","detail":"Preserva o enlace e evita falhas adicionais, com gasto energético.","delta":{"oxygen":-4,"power":-7,"signal":15},"consequence":"Os mecanismos externos são protegidos e o sistema de comunicação passa a operar com maior estabilidade projetada.","learning":"Proteger equipamentos críticos pode custar energia agora para reduzir exposição e preservar capacidade futura."},{"id":"habitat","title":"Priorizar a vedação completa do habitat","detail":"Melhora as condições do ar, mas suspende parte do enlace.","delta":{"oxygen":16,"power":-12,"signal":-7},"consequence":"As comportas do habitat são reforçadas. O sistema de comunicação perde parte da disponibilidade durante o fechamento.","learning":"Quando o habitat é a prioridade, aceitar uma queda temporária de comunicação pode ser coerente com o objetivo."},{"id":"sleep","title":"Hibernar equipamentos não essenciais","detail":"Reserva energia e ar, sacrificando monitoramento e sinal.","delta":{"oxygen":8,"power":10,"signal":-15},"consequence":"Módulos auxiliares entram em modo de economia. As reservas melhoram, mas a base terá menos telemetria disponível.","learning":"Economia agressiva cria folga para sobreviver, porém reduz a percepção do ambiente e a capacidade de resposta."}]},{"id":"final","stage":"SOL 41 · 18h10","title":"Última janela de decisão","subtitle":"Resta uma única intervenção programada.","situation":"O contato ainda depende da infraestrutura disponível. Antes de fechar o ciclo operacional, a equipe pode usar suas reservas em uma última medida de recuperação.","question":"Qual prioridade você escolhe para o encerramento da missão?","illustration":"landing","choices":[{"id":"uplink","title":"Sincronizar o canal de dados com a central","detail":"Tenta consolidar a comunicação com consumo de energia e ar.","delta":{"oxygen":-2,"power":-7,"signal":22},"consequence":"O envio de telemetria é reorganizado e o índice do enlace cresce. O sistema de suporte permanece sob a carga do transmissor.","learning":"Comunicação só representa sucesso completo se as reservas para sustentar a operação continuarem suficientes."},{"id":"heat","title":"Estabilizar a alimentação dos sistemas vitais","detail":"Recupera energia e alguma margem de ar, aceitando piora do enlace.","delta":{"oxygen":6,"power":14,"signal":-7},"consequence":"As cargas dos sistemas vitais são equilibradas. O transmissor trabalha com menos margem, mas a sustentação da base melhora.","learning":"Ao final de uma crise, priorizar capacidade de operar pode ser tão importante quanto recuperar o contato imediato."},{"id":"oxygen","title":"Ativar a regeneração emergencial de ar","detail":"Recupera fortemente o oxigênio com consumo elétrico elevado.","delta":{"oxygen":17,"power":-15,"signal":0},"consequence":"O módulo de regeneração eleva a reserva de ar; a energia cai e o contato permanece no nível anterior.","learning":"A solução de uma variável não resolve o cenário inteiro: recursos interdependentes precisam ser avaliados juntos."}]}]}</script>
+<script>
+(function(){
+"use strict";
+const data=JSON.parse(document.getElementById("mission-data").textContent);
+const $=id=>document.getElementById(id);
+const make=(tag,text,cls)=>{const el=document.createElement(tag);el.textContent=text;if(cls)el.className=cls;return el;};
+const clamp=n=>Math.max(0,Math.min(100,n));
+const names={oxygen:"Oxigênio",power:"Energia",signal:"Comunicação"};
+const units=Object.keys(names);
+const path=[];
+let pending=false,showReport=false,resetOpen=false;
+function assertData(){
+ if(!data||!Array.isArray(data.phases)||data.phases.length!==5)throw Error("Cenário inválido");
+ const ids=new Set();
+ for(const phase of data.phases){
+  if(ids.has(phase.id)||!Array.isArray(phase.choices)||phase.choices.length!==3)throw Error("Fase inválida");
+  ids.add(phase.id);
+  const seen=new Set();
+  for(const choice of phase.choices){
+   if(seen.has(choice.id)||units.some(u=>!Number.isInteger(choice.delta[u])||Math.abs(choice.delta[u])>100))throw Error("Opção inválida");
+   seen.add(choice.id);
+  }
+ }
+}
+function simulate(selected){
+ const values={...data.start},history=[];
+ for(let i=0;i<selected.length;i++){
+  const phase=data.phases[i],choice=phase.choices.find(x=>x.id===selected[i]);
+  if(!choice)throw Error("Escolha não encontrada");
+  const before={...values};
+  for(const key of units)values[key]=clamp(values[key]+choice.delta[key]);
+  history.push({phase,choice,before,after:{...values}});
+ }
+ return {values,history};
+}
+function evaluate(values){
+ const t=data.thresholds;
+ if(values.oxygen<t.criticalOxygen||values.power<t.criticalPower)return {className:"alert",title:"Protocolo de contingência",details:"A base termina com reserva insuficiente de oxigênio ou energia para os critérios do exercício. A comunicação pode ter melhorado, mas isso não compensa o comprometimento dos sistemas vitais.",recommendation:"Antes de priorizar o enlace, reveja ações que consumiram energia ou ar e tente recuperar a margem de operação."};
+ if(values.oxygen>=t.oxygen&&values.power>=t.power&&values.signal>=t.signal)return {className:"",title:"Base estabilizada e enlace recuperado",details:"As três metas didáticas foram atendidas ao final da sequência. A tripulação preservou capacidade de suporte e qualidade suficiente de comunicação para o cenário simulado.",recommendation:"Compare alternativas: qual decisão foi mais decisiva e que risco ainda dependeria de monitoramento em uma operação real?"};
+ return {className:"caution",title:"Base operante, recuperação parcial",details:"A base conserva uma margem mínima fictícia para operar, mas ao menos um dos três objetivos finais não foi atingido. O plano precisa de continuidade e acompanhamento.",recommendation:"Identifique o indicador abaixo da meta e escolha uma decisão anterior para testar uma estratégia diferente."};
+}
+function deltaLine(delta){
+ return units.map(key=>{const value=delta[key];return names[key]+" "+(value>0?"+":"")+value;}).join(" · ");
+}
+function renderMeters(values){
+ for(const key of units){
+  const value=values[key],warn=key==="signal"?data.thresholds.signal:(key==="oxygen"?data.thresholds.oxygen:data.thresholds.power);
+  const critical=key==="signal"?0:(key==="oxygen"?data.thresholds.criticalOxygen:data.thresholds.criticalPower);
+  $(key+"-value").textContent=value+" / 100";
+  $(key+"-bar").setAttribute("aria-valuenow",String(value));
+  $(key+"-fill").style.width=value+"%";
+  $(key+"-fill").className="fill"+(value<critical?" low":value<warn?" warn":"");
+ }
+}
+function renderSteps(current){
+ const box=$("steps");box.replaceChildren();
+ for(let i=0;i<data.phases.length;i++){
+  const li=document.createElement("li");
+  li.className=i<current?"done":i===current?"current":"";
+  li.setAttribute("aria-label","Incidente "+(i+1)+(i<current?": concluído":i===current?": atual":": pendente"));
+  box.append(li);
+ }
+}
+function renderLog(history){
+ const box=$("log");box.replaceChildren();
+ if(!history.length){box.append(make("li","Nenhuma ação registrada."));return;}
+ for(let i=0;i<history.length;i++){
+  const item=document.createElement("li");
+  item.append(make("strong",""+(i+1)+". "+history[i].phase.title),make("span",history[i].choice.title));
+  box.append(item);
+ }
+}
+function focusHeading(id){
+ const h=$(id);h.focus({preventScroll:true});h.scrollIntoView({block:"start",behavior:"auto"});
+}
+function render(){
+ const current=simulate(path),values=current.values,finished=path.length===data.phases.length&&!pending;
+ renderMeters(values);renderLog(current.history);
+ $("confirm").hidden=!resetOpen;
+ const reportMode=showReport&&finished;
+ $("stage").hidden=reportMode;
+ $("report").hidden=!reportMode;
+ $("stage-number").textContent=reportMode?"Missão concluída":"Incidente "+String(Math.min(path.length+(pending?0:1),5)).padStart(2,"0")+" / 05";
+ $("sol").textContent=reportMode?"Sol 41 · Fechamento":data.phases[Math.min(path.length-(pending?1:0),4)].stage;
+ renderSteps(reportMode?5:(pending?path.length-1:path.length));
+ if(reportMode){renderReport(current);return;}
+ const index=pending?path.length-1:path.length;
+ const phase=data.phases[index];
+ if(!phase)return;
+ $("stage-title").textContent=phase.title;
+ $("stage-description").textContent=phase.situation+" "+phase.question;
+ const choices=$("choices");choices.replaceChildren();
+ if(!pending){
+  for(const choice of phase.choices){
+   const button=document.createElement("button");button.type="button";button.className="option";
+   button.append(make("span",choice.title,"option-title"),make("span",choice.detail,"option-detail"));
+   const deltas=make("span","","deltas");
+   for(const key of units){
+    const value=choice.delta[key];
+    deltas.append(make("span",names[key]+" "+(value>0?"+":"")+value,"delta"+(value>0?" plus":value<0?" minus":"")));
+   }
+   button.append(deltas);
+   button.addEventListener("click",()=>choose(choice.id));
+   choices.append(button);
+  }
+  $("consequence").hidden=true;
+ }else{
+  const last=current.history[current.history.length-1];
+  $("consequence").hidden=false;
+  $("consequence-text").textContent=last.choice.consequence;
+  $("learning-text").textContent="Para refletir: "+last.choice.learning+" Impacto aplicado: "+deltaLine(last.choice.delta)+".";
+ }
+ $("undo").disabled=path.length===0;
+ $("undo").textContent=pending?"Alterar esta decisão":"Rever decisão anterior";
+ $("next").hidden=!pending;
+ $("next").textContent=path.length===data.phases.length?"Ver relatório":"Próximo incidente";
+ const t=data.thresholds;
+ const warnings=[];
+ if(values.oxygen<t.criticalOxygen)warnings.push("oxigênio em nível crítico didático");
+ else if(values.oxygen<t.oxygen)warnings.push("oxigênio abaixo da meta");
+ if(values.power<t.criticalPower)warnings.push("energia em nível crítico didático");
+ else if(values.power<t.power)warnings.push("energia abaixo da meta");
+ if(values.signal<t.signal)warnings.push("comunicação abaixo da meta");
+ const note=warnings.length?"Atenção: "+warnings.join("; ")+".":"Os três índices estão acima das metas do exercício.";
+ $("status").textContent=(pending?"Decisão registrada. ":"Incidente "+(index+1)+" de 5. ")+note;
+}
+function choose(id){
+ if(pending||showReport||path.length>=data.phases.length)return;
+ const phase=data.phases[path.length];
+ if(!phase.choices.some(choice=>choice.id===id))return;
+ path.push(id);pending=true;render();
+ $("consequence-title").focus?.(); // Focus is kept on native button when available; the consequence is also announced.
+}
+function advance(){
+ if(!pending)return;
+ pending=false;
+ if(path.length===data.phases.length){showReport=true;render();focusHeading("report-heading");return;}
+ render();focusHeading("stage-title");
+}
+function undo(){
+ if(!path.length)return;
+ path.pop();pending=false;showReport=false;resetOpen=false;render();focusHeading("stage-title");
+}
+function renderReport(sim){
+ const result=evaluate(sim.values),root=$("ending");
+ root.className="ending"+(result.className?" "+result.className:"");
+ root.replaceChildren(make("p","DESFECHO DA MISSÃO","minor"),make("h3",result.title),make("p",result.details),make("p",result.recommendation));
+ const metrics=$("report-metrics");metrics.replaceChildren();
+ for(const key of units){
+  const box=make("div","","mini");box.append(make("span",names[key]),make("strong",sim.values[key]+" / 100"));metrics.append(box);
+ }
+ const steps=$("report-steps");steps.replaceChildren();
+ sim.history.forEach(({phase,choice,after})=>{
+  const li=document.createElement("li");
+  li.append(make("strong",phase.title+" — "+choice.title),make("p",choice.consequence),make("span","Após a decisão: oxigênio "+after.oxygen+", energia "+after.power+", comunicação "+after.signal+"."));
+  steps.append(li);
+ });
+ $("status").textContent="Fim da simulação: "+result.title+". Oxigênio "+sim.values.oxygen+", energia "+sim.values.power+", comunicação "+sim.values.signal+".";
+}
+function askReset(){resetOpen=true;$("confirm").hidden=false;$("cancel-reset").focus();}
+function reset(){
+ path.length=0;pending=false;showReport=false;resetOpen=false;render();focusHeading("stage-title");
+}
+assertData();
+$("next").addEventListener("click",advance);
+$("undo").addEventListener("click",undo);
+$("change-last").addEventListener("click",undo);
+$("restart").addEventListener("click",askReset);
+$("report-restart").addEventListener("click",askReset);
+$("cancel-reset").addEventListener("click",()=>{resetOpen=false;$("confirm").hidden=true;$("restart").focus();});
+$("confirm-reset").addEventListener("click",reset);
+render();
+})();
+</script>
+</body>
+</html>
