@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Da Flor à Fruta | Estufa de Descobertas</title>
+<style>
+:root{--ink:#293a46;--quiet:#526474;--purple:#533f72;--violet:#745999;--mint:#dff1e7;--leaf:#376c59;--paper:#fffdf9;--edge:#d9d8cd;--peach:#f7e5d6;--bg:#f7f6ef;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);color-scheme:light}
+*{box-sizing:border-box}body{margin:0;min-width:320px;background:radial-gradient(ellipse at 98% 6%,#eadcf3,transparent 35%),linear-gradient(90deg,#dcebdc30 1px,transparent 1px),var(--bg);background-size:auto,23px 23px,auto}
+button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #ac632a;outline-offset:3px}button:disabled{opacity:.42;cursor:not-allowed}
+a{color:#305f63;font-weight:750}.skip{position:absolute;left:10px;top:-100px;z-index:4;background:white;padding:11px;border-radius:7px}.skip:focus{top:10px}
+.page{max-width:1400px;margin:auto;padding:clamp(13px,2.7vw,40px)}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 230px;align-items:center;gap:22px;background:linear-gradient(135deg,#3a315b,#644e7e 75%,#76658e);color:#fff;padding:clamp(23px,4vw,45px);border-radius:26px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;border:1px solid #f7d9d04a;border-radius:50%;right:-105px;top:-130px;width:370px;height:370px;box-shadow:0 0 0 35px #f8ebee16,0 0 0 75px #f8ebee14;pointer-events:none}
+.eyebrow{font:850 .75rem ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;text-transform:uppercase;color:#e7d5bd;margin:0 0 10px}
+.hero h1{font:normal clamp(2.2rem,4.8vw,4.4rem)/1.05 Georgia,serif;letter-spacing:-.043em;margin:0}
+.hero p:last-child{max-width:720px;color:#f0e8ed;line-height:1.68;font-size:.95rem;margin:14px 0 0}
+.hero svg{width:210px;height:210px;color:#eac6cf;position:relative;z-index:1}
+.guide{margin:19px 0;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:13px;background:#eaf1e6;border:1px solid #ccdccc;border-radius:13px;padding:15px 19px;color:#37574b;font-size:.84rem;line-height:1.55}
+.guide b{color:#295640}.guide span{font:800 .74rem ui-monospace,monospace;color:#53645a}
+.workspace{display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;align-items:start}
+.sidebar{background:#edf1e8;border:1px solid #d0dacc;border-radius:17px;padding:18px 14px}
+.sidebar h2,.anatomy h2,.types h2,.quiz h2{font-size:1.13rem;margin:0 0 8px}
+.sidebar p,.anatomy>p,.types>p,.quiz>p{font-size:.84rem;line-height:1.61;color:#566b61;margin:5px 0 14px}
+.filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.filter{border:1px solid #a0b6a6;background:#fffdf9;color:#365d4a;min-height:38px;padding:8px 11px;border-radius:100px;font-size:.75rem;font-weight:800}
+.filter[aria-pressed="true"]{background:#365d4a;color:#fff;border-color:#365d4a}
+.steps{max-height:640px;overflow-y:auto;display:grid;gap:6px;padding:3px 3px 13px;scrollbar-color:#99aa9c transparent}
+.step{display:flex;align-items:center;gap:12px;text-align:left;background:#fffefa;color:#354c43;padding:9px 11px;min-height:60px;border:1px solid #c9d8c7;border-left:5px solid #aec7a9;border-radius:9px}
+.step[aria-current="true"]{background:#dcf0de;border-color:#4c805c;border-left-color:#426f54}
+.step.visited:not([aria-current="true"]){background:#f5faef}
+.step .num{font:850 .8rem ui-monospace,monospace;color:#4e7560;min-width:23px}.step b{font-size:.83rem;line-height:1.35}
+.progress{margin-top:13px;border-top:1px solid #c0d1c0;padding-top:13px}
+.progress strong{font-size:.8rem;color:#4b6559}
+.meter{height:9px;border-radius:99px;background:#c8dac6;overflow:hidden;margin:9px 0}
+.meter span{display:block;background:#578367;height:100%;width:8.333%;transition:width .16s}
+.reset{border:0;padding:9px 2px;text-decoration:underline;background:none;color:#345e54;font-size:.82rem;font-weight:780}
+.sheet{background:var(--paper);border:1px solid #d9d6d0;border-radius:17px;overflow:hidden;box-shadow:7px 9px 0 #8c9d8730}
+.sheet-head{padding:clamp(18px,3vw,33px) clamp(18px,3vw,35px) 0}
+.sheet-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font:850 .73rem ui-monospace,Consolas,monospace;color:#795f89;letter-spacing:.07em}
+.group-label{background:#ede4f3;color:#5c4176;padding:7px 11px;border-radius:30px;font-family:system-ui,sans-serif;letter-spacing:0}
+.sheet h2{font:normal clamp(1.75rem,3.6vw,3rem)/1.1 Georgia,serif;letter-spacing:-.035em;color:#493a63;margin:19px 0 6px}
+.subtitle{font-size:.9rem;color:#71637e;font-weight:830;margin:0 0 19px}
+.scene{background:radial-gradient(circle at center,#fff3e2,transparent 62%),repeating-linear-gradient(90deg,#f4ecf0 0 35px,#e5dbe4 36px 37px);min-height:270px;position:relative;display:grid;place-items:center;border-block:1px solid #ded8d9}
+.scene:before{content:"";position:absolute;inset:17px;border:1px dashed #a99aad;border-radius:52% 43% 50% 49%;pointer-events:none}
+.scene svg{width:min(91%,475px);height:265px;color:#886480;position:relative;z-index:1}
+.scene-label{position:absolute;top:14px;left:17px;font:850 .68rem ui-monospace,monospace;color:#726079;letter-spacing:.08em}
+.scene-label.end{left:auto;top:auto;right:17px;bottom:14px}
+.details{padding:clamp(18px,3vw,33px)}
+.details>p:first-child{line-height:1.73;color:#46545c;font-size:1rem;margin:0 0 17px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fact{background:#eff7ee;border:1px solid #d5e5d1;border-radius:10px;padding:15px}
+.fact.caveat{background:#fbf0e7;border-color:#ead7c8}
+.fact b{font-size:.73rem;color:#396d57;text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:7px}
+.fact.caveat b{color:#945a4a}
+.fact p{font-size:.88rem;line-height:1.63;color:#5b6260;margin:0}
+.reference{font-size:.81rem;line-height:1.6;margin:15px 0;color:#5f6770}
+.reference a{overflow-wrap:anywhere}
+.step-actions{display:flex;justify-content:space-between;gap:12px}
+.step-actions button{min-height:44px;border:1px solid #79628e;background:transparent;color:#624980;font-weight:840;border-radius:9px;padding:11px 15px}
+.step-actions button:last-child{background:#624b81;color:white}
+.explorers{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:19px;align-items:start}
+.anatomy,.types,.quiz{background:#fffdf9;border:1px solid #d8dace;border-radius:17px;padding:clamp(18px,2.5vw,28px)}
+.anatomy-diagram{display:block;width:100%;height:auto;max-height:320px;background:#f9f4f7;border:1px solid #e0d7e4;border-radius:12px}
+.structure-controls,.type-controls{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
+.structure-controls button,.type-controls button{border:1px solid #afabc1;background:#f8f5fa;color:#5c4b78;border-radius:9px;padding:10px 12px;font-size:.83rem;min-height:44px;font-weight:800}
+.structure-controls button[aria-pressed="true"],.type-controls button[aria-pressed="true"]{background:#644f82;color:#fff;border-color:#644f82}
+.info{background:#f1f0f8;border-left:4px solid #8c77ad;border-radius:0 9px 9px 0;padding:14px;line-height:1.63;color:#52536a;font-size:.86rem;min-height:85px;margin:0}
+.info strong{display:block;margin-bottom:4px;color:#493d6a}
+.type-preview{display:grid;grid-template-columns:140px 1fr;gap:13px;align-items:center;background:#f9f3eb;border:1px solid #e6dccf;border-radius:12px;padding:12px;min-height:166px}
+.type-preview svg{width:100%;height:140px;color:#996e83}
+.type-preview strong{font-size:1rem;color:#624672}
+.type-preview .kind{display:block;font-size:.79rem;color:#7b5976;font-weight:780;margin:5px 0}
+.type-preview p{font-size:.84rem;line-height:1.57;color:#5c6468;margin:8px 0}
+.type-note{margin-top:10px;border-left:3px solid #b37c55;background:#fff2e6;padding:11px 13px;color:#71574e;font-size:.83rem;line-height:1.59}
+.type-note a{display:block;margin-top:7px;font-size:.77rem}
+.quiz{margin-top:19px}.question-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.question{border:1px solid #dcd7df;border-radius:11px;margin:0;padding:15px;min-width:0}
+.question legend{font-size:.88rem;font-weight:850;line-height:1.46;color:#51416d;padding:0 4px}
+.options{display:grid;gap:8px;margin:12px 0}
+.option{border:1px solid #aba5b4;background:#f8f5fa;color:#544566;border-radius:8px;min-height:44px;text-align:left;padding:10px 12px;font-size:.83rem}
+.option[aria-pressed="true"]{background:#604d7b;color:white;border-color:#604d7b}
+.feedback{font-size:.83rem;line-height:1.56;color:#8a553b;min-height:38px;margin:9px 0 0}
+.feedback.correct{color:#2e7153}
+.note{color:#69736c;line-height:1.75;font-size:.8rem;margin:17px 3px 0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:990px){.workspace{grid-template-columns:1fr}.steps{display:flex;overflow-x:auto;overflow-y:hidden;max-height:none;padding:7px 3px 15px;scroll-snap-type:x proximity}.step{flex:0 0 158px;scroll-snap-align:center}.sidebar{padding:15px}}
+@media(max-width:780px){.explorers{grid-template-columns:1fr}.type-preview{grid-template-columns:135px 1fr}}
+@media(max-width:560px){.page{padding:11px}.hero{grid-template-columns:1fr;border-radius:13px;padding:24px 18px}.hero svg{display:none}.hero h1{font-size:2.5rem}.sheet-head,.details{padding:18px}.sheet h2{font-size:1.95rem}.scene{min-height:210px}.scene svg{height:205px}.facts,.question-grid{grid-template-columns:1fr}.type-preview{grid-template-columns:100px 1fr}.type-preview svg{height:110px}.step-actions button{padding:10px}.guide{padding:13px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}.steps{scroll-snap-type:none}}
+</style></head>
+<body>
+<a class="skip" href="#stage-panel">Ir para o conteúdo da etapa</a>
+<main class="page">
+<header class="hero"><div><p class="eyebrow">Estufa de descobertas / caderno de morfologia vegetal</p><h1>Da Flor à Fruta</h1><p>O que acontece entre uma flor e um fruto? Percorra os processos reprodutivos das plantas, investigue suas estruturas e compare frutos que parecem semelhantes, mas se formam de modos diferentes.</p></div><svg viewBox="0 0 440 300" role="img" aria-label="Desenho original de flor estilizada"><use href="#fd-flower"></use></svg></header>
+<div class="guide"><div><b>Uma sequência de processos, não um calendário.</b> Cada espécie tem seus próprios ritmos; as etapas ilustram um caso didático geral de reprodução de angiospermas.</div><span>12 ETAPAS · 18 ILUSTRAÇÕES · 6 TIPOS DE FRUTO</span></div>
+<div class="workspace">
+<aside class="sidebar" aria-label="Navegação da linha do tempo"><h2>Diário do desenvolvimento</h2><p>Selecione uma fase, ou use ↑ ↓, Home e End nos marcos. No celular, deslize a sequência com o dedo.</p>
+<div class="filters" id="stage-filters" role="group" aria-label="Filtrar etapas por fase"></div><nav class="steps" id="stages" aria-label="Etapas da flor à fruta"></nav>
+<div class="progress"><strong id="progress-label">1 de 12 etapas exploradas</strong><div id="progress" class="meter" role="progressbar" aria-label="Etapas exploradas" aria-valuemin="0" aria-valuemax="12" aria-valuenow="1"><span id="progress-fill"></span></div><button type="button" id="reset-all" class="reset">Recomeçar atividade inteira</button></div></aside>
+<article id="stage-panel" class="sheet" aria-labelledby="stage-title" tabindex="-1">
+<div class="sheet-head"><div class="sheet-meta"><span id="stage-number">LÂMINA 01 / 12</span><span id="stage-group" class="group-label">A flor</span></div><h2 id="stage-title">Botão floral</h2><p id="stage-subtitle" class="subtitle">Proteção antes da abertura</p></div>
+<div class="scene"><span class="scene-label">ILUSTRAÇÃO DE PROCESSO</span><svg viewBox="0 0 440 300" role="img" aria-labelledby="stage-art-title stage-art-desc"><title id="stage-art-title">Desenho de processo</title><desc id="stage-art-desc">Desenho original esquemático.</desc><defs>
+<symbol id="fd-bud" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M220 266V167q-69-33-55-90 7-42 55-55 48 14 55 55 13 57-55 90z"/><path d="M220 164q-30-88 0-141m0 141q33-88 0-141M176 125q-50-12-64-49 54 4 64 49zm89 0q50-12 63-49-53 2-63 49zM220 222q-63-53-96-14 38 29 96 14zm0 0q62-53 97-14-41 29-97 14z"/></g></symbol>
+<symbol id="fd-flower" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><circle cx="219" cy="135" r="31"/><ellipse cx="218" cy="59" rx="33" ry="49"/><ellipse cx="218" cy="211" rx="33" ry="49"/><ellipse cx="143" cy="135" rx="49" ry="33"/><ellipse cx="295" cy="135" rx="49" ry="33"/><path d="M218 245v36m-8-146h16"/></g></symbol>
+<symbol id="fd-stamen" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M215 263V62m-51 200 20-168m108 168-22-168M216 81l-25-16m25 16 27-16"/><ellipse cx="181" cy="83" rx="17" ry="31" transform="rotate(-15 181 83)"/><ellipse cx="274" cy="83" rx="17" ry="31" transform="rotate(15 274 83)"/><circle cx="126" cy="65" r="7"/><circle cx="318" cy="55" r="7"/><circle cx="340" cy="107" r="7"/></g></symbol>
+<symbol id="fd-bee" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M120 222v-80m0 50q-50-69-76-30 27 35 76 30zm0-22q47-67 79-31-32 40-79 31zM215 118q56-66 111-10-33 65-102 37zM269 127q-5 52 43 62 48-28 16-72m-55 31 49 23"/><path d="M232 91q-21-55 20-61 28 18 17 70m20 0q18-60 53-41 15 30-31 52"/><circle cx="342" cy="131" r="7"/><path d="M204 142l-29 11" stroke-dasharray="8 10"/></g></symbol>
+<symbol id="fd-stigma" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M192 65q25 25 52 0m-27 0v119m0-8q-44 18-55 61 29 40 55 13 29 28 57-13-12-43-57-61zM217 267v20"/><circle cx="178" cy="45" r="10"/><circle cx="235" cy="39" r="10"/><path d="M178 45l28 21m29-27-7 30"/></g></symbol>
+<symbol id="fd-tube" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M190 48q27 23 54 0m-27 0v159q-44 18-54 42 27 43 54 10 29 34 56-10-13-31-56-42z"/><circle cx="190" cy="34" r="11"/><path d="M190 43q34 29 22 57t7 48-2 85" stroke-dasharray="8 8"/><circle cx="217" cy="241" r="13"/></g></symbol>
+<symbol id="fd-fertilization" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5"><ellipse cx="220" cy="155" rx="118" ry="91"/><ellipse cx="220" cy="155" rx="79" ry="62"/><circle cx="193" cy="147" r="24"/><circle cx="256" cy="162" r="24"/><circle cx="184" cy="137" r="7"/><circle cx="246" cy="153" r="7"/><path d="M87 60q87 0 107 57m71-55q-30 26-20 73"/><path d="M117 49h-36m280 110h-32"/></g></symbol>
+<symbol id="fd-seed" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M208 35q-80 41-82 124 0 83 82 109 88-24 88-109-3-90-88-124zM208 56v190M180 121q30-27 56 0v87q-30 26-56-3zM180 151q29 23 56 0M208 35l-13-19"/></g></symbol>
+<symbol id="fd-ovary" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M220 38v77m0-5q-93 25-97 92 17 78 97 74 78 4 97-74-4-67-97-92z"/><ellipse cx="183" cy="200" rx="21" ry="36"/><ellipse cx="255" cy="200" rx="21" ry="36"/><path d="M220 113v148M125 168q95 45 190 0" stroke-dasharray="8 10"/></g></symbol>
+<symbol id="fd-pericarp" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5"><circle cx="220" cy="150" r="110"/><circle cx="220" cy="150" r="87"/><circle cx="220" cy="150" r="66"/><ellipse cx="190" cy="151" rx="18" ry="31"/><ellipse cx="252" cy="151" rx="18" ry="31"/><path d="M220 40l-11-17m11 17 11-17M308 70l30-27m-21 93 50-9"/></g></symbol>
+<symbol id="fd-ripe" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M220 87q-72-66-127 7-46 104 55 149 68 30 140 0 102-45 56-149-54-73-124-7z"/><path d="M220 87V38m0 14q-47-49-82-24 24 45 82 24zm0-1q39-51 74-27-20 40-74 27zM137 150q-9 53 28 74M318 150q8 50-26 75"/></g></symbol>
+<symbol id="fd-disperse" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M93 247h258M222 247V151m0 53q-51-62-82-24 32 30 82 24zm0-21q50-59 81-24-28 34-81 24zM225 152q-22-55-2-65 25 30 2 65z"/><path d="M49 113q55-43 103 6m163-11q48-43 79-5" stroke-dasharray="10 11"/><ellipse cx="88" cy="86" rx="15" ry="26" transform="rotate(-32 88 86)"/><ellipse cx="352" cy="70" rx="15" ry="26" transform="rotate(32 352 70)"/></g></symbol>
+<symbol id="fd-tomato" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5"><circle cx="220" cy="160" r="106"/><ellipse cx="188" cy="160" rx="25" ry="43"/><ellipse cx="252" cy="160" rx="25" ry="43"/><path d="M220 56l-13-30m13 30 27-25M220 56l-32 12m32-12 23 17"/></g></symbol>
+<symbol id="fd-peach" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M221 67q-82-53-117 22-52 97 30 149 88 43 168-3 80-57 21-154-48-63-102-14z"/><ellipse cx="218" cy="162" rx="44" ry="67"/><ellipse cx="218" cy="162" rx="24" ry="42"/><path d="M220 75V26m0 14q-47-26-81 0 34 34 81 0"/></g></symbol>
+<symbol id="fd-strawberry" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M220 77q-83-70-132 5-21 109 132 179 155-70 132-179-52-75-132-5z"/><path d="M219 76q-28-39-56-20m56 20q29-37 59-20m-59 19V37"/><circle cx="149" cy="126" r="5"/><circle cx="221" cy="114" r="5"/><circle cx="291" cy="127" r="5"/><circle cx="181" cy="185" r="5"/><circle cx="262" cy="185" r="5"/><circle cx="219" cy="222" r="5"/></g></symbol>
+<symbol id="fd-pineapple" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M224 85q-99-14-97 80 0 96 97 118 97-22 97-118 2-94-97-80zM224 88V24m0 63q-61-30-66-70 54 5 66 70zm0-8q51-43 81-51-7 47-81 51zM130 125l189 93m-183 13 180-92M151 112l152 138m-151 0 146-139"/></g></symbol>
+<symbol id="fd-apple" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M220 84q-64-49-112 13-64 99 14 163 47 27 98-6 52 32 98 6 78-64 13-163-49-62-111-13zM220 82V30m0 19q-51-38-77-8 33 39 77 8zM187 142q33-24 66 0l-7 85q-26 20-51 0z"/><ellipse cx="220" cy="188" rx="13" ry="27"/></g></symbol>
+<symbol id="fd-pod" viewBox="0 0 440 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M112 44q-44 67 0 133 37 72 167 74 47-15 47-65-31-38-95-61-60-26-119-81zM112 44q9 77 92 130t122 12"/><ellipse cx="157" cy="139" rx="13" ry="21" transform="rotate(-39 157 139)"/><ellipse cx="215" cy="185" rx="13" ry="21" transform="rotate(-39 215 185)"/><ellipse cx="276" cy="211" rx="13" ry="21" transform="rotate(-39 276 211)"/></g></symbol>
+</defs><use id="stage-art-use" href="#fd-bud"></use></svg><span class="scene-label end">SVG AUTORAL · SEM ESCALA</span></div>
+<div class="details"><p id="stage-description"></p><div class="facts"><div class="fact"><b>Por que é importante</b><p id="stage-importance"></p></div><div class="fact caveat"><b>Não simplifique demais</b><p id="stage-caution"></p></div></div>
+<p class="reference">Fonte para aprofundar: <a id="stage-source" target="_blank" rel="noopener noreferrer" href="https://openstax.org/books/biology/pages/26-3-angiosperms">OpenStax</a>.</p>
+<div class="step-actions"><button type="button" id="previous">← Etapa anterior</button><button type="button" id="next">Próxima etapa →</button></div></div></article>
+</div>
+<div class="explorers">
+<section class="anatomy" aria-labelledby="anatomy-heading"><h2 id="anatomy-heading">Um olhar por dentro da flor</h2><p>Explore cinco estruturas reprodutivas. O desenho representa uma flor hipotética, não todas as espécies.</p>
+<svg viewBox="0 0 580 370" role="img" aria-labelledby="anatomy-title anatomy-desc" class="anatomy-diagram">
+<title id="anatomy-title">Corte didático de uma flor</title><desc id="anatomy-desc">Pétalas e sépalas cercam estames com anteras; no centro, estigma ligado por estilete a um ovário contendo óvulos. Sem escala.</desc>
+<g stroke="#8b6183" stroke-width="5" stroke-linejoin="round" fill="none">
+<path d="M273 345v-76"/><path d="M276 130q-88-117-164-74 8 94 164 74zm0 0q87-116 158-75-13 98-158 75z" fill="#e5b8cd" stroke="#9a6c85"/>
+<path d="M276 158q-110-19-129 65 79 26 129-65zm0 0q106-19 130 65-78 27-130-65z" fill="#f3c9cf" stroke="#9a6c85"/>
+<path d="M275 182V106"/><path d="M246 104q29 28 57 0" stroke="#ad694a" stroke-width="8"/>
+<path d="M223 184l-19-100m123 100 23-100" stroke="#617c54"/>
+<ellipse cx="201" cy="79" rx="18" ry="30" fill="#ebc47a" stroke="#9c7336"/><ellipse cx="352" cy="81" rx="18" ry="30" fill="#ebc47a" stroke="#9c7336"/>
+<path d="M275 180q-68 20-70 79 30 59 70 30 44 28 70-30-6-59-70-79z" fill="#c3d8af" stroke="#647a58"/>
+<ellipse cx="247" cy="245" rx="17" ry="30" fill="#e8cf8d" stroke="#a4884e"/><ellipse cx="307" cy="245" rx="17" ry="30" fill="#e8cf8d" stroke="#a4884e"/>
+</g>
+<g stroke="#806b64" stroke-width="2.2" fill="none" stroke-dasharray="5 5">
+<path d="M301 102h180m-206 43h205M353 79h127m-134 171h134m-172-4-173 29"/>
+</g>
+<g fill="#433c44" font-family="system-ui,sans-serif" font-size="17" font-weight="750">
+<text x="484" y="107">Estigma</text><text x="484" y="151">Estilete</text><text x="484" y="79">Antera</text><text x="484" y="255">Ovário</text><text x="40" y="280">Óvulo</text>
+</g></svg>
+<div class="structure-controls" id="anatomy-buttons" role="group" aria-label="Selecionar estrutura floral"></div>
+<div id="anatomy-info" class="info" role="status" aria-live="polite"><strong>Selecione uma estrutura</strong>Veja sua função no ciclo reprodutivo.</div>
+</section>
+<section class="types" aria-labelledby="types-heading"><h2 id="types-heading">Nem todo fruto é igual</h2><p>Compare frutos simples, agregados, múltiplos, acessórios, carnosos e secos. A classificação considera sua origem, não apenas o sabor.</p>
+<div class="type-controls" id="type-buttons" role="group" aria-label="Selecionar fruto para comparar"></div>
+<div class="type-preview"><svg viewBox="0 0 440 300" role="img" aria-labelledby="type-art-title type-art-desc"><title id="type-art-title">Ilustração original de fruto</title><desc id="type-art-desc">Representação esquemática sem escala.</desc><use id="type-art-use" href="#fd-tomato"></use></svg><div><strong id="type-title">Tomate</strong><span class="kind" id="type-kind">Baga simples</span><p id="type-origin"></p><p id="type-description"></p></div></div>
+<div class="type-note"><b>Observe a diferença:</b> <span id="type-caution"></span><a id="type-source" target="_blank" rel="noopener noreferrer" href="https://open.lib.umn.edu/horticulture/chapter/8-1-fruit-morphology/">Conferir referência botânica</a></div>
+</section></div>
+<section class="quiz" aria-labelledby="quiz-heading"><h2 id="quiz-heading">Caderno de investigação</h2><p>Quatro perguntas para verificar as diferenças entre polinização, fecundação e tipos de fruto. O resultado é apenas formativo.</p><div class="question-grid" id="questions"></div><button type="button" class="reset" id="reset-quiz">Reiniciar perguntas</button></section>
+<p class="note">As ilustrações são originais, esquemáticas e sem escala. Não há um prazo universal entre polinização e amadurecimento; a reprodução das angiospermas possui exceções, como a partenocarpia. Esta atividade não salva respostas ou notas no Moodle, não carrega recursos remotos e não coleta dados pessoais.</p>
+<p id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+</main>
+<script>
+"use strict";
+const model={"stages":[{"id":"botao","group":"flor","n":"01","title":"Botão floral","subtitle":"Proteção antes da abertura","description":"No botão floral, as peças da flor ainda estão em desenvolvimento; sépalas frequentemente protegem suas estruturas.","importance":"Os órgãos reprodutivos se formam e se preparam para a antese.","caution":"Botões não são iguais em todas as espécies; algumas flores são muito reduzidas.","motif":"bud","source":"OpenStax · Angiospermas e reprodução","url":"https://openstax.org/books/biology/pages/26-3-angiosperms"},{"id":"abertura","group":"flor","n":"02","title":"A flor se abre","subtitle":"Antese","description":"A abertura floral expõe estruturas reprodutivas. Em algumas espécies, pétalas, aromas e néctar atraem polinizadores.","importance":"A forma da flor influencia as maneiras possíveis de transportar pólen.","caution":"Muitas plantas dependem de vento, e nem todas têm pétalas vistosas.","motif":"flower","source":"OpenStax · Angiospermas e reprodução","url":"https://openstax.org/books/biology/pages/26-3-angiosperms"},{"id":"estames","group":"flor","n":"03","title":"Produção de pólen","subtitle":"Anteras e estames","description":"Anteras produzem e liberam grãos de pólen, que carregam o gametófito masculino das plantas com flores.","importance":"A produção de pólen é essencial para a reprodução sexuada em angiospermas.","caution":"Grão de pólen não é semente e antera não é estigma.","motif":"stamen","source":"OpenStax · Angiospermas e reprodução","url":"https://openstax.org/books/biology/pages/26-3-angiosperms"},{"id":"transporte","group":"polinizacao","n":"04","title":"O pólen é transportado","subtitle":"Animais, vento e outros vetores","description":"Grãos de pólen podem deslocar-se entre flores ou dentro da mesma flor por animais, vento e outros mecanismos.","importance":"O transporte pode conectar o pólen à superfície receptiva adequada.","caution":"Uma visita de inseto não garante a deposição de pólen compatível.","motif":"bee","source":"USA National Phenology Network · Botany Primer","url":"https://usanpn.org/files/education/usa-npn_botany-primer-2018.pdf"},{"id":"estigma","group":"polinizacao","n":"05","title":"Polinização no estigma","subtitle":"Pólen encontra a superfície receptiva","description":"Polinização é a deposição do pólen no estigma. Dependendo da espécie, pode haver autofecundação ou cruzamento posterior.","importance":"O pólen chega à estrutura que permite iniciar a etapa de germinação.","caution":"Polinização não é fecundação: a união dos gametas ainda não ocorreu.","motif":"stigma","source":"OpenStax Biology 2e · Pollination and Fertilization","url":"https://openstax.org/books/biology-2e/pages/32-2-pollination-and-fertilization"},{"id":"tubo","group":"polinizacao","n":"06","title":"Tubo polínico","subtitle":"Crescimento pelo estilete","description":"Quando compatível, o grão de pólen pode germinar e formar um tubo que cresce pelo estilete na direção do óvulo.","importance":"O tubo leva células espermáticas até a região onde ocorrerá fecundação.","caution":"Nem todo pólen que alcança o estigma germina ou completa o percurso.","motif":"tube","source":"OpenStax Biology 2e · Pollination and Fertilization","url":"https://openstax.org/books/biology-2e/pages/32-2-pollination-and-fertilization"},{"id":"dupla","group":"fecundacao","n":"07","title":"Dupla fecundação","subtitle":"Dois encontros celulares","description":"Nas angiospermas, uma célula espermática se une à oosfera, formando o zigoto; outra participa da formação do endosperma.","importance":"O processo dá origem ao embrião e contribui para seu tecido nutritivo.","caution":"O modelo ilustrado simplifica mecanismos celulares; existem variações entre linhagens.","motif":"fertilization","source":"OpenStax · Angiospermas e reprodução","url":"https://openstax.org/books/biology/pages/26-3-angiosperms"},{"id":"semente","group":"fecundacao","n":"08","title":"O óvulo vira semente","subtitle":"Embrião e envoltórios","description":"Após fecundação, um óvulo pode originar uma semente que contém embrião e tecidos protetores, com reservas de distribuição variável.","importance":"A semente protege uma nova geração e pode germinar quando houver condições adequadas.","caution":"Há frutos partenocárpicos que se desenvolvem sem fecundação, podendo não formar sementes viáveis.","motif":"seed","source":"Journal of Experimental Botany · Parthenocarpy","url":"https://academic.oup.com/jxb/article/69/5/955/4796817"},{"id":"ovario","group":"fruto","n":"09","title":"O ovário cresce","subtitle":"Formação do fruto","description":"Em geral, o ovário aumenta de tamanho e a parede ovariana passa por mudanças que originam o pericarpo.","importance":"Essa estrutura envolve e protege sementes durante o desenvolvimento.","caution":"Em frutos acessórios, receptáculo e outras peças florais também contribuem.","motif":"ovary","source":"OpenStax · Angiospermas e reprodução","url":"https://openstax.org/books/biology/pages/26-3-angiosperms"},{"id":"pericarpo","group":"fruto","n":"10","title":"Camadas se diferenciam","subtitle":"Pericarpo carnoso ou seco","description":"A parede do ovário pode formar regiões externas, médias e internas com texturas diferentes, suculentas ou secas.","importance":"As formas do pericarpo colaboram na proteção e na dispersão.","caution":"Nem todo fruto tem polpa doce: tomate e vagem são frutos muito diferentes.","motif":"pericarp","source":"University of Minnesota · Fruit Morphology","url":"https://open.lib.umn.edu/horticulture/chapter/8-1-fruit-morphology/"},{"id":"maduracao","group":"fruto","n":"11","title":"O fruto amadurece","subtitle":"Cor, aroma e consistência","description":"Dependendo da espécie, a maturação envolve alterações de pigmentos, textura, aroma e composição do fruto.","importance":"A maturação pode influenciar relações com animais e estratégias de dispersão.","caution":"Nem todos os frutos mudam de cor ou amadurecem no mesmo ritmo.","motif":"ripe","source":"Oregon State University · Reproductive Plant Parts","url":"https://extension.oregonstate.edu/catalog/em-9900-reproductive-plant-parts"},{"id":"dispersao","group":"fruto","n":"12","title":"Dispersão e novo ciclo","subtitle":"Vento, água, animais e mecanismos próprios","description":"Frutos e sementes podem ser deslocados por vento, água, animais ou mecanismos de abertura; algumas sementes germinam em ambiente favorável.","importance":"A dispersão pode conectar novas gerações a locais onde poderão se estabelecer.","caution":"Dispersar não garante germinação; espécies partenocárpicas podem ter frutos sem sementes viáveis.","motif":"disperse","source":"OpenStax · Angiospermas e reprodução","url":"https://openstax.org/books/biology/pages/26-3-angiosperms"}],"types":[{"id":"tomate","title":"Tomate","kind":"Baga · simples e carnoso","origin":"Um ovário de uma flor","description":"Tomate é baga na classificação botânica: desenvolve-se de um ovário e contém sementes internas.","caution":"É usado como hortaliça na cozinha, mas isso não altera a origem botânica.","motif":"tomato","source":"University of Minnesota · Fruit Morphology","url":"https://open.lib.umn.edu/horticulture/chapter/8-1-fruit-morphology/"},{"id":"pessego","title":"Pêssego","kind":"Drupa · simples e carnoso","origin":"Um ovário, com endocarpo endurecido","description":"A parte dura do caroço corresponde ao endocarpo, que envolve a semente.","caution":"O caroço inteiro não é a mesma coisa que a semente.","motif":"peach","source":"University of Minnesota · Fruit Morphology","url":"https://open.lib.umn.edu/horticulture/chapter/8-1-fruit-morphology/"},{"id":"morango","title":"Morango","kind":"Agregado e acessório","origin":"Uma flor com vários ovários; receptáculo carnoso","description":"Cada pequeno aquênio na superfície é um fruto; a parte vermelha comestível deriva principalmente do receptáculo.","caution":"O morango não é uma baga verdadeira; as sementes ficam no interior dos aquênios.","motif":"strawberry","source":"University of Minnesota · Fruit Morphology","url":"https://open.lib.umn.edu/horticulture/chapter/8-1-fruit-morphology/"},{"id":"abacaxi","title":"Abacaxi","kind":"Múltiplo · infrutescência","origin":"Muitas flores de uma inflorescência","description":"Vários conjuntos florais contribuem para uma estrutura composta reconhecida como abacaxi.","caution":"Múltiplo usa várias flores; agregado envolve vários ovários de uma só flor.","motif":"pineapple","source":"University of Minnesota · Fruit Morphology","url":"https://open.lib.umn.edu/horticulture/chapter/8-1-fruit-morphology/"},{"id":"maca","title":"Maçã","kind":"Acessório · pomo","origin":"Ovário e tecidos florais adicionais","description":"Grande parte da região carnosa resulta de tecidos ligados ao hipanto ou receptáculo; o ovário abriga as sementes.","caution":"O termo acessório descreve a origem do tecido, não qualidade alimentar inferior.","motif":"apple","source":"University of Minnesota · Fruit Morphology","url":"https://open.lib.umn.edu/horticulture/chapter/8-1-fruit-morphology/"},{"id":"feijao","title":"Vagem de feijão","kind":"Simples seco · legume","origin":"Um ovário que pode abrir na maturidade","description":"A vagem é um fruto seco que abriga as sementes de feijão.","caution":"Fruto e semente são estruturas diferentes, embora ambos possam fazer parte do alimento.","motif":"pod","source":"University of Minnesota · Fruit Morphology","url":"https://open.lib.umn.edu/horticulture/chapter/8-1-fruit-morphology/"}],"anatomy":[{"id":"estigma","label":"Estigma","description":"Superfície que recebe pólen compatível. Receber pólen é polinização; a fecundação pode ocorrer depois."},{"id":"estilete","label":"Estilete","description":"Liga estigma e ovário em muitas flores e permite o crescimento do tubo polínico."},{"id":"antera","label":"Antera","description":"Parte do estame onde grãos de pólen são produzidos e liberados."},{"id":"ovario","label":"Ovário","description":"Estrutura do carpelo que abriga óvulos e cuja parede normalmente origina o pericarpo do fruto."},{"id":"ovulo","label":"Óvulo","description":"Estrutura que pode transformar-se em semente após a fecundação."}],"quiz":[{"question":"O que distingue polinização de fecundação?","options":["Polinização deposita pólen no estigma; fecundação une células reprodutivas.","São nomes diferentes para o mesmo evento.","Fecundação sempre vem antes de o pólen alcançar o estigma."],"answer":0,"feedback":"Depositar pólen no estigma é polinização. O tubo polínico e a fecundação normalmente vêm depois."},{"question":"Qual estrutura da flor pode originar uma semente?","options":["Uma pétala.","O óvulo.","A antera."],"answer":1,"feedback":"O óvulo pode desenvolver-se em semente, enquanto a parede do ovário normalmente participa da formação do fruto."},{"question":"Que fruto deriva da contribuição de várias flores?","options":["Tomate.","Pêssego.","Abacaxi."],"answer":2,"feedback":"O abacaxi é uma infrutescência formada a partir de várias flores. Morango é agregado e acessório."},{"question":"Qual fenômeno permite que alguns frutos se desenvolvam sem fecundação?","options":["Partenocarpia.","Produção de estames.","Queda das pétalas."],"answer":0,"feedback":"A partenocarpia permite o desenvolvimento de frutos sem fecundação, frequentemente sem sementes viáveis."}]};
+const stages=model.stages,types=model.types,anatomy=model.anatomy,quiz=model.quiz;
+const categories=[["all","Todas"],["flor","Flor"],["polinizacao","Polinização"],["fecundacao","Fecundação"],["fruto","Fruto"]];
+const groupNames={flor:"Flor e órgãos",polinizacao:"Transporte do pólen",fecundacao:"Fecundação",fruto:"Fruto e dispersão"};
+const byId=id=>document.getElementById(id);
+const state={filter:"all",stage:stages[0].id,visited:new Set([stages[0].id]),structure:null,type:types[0].id,answers:new Map()};
+const visible=()=>stages.filter(x=>state.filter==="all"||x.group===state.filter);
+function filtersRender(){
+ const host=byId("stage-filters");host.replaceChildren();
+ for(const [id,label] of categories){
+  const button=document.createElement("button");button.type="button";button.className="filter";button.textContent=label;
+  button.setAttribute("aria-pressed",String(state.filter===id));
+  button.addEventListener("click",()=>applyFilter(id));host.append(button);
+ }
+}
+function stepsRender(){
+ const host=byId("stages"),data=visible();host.replaceChildren();
+ data.forEach((s,index)=>{
+  const b=document.createElement("button");b.type="button";b.className="step";
+  b.setAttribute("aria-current",String(s.id===state.stage));
+  b.setAttribute("aria-label","Etapa "+s.n+" de 12: "+s.title);
+  b.classList.toggle("visited",state.visited.has(s.id));
+  const num=document.createElement("span");num.className="num";num.textContent=s.n;
+  const text=document.createElement("b");text.textContent=s.title;
+  b.append(num,text);
+  b.addEventListener("click",()=>select(s.id));
+  b.addEventListener("keydown",event=>{
+   let target=null;
+   if(event.key==="ArrowDown"||event.key==="ArrowRight")target=Math.min(index+1,data.length-1);
+   if(event.key==="ArrowUp"||event.key==="ArrowLeft")target=Math.max(index-1,0);
+   if(event.key==="Home")target=0;
+   if(event.key==="End")target=data.length-1;
+   if(target!==null){event.preventDefault();select(data[target].id);const next=host.querySelectorAll(".step")[target];if(next)next.focus();}
+  });
+  host.append(b);
+ });
+}
+function select(id){
+ const list=visible(),index=list.findIndex(x=>x.id===id);
+ if(index<0)return;
+ const s=list[index];state.stage=id;state.visited.add(id);
+ const values={
+ "stage-number":"LÂMINA "+s.n+" / 12","stage-group":groupNames[s.group],
+ "stage-title":s.title,"stage-subtitle":s.subtitle,"stage-description":s.description,
+ "stage-importance":s.importance,"stage-caution":s.caution,"stage-source":s.source,
+ "stage-art-title":"Ilustração original: "+s.title,
+ "stage-art-desc":"Diagrama vetorial esquemático da etapa "+s.title+". Sem escala.",
+ "progress-label":state.visited.size+" de "+stages.length+" etapas exploradas"
+ };
+ for(const [id,value] of Object.entries(values))byId(id).textContent=value;
+ byId("stage-source").href=s.url;byId("stage-art-use").setAttribute("href","#fd-"+s.motif);
+ byId("previous").disabled=index===0;byId("next").disabled=index===list.length-1;
+ byId("progress").setAttribute("aria-valuenow",String(state.visited.size));
+ byId("progress-fill").style.width=state.visited.size/stages.length*100+"%";
+ stepsRender();
+ const host=byId("stages"),target=host.querySelectorAll(".step")[index];
+ if(target){
+  const behavior=window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
+  if(window.matchMedia("(max-width:990px)").matches)host.scrollTo({left:Math.max(0,target.offsetLeft-host.offsetLeft-host.clientWidth/2+target.clientWidth/2),behavior});
+  else host.scrollTo({top:Math.max(0,target.offsetTop-host.offsetTop-host.clientHeight/2+target.clientHeight/2),behavior});
+ }
+ byId("announcement").textContent="Etapa "+s.n+" de 12, "+s.title+". "+groupNames[s.group]+".";
+}
+function applyFilter(id){
+ if(!categories.some(x=>x[0]===id))return;
+ state.filter=id;filtersRender();
+ const data=visible();if(!data.some(s=>s.id===state.stage))state.stage=data[0].id;
+ select(state.stage);
+ byId("announcement").textContent="Filtro "+categories.find(x=>x[0]===id)[1]+": "+data.length+" etapas.";
+}
+byId("previous").addEventListener("click",()=>{const list=visible(),i=list.findIndex(x=>x.id===state.stage);if(i>0)select(list[i-1].id);});
+byId("next").addEventListener("click",()=>{const list=visible(),i=list.findIndex(x=>x.id===state.stage);if(i>=0&&i<list.length-1)select(list[i+1].id);});
+function anatomyRender(){
+ const host=byId("anatomy-buttons");host.replaceChildren();
+ for(const part of anatomy){
+  const button=document.createElement("button");button.type="button";button.textContent=part.label;
+  button.setAttribute("aria-pressed",String(state.structure===part.id));
+  button.addEventListener("click",()=>choosePart(part.id));host.append(button);
+ }
+}
+function choosePart(id){
+ const part=anatomy.find(p=>p.id===id);if(!part)return;
+ state.structure=id;anatomyRender();
+ const host=byId("anatomy-info");host.replaceChildren();
+ const title=document.createElement("strong");title.textContent=part.label;
+ const explanation=document.createElement("span");explanation.textContent=part.description;
+ host.append(title,explanation);
+}
+function typeRender(){
+ const host=byId("type-buttons");host.replaceChildren();
+ for(const t of types){
+  const b=document.createElement("button");b.type="button";b.textContent=t.title;b.setAttribute("aria-pressed",String(state.type===t.id));
+  b.addEventListener("click",()=>chooseType(t.id));host.append(b);
+ }
+}
+function chooseType(id){
+ const t=types.find(x=>x.id===id);if(!t)return;
+ state.type=id;typeRender();
+ const values={
+ "type-title":t.title,"type-kind":t.kind,"type-origin":t.origin,"type-description":t.description,
+ "type-caution":t.caution,"type-art-title":"Ilustração original do fruto "+t.title,
+ "type-art-desc":"Desenho esquemático original de "+t.title+", sem escala."
+ };
+ for(const [key,value] of Object.entries(values))byId(key).textContent=value;
+ byId("type-art-use").setAttribute("href","#fd-"+t.motif);
+ byId("type-source").href=t.url;
+}
+function quizRender(){
+ const host=byId("questions");host.replaceChildren();
+ quiz.forEach((q,index)=>{
+  const box=document.createElement("fieldset");box.className="question";
+  const title=document.createElement("legend");title.textContent=(index+1)+". "+q.question;
+  const controls=document.createElement("div");controls.className="options";
+  const feedback=document.createElement("p");feedback.className="feedback";feedback.setAttribute("aria-live","polite");feedback.textContent="Selecione uma alternativa.";
+  const buttons=q.options.map((option,i)=>{
+   const b=document.createElement("button");b.type="button";b.className="option";b.textContent=option;b.setAttribute("aria-pressed","false");
+   b.addEventListener("click",()=>{
+    state.answers.set(index,i);buttons.forEach((other,k)=>other.setAttribute("aria-pressed",String(k===i)));
+    const right=i===q.answer;feedback.textContent=(right?"Correto. ":"Reveja. ")+q.feedback;
+    feedback.classList.toggle("correct",right);
+   });
+   controls.append(b);return b;
+  });
+  box.append(title,controls,feedback);host.append(box);
+ });
+}
+byId("reset-quiz").addEventListener("click",()=>{state.answers.clear();quizRender();byId("announcement").textContent="Perguntas reiniciadas.";});
+byId("reset-all").addEventListener("click",()=>{
+ state.filter="all";state.stage=stages[0].id;state.visited.clear();state.visited.add(state.stage);
+ state.structure=null;state.type=types[0].id;state.answers.clear();
+ filtersRender();select(state.stage);anatomyRender();chooseType(state.type);quizRender();
+ byId("anatomy-info").replaceChildren();
+ const hint=document.createElement("span");hint.textContent="Selecione uma estrutura para conhecer sua função.";byId("anatomy-info").append(hint);
+ byId("announcement").textContent="Atividade reiniciada na primeira etapa.";
+});
+filtersRender();select(state.stage);anatomyRender();chooseType(state.type);quizRender();
+</script></body></html>
