@@ -181,6 +181,7 @@ progress::-moz-progress-bar{background:#3aa58d;border-radius:99px}
 <strong id="lastFeedbackTitle"></strong>
 <p id="lastFeedbackText"></p>
 <p id="lastFeedbackWarning" class="warning" hidden></p>
+<p id="lastFeedbackAdjustment" class="warning" hidden></p>
 </div>
 </section>
 <section class="panel" aria-labelledby="historyTitle">
@@ -396,6 +397,15 @@ progress::-moz-progress-bar{background:#3aa58d;border-radius:99px}
     const warning=concern(last.after);
     $("lastFeedbackWarning").hidden=!warning;
     $("lastFeedbackWarning").textContent=warning;
+    const adjusted=limitAdjustments(last);
+    $("lastFeedbackAdjustment").hidden=adjusted.length===0;
+    $("lastFeedbackAdjustment").textContent=adjusted.length
+      ?"Efeito ajustado pelos limites de 0 a 100: "+adjusted.join("; ")+".":"";
+  }
+  function limitAdjustments(step){
+    if(!step)return [];
+    return indicators.filter(i=>step.actual[i.key]!==step.option.delta[i.key])
+      .map(i=>i.title+": previsto "+signed(step.option.delta[i.key])+", aplicado "+signed(step.actual[i.key]));
   }
   function deltaChip(key,value){
     const i=indicators.find(i=>i.key===key);
@@ -476,7 +486,12 @@ progress::-moz-progress-bar{background:#3aa58d;border-radius:99px}
     choices.push(id);render();
     if(choices.length===stages.length)$("outcomeTitle").focus();
     else $("decisionTitle").focus();
-    announce("Etapa "+(index+1)+" concluída: "+option.title+". Indicadores atualizados; próxima etapa disponível.");
+    const adjusted=limitAdjustments(simulate(choices).steps.at(-1));
+    const nextMessage=choices.length===stages.length
+      ?"Percurso concluído; você pode guardar uma referência e comparar trajetórias."
+      :"Próxima etapa disponível.";
+    announce("Etapa "+(index+1)+" concluída: "+option.title+". Indicadores atualizados. "+nextMessage
+      +(adjusted.length?" Alguns efeitos atingiram os limites de 0 a 100; consulte o feedback.":""));
   }
   function revise(index){
     if(!Number.isInteger(index)||index<0||index>=choices.length)return;

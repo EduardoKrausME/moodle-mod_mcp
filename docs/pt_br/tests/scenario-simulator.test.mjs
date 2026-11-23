@@ -64,7 +64,7 @@ test("HTML e SVG originais, acessíveis e independentes",async()=>{
     /role="status"/,/aria-live="polite"/,/aria-atomic="true"/,
     /<progress id="stageProgress"/,/id="sceneNode0"/,/id="sceneNode3"/,
     /id="saveBaseline"/,/id="comparisonBody"/,/id="history"/,
-    /id="confirmReset"/,/id="resetConfirmation"/,/@media\(max-width:740px\)/,
+    /id="confirmReset"/,/id="resetConfirmation"/,/id="lastFeedbackAdjustment"/,/@media\(max-width:740px\)/,
     /prefers-reduced-motion:reduce/,/aria-label/,/tabindex="-1"/
   ]) assert.match(html,re);
   assert.doesNotMatch(script,/innerHTML\s*=|localStorage|sessionStorage|fetch\(|XMLHttpRequest|document\.cookie/);
@@ -117,6 +117,8 @@ test("decisões encadeadas, contextos variáveis, revisão, comparação e rein�
   assert.equal($("sceneNode0").dataset.phase,"done");
   assert.equal($("sceneNode1").dataset.phase,"active");
   assert.match($("lastFeedbackText").textContent,/amplia a participação/);
+  assert.equal($("lastFeedbackAdjustment").hidden,true,"sem saturação não há aviso de ajuste");
+  assert.match($("announcer").textContent,/Próxima etapa disponível/);
   choose(2); // empréstimo
   assert.deepEqual([0,1,2,3].map(value),[57,74,66,67]);
   choose(2); // remoto
@@ -202,6 +204,10 @@ test("efeitos limitados a 0-100 com delta real distinto do previsto na saturaç�
   assert.equal($("stageProgress").value,4);
   const lastHistory=$("history").children[3],chips=lastHistory.children[3].children;
   assert.equal(chips[0].textContent,"Recursos +3","delta exibido corresponde ao aplicado após limite");
+  assert.equal($("lastFeedbackAdjustment").hidden,false,"saturação deve produzir alerta explícito");
+  assert.match($("lastFeedbackAdjustment").textContent,/Recursos: previsto \+12, aplicado \+3/);
+  assert.match($("announcer").textContent,/Percurso concluído/);
+  assert.match($("announcer").textContent,/limites de 0 a 100/);
   assert.equal(value(1),3);
   assert.equal(value(2),81);
   assert.equal(value(3),20);
@@ -237,11 +243,12 @@ test("catálogo acrescenta apenas o 13º exemplo e começa perguntando ao profes
   ];
   assert.equal(catalog.version,1);
   assert.equal(catalog.category,"custom");
-  assert.equal(catalog.examples.length,13);
+  assert.ok(catalog.examples.length>=13,"Exemplos posteriores não invalidam o cadastro do item 13.");
   assert.deepEqual(catalog.examples.slice(0,12).map(e=>e.id),previous);
   const current=catalog.examples[12];
   assert.equal(current.id,"simulador-de-cenarios-e-consequencias");
   assert.equal(current.path,"custom/simulador-de-cenarios-e-consequencias.html");
+  assert.equal(catalog.examples[12].id,"simulador-de-cenarios-e-consequencias","O exemplo 13 deve manter sua posição.");
   assert.match(current.prompt,/Na sua PRIMEIRA resposta/);
   assert.match(current.prompt,/Qual tipo de conteúdo você deseja trabalhar/);
   assert.match(current.prompt,/Aguarde a resposta/);
