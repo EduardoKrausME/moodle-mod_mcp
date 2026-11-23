@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Quiz de 12 desafios sobre o ciclo da água, evaporação, transpiração, nuvens, precipitação, gelo, infiltração, aquíferos e cidades, com ilustrações SVG originais.">
+<title>A incrível jornada de uma gota de água | Quiz Atlas das Águas</title>
+<style>
+:root{color-scheme:light;--papyrus:#f6eedb;--paper:#fffaf0;--ink:#3d2c29;--muted:#6b5b4f;--brick:#a54232;--brick2:#7f2d29;--gold:#c39c5b;--navy:#303b50;--olive:#677154;--line:#d3bea0;--mono:Consolas,"Liberation Mono",monospace;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--serif:Georgia,"Times New Roman",serif;background:var(--papyrus);color:var(--ink);font-family:var(--sans)}
+*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:290px;line-height:1.74;background:radial-gradient(ellipse at 20% 3%,#fae7c5,transparent 39%),var(--papyrus)}
+a{color:#79352a;text-underline-offset:4px}a:hover{color:#4d3627}button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}:focus-visible{outline:3px solid #2b6192;outline-offset:4px}[hidden]{display:none!important}
+.wrap{width:min(1170px,calc(100% - 44px));margin:auto}.skip{position:absolute;left:12px;top:-110px;padding:12px 17px;color:var(--ink);background:white;z-index:20}.skip:focus{top:12px}.kicker{font:850 .75rem/1.6 var(--sans);color:#8c392f;letter-spacing:.13em;text-transform:uppercase}
+.masthead{background:linear-gradient(135deg,#a04437,#642826);color:#fff3db;position:relative;overflow:hidden}.masthead:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,#e0a06a55,transparent 51%),repeating-linear-gradient(35deg,transparent 0 14px,#ffe8bf0a 14px 15px);pointer-events:none}
+.folio{position:relative;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center;border-bottom:1px solid #e2b67b99;padding:22px 0;color:#f9e2c7;font:800 .72rem/1.5 var(--sans);letter-spacing:.09em;text-transform:uppercase}.folio strong{color:#fff1c6}
+.hero-grid{position:relative;display:grid;grid-template-columns:.94fr 1.06fr;gap:32px;align-items:center;min-height:475px;padding:50px 0 43px}.masthead .kicker{color:#ffe0ab}.hero-title{font:normal clamp(2.65rem,6vw,6rem)/1.02 var(--serif);letter-spacing:-.06em;margin:18px 0 28px}.hero-title em{font-style:italic;font-weight:normal;color:#ffe0a8}.hero-lead{max-width:560px;color:#ffe8d1;line-height:1.86;font-size:1.07rem}.hero-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:23px}.hero-tags span{background:#fff3d51c;border:1px solid #f7d8aa9c;color:#fff0d7;padding:8px 12px;font:760 .76rem/1.4 var(--sans)}.hero-plate{min-width:0;margin:0}.hero-plate svg{display:block;width:100%;height:auto;filter:drop-shadow(8px 14px 16px #53231f4e)}.hero-plate figcaption{font-size:.8rem;line-height:1.7;color:#fbe0c0;margin-top:12px}
+.color-band{height:16px;background-color:#e5c899;background-image:linear-gradient(45deg,#874a38 25%,transparent 25%),linear-gradient(-45deg,#874a38 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#874a38 75%),linear-gradient(-45deg,transparent 75%,#874a38 75%);background-position:0 0,0 8px,8px -8px,-8px 0;background-size:16px 16px}
+.progress-section{padding:26px 0 19px}.progress-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font:760 .78rem var(--sans);color:#79503f;margin-bottom:10px}.progress-track{height:10px;background:#e6d2b4;border:1px solid #bea480;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#667451,#a54232);transition:width .25s ease}.progress-caption{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:11px;color:#745542;font:.83rem/1.6 var(--sans)}.notice{background:#efe1c9;border-left:4px solid #667451;padding:14px 17px;color:#563e30;font-size:.88rem;line-height:1.8}
+.main-shell{padding:25px 0 67px}.question-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:24px;align-items:start}.plate{margin:0;padding:17px;background:#eadcc4;border:1px solid #c3ad8b}.plate-number{display:flex;justify-content:space-between;gap:11px;flex-wrap:wrap;padding-bottom:13px;margin-bottom:12px;border-bottom:1px solid #c9b08b;color:#843d30;font:800 .73rem var(--sans);letter-spacing:.06em}.plate-picture{min-height:340px;background:#f6e8d0;display:grid;place-items:center}.plate-picture svg{display:block;width:100%;height:auto;max-height:450px}.plate figcaption{border-top:1px solid #cbb18e;padding-top:12px;margin-top:12px;color:#65503f;font-size:.82rem;line-height:1.76}.plate-note{margin-top:11px;color:#6c5541;font:.76rem var(--sans)}
+.question-card{min-height:567px;padding:clamp(20px,3vw,33px);background:#fffbf1;border:1px solid #c7ac88;display:flex;flex-direction:column}.question-index{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#8e3b30;border-bottom:1px solid #d2b99a;padding-bottom:16px;font:800 .75rem var(--sans)}.question-card h2{font:normal clamp(1.62rem,2.95vw,2.5rem)/1.21 var(--serif);letter-spacing:-.025em;margin:20px 0 15px}.question-instruction{color:#614d40;line-height:1.8;font-size:.94rem;margin-bottom:18px}
+.answers{margin:0;padding:0;border:0;min-width:0}.answers legend{font:800 .8rem var(--sans);color:#824332;margin-bottom:10px}.options{display:grid;gap:9px}.option{display:flex;align-items:center;gap:12px;padding:11px 13px;min-height:59px;background:#fff7e6;border:1px solid #d4bea0;cursor:pointer}.option:hover{background:#f5e5d0;border-color:#a54232}.option.selected{border:2px solid #923f33;background:#f5decb;padding:10px 12px}.option input{width:20px;height:20px;flex:none;accent-color:#8c3a2f}.option-copy{min-width:0;overflow-wrap:anywhere;color:#463127;font-size:.9rem;line-height:1.57}.option-art{flex:none;display:grid;place-items:center;width:76px;height:56px;background:#eddfc8;border:1px solid #bea17b}.option-art svg{width:74px;height:54px}
+.sequence{list-style:none;padding:0;margin:0;display:grid;gap:8px}.sequence-item{display:grid;grid-template-columns:27px minmax(0,1fr) auto;gap:9px;align-items:center;background:#fff6e2;border:1px solid #d7bea0;padding:10px}.sequence-item .num{font:.84rem var(--mono);color:#8a3c2e}.sequence-item .label{font-size:.9rem;line-height:1.48}.order-buttons{display:flex;gap:5px}.order-buttons button{border:1px solid #bba184;color:#704032;background:#fff8eb;width:35px;height:35px}.order-buttons button:not(:disabled):hover{background:#ead5b9}.answer-help{font-size:.84rem;color:#76604e;line-height:1.78;margin:13px 0 0}
+.feedback{border-left:5px solid #bd8f55;background:#f1e3cc;color:#5b4030;padding:16px 18px;margin:20px 0 0;line-height:1.78}.feedback.correct{border-color:#677154;background:#e0e9d6;color:#3c563b}.feedback strong{display:block;font:780 1.04rem var(--serif);margin-bottom:7px}.feedback p{margin:0}.feedback .feedback-extra{font-size:.83rem;margin-top:8px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto;padding-top:24px}.btn{background:#8e3b30;color:#fff8ed;border:1px solid #8e3b30;font:800 .9rem var(--sans);min-height:45px;padding:11px 15px}.btn:hover:not(:disabled){background:#6d2e27}.btn.secondary{background:#fff8e8;color:#713a2e;border-color:#ad8966}.btn.secondary:hover:not(:disabled){background:#efdfc8}.btn.teal{background:#4b614d;color:#fff9ed;border-color:#4b614d}.btn.teal:hover:not(:disabled){background:#384d3a}.btn.next{margin-left:auto}
+.tips{margin:20px 0;padding:15px 19px;background:#efe1cb;border-left:4px solid #a54232;color:#574334;font-size:.9rem}.tips b{color:#863a30}
+.summary{max-width:975px;margin:auto;background:#fffbf1;border:1px solid #c6ad89;padding:clamp(23px,4vw,48px)}.summary h2{font:normal clamp(2.1rem,4vw,3.6rem)/1.12 var(--serif);letter-spacing:-.04em;margin:14px 0 19px}.summary>p{color:#645241}.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:22px 0}.stat{background:#f0e2cb;padding:14px;border-top:4px solid #a54232}.stat:nth-child(2){border-color:#677154}.stat:nth-child(3){border-color:#c39c5b}.stat b{display:block;color:#7c392f;font:normal 2.5rem var(--serif)}.stat span{font:800 .75rem var(--sans);color:#6b5241}
+.review-list{list-style:none;display:grid;gap:11px;padding:0}.review-item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:#fbf1df;border:1px solid #d5bb9b;padding:13px 15px}.review-item strong{font-size:.95rem}.review-item p{font-size:.84rem;color:#66513f;margin:4px 0 0}.review-item button{border:1px solid #b69674;background:#fff8ed;color:#7e3c2e;padding:10px 12px}
+.references{border-top:1px solid #d3bea0;color:#65513f;padding:36px 0 53px;font-size:.85rem;line-height:1.8}.references h2{font:normal 1.65rem var(--serif)}.references p{margin:11px 0}
+.motion-reduce *,.motion-reduce *:before,.motion-reduce *:after{animation:none!important;transition:none!important}
+@media(max-width:950px){.hero-grid{grid-template-columns:1fr .85fr;min-height:0}.question-grid{grid-template-columns:1fr}.plate-picture{min-height:230px}.question-card{min-height:0}}
+@media(max-width:620px){.wrap{width:calc(100% - 28px)}.hero-grid{grid-template-columns:1fr;gap:19px;padding:31px 0;min-height:0}.hero-title{font-size:clamp(2.5rem,10vw,4.4rem)}.hero-plate{max-width:420px}.plate{padding:10px}.plate-picture{min-height:0}.question-card{padding:17px}.btn{flex:1 1 40%}.btn.next{margin-left:0}.option-art{width:61px;height:44px}.option-art svg{width:59px;height:42px}.summary-stats{grid-template-columns:1fr}.review-item{grid-template-columns:1fr}.sequence-item{grid-template-columns:23px minmax(0,1fr) 76px}.order-buttons button{width:33px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+/* Atlas das Águas · identidade visual científica da página de referência */
+:root{--papyrus:#f5f2e5;--paper:#fbf9f0;--ink:#203f43;--muted:#48676a;--brick:#176d7d;--brick2:#134d65;--gold:#f6c66b;--navy:#163d52;--olive:#4c8461;--cream:#e0ede3;--line:#c5d4c8}
+body{background:radial-gradient(ellipse at 88% 2%,#d9eee5,transparent 38%),#f5f2e5;color:#203f43}
+a{color:#145d76}a:hover{color:#0c414d}:focus-visible{outline:3px solid #bc663e;outline-offset:4px}
+.kicker{color:#2a7773}.masthead{background:linear-gradient(180deg,#94d2d0,#d9eee2 73%,#f5f2e5);color:#203f43}
+.masthead:before{background:radial-gradient(ellipse at 20% 15%,#fff9,transparent 42%),repeating-linear-gradient(110deg,transparent 0 37px,#d3eee644 38px 40px);opacity:1}
+.folio{color:#28595d;border-color:#1a6b6e4a;font:800 .74rem/1.5 var(--mono)}.folio strong{color:#176d73}
+.masthead .kicker{color:#297974}.hero-title{font-family:Georgia,"Times New Roman",serif;color:#203f43;font-weight:700;letter-spacing:-.069em}
+.hero-title em{font-style:italic;font-weight:400;color:#176b7d}.hero-lead{color:#345d60;line-height:1.84}.hero-tags span{color:#295f5c;background:#effaf4b6;border:1px solid #82b6aa}
+.hero-plate{transform:none}.hero-plate svg{filter:drop-shadow(8px 14px 18px #29546826)}.hero-plate figcaption{background:#f5fbf2b6;padding:10px 12px;color:#366968}
+.color-band{height:12px;background:linear-gradient(90deg,#1a6d89 0 20%,#8dcecc 20% 39%,#4c8461 39% 60%,#f6c66b 60% 82%,#de835e 82%)}
+.progress-track{background:#d5e7dc;border-color:#a3c4b8}.progress-fill{background:linear-gradient(90deg,#237994,#4eae91)}
+.progress-meta,.progress-caption{color:#306a67}.notice{background:#e4eee5;border-left-color:#2b817f;color:#335c58}
+.plate{background:#e5f0e6;border-color:#aac9bd}.plate-number{color:#266f77;border-color:#b3d0c0}.plate-picture{background:#e0ede4}
+.plate figcaption{color:#446c60;border-color:#b0ccc0}.plate-note{color:#346a6a}
+.question-card{background:#fcfff5;border-color:#b4cec2}.question-index{color:#1a7182;border-color:#b5cfc5}
+.question-card h2{font-family:Georgia,"Times New Roman",serif;color:#20484c}.question-instruction,.answer-help{color:#486966}.answers legend{color:#206f77}
+.option,.sequence-item{background:#f0f8f0;border-color:#b0cdbf;color:#254b48}.option:hover{border-color:#24768c;background:#e1f2ed}.option.selected{border-color:#207b8a;background:#dcefea}.option input{accent-color:#187583}
+.option-art{background:#e2f0e8;border-color:#abd0c7}.sequence-item .num{color:#1b7584}
+.order-buttons button{background:#f7fcf2;border-color:#7caaa2;color:#205967}.order-buttons button:not(:disabled):hover{background:#d7eeea}
+.feedback{border-left-color:#de835e;background:#f3e8d5;color:#6c513e}.feedback.correct{background:#e1f0e4;border-color:#2b806f;color:#215c57}
+.btn{background:#206a79;border-color:#206a79;color:#fffdf2}.btn:hover:not(:disabled){background:#124d65}
+.btn.secondary{background:#f8fcf3;border-color:#76a59b;color:#206866}.btn.secondary:hover:not(:disabled){background:#e1efe7}
+.btn.teal{background:#387d6b;border-color:#387d6b;color:#fffdf2}.btn.teal:hover:not(:disabled){background:#286354}
+.tips{background:#e1ede3;border-color:#3f8a7f;color:#39635b}.tips b{color:#216a6e}
+.summary{background:#fcfff5;border-color:#b1cbbb}.summary h2{font-family:Georgia,"Times New Roman",serif}.summary-stats .stat{background:#e1eee5;border-color:#237c8d}.summary-stats .stat:nth-child(2){border-color:#4e8b65}.summary-stats .stat:nth-child(3){border-color:#e1af5e}.stat b{color:#1f6c7a}
+.review-item{background:#e6f0e5;border-color:#b9cbb9}.review-item button{background:#286e75;border-color:#286e75;color:#fffdf3}
+.references{color:#48675d;border-color:#b8cfc0}.references a{color:#145d76}
+@media(max-width:650px){.hero-grid{grid-template-columns:1fr}.hero-plate{max-width:520px}.hero-title{font-size:clamp(2.7rem,10.5vw,4.6rem)}.option-art{width:63px;height:46px}.option-art svg{width:61px;height:44px}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#atividade">Ir para a questão</a>
+<header class="masthead">
+ <div class="wrap">
+  <div class="folio"><strong>ATLAS DAS ÁGUAS · EXPEDIÇÃO 07 / 10</strong><span>OCEANO · NUVENS · SOLO · RIOS · GELO</span></div>
+  <div class="hero-grid">
+   <div><div class="kicker">Viagem interativa de uma gota</div>
+    <h1 class="hero-title">A incrível jornada<br>de uma <em>gota de água.</em></h1>
+    <p class="hero-lead">Um oceano pode se transformar em nuvem, a chuva pode alimentar um rio ou infiltrar no solo e a mesma água pode ficar armazenada por muito tempo. Descubra 12 processos, compare caminhos e explique o que muda em cada ambiente.</p>
+    <div class="hero-tags"><span>12 desafios comentados</span><span>Pranchas científicas SVG</span><span>Rotas possíveis, não obrigatórias</span></div>
+   </div>
+   <figure class="hero-plate">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 454" role="img" aria-labelledby="heroWaterTitle heroWaterDesc">
+     <title id="heroWaterTitle">Ciclo da água entre oceano, nuvem, montanha, rios, plantas e solo</title>
+     <desc id="heroWaterDesc">Ilustração vetorial original em corte da paisagem. Sol aquece um oceano à esquerda; vapor ascende, há nuvens sobre uma montanha, chuva alimenta um rio, parte da água infiltra em camadas permeáveis e um pequeno fluxo retorna ao mar. As setas representam possibilidades, sem escala.</desc>
+     <defs>
+      <linearGradient id="atlasSky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8bccca"/><stop offset="1" stop-color="#e0f1e6"/></linearGradient>
+      <linearGradient id="atlasSea" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#43a9b7"/><stop offset="1" stop-color="#0e597b"/></linearGradient>
+      <marker id="atlasArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2f7c8d"/></marker>
+     </defs>
+     <rect width="650" height="454" rx="12" fill="url(#atlasSky)"/>
+     <circle cx="93" cy="83" r="47" fill="#f8c96a"/>
+     <g stroke="#f1ba5e" stroke-width="5" stroke-linecap="round"><path d="M93 18V7M93 146V160M30 84H14M154 84h16M49 39L36 27M134 127l15 15"/></g>
+     <path d="M0 278Q90 239 194 278T401 278V454H0Z" fill="url(#atlasSea)"/>
+     <path d="M232 275L398 119L475 196L519 150L650 297V454H270Z" fill="#84a997" stroke="#5a8a80" stroke-width="4"/>
+     <path d="M349 164L398 119L449 169L418 168L398 150L374 178Z" fill="#fafdf2"/>
+     <path d="M482 190L519 150L558 198L536 189L519 175L505 198Z" fill="#f7f9ee"/>
+     <path d="M0 313Q76 288 146 316T291 323" fill="none" stroke="#7bdbd4" stroke-width="5" opacity=".8"/>
+     <path d="M412 198Q392 259 454 293T522 361Q550 397 647 417" fill="none" stroke="#2b8fa5" stroke-width="22" stroke-linecap="round"/>
+     <path d="M328 326Q412 354 468 387T647 419" fill="none" stroke="#70c4c5" stroke-width="8" opacity=".65"/>
+     <g fill="#f9fff6" stroke="#d1ebe8" stroke-width="2"><ellipse cx="281" cy="101" rx="68" ry="30"/><ellipse cx="237" cy="105" rx="42" ry="28"/><ellipse cx="321" cy="105" rx="46" ry="25"/><ellipse cx="389" cy="88" rx="62" ry="26"/><ellipse cx="346" cy="93" rx="40" ry="24"/><ellipse cx="435" cy="95" rx="40" ry="22"/></g>
+     <path d="M146 263Q143 184 209 139" fill="none" stroke="#388998" stroke-width="6" stroke-dasharray="11 9" marker-end="url(#atlasArrow)"/>
+     <path d="M289 178Q334 192 375 171" fill="none" stroke="#368a95" stroke-width="4" stroke-dasharray="7 7" marker-end="url(#atlasArrow)"/>
+     <g stroke="#2f9cba" stroke-linecap="round" stroke-width="5"><path d="M375 137l-8 19M396 140l-8 20M419 136l-8 21M440 138l-8 19"/></g>
+     <path d="M275 297V454H650V400L502 400L450 362Z" fill="#b29d7c" opacity=".65"/>
+     <path d="M303 374Q447 358 650 380" fill="none" stroke="#8e7960" stroke-width="4" stroke-dasharray="6 8"/>
+     <path d="M466 316Q468 353 486 385" fill="none" stroke="#296e85" stroke-width="5" stroke-dasharray="8 9" marker-end="url(#atlasArrow)"/>
+     <path d="M485 386Q561 400 628 388" fill="none" stroke="#28789b" stroke-width="5" marker-end="url(#atlasArrow)"/>
+     <path d="M555 299V240" stroke="#507b52" stroke-width="8"/><path d="M555 246Q509 205 503 254Q530 272 555 254M555 259Q603 203 615 260Q587 277 555 268" fill="#69a27c" stroke="#458161" stroke-width="3"/>
+     <g fill="#164e62" font-family="Consolas,monospace" font-size="15"><text x="32" y="255">OCEANO</text><text x="222" y="61">NUVENS</text><text x="504" y="341">RIO</text><text x="323" y="429">ÁGUA NO SOLO</text></g>
+     <g><path d="M110 189C111 174 130 159 135 141C141 157 159 172 159 189C159 216 111 216 110 189Z" fill="#e9ffff" stroke="#2b92ad" stroke-width="4"/><path d="M127 184Q121 191 126 199" stroke="#83c9d6" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+    </svg>
+    <figcaption>Atlas autoral em paisagem conceitual: as setas sugerem percursos possíveis, não um ciclo único nem medidas reais.</figcaption>
+   </figure>
+  </div>
+ </div>
+</header>
+<div class="color-band" aria-hidden="true"></div>
+<div class="wrap">
+ <section class="progress-section" aria-label="Acompanhamento do quiz">
+  <div class="progress-meta"><span id="progressStep">QUESTÃO 01 / 12</span><span id="progressDone">0 de 12 conferidas</span></div>
+  <div class="progress-track" id="progressBar" role="progressbar" aria-label="Questões conferidas" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-caption"><span id="progressTopic">Da atmosfera aos reservatórios</span><button class="btn secondary" type="button" id="motionToggle" aria-pressed="false">Reduzir movimentos</button></div>
+  <p class="notice">Este é um quiz formativo local: não envia respostas ao Moodle nem lança notas oficiais. As pranchas são modelos conceituais, sem representar medições reais, e a água não segue sempre uma única rota.</p>
+ </section>
+ <main id="atividade" class="main-shell">
+  <section id="questionScreen" class="question-grid" aria-label="Questão atual">
+   <figure class="plate">
+    <div class="plate-number"><span id="plateNum">PRANCHA 01</span><span id="plateLabel">ESTRUTURA</span></div>
+    <div id="platePicture" class="plate-picture"></div>
+    <figcaption id="plateCaption">Diagrama original de um processo hidrológico.</figcaption>
+    <div class="plate-note">SVG original · Diagrama científico conceitual, sem escala</div>
+   </figure>
+   <div class="question-card">
+    <div class="question-index"><span id="questionSection">01 / ESTRUTURA</span><span id="questionType">ESCOLHA ÚNICA</span></div>
+    <h2 id="questionTitle" tabindex="-1">Carregando a primeira questão…</h2>
+    <p id="questionInstruction" class="question-instruction"></p>
+    <div id="answerMount"></div>
+    <p class="answer-help" id="answerHelp"></p>
+    <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+    <div class="actions">
+     <button type="button" id="previousButton" class="btn secondary">Anterior</button>
+     <button type="button" id="checkButton" class="btn">Conferir resposta</button>
+     <button type="button" id="nextButton" class="btn teal next">Próxima questão →</button>
+    </div>
+   </div>
+  </section>
+  <section id="summaryScreen" class="summary" hidden aria-labelledby="summaryTitle">
+   <div class="kicker">Conclusão / revisão comentada</div>
+   <h2 id="summaryTitle" tabindex="-1">Quantos caminhos uma gota pode percorrer?</h2>
+   <p>O resultado resume apenas esta interação local. Reveja as pranchas para entender como energia, mudanças de fase, terreno e armazenamento alteram o caminho da água, sem tratar o ciclo como uma rota única.</p>
+   <div class="summary-stats">
+    <div class="stat"><b id="totalReviewed">0</b><span>QUESTÕES CONFERIDAS</span></div>
+    <div class="stat"><b id="totalMastered">0</b><span>RESPOSTAS CORRETAS AO FINAL</span></div>
+    <div class="stat"><b id="totalFirst">0</b><span>ACERTOS NA PRIMEIRA TENTATIVA</span></div>
+   </div>
+   <h3 style="font:normal 1.65rem Georgia,serif;margin:22px 0 14px">Revisitar pranchas</h3>
+   <ol id="reviewList" class="review-list"></ol>
+   <div class="actions"><button class="btn secondary" type="button" id="restartButton">Recomeçar do zero</button><button class="btn teal" type="button" id="reviewFirstButton">Rever a primeira questão</button></div>
+  </section>
+ </main>
+ <aside class="tips" aria-label="Instruções do atlas"><b>Como explorar:</b> observe as pranchas, selecione uma ou várias alternativas e confira para receber a explicação. Na questão final, use ↑ e ↓ para ordenar uma rota possível. Você pode voltar, revisar e recomeçar, sem registro acadêmico.</aside>
+ <section class="references" aria-labelledby="sourcesTitle"><h2 id="sourcesTitle">Fontes científicas, imagens e limites</h2>
+<p>As 12 pranchas SVG e as alternativas ilustradas são desenhos originais. Representam processos possíveis de evaporação, transpiração, condensação, precipitação, neve, escoamento, infiltração, aquíferos, ocupação urbana e variações de armazenamento, sem ser fotografias, resultados medidos, mapas hidrogeológicos ou previsões meteorológicas. Proporções, escalas, taxas e caminhos foram simplificados; uma gota real não percorre necessariamente todas as etapas, nem em tempo fixo.</p>
+<p>Referências: <a href="https://www.usgs.gov/water-science-school/water-cycle" target="_blank" rel="noopener noreferrer">USGS - Ciclo da água</a>; <a href="https://www.usgs.gov/water-science-school/science/infiltration-and-water-cycle" target="_blank" rel="noopener noreferrer">USGS - Infiltração</a>; <a href="https://www.usgs.gov/water-science-school/science/aquifers-and-groundwater" target="_blank" rel="noopener noreferrer">USGS - Aquíferos e água subterrânea</a>; <a href="https://www.noaa.gov/education/resource-collections/freshwater/water-cycle" target="_blank" rel="noopener noreferrer">NOAA - Water Cycle</a>; <a href="https://science.nasa.gov/earth/earth-observatory/the-water-cycle/" target="_blank" rel="noopener noreferrer">NASA - The Water Cycle</a>; <a href="https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-8/" target="_blank" rel="noopener noreferrer">IPCC AR6 - Water Cycle Changes</a>.</p></section>
+</div>
+<script>
+(function(){
+'use strict';
+var root=document, total=12;
+var $=function(id){return root.getElementById(id);};
+var questions=[{"section":"Reservatórios da Terra","figure":"reservoir","type":"single","title":"Onde está armazenada a maior parte da água existente na Terra?","instruction":"Compare os reservatórios no desenho e não confunda água doce acessível com água total.","options":[["a","Nos oceanos e mares"],["b","Nos rios e lagos superficiais"],["c","Nas nuvens da atmosfera"],["d","Apenas nas geleiras de montanha"]],"correct":"a","hint":"O maior reservatório é salgado, mesmo que a água doce seja essencial para a vida.","explain":"Os oceanos concentram a maior parte da água da Terra. Água em gelo, aquíferos, lagos, rios, organismos e atmosfera constitui parcelas menores, com disponibilidades muito diferentes.","caption":"O esquema compara volumes de maneira qualitativa; o tamanho dos blocos não representa uma escala exata."},{"section":"Evaporação e calor","figure":"evaporation","type":"single","title":"Ao receber energia solar, como parte da água do oceano pode chegar à atmosfera?","instruction":"Distinga evaporação de ebulição, congelamento e condensação.","options":[["a","Por evaporação: moléculas passam do líquido para o vapor, sem exigir fervura","evap"],["b","Só por ebulição: toda água precisa alcançar 100 °C","boil"],["c","Por condensação: vapor vira água líquida no mar","condense"]],"correct":"a","hint":"A evaporação pode ocorrer em temperaturas muito inferiores ao ponto de ebulição.","explain":"Moléculas de água podem passar da superfície líquida ao estado gasoso em diversas temperaturas; o processo é favorecido por energia disponível, condições do ar e vento. Evaporação não exige que o oceano ferva.","caption":"Setas saem da superfície do mar; o esquema não representa temperatura ou fluxo medidos."},{"section":"Água nas plantas","figure":"transpiration","type":"multiple","title":"Quais processos explicam o papel da vegetação no caminho da água?","instruction":"Marque as afirmações coerentes com absorção de água e transpiração.","options":[["a","Raízes podem absorver água do solo"],["b","As folhas podem liberar vapor de água por transpiração"],["c","Evaporação do solo e transpiração vegetal contribuem para a evapotranspiração"],["d","Toda água absorvida pela planta fica armazenada para sempre"],["e","As plantas fabricam toda a água atmosférica sem utilizar água do solo"]],"correct":["a","b","c"],"hint":"Observe raízes, folhas e setas em direção à atmosfera.","explain":"Plantas absorvem água e parte dela sai para a atmosfera por transpiração, principalmente através de estômatos. Evaporação e transpiração são processos distintos que juntos integram a evapotranspiração; os fluxos variam entre espécies e ambientes.","caption":"Planta esquemática com raízes, água no solo e vapor liberado pelas folhas."},{"section":"Condensação e nuvens","figure":"condensation","type":"single","title":"Como o vapor de água pode participar da formação de uma nuvem?","instruction":"Considere o resfriamento do ar e a formação de gotículas ou cristais.","options":[["a","O vapor pode condensar em gotículas, frequentemente sobre aerossóis, ou formar gelo em condições apropriadas"],["b","Toda nuvem é composta exclusivamente por vapor invisível"],["c","O vapor precisa primeiro ferver para se tornar líquido"],["d","A água deixa de existir ao alcançar altitude elevada"]],"correct":"a","hint":"As nuvens visíveis contêm gotículas de água e/ou cristais de gelo.","explain":"Quando o ar atinge condições de saturação, água pode condensar sobre partículas e gerar gotículas; em condições adequadas há formação de cristais de gelo. O vapor em si é invisível, e a nuvem é formada por partículas condensadas.","caption":"Partículas de aerossol e gotículas representadas de modo ampliado, sem escala microscópica."},{"section":"Da nuvem à superfície","figure":"precipitation","type":"single","title":"O que torna possível uma gotícula de nuvem participar da precipitação?","instruction":"Leia as três alternativas ilustradas como processos e não como garantias de chuva.","options":[["a","Crescimento por colisão/coalescência ou processos com gelo, até partículas capazes de precipitar","rain"],["b","Toda nuvem precipita imediatamente sem crescimento das partículas","cloud"],["c","As gotículas precisam virar vapor antes de cair como pedras","vapor"]],"correct":"a","hint":"Gotículas pequenas podem permanecer suspensas; a precipitação envolve crescimento ou transformação.","explain":"Precipitação envolve crescimento de gotículas por colisão e coalescência e/ou processos de gelo, dependendo da nuvem. A água pode chegar como chuva, neve ou outras formas; nem toda nuvem produz precipitação que alcança o solo.","caption":"Três caminhos conceituais; apenas o crescimento de partículas em condições apropriadas favorece precipitação."},{"section":"Neve, gelo e reservas","figure":"glacier","type":"multiple","title":"Quais afirmações sobre neve, geleiras e armazenamento de água são corretas?","instruction":"Selecione as opções compatíveis com reservatórios e mudanças de fase.","options":[["a","Parte da precipitação pode cair como neve em condições adequadas"],["b","Gelo e neve podem armazenar água por períodos muito diferentes"],["c","A fusão de neve e gelo pode alimentar rios e cursos d'água"],["d","Toda água que cai em forma de neve retorna ao oceano no mesmo dia"],["e","Geleiras são somente paisagens e não armazenam água"]],"correct":["a","b","c"],"hint":"Gelo pode armazenar água e derreter posteriormente, mas os tempos são variáveis.","explain":"Neve e gelo são reservatórios do ciclo da água; a acumulação e o degelo variam conforme clima, relevo e balanço de massa. Geleiras podem reter água por anos a períodos muito maiores, sem uma duração universal.","caption":"Montanha e reservatório glacial são simplificações gráficas; sem escala ou previsão climática."},{"section":"Escoamento ou infiltração","figure":"infiltration","type":"single","title":"Ao atingir uma encosta com solo permeável, qual destino uma parte da chuva pode ter?","instruction":"Não suponha que a chuva sempre escorra diretamente para o rio.","options":[["a","Infiltrar no solo e, em certas condições, contribuir para recarga subterrânea"],["b","Transformar-se automaticamente em rocha"],["c","Ficar suspensa eternamente sobre a superfície"],["d","Retornar à nuvem sem nenhuma mudança de fase"]],"correct":"a","hint":"A água pode entrar nos poros do solo antes de atingir reservatórios subterrâneos.","explain":"Parte da água infiltra no solo, onde pode ser retida, absorvida por plantas, mover-se lateralmente ou percolar e participar da recarga de aquíferos. Outra parte pode escoar superficialmente, conforme intensidade da chuva e características do terreno.","caption":"Corte da encosta com setas separadas de infiltração e escoamento superficial."},{"section":"O que é um aquífero?","figure":"aquifer","type":"single","title":"Qual ilustração representa melhor um aquífero poroso comum?","instruction":"Compare desenhos de materiais com poros, cavidades e tubos artificiais.","options":[["a","A: Sedimentos ou rochas permeáveis com água nos poros ou fraturas","pores"],["b","B: Uma caverna gigante cheia de água, que descreve todo aquífero","cave"],["c","C: Uma rede de canos metálicos que forma naturalmente todos os aquíferos","pipes"]],"correct":"a","hint":"Água subterrânea costuma preencher poros ou fraturas; grandes cavidades ocorrem em alguns sistemas, mas não em todos.","explain":"Um aquífero é uma formação geológica capaz de armazenar e transmitir água subterrânea em quantidades relevantes. Muitos têm água em poros e fraturas; sistemas cársticos podem incluir condutos e cavidades, mas isso não define todos os aquíferos.","caption":"Três cortes didáticos contrastam poros, cavidade idealizada e tubulação artificial."},{"section":"Chuva em áreas urbanas","figure":"urban","type":"multiple","title":"Quais mudanças podem ocorrer quando solo vegetado é substituído por grandes áreas impermeáveis?","instruction":"Considere escoamento, infiltração e planejamento da drenagem.","options":[["a","Pode aumentar o escoamento superficial para uma mesma chuva"],["b","Pode reduzir a infiltração em partes do terreno"],["c","Áreas verdes e soluções de drenagem podem alterar a distribuição dos fluxos"],["d","A impermeabilização faz toda chuva desaparecer instantaneamente"],["e","O comportamento da água independe de relevo, intensidade da chuva e infraestrutura"]],"correct":["a","b","c"],"hint":"Compare a proporção de água que entra no solo e a que se desloca na superfície.","explain":"Pavimentos tendem a dificultar infiltração e favorecer escoamento, mas os efeitos dependem também de solo, intensidade da chuva, relevo e drenagem. Vegetação e infraestrutura verde podem ajudar a modificar esses caminhos.","caption":"Duas mini-paisagens, solo vegetado e pavimento, com setas proporcionais apenas conceituais."},{"section":"Atmosfera e mudanças climáticas","figure":"climate","type":"multiple","title":"Quais afirmações tratam corretamente a relação entre aquecimento e ciclo da água?","instruction":"Evite conclusões absolutas sobre chuvas em cada cidade ou região.","options":[["a","Ar mais quente pode conter mais vapor d'água em condições de saturação"],["b","Alterações no clima podem modificar a frequência ou intensidade de alguns extremos hidrológicos"],["c","Os impactos de precipitação variam entre regiões e cenários"],["d","Um planeta mais quente significa necessariamente mais chuva em todos os lugares o tempo todo"],["e","Temperatura, umidade, circulação e condições locais são irrelevantes"]],"correct":["a","b","c"],"hint":"Capacidade de retenção de vapor e distribuição de chuvas não são a mesma coisa.","explain":"O aquecimento favorece maior teor de vapor em ar saturado, com implicações para o ciclo hidrológico, mas circulação atmosférica, disponibilidade de água e condições regionais controlam padrões de precipitação. Não é correto inferir mais chuva em todo lugar.","caption":"Mapa esquemático com regiões úmidas e secas distintas, sem previsão para local real."},{"section":"Tempo de residência","figure":"residence","type":"single","title":"Uma gota precisa completar o mesmo circuito em um tempo fixo?","instruction":"Compare o movimento rápido na atmosfera e o armazenamento prolongado no gelo ou em águas subterrâneas.","options":[["a","Não: diferentes reservatórios e trajetórias têm durações muito variadas"],["b","Sim: toda gota retorna ao oceano exatamente em 24 horas"],["c","Sim: qualquer aquífero troca toda sua água todos os meses"],["d","Sim: uma gota de gelo e uma gota de chuva têm sempre a mesma duração"]],"correct":"a","hint":"Reservatórios como atmosfera, gelo e aquíferos operam em escalas de tempo diferentes.","explain":"A água percorre caminhos diversos e permanece tempos distintos em cada reservatório. Parte circula rapidamente; outra pode ficar armazenada por anos ou muito mais, dependendo das condições e da escala analisada.","caption":"Três relógios ilustrativos simbolizam escalas relativas, sem intervalos medidos."},{"section":"Uma rota possível","figure":"journey","type":"sequence","title":"Ordene uma rota hipotética da água entre o oceano e um rio.","instruction":"Use ↑ e ↓. Esta é uma rota possível, não o percurso obrigatório de todas as gotas.","items":[["river","A água da chuva escorre para o rio"],["cloud","Parte do vapor condensa e participa da formação de nuvens"],["ocean","A gota está na superfície do oceano"],["rain","A água cresce em partículas de nuvem e precipita como chuva"],["return","O rio transporta água em direção a reservatórios a jusante"],["evap","Parte da água evapora e entra na atmosfera"]],"correct":["ocean","evap","cloud","rain","river","return"],"hint":"Comece pelo reservatório, depois mudança de fase, nuvem, precipitação e transporte superficial.","explain":"Uma sequência coerente é oceano, evaporação, condensação/nuvem, chuva, escoamento ao rio e transporte a jusante. Em outras trajetórias há infiltração, transpiração, gelo, lagos ou longos armazenamentos. O ciclo não é uma fila única.","caption":"Roteiro linear simplificado apenas para ordenar esta hipótese; outras rotas são igualmente possíveis."}];
+var answer=Object.create(null),checked=Object.create(null),firstTry=Object.create(null),index=0,reduceMotion=false;
+function svgFrame(title,desc,body){
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 570 386" role="img" aria-labelledby="waterFigTitle waterFigDesc"><title id="waterFigTitle">'+title+'</title><desc id="waterFigDesc">'+desc+'</desc>'+
+ '<defs><marker id="waterArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#277e8b"/></marker></defs>'+
+ '<rect x="1" y="1" width="568" height="384" fill="#e1f0e7" stroke="#9cbeb5" stroke-width="2"/><rect x="18" y="17" width="534" height="319" fill="#eef8ec" stroke="#b7d4c6"/>'+
+ '<text x="34" y="40" font-size="13" font-family="Consolas,monospace" fill="#1e6471">ATLAS DAS ÁGUAS · PRANCHA ILUSTRADA</text>'+
+ body+'<text x="33" y="364" font-size="11" font-family="Consolas,monospace" fill="#456d6b">ESQUEMA ORIGINAL / SEM ESCALA NEM MEDIÇÃO REAL</text></svg>';
+}
+function txt(x,y,s,z,color){return '<text x="'+x+'" y="'+y+'" font-size="'+(z||16)+'" font-family="Consolas,monospace" fill="'+(color||'#24545a')+'">'+s+'</text>';}
+function line(d,color,dash){return '<path d="'+d+'" fill="none" stroke="'+(color||'#277e8b')+'" stroke-width="5" stroke-linecap="round"'+(dash?' stroke-dasharray="9 8"':'')+' marker-end="url(#waterArrow)"/>';}
+function drop(x,y,s,fill){
+ return '<g transform="translate('+x+' '+y+') scale('+s+')"><path d="M0 -28C-8 -9 -24 1 -24 17C-24 46 24 46 24 17C24 1 8 -9 0 -28Z" fill="'+(fill||'#2f9db7')+'" stroke="#176c87" stroke-width="3"/><path d="M-11 15Q-14 24 -7 29" stroke="#dbf9fb" stroke-width="5" fill="none" stroke-linecap="round"/></g>';
+}
+function cloud(x,y,s){
+ return '<g transform="translate('+x+' '+y+') scale('+s+')" fill="#fffdf5" stroke="#a2c6c9" stroke-width="3"><ellipse cx="-32" cy="4" rx="44" ry="24"/><ellipse cx="12" cy="-13" rx="38" ry="36"/><ellipse cx="53" cy="6" rx="39" ry="23"/></g>';
+}
+function mountain(x,y,s){
+ return '<g transform="translate('+x+' '+y+') scale('+s+')"><path d="M-119 90L0 -100L130 90Z" fill="#86a79f" stroke="#61877d" stroke-width="3"/><path d="M-37 -40L0 -100L44 -35L17 -40L0 -60L-18 -33Z" fill="#fafdf3"/></g>';
+}
+function tree(x,y,s){
+ return '<g transform="translate('+x+' '+y+') scale('+s+')"><path d="M0 70V-2" stroke="#6b6545" stroke-width="12" stroke-linecap="round"/><ellipse cx="-28" cy="-21" rx="43" ry="35" fill="#63a77a" stroke="#408567" stroke-width="3"/><ellipse cx="24" cy="-36" rx="46" ry="42" fill="#6bb184" stroke="#408567" stroke-width="3"/><path d="M0 70L-26 94M0 70L25 95" fill="none" stroke="#8d805c" stroke-width="5"/></g>';
+}
+function pill(x,y,w,h,s,color){
+ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="8" fill="'+(color||'#fafff4')+'" stroke="#a1c5b7" stroke-width="2"/>'+txt(x+11,y+h/2+6,s,15);
+}
+function icon(k){
+ var b='',blue='#268ca8',green='#478f71',orange='#d9974f';
+ if(k==='evap')b='<path d="M7 43H73" stroke="'+blue+'" stroke-width="8"/><path d="M18 36Q6 21 23 6M42 36Q30 21 47 6M63 36Q50 21 67 6" fill="none" stroke="'+orange+'" stroke-width="4"/>';
+ if(k==='boil')b='<rect x="9" y="34" width="61" height="15" fill="'+blue+'"/><g fill="#fff"><circle cx="20" cy="29" r="6"/><circle cx="37" cy="20" r="7"/><circle cx="58" cy="27" r="6"/></g>';
+ if(k==='condense')b='<path d="M8 14H72" stroke="'+blue+'" stroke-width="3"/><g fill="'+blue+'"><circle cx="18" cy="37" r="5"/><circle cx="38" cy="37" r="5"/><circle cx="58" cy="37" r="5"/></g>';
+ if(k==='rain')b='<g fill="#fafff4" stroke="#9abac0" stroke-width="2"><ellipse cx="38" cy="17" rx="25" ry="11"/><ellipse cx="24" cy="19" rx="17" ry="10"/></g><path d="M24 35l-6 14M42 34l-6 14M60 33l-6 14" stroke="'+blue+'" stroke-width="4"/>';
+ if(k==='cloud')b='<ellipse cx="40" cy="26" rx="31" ry="16" fill="#fafff4" stroke="#9abac0" stroke-width="3"/>';
+ if(k==='vapor')b='<path d="M20 48Q5 31 27 17M38 46Q23 32 45 9M57 45Q45 29 63 14" fill="none" stroke="'+blue+'" stroke-width="4"/>';
+ if(k==='pores'){b='<rect x="3" y="5" width="74" height="47" fill="#bbaa8c"/>';for(var i=0;i<4;i++)for(var j=0;j<3;j++)b+='<circle cx="'+(13+i*18)+'" cy="'+(13+j*16)+'" r="6" fill="'+(j%2?'#2f9db7':'#e6dcc4')+'"/>';}
+ if(k==='cave')b='<rect x="3" y="5" width="74" height="47" fill="#a9987b"/><ellipse cx="40" cy="28" rx="28" ry="18" fill="'+blue+'"/>';
+ if(k==='pipes')b='<path d="M12 8V44H62V13" stroke="'+blue+'" fill="none" stroke-width="10"/><path d="M10 8V43H63V13" stroke="#c9d6d8" fill="none" stroke-width="3"/>';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 58" aria-hidden="true" focusable="false">'+b+'</svg>';
+}
+function art(k){
+ var b='',blue='#2687a3',green='#468c6c',orange='#f6c66b';
+ if(k==='reservoir'){
+  b='<rect x="41" y="99" width="345" height="182" rx="8" fill="#2b95ac" stroke="#1b607f" stroke-width="4"/><rect x="403" y="219" width="132" height="62" rx="5" fill="#65adba" stroke="#1b607f" stroke-width="3"/>'+
+   txt(61,156,'OCEANOS',25,'#fffdf0')+txt(62,191,'MAIOR VOLUME',15,'#e8fcf7')+txt(412,249,'DEMAIS',14,'#fffdf0')+txt(413,267,'RESERVAS',13,'#fffdf0')+
+   cloud(452,127,.57)+drop(480,182,.39);
+ }else if(k==='evaporation'){
+  b='<rect x="38" y="242" width="500" height="70" fill="#57adbd"/><path d="M37 242Q111 225 192 242T347 242T538 242" fill="none" stroke="#167891" stroke-width="5"/>'+
+   '<circle cx="478" cy="104" r="39" fill="#f9cb68"/>'+drop(114,260,.57)+
+   line('M141 224Q120 150 178 100',blue,true)+line('M271 222Q248 151 297 111',blue,true)+
+   txt(56,91,'ENERGIA',18)+txt(60,116,'+ VENTO / AR',15)+txt(350,199,'VAPOR',18);
+ }else if(k==='transpiration'){
+  b='<rect x="28" y="258" width="510" height="67" fill="#bc9b78" stroke="#8c765a" stroke-width="3"/>'+
+   '<path d="M47 281H510M47 303H510" stroke="#9f8669" stroke-width="3" stroke-dasharray="8 12"/>'+tree(284,192,1.18)+
+   line('M283 266Q277 301 253 307',blue,true)+line('M264 111Q231 70 245 59',blue,true)+line('M340 115Q369 72 354 55',blue,true)+
+   txt(61,158,'EVAPORAÇÃO',15)+txt(375,155,'TRANSPIRAÇÃO',14)+txt(64,295,'ÁGUA DO SOLO',14);
+ }else if(k==='condensation'){
+  b='<g fill="#e0f1e7" stroke="#89babc" stroke-width="2"><circle cx="109" cy="232" r="10"/><circle cx="149" cy="219" r="12"/><circle cx="195" cy="230" r="9"/></g>'+
+   line('M186 219Q238 171 278 153',blue,true)+cloud(363,169,1.05)+
+   '<g fill="#4fa9b7"><circle cx="325" cy="185" r="7"/><circle cx="361" cy="192" r="9"/><circle cx="402" cy="184" r="7"/></g>'+
+   txt(50,285,'VAPOR INVISÍVEL',17)+txt(315,286,'GOTÍCULAS',17)+txt(221,79,'AR RESFRIADO / SATURAÇÃO',16);
+ }else if(k==='precipitation'){
+  b=cloud(192,134,1.2)+cloud(405,112,.83)+
+   '<g fill="#55abc0"><circle cx="126" cy="182" r="6"/><circle cx="154" cy="189" r="7"/><circle cx="180" cy="183" r="5"/><circle cx="209" cy="190" r="8"/></g>'+
+   drop(270,260,.8)+drop(361,274,.78)+drop(452,263,.64)+
+   line('M220 208Q259 216 269 227',blue,true)+txt(50,309,'CRESCIMENTO DAS PARTÍCULAS',17);
+ }else if(k==='glacier'){
+  b=mountain(278,236,1.32)+mountain(416,264,.73)+
+   '<path d="M20 285H546V322H20Z" fill="#91bdab"/>'+
+   '<path d="M248 250Q259 274 294 298T361 319" fill="none" stroke="#3c9cb3" stroke-width="11"/>'+
+   cloud(109,104,.56)+
+   '<g stroke="#3c90a2" stroke-width="3"><path d="M116 146l-8 12M143 142l-8 13M164 148l-8 12"/></g>'+
+   txt(49,243,'NEVE',18)+txt(390,304,'DEGELO',17)+txt(221,69,'ARMAZENAMENTO DE GELO',16);
+ }else if(k==='infiltration'){
+  b='<rect x="28" y="214" width="514" height="109" fill="#c0a181"/><path d="M28 255H542M28 296H542" stroke="#9e886b" stroke-width="3" stroke-dasharray="6 9"/>'+
+   '<path d="M30 208Q147 171 268 209T543 209" fill="none" stroke="#4c9a71" stroke-width="13"/>'+
+   cloud(155,102,.57)+drop(164,179,.49)+drop(295,187,.49)+
+   line('M161 218V294',blue,true)+line('M305 219Q373 224 451 238',blue,true)+
+   txt(54,309,'INFILTRAÇÃO',14)+txt(371,273,'ESCOAMENTO',14);
+ }else if(k==='aquifer'){
+  b='<rect x="26" y="95" width="518" height="221" fill="#c7b38f" stroke="#a38c67" stroke-width="3"/>';
+  for(var a=0;a<7;a++)for(var z=0;z<4;z++)b+='<ellipse cx="'+(49+a*73+(z%2)*21)+'" cy="'+(121+z*49)+'" rx="19" ry="13" fill="'+((a+z)%3===0?'#4ba4b7':'#eadcc2')+'" stroke="#af9e7e" stroke-width="2"/>';
+  b+=txt(55,66,'ÁGUA OCUPA POROS E FRATURAS',18)+
+   '<path d="M168 222Q262 189 363 217" stroke="#2f92b1" stroke-width="5" fill="none" marker-end="url(#waterArrow)"/>';
+ }else if(k==='urban'){
+  b='<rect x="24" y="111" width="249" height="215" fill="#deeadc" stroke="#9ab7a3" stroke-width="3"/><rect x="291" y="111" width="251" height="215" fill="#d5d9d6" stroke="#9baeb5" stroke-width="3"/>'+
+   tree(152,206,.62)+'<rect x="321" y="187" width="74" height="76" fill="#829ba5"/><rect x="420" y="167" width="91" height="96" fill="#859ca5"/>'+
+   '<path d="M305 273H531" stroke="#5b737d" stroke-width="11"/>'+
+   line('M192 262V302',blue,true)+line('M420 278H521',blue,true)+
+   txt(53,140,'SOLO / VEGETAÇÃO',14)+txt(327,140,'PAVIMENTO',14)+txt(57,308,'INFILTRAÇÃO',13)+txt(364,311,'ESCOAMENTO',13);
+ }else if(k==='climate'){
+  b='<rect x="33" y="94" width="225" height="216" fill="#e0f0df" stroke="#a3bfad" stroke-width="3"/><rect x="300" y="94" width="229" height="216" fill="#f5e2c1" stroke="#dcb38e" stroke-width="3"/>'+
+   cloud(131,153,.72)+
+   '<g stroke="#4da4bd" stroke-width="5"><path d="M106 206l-12 25M145 208l-12 25M185 206l-12 25"/></g>'+
+   '<circle cx="407" cy="155" r="39" fill="#e3b66f"/>'+
+   '<path d="M317 274H511" stroke="#c89f6e" stroke-width="8" stroke-dasharray="24 12"/>'+
+   txt(63,277,'CHUVA INTENSA',15)+txt(365,273,'REGIÃO SECA',15)+txt(81,70,'RESPOSTAS REGIONAIS DIFERENTES',17);
+ }else if(k==='residence'){
+  b=pill(37,120,157,159,'ATMOSFERA')+pill(205,120,157,159,'GELO')+pill(372,120,160,159,'AQUÍFERO')+
+   '<g fill="none" stroke="#277e8b" stroke-width="5"><circle cx="115" cy="224" r="29"/><circle cx="283" cy="224" r="29"/><circle cx="453" cy="224" r="29"/>'+
+   '<path d="M115 224l-1-18M115 224l17 12M283 224l9-16M283 224l-18 0M453 224l-8 20M453 224l15 0"/></g>'+
+   txt(42,89,'TEMPOS DIFERENTES EM CADA RESERVA',16);
+ }else if(k==='journey'){
+  var names=['OCEANO','VAPOR','NUVEM','CHUVA','RIO','A JUSANTE'];
+  for(var j=0;j<6;j++){var x=26+(j%3)*176,y=105+Math.floor(j/3)*116;
+    b+=pill(x,y,156,83,(j+1)+'. '+names[j],j===2?'#e9f4e8':'#fffdf4');
+    if(j!==2&&j!==5)b+=line('M'+(x+160)+' '+(y+42)+'h11',blue,false);
+  }
+  b+=txt(59,315,'UMA ROTA POSSÍVEL · NÃO É O ÚNICO CICLO',15);
+ }
+ return svgFrame(questions[index].figureTitle,questions[index].caption,b);
+}
+function chosen(q){
+ if(q.type==='sequence'){return (answer[index]||q.items.map(function(x){return x[0];})).slice();}
+ return q.type==='multiple'?(answer[index]||[]).slice():(answer[index]||'');
+}
+function equal(a,b){
+ if(Array.isArray(a)&&Array.isArray(b)){
+  if(a.length!==b.length)return false;
+  return a.slice().sort().join('|')===b.slice().sort().join('|');
+ }
+ return a===b;
+}
+function correctCount(){return questions.filter(function(q,i){return checked[i]&&checked[i].ok;}).length;}
+function reviewedCount(){return Object.keys(checked).length;}
+function updateProgress(){
+ var done=reviewedCount();
+ $('progressStep').textContent='QUESTÃO '+String(index+1).padStart(2,'0')+' / '+total;
+ $('progressDone').textContent=done+' de '+total+' conferidas';
+ $('progressFill').style.width=(done*100/total)+'%';
+ $('progressBar').setAttribute('aria-valuenow',String(done));
+ $('progressTopic').textContent=questions[index].section;
+}
+function updateSelections(){
+ Array.prototype.forEach.call($('answerMount').querySelectorAll('.option'),function(el){el.classList.toggle('selected',!!el.querySelector('input').checked);});
+}
+function render(focus){
+ var q=questions[index],isSequence=q.type==='sequence';
+ $('summaryScreen').hidden=true;$('questionScreen').hidden=false;
+ $('plateNum').textContent='PRANCHA '+String(index+1).padStart(2,'0');
+ $('plateLabel').textContent=q.section.toUpperCase();
+ $('platePicture').innerHTML=art(q.figure);
+ $('plateCaption').textContent=q.caption;
+ $('questionSection').textContent=String(index+1).padStart(2,'0')+' / '+q.section.toUpperCase();
+ $('questionType').textContent=isSequence?'ORDENAÇÃO':q.type==='multiple'?'MÚLTIPLA SELEÇÃO':'ESCOLHA ÚNICA';
+ $('questionTitle').textContent=q.title;
+ $('questionInstruction').textContent=q.instruction;
+ $('answerHelp').textContent=isSequence?'Use ↑ e ↓ para mover cada etapa.':q.type==='multiple'?'Marque uma ou mais alternativas antes de conferir.':'Escolha uma única alternativa e confira.';
+ var mount=$('answerMount');mount.replaceChildren();
+ if(isSequence){
+  var ul=document.createElement('ol');ul.className='sequence';ul.setAttribute('aria-label','Etapas em ordem editável');
+  var current=chosen(q);
+  current.forEach(function(id,j){
+   var li=document.createElement('li');li.className='sequence-item';
+   var n=document.createElement('span');n.className='num';n.textContent=String(j+1).padStart(2,'0');
+   var lab=document.createElement('span');lab.className='label';lab.textContent=q.items.find(function(it){return it[0]===id;})[1];
+   var group=document.createElement('span');group.className='order-buttons';
+   [-1,1].forEach(function(delta){
+    var b=document.createElement('button');b.type='button';b.textContent=delta<0?'↑':'↓';b.disabled=delta<0?j===0:j===current.length-1;
+    b.dataset.position=String(j);b.dataset.delta=String(delta);
+    b.setAttribute('aria-label',(delta<0?'Subir: ':'Descer: ')+lab.textContent);
+    group.appendChild(b);
+   });
+   li.appendChild(n);li.appendChild(lab);li.appendChild(group);ul.appendChild(li);
+  });mount.appendChild(ul);
+ }else{
+  var field=document.createElement('fieldset');field.className='answers';
+  var legend=document.createElement('legend');legend.textContent=q.type==='multiple'?'Selecione todas as respostas corretas':'Escolha a resposta';field.appendChild(legend);
+  var opts=document.createElement('div');opts.className='options';
+  q.options.forEach(function(opt){
+   var lab=document.createElement('label');lab.className='option';
+   var inp=document.createElement('input');inp.type=q.type==='multiple'?'checkbox':'radio';inp.name='q'+index;inp.value=opt[0];
+   inp.checked=q.type==='multiple'?chosen(q).indexOf(opt[0])!==-1:chosen(q)===opt[0];
+   var label=document.createElement('span');label.className='option-copy';label.textContent=opt[1];
+   lab.appendChild(inp);if(opt[2]){var artwork=document.createElement('span');artwork.className='option-art';artwork.innerHTML=icon(opt[2]);lab.appendChild(artwork);}lab.appendChild(label);opts.appendChild(lab);
+  });field.appendChild(opts);mount.appendChild(field);updateSelections();
+ }
+ var state=checked[index];var fb=$('feedback');
+ fb.hidden=!state;fb.className='feedback'+(state&&state.ok?' correct':'');
+ if(state){
+  fb.replaceChildren();
+  var strong=document.createElement('strong');strong.textContent=state.ok?'Correto: você identificou a relação essencial.':'Ainda não. Examine novamente a prancha.';
+  var detail=document.createElement('p');detail.textContent=state.ok?q.explain:q.hint+' '+q.explain;
+  fb.appendChild(strong);fb.appendChild(detail);
+  var small=document.createElement('p');small.className='feedback-extra';small.textContent=state.ok?'Resposta conferida. Você pode avançar ou voltar para revisar.':'Você pode alterar a resposta e conferir novamente, ou avançar e revisar depois.';
+  fb.appendChild(small);
+ }
+ $('previousButton').disabled=index===0;
+ $('checkButton').textContent=state?'Tentar novamente':'Conferir resposta';
+ $('nextButton').disabled=!state;
+ $('nextButton').textContent=index===total-1?'Ver resultado →':'Próxima questão →';
+ updateProgress();
+ if(focus){$('questionTitle').focus();$('questionScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});}
+}
+function invalidate(){if(checked[index])delete checked[index];$('feedback').hidden=true;$('checkButton').textContent='Conferir resposta';$('nextButton').disabled=true;updateProgress();}
+$('answerMount').addEventListener('change',function(e){
+ var input=e.target;
+ if(!input.matches('input'))return;
+ var q=questions[index];
+ if(q.type==='multiple'){answer[index]=Array.prototype.map.call($('answerMount').querySelectorAll('input:checked'),function(it){return it.value;});}
+ else{answer[index]=input.value;}
+ invalidate();updateSelections();
+});
+$('answerMount').addEventListener('click',function(e){
+ var b=e.target.closest('button[data-position]');if(!b)return;
+ var q=questions[index],current=chosen(q);
+ var pos=Number(b.dataset.position),next=pos+Number(b.dataset.delta);
+ if(next<0||next>=current.length)return;
+ var temp=current[pos];current[pos]=current[next];current[next]=temp;answer[index]=current;
+ invalidate();render(false);
+ var selector='button[data-position="'+next+'"][data-delta="'+b.dataset.delta+'"]';
+ var focusButton=$('answerMount').querySelector(selector);if(focusButton&&!focusButton.disabled)focusButton.focus();
+});
+$('checkButton').addEventListener('click',function(){
+ if(checked[index]){invalidate();$('questionTitle').focus();return;}
+ var q=questions[index],value=chosen(q),missing=q.type==='sequence'?false:q.type==='multiple'?value.length===0:!value;
+ if(missing){$('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Selecione uma resposta antes de conferir.';return;}
+ var ok=q.type==='sequence'?value.join('|')===q.correct.join('|'):equal(value,q.correct);
+ if(firstTry[index]===undefined)firstTry[index]=ok;
+ checked[index]={ok:ok};
+ render(false);
+});
+$('previousButton').addEventListener('click',function(){if(index>0){index--;render(true);}});
+$('nextButton').addEventListener('click',function(){
+ if(!checked[index])return;
+ if(index===total-1){showSummary();return;}
+ index++;render(true);
+});
+function showSummary(){
+ $('questionScreen').hidden=true;$('summaryScreen').hidden=false;
+ $('progressStep').textContent='REVISÃO CONCLUÍDA';
+ $('progressTopic').textContent='Conclusão / rotas e reservatórios';
+ $('totalReviewed').textContent=String(reviewedCount())+' / '+total;
+ $('totalMastered').textContent=String(correctCount())+' / '+total;
+ $('totalFirst').textContent=String(Object.keys(firstTry).filter(function(k){return firstTry[k]===true;}).length)+' / '+total;
+ var list=$('reviewList');list.replaceChildren();
+ questions.forEach(function(q,i){
+  var li=document.createElement('li');li.className='review-item';
+  var block=document.createElement('div');
+  var strong=document.createElement('strong');strong.textContent=String(i+1).padStart(2,'0')+'. '+q.section;
+  var p=document.createElement('p');p.textContent=checked[i]?(checked[i].ok?'Correta. ':'A revisar. ')+q.explain:'Ainda não conferida. '+q.explain;
+  block.appendChild(strong);block.appendChild(p);
+  var b=document.createElement('button');b.type='button';b.textContent='Rever prancha';b.dataset.review=String(i);
+  li.appendChild(block);li.appendChild(b);list.appendChild(li);
+ });
+ $('summaryTitle').focus();$('summaryScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});
+}
+$('reviewList').addEventListener('click',function(e){var b=e.target.closest('button[data-review]');if(!b)return;index=Number(b.dataset.review);render(true);});
+$('restartButton').addEventListener('click',function(){answer=Object.create(null);checked=Object.create(null);firstTry=Object.create(null);index=0;render(true);});
+$('reviewFirstButton').addEventListener('click',function(){index=0;render(true);});
+$('motionToggle').addEventListener('click',function(){reduceMotion=!reduceMotion;document.body.classList.toggle('motion-reduce',reduceMotion);this.setAttribute('aria-pressed',String(reduceMotion));this.textContent=reduceMotion?'Restaurar movimentos':'Reduzir movimentos';});
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){reduceMotion=true;document.body.classList.add('motion-reduce');$('motionToggle').setAttribute('aria-pressed','true');$('motionToggle').textContent='Restaurar movimentos';}
+if(questions.length!==total){throw new Error('Total de questões inconsistente');}
+render(false);
+})();
+</script>
+</body>
+</html>
