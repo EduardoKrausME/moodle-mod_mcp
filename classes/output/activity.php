@@ -130,7 +130,7 @@ final class activity {
 
         $cssvariables = [];
         if (strpos($themename, "learnlingo") !== false) {
-            $cssvariables = ["--bs-primary", "--bs-accent"];
+            $cssvariables = ["--bs-primary", "--bs-accent", "--bs-primary-rgb", "--bs-accent-rgb"];
         } else if (in_array($themename, ["degrade", "eadflix", "eadtraining", "boost_magnific"], true)) {
             $cssvariables = ["--bs-primary", "--bs-secondary"];
         }
