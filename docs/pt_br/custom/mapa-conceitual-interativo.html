@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa conceitual interativo - Oficina de conexões</title>
+<style>
+:root{font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:#263650;--ink:#263650;--muted:#60718a;--line:#dfe6ef;--blue:#3266a8;--teal:#167e7b;--orange:#bf7342;--paper:#fff;background:#f1f5fa}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(15px,3vw,40px);background:radial-gradient(ellipse at 85% 3%,#dbe9f5 0,transparent 46%),#f1f5fa}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.47;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #db922e;outline-offset:3px}
+[hidden]{display:none!important}
+main{max-width:1200px;margin:auto}
+.kicker{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:850;color:#276b86}
+h1{font-size:clamp(30px,4vw,45px);line-height:1.13;letter-spacing:-.04em;margin:9px 0}
+header{margin-bottom:24px}
+header p{max-width:780px;margin:0;color:var(--muted)}
+.panel{border:1px solid var(--line);border-radius:21px;background:var(--paper);padding:clamp(16px,2.5vw,25px);box-shadow:0 12px 36px #243d5a12;min-width:0}
+.panel h2{font-size:20px;letter-spacing:-.02em;line-height:1.2;margin:3px 0 7px}
+.panel h3{font-size:15px;margin:4px 0 12px}
+.hint{font-size:13px;color:var(--muted);margin:0 0 14px}
+.palette{margin-bottom:16px}
+.palette-head{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between}
+.palette-chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 15px}
+.chip{border:1px solid #bcd5e5;border-radius:99px;background:#edf6fb;color:#275f79;font-size:13px;font-weight:750;min-height:38px;padding:7px 13px}
+.chip:hover{background:#dbeefa}
+.add-form{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
+.add-form label{font-size:13px;font-weight:750;color:#425875}
+.field{min-height:44px;border-radius:11px;padding:10px 12px;border:1px solid #bbcadd;background:#fff;color:var(--ink);min-width:0}
+.add-form .field{flex:1 1 235px}
+.btn{min-height:43px;padding:9px 15px;border-radius:10px;border:1px solid #bfd0e2;color:#285477;background:#fff;font-size:13px;font-weight:800}
+.btn:hover:not(:disabled){background:#edf4fa}
+.btn.primary{color:white;background:var(--blue);border-color:var(--blue)}
+.btn.primary:hover:not(:disabled){background:#28578f}
+.btn.danger{border-color:#d8adb0;color:#8b3b46}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.columns{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.82fr);gap:16px;align-items:start}
+.board-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:13px}
+.board-head h2{margin:0}
+.count{font-size:12px;color:#42617c;font-weight:750}
+.board-wrap{position:relative;width:100%;height:540px;border:1px solid #cbdbe5;border-radius:16px;overflow:hidden;background-color:#f6fafa;background-image:radial-gradient(#bed4dc 1px,transparent 1px);background-size:21px 21px;touch-action:pan-y}
+.connections{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.node-layer{position:absolute;inset:0;z-index:1}
+.concept-node{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:clamp(104px,26%,150px);min-height:65px;padding:10px 8px;border:2px solid #7eb3bc;border-radius:14px;background:#fff;color:#1e5364;text-align:center;box-shadow:0 7px 17px #1d516320;transform:translate(-50%,-50%);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.concept-node:active{cursor:grabbing}
+.concept-node strong{font-size:clamp(12px,1.4vw,14px);line-height:1.26;overflow-wrap:anywhere}
+.concept-node small{font-size:10px;color:#557784}
+.concept-node[data-selected=true]{border-color:#375eaa;background:#eaf1ff;box-shadow:0 0 0 4px #4074c42b,0 8px 18px #1d516320}
+.connector{fill:none;stroke:#6795bb;stroke-width:3;stroke-linecap:round}
+.connector-label{fill:#214568;font:750 12px system-ui,-apple-system,"Segoe UI",sans-serif;text-anchor:middle;dominant-baseline:middle}
+.connector-bg{fill:#fff;stroke:#bed0df;stroke-width:1.2}
+.board-empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#56718a;padding:25px;pointer-events:none;z-index:0;font-size:14px}
+.board-instructions{margin:14px 2px 0;color:var(--muted);font-size:12px}
+.sidebar{display:grid;gap:16px}
+.sidebar .panel{padding:19px}
+.field-set{display:grid;gap:7px;margin:12px 0}
+.field-set label{font-size:12px;font-weight:800;color:#485c74}
+.field-set .field{width:100%}
+.inspector-note{font-size:13px;color:var(--muted)}
+.move-grid{display:grid;grid-template-columns:repeat(3,43px);grid-template-rows:repeat(2,41px);justify-content:center;gap:6px;margin:13px 0}
+.move-grid button{min-height:40px;padding:0;border:1px solid #c8d7e5;border-radius:9px;background:#f4f8fb;color:#335f89;font-size:19px}
+.move-grid button:hover{background:#e4f0fa}
+.move-grid .up{grid-column:2;grid-row:1}
+.move-grid .left{grid-column:1;grid-row:2}
+.move-grid .down{grid-column:2;grid-row:2}
+.move-grid .right{grid-column:3;grid-row:2}
+.editor-actions{display:flex;gap:8px;flex-wrap:wrap}
+.editor-actions .btn{flex:1}
+.relationship-intro{margin-bottom:12px}
+.relation-list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.relation-list button{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #dce5ee;background:#f8fbfd;border-radius:10px;padding:11px 12px;color:#33516b;font-size:12px;line-height:1.35}
+.relation-list button:hover,.relation-list button[aria-current=true]{background:#ecf5fc;border-color:#83acd0}
+.relation-list button b{flex:none;color:#366da1;font-size:11px}
+.relation-empty{color:var(--muted);font-size:13px;margin:12px 0 0}
+.rule{border:0;border-top:1px solid #e3eaf1;margin:18px 0}
+.reset-warning{background:#fff7ef;border:1px solid #ebcfab;border-radius:11px;padding:14px;margin-top:12px;font-size:13px;color:#765631}
+.reset-warning p{margin:0 0 12px}
+.alert{margin-top:16px;padding:13px 15px;background:#f1f6fc;border-left:3px solid #6893c5;border-radius:0 10px 10px 0;font-size:13px;color:#546b83}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:980px){.columns{grid-template-columns:1fr}.sidebar{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.board-wrap{height:490px}}
+@media(max-width:630px){.sidebar{grid-template-columns:1fr}.board-wrap{height:480px}.concept-node{width:clamp(92px,29%,128px);min-height:57px}.panel{border-radius:16px}.add-form label{width:100%}.board-instructions{line-height:1.6}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<span class="kicker">Eu escolho · Oficina de construção</span>
+<h1>Mapa conceitual interativo</h1>
+<p>Crie e reorganize conceitos, conecte ideias com verbos e expressões e construa proposições que façam sentido. O mapa inicial é apenas um ponto de partida: você pode transformá-lo completamente.</p>
+</header>
+<section class="panel palette" aria-labelledby="paletteTitle">
+<div class="palette-head"><h2 id="paletteTitle">1. Adicione conceitos</h2><span class="count">Até 12 conceitos por mapa</span></div>
+<p class="hint">Escolha uma sugestão ou escreva um novo conceito relacionado a aprendizagem.</p>
+<div class="palette-chips" id="paletteChips" aria-label="Conceitos sugeridos"></div>
+<form class="add-form" id="addForm">
+<label for="newConcept">Meu conceito</label>
+<input class="field" id="newConcept" name="newConcept" maxlength="44" autocomplete="off" required placeholder="Ex.: Colaboração">
+<button class="btn primary" type="submit" id="addButton">Adicionar ao mapa</button>
+</form>
+</section>
+<div class="columns">
+<section class="panel" aria-labelledby="mapTitle">
+<div class="board-head">
+<h2 id="mapTitle">2. Organize as ideias</h2>
+<div class="actions">
+<span class="count" id="counter">3 conceitos · 2 relações</span>
+<button class="btn" type="button" id="undo" disabled>Desfazer</button>
+<button class="btn" type="button" id="reset">Reiniciar</button>
+</div>
+</div>
+<div class="board-wrap" id="board" role="group" aria-label="Mapa conceitual com conceitos móveis e conexões">
+<svg id="edges" class="connections" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+<defs>
+<marker id="arrowTip" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M1 1L7 4.5L1 8" fill="none" stroke="#6795bb" stroke-width="1.5"></path></marker>
+</defs>
+<g id="edgeLayer"></g>
+</svg>
+<div class="node-layer" id="nodeLayer"></div>
+<div class="board-empty" id="boardEmpty" hidden>Adicione conceitos para começar a construir seu mapa.</div>
+</div>
+<p class="board-instructions">Selecione um conceito para editar. Arraste com o mouse ou o dedo, use as setas do teclado quando ele estiver em foco (Shift = passo maior) ou os controles de movimento à direita. As conexões aparecem visualmente e também na lista acessível.</p>
+<div class="reset-warning" id="resetConfirmation" hidden>
+<p>Reiniciar restaura o pequeno mapa inicial e descarta as alterações desta sessão. Você poderá desfazer o reinício.</p>
+<div class="actions">
+<button type="button" class="btn" id="cancelReset">Cancelar</button>
+<button type="button" class="btn danger" id="confirmReset">Restaurar mapa inicial</button>
+</div>
+</div>
+</section>
+<div class="sidebar">
+<section class="panel" aria-labelledby="nodeTitle">
+<h2 id="nodeTitle">3. Edite e mova conceitos</h2>
+<p class="inspector-note" id="nodeEmpty">Selecione um conceito no quadro. Você poderá renomeá-lo, movê-lo ou removê-lo.</p>
+<div id="nodeEditor" hidden>
+<div class="field-set"><label for="renameInput">Nome do conceito selecionado</label><input class="field" id="renameInput" maxlength="44"></div>
+<div class="editor-actions">
+<button type="button" class="btn primary" id="renameButton">Renomear</button>
+<button type="button" class="btn danger" id="deleteNode">Excluir conceito</button>
+</div>
+<h3 style="text-align:center;margin-top:20px">Mover sem arrastar</h3>
+<div class="move-grid" role="group" aria-label="Mover conceito selecionado">
+<button type="button" class="up" id="moveUp" aria-label="Mover para cima">↑</button>
+<button type="button" class="left" id="moveLeft" aria-label="Mover para esquerda">←</button>
+<button type="button" class="down" id="moveDown" aria-label="Mover para baixo">↓</button>
+<button type="button" class="right" id="moveRight" aria-label="Mover para direita">→</button>
+</div>
+</div>
+</section>
+<section class="panel" aria-labelledby="relationTitle">
+<h2 id="relationTitle">4. Conecte os conceitos</h2>
+<p class="hint relationship-intro">Complete uma proposição do tipo <strong>Conceito A → palavra de ligação → Conceito B</strong>. A lista abaixo permite editar relações.</p>
+<form id="relationForm">
+<div class="field-set"><label for="fromNode">Conceito de origem</label><select class="field" id="fromNode" required></select></div>
+<div class="field-set"><label for="relationLabel">Palavra de ligação</label><input class="field" id="relationLabel" maxlength="40" required placeholder="Ex.: contribui para"></div>
+<div class="field-set"><label for="toNode">Conceito de destino</label><select class="field" id="toNode" required></select></div>
+<div class="editor-actions"><button type="submit" class="btn primary" id="saveRelation">Criar relação</button><button type="button" class="btn" id="cancelEdit" hidden>Cancelar edição</button><button type="button" class="btn danger" id="deleteRelation" hidden>Excluir relação</button></div>
+</form>
+<hr class="rule">
+<h3>Relações no mapa</h3>
+<ul class="relation-list" id="relationList"></ul>
+<p class="relation-empty" id="relationEmpty" hidden>Nenhuma relação ainda. Adicione pelo menos dois conceitos para conectar ideias.</p>
+</section>
+</div>
+</div>
+<div class="alert">As alterações são locais e não são enviadas ao Moodle. Não há notas, salvamento automático nem exportação implícita. Use este exemplo como modelo para construir uma atividade sobre qualquer tema definido pelo professor.</div>
+<div class="sr-only" id="announcer" role="status" aria-live="polite" aria-atomic="true"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  const presets = ["Prática","Feedback","Conhecimento prévio","Investigação","Colaboração","Objetivos","Autonomia"];
+  const seed = {
+    nodes:[
+      {id:"n1",label:"Aprendizagem",x:26,y:32},
+      {id:"n2",label:"Experiência",x:75,y:30},
+      {id:"n3",label:"Reflexão",x:50,y:75}
+    ],
+    edges:[
+      {id:"e1",from:"n2",to:"n1",label:"contribui para"},
+      {id:"e2",from:"n3",to:"n1",label:"aprofunda a"}
+    ],
+    nextNode:4,nextEdge:3
+  };
+  const $ = id => document.getElementById(id);
+  const state = structuredCopy(seed);
+  const history=[];
+  const nodeButtons=new Map();
+  const maxNodes=12;
+  const svgNS="http://www.w3.org/2000/svg";
+  let selectedNode="n1";
+  let editingEdge=null;
+  let dragging=null;
+  function structuredCopy(data) {
+    return JSON.parse(JSON.stringify(data));
+  }
+  function snapshot() {
+    return structuredCopy({nodes:state.nodes,edges:state.edges,nextNode:state.nextNode,nextEdge:state.nextEdge});
+  }
+  function restore(s) {
+    state.nodes=s.nodes;
+    state.edges=s.edges;
+    state.nextNode=s.nextNode;
+    state.nextEdge=s.nextEdge;
+  }
+  function remember(s) {
+    history.push(s||snapshot());
+    if(history.length>40)history.shift();
+    $("undo").disabled=false;
+  }
+  function announce(message) {$("announcer").textContent=message;}
+  function item(tag,className,text) {
+    const el=document.createElement(tag);
+    if(className)el.className=className;
+    if(text!==undefined)el.textContent=text;
+    return el;
+  }
+  function svg(tag,attributes) {
+    const el=document.createElementNS(svgNS,tag);
+    Object.entries(attributes||{}).forEach(([key,value])=>el.setAttribute(key,String(value)));
+    return el;
+  }
+  function getNode(id) {return state.nodes.find(n=>n.id===id);}
+  function clean(text,max) {return String(text||"").trim().replace(/\s+/g," ").slice(0,max);}
+  function existsLabel(label,exceptId) {
+    return state.nodes.some(n=>n.id!==exceptId&&n.label.toLocaleLowerCase("pt-BR")===label.toLocaleLowerCase("pt-BR"));
+  }
+  function clamp(number,min,max) {return Math.max(min,Math.min(max,number));}
+  function nextPosition() {
+    const choices=[];
+    for(const y of [18,37,57,78])for(const x of [20,50,80])choices.push({x,y});
+    const distance=c=>Math.min(...state.nodes.map(n=>(n.x-c.x)**2+(n.y-c.y)**2));
+    choices.sort((a,b)=>distance(b)-distance(a));
+    return choices[0];
+  }
+  function drawEdges() {
+    const group=$("edgeLayer"),board=$("board");
+    group.replaceChildren();
+    const width=board.clientWidth||760,height=board.clientHeight||540;
+    $("edges").setAttribute("viewBox","0 0 "+width+" "+height);
+    for(const edge of state.edges) {
+      const from=getNode(edge.from),to=getNode(edge.to);
+      if(!from||!to)continue;
+      const x1=from.x*width/100,y1=from.y*height/100;
+      const x2=to.x*width/100,y2=to.y*height/100;
+      const dx=x2-x1,dy=y2-y1,length=Math.hypot(dx,dy)||1;
+      // End arrow before the target card; cards are HTML layers above connectors.
+      const endX=x2-dx/length*49,endY=y2-dy/length*30;
+      const beginX=x1+dx/length*40,beginY=y1+dy/length*22;
+      const xmid=(beginX+endX)/2,ymid=(beginY+endY)/2;
+      const labelX=xmid,labelY=ymid-13;
+      group.appendChild(svg("path",{class:"connector",d:"M "+beginX.toFixed(1)+" "+beginY.toFixed(1)+" L "+endX.toFixed(1)+" "+endY.toFixed(1),"marker-end":"url(#arrowTip)"}));
+      const approxWidth=Math.max(65,Math.min(212,edge.label.length*7+16));
+      const box=svg("rect",{class:"connector-bg",x:(labelX-approxWidth/2).toFixed(1),y:(labelY-13).toFixed(1),width:approxWidth,height:25,rx:9});
+      const caption=svg("text",{class:"connector-label",x:labelX.toFixed(1),y:labelY.toFixed(1)});
+      caption.textContent=edge.label;
+      group.append(box,caption);
+    }
+  }
+  function syncNodePosition(node) {
+    const button=nodeButtons.get(node.id);
+    if(!button)return;
+    button.style.left=node.x+"%";
+    button.style.top=node.y+"%";
+  }
+  function selectNode(id) {
+    if(!getNode(id))return;
+    selectedNode=id;
+    syncSelection();
+    announce("Conceito selecionado: "+getNode(id).label+". Use as setas para mover.");
+  }
+  function syncSelection(){
+    nodeButtons.forEach((button,id)=>{
+      button.dataset.selected=String(id===selectedNode);
+      button.setAttribute("aria-pressed",String(id===selectedNode));
+    });
+    const node=getNode(selectedNode);
+    $("nodeEditor").hidden=!node;
+    $("nodeEmpty").hidden=!!node;
+    if(node)$("renameInput").value=node.label;
+  }
+  function nudge(id,dx,dy,amount){
+    const node=getNode(id);
+    if(!node)return false;
+    const x=clamp(node.x+dx*amount,13,87);
+    const y=clamp(node.y+dy*amount,12,88);
+    if(x===node.x&&y===node.y)return false;
+    remember();
+    node.x=x;node.y=y;
+    syncNodePosition(node);
+    drawEdges();
+    announce(node.label+" movido no mapa. Use Desfazer para restaurar a posição.");
+    return true;
+  }
+  function pointerDown(event,id,button) {
+    if(event.button!==undefined&&event.button!==0)return;
+    const node=getNode(id);
+    if(!node)return;
+    dragging={id,original:snapshot(),moved:false};
+    if(button.setPointerCapture&&event.pointerId!==undefined)button.setPointerCapture(event.pointerId);
+    selectNode(id);
+  }
+  function pointerMove(event,id) {
+    if(!dragging||dragging.id!==id)return;
+    const board=$("board"),bounds=board.getBoundingClientRect();
+    if(!bounds.width||!bounds.height)return;
+    const node=getNode(id);
+    if(!node)return;
+    const x=clamp((event.clientX-bounds.left)/bounds.width*100,13,87);
+    const y=clamp((event.clientY-bounds.top)/bounds.height*100,12,88);
+    if(Math.abs(node.x-x)<.3&&Math.abs(node.y-y)<.3)return;
+    if(event.preventDefault)event.preventDefault();
+    node.x=x;node.y=y;
+    dragging.moved=true;
+    syncNodePosition(node);
+    drawEdges();
+  }
+  function pointerEnd(cancelled) {
+    if(!dragging)return;
+    const prior=dragging;
+    dragging=null;
+    if(!prior.moved)return;
+    if(cancelled){restore(prior.original);render();return;}
+    remember(prior.original);
+    announce(getNode(prior.id).label+" reposicionado. A ação pode ser desfeita.");
+  }
+  function renderNodes(){
+    const layer=$("nodeLayer");
+    layer.replaceChildren();
+    nodeButtons.clear();
+    for(const concept of state.nodes) {
+      const button=item("button","concept-node");
+      button.type="button";
+      button.setAttribute("aria-label",concept.label+". Selecionar ou mover com as setas do teclado.");
+      button.setAttribute("aria-pressed",String(selectedNode===concept.id));
+      button.dataset.selected=String(selectedNode===concept.id);
+      button.append(item("strong","",concept.label),item("small","","Arraste ou use as setas"));
+      button.addEventListener("click",()=>selectNode(concept.id));
+      button.addEventListener("keydown",event=>{
+        const directions={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]};
+        if(directions[event.key]){
+          event.preventDefault();
+          const [x,y]=directions[event.key];
+          nudge(concept.id,x,y,event.shiftKey?7:2);
+        }
+      });
+      button.addEventListener("pointerdown",event=>pointerDown(event,concept.id,button));
+      button.addEventListener("pointermove",event=>pointerMove(event,concept.id));
+      button.addEventListener("pointerup",()=>pointerEnd(false));
+      button.addEventListener("pointercancel",()=>pointerEnd(true));
+      layer.appendChild(button);
+      nodeButtons.set(concept.id,button);
+      syncNodePosition(concept);
+    }
+    $("boardEmpty").hidden=state.nodes.length>0;
+    syncSelection();
+  }
+  function renderSelects(){
+    const from=$("fromNode"),to=$("toNode");
+    const previousFrom=from.value,previousTo=to.value;
+    from.replaceChildren();to.replaceChildren();
+    for(const concept of state.nodes){
+      for(const select of [from,to]){
+        const option=item("option","",concept.label);
+        option.value=concept.id;
+        select.appendChild(option);
+      }
+    }
+    const ids=state.nodes.map(n=>n.id);
+    from.value=ids.includes(previousFrom)?previousFrom:(selectedNode&&ids.includes(selectedNode)?selectedNode:ids[0]||"");
+    to.value=ids.includes(previousTo)&&previousTo!==from.value?previousTo:(ids.find(id=>id!==from.value)||"");
+    $("saveRelation").disabled=state.nodes.length<2;
+  }
+  function renderRelations(){
+    const list=$("relationList");
+    list.replaceChildren();
+    $("relationEmpty").hidden=state.edges.length>0;
+    for(const edge of state.edges){
+      const from=getNode(edge.from),to=getNode(edge.to);
+      if(!from||!to)continue;
+      const li=item("li");
+      const button=item("button");
+      button.type="button";
+      button.setAttribute("aria-current",String(editingEdge===edge.id));
+      button.setAttribute("aria-label","Editar relação: "+from.label+" "+edge.label+" "+to.label);
+      button.append(item("span","",from.label+" → "+edge.label+" → "+to.label),item("b","","Editar"));
+      button.addEventListener("click",()=>editRelation(edge.id));
+      li.appendChild(button);
+      list.appendChild(li);
+    }
+  }
+  function render(){
+    renderNodes();
+    renderSelects();
+    if(editingEdge&&!state.edges.some(e=>e.id===editingEdge))editingEdge=null;
+    if(editingEdge)fillEdgeEditor(editingEdge);
+    else clearEdgeEditor(false);
+    renderRelations();
+    drawEdges();
+    $("counter").textContent=state.nodes.length+" conceitos · "+state.edges.length+" relações";
+    $("undo").disabled=history.length===0;
+    $("resetConfirmation").hidden=true;
+  }
+  function addConcept(label){
+    label=clean(label,44);
+    if(label.length<2){announce("Digite um conceito com pelo menos dois caracteres.");return false;}
+    if(state.nodes.length>=maxNodes){announce("Limite de 12 conceitos atingido.");return false;}
+    if(existsLabel(label)){announce("Esse conceito já está no mapa.");return false;}
+    const pos=nextPosition();
+    remember();
+    const id="n"+state.nextNode++;
+    state.nodes.push({id,label,x:pos.x,y:pos.y});
+    selectedNode=id;
+    render();
+    const button=nodeButtons.get(id);
+    if(button)button.focus();
+    announce("Conceito adicionado: "+label+". Use as setas ou arraste para organizá-lo.");
+    return true;
+  }
+  function rename(){
+    const concept=getNode(selectedNode);
+    if(!concept)return;
+    const text=clean($("renameInput").value,44);
+    if(text.length<2){announce("O conceito precisa ter pelo menos dois caracteres.");return;}
+    if(existsLabel(text,concept.id)){announce("Já existe outro conceito com esse nome.");return;}
+    if(text===concept.label){announce("O nome do conceito não foi alterado.");return;}
+    remember();concept.label=text;
+    render();
+    $("renameInput").focus();
+    announce("Conceito renomeado para "+text+".");
+  }
+  function deleteNode(){
+    const concept=getNode(selectedNode);
+    if(!concept)return;
+    remember();
+    state.nodes=state.nodes.filter(n=>n.id!==concept.id);
+    state.edges=state.edges.filter(e=>e.from!==concept.id&&e.to!==concept.id);
+    selectedNode=state.nodes[0]?.id||null;
+    editingEdge=null;
+    render();
+    $("newConcept").focus();
+    announce("Conceito "+concept.label+" e suas relações removidos. Use Desfazer para restaurar.");
+  }
+  function clearEdgeEditor(keepValues){
+    editingEdge=null;
+    if(!keepValues)$("relationLabel").value="";
+    $("saveRelation").textContent="Criar relação";
+    $("cancelEdit").hidden=true;
+    $("deleteRelation").hidden=true;
+  }
+  function fillEdgeEditor(id){
+    const edge=state.edges.find(e=>e.id===id);
+    if(!edge)return;
+    $("fromNode").value=edge.from;
+    $("toNode").value=edge.to;
+    $("relationLabel").value=edge.label;
+    $("saveRelation").textContent="Salvar relação";
+    $("cancelEdit").hidden=false;
+    $("deleteRelation").hidden=false;
+  }
+  function editRelation(id){
+    if(!state.edges.some(e=>e.id===id))return;
+    editingEdge=id;
+    fillEdgeEditor(id);
+    renderRelations();
+    $("relationLabel").focus();
+    announce("Editando relação. Altere origem, palavra de ligação ou destino.");
+  }
+  function submitRelation(){
+    const from=$("fromNode").value,to=$("toNode").value,label=clean($("relationLabel").value,40);
+    if(!getNode(from)||!getNode(to)){announce("Escolha dois conceitos existentes.");return;}
+    if(from===to){announce("Uma relação deve conectar dois conceitos diferentes.");return;}
+    if(label.length<2){announce("Digite uma palavra ou expressão de ligação com pelo menos dois caracteres.");return;}
+    if(state.edges.some(e=>e.id!==editingEdge&&e.from===from&&e.to===to)){
+      announce("Essa direção entre os conceitos já possui uma relação. Edite a existente.");return;
+    }
+    const existing=editingEdge?state.edges.find(e=>e.id===editingEdge):null;
+    if(editingEdge&&!existing){clearEdgeEditor(false);announce("Relação não encontrada.");return;}
+    if(existing&&existing.from===from&&existing.to===to&&existing.label===label){
+      announce("Nenhuma alteração nessa relação.");return;
+    }
+    remember();
+    if(existing){existing.from=from;existing.to=to;existing.label=label;}
+    else state.edges.push({id:"e"+state.nextEdge++,from,to,label});
+    const edited=!!existing;
+    editingEdge=null;
+    render();
+    $("relationLabel").focus();
+    announce(edited?"Relação atualizada.":"Relação criada e desenhada no mapa.");
+  }
+  function deleteRelation(){
+    if(!editingEdge)return;
+    if(!state.edges.some(e=>e.id===editingEdge))return;
+    remember();
+    state.edges=state.edges.filter(e=>e.id!==editingEdge);
+    editingEdge=null;
+    render();
+    $("relationLabel").focus();
+    announce("Relação excluída. Use Desfazer para restaurar.");
+  }
+  function undo(){
+    if(!history.length)return;
+    restore(history.pop());
+    if(!getNode(selectedNode))selectedNode=state.nodes[0]?.id||null;
+    editingEdge=null;
+    render();
+    $("undo").focus();
+    announce("Última alteração desfeita.");
+  }
+  function reset(){
+    remember();
+    restore(structuredCopy(seed));
+    selectedNode="n1";editingEdge=null;
+    render();
+    nodeButtons.get(selectedNode)?.focus();
+    announce("Mapa inicial restaurado. Você pode desfazer o reinício.");
+  }
+  function addChips(){
+    const palette=$("paletteChips");
+    for(const label of presets) {
+      const button=item("button","chip","+ "+label);
+      button.type="button";
+      button.setAttribute("aria-label","Adicionar conceito "+label);
+      button.addEventListener("click",()=>addConcept(label));
+      palette.appendChild(button);
+    }
+  }
+  addChips();
+  $("addForm").addEventListener("submit",event=>{
+    event.preventDefault();
+    if(addConcept($("newConcept").value))$("newConcept").value="";
+  });
+  $("renameButton").addEventListener("click",rename);
+  $("deleteNode").addEventListener("click",deleteNode);
+  [["moveUp",0,-1],["moveDown",0,1],["moveLeft",-1,0],["moveRight",1,0]].forEach(([id,x,y])=>{
+    $(id).addEventListener("click",()=>nudge(selectedNode,x,y,4));
+  });
+  $("relationForm").addEventListener("submit",event=>{event.preventDefault();submitRelation();});
+  $("cancelEdit").addEventListener("click",()=>{clearEdgeEditor(false);renderRelations();$("relationLabel").focus();announce("Edição da relação cancelada.");});
+  $("deleteRelation").addEventListener("click",deleteRelation);
+  $("undo").addEventListener("click",undo);
+  $("reset").addEventListener("click",()=>{$("resetConfirmation").hidden=false;$("cancelReset").focus();announce("Confirme ou cancele a restauração do mapa inicial.");});
+  $("cancelReset").addEventListener("click",()=>{$("resetConfirmation").hidden=true;$("reset").focus();announce("Reinício cancelado.");});
+  $("confirmReset").addEventListener("click",reset);
+  if(typeof ResizeObserver!=="undefined")new ResizeObserver(drawEdges).observe($("board"));
+  window.addEventListener("resize",drawEdges);
+  render();
+})();
+</script>
+</body>
+</html>
