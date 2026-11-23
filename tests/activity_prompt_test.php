@@ -79,6 +79,8 @@ final class activity_prompt_test extends \advanced_testcase {
             $description = get_string($configuration["description"], "mcp");
             $this->assertNotEmpty($description);
             $this->assertStringNotContainsString("[[", $description);
+            $this->assertGreaterThan(250, \core_text::strlen($description));
+            $this->assertStringContainsString("?", $description);
             $this->assertFileExists(__DIR__ . "/../pix/material_types/{$type}.png");
         }
 
