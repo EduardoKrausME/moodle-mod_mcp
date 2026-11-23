@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>Expedição Perdida na Amazônia - Estudo de caso interativo</title>
+<style>
+:root{color-scheme:light;--bg:#e9f0e9;--paper:#fffdf7;--ink:#203c38;--muted:#526d65;--line:#c8dace;--deep:#16413a;--accent:#1c7162;--on-accent:#fff;--sand:#b77e39;--warning:#a95340;--focus:#174bba;--shadow:0 12px 32px #133a271c}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.53 system-ui,-apple-system,"Segoe UI",sans-serif}button,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}:focus-visible,textarea:focus-visible{outline:3px solid var(--focus);outline-offset:3px}[hidden]{display:none!important}
+main{max-width:1280px;margin:auto;padding:clamp(12px,3vw,32px)}
+.hero{display:grid;grid-template-columns:1.04fr .96fr;border-radius:23px;overflow:hidden;background:var(--deep);color:#fff;box-shadow:var(--shadow)}
+.hero-copy{padding:clamp(25px,4.3vw,47px);align-self:center}
+.kicker{font-size:.77rem;letter-spacing:.12em;text-transform:uppercase;font-weight:850;color:var(--accent);margin:0 0 9px}.hero .kicker{color:#f5d69f;margin-bottom:18px}
+h1,h2{font:500 clamp(2rem,3vw,2.5rem)/1.13 Georgia,"Times New Roman",serif;letter-spacing:-.02em}
+h1{font-size:clamp(2.4rem,5.3vw,4.7rem);margin:0 0 20px}h2{margin:0 0 15px}h3{font-size:1.09rem;margin:0 0 10px}
+.hero-copy>p:not(.kicker){color:#dcece1;max-width:50ch}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:23px}.chips span{border:1px solid #92afa2;color:#f7e6c5;border-radius:20px;padding:5px 12px;font-size:.78rem;font-weight:800}
+.hero-art{background:#2a5b50;display:grid;place-items:center;min-height:240px}.hero-art svg{display:block;width:100%;height:100%;max-height:390px}
+.disclaimer,.fine,.footer-note{color:var(--muted);font-size:.84rem}.disclaimer{margin:17px 3px 24px}
+.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.76fr);gap:17px;align-items:start}
+.panel{min-width:0;background:var(--paper);padding:clamp(17px,2.8vw,29px);border-radius:19px;border:1px solid var(--line);box-shadow:var(--shadow)}
+.dashboard{position:sticky;top:12px}
+.topline{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap}.count{border-radius:11px;background:#e0f1e5;color:#205946;padding:8px 12px;font-size:.83rem;font-weight:850}
+.lead{color:var(--muted);max-width:78ch;margin:0 0 19px}
+.map-scroll{background:#daeadb;border:1px solid #aec8b6;border-radius:14px;overflow-x:auto;scrollbar-color:#619485 transparent}
+.map-scroll svg{display:block;width:100%;height:auto;min-width:940px}
+.map-scroll .tree{fill:#76a77b;opacity:.8}.map-scroll .tree-dark{fill:#568d66;opacity:.75}
+.map-scroll .water{fill:none;stroke:#74b4ae;stroke-width:45;stroke-linejoin:round;stroke-linecap:round}
+.map-scroll .water-inner{fill:none;stroke:#bee0d0;stroke-width:9;stroke-linejoin:round;stroke-linecap:round}
+.map-scroll .wetland{fill:#b2d4a2;stroke:#8bb28c;stroke-width:3;stroke-dasharray:8 7}
+.map-scroll .map-note{font:800 20px system-ui,sans-serif;fill:#3e6955}
+.map-scroll .route{cursor:pointer}.map-scroll .route-hit{stroke:transparent;stroke-width:25;fill:none}
+.map-scroll .route-line{stroke-width:6;fill:none;stroke-linecap:round;stroke-dasharray:12 7}
+.map-scroll .route-line.lane-0{stroke:#227d73}.map-scroll .route-line.lane-1{stroke:#bb8647}.map-scroll .route-line.lane-2{stroke:#a46a60}
+.map-scroll .route:not(.active):not(.committed){opacity:0;pointer-events:none}.map-scroll .route.committed .route-line{stroke:#376d50;stroke-dasharray:none;stroke-width:8}
+.map-scroll .route.pending .route-line{stroke-width:11;stroke-dasharray:none}.map-scroll .route:focus{outline:none}
+.map-scroll .route:focus .route-line{stroke:#144cbd;stroke-width:11}
+.map-scroll .route-badge{fill:#fffaf0;stroke:#426858;stroke-width:2;pointer-events:none}
+.map-scroll .route-letter{font:900 17px system-ui,sans-serif;fill:#274b41;text-anchor:middle;pointer-events:none}
+.map-scroll .landmark{cursor:pointer}.map-scroll .marker-halo{fill:#fcf9ec;stroke:#4e7e68;stroke-width:3}
+.map-scroll .marker-core{fill:#b2d9b1;stroke:#2c7956;stroke-width:2}.map-scroll .landmark.seen .marker-core{fill:#3c9871}
+.map-scroll .landmark.active .marker-halo,.map-scroll .landmark:focus .marker-halo{stroke:#1b4cba;stroke-width:7}.map-scroll .landmark:focus{outline:none}
+.map-scroll .marker-number{font:850 18px system-ui,sans-serif;fill:#173f38;text-anchor:middle;pointer-events:none}
+.map-scroll .marker-label-bg{fill:#fffdf4;stroke:#9fb7a7}.map-scroll .marker-label{font:750 14px system-ui,sans-serif;fill:#34594b;text-anchor:middle;pointer-events:none}
+.map-scroll .marker-visited{fill:#438e6b}
+.caption{color:var(--muted);font-size:.79rem;margin:10px 0 15px}
+.stations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.station-btn{min-height:61px;padding:10px 12px;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:10px;color:var(--ink)}
+.station-btn[aria-pressed="true"]{border-color:var(--accent);background:#e7f4e9}.station-btn strong,.station-btn small{display:block}.station-btn strong{font-size:.83rem}.station-btn small{font-size:.76rem;color:var(--muted)}
+.station-detail{border-left:4px solid var(--accent);background:#e6f3e7;border-radius:0 11px 11px 0;padding:13px 16px;margin:14px 0}
+.station-detail p{margin:7px 0}.station-detail h3{margin:0}
+.resources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.resource{padding:12px 13px;border:1px solid var(--line);background:#eff5ee;border-radius:12px;min-width:0}
+.resource small,.resource strong{display:block}.resource small{color:var(--muted);font-size:.79rem}.resource strong{font-size:1.39rem;font-variant-numeric:tabular-nums}
+.resource.low strong{color:var(--warning)}
+.bar{height:7px;border-radius:9px;background:#ceded2;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;border-radius:8px;background:#4f9b7a}
+.context{border-left:4px solid var(--accent);background:#e5f2e8;padding:12px 14px;border-radius:0 10px 10px 0;font-size:.86rem;margin-top:16px}
+.progress{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:19px 0;padding:0;list-style:none}.progress li{height:8px;background:#d0dfd3;border-radius:10px}.progress li.passed{background:#4b9471}.progress li.current{background:#bc9058}
+.route-options{display:grid;gap:11px;margin:17px 0}
+.route-option{display:grid;gap:7px;padding:15px 17px;border:1.5px solid var(--line);background:#f5f8f1;border-radius:13px;text-align:left;color:var(--ink)}
+.route-option[aria-pressed="true"]{background:#e4f2e8;border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.route-option strong{font-size:1rem}.route-option small{font-size:.84rem;color:var(--muted)}.route-option .route-index{color:var(--accent);text-transform:uppercase;font-size:.77rem;font-weight:850;letter-spacing:.07em}
+.weather{padding:13px;border:1px solid #bdcda9;border-left:5px solid #ac9258;background:#f4f0db;border-radius:0 13px 13px 0;margin:17px 0}
+.weather strong{display:block}.weather p{margin:6px 0;color:var(--muted)}
+.preview{padding:17px;border:1px solid var(--line);border-radius:14px;background:#e7f3e9}.preview h3{margin:0 0 8px}.preview p{margin:8px 0}
+.preview .delta{font-variant-numeric:tabular-nums;font-weight:750;line-height:1.7}
+.justify{margin-top:17px}.justify label{display:block;font-weight:800;margin-bottom:9px}
+textarea{display:block;width:100%;min-height:95px;resize:vertical;padding:12px 13px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:11px}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:19px}
+.primary,.secondary{padding:10px 17px;min-height:45px;border-radius:10px;font-weight:850}
+.primary{background:var(--accent);color:var(--on-accent);border:1px solid var(--accent)}.secondary{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.primary:not(:disabled):hover{filter:brightness(1.12)}.error{min-height:22px;color:var(--warning);font-weight:800}
+.history{padding-left:21px;margin:14px 0}.history li{font-size:.85rem;color:var(--muted);margin-bottom:8px}
+.confirm{border:1px solid #cbb084;background:#fff1d7;border-radius:13px;padding:14px 16px;margin:15px 0}
+.confirm p{margin:0;font-weight:800}
+.charts{margin-top:17px}.chart-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+.chartbox{background:#f7faf4;border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.chartbox svg{display:block;width:100%;height:auto;overflow:visible}
+.chartbox h3{margin:0 0 9px}.chartbox .grid{stroke:#d0e0d7;stroke-width:1}.chartbox .axis{font:12px system-ui,sans-serif;fill:#62756f}
+.chartbox .waterline{fill:none;stroke:#327fbd;stroke-width:3.5}.chartbox .foodline{fill:none;stroke:#b38546;stroke-width:3.5}
+.chartbox .energyline{fill:none;stroke:#27856b;stroke-width:3.5}.chartbox .orientline{fill:none;stroke:#885eac;stroke-width:3.5}
+.chartbox .timelinebar{fill:#438b70}.chartbox .timepreview{fill:#c79552}
+.chartbox .dot{stroke:#fff;stroke-width:2}.chartbox .dot-water{fill:#327fbd}.chartbox .dot-food{fill:#b38546}.chartbox .dot-energy{fill:#27856b}.chartbox .dot-orient{fill:#885eac}
+.legend{display:flex;gap:11px;flex-wrap:wrap;margin-top:10px;font-size:.78rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}.legend b{width:13px;height:7px;background:#327fbd}.legend b.food{background:#b38546}.legend b.energy{background:#27856b}.legend b.orient{background:#885eac}
+.table-scroll{overflow-x:auto;margin-top:18px}table{width:100%;border-collapse:collapse;min-width:1070px;font-size:.84rem}
+th,td{padding:10px 12px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+thead th{background:#e5f0e7;color:#245d4d}th:first-child,td:first-child{text-align:left}
+tbody tr:nth-child(even){background:#f2f7f1}td{font-variant-numeric:tabular-nums}
+.ending{background:#e5f1e7;border:1px solid #90b69d;border-radius:15px;padding:19px}
+.ending.assisted{background:#f9eed8;border-color:#d1b17d}.ending.critical{background:#f7e1da;border-color:#c59589}
+.ending h3{font:500 1.6rem Georgia,serif;margin:0 0 10px}.ending p{margin:9px 0}
+.report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:16px 0}
+.report-card{padding:15px;border:1px solid var(--line);border-radius:12px}
+.report-card h3{font-size:.97rem;margin:0 0 8px}.report-card p{font-size:.85rem;color:var(--muted);margin:8px 0}
+.compare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:17px 0}
+.compare{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f5f8ef}
+.compare strong,.compare small{display:block}.compare small{color:var(--muted);font-size:.79rem;margin-top:6px}
+details{border:1px solid var(--line);border-radius:12px;padding:13px 17px;margin-top:17px}summary{cursor:pointer;font-weight:800}
+@media(max-width:980px){.hero,.layout,.chart-layout{grid-template-columns:1fr}.hero-art svg{max-height:250px}.dashboard{position:static}}
+@media(max-width:620px){main{padding:11px}.panel,.hero{border-radius:14px}.stations,.resources,.report-grid,.compare-grid{grid-template-columns:1fr}.actions>button{flex:1 1 auto}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#10231f;--paper:#243830;--ink:#ecf4e8;--muted:#bfd5c8;--line:#4a685a;--accent:#9fdfbe;--on-accent:#12362b;--warning:#f0b694;--focus:#ffe09b;--shadow:none}.hero{background:#13372f}.count{background:#2d5140;color:#dcf8e5}.station-btn[aria-pressed="true"],.route-option[aria-pressed="true"]{background:#2c5040}.station-detail,.context,.preview{background:#294a3b}.resource,.route-option,.chartbox,.compare{background:#2c4237}.bar{background:#4a6858}.bar i{background:#8bceb0}.weather{background:#473e2d;border-color:#99845f}.weather p{color:#ddded2}.confirm{background:#473b2b}.chartbox .grid{stroke:#4a685a}.chartbox .axis{fill:#c5d6cf}.chartbox .dot{stroke:#273e32}thead th{background:#2c5040;color:#e3f4e9}tbody tr:nth-child(even){background:#2c4439}.ending{background:#294837}.ending.assisted{background:#493d2d}.ending.critical{background:#4c302e}}
+</style>
+</head>
+<body>
+<main>
+<section class="hero" aria-labelledby="case-title">
+ <div class="hero-copy">
+  <p class="kicker">Dossiê 009 · Jornada inteiramente fictícia</p>
+  <h1 id="case-title">Expedição Perdida na Amazônia</h1>
+  <p>Um grupo de pesquisa fictício precisa comparar rotas em seis trechos de uma floresta tropical imaginária. O mapa contém marcos documentais, condições meteorológicas simuladas e escolhas que afetam recursos, orientação, tempo e cuidado ambiental.</p>
+  <div class="chips"><span>7 marcos exploráveis</span><span>6 trechos</span><span>18 rotas possíveis</span><span>3 desfechos</span></div>
+ </div>
+ <div class="hero-art"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 390" role="img" aria-labelledby="hero-map-title hero-map-desc">
+<title id="hero-map-title">Ilustração original de uma floresta tropical e um mapa esquemático</title>
+<desc id="hero-map-desc">Desenho vetorial abstrato com copas de árvores, rio curvo e uma prancheta de mapa, sem representar locais reais, trilhas existentes ou comunidades identificáveis.</desc>
+<defs><linearGradient id="illustration-sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#99c4ad"/><stop offset="1" stop-color="#4a8a7c"/></linearGradient></defs>
+<rect width="650" height="390" fill="url(#illustration-sky)"/>
+<circle cx="526" cy="92" r="50" fill="#ead5a0" opacity=".86"/>
+<path d="M0 220Q120 152 225 210T435 202T650 167V390H0Z" fill="#366e61"/>
+<path d="M0 283Q125 215 247 282T500 255T650 265V390H0Z" fill="#215649"/>
+<path d="M-30 305Q130 235 227 310T485 314T670 275" fill="none" stroke="#c5e0ce" stroke-width="76" stroke-linecap="round"/>
+<path d="M-30 305Q130 235 227 310T485 314T670 275" fill="none" stroke="#6da9ae" stroke-width="58" stroke-linecap="round"/>
+<g fill="#2b5845"><circle cx="35" cy="89" r="50"/><circle cx="115" cy="120" r="46"/><circle cx="166" cy="82" r="38"/><circle cx="296" cy="129" r="51"/><circle cx="353" cy="81" r="42"/><circle cx="608" cy="158" r="61"/></g>
+<g fill="#4f8a5a"><circle cx="48" cy="80" r="36"/><circle cx="117" cy="113" r="30"/><circle cx="298" cy="124" r="39"/><circle cx="615" cy="150" r="38"/></g>
+<g transform="translate(360 175) rotate(-9)"><rect width="235" height="159" rx="16" fill="#f0e2c7" stroke="#a68b5d" stroke-width="6"/>
+<path d="M25 45Q80 8 130 57T212 66M21 112Q95 82 144 119T212 122" fill="none" stroke="#8ba78d" stroke-width="9" stroke-linecap="round"/>
+<path d="M40 45 87 74 144 55 202 104" fill="none" stroke="#c49b63" stroke-width="5" stroke-dasharray="7 7"/>
+<circle cx="40" cy="45" r="9" fill="#286c62"/><circle cx="202" cy="104" r="9" fill="#286c62"/><path d="M182 28v37m-18-18h37" stroke="#78674e" stroke-width="3"/></g>
+</svg></div>
+</section>
+<p class="disclaimer">Ficção educativa, não manual de sobrevivência. Trilhas, rios, clima, direções, tempos, alternativas e indicadores não representam a geografia amazônica real, previsões do tempo, autorização de acesso ou práticas seguras de campo. As comunidades amazônicas têm direitos e autonomia próprios; uma atividade real exige profissionais habilitados, normas aplicáveis e consentimentos quando necessários. Os índices de água, alimentos, energia, orientação e impacto são unidades didáticas abstratas.</p>
+<div class="actions" style="margin:0 0 16px"><button type="button" class="secondary" id="restart">Recomeçar o estudo</button></div>
+<div class="confirm" id="reset-confirm" hidden role="group" aria-label="Confirmar reinício">
+ <p>Descartar a inspeção do mapa, as decisões e as justificativas registradas neste percurso?</p>
+ <div class="actions"><button type="button" class="secondary" id="reset-cancel">Cancelar</button><button type="button" class="primary" id="reset-accept">Sim, recomeçar</button></div>
+</div>
+<div class="layout">
+ <section class="panel" aria-labelledby="map-heading">
+  <div class="topline"><div><p class="kicker">Mapa esquemático original</p><h2 id="map-heading">Sete marcos e caminhos possíveis</h2></div><strong class="count" id="map-count" aria-live="polite">0 de 7 marcos examinados</strong></div>
+  <p class="lead">Selecione os marcos para ler suas características. Quando a simulação começar, as três rotas do trecho atual aparecerão no mapa. Trilhas e rio são elementos imaginários.</p>
+  <div class="map-scroll">
+   <svg id="route-map" viewBox="0 0 1240 630" role="group" aria-labelledby="route-svg-title route-svg-desc" xmlns="http://www.w3.org/2000/svg">
+    <title id="route-svg-title">Mapa interativo fictício de seis trechos na floresta</title>
+    <desc id="route-svg-desc">Sete marcos numerados e três possibilidades em cada um dos seis trechos. Somente o trecho atual pode ser selecionado. Todas as opções possuem botões HTML equivalentes.</desc>
+    <defs><pattern id="canopy" width="72" height="68" patternUnits="userSpaceOnUse"><circle cx="19" cy="22" r="17" fill="#94c49a" opacity=".45"/><circle cx="54" cy="51" r="20" fill="#6aa882" opacity=".35"/></pattern></defs>
+    <rect width="1240" height="630" fill="#d5e8d3"/>
+    <rect width="1240" height="630" fill="url(#canopy)"/>
+    <path class="wetland" d="M0 443Q220 420 367 467T699 482T1091 468L1240 440V630H0Z"/>
+    <path class="water" d="M-40 550Q178 490 290 560T584 545T900 556T1280 509"/>
+    <path class="water-inner" d="M-40 550Q178 490 290 560T584 545T900 556T1280 509"/>
+    <g aria-hidden="true" class="tree-dark"><circle cx="175" cy="86" r="50"/><circle cx="348" cy="85" r="47"/><circle cx="560" cy="92" r="49"/><circle cx="745" cy="93" r="50"/><circle cx="1010" cy="91" r="52"/><circle cx="1175" cy="120" r="43"/></g>
+    <g aria-hidden="true" class="tree"><circle cx="95" cy="161" r="30"/><circle cx="212" cy="144" r="27"/><circle cx="494" cy="145" r="29"/><circle cx="875" cy="163" r="35"/><circle cx="1090" cy="170" r="32"/></g>
+    <text x="37" y="42" class="map-note">FLORESTA FICTÍCIA · PERCURSO ESQUEMÁTICO</text>
+    <text x="54" y="601" class="map-note">RIO IMAGINÁRIO · SEM DISTÂNCIAS REAIS</text>
+    <g class="route" data-leg="0" data-route="l1-a" role="button" tabindex="-1" aria-label="Trecho 1, rota 1: Corredor de referência" aria-pressed="false">
+   <path class="route-hit" d="M 100 305 Q 146.6 139.0 276 253"/><path class="route-line lane-0" d="M 100 305 Q 146.6 139.0 276 253"/>
+   <circle class="route-badge" cx="167.3" cy="209.0" r="16"/>
+   <text class="route-letter" x="167.3" y="214.0">A</text>
+  </g>
+<g class="route" data-leg="0" data-route="l1-b" role="button" tabindex="-1" aria-label="Trecho 1, rota 2: Conferir os marcos antes de avançar" aria-pressed="false">
+   <path class="route-hit" d="M 100 305 Q 188.0 279.0 276 253"/><path class="route-line lane-1" d="M 100 305 Q 188.0 279.0 276 253"/>
+   <circle class="route-badge" cx="188.0" cy="279.0" r="16"/>
+   <text class="route-letter" x="188.0" y="284.0">B</text>
+  </g>
+<g class="route" data-leg="0" data-route="l1-c" role="button" tabindex="-1" aria-label="Trecho 1, rota 3: Atalho sem registros suficientes" aria-pressed="false">
+   <path class="route-hit" d="M 100 305 Q 229.4 419.0 276 253"/><path class="route-line lane-2" d="M 100 305 Q 229.4 419.0 276 253"/>
+   <circle class="route-badge" cx="208.7" cy="349.0" r="16"/>
+   <text class="route-letter" x="208.7" y="354.0">C</text>
+  </g>
+<g class="route" data-leg="1" data-route="l2-a" role="button" tabindex="-1" aria-label="Trecho 2, rota 1: Passagem alta cadastrada" aria-pressed="false">
+   <path class="route-hit" d="M 276 253 Q 433.7 174.3 448 350"/><path class="route-line lane-0" d="M 276 253 Q 433.7 174.3 448 350"/>
+   <circle class="route-badge" cx="397.9" cy="237.9" r="16"/>
+   <text class="route-letter" x="397.9" y="242.9">A</text>
+  </g>
+<g class="route" data-leg="1" data-route="l2-b" role="button" tabindex="-1" aria-label="Trecho 2, rota 2: Reavaliar o traçado antes de seguir" aria-pressed="false">
+   <path class="route-hit" d="M 276 253 Q 362.0 301.5 448 350"/><path class="route-line lane-1" d="M 276 253 Q 362.0 301.5 448 350"/>
+   <circle class="route-badge" cx="362.0" cy="301.5" r="16"/>
+   <text class="route-letter" x="362.0" y="306.5">B</text>
+  </g>
+<g class="route" data-leg="1" data-route="l2-c" role="button" tabindex="-1" aria-label="Trecho 2, rota 3: Rastro direto não documentado" aria-pressed="false">
+   <path class="route-hit" d="M 276 253 Q 290.3 428.7 448 350"/><path class="route-line lane-2" d="M 276 253 Q 290.3 428.7 448 350"/>
+   <circle class="route-badge" cx="326.1" cy="365.1" r="16"/>
+   <text class="route-letter" x="326.1" y="370.1">C</text>
+  </g>
+<g class="route" data-leg="2" data-route="l3-a" role="button" tabindex="-1" aria-label="Trecho 3, rota 1: Seguir os marcos do dossiê" aria-pressed="false">
+   <path class="route-hit" d="M 448 350 Q 458.5 172.1 622 243"/><path class="route-line lane-0" d="M 448 350 Q 458.5 172.1 622 243"/>
+   <circle class="route-badge" cx="496.8" cy="234.3" r="16"/>
+   <text class="route-letter" x="496.8" y="239.3">A</text>
+  </g>
+<g class="route" data-leg="2" data-route="l3-b" role="button" tabindex="-1" aria-label="Trecho 3, rota 2: Desvio extenso registrado" aria-pressed="false">
+   <path class="route-hit" d="M 448 350 Q 535.0 296.5 622 243"/><path class="route-line lane-1" d="M 448 350 Q 535.0 296.5 622 243"/>
+   <circle class="route-badge" cx="535.0" cy="296.5" r="16"/>
+   <text class="route-letter" x="535.0" y="301.5">B</text>
+  </g>
+<g class="route" data-leg="2" data-route="l3-c" role="button" tabindex="-1" aria-label="Trecho 3, rota 3: Linha pouco conhecida" aria-pressed="false">
+   <path class="route-hit" d="M 448 350 Q 611.5 420.9 622 243"/><path class="route-line lane-2" d="M 448 350 Q 611.5 420.9 622 243"/>
+   <circle class="route-badge" cx="573.2" cy="358.7" r="16"/>
+   <text class="route-letter" x="573.2" y="363.7">C</text>
+  </g>
+<g class="route" data-leg="3" data-route="l4-a" role="button" tabindex="-1" aria-label="Trecho 4, rota 1: Trilha consolidada no enredo" aria-pressed="false">
+   <path class="route-hit" d="M 622 243 Q 785.7 171.9 797 350"/><path class="route-line lane-0" d="M 622 243 Q 785.7 171.9 797 350"/>
+   <circle class="route-badge" cx="747.6" cy="234.2" r="16"/>
+   <text class="route-letter" x="747.6" y="239.2">A</text>
+  </g>
+<g class="route" data-leg="3" data-route="l4-b" role="button" tabindex="-1" aria-label="Trecho 4, rota 2: Priorizar área menos sensível" aria-pressed="false">
+   <path class="route-hit" d="M 622 243 Q 709.5 296.5 797 350"/><path class="route-line lane-1" d="M 622 243 Q 709.5 296.5 797 350"/>
+   <circle class="route-badge" cx="709.5" cy="296.5" r="16"/>
+   <text class="route-letter" x="709.5" y="301.5">B</text>
+  </g>
+<g class="route" data-leg="3" data-route="l4-c" role="button" tabindex="-1" aria-label="Trecho 4, rota 3: Desvio de baixa rastreabilidade" aria-pressed="false">
+   <path class="route-hit" d="M 622 243 Q 633.3 421.1 797 350"/><path class="route-line lane-2" d="M 622 243 Q 633.3 421.1 797 350"/>
+   <circle class="route-badge" cx="671.4" cy="358.8" r="16"/>
+   <text class="route-letter" x="671.4" y="363.8">C</text>
+  </g>
+<g class="route" data-leg="4" data-route="l5-a" role="button" tabindex="-1" aria-label="Trecho 5, rota 1: Passagem do mapa original" aria-pressed="false">
+   <path class="route-hit" d="M 797 350 Q 812.1 176.3 965 260"/><path class="route-line lane-0" d="M 797 350 Q 812.1 176.3 965 260"/>
+   <circle class="route-badge" cx="846.5" cy="240.7" r="16"/>
+   <text class="route-letter" x="846.5" y="245.7">A</text>
+  </g>
+<g class="route" data-leg="4" data-route="l5-b" role="button" tabindex="-1" aria-label="Trecho 5, rota 2: Revisar os pontos de controle" aria-pressed="false">
+   <path class="route-hit" d="M 797 350 Q 881.0 305.0 965 260"/><path class="route-line lane-1" d="M 797 350 Q 881.0 305.0 965 260"/>
+   <circle class="route-badge" cx="881.0" cy="305.0" r="16"/>
+   <text class="route-letter" x="881.0" y="310.0">B</text>
+  </g>
+<g class="route" data-leg="4" data-route="l5-c" role="button" tabindex="-1" aria-label="Trecho 5, rota 3: Linha curta não verificada" aria-pressed="false">
+   <path class="route-hit" d="M 797 350 Q 949.9 433.7 965 260"/><path class="route-line lane-2" d="M 797 350 Q 949.9 433.7 965 260"/>
+   <circle class="route-badge" cx="915.5" cy="369.3" r="16"/>
+   <text class="route-letter" x="915.5" y="374.3">C</text>
+  </g>
+<g class="route" data-leg="5" data-route="l6-a" role="button" tabindex="-1" aria-label="Trecho 6, rota 1: Rota de encontro registrada" aria-pressed="false">
+   <path class="route-hit" d="M 965 260 Q 1081.0 140.0 1121 302"/><path class="route-line lane-0" d="M 965 260 Q 1081.0 140.0 1121 302"/>
+   <circle class="route-badge" cx="1062.0" cy="210.5" r="16"/>
+   <text class="route-letter" x="1062.0" y="215.5">A</text>
+  </g>
+<g class="route" data-leg="5" data-route="l6-b" role="button" tabindex="-1" aria-label="Trecho 6, rota 2: Revisar o plano final" aria-pressed="false">
+   <path class="route-hit" d="M 965 260 Q 1043.0 281.0 1121 302"/><path class="route-line lane-1" d="M 965 260 Q 1043.0 281.0 1121 302"/>
+   <circle class="route-badge" cx="1043.0" cy="281.0" r="16"/>
+   <text class="route-letter" x="1043.0" y="286.0">B</text>
+  </g>
+<g class="route" data-leg="5" data-route="l6-c" role="button" tabindex="-1" aria-label="Trecho 6, rota 3: Conexão sem confirmação" aria-pressed="false">
+   <path class="route-hit" d="M 965 260 Q 1005.0 422.0 1121 302"/><path class="route-line lane-2" d="M 965 260 Q 1005.0 422.0 1121 302"/>
+   <circle class="route-badge" cx="1024.0" cy="351.5" r="16"/>
+   <text class="route-letter" x="1024.0" y="356.5">C</text>
+  </g>
+    <g class="landmark" data-station="s0" role="button" tabindex="0" aria-pressed="false" aria-label="Estação Ipê, selecionar marco">
+ <circle class="marker-halo" cx="100" cy="305" r="25"/><circle class="marker-core" cx="100" cy="305" r="19"/>
+ <text class="marker-number" x="100" y="311">0</text>
+ <rect class="marker-label-bg" x="24" y="338" width="152" height="30" rx="9"/>
+ <text class="marker-label" x="100" y="359">Partida</text>
+ </g>
+<g class="landmark" data-station="s1" role="button" tabindex="0" aria-pressed="false" aria-label="Marco das Samambaias, selecionar marco">
+ <circle class="marker-halo" cx="276" cy="253" r="25"/><circle class="marker-core" cx="276" cy="253" r="19"/>
+ <text class="marker-number" x="276" y="259">1</text>
+ <rect class="marker-label-bg" x="200" y="286" width="152" height="30" rx="9"/>
+ <text class="marker-label" x="276" y="307">Samambaias</text>
+ </g>
+<g class="landmark" data-station="s2" role="button" tabindex="0" aria-pressed="false" aria-label="Ponte da Névoa, selecionar marco">
+ <circle class="marker-halo" cx="448" cy="350" r="25"/><circle class="marker-core" cx="448" cy="350" r="19"/>
+ <text class="marker-number" x="448" y="356">2</text>
+ <rect class="marker-label-bg" x="372" y="383" width="152" height="30" rx="9"/>
+ <text class="marker-label" x="448" y="404">Ponte da Névoa</text>
+ </g>
+<g class="landmark" data-station="s3" role="button" tabindex="0" aria-pressed="false" aria-label="Várzea das Garças, selecionar marco">
+ <circle class="marker-halo" cx="622" cy="243" r="25"/><circle class="marker-core" cx="622" cy="243" r="19"/>
+ <text class="marker-number" x="622" y="249">3</text>
+ <rect class="marker-label-bg" x="546" y="276" width="152" height="30" rx="9"/>
+ <text class="marker-label" x="622" y="297">Várzea</text>
+ </g>
+<g class="landmark" data-station="s4" role="button" tabindex="0" aria-pressed="false" aria-label="Copa das Castanheiras, selecionar marco">
+ <circle class="marker-halo" cx="797" cy="350" r="25"/><circle class="marker-core" cx="797" cy="350" r="19"/>
+ <text class="marker-number" x="797" y="356">4</text>
+ <rect class="marker-label-bg" x="721" y="383" width="152" height="30" rx="9"/>
+ <text class="marker-label" x="797" y="404">Castanheiras</text>
+ </g>
+<g class="landmark" data-station="s5" role="button" tabindex="0" aria-pressed="false" aria-label="Pedra do Tucum, selecionar marco">
+ <circle class="marker-halo" cx="965" cy="260" r="25"/><circle class="marker-core" cx="965" cy="260" r="19"/>
+ <text class="marker-number" x="965" y="266">5</text>
+ <rect class="marker-label-bg" x="889" y="293" width="152" height="30" rx="9"/>
+ <text class="marker-label" x="965" y="314">Pedra do Tucum</text>
+ </g>
+<g class="landmark" data-station="s6" role="button" tabindex="0" aria-pressed="false" aria-label="Ponto de Encontro, selecionar marco">
+ <circle class="marker-halo" cx="1121" cy="302" r="25"/><circle class="marker-core" cx="1121" cy="302" r="19"/>
+ <text class="marker-number" x="1121" y="308">6</text>
+ <rect class="marker-label-bg" x="1045" y="335" width="152" height="30" rx="9"/>
+ <text class="marker-label" x="1121" y="356">Encontro</text>
+ </g>
+   </svg>
+  </div>
+  <p class="caption">A planta pode rolar horizontalmente no celular. Clique ou use Enter/Espaço nos marcos e nas rotas; todas as decisões também aparecem como botões HTML abaixo. Nenhuma imagem é necessária para compreender os dados.</p>
+  <div class="stations" id="station-buttons" aria-label="Marcos do percurso em texto"></div>
+  <div class="station-detail" role="region" aria-live="polite" aria-label="Marco selecionado">
+   <h3 id="station-title" tabindex="-1">Estação Ipê</h3><p id="station-description"></p>
+   <p class="fine" id="station-status"></p>
+  </div>
+  <section id="explore" aria-labelledby="explore-title">
+   <p class="kicker">Etapa 0 · Exploração do mapa</p><h2 id="explore-title" tabindex="-1">O que o mapa realmente informa?</h2>
+   <p class="lead">Examine ao menos três marcos antes de decidir rotas. Considere que o desenho não oferece coordenadas, distâncias, previsão climática nem dados de segurança para um deslocamento real.</p>
+   <div class="actions"><button type="button" class="primary" id="start" disabled>Iniciar os seis trechos</button><span id="explore-hint" class="fine">Inspecione mais 3 marcos.</span></div>
+  </section>
+  <section id="journey" hidden aria-labelledby="journey-title">
+   <p class="kicker" id="chapter-kicker">Etapa 1 de 6 · Decisão de rota</p>
+   <h2 id="journey-title" tabindex="-1">Escolher a primeira passagem</h2>
+   <ol id="progress" class="progress" aria-label="Avanço dos seis trechos"></ol>
+   <div class="weather"><strong id="weather-label">Condição fictícia de tempo</strong><p id="chapter-scene"></p></div>
+   <p class="lead">Escolha um dos três trajetos. Cada um termina no mesmo próximo marco, mas tem custos didáticos diferentes. A seleção gera uma prévia; só a confirmação acompanhada de uma justificativa registra a decisão.</p>
+   <div id="route-buttons" class="route-options"></div>
+   <div id="consequence" class="preview" hidden aria-live="polite">
+    <h3 id="consequence-title">Prévia da escolha</h3><p id="consequence-text"></p>
+    <p class="delta" id="consequence-delta"></p><p id="consequence-warnings" class="fine"></p>
+   </div>
+   <form id="choice-form" class="justify" novalidate>
+    <label for="justification">Justifique sua escolha com pelo menos 12 caracteres, citando recursos, tempo, orientação, impactos ou incertezas.</label>
+    <textarea id="justification" rows="3" minlength="12" placeholder="Exemplo: a opção preserva a orientação, mas consome mais turnos..." aria-describedby="reason-help"></textarea>
+    <p id="reason-help" class="fine">O texto permanece somente nesta página, não é enviado nem salvo no Moodle.</p>
+    <p id="reason-error" class="error" role="alert"></p>
+    <div class="actions"><button type="button" class="secondary" id="undo" disabled>Rever trecho anterior</button><button type="submit" class="primary" id="confirm-choice" disabled>Confirmar e avançar</button></div>
+   </form>
+  </section>
+  <section id="report" hidden aria-labelledby="report-title">
+   <p class="kicker">Relatório da jornada simulada</p><h2 id="report-title" tabindex="-1">Seis decisões, um percurso</h2>
+   <div class="ending" id="ending" aria-live="polite"></div>
+   <div class="report-grid" id="report-grid"></div>
+   <h3>Histórico das decisões justificadas</h3><ol id="report-history" class="history"></ol>
+   <h3>Como mudaria o resultado com outra estratégia?</h3><div id="comparisons" class="compare-grid"></div>
+   <details><summary>Limites desta simulação</summary><p>O simulador trabalha com unidades arbitrárias e turnos abstratos. Ele não incorpora dados de ecologia, hidrologia, meteorologia, esforço humano, logística de campo ou segurança real. Atividades verdadeiras na Amazônia demandam equipes profissionais, respeito aos territórios e comunidades locais, autorizações aplicáveis e protocolos específicos. Nenhuma rota ilustrada representa uma recomendação de deslocamento.</p></details>
+   <div class="actions"><button type="button" class="secondary" id="report-back">Rever último trecho</button><button type="button" class="primary" id="report-reset">Reiniciar e testar outro caminho</button></div>
+  </section>
+ </section>
+ <aside class="panel dashboard" aria-labelledby="dashboard-title">
+  <p class="kicker">Painel de estado · Índices inventados</p><h2 id="dashboard-title">Recursos e orientação</h2>
+  <p class="fine" id="dashboard-caption">Valores em unidades didáticas, sem relação com consumo ou segurança de pessoas reais.</p>
+  <div id="resource-list" class="resources"></div>
+  <div class="context" id="resource-context" role="status" aria-live="polite">O percurso ainda não foi iniciado.</div>
+  <h3 style="margin-top:23px">Linha das decisões</h3>
+  <ol id="history" class="history"><li>Nenhuma escolha registrada.</li></ol>
+  <details>
+   <summary>Como as consequências são calculadas?</summary>
+   <p class="fine">Cada opção define variações inteiras de água, alimentos, energia, orientação, impacto e tempo. Os cinco primeiros indicadores são limitados ao intervalo fictício de 0 a 100; o tempo soma turnos.</p>
+   <p class="fine">Se a orientação cair abaixo de 45 após uma escolha, o modelo adiciona 1 turno e retira 3 unidades de energia; se água, alimentos ou energia atingirem zero, adiciona 1 alerta e 1 turno. Impacto ambiental abaixo de 35 adiciona 1 alerta por trecho nessa condição. Não há reposição automática nem ação real de resgate.</p>
+   <p class="fine">Os três desfechos consideram todos os trechos, o menor nível de recursos observado, os alertas, os valores finais e o limite de tempo fictício. O histórico é recalculado desde o estado inicial, sem lançamentos duplicados.</p>
+  </details>
+ </aside>
+</div>
+<section class="panel charts" aria-labelledby="charts-title">
+ <p class="kicker">Consequências acumuladas</p><h2 id="charts-title">Como a jornada evolui?</h2>
+ <div class="chart-layout">
+  <div class="chartbox"><h3>Água, alimentos, energia e orientação</h3>
+   <svg id="resources-svg" viewBox="0 0 720 275" role="img" aria-labelledby="resource-svg-title resource-svg-desc">
+    <title id="resource-svg-title">Evolução comparada dos indicadores da jornada</title>
+    <desc id="resource-svg-desc">O gráfico mostrará os recursos no início e após os trechos. Os números também estão na tabela.</desc>
+    <g id="resource-chart"></g>
+   </svg>
+   <div class="legend"><span><b></b>Água</span><span><b class="food"></b>Alimentos</span><span><b class="energy"></b>Energia</span><span><b class="orient"></b>Orientação</span></div>
+  </div>
+  <div class="chartbox"><h3>Turnos cumulativos</h3>
+   <svg id="time-svg" viewBox="0 0 720 275" role="img" aria-labelledby="time-svg-title time-svg-desc">
+    <title id="time-svg-title">Tempo acumulado na jornada fictícia</title><desc id="time-svg-desc">Barras de turnos abstratos por trecho; os números aparecem também na tabela.</desc><g id="time-chart"></g>
+   </svg>
+   <p class="fine">Tempo em turnos arbitrários; não interprete como horas, velocidade ou distância real.</p>
+  </div>
+ </div>
+ <div class="table-scroll"><table aria-label="Histórico numérico dos recursos e decisões"><thead><tr>
+  <th scope="col">Marco / opção</th><th scope="col">Água</th><th scope="col">Alimentos</th><th scope="col">Energia</th><th scope="col">Orientação</th><th scope="col">Impacto</th><th scope="col">Turnos</th><th scope="col">Alertas</th>
+ </tr></thead><tbody id="ledger"></tbody></table></div>
+ <p class="fine">Uma linha identificada como prévia ainda não foi confirmada. Valores zero indicam que um recurso abstrato se esgotou; isso não define um procedimento seguro de viagem.</p>
+</section>
+<p class="footer-note">Atividade e mapa inteiramente fictícios, SVGs originais e sem dependências remotas. A floresta amazônica real reúne ambientes e comunidades diversos não representados por este modelo. Não há coleta de identidade, armazenamento de respostas, nota oficial Moodle nem aconselhamento de segurança ou navegação.</p>
+</main>
+<script type="application/json" id="case-data">{"name":"Expedição Perdida na Amazônia","region":"Corredores fictícios de uma floresta tropical inspirada em princípios de conservação","disclaimer":"Roteiro inteiramente inventado: a posição dos rios, trilhas, clima, pontos, tempos e recursos não descreve a Amazônia real nem fornece orientação de navegação, sobrevivência, segurança ou autorização de deslocamento.","units":"unidades didáticas fictícias de 0 a 100 para recursos; turnos abstratos, não horas reais","initial":{"water":92,"food":78,"energy":100,"orientation":74,"impact":89,"time":0,"alerts":0},"stations":[{"id":"s0","name":"Estação Ipê","x":100,"y":305,"description":"Ponto inicial da expedição fictícia, com mapa de referência de sete marcos. Não corresponde a uma base real."},{"id":"s1","name":"Marco das Samambaias","x":276,"y":253,"description":"Marco sinalizado num corredor de vegetação; a próxima etapa apresenta chuva simulada."},{"id":"s2","name":"Ponte da Névoa","x":448,"y":350,"description":"Travessia inventada que aparece na documentação do enredo. Não representa infraestrutura real."},{"id":"s3","name":"Várzea das Garças","x":622,"y":243,"description":"Área de mata de várzea imaginária, com trajetos representados apenas para comparação educativa."},{"id":"s4","name":"Copa das Castanheiras","x":797,"y":350,"description":"Marco abstrato próximo a árvores grandes; o impacto ambiental é uma variável do simulador."},{"id":"s5","name":"Pedra do Tucum","x":965,"y":260,"description":"Ponto de referência fictício de onde se acompanha a última etapa do exercício."},{"id":"s6","name":"Ponto de Encontro","x":1121,"y":302,"description":"Local de chegada inventado. O desfecho depende também de recursos, tempo, orientação e cuidado ambiental."}],"legs":[{"id":"leg1","from":"s0","to":"s1","weather":"Chuvisco e nuvens baixas","title":"Escolher a primeira passagem","scene":"O grupo sai da Estação Ipê com informações incompletas sobre as trilhas. Há três corredores abstratos até o marco seguinte.","options":[{"id":"l1-a","label":"Corredor de referência","description":"Trajeto documentado no mapa fictício.","consequence":"A opção preserva clareza da orientação com consumo moderado de recursos.","lane":0,"change":{"water":-12,"food":-7,"energy":-11,"orientation":7,"impact":-3,"time":3},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l1-b","label":"Conferir os marcos antes de avançar","description":"Exige mais um turno de observação.","consequence":"A orientação melhora bastante, mas o calendário fica mais apertado.","lane":1,"change":{"water":-10,"food":-8,"energy":-8,"orientation":12,"impact":-1,"time":4},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l1-c","label":"Atalho sem registros suficientes","description":"Encurta a duração simulada.","consequence":"Menos tempo não significa caminho confiável: caem orientação e cuidado ambiental.","lane":2,"change":{"water":-8,"food":-5,"energy":-9,"orientation":-17,"impact":-14,"time":2},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"}]},{"id":"leg2","from":"s1","to":"s2","weather":"Chuva intensa simulada","title":"A chuva altera a prioridade","scene":"Registros fictícios mostram chuva no trecho entre os dois marcos. As alternativas incluem tempos e custos simulados, não técnicas reais de travessia.","options":[{"id":"l2-a","label":"Passagem alta cadastrada","description":"Rota mais previsível no enredo.","consequence":"O trecho demanda recursos, mas conserva uma referência positiva de orientação.","lane":0,"change":{"water":-17,"food":-10,"energy":-14,"orientation":4,"impact":-2,"time":4},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l2-b","label":"Reavaliar o traçado antes de seguir","description":"Maior custo de tempo, menor desgaste energético.","consequence":"A cautela no planejamento melhora a orientação, mas consome um turno adicional.","lane":1,"change":{"water":-11,"food":-10,"energy":-9,"orientation":9,"impact":0,"time":5},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l2-c","label":"Rastro direto não documentado","description":"Promete poucas etapas no mapa.","consequence":"A pressa reduz a qualidade da orientação e eleva o impacto ambiental fictício.","lane":2,"change":{"water":-20,"food":-8,"energy":-17,"orientation":-13,"impact":-14,"time":2},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"}]},{"id":"leg3","from":"s2","to":"s3","weather":"Névoa densa inventada","title":"Comparar caminhos sob baixa visibilidade","scene":"O sistema apresenta névoa em um ponto com referências incompletas. As alternativas representam escolhas de planejamento em um modelo, sem simular orientação de campo.","options":[{"id":"l3-a","label":"Seguir os marcos do dossiê","description":"Preserva o itinerário registrado.","consequence":"Maior consumo normal de recursos, com melhoria do índice de orientação.","lane":0,"change":{"water":-13,"food":-9,"energy":-13,"orientation":10,"impact":-2,"time":3},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l3-b","label":"Desvio extenso registrado","description":"Rota mais longa, mas bem documentada.","consequence":"Gasta mais tempo, água e energia, preservando o rastreamento fictício.","lane":1,"change":{"water":-16,"food":-11,"energy":-18,"orientation":12,"impact":-1,"time":5},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l3-c","label":"Linha pouco conhecida","description":"Passagem rápida na simulação.","consequence":"Custa menos tempo imediato, mas reduz muito a confiabilidade do trajeto.","lane":2,"change":{"water":-13,"food":-7,"energy":-11,"orientation":-21,"impact":-12,"time":2},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"}]},{"id":"leg4","from":"s3","to":"s4","weather":"Intervalos de sol","title":"Como considerar o território?","scene":"O quarto marco inclui uma área ecológica sensível no cenário fictício. Nenhuma alternativa representa uma autorização para entrar em áreas protegidas ou territórios comunitários.","options":[{"id":"l4-a","label":"Trilha consolidada no enredo","description":"O mapa registra um corredor já utilizado.","consequence":"Evita um deslocamento excessivo e mantém impactos moderados.","lane":0,"change":{"water":-12,"food":-9,"energy":-14,"orientation":6,"impact":-3,"time":3},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l4-b","label":"Priorizar área menos sensível","description":"Proposta de planejamento de menor perturbação.","consequence":"A decisão consome mais tempo, mas preserva melhor o indicador ambiental.","lane":1,"change":{"water":-15,"food":-11,"energy":-11,"orientation":10,"impact":2,"time":4},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l4-c","label":"Desvio de baixa rastreabilidade","description":"Trecho curto de documentação insuficiente.","consequence":"Ganho imediato de tempo acompanhado de menor confiança de navegação e maior impacto.","lane":2,"change":{"water":-9,"food":-6,"energy":-10,"orientation":-15,"impact":-15,"time":2},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"}]},{"id":"leg5","from":"s4","to":"s5","weather":"Vento e garoa simulados","title":"A proximidade do objetivo muda algo?","scene":"A equipe avista o penúltimo marco no mapa do exercício. A pressão por cumprir o cronograma pode distorcer a comparação entre alternativas.","options":[{"id":"l5-a","label":"Passagem do mapa original","description":"Prioriza um itinerário representado no dossiê.","consequence":"A orientação permanece estável, embora o consumo continue.","lane":0,"change":{"water":-14,"food":-9,"energy":-13,"orientation":6,"impact":-3,"time":3},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l5-b","label":"Revisar os pontos de controle","description":"Aumenta o tempo destinado à checagem do plano.","consequence":"Melhora a orientação e reduz o impacto simbólico, mas consome recursos.","lane":1,"change":{"water":-12,"food":-10,"energy":-11,"orientation":11,"impact":-1,"time":4},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l5-c","label":"Linha curta não verificada","description":"Reduz a duração prevista no modelo.","consequence":"A escolha rápida cobra orientação, energia e impacto ambiental.","lane":2,"change":{"water":-17,"food":-6,"energy":-18,"orientation":-17,"impact":-12,"time":2},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"}]},{"id":"leg6","from":"s5","to":"s6","weather":"Céu variável, fim da jornada","title":"O último trecho também exige decisão","scene":"O último marco leva ao ponto de encontro fictício. O painel registrará uma chegada estável, uma continuidade condicionada ou a necessidade de interromper o plano e solicitar apoio.","options":[{"id":"l6-a","label":"Rota de encontro registrada","description":"Segue a última conexão do mapa fictício.","consequence":"Preserva um ritmo previsível, com gasto final de recursos.","lane":0,"change":{"water":-11,"food":-10,"energy":-13,"orientation":6,"impact":-2,"time":3},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l6-b","label":"Revisar o plano final","description":"Usa um turno a mais para verificar o itinerário.","consequence":"Melhora a orientação no resultado, embora deixe menos margem de tempo.","lane":1,"change":{"water":-10,"food":-12,"energy":-12,"orientation":12,"impact":0,"time":4},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"},{"id":"l6-c","label":"Conexão sem confirmação","description":"Escolha mais curta no desenho do caso.","consequence":"A redução de tempo pode agravar falta de referência e cuidado ambiental.","lane":2,"change":{"water":-14,"food":-8,"energy":-15,"orientation":-20,"impact":-14,"time":2},"justificationPrompt":"Por que essa opção é compatível com os recursos e incertezas mostrados no painel?"}]}],"observations":[{"id":"landscape","title":"Áreas úmidas e rios","description":"O mapa é esquemático e não traz vazão, profundidade, segurança de travessia ou distâncias reais."},{"id":"climate","title":"Clima simulado por trecho","description":"Condições pré-definidas fazem parte do exercício; não são previsão meteorológica nem recomendação de campo."},{"id":"community","title":"Comunidades e direitos territoriais","description":"Comunidades amazônicas possuem conhecimentos, direitos e autonomia próprios. O exercício não inclui territórios reais, nem autoriza incursões; qualquer atividade real exige consentimento, normas aplicáveis e profissionais habilitados."}],"endings":[{"id":"stable","title":"Ponto de encontro com margem de recursos","description":"A simulação chega ao fim com indicadores positivos, tempo dentro da reserva do exercício, orientação e impacto preservados. Não é garantia de segurança para uma expedição real."},{"id":"assisted","title":"Chegada com plano de apoio e reavaliação","description":"O trajeto fictício termina com alguma margem limitada ou tempo elevado. A conclusão educativa é revisar escolhas e planejar apoio, não reproduzir decisões em campo."},{"id":"critical","title":"Plano interrompido: assistência indispensável","description":"Os indicadores ou alertas atingem condição crítica. O exercício não simula resgate nem fornece procedimentos reais; reconhece a necessidade de interromper o plano e encaminhar a profissionais competentes."}]}</script>
+<script>
+"use strict";
+const DATA=JSON.parse(document.getElementById("case-data").textContent);
+
+function cap(value){return Math.max(0,Math.min(100,value));}
+function compute(previous,leg,choice){
+ const s={...previous},warnings=[];
+ if(!leg.options.some(o=>o.id===choice.id))throw Error("Alternativa inválida no trecho");
+ for(const key of ["water","food","energy","orientation","impact"]){
+  if(!Number.isInteger(choice.change[key]))throw Error("Variação ausente: "+key);
+  s[key]=cap(previous[key]+choice.change[key]);
+ }
+ if(!Number.isInteger(choice.change.time)||choice.change.time<1)throw Error("Duração inválida");
+ s.time=previous.time+choice.change.time;
+ s.alerts=previous.alerts;
+ if(s.orientation<45){
+  s.time+=1;
+  s.energy=cap(s.energy-3);
+  warnings.push("Baixa orientação acrescentou 1 turno e consumiu 3 unidades de energia no modelo.");
+ }
+ const exhausted=["water","food","energy"].filter(key=>s[key]===0);
+ if(exhausted.length){
+  s.alerts+=1;
+  s.time+=1;
+  warnings.push("Um ou mais recursos se esgotaram ("+exhausted.join(", ")+"); acrescentado 1 turno de atraso fictício. Isto não representa uma condição segura de continuidade real.");
+ }
+ if(s.impact<35){
+  s.alerts+=1;
+  warnings.push("O indicador de cuidado ambiental ficou abaixo de 35; o resultado registra alerta acumulado.");
+ }
+ const delta={};
+ for(const key of ["water","food","energy","orientation","impact","time","alerts"])delta[key]=s[key]-previous[key];
+ return {before:{...previous},after:s,delta,legId:leg.id,weather:leg.weather,choiceId:choice.id,option:choice,warnings};
+}
+function replay(path,DATA){
+ if(!Array.isArray(path)||path.length>DATA.legs.length)throw Error("Percurso inválido");
+ let s={...DATA.initial},records=[],lowest={water:s.water,food:s.food,energy:s.energy,orientation:s.orientation,impact:s.impact};
+ for(let i=0;i<path.length;i++){
+  const entry=typeof path[i]==="string"?{id:path[i],reason:""}:path[i];
+  const leg=DATA.legs[i],option=leg.options.find(o=>o.id===entry.id);
+  if(!option)throw Error("Alternativa inexistente no trecho "+(i+1));
+  const record=compute(s,leg,option);
+  record.reason=String(entry.reason||"");
+  s=record.after;
+  records.push(record);
+  for(const k of Object.keys(lowest))lowest[k]=Math.min(lowest[k],s[k]);
+ }
+ return {state:s,records,lowest,completed:records.length===DATA.legs.length,choices:path.map(p=>typeof p==="string"?p:p.id)};
+}
+function ending(result,DATA){
+ if(!result.completed)return {id:"pending",title:"Ainda em percurso",description:"A jornada simulada não terminou."};
+ const s=result.state;
+ if(s.alerts>0||result.lowest.water===0||result.lowest.food===0||result.lowest.energy===0||s.orientation<25||s.impact<35||s.time>28)return DATA.endings.find(x=>x.id==="critical");
+ if(s.water>=12&&s.food>=12&&s.energy>=15&&s.orientation>=65&&s.impact>=55&&s.time<=22)return DATA.endings.find(x=>x.id==="stable");
+ return DATA.endings.find(x=>x.id==="assisted");
+}
+function validateScenario(DATA){
+ if(DATA.stations.length!==7||DATA.legs.length!==6)throw Error("Quantidade inválida de marcos ou etapas");
+ for(const type of ["stations","legs"]){
+  if(new Set(DATA[type].map(x=>x.id)).size!==DATA[type].length)throw Error("ID repetido: "+type);
+ }
+ for(const [i,leg] of DATA.legs.entries()){
+  if(leg.from!==DATA.stations[i].id||leg.to!==DATA.stations[i+1].id||leg.options.length!==3)throw Error("Conexão inconsistente");
+  if(new Set(leg.options.map(x=>x.id)).size!==3)throw Error("Alternativa repetida");
+  for(const option of leg.options){
+   if(!Number.isInteger(option.change.time)||option.change.time<1||["water","food","energy","orientation","impact"].some(k=>!Number.isInteger(option.change[k])))throw Error("Variações inválidas");
+  }
+ }
+}
+
+(function(){
+const $=id=>document.getElementById(id),NS="http://www.w3.org/2000/svg";
+const el=(tag,value,cls)=>{const x=document.createElement(tag);x.textContent=value??"";if(cls)x.className=cls;return x};
+const svg=(tag,attrs={},value)=>{const x=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))x.setAttribute(k,String(v));if(value!==undefined)x.textContent=value;return x};
+const stationById=Object.fromEntries(DATA.stations.map(s=>[s.id,s]));
+const inspected=new Set();
+let activeStation="s0",started=false,choices=[],pending=null,resetOpen=false;
+const keys=["water","food","energy","orientation","impact"];
+const names={water:"Água",food:"Alimentos",energy:"Energia",orientation:"Orientação",impact:"Cuidado ambiental",time:"Tempo",alerts:"Alertas"};
+function focus(id){const x=$(id);x.focus({preventScroll:true});x.scrollIntoView({block:"start",behavior:"auto"});}
+function stageIndex(){return choices.length;}
+function routeChoice(id){
+ if(resetOpen||!started||stageIndex()>=DATA.legs.length)return;
+ const opt=DATA.legs[stageIndex()].options.find(x=>x.id===id);
+ if(!opt)return;
+ pending={id:opt.id,reason:pending?.id===id?pending.reason:""};
+ $("reason-error").textContent="";
+ render();focus("justification");
+}
+function visitStation(id,origin){
+ if(!stationById[id]||resetOpen)return;
+ activeStation=id;inspected.add(id);
+ renderStations();renderMap();
+ focus("station-title");
+}
+function renderStations(){
+ const root=$("station-buttons");root.replaceChildren();
+ for(const [i,s] of DATA.stations.entries()){
+  const btn=el("button","","station-btn");btn.type="button";btn.setAttribute("aria-pressed",String(activeStation===s.id));
+  btn.append(el("strong",i+" · "+s.name),el("small",inspected.has(s.id)?"Examinado":"Ainda não examinado"));
+  btn.addEventListener("click",()=>visitStation(s.id,"list"));root.append(btn);
+ }
+ const selected=stationById[activeStation];
+ $("station-title").textContent=selected.name;
+ $("station-description").textContent=selected.description;
+ $("station-status").textContent=inspected.has(selected.id)?"Marco examinado. O símbolo no mapa não informa navegação segura.":"Este marco ainda não foi examinado.";
+ $("map-count").textContent=inspected.size+" de 7 marcos examinados";
+ $("start").disabled=inspected.size<3||started;
+ $("explore-hint").textContent=inspected.size<3?"Examine mais "+(3-inspected.size)+" marco(s).":"Você já examinou marcos suficientes para iniciar os seis trechos.";
+}
+function renderMap(){
+ for(const node of document.querySelectorAll("[data-station]")){
+  const id=node.dataset.station;
+  node.classList.toggle("active",id===activeStation);
+  node.classList.toggle("seen",inspected.has(id));
+  node.setAttribute("aria-pressed",String(id===activeStation));
+  node.setAttribute("aria-label",stationById[id].name+(inspected.has(id)?", examinado":", ainda não examinado")+", selecionar marco");
+ }
+ for(const node of document.querySelectorAll("[data-route]")){
+  const idx=Number(node.dataset.leg),route=node.dataset.route;
+  const active=started&&idx===stageIndex()&&stageIndex()<DATA.legs.length;
+  const committed=idx<choices.length&&choices[idx].id===route;
+  const selected=active&&pending?.id===route;
+  node.classList.toggle("active",active);
+  node.classList.toggle("committed",committed);
+  node.classList.toggle("pending",selected);
+  node.setAttribute("tabindex",active?"0":"-1");
+  node.setAttribute("aria-pressed",String(selected));
+  node.setAttribute("aria-disabled",String(!active));
+ }
+}
+function currentReplay(includePending){
+ const ids=[...choices];
+ if(includePending&&pending)ids.push(pending);
+ return replay(ids,DATA);
+}
+function selectRouteLabels(){
+ const root=$("route-buttons");root.replaceChildren();
+ const leg=DATA.legs[stageIndex()];if(!leg)return;
+ for(const [index,option] of leg.options.entries()){
+  const btn=el("button","","route-option");btn.type="button";btn.setAttribute("aria-pressed",String(pending?.id===option.id));
+  btn.append(el("span","Rota "+["A","B","C"][index],"route-index"),el("strong",option.label),el("small",option.description),
+    el("small","Variações: "+keys.map(k=>names[k]+" "+signed(option.change[k])).join("; ")+"; tempo +"+option.change.time+"."));
+  btn.addEventListener("click",()=>routeChoice(option.id));root.append(btn);
+ }
+}
+function signed(n){return n>0?"+"+n:String(n);}
+function renderJourney(result){
+ const isReport=started&&stageIndex()===DATA.legs.length&&!pending;
+ $("explore").hidden=started;
+ $("journey").hidden=!started||isReport;
+ $("report").hidden=!isReport;
+ if(isReport){renderFinal(result);return;}
+ if(!started)return;
+ const i=stageIndex(),leg=DATA.legs[i],root=$("progress");root.replaceChildren();
+ for(let j=0;j<DATA.legs.length;j++){
+  const item=el("li");item.className=j<i?"passed":j===i?"current":"";
+  item.setAttribute("aria-label","Trecho "+(j+1)+(j<i?" concluído":j===i?" atual":" ainda não iniciado"));root.append(item);
+ }
+ $("chapter-kicker").textContent="Trecho "+(i+1)+" de 6 · "+DATA.stations[i].name+" até "+DATA.stations[i+1].name;
+ $("journey-title").textContent=leg.title;
+ $("weather-label").textContent="Condição fictícia: "+leg.weather;
+ $("chapter-scene").textContent=leg.scene;
+ selectRouteLabels();
+ $("undo").disabled=!choices.length&&!pending;
+ $("undo").textContent=pending?"Desfazer escolha deste trecho":"Rever trecho anterior";
+ $("confirm-choice").disabled=!pending;
+ $("confirm-choice").textContent=i===5?"Confirmar e gerar relatório":"Confirmar e avançar";
+ $("consequence").hidden=!pending;
+ $("justification").disabled=!pending;
+ $("justification").value=pending?.reason||"";
+ if(pending){
+  const latest=result.records[result.records.length-1];
+  $("consequence-title").textContent="Prévia: "+latest.option.label;
+  $("consequence-text").textContent=latest.option.consequence;
+  $("consequence-delta").textContent=keys.map(k=>names[k]+" "+signed(latest.delta[k])+" → "+latest.after[k]).join("; ")+". Tempo "+signed(latest.delta.time)+" → "+latest.after.time+" turnos.";
+  $("consequence-warnings").textContent=latest.warnings.length?latest.warnings.join(" "):"Nenhum alerta adicional no trecho escolhido. Esta é somente uma prévia didática.";
+ }
+}
+function confirm(event){
+ event.preventDefault();
+ if(resetOpen||!pending||!started)return;
+ const reason=$("justification").value.trim();
+ if(reason.length<12){
+  $("reason-error").textContent="Explique a decisão usando pelo menos 12 caracteres, em vez de apenas escolher uma rota.";
+  focus("justification");return;
+ }
+ choices.push({id:pending.id,reason});pending=null;
+ $("reason-error").textContent="";
+ render();
+ focus(choices.length===DATA.legs.length?"report-title":"journey-title");
+}
+function undo(){
+ if(resetOpen||!started)return;
+ if(pending){pending=null;}
+ else if(choices.length){pending=choices.pop();}
+ else return;
+ $("reason-error").textContent="";render();
+ focus(pending?"justification":"journey-title");
+}
+function renderDashboard(result){
+ const s=result.state;
+ const root=$("resource-list");root.replaceChildren();
+ for(const key of keys){
+  const block=el("div","","resource");
+  block.classList.toggle("low",s[key]===0||key==="orientation"&&s[key]<35);
+  block.append(el("small",names[key]),el("strong",s[key]+" / 100"));
+  const bar=el("div","","bar"),fill=el("i");
+  fill.style.width=s[key]+"%";bar.append(fill);block.append(bar);root.append(block);
+ }
+ for(const [name,value] of [["Turnos",s.time],["Alertas",s.alerts]]){
+  const block=el("div","","resource");
+  block.append(el("small",name),el("strong",String(value)));root.append(block);
+ }
+ $("dashboard-caption").textContent="Indicadores didáticos inteiros de 0 a 100. "+(pending?"Prévia da escolha ainda não confirmada.":"Estado das "+choices.length+" escolhas confirmadas.");
+ $("resource-context").textContent=
+  (s.alerts?"Foram registrados "+s.alerts+" alertas acumulados. ":"Sem alertas acumulados. ")+
+  (s.orientation<45?"A baixa orientação adiciona custos nos próximos trechos. ":"Orientação ainda fora da faixa de penalidade. ")+
+  "Tempo total: "+s.time+" turnos fictícios. Nenhum índice representa condição segura real.";
+ const history=$("history");history.replaceChildren();
+ if(!choices.length)history.append(el("li","Nenhuma decisão confirmada."));
+ for(const [i,p] of choices.entries()){
+  const record=result.records[i];history.append(el("li","Trecho "+(i+1)+": "+record.option.label+"; água "+record.after.water+", energia "+record.after.energy+", tempo "+record.after.time+"."));
+ }
+ if(pending)history.append(el("li","Prévia do trecho "+(choices.length+1)+": "+result.records[result.records.length-1].option.label+" (não confirmada)."));
+}
+function plotResources(result){
+ const root=$("resource-chart");root.replaceChildren();
+ const values=[DATA.initial,...result.records.map(r=>r.after)];
+ const x=i=>66+i/6*630,y=v=>28+(100-v)/100*191;
+ for(let j=0;j<=4;j++){
+  const yy=y(j*25);
+  root.append(svg("line",{x1:66,y1:yy,x2:698,y2:yy,class:"grid"}));
+  root.append(svg("text",{x:55,y:yy+4,"text-anchor":"end",class:"axis"},String(j*25)));
+ }
+ for(let i=0;i<=6;i++)root.append(svg("text",{x:x(i),y:251,"text-anchor":"middle",class:"axis"},i===0?"Início":"T"+i));
+ for(const [key,klass] of [["water","water"],["food","food"],["energy","energy"],["orientation","orient"]]){
+  const points=values.map((v,i)=>x(i).toFixed(1)+","+y(v[key]).toFixed(1)).join(" ");
+  root.append(svg("polyline",{points,class:klass+"line"}));
+  values.forEach((v,i)=>root.append(svg("circle",{cx:x(i),cy:y(v[key]),r:3.9,class:"dot dot-"+klass})));
+ }
+ $("resource-svg-desc").textContent=values.map((v,i)=>(i===0?"Inicial":"Trecho "+i)+": água "+v.water+", alimentos "+v.food+", energia "+v.energy+", orientação "+v.orientation).join("; ")+". Dados equivalentes na tabela.";
+}
+function plotTime(result){
+ const root=$("time-chart");root.replaceChildren();
+ const max=Math.max(28,...result.records.map(r=>r.after.time));
+ const upper=Math.ceil(max/5)*5;
+ const y=v=>217-v/upper*190;
+ for(let j=0;j<=4;j++){
+  const v=upper*j/4,yy=y(v);
+  root.append(svg("line",{x1:66,y1:yy,x2:698,y2:yy,class:"grid"}));
+  root.append(svg("text",{x:56,y:yy+4,"text-anchor":"end",class:"axis"},v.toFixed(0)));
+ }
+ for(let i=0;i<6;i++){
+  const row=result.records[i],x=86+i*100;
+  if(row){
+   root.append(svg("rect",{x,y:y(row.after.time),width:60,height:Math.max(0,217-y(row.after.time)),rx:4,class:pending&&i===result.records.length-1?"timepreview":"timelinebar"}));
+  }
+  root.append(svg("text",{x:x+30,y:250,"text-anchor":"middle",class:"axis"},"T"+(i+1)));
+ }
+ $("time-svg-desc").textContent=result.records.length?result.records.map((row,i)=>"Trecho "+(i+1)+": "+row.after.time+" turnos acumulados"+(pending&&i===result.records.length-1?" (prévia)":"")).join("; ")+".":"Nenhum trecho concluído, tempo inicial zero.";
+}
+function renderLedger(result){
+ const root=$("ledger");root.replaceChildren();
+ const row0=el("tr");const h=el("th","Início");h.scope="row";row0.append(h);
+ for(const key of [...keys,"time","alerts"])row0.append(el("td",String(DATA.initial[key])));root.append(row0);
+ for(const [i,record] of result.records.entries()){
+  const tr=el("tr"),last=Boolean(pending)&&i===result.records.length-1;
+  const heading=el("th","Trecho "+(i+1)+(last?" (prévia)":"")+": "+record.option.label);heading.scope="row";tr.append(heading);
+  for(const key of [...keys,"time","alerts"])tr.append(el("td",String(record.after[key])));
+  root.append(tr);
+ }
+}
+function renderFinal(result){
+ const status=ending(result,DATA);
+ const root=$("ending");root.className="ending"+(status.id==="stable"?"":status.id==="assisted"?" assisted":" critical");
+ root.replaceChildren(el("p",status.id==="stable"?"Margem de recursos":status.id==="assisted"?"Reavaliação necessária":"Condição crítica","kicker"),
+  el("h3",status.title),el("p",status.description),
+  el("p","Ao fim de seis trechos: água "+result.state.water+", alimentos "+result.state.food+", energia "+result.state.energy+", orientação "+result.state.orientation+
+  ", cuidado ambiental "+result.state.impact+", tempo "+result.state.time+" turnos e "+result.state.alerts+" alertas."),el("p","Este parecer não é recomendação operacional de segurança, navegação, acesso territorial ou proteção de saúde."));
+ const cards=$("report-grid");cards.replaceChildren();
+ function card(title,message){const section=el("section","","report-card");section.append(el("h3",title),el("p",message));cards.append(section);}
+ card("Reservas e limites","Menores índices: água "+result.lowest.water+", alimentos "+result.lowest.food+", energia "+result.lowest.energy+", orientação "+result.lowest.orientation+", impacto "+result.lowest.impact+". A regra de desfecho examina mínimos, alertas e estado final.");
+ card("Custo do trajeto","Tempo acumulado "+result.state.time+" turnos, com eventuais penalidades de orientação baixa e recursos esgotados descritas no histórico. A simulação não modela distância nem horas reais.");
+ card("Consequências ambientais","Indicador final de cuidado ambiental "+result.state.impact+"/100. É um parâmetro pedagógico abstrato; não equivale a impacto ecológico calculado ou avaliação de comunidades reais.");
+ card("Incertezas","O clima e as alterações de recursos foram predefinidos. O modelo não inclui dados reais de hidrologia, fisiologia, biodiversidade, trilhas, territórios, acesso ou resposta a emergências.");
+ const hist=$("report-history");hist.replaceChildren();
+ for(const [i,record] of result.records.entries()){
+  const li=el("li");
+  li.append(el("strong","Trecho "+(i+1)+": "+record.option.label+" · "+record.weather),
+   el("p","Justificativa registrada: "+record.reason),
+   el("p",record.option.consequence),
+   el("p","Variações: "+keys.map(k=>names[k]+" "+signed(record.delta[k])).join(", ")+", tempo "+signed(record.delta.time)+"."),
+   el("p",record.warnings.length?record.warnings.join(" "):"Sem novo alerta no trecho."));
+  hist.append(li);
+ }
+ const comp=$("comparisons");comp.replaceChildren();
+ for(const preset of [
+  {title:"Seis rotas de referência",choice:0},
+  {title:"Seis rotas de reavaliação",choice:1},
+  {title:"Seis trajetos de atalho",choice:2}
+ ]){
+  const sim=replay(DATA.legs.map(leg=>leg.options[preset.choice].id),DATA),e=ending(sim,DATA);
+  const section=el("section","","compare");
+  section.append(el("strong",preset.title),el("small",e.title),
+   el("small","Água "+sim.state.water+" · Energia "+sim.state.energy+" · Orientação "+sim.state.orientation+" · Tempo "+sim.state.time+" · Impacto "+sim.state.impact+"."));
+  comp.append(section);
+ }
+}
+function render(){
+ const res=currentReplay(true);
+ renderStations();renderMap();renderJourney(res);renderDashboard(res);plotResources(res);plotTime(res);renderLedger(res);
+}
+function start(){
+ if(started||inspected.size<3||resetOpen)return;
+ started=true;pending=null;render();focus("journey-title");
+}
+function requestReset(){resetOpen=true;$("reset-confirm").hidden=false;$("reset-cancel").focus();}
+function cancelReset(){resetOpen=false;$("reset-confirm").hidden=true;$("restart").focus();}
+function reset(){
+ inspected.clear();activeStation="s0";started=false;choices=[];pending=null;resetOpen=false;
+ $("reason-error").textContent="";$("reset-confirm").hidden=true;render();focus("explore-title");
+}
+validateScenario(DATA);
+document.querySelectorAll("[data-station]").forEach(st=>{
+ st.addEventListener("click",()=>visitStation(st.dataset.station,"svg"));
+ st.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();visitStation(st.dataset.station,"svg");}});
+});
+document.querySelectorAll("[data-route]").forEach(rt=>{
+ rt.addEventListener("click",()=>routeChoice(rt.dataset.route));
+ rt.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();routeChoice(rt.dataset.route);}});
+});
+$("start").addEventListener("click",start);
+$("choice-form").addEventListener("submit",confirm);
+$("justification").addEventListener("input",()=>{
+ if(pending){pending.reason=$("justification").value;$("reason-error").textContent="";}
+});
+$("undo").addEventListener("click",undo);
+$("report-back").addEventListener("click",undo);
+$("restart").addEventListener("click",requestReset);
+$("report-reset").addEventListener("click",requestReset);
+$("reset-cancel").addEventListener("click",cancelReset);
+$("reset-accept").addEventListener("click",reset);
+render();
+})();
+</script>
+</body>
+</html>
