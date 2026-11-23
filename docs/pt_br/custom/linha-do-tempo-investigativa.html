@@ -248,7 +248,7 @@ progress::-moz-progress-bar{background:#3b9b7d;border-radius:99px}
   }
   function announce(message){$("announcer").textContent=message;}
   function correctCount(){return order.reduce((sum,id,index)=>sum+(byId.get(id).order===index?1:0),0);}
-  function completed(){return inspected.size===records.length&&correctCount()===records.length;}
+  function completed(){return lastResult===true&&inspected.size===records.length&&correctCount()===records.length;}
   function invalidate(){lastResult=null;}
   function visibleClue(record){return inspected.has(record.id)?record.clock+" · "+record.kind:"Horário protegido na evidência";}
   function renderProgress(){

@@ -155,6 +155,7 @@ test("explorar fontes, navegar pelo teclado e reordenar por botões e arraste de
   assert.deepEqual(Array.from(events(),(_,idx)=>title(idx)),chronological);
   assert.equal($("timelineDesc").textContent.includes("1. Preparar o experimento"),true);
   assert.equal($("studentNote").value,"Ordenei os documentos comparando as horas de cada anotação.");
+  assert.equal($("completion").hidden,true,"A conclusão exige verificação explícita, mesmo com fontes e ordem corretas.");
   $("validate").click();
   assert.equal($("feedbackTitle").textContent,"Todas as etapas estão em ordem");
   assert.equal($("completion").hidden,false);
@@ -188,11 +189,12 @@ test("catálogo mantém os onze registros anteriores e exige perguntar ao profes
   ];
   assert.equal(catalog.category,"custom");
   assert.equal(catalog.version,1);
-  assert.equal(catalog.examples.length,12);
+  assert.ok(catalog.examples.length>=12,"O catálogo pode receber exemplos posteriores sem invalidar o item 12.");
   assert.deepEqual(catalog.examples.slice(0,11).map(x=>x.id),expected);
   const item=catalog.examples[11];
   assert.equal(item.id,"linha-do-tempo-investigativa");
   assert.equal(item.path,"custom/linha-do-tempo-investigativa.html");
+  assert.equal(catalog.examples[11].id,"linha-do-tempo-investigativa","Não duplicar nem reposicionar o exemplo 12.");
   assert.match(item.prompt,/PRIMEIRA resposta/);
   assert.match(item.prompt,/Qual tipo de conteúdo você deseja trabalhar/);
   assert.match(item.prompt,/Aguarde a resposta/);
