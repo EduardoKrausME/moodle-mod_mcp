@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>O Vazamento de Dados - Estudo de caso interativo</title>
+<style>
+:root{color-scheme:light;--bg:#e9f0f0;--paper:#fdfcf8;--ink:#243d46;--muted:#536d75;--line:#c9d9dd;--dark:#163943;--accent:#216b70;--on-accent:#fff;--amber:#a77935;--red:#a44742;--blue:#2d7899;--focus:#1656ba;--shadow:0 12px 31px #10394617}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.53 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.53;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}[hidden]{display:none!important}
+main{max-width:1270px;margin:auto;padding:clamp(12px,2.9vw,31px)}
+.hero{display:grid;grid-template-columns:1.03fr .97fr;overflow:hidden;background:var(--dark);color:#fff;border-radius:23px;box-shadow:var(--shadow)}
+.hero-copy{padding:clamp(23px,4.4vw,49px);align-self:center}.hero-art{background:#244d59;display:grid;place-items:center;min-height:220px}.hero-art svg{width:100%;height:100%;display:block;max-height:400px}
+.eyebrow,.kicker{font-size:.76rem;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}.eyebrow{color:#e9ca93;margin-bottom:19px}
+h1,h2{font-family:Georgia,"Times New Roman",serif;line-height:1.12;font-weight:500;letter-spacing:-.023em}h1{font-size:clamp(2.4rem,5vw,4.6rem);margin:0 0 18px}h2{font-size:clamp(1.8rem,3vw,2.5rem);margin:0 0 13px}h3{font-size:1.08rem;margin:0 0 9px}
+.hero-copy>p:not(.eyebrow){max-width:52ch;color:#dce9e9}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:21px}.chips span{font-size:.77rem;padding:6px 11px;border:1px solid #92b5b4;border-radius:23px;font-weight:800;color:#f6dfbc}
+.disclaimer,.fine,.footnote{color:var(--muted);font-size:.83rem}.disclaimer{margin:17px 3px 24px}
+.panel{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:19px;padding:clamp(18px,2.9vw,31px);box-shadow:var(--shadow)}
+.topline{display:flex;gap:13px;align-items:start;justify-content:space-between;flex-wrap:wrap}.count{background:#e1eff0;color:#28656a;font-size:.82rem;font-weight:850;border-radius:11px;padding:8px 12px}
+.lead{max-width:82ch;color:var(--muted);margin:0 0 19px}
+.steps{display:flex;flex-wrap:wrap;gap:7px;margin:19px 0}.steps span{font-size:.79rem;color:var(--muted);border:1px solid var(--line);border-radius:22px;padding:8px 12px;background:var(--paper);font-weight:800}.steps span.active{color:var(--on-accent);background:var(--accent);border-color:var(--accent)}.steps span.done{color:var(--accent);border-color:var(--accent)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:19px 0 0}.primary,.secondary{border:1px solid var(--accent);border-radius:10px;padding:10px 16px;min-height:46px;font-weight:850}.primary{background:var(--accent);color:var(--on-accent)}.secondary{color:var(--accent);background:transparent}.primary:not(:disabled):hover{filter:brightness(1.12)}
+.reset-box{border:1px solid #cba76e;background:#fcf1de;border-radius:13px;padding:15px;margin:0 0 18px}.reset-box p{font-weight:850;margin:0}
+.grid-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.7fr);gap:15px}
+.map-scroll{overflow-x:auto;background:#d9e7e9;border:1px solid #bbd0d2;border-radius:13px}
+.map-scroll svg{min-width:930px;width:100%;height:auto;display:block}
+.map-scroll .wire{fill:none;stroke:#76a9af;stroke-width:11;stroke-linecap:round}
+.map-scroll .wire-dash{fill:none;stroke:#b78a51;stroke-width:5;stroke-dasharray:13 10}
+.map-scroll .sys{cursor:pointer}.map-scroll .sys-face{fill:#f5f8f0;stroke:#729ba0;stroke-width:4}.map-scroll .sys.visited .sys-face{fill:#e2f1e7}
+.map-scroll .sys.selected .sys-face,.map-scroll .sys:focus .sys-face{stroke:#1850b6;stroke-width:8}.map-scroll .sys:focus{outline:none}
+.map-scroll .sys-icon{fill:#bde3d4;stroke:#609985;stroke-width:2}.map-scroll .sys-no{font:900 17px system-ui;text-anchor:middle;fill:#235f5a}
+.map-scroll .sys-name{font:800 21px system-ui;fill:#2b5358;pointer-events:none}.map-scroll .sys-type{font:600 15px system-ui;fill:#5b7d79;pointer-events:none}
+.map-scroll .sys-visited{fill:#c6d5d2;stroke:#85a7a0}.map-scroll .sys.visited .sys-visited{fill:#428f79}
+.map-scroll .map-tag{font:850 18px system-ui;fill:#4d7b7d}
+.map-caption{color:var(--muted);font-size:.79rem;margin:10px 0 15px}
+.system-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
+.system-btn{border:1px solid var(--line);background:var(--paper);border-radius:11px;padding:10px 12px;text-align:left;color:var(--ink)}
+.system-btn[aria-pressed="true"]{background:#e5f1e9;border-color:var(--accent)}
+.system-btn strong,.system-btn small{display:block}.system-btn strong{font-size:.88rem}.system-btn small{font-size:.77rem;color:var(--muted)}
+.detail{padding:16px;background:#e8f2ec;border:1px solid var(--line);border-radius:13px}
+.detail h3{font-family:Georgia,serif;font-size:1.38rem;font-weight:500}.detail p{margin:9px 0}
+.fact{border-left:4px solid var(--accent);background:#e1f1e8;padding:11px 13px;border-radius:0 9px 9px 0}
+.event-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:17px 0}
+.event-btn{display:grid;gap:6px;text-align:left;border:1px solid var(--line);background:#f5f8f5;color:var(--ink);border-radius:13px;padding:14px;min-height:124px}
+.event-btn[aria-pressed="true"]{border-color:var(--accent);background:#e3f2e8}
+.event-btn strong{font-size:.93rem}.event-btn small{font-size:.77rem;color:var(--muted)}.event-btn .clock{font-size:.75rem;color:var(--accent);font-weight:850}
+.record{background:#e5f1ea;border-left:4px solid var(--accent);padding:17px;border-radius:0 12px 12px 0;min-height:135px}
+.record h3{margin:0 0 8px}.record blockquote{background:#f6faf5;border-left:3px solid #8aafb1;padding:12px;margin:12px 0;font-family:Georgia,serif}.record p{margin:9px 0}
+.form-fields{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:20px}fieldset{border:0;margin:0;padding:0}legend{font-weight:850;margin:0 0 10px}
+.radio-list,.source-list{display:grid;gap:9px}.option{border:1px solid var(--line);border-radius:12px;padding:12px 13px;display:flex;align-items:flex-start;gap:10px;cursor:pointer}
+.option:has(input:checked){background:#e3f1ea;border-color:var(--accent)}
+.option input{accent-color:var(--accent);width:19px;height:19px;margin:3px 0 0;flex:0 0 auto}
+.option strong,.option small{display:block}.option strong{font-size:.92rem}.option small{font-size:.79rem;color:var(--muted);margin-top:5px}
+.error{font-weight:800;color:var(--red);min-height:21px}
+.sim-layout{display:grid;grid-template-columns:minmax(0,1.42fr) minmax(265px,.8fr);gap:16px;align-items:start}
+.progress{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;padding:0;margin:17px 0 22px;list-style:none}.progress li{height:8px;border-radius:10px;background:#cfdfd9}.progress li.done{background:#4b9880}.progress li.current{background:#c39860}
+.weather{border-left:5px solid var(--amber);background:#f4efdd;border-radius:0 12px 12px 0;padding:13px;margin:15px 0}.weather strong{display:block}.weather p{margin:7px 0;color:var(--muted)}
+.choices{display:grid;gap:10px;margin-top:15px}
+.choice-btn{display:grid;gap:7px;text-align:left;padding:16px;border-radius:13px;border:1.5px solid var(--line);background:#f5f8f3;color:var(--ink)}
+.choice-btn[aria-pressed="true"]{border-color:var(--accent);background:#e5f2ec;box-shadow:inset 0 0 0 1px var(--accent)}
+.choice-btn strong{font-size:1.02rem}.choice-btn small{font-size:.84rem;color:var(--muted)}.choice-btn .choice-no{color:var(--accent);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;font-weight:850}
+.preview{border:1px solid var(--line);border-radius:14px;background:#e6f2ec;padding:16px;margin-top:17px}.preview p{margin:8px 0}.preview h3{margin:0 0 9px}.delta{font-variant-numeric:tabular-nums;font-weight:750}
+.justification{margin-top:20px}.justification label{display:block;font-weight:850;margin-bottom:9px}
+textarea{min-height:94px;resize:vertical;width:100%;padding:12px;background:var(--paper);border:1px solid var(--line);border-radius:11px;color:var(--ink)}
+.dashboard{position:sticky;top:12px}.resources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.resource{padding:12px 13px;border:1px solid var(--line);border-radius:12px;background:#f0f5f1}.resource small,.resource strong{display:block}.resource small{font-size:.79rem;color:var(--muted)}.resource strong{font-size:1.36rem;font-variant-numeric:tabular-nums}.resource.low strong{color:var(--red)}
+.bar{height:7px;background:#d2e3da;border-radius:9px;overflow:hidden;margin-top:9px}.bar i{display:block;height:100%;background:#5c9f91;border-radius:9px}
+.status{padding:12px 14px;border-left:4px solid var(--accent);background:#e5f0e8;border-radius:0 10px 10px 0;font-size:.86rem;margin-top:16px}
+.history{padding-left:21px;margin:14px 0}.history li{font-size:.85rem;color:var(--muted);margin-bottom:8px}
+.charts{margin-top:17px}.chart-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:15px}
+.chart-box{border:1px solid var(--line);background:#f6faf6;border-radius:13px;padding:15px;min-width:0}
+.chart-box svg{display:block;width:100%;height:auto;overflow:visible}.chart-box .gridline{stroke:#d0dede;stroke-width:1}.chart-box .axis{font:12px system-ui;fill:#5c7479}
+.chart-box .line-cont{stroke:#327bba;fill:none;stroke-width:3.3}
+.chart-box .line-ev{stroke:#459878;fill:none;stroke-width:3.3}
+.chart-box .line-cnt{stroke:#ae8037;fill:none;stroke-width:3.3}
+.chart-box .line-clar{stroke:#8864aa;fill:none;stroke-width:3.3}
+.chart-box .line-trust{stroke:#b35c5d;fill:none;stroke-width:3.3}
+.chart-box .timebar{fill:#528f9a}.chart-box .timepreview{fill:#ba965d}
+.legend{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.77rem;margin-top:9px}
+.legend span{display:flex;gap:5px;align-items:center}.legend b{width:13px;height:7px;background:#327bba}.legend .ev{background:#459878}.legend .cnt{background:#ae8037}.legend .clar{background:#8864aa}.legend .trust{background:#b35c5d}
+.table-scroll{overflow-x:auto;margin-top:16px}table{border-collapse:collapse;width:100%;min-width:1120px;font-size:.82rem}
+th,td{border-bottom:1px solid var(--line);padding:10px 12px;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}thead th{background:#e2f0e9;color:#24574e}tbody tr:nth-child(even){background:#f1f6f2}
+.report-result{border-radius:14px;padding:19px;background:#e3f0e9;border:1px solid #94bca6}.report-result.partial{background:#f8eed9;border-color:#cfb27c}.report-result.critical{background:#f8e3df;border-color:#cb9c95}
+.report-result h3{font:500 1.64rem Georgia,serif;margin:0 0 11px}.report-result p{margin:8px 0}
+.report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:17px 0}.report-card{padding:15px;border:1px solid var(--line);border-radius:12px}.report-card h3{font-size:1.01rem}.report-card p{font-size:.87rem;color:var(--muted);margin:7px 0}
+.compare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:16px 0}.compare{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f4f7f3}.compare strong,.compare small{display:block}.compare small{font-size:.8rem;color:var(--muted);margin-top:8px}
+details{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:18px}summary{cursor:pointer;font-weight:850}
+@media(max-width:970px){.hero,.grid-layout,.sim-layout,.chart-grid{grid-template-columns:1fr}.hero-art svg{max-height:250px}.dashboard{position:static}.event-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){main{padding:11px}.hero,.panel{border-radius:14px}.event-grid,.system-buttons,.form-fields,.resources,.report-grid,.compare-grid{grid-template-columns:1fr}.actions>button{flex:1 1 auto}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#13232c;--paper:#243840;--ink:#ecf6ed;--muted:#c0d2d2;--line:#4b626c;--accent:#9cded3;--on-accent:#12392f;--focus:#ffe19d;--red:#ffb9a9;--shadow:none}.hero{background:#153440}.count{background:#2c5149;color:#e2f4ed}.detail,.fact,.record,.preview,.status{background:#2d4b43}.system-btn[aria-pressed="true"],.event-btn[aria-pressed="true"],.choice-btn[aria-pressed="true"],.option:has(input:checked){background:#304d47}.event-btn,.choice-btn,.resource,.chart-box,.compare{background:#2c4248}.record blockquote{background:#35574f}.weather{background:#4a4030}.reset-box{background:#493e2d}.bar{background:#45605b}.bar i{background:#8dd0c0}thead th{background:#2d5345;color:#e2f8ef}tbody tr:nth-child(even){background:#2b4343}.chart-box .gridline{stroke:#4a6264}.chart-box .axis{fill:#c0d5d5}.report-result{background:#29493f}.report-result.partial{background:#4c3d2c}.report-result.critical{background:#503434}}
+</style>
+</head>
+<body>
+<main>
+<section class="hero" aria-labelledby="case-title">
+ <div class="hero-copy">
+  <p class="eyebrow">Dossiê 010 · Cooperativa Horizonte (ficção)</p><h1 id="case-title">O Vazamento de Dados</h1>
+  <p>Um aumento inesperado na geração de relatórios, uma janela sem registros e uma rotina agendada colocam um time de segurança diante de decisões urgentes. Que hipóteses os fatos sustentam, e como responder sem declarar comprovado um vazamento que ainda não foi demonstrado?</p>
+  <div class="chips"><span>7 sistemas exploráveis</span><span>8 evidências sintéticas</span><span>6 etapas decisórias</span><span>3 desfechos</span></div>
+ </div><div class="hero-art"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 410" role="img" aria-labelledby="hero-title hero-desc">
+<title id="hero-title">Painel de apuração de um evento digital fictício</title>
+<desc id="hero-desc">Ilustração vetorial autoral com servidores abstratos, uma trilha de evidências em pontos e uma lupa sobre um documento. Nenhuma pessoa ou sistema real é representado.</desc>
+<defs><linearGradient id="hero-back" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#264c69"/><stop offset="1" stop-color="#142e4b"/></linearGradient></defs>
+<rect width="700" height="410" fill="url(#hero-back)"/>
+<g opacity=".25" fill="none" stroke="#9ed7d1" stroke-width="3"><path d="M0 55H700M0 120H700M0 185H700M0 250H700M0 315H700M62 0V410M139 0V410M216 0V410M293 0V410M370 0V410M447 0V410M524 0V410M601 0V410"/></g>
+<g fill="#2c6475" stroke="#a9d3ce" stroke-width="4">
+<rect x="72" y="91" width="175" height="226" rx="17"/><rect x="90" y="112" width="139" height="43" rx="6"/><rect x="90" y="170" width="139" height="43" rx="6"/><rect x="90" y="228" width="139" height="43" rx="6"/>
+<rect x="452" y="128" width="170" height="183" rx="17"/></g>
+<g fill="#cce9df"><circle cx="113" cy="132" r="7"/><circle cx="113" cy="192" r="7"/><circle cx="113" cy="250" r="7"/></g>
+<g stroke="#c9e7db" stroke-width="6" stroke-linecap="round"><path d="M133 132h76M133 192h76M133 250h76"/></g>
+<path d="M250 182h90M396 182h56M336 182l-10-9m10 9-10 9" fill="none" stroke="#dbb97e" stroke-width="7" stroke-linecap="round"/>
+<rect x="482" y="155" width="112" height="128" rx="8" fill="#e3e4cf"/><path d="M499 182h74M499 205h61M499 227h73M499 250h46" stroke="#789e9d" stroke-width="6" stroke-linecap="round"/>
+<circle cx="405" cy="236" r="58" fill="none" stroke="#f1cb83" stroke-width="12"/><path d="m446 280 49 49" stroke="#f1cb83" stroke-width="16" stroke-linecap="round"/>
+<circle cx="405" cy="236" r="38" fill="#bde4da" fill-opacity=".24"/>
+<path d="M360 95q70-60 137-8" stroke="#e2bb7b" stroke-width="5" fill="none" stroke-dasharray="7 8"/>
+<circle cx="360" cy="95" r="9" fill="#e2bb7b"/><circle cx="497" cy="87" r="9" fill="#e2bb7b"/>
+</svg></div>
+</section>
+<p class="disclaimer">Todos os sistemas, horários, volumes, organizações e eventos são inventados. Não há dados pessoais, credenciais, endereços reais, instruções de exploração ou tráfego verdadeiro. Nesta atividade, arquivos gerados internamente, anomalias e falhas de registro NÃO confirmam cópia externa, violação de privacidade ou autoria. A resposta real a incidentes exige equipe especializada e consideração das obrigações legais aplicáveis.</p>
+<nav class="steps" aria-label="Etapas do exercício">
+ <span class="active" id="step-0">00 · Investigar</span><span id="step-1">01 · Triagem</span><span id="step-2">02 · Evidências</span><span id="step-3">03 · Contenção</span><span id="step-4">04 · Continuidade</span><span id="step-5">05 · Comunicação</span><span id="step-6">06 · Verificação</span><span id="step-7">07 · Relatório</span>
+</nav>
+<div class="actions" style="margin:0 0 15px"><button type="button" class="secondary" id="restart-anytime">Reiniciar investigação</button></div>
+<div class="reset-box" id="reset-confirm" hidden role="group" aria-label="Confirmar reinício">
+ <p>Descartar os sistemas examinados, as evidências selecionadas, a hipótese e todas as decisões desta simulação?</p>
+ <div class="actions"><button type="button" class="secondary" id="cancel-reset">Cancelar</button><button type="button" class="primary" id="accept-reset">Sim, recomeçar</button></div>
+</div>
+<section id="exploration" class="panel" aria-labelledby="explore-title">
+ <div class="topline"><div><p class="kicker">Etapa 0 · Antes das decisões</p><h2 id="explore-title" tabindex="-1">Onde estão os fatos e as lacunas?</h2></div><strong class="count" id="explore-count" aria-live="polite">0 sistemas · 0 registros</strong></div>
+ <p class="lead">Examine ao menos três sistemas e quatro registros, selecione uma hipótese provisória e cite exatamente dois registros que tenha consultado. Você poderá revisar essa hipótese após as decisões e continuar de onde parou.</p>
+ <div class="grid-layout">
+  <div>
+   <h3>Diagrama original do ambiente fictício</h3>
+   <div class="map-scroll">
+    <svg viewBox="0 0 1260 565" role="group" aria-labelledby="system-map-title system-map-desc" xmlns="http://www.w3.org/2000/svg">
+     <title id="system-map-title">Diagrama interativo de sete componentes fictícios</title>
+     <desc id="system-map-desc">Portal, serviços, repositório, motor de relatórios, auditoria, cópia de recuperação e comunicação, ligados por conexões esquemáticas sem protocolo, endereços ou caminhos de acesso reais. Botões HTML equivalentes aparecem abaixo.</desc>
+     <rect width="1260" height="565" fill="#dcebef"/>
+     <path class="wire" d="M280 188H355M590 188H670M170 250V360M475 250V360M792 250V360M295 429H355M590 429H670M915 190H1030V240M915 420H1040V370"/>
+     <path class="wire-dash" d="M280 188H355M590 188H670M590 430H670" />
+     <text x="50" y="45" class="map-tag">AMBIENTE DE DEMONSTRAÇÃO · CONEXÕES ABSTRATAS</text>
+     <text x="51" y="538" class="map-tag">CONEXÃO NÃO SIGNIFICA TRÂNSITO DE DADOS COMPROVADO</text>
+     <g class="sys" data-sys="portal" role="button" tabindex="0" aria-label="Portal público, examinar componente" aria-pressed="false">
+  <rect class="sys-face" x="55" y="120" width="225" height="130" rx="15"/>
+  <circle class="sys-icon" cx="93" cy="160" r="22"/>
+  <text class="sys-no" x="93" y="166">1</text>
+  <text class="sys-name" x="71" y="207">Portal público</text>
+  <text class="sys-type" x="71" y="230">Entrada de usuários</text>
+  <circle class="sys-visited" cx="260" cy="137" r="7"/>
+ </g>
+<g class="sys" data-sys="gateway" role="button" tabindex="0" aria-label="Camada de serviços, examinar componente" aria-pressed="false">
+  <rect class="sys-face" x="355" y="120" width="235" height="130" rx="15"/>
+  <circle class="sys-icon" cx="393" cy="160" r="22"/>
+  <text class="sys-no" x="393" y="166">2</text>
+  <text class="sys-name" x="371" y="207">Camada de serviços</text>
+  <text class="sys-type" x="371" y="230">Processamento</text>
+  <circle class="sys-visited" cx="570" cy="137" r="7"/>
+ </g>
+<g class="sys" data-sys="records" role="button" tabindex="0" aria-label="Repositório sintético, examinar componente" aria-pressed="false">
+  <rect class="sys-face" x="670" y="120" width="245" height="130" rx="15"/>
+  <circle class="sys-icon" cx="708" cy="160" r="22"/>
+  <text class="sys-no" x="708" y="166">3</text>
+  <text class="sys-name" x="686" y="207">Repositório sintético</text>
+  <text class="sys-type" x="686" y="230">Arquivo de demonstração</text>
+  <circle class="sys-visited" cx="895" cy="137" r="7"/>
+ </g>
+<g class="sys" data-sys="reports" role="button" tabindex="0" aria-label="Motor de relatórios, examinar componente" aria-pressed="false">
+  <rect class="sys-face" x="60" y="360" width="235" height="130" rx="15"/>
+  <circle class="sys-icon" cx="98" cy="400" r="22"/>
+  <text class="sys-no" x="98" y="406">4</text>
+  <text class="sys-name" x="76" y="447">Motor de relatórios</text>
+  <text class="sys-type" x="76" y="470">Geração de arquivos</text>
+  <circle class="sys-visited" cx="275" cy="377" r="7"/>
+ </g>
+<g class="sys" data-sys="audit" role="button" tabindex="0" aria-label="Cofre de auditoria, examinar componente" aria-pressed="false">
+  <rect class="sys-face" x="355" y="360" width="235" height="130" rx="15"/>
+  <circle class="sys-icon" cx="393" cy="400" r="22"/>
+  <text class="sys-no" x="393" y="406">5</text>
+  <text class="sys-name" x="371" y="447">Cofre de auditoria</text>
+  <text class="sys-type" x="371" y="470">Preservação de eventos</text>
+  <circle class="sys-visited" cx="570" cy="377" r="7"/>
+ </g>
+<g class="sys" data-sys="backup" role="button" tabindex="0" aria-label="Cópia de recuperação, examinar componente" aria-pressed="false">
+  <rect class="sys-face" x="670" y="360" width="245" height="130" rx="15"/>
+  <circle class="sys-icon" cx="708" cy="400" r="22"/>
+  <text class="sys-no" x="708" y="406">6</text>
+  <text class="sys-name" x="686" y="447">Cópia de recuperação</text>
+  <text class="sys-type" x="686" y="470">Continuidade</text>
+  <circle class="sys-visited" cx="895" cy="377" r="7"/>
+ </g>
+<g class="sys" data-sys="notice" role="button" tabindex="0" aria-label="Canal de comunicação, examinar componente" aria-pressed="false">
+  <rect class="sys-face" x="975" y="240" width="230" height="130" rx="15"/>
+  <circle class="sys-icon" cx="1013" cy="280" r="22"/>
+  <text class="sys-no" x="1013" y="286">7</text>
+  <text class="sys-name" x="991" y="327">Canal de comunicação</text>
+  <text class="sys-type" x="991" y="350">Informações verificadas</text>
+  <circle class="sys-visited" cx="1185" cy="257" r="7"/>
+ </g>
+    </svg>
+   </div>
+   <p class="map-caption">No celular, deslize para examinar todo o diagrama. Os sistemas podem ser selecionados com toque, mouse, Enter ou Espaço. As opções HTML abaixo oferecem o mesmo conteúdo.</p>
+   <div class="system-buttons" id="system-buttons"></div>
+  </div>
+  <aside class="detail" role="region" aria-live="polite" aria-label="Detalhes do componente">
+   <p class="kicker" id="system-kind">Componente fictício</p>
+   <h3 id="system-title" tabindex="-1">Portal público</h3><p id="system-observed"></p>
+   <p class="fact" id="system-supports"></p><p id="system-limits" class="fine"></p>
+  </aside>
+ </div>
+ <h3 style="margin-top:25px">Linha do tempo e registros de auditoria sintéticos</h3>
+ <p class="fine">Horários são fictícios, sem URLs, identificadores pessoais, credenciais, endereços de rede ou conteúdo real. Leia o que cada registro apoia e o que ele não consegue demonstrar.</p>
+ <div id="event-list" class="event-grid"></div>
+ <div id="event-detail" class="record" tabindex="-1" role="region" aria-live="polite" aria-atomic="true" aria-label="Registro selecionado">
+  <h3 id="event-placeholder">Selecione um registro</h3><p>Confira o evento observado, sua confiabilidade e as inferências permitidas.</p>
+ </div>
+ <form id="initial-form" novalidate>
+  <div class="form-fields">
+   <fieldset><legend>Hipótese provisória</legend><div id="hypothesis-options" class="radio-list"></div></fieldset>
+   <fieldset><legend>Cite exatamente dois registros examinados</legend><p class="fine">Inclua, quando possível, registros que sustentem e questionem a mesma hipótese.</p><div id="citation-options" class="source-list"></div></fieldset>
+  </div>
+  <p class="error" id="initial-error" role="alert"></p>
+  <div class="actions"><button type="submit" class="primary" id="begin" disabled>Iniciar a resposta simulada</button><span class="fine" id="explore-hint">Examine 3 sistemas e 4 registros antes de avançar.</span></div>
+ </form>
+</section>
+<section id="simulator" class="sim-layout" hidden aria-label="Simulação de decisões">
+ <section class="panel" aria-labelledby="round-heading">
+  <div class="topline"><div><p class="kicker" id="round-label">Etapa 1 de 6</p><h2 id="round-heading" tabindex="-1">Delimitar o que está acontecendo</h2></div><strong class="count" id="round-status" aria-live="polite">0 de 6 decisões</strong></div>
+  <ol class="progress" id="progress" aria-label="Progresso de seis decisões"></ol>
+  <div class="weather"><strong id="time-context">Verificação inicial</strong><p id="round-scene"></p></div>
+  <p class="lead">Selecione uma providência, avalie a prévia dos impactos e justifique sua decisão. A escolha só é registrada ao confirmar; voltar recalcula todos os indicadores a partir do estado inicial.</p>
+  <div id="choice-list" class="choices"></div>
+  <div class="preview" id="choice-preview" hidden aria-live="polite">
+   <h3 id="preview-title">Prévia de efeito</h3><p id="preview-consequence"></p>
+   <p class="delta" id="preview-deltas"></p><p class="fine" id="preview-notes"></p>
+  </div>
+  <form id="decision-form" class="justification" novalidate>
+   <label for="reason">Explique sua decisão em pelo menos 12 caracteres, considerando evidências, continuidade, privacidade, impacto ou incerteza.</label>
+   <textarea id="reason" rows="3" minlength="12" placeholder="Exemplo: prefiro preservar os registros antes de concluir a investigação." aria-describedby="reason-note"></textarea>
+   <p id="reason-note" class="fine">Justificativas são utilizadas apenas no relatório desta página e não são armazenadas ou enviadas a outros sistemas.</p>
+   <p id="reason-error" class="error" role="alert"></p>
+   <div class="actions"><button type="button" class="secondary" id="undo" disabled>Rever decisão anterior</button><button type="submit" class="primary" id="confirm" disabled>Confirmar e avançar</button></div>
+  </form>
+ </section>
+ <aside class="panel dashboard" aria-labelledby="dashboard-title">
+  <p class="kicker">Indicadores de resposta · Índices fictícios</p><h2 id="dashboard-title">Consequências acumuladas</h2>
+  <p class="fine">Cada métrica utiliza unidades inteiras abstratas. Valores altos são positivos neste modelo didático e não representam níveis de segurança, confiança ou conformidade reais.</p>
+  <div class="resources" id="resource-list"></div>
+  <div class="status" id="resource-status" role="status" aria-live="polite"></div>
+  <h3 style="margin-top:21px">Histórico da resposta</h3><ol class="history" id="decision-history"></ol>
+  <div class="actions"><button type="button" class="secondary" id="review-evidence">Rever registros e hipótese</button></div>
+  <details>
+   <summary>Regras e custos da simulação</summary>
+   <p class="fine">Cada ação modifica continuidade, preservação de evidências, contenção, clareza e confiança; os valores são limitados ao intervalo 0–100. O tempo soma blocos abstratos.</p>
+   <p class="fine">Se contenção cair abaixo de 40 ao fim de uma etapa, o modelo subtrai 3 de continuidade e 2 de confiança e acrescenta um alerta. Se evidências caírem abaixo de 30, subtrai 4 de clareza e soma um alerta. Se o tempo passar de 16 blocos com contenção abaixo de 55, subtrai 3 de confiança.</p>
+   <p class="fine">Os desfechos dependem de mínimos de indicadores, alertas e tempo. Um bom resultado NÃO confirma ausência de violação, e um resultado crítico NÃO comprova vazamento.</p>
+  </details>
+ </aside>
+</section>
+<section id="report" class="panel" hidden aria-labelledby="report-title">
+ <p class="kicker">Relatório final · Qualidade da resposta simulada</p><h2 id="report-title" tabindex="-1">Quais decisões foram justificadas?</h2>
+ <div id="report-result" class="report-result" aria-live="polite"></div>
+ <div id="report-grid" class="report-grid"></div>
+ <h3>Decisões, justificativas e consequências</h3><ol id="report-history" class="history"></ol>
+ <h3>Comparar estratégias alternativas</h3><div id="comparisons" class="compare-grid"></div>
+ <details><summary>Interpretação de referência: indício, confirmação e comunicação</summary>
+  <p>O pico de geração de arquivos, a falha de sincronização e a lentidão constituem observações de uma simulação. A rotina agendada é uma hipótese concorrente documentada; nenhum registro demonstra transmissão externa ou acesso não autorizado a pessoas reais. Por outro lado, a ausência de confirmação, especialmente diante de uma lacuna, não demonstra ausência absoluta de risco. A investigação e a comunicação devem separar fatos, hipóteses, limitações e providências, preservando evidências e respeitando privacidade e eventuais obrigações aplicáveis, avaliadas por especialistas competentes. O desfecho mede a qualidade de decisões no exercício, não a ocorrência factual de vazamento.</p>
+ </details>
+ <div class="actions"><button type="button" class="secondary" id="report-back">Rever última decisão</button><button type="button" class="secondary" id="report-investigation">Rever hipótese e documentos</button><button type="button" class="primary" id="report-reset">Recomeçar o caso</button></div>
+</section>
+<section id="charts-panel" class="panel charts" aria-labelledby="charts-title">
+ <p class="kicker">Registros da simulação</p><h2 id="charts-title">Como evoluíram os indicadores?</h2>
+ <div class="chart-grid">
+  <div class="chart-box"><h3>Continuidade, evidências, contenção, clareza e confiança</h3>
+   <svg viewBox="0 0 740 280" role="img" aria-labelledby="metrics-svg-title metrics-svg-desc" xmlns="http://www.w3.org/2000/svg">
+    <title id="metrics-svg-title">Evolução dos cinco indicadores ao longo de seis decisões</title><desc id="metrics-svg-desc">Gráfico dinâmico com valores equivalentes na tabela abaixo.</desc><g id="metrics-plot"></g>
+   </svg>
+   <div class="legend"><span><b></b>Continuidade</span><span><b class="ev"></b>Evidências</span><span><b class="cnt"></b>Contenção</span><span><b class="clar"></b>Clareza</span><span><b class="trust"></b>Confiança</span></div>
+  </div>
+  <div class="chart-box"><h3>Blocos de tempo acumulados</h3>
+   <svg viewBox="0 0 740 280" role="img" aria-labelledby="time-svg-title time-svg-desc" xmlns="http://www.w3.org/2000/svg">
+    <title id="time-svg-title">Tempo abstrato acumulado por decisão</title><desc id="time-svg-desc">Barras com tempo cumulativo por etapa, incluindo previsão selecionada.</desc><g id="time-plot"></g>
+   </svg><p class="fine">Os blocos não representam minutos, prazos de reporte ou tempos reais de resposta a incidentes.</p>
+  </div>
+ </div>
+ <div class="table-scroll"><table aria-label="Indicadores verificáveis em cada etapa"><thead><tr>
+  <th scope="col">Etapa</th><th scope="col">Continuidade</th><th scope="col">Evidências</th><th scope="col">Contenção</th><th scope="col">Clareza</th><th scope="col">Confiança</th><th scope="col">Tempo</th><th scope="col">Alertas</th>
+ </tr></thead><tbody id="ledger"></tbody></table></div>
+ <p class="fine">Prévia não é decisão confirmada. Todas as contas usam o mesmo motor e podem ser reconstruídas pelas regras descritas.</p>
+</section>
+<p class="footnote">Estudo de caso original, inteiramente fictício, sem credenciais, identificadores reais, dados pessoais, armazenamento local ou remoto, notas oficiais ou chamadas externas. Não é auditoria, aconselhamento jurídico, avaliação de segurança de sistemas reais ou guia operacional de incidentes.</p>
+</main>
+<script type="application/json" id="case-data">{"title":"O Vazamento de Dados","incident":"Protocolo hipotético DS-010","setting":"Ambiente de demonstração da Cooperativa Horizonte, organização inteiramente inventada","systemUnits":"Índices didáticos de 0 a 100 e blocos abstratos de tempo; não são estimativas reais de segurança ou duração.","initial":{"continuity":72,"evidence":62,"containment":25,"clarity":24,"trust":65,"time":0,"alerts":0},"systems":[{"id":"portal","name":"Portal público","category":"Entrada de usuários","x":55,"y":120,"w":225,"h":130,"observed":"O portal recebeu reclamações de lentidão, mas não armazenava as cópias do dossiê fictício.","supports":"Indício de impacto percebido na disponibilidade, não prova de acesso indevido aos dados.","limits":"Não é possível concluir quem originou as solicitações nem se houve transmissão de informações."},{"id":"gateway","name":"Camada de serviços","category":"Processamento","x":355,"y":120,"w":235,"h":130,"observed":"O contador registrou aumento incomum de solicitações para gerar relatórios internos de exemplo.","supports":"É plausível iniciar uma revisão dos processos e permissões do relatório.","limits":"Volume elevado pode resultar de rotinas autorizadas ou falhas de repetição; não estabelece exfiltração."},{"id":"records","name":"Repositório sintético","category":"Arquivo de demonstração","x":670,"y":120,"w":245,"h":130,"observed":"Contém apenas 220 registros fictícios do exercício e foi acessado por rotinas do sistema de relatórios.","supports":"Identifica um recurso potencialmente envolvido no evento simulado.","limits":"A leitura interna não equivale a cópia externa nem contém dados de pessoas reais."},{"id":"reports","name":"Motor de relatórios","category":"Geração de arquivos","x":60,"y":360,"w":235,"h":130,"observed":"Houve uma fila de exportações sintéticas com tamanho agregado acima da rotina habitual.","supports":"A fila de arquivos deve ser confrontada com agendamentos autorizados.","limits":"Nenhum registro mostra destinatário externo verificado ou conteúdo de uma transferência."},{"id":"audit","name":"Cofre de auditoria","category":"Preservação de eventos","x":355,"y":360,"w":235,"h":130,"observed":"Parte dos registros foi consolidada em cópia verificada, mas há uma lacuna de sincronização de dez minutos.","supports":"Disponibiliza fragmentos rastreáveis para análise, preservando a identificação das lacunas.","limits":"Uma cópia posterior não recria acontecimentos que não foram registrados."},{"id":"backup","name":"Cópia de recuperação","category":"Continuidade","x":670,"y":360,"w":245,"h":130,"observed":"Existe uma cópia de teste com manifesto de integridade anterior ao episódio fictício.","supports":"Serve como referência para um plano de recuperação controlada, sujeito a verificações.","limits":"Manifesto íntegro não valida automaticamente permissões atuais ou segurança de todos os serviços."},{"id":"notice","name":"Canal de comunicação","category":"Informações verificadas","x":975,"y":240,"w":230,"h":130,"observed":"Os comunicados ainda estão em rascunho; não há confirmação de acesso externo, cópia externa ou identificação de titulares reais.","supports":"Permite preparar uma comunicação proporcional com fatos, dúvidas e próximo momento de atualização.","limits":"Não deve apresentar suspeita de vazamento como comprovação ou descartar risco sem apuração."}],"evidence":[{"id":"e1","clock":"14h02","kind":"Contador de operações","title":"Pico de relatórios","excerpt":"O gerador registrou 42 solicitações sintéticas em dez minutos, contra uma média fictícia de 8 na janela de comparação.","supports":"Demonstra uma diferença no volume observado na simulação.","limits":"Não identifica origem humana, intencionalidade nem destino do material.","confidence":"Registro automatizado completo nessa janela.","system":"gateway"},{"id":"e2","clock":"14h05","kind":"Fila de processamento","title":"Arquivos em preparação","excerpt":"A fila indica 17 arquivos internos gerados para o exercício, totalizando 48 MB fictícios de conteúdo de demonstração.","supports":"Confirma geração interna de arquivos no ambiente de teste.","limits":"Gerar arquivo não comprova que tenha saído da infraestrutura.","confidence":"Evento local com contagem, sem rastro externo confirmado.","system":"reports"},{"id":"e3","clock":"14h08","kind":"Agenda administrativa","title":"Rotina autorizada","excerpt":"A agenda de testes previa uma execução extraordinária de relatórios às 14h00, com escopo sujeito a conferência.","supports":"Existe explicação administrativa alternativa para parte do volume.","limits":"A anotação não confirma que todas as 42 solicitações vieram dessa rotina.","confidence":"Agendamento contemporâneo de teste.","system":"reports"},{"id":"e4","clock":"14h10","kind":"Cofre de auditoria","title":"Lacuna de sincronização","excerpt":"Os eventos entre 14h06 e 14h16 não foram espelhados no cofre; o motivo não foi estabelecido.","supports":"Há uma lacuna conhecida no conjunto de evidências.","limits":"Ausência de registro não prova ausência de atividade nem indica sabotagem.","confidence":"Lacuna verificada; conteúdo ausente não recuperável por inferência.","system":"audit"},{"id":"e5","clock":"14h15","kind":"Monitor operacional","title":"Queda de desempenho","excerpt":"O tempo de resposta do portal aumentou durante a fila. O indicador não registrou impacto persistente após o período fictício.","supports":"Há coincidência temporal entre processamento e lentidão.","limits":"Coincidência temporal não estabelece que houve cópia de dados ou ataque.","confidence":"Série operacional de teste, sem diagnóstico causal.","system":"portal"},{"id":"e6","clock":"14h19","kind":"Registro de restauração","title":"Manifesto da cópia","excerpt":"O manifesto da cópia anterior corresponde ao resumo verificado no ambiente de homologação fictício.","supports":"Uma cópia de referência pode apoiar recuperação planejada.","limits":"Não comprova que todos os serviços estejam seguros para religamento imediato.","confidence":"Cópia de integridade com escopo declarado.","system":"backup"},{"id":"e7","clock":"14h25","kind":"Verificação de saída","title":"Transmissão não confirmada","excerpt":"O painel de saída registra dados agregados insuficientes para vincular qualquer envio externo aos arquivos de exemplo.","supports":"Não há, nos registros apresentados, comprovação de saída dos arquivos.","limits":"A ausência de confirmação, sobretudo diante da lacuna, não prova que nenhuma saída ocorreu.","confidence":"Registro parcial, sem conteúdo ou associação segura a arquivos.","system":"records"},{"id":"e8","clock":"14h31","kind":"Comunicação interna","title":"Alerta de revisão","excerpt":"O time fictício abriu um incidente para apurar integridade, disponibilidade e possível exposição, sem registrar pessoa atingida ou conteúdo pessoal real.","supports":"Houve acionamento de investigação e necessidade de comunicação responsável.","limits":"Abrir chamado não prova a ocorrência de vazamento.","confidence":"Abertura documentada; conclusão ainda pendente.","system":"notice"}],"hypotheses":[{"id":"uncertain","title":"Há anomalia de processamento e lacunas de auditoria; vazamento não foi confirmado.","detail":"Mantém investigação de possível exposição e considera a rotina agendada como explicação concorrente."},{"id":"confirmed","title":"Os 48 MB gerados provam que houve vazamento externo.","detail":"Confunde criação de arquivos internos com transmissão externa comprovada."},{"id":"none","title":"A agenda de testes prova que não houve incidente algum.","detail":"Um agendamento pode explicar parte do evento, mas não resolve a lacuna nem confirma todos os acessos."},{"id":"person","title":"Alguém da equipe é responsável por um ataque deliberado.","detail":"Transforma suspeita técnica em imputação pessoal sem identificação nem evidência."}],"stages":[{"id":"triage","label":"1 · Triagem","title":"Delimitar o que está acontecendo","weather":"14h35 · Verificação inicial","scene":"O painel contém um pico de solicitações, uma rotina agendada e uma lacuna de auditoria. A equipe precisa definir o que é observado e o que segue em aberto.","options":[{"id":"t1","title":"Correlacionar registros e levantar hipóteses","summary":"Abrir análise com fatos verificados, responsáveis definidos e registro das lacunas.","effect":{"continuity":-3,"evidence":9,"containment":6,"clarity":15,"trust":3,"time":3},"consequence":"A investigação ganha clareza sem antecipar uma confirmação de vazamento."},{"id":"t2","title":"Divulgar imediatamente que ocorreu vazamento","summary":"Publicar uma conclusão que os registros ainda não permitem sustentar.","effect":{"continuity":1,"evidence":-3,"containment":0,"clarity":-15,"trust":-16,"time":1},"consequence":"A comunicação exagera o que foi observado e introduz risco de desinformação."},{"id":"t3","title":"Tratar a anomalia como ruído e encerrar","summary":"Não preservar perguntas de investigação nem conferir a rotina agendada.","effect":{"continuity":3,"evidence":-13,"containment":-7,"clarity":-8,"trust":-9,"time":1},"consequence":"A continuidade imediata melhora levemente, mas pistas deixam de ser investigadas."}]},{"id":"preserve","label":"2 · Evidências","title":"Preservar o que pode ser verificado","weather":"15h00 · Preservação de registros","scene":"O cofre contém registros parciais. A cópia de referência foi verificada, mas a lacuna não desaparece com uma exportação tardia.","options":[{"id":"e1","title":"Criar cópias verificáveis e registrar custódia","summary":"Preservar evidências com identificação, integridade e limites documentados.","effect":{"continuity":-3,"evidence":19,"containment":5,"clarity":7,"trust":2,"time":3},"consequence":"A rastreabilidade melhora, mas a lacuna histórica permanece explicitamente conhecida."},{"id":"e2","title":"Sobrescrever registros para reduzir volume","summary":"Apagar dados parciais para deixar a análise mais simples.","effect":{"continuity":4,"evidence":-30,"containment":-3,"clarity":-12,"trust":-9,"time":1},"consequence":"A capacidade de verificar hipóteses cai e o relato do incidente perde confiabilidade."},{"id":"e3","title":"Preservar apenas um resumo operacional","summary":"Documentar um resumo sem verificar a integridade de todas as fontes disponíveis.","effect":{"continuity":0,"evidence":5,"containment":3,"clarity":5,"trust":0,"time":2},"consequence":"O resumo ajuda, mas permanece inferior à preservação de cópias verificáveis."}]},{"id":"contain","label":"3 · Contenção","title":"Conter sem apagar pistas essenciais","weather":"15h35 · Delimitação operacional","scene":"O processo de relatórios está envolvido na anomalia, enquanto portal e comunicações seguem operacionais. A questão é controlar o escopo com medidas proporcionais.","options":[{"id":"c1","title":"Suspender seletivamente a geração de relatórios","summary":"Aplicar um controle reversível e preservar os registros existentes.","effect":{"continuity":-11,"evidence":5,"containment":30,"clarity":7,"trust":3,"time":4},"consequence":"Reduz a superfície operacional simulada com impacto delimitado na continuidade."},{"id":"c2","title":"Desligar indiscriminadamente todos os serviços","summary":"Interromper o ambiente inteiro sem avaliação de proporcionalidade.","effect":{"continuity":-32,"evidence":-6,"containment":28,"clarity":1,"trust":-8,"time":2},"consequence":"A contenção cresce, mas a disponibilidade sofre e a coleta de evidências é prejudicada."},{"id":"c3","title":"Adiar medidas até prova definitiva","summary":"Manter processamento sem controles adicionais, apesar das lacunas.","effect":{"continuity":3,"evidence":-5,"containment":-12,"clarity":-4,"trust":-12,"time":1},"consequence":"O modelo penaliza a demora quando o controle da exposição permanece baixo."}]},{"id":"recover","label":"4 · Continuidade","title":"Recompor serviços de forma controlada","weather":"16h15 · Recuperação planejada","scene":"Uma cópia de referência tem manifesto verificável, mas restaurar serviços implica conferir funcionamento, dependências e permissões.","options":[{"id":"r1","title":"Restaurar gradualmente com verificações documentadas","summary":"Checar integridade e comportamento antes de ampliar a operação.","effect":{"continuity":24,"evidence":7,"containment":8,"clarity":6,"trust":6,"time":4},"consequence":"Recupera disponibilidade de modo progressivo, mantendo a apuração separada da restauração."},{"id":"r2","title":"Reabrir tudo sem verificações","summary":"Recuperar disponibilidade imediatamente sem confirmar condições mínimas de controle.","effect":{"continuity":28,"evidence":-12,"containment":-23,"clarity":-8,"trust":-12,"time":1},"consequence":"A operação volta mais depressa na simulação, mas o nível de contenção recua."},{"id":"r3","title":"Manter a pausa e planejar testes adicionais","summary":"Priorizar análise prolongada sem definição de retorno gradual.","effect":{"continuity":-8,"evidence":8,"containment":10,"clarity":7,"trust":1,"time":3},"consequence":"As evidências melhoram, mas a continuidade permanece pressionada."}]},{"id":"communicate","label":"5 · Comunicação","title":"Informar sem afirmar mais do que se sabe","weather":"16h55 · Atualização responsável","scene":"Os serviços têm status parcial e o volume de arquivos continua sem comprovação de transmissão externa. A comunicação precisa distinguir fatos, hipóteses e próximos passos.","options":[{"id":"m1","title":"Publicar atualização factual com incertezas","summary":"Comunicar escopo conhecido, investigação, medidas realizadas e próximos passos apropriados.","effect":{"continuity":-1,"evidence":2,"containment":3,"clarity":12,"trust":17,"time":3},"consequence":"O comunicado protege a confiança sem apresentar vazamento confirmado ou descartado."},{"id":"m2","title":"Garantir que nenhum dado poderia ter saído","summary":"Afirmar ausência de risco mesmo com evidências incompletas.","effect":{"continuity":2,"evidence":-2,"containment":0,"clarity":-13,"trust":-15,"time":1},"consequence":"Uma certeza não demonstrada enfraquece o relatório e a governança."},{"id":"m3","title":"Omitir informações relevantes sem plano de atualização","summary":"Aguardar indefinidamente sem comunicar o estado do trabalho aos envolvidos competentes.","effect":{"continuity":2,"evidence":0,"containment":0,"clarity":-9,"trust":-16,"time":1},"consequence":"A falta de atualização e de registro de decisões reduz transparência e confiança."}]},{"id":"verify","label":"6 · Verificação","title":"Concluir a etapa sem inventar uma certeza","weather":"17h30 · Encerramento didático","scene":"A revisão final deve confrontar hipóteses e registros, reconhecer o que não está demonstrado e planejar acompanhamento, sem confundir funcionamento normal com prova de ausência de incidente.","options":[{"id":"v1","title":"Revisão independente e plano de monitoramento","summary":"Reconciliar registros, documentar lacunas, verificar controles e encaminhar questões pendentes.","effect":{"continuity":9,"evidence":11,"containment":11,"clarity":19,"trust":10,"time":4},"consequence":"A resposta termina com documentação mais consistente e incertezas ainda explicitadas."},{"id":"v2","title":"Apagar artefatos e fechar sem revisão","summary":"Priorizar uma aparência de resolução sem preservação e validação.","effect":{"continuity":5,"evidence":-32,"containment":-11,"clarity":-20,"trust":-9,"time":1},"consequence":"A operação pode parecer recuperada, mas desaparecem fundamentos para verificar o ocorrido."},{"id":"v3","title":"Executar conferência resumida","summary":"Documentar o estado de serviços e alguns indicadores, sem revisão ampliada.","effect":{"continuity":5,"evidence":5,"containment":6,"clarity":7,"trust":2,"time":2},"consequence":"A conferência parcial oferece uma conclusão provisória e exige acompanhamento adicional."}]}],"endings":[{"id":"controlled","title":"Resposta organizada e recuperação controlada","summary":"A simulação termina com continuidade restaurada, registros preservados, contenção reforçada e comunicação proporcional. Não há confirmação automática de vazamento."},{"id":"partial","title":"Controle parcial com pendências documentadas","summary":"A situação fictícia preserva alguma capacidade de resposta, mas os índices indicam lacunas de continuidade, evidência, confiança ou tempo, exigindo nova análise."},{"id":"critical","title":"Resposta crítica: plano precisa de revisão","summary":"O modelo registrou perda importante de evidências, falha de continuidade ou acúmulo de alertas. A simulação não representa recuperação nem incidente real."}]}</script>
+<script>
+"use strict";
+const DATA=JSON.parse(document.getElementById("case-data").textContent);
+
+function clamp(x){return Math.max(0,Math.min(100,x));}
+function apply(state,stage,option){
+ if(!stage.options.some(o=>o.id===option.id))throw Error("Decisão inválida");
+ let s={...state},notes=[];
+ for(const k of ["continuity","evidence","containment","clarity","trust"]){
+  if(!Number.isInteger(option.effect[k]))throw Error("Efeito não inteiro: "+k);
+  s[k]=clamp(s[k]+option.effect[k]);
+ }
+ if(!Number.isInteger(option.effect.time)||option.effect.time<1)throw Error("Tempo inválido");
+ s.time=state.time+option.effect.time;s.alerts=state.alerts;
+ if(s.containment<40){
+  s.continuity=clamp(s.continuity-3);s.trust=clamp(s.trust-2);
+  s.alerts+=1;notes.push("Contenção abaixo de 40: −3 na continuidade, −2 na confiança e +1 alerta.");
+ }
+ if(s.evidence<30){
+  s.clarity=clamp(s.clarity-4);
+  s.alerts+=1;notes.push("Preservação de evidências abaixo de 30: −4 na clareza e +1 alerta.");
+ }
+ if(s.time>16&&s.containment<55){
+  s.trust=clamp(s.trust-3);
+  notes.push("Tempo superior a 16 blocos com contenção abaixo de 55: −3 na confiança.");
+ }
+ const delta={};
+ for(const k of ["continuity","evidence","containment","clarity","trust","time","alerts"])delta[k]=s[k]-state[k];
+ return {before:{...state},after:s,delta,stageId:stage.id,decisionId:option.id,option,notes};
+}
+function replay(choices,DATA){
+ if(!Array.isArray(choices)||choices.length>DATA.stages.length)throw Error("Histórico inválido");
+ let s={...DATA.initial},history=[],low={continuity:s.continuity,evidence:s.evidence,containment:s.containment,clarity:s.clarity,trust:s.trust};
+ for(let i=0;i<choices.length;i++){
+  const ch=typeof choices[i]==="string"?{id:choices[i],reason:""}:choices[i];
+  const stage=DATA.stages[i],option=stage.options.find(o=>o.id===ch.id);
+  if(!option)throw Error("Opção desconhecida para etapa "+(i+1));
+  const record=apply(s,stage,option);record.reason=String(ch.reason||"");
+  s=record.after;history.push(record);
+  for(const key of Object.keys(low))low[key]=Math.min(low[key],s[key]);
+ }
+ return {state:s,low,history,completed:choices.length===DATA.stages.length};
+}
+function outcome(run,DATA){
+ if(!run.completed)return {id:"pending",title:"Investigação em andamento"};
+ const s=run.state;
+ if(s.alerts>=4||s.continuity<30||s.evidence<25||s.trust<25||s.time>26)return DATA.endings.find(e=>e.id==="critical");
+ if(s.continuity>=60&&s.evidence>=65&&s.containment>=72&&s.clarity>=65&&s.trust>=60&&s.time<=23&&s.alerts<=2)return DATA.endings.find(e=>e.id==="controlled");
+ return DATA.endings.find(e=>e.id==="partial");
+}
+function validScenario(DATA){
+ if(DATA.systems.length!==7||DATA.evidence.length!==8||DATA.stages.length!==6)throw Error("Incompleto");
+ for(const field of ["systems","evidence","stages","hypotheses"]){
+  if(new Set(DATA[field].map(x=>x.id)).size!==DATA[field].length)throw Error("IDs duplicados: "+field);
+ }
+ for(const stage of DATA.stages){
+  if(stage.options.length!==3||new Set(stage.options.map(o=>o.id)).size!==3)throw Error("Opções insuficientes");
+  for(const option of stage.options)if(["continuity","evidence","containment","clarity","trust","time"].some(k=>!Number.isInteger(option.effect[k])))throw Error("Efeitos inválidos");
+ }
+ for(const e of DATA.evidence)if(!DATA.systems.some(s=>s.id===e.system))throw Error("Evidência sem sistema");
+}
+
+(function(){
+const $=id=>document.getElementById(id),NS="http://www.w3.org/2000/svg";
+const item=(tag,value,cls)=>{const e=document.createElement(tag);e.textContent=value??"";if(cls)e.className=cls;return e};
+const svg=(tag,attrs={},value)=>{const e=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,String(v));if(value!==undefined)e.textContent=value;return e};
+const bySystem=Object.fromEntries(DATA.systems.map(s=>[s.id,s]));
+const metricNames={continuity:"Continuidade",evidence:"Evidências",containment:"Contenção",clarity:"Clareza",trust:"Confiança"};
+const keys=Object.keys(metricNames);
+const visited=new Set(),opened=new Set();
+let selectedSystem="portal",selectedEvent=null,hypothesis=null,refs=[],responseStarted=false,
+ path=[],pending=null,reviewing=false,resetPending=false;
+function focus(id){const el=$(id);el.focus({preventScroll:true});el.scrollIntoView({block:"start",behavior:"auto"});}
+function signed(n){return n>0?"+"+n:String(n);}
+function inspectSystem(id,source){
+ if(!bySystem[id]||resetPending)return;
+ selectedSystem=id;visited.add(id);renderSystems();
+ focus("system-title");
+}
+function renderSystems(){
+ const root=$("system-buttons");root.replaceChildren();
+ for(const s of DATA.systems){
+  const button=item("button","","system-btn");button.type="button";
+  button.setAttribute("aria-pressed",String(s.id===selectedSystem));
+  button.append(item("strong",s.name),item("small",visited.has(s.id)?"Examinado":"Não examinado"));
+  button.addEventListener("click",()=>inspectSystem(s.id,"button"));root.append(button);
+ }
+ const s=bySystem[selectedSystem];
+ $("system-kind").textContent=s.category;$("system-title").textContent=s.name;
+ $("system-observed").textContent="Observado: "+s.observed;
+ $("system-supports").textContent="Permite analisar: "+s.supports;
+ $("system-limits").textContent="Não permite concluir: "+s.limits;
+ document.querySelectorAll("[data-sys]").forEach(e=>{
+  const id=e.dataset.sys;e.classList.toggle("visited",visited.has(id));e.classList.toggle("selected",id===selectedSystem);
+  e.setAttribute("aria-pressed",String(id===selectedSystem));
+  e.setAttribute("aria-label",bySystem[id].name+(visited.has(id)?", já examinado":", ainda não examinado")+", selecionar");
+ });
+ renderGate();
+}
+function renderEvents(){
+ const root=$("event-list");root.replaceChildren();
+ for(const ev of DATA.evidence){
+  const button=item("button","","event-btn");button.type="button";
+  button.setAttribute("aria-pressed",String(selectedEvent===ev.id));
+  button.append(item("span",ev.clock+" · "+ev.kind,"clock"),item("strong",ev.title),item("small",opened.has(ev.id)?"Examinado":"Não examinado"));
+  button.addEventListener("click",()=>inspectEvent(ev.id));root.append(button);
+ }
+ renderGate();
+}
+function inspectEvent(id){
+ const ev=DATA.evidence.find(e=>e.id===id);if(!ev||resetPending)return;
+ opened.add(id);selectedEvent=id;
+ $("event-detail").replaceChildren(item("h3",ev.title),item("small",ev.clock+" · "+ev.kind),item("blockquote",ev.excerpt),
+ item("p","O que sustenta: "+ev.supports),item("p","Limitação: "+ev.limits),item("p","Fonte: "+ev.confidence));
+ renderEvents();renderCitations();
+ focus("event-detail");
+}
+function renderCitations(){
+ const before=Array.from(document.querySelectorAll('input[name="citation"]:checked')).map(x=>x.value);
+ const selected=new Set([...refs,...before]);
+ const root=$("citation-options");root.replaceChildren();
+ const available=DATA.evidence.filter(e=>opened.has(e.id));
+ refs=[...selected].filter(id=>opened.has(id));
+ for(const e of available){
+  const label=item("label","","option"),input=document.createElement("input"),body=item("span");
+  input.type="checkbox";input.name="citation";input.value=e.id;input.checked=refs.includes(e.id);
+  body.append(item("strong",e.id.toUpperCase()+" · "+e.title),item("small",e.supports+" Limite: "+e.limits));
+  label.append(input,body);root.append(label);
+ }
+ renderGate();
+}
+function renderGate(){
+ $("explore-count").textContent=visited.size+" sistemas · "+opened.size+" registros";
+ $("explore-hint").textContent="Examinados "+visited.size+"/3 sistemas e "+opened.size+"/4 registros; fontes selecionadas "+refs.length+"/2.";
+ $("begin").disabled=visited.size<3||opened.size<4||refs.length!==2||!hypothesis;
+ $("begin").textContent=path.length===DATA.stages.length?"Atualizar relatório":"Continuar para decisões";
+}
+function chooseHypotheses(){
+ const root=$("hypothesis-options");root.replaceChildren();
+ for(const h of DATA.hypotheses){
+  const label=item("label","","option"),input=document.createElement("input"),body=item("span");
+  input.type="radio";input.name="hypothesis";input.value=h.id;input.checked=h.id===hypothesis;
+  body.append(item("strong",h.title),item("small",h.detail));label.append(input,body);root.append(label);
+ }
+}
+function showSteps(){
+ for(let i=0;i<=7;i++){
+  const el=$("step-"+i);
+  el.className=(i===0?(reviewing||!responseStarted?"active":"done"):path.length===6&&!reviewing?(i===7?"active":"done"):reviewing?"":i<=path.length?"done":i===path.length+1?"active":"");
+ }
+}
+function reviewInvestigation(){
+ reviewing=true;
+ $("exploration").hidden=false;$("simulator").hidden=true;$("report").hidden=true;
+ showSteps();renderSystems();renderEvents();renderCitations();focus("explore-title");
+}
+function startResponse(event){
+ event.preventDefault();
+ const selected=Array.from(document.querySelectorAll('input[name="citation"]:checked')).map(x=>x.value);
+ const h=document.querySelector('input[name="hypothesis"]:checked')?.value||null;
+ if(visited.size<3||opened.size<4||!h||selected.length!==2||selected.some(id=>!opened.has(id))){
+  $("initial-error").textContent="Examine 3 sistemas e 4 registros; escolha hipótese e exatamente 2 documentos consultados.";return;
+ }
+ hypothesis=h;refs=selected;responseStarted=true;reviewing=false;$("initial-error").textContent="";
+ render();focus(path.length===6?"report-title":"round-heading");
+}
+function choose(id){
+ if(!responseStarted||reviewing||resetPending||path.length===DATA.stages.length)return;
+ const option=DATA.stages[path.length].options.find(x=>x.id===id);
+ if(!option)return;
+ pending={id,reason:pending?.id===id?pending.reason:""};$("reason-error").textContent="";
+ render();focus("reason");
+}
+function currentRun(withPending){
+ const list=[...path];if(withPending&&pending)list.push(pending);
+ return replay(list,DATA);
+}
+function renderChoices(){
+ const stage=DATA.stages[path.length],root=$("choice-list");root.replaceChildren();
+ if(!stage)return;
+ for(const [i,o] of stage.options.entries()){
+  const b=item("button","","choice-btn");b.type="button";b.setAttribute("aria-pressed",String(pending?.id===o.id));
+  b.append(item("small","Alternativa "+["A","B","C"][i],"choice-no"),item("strong",o.title),item("small",o.summary),
+  item("small","Variações: "+keys.map(k=>metricNames[k]+" "+signed(o.effect[k])).join("; ")+"; tempo +"+o.effect.time+"."));
+  b.addEventListener("click",()=>choose(o.id));root.append(b);
+ }
+}
+function renderDecision(run){
+ const complete=path.length===6&&!pending;
+ $("exploration").hidden=true;$("simulator").hidden=complete;$("report").hidden=!complete;
+ if(complete){renderReport(run);showSteps();return;}
+ const stage=DATA.stages[path.length],root=$("progress");root.replaceChildren();
+ for(let i=0;i<6;i++){
+  const el=item("li");el.className=i<path.length?"done":i===path.length?"current":"";
+  el.setAttribute("aria-label","Etapa "+(i+1)+(i<path.length?" concluída":i===path.length?" atual":" futura"));root.append(el);
+ }
+ $("round-label").textContent=stage.label+" de 6";$("round-heading").textContent=stage.title;
+ $("time-context").textContent=stage.weather;$("round-scene").textContent=stage.scene;
+ $("round-status").textContent=path.length+" de 6 decisões confirmadas";
+ renderChoices();
+ $("undo").disabled=!path.length&&!pending;
+ $("undo").textContent=pending?"Desfazer prévia":"Rever etapa anterior";
+ $("confirm").disabled=!pending;
+ $("confirm").textContent=path.length===5?"Confirmar e emitir relatório":"Confirmar e avançar";
+ $("choice-preview").hidden=!pending;$("reason").disabled=!pending;
+ $("reason").value=pending?.reason||"";
+ if(pending){
+  const row=run.history[run.history.length-1];
+  $("preview-title").textContent="Prévia: "+row.option.title;
+  $("preview-consequence").textContent=row.option.consequence;
+  $("preview-deltas").textContent=keys.map(k=>metricNames[k]+" "+signed(row.delta[k])+" → "+row.after[k]).join("; ")+". Tempo "+signed(row.delta.time)+" → "+row.after.time+".";
+  $("preview-notes").textContent=row.notes.length?row.notes.join(" "):"Nenhuma penalidade adicional nesta prévia.";
+ }
+ showSteps();
+}
+function confirmDecision(event){
+ event.preventDefault();
+ if(!pending||!responseStarted||reviewing||resetPending)return;
+ const reason=$("reason").value.trim();
+ if(reason.length<12){
+  $("reason-error").textContent="Escreva uma justificativa com pelo menos 12 caracteres.";
+  focus("reason");return;
+ }
+ path.push({id:pending.id,reason});pending=null;$("reason-error").textContent="";
+ render();focus(path.length===6?"report-title":"round-heading");
+}
+function undo(){
+ if(resetPending||!responseStarted)return;
+ if(pending)pending=null;
+ else if(path.length)pending=path.pop();
+ else return;
+ reviewing=false;$("reason-error").textContent="";render();focus(pending?"reason":"round-heading");
+}
+function renderDashboard(run){
+ const state=run.state,root=$("resource-list");root.replaceChildren();
+ for(const k of keys){
+  const c=item("div","","resource");c.classList.toggle("low",state[k]<30);
+  c.append(item("small",metricNames[k]),item("strong",state[k]+" / 100"));
+  const bar=item("div","","bar"),fill=item("i");fill.style.width=state[k]+"%";bar.append(fill);c.append(bar);root.append(c);
+ }
+ for(const k of ["time","alerts"]){
+  const c=item("div","","resource");c.append(item("small",k==="time"?"Blocos de tempo":"Alertas"),item("strong",String(state[k])));root.append(c);
+ }
+ $("resource-status").textContent=(pending?"Valores da prévia (ainda não confirmados). ":"Estado confirmado. ")+
+  "Contenção "+state.containment+"/100, preservação "+state.evidence+"/100, tempo "+state.time+" blocos e "+state.alerts+" alertas acumulados. Estes valores não comprovam um vazamento.";
+ const history=$("decision-history");history.replaceChildren();
+ if(!path.length)history.append(item("li","Nenhuma decisão confirmada."));
+ for(const [i,choice] of path.entries()){
+  const row=run.history[i];history.append(item("li",(i+1)+". "+row.option.title+"; continuidade "+row.after.continuity+", contenção "+row.after.containment+", evidências "+row.after.evidence+"."));
+ }
+ if(pending)history.append(item("li","Prévia: "+run.history[run.history.length-1].option.title+"."));
+}
+function renderChart(run){
+ const root=$("metrics-plot");root.replaceChildren();
+ const values=[DATA.initial,...run.history.map(x=>x.after)],x=i=>66+i/6*651,y=v=>28+(100-v)/100*192;
+ for(let j=0;j<=4;j++){
+  const yy=y(j*25);root.append(svg("line",{x1:66,y1:yy,x2:720,y2:yy,class:"gridline"}),svg("text",{x:56,y:yy+4,"text-anchor":"end",class:"axis"},String(j*25)));
+ }
+ for(let i=0;i<=6;i++)root.append(svg("text",{x:x(i),y:252,"text-anchor":"middle",class:"axis"},i===0?"Início":"E"+i));
+ for(const [key,c] of [["continuity","cont"],["evidence","ev"],["containment","cnt"],["clarity","clar"],["trust","trust"]]){
+  root.append(svg("polyline",{points:values.map((v,i)=>x(i)+","+y(v[key])).join(" "),class:"line-"+c}));
+  values.forEach((v,i)=>root.append(svg("circle",{cx:x(i),cy:y(v[key]),r:3.2,fill:["continuity","evidence","containment","clarity","trust"].indexOf(key)%2?"#fff":"#d5efd9",stroke:"#5d8684","stroke-width":1.3})));
+ }
+ $("metrics-svg-desc").textContent=values.map((v,i)=>(i===0?"Inicial":"Etapa "+i)+": "+keys.map(k=>metricNames[k]+" "+v[k]).join(", ")).join("; ")+". Esses números também estão na tabela.";
+}
+function renderTime(run){
+ const root=$("time-plot");root.replaceChildren();
+ const top=Math.ceil(Math.max(24,...run.history.map(x=>x.after.time))/5)*5,y=v=>219-v/top*190;
+ for(let j=0;j<=4;j++){
+  const val=top*j/4,yy=y(val);root.append(svg("line",{x1:66,y1:yy,x2:720,y2:yy,class:"gridline"}),svg("text",{x:56,y:yy+4,"text-anchor":"end",class:"axis"},val.toFixed(0)));
+ }
+ for(let i=0;i<6;i++){
+  const row=run.history[i],px=90+i*103;
+  if(row)root.append(svg("rect",{x:px,y:y(row.after.time),width:57,height:Math.max(0,219-y(row.after.time)),rx:4,class:pending&&i===run.history.length-1?"timepreview":"timebar"}));
+  root.append(svg("text",{x:px+28.5,y:252,"text-anchor":"middle",class:"axis"},"E"+(i+1)));
+ }
+ $("time-svg-desc").textContent=run.history.length?run.history.map((x,i)=>"Etapa "+(i+1)+" "+x.after.time+" blocos"+(pending&&i===run.history.length-1?" (prévia)":"")).join("; "):"Nenhuma decisão confirmada; tempo inicial zero.";
+}
+function renderLedger(run){
+ const root=$("ledger");root.replaceChildren();
+ function row(title,s){
+  const tr=item("tr"),th=item("th",title);th.scope="row";tr.append(th);
+  for(const key of [...keys,"time","alerts"])tr.append(item("td",String(s[key])));
+  root.append(tr);
+ }
+ row("Início",DATA.initial);
+ run.history.forEach((r,i)=>row("Etapa "+(i+1)+(pending&&i===run.history.length-1?" (prévia)":"")+": "+r.option.title,r.after));
+}
+function reportCard(root,title,body){
+ const block=item("section","","report-card");block.append(item("h3",title),item("p",body));root.append(block);
+}
+function renderReport(run){
+ const result=outcome(run,DATA);
+ const root=$("report-result");root.className="report-result"+(result.id==="controlled"?"":result.id==="partial"?" partial":" critical");
+ root.replaceChildren(item("p",result.id==="controlled"?"Resposta coordenada":result.id==="partial"?"Resposta com pendências":"Resposta crítica","kicker"),item("h3",result.title),
+  item("p",result.summary),
+  item("p","O desfecho avalia apenas o cuidado operacional no modelo. Os registros apresentados NÃO confirmam transmissão externa, autoria, conteúdo pessoal afetado ou a inexistência absoluta de risco."));
+ const cards=$("report-grid");cards.replaceChildren();
+ const h=DATA.hypotheses.find(x=>x.id===hypothesis),source=refs.map(id=>DATA.evidence.find(x=>x.id===id));
+ reportCard(cards,"Sua hipótese",h.title+" "+(h.id==="uncertain"?"Reconhece apropriadamente os limites do dossiê.":"Esta formulação extrapola ou ignora parte dos registros; considere revisar a hipótese."));
+ reportCard(cards,"Fontes citadas",source.map(x=>x.id.toUpperCase()+" · "+x.title+": "+x.supports+" Limite: "+x.limits).join(" "));
+ reportCard(cards,"Qualidade da evidência",refs.includes("e1")&&(refs.includes("e3")||refs.includes("e7"))?
+   "O pico de solicitações foi confrontado com uma hipótese alternativa ou com a falta de confirmação de saída. Isso sustenta cautela, não uma certeza.":"Um confronto entre a anomalia de volume, a rotina programada e os limites do registro de saída pode melhorar a fundamentação.");
+ reportCard(cards,"Indicadores finais","Continuidade "+run.state.continuity+", evidências "+run.state.evidence+", contenção "+run.state.containment+
+   ", clareza "+run.state.clarity+", confiança "+run.state.trust+", tempo "+run.state.time+" blocos e "+run.state.alerts+" alertas.");
+ reportCard(cards,"Menores indicadores observados",keys.map(k=>metricNames[k]+": "+run.low[k]).join("; ")+". Os índices são artificiais, não medições de segurança.");
+ reportCard(cards,"Questões ainda abertas","Quais solicitações eram legítimas? O que ocorreu na janela sem espelhamento? Houve alguma transmissão externa? São necessários registros e avaliações independentes para responder.");
+ const list=$("report-history");list.replaceChildren();
+ for(const [i,r] of run.history.entries()){
+  const li=item("li");
+  li.append(item("strong",(i+1)+". "+r.option.title),item("p","Sua justificativa: "+r.reason),
+   item("p",r.option.consequence),item("p","Consequências: "+keys.map(k=>metricNames[k]+" "+signed(r.delta[k])).join(", ")+"; tempo "+signed(r.delta.time)+"; alertas "+signed(r.delta.alerts)+"."),
+   item("p",r.notes.length?r.notes.join(" "):"Nenhuma penalidade adicional registrada."));
+  list.append(li);
+ }
+ const other=$("comparisons");other.replaceChildren();
+ for(const [index,label] of ["Preservar, conter e verificar","Agir rápido sem comprovação","Adiar controles e registrar pouco"].entries()){
+  const sim=replay(DATA.stages.map(s=>s.options[index].id),DATA),o=outcome(sim,DATA);
+  const panel=item("section","","compare");
+  panel.append(item("strong",label),item("small",o.title),item("small","Continuidade "+sim.state.continuity+", evidências "+sim.state.evidence+
+    ", contenção "+sim.state.containment+", clareza "+sim.state.clarity+", confiança "+sim.state.trust+", tempo "+sim.state.time+", alertas "+sim.state.alerts+"."));
+  other.append(panel);
+ }
+}
+function render(){
+ const run=currentRun(true);
+ $("exploration").hidden=responseStarted&&!reviewing;
+ $("simulator").hidden=!responseStarted||reviewing;
+ $("report").hidden=true;
+ if(!responseStarted||reviewing){showSteps();renderSystems();renderEvents();renderCitations();}
+ else renderDecision(run);
+ renderDashboard(run);renderChart(run);renderTime(run);renderLedger(run);
+}
+function requestReset(){resetPending=true;$("reset-confirm").hidden=false;$("cancel-reset").focus();}
+function cancelReset(){resetPending=false;$("reset-confirm").hidden=true;$("restart-anytime").focus();}
+function reset(){
+ visited.clear();opened.clear();selectedSystem="portal";selectedEvent=null;hypothesis=null;refs=[];
+ responseStarted=false;path=[];pending=null;reviewing=false;resetPending=false;
+ $("reset-confirm").hidden=true;$("reason-error").textContent="";$("initial-error").textContent="";
+ $("event-detail").replaceChildren(item("h3","Selecione um registro"),item("p","Confira o evento observado, sua confiabilidade e as inferências permitidas."));
+ chooseHypotheses();render();focus("explore-title");
+}
+validScenario(DATA);
+chooseHypotheses();
+document.querySelectorAll("[data-sys]").forEach(el=>{
+ el.addEventListener("click",()=>inspectSystem(el.dataset.sys,"svg"));
+ el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();inspectSystem(el.dataset.sys,"svg");}});
+});
+$("hypothesis-options").addEventListener("change",()=>{
+ hypothesis=document.querySelector('input[name="hypothesis"]:checked')?.value||null;renderGate();
+});
+$("citation-options").addEventListener("change",()=>{
+ refs=Array.from(document.querySelectorAll('input[name="citation"]:checked')).map(x=>x.value);renderGate();
+});
+$("initial-form").addEventListener("submit",startResponse);
+$("choice-list").addEventListener("change",()=>{$("reason-error").textContent="";});
+$("reason").addEventListener("input",()=>{
+ if(pending){pending.reason=$("reason").value;$("reason-error").textContent="";}
+});
+$("decision-form").addEventListener("submit",confirmDecision);
+$("undo").addEventListener("click",undo);
+$("review-evidence").addEventListener("click",reviewInvestigation);
+$("report-investigation").addEventListener("click",reviewInvestigation);
+$("report-back").addEventListener("click",undo);
+$("restart-anytime").addEventListener("click",requestReset);
+$("report-reset").addEventListener("click",requestReset);
+$("cancel-reset").addEventListener("click",cancelReset);
+$("accept-reset").addEventListener("click",reset);
+render();
+})();
+</script>
+</body>
+</html>
