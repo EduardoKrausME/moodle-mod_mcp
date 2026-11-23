@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matriz de decisão interativa - Laboratório de escolhas</title>
+<style>
+:root{color-scheme:light;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:#26364d;background:#f3f5fa;--ink:#26364d;--muted:#607086;--line:#dee6f1;--blue:#4769ab;--violet:#7655aa;--mint:#2c8974;--orange:#be794b}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(14px,3vw,39px);background:radial-gradient(ellipse at 83% 0%,#e7e5fa,transparent 46%),#f3f5fa}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible,[tabindex="0"]:focus-visible{outline:3px solid #cb8a32;outline-offset:3px}
+[hidden]{display:none!important}
+main{max-width:1250px;margin:auto}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#6255a6;font-weight:850}
+header{display:flex;gap:20px;align-items:center;justify-content:space-between;margin-bottom:22px}
+h1{font-size:clamp(30px,4vw,45px);line-height:1.12;letter-spacing:-.04em;margin:9px 0 11px}
+header p{max-width:790px;color:var(--muted);margin:0}
+header svg{width:151px;max-width:22%;flex:none}
+.panel{background:#fff;border:1px solid var(--line);border-radius:21px;padding:clamp(16px,2.4vw,26px);box-shadow:0 12px 33px #3e426413;min-width:0}
+.panel h2{font-size:21px;letter-spacing:-.025em;margin:5px 0 10px;line-height:1.2}
+.panel h3{font-size:15px;margin:12px 0 10px}
+.lead{font-size:13px;color:var(--muted);margin:0 0 17px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.list{list-style:none;margin:0 0 15px;padding:0;display:grid;gap:8px}
+.entry{display:flex;gap:8px;align-items:center;min-width:0;padding:8px;background:#f7f9fd;border:1px solid #e2e9f2;border-radius:11px}
+.entry label{flex:1;min-width:0}
+.entry label span{display:block;font-size:11px;font-weight:750;color:#506882;margin-bottom:3px}
+.entry input{width:100%;min-width:0;border:1px solid #c3d1e3;border-radius:8px;padding:8px 10px;color:var(--ink);background:#fff;font-size:13px}
+.entry button{flex:none;border:1px solid #e5c0bf;background:#fff7f5;color:#964e48;border-radius:9px;padding:8px 10px;font-size:12px;font-weight:850;min-height:38px}
+.entry button:hover:not(:disabled){background:#ffe9e7}
+.add-form{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.field{border:1px solid #b9c9df;border-radius:10px;min-height:43px;padding:9px 11px;background:#fff;color:var(--ink);min-width:0}
+.add-form .field{flex:1 1 170px}
+.btn{border:1px solid #becde2;border-radius:10px;min-height:42px;padding:9px 15px;background:#fff;color:#335e8c;font-size:13px;font-weight:800}
+.btn:hover:not(:disabled){background:#eff4fc}
+.btn.primary{background:#4b64ad;color:#fff;border-color:#4b64ad}
+.btn.primary:hover:not(:disabled){background:#405599}
+.btn.danger{color:#934c47;border-color:#e3b5b1}
+.count{font-size:12px;font-weight:750;color:#64738a}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start;margin-top:16px}
+.main-column{display:grid;gap:16px;min-width:0}
+.sidebar{display:grid;gap:16px;position:sticky;top:15px}
+.table-region{overflow:auto;overscroll-behavior-x:contain;border:1px solid #dfe6f1;border-radius:14px;max-width:100%}
+.matrix{width:100%;min-width:680px;border-collapse:collapse;table-layout:fixed}
+.matrix th,.matrix td{padding:13px 11px;border-right:1px solid #e5eaf3;border-bottom:1px solid #e5eaf3;text-align:left;vertical-align:top}
+.matrix tr:last-child th,.matrix tr:last-child td{border-bottom:0}
+.matrix tr>*:last-child{border-right:0}
+.matrix thead th{background:#eaf0fa;color:#365477;font-size:13px}
+.matrix thead th:first-child{width:195px;position:sticky;left:0;z-index:3}
+.matrix tbody th{background:#f8faff;width:195px;position:sticky;left:0;z-index:2;font-size:13px}
+.matrix tbody th strong{display:block;line-height:1.28;margin:0 0 5px}
+.matrix tbody th small{display:block;font-size:11px;font-weight:400;line-height:1.3;color:var(--muted);margin:8px 0 3px}
+.matrix select,.matrix input{border:1px solid #bccce0;border-radius:8px;min-height:38px;background:#fff;color:#26364d;padding:8px;width:100%;min-width:0}
+.matrix select{font-weight:800;color:#365d91}
+.matrix .weight{max-width:95px}
+.matrix .explanation{font-size:11px;color:#6a7a8e;line-height:1.4;margin:5px 0 0}
+.matrix .score-label{display:block;font-size:11px;color:#60728e;font-weight:700;margin:0 0 5px}
+.matrix .reason-label{display:block;font-size:11px;color:#60728e;font-weight:700;margin:9px 0 5px}
+.matrix .reason{font-size:12px}
+.figure-note{margin:14px 0 0;font-size:12px;color:var(--muted)}
+.formula{font-size:12px;background:#f1f4fa;border-left:3px solid #7993c2;padding:11px 14px;border-radius:0 9px 9px 0;margin-top:14px;color:#496483}
+.ranking{list-style:none;display:grid;gap:13px;margin:16px 0 0;padding:0}
+.rank-item{border:1px solid #e2e9f3;border-radius:13px;padding:14px;background:#fcfdff}
+.rank-header{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.rank-title{display:flex;gap:9px;align-items:baseline;font-size:14px;font-weight:850}
+.rank-pos{background:#e8edfa;color:#435f9c;padding:4px 8px;border-radius:8px;white-space:nowrap;font-size:11px}
+.rank-score{font-size:17px;font-weight:900;color:#365c92;white-space:nowrap}
+.bar-track{height:11px;background:#e7ecf3;overflow:hidden;border-radius:99px;margin:11px 0 8px}
+.bar-fill{height:100%;background:linear-gradient(90deg,#5078b7,#8d71c4);border-radius:99px}
+.rank-item[data-leader=true]{border-color:#abc8c0;background:#f8fdfb}
+.rank-item[data-leader=true] .bar-fill{background:linear-gradient(90deg,#388d81,#64b99e)}
+.rank-reason{font-size:12px;line-height:1.5;color:#5c7084;margin:4px 0 0}
+.empty{border:1px dashed #aebed6;border-radius:13px;background:#f8fafc;color:#516984;padding:19px;font-size:13px}
+.summary{border:1px solid #b8d9cc;border-radius:14px;background:#effaf5;padding:14px}
+.summary[data-state=none]{border-color:#ebd5a5;background:#fff9eb}
+.summary strong{display:block;font-size:16px;color:#246858;margin:0 0 5px}
+.summary[data-state=none] strong{color:#805e32}
+.summary p{font-size:12px;color:#486858;margin:0}
+.summary[data-state=none] p{color:#805e32}
+.sensitivity-controls{display:grid;gap:13px}
+.sensitivity-controls label{font-size:12px;color:#45627c;font-weight:850;display:block;margin-bottom:5px}
+.sensitivity-controls select{width:100%}
+.sensitivity-controls input[type=range]{width:100%;accent-color:#5268ad;cursor:pointer}
+.weight-row{display:flex;justify-content:space-between;font-size:12px;color:#5f7288}
+.weight-row output{font-size:18px;font-weight:850;color:#4c61a3}
+.scenario{margin:15px 0;background:#f4f1fc;border:1px solid #e2d9f3;padding:15px;border-radius:13px}
+.scenario strong{display:block;font-size:13px;color:#5b468c}
+.scenario p{font-size:12px;margin:7px 0;color:#5d5470;line-height:1.5}
+.scenario-list{display:grid;gap:7px;margin:12px 0 0;padding:0;list-style:none}
+.scenario-list li{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#5b5369}
+.scenario-list li strong{font-size:12px;color:#554b7c}
+.sensitivity-actions{display:flex;flex-wrap:wrap;gap:8px}
+.sensitivity-actions .btn{flex:1}
+.reset-confirm{margin-top:15px;border:1px solid #ebc9a6;background:#fff7ef;padding:14px;border-radius:12px}
+.reset-confirm p{font-size:13px;color:#785735;margin:0 0 12px}
+.reset-confirm .sensitivity-actions{margin:0}
+.notice{margin:18px 0 0;padding:13px 15px;border-left:3px solid #8b9bbf;background:#f0f3f9;border-radius:0 10px 10px 0;font-size:12px;color:var(--muted)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:1050px){.workspace{grid-template-columns:1fr}.sidebar{position:static;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.two,.sidebar{grid-template-columns:1fr}.panel{border-radius:16px;padding:17px}header svg{display:none}.matrix{min-width:620px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div><span class="eyebrow">Laboratório de escolhas · Simulação didática</span><h1>Matriz de decisão interativa</h1>
+<p>Construa sua própria comparação, atribua pesos aos critérios e justifique as notas. Explore como diferentes prioridades podem mudar a classificação antes de decidir.</p></div>
+<svg viewBox="0 0 165 130" aria-hidden="true" focusable="false" fill="none">
+<rect x="7" y="8" width="149" height="113" rx="17" fill="#fff" stroke="#d3d7ed" stroke-width="3"></rect>
+<path d="M19 39h124M19 66h124M19 93h124M60 20v89M103 20v89" stroke="#b9c4e4" stroke-width="3"></path>
+<rect x="63" y="42" width="37" height="21" rx="6" fill="#d9eae5"></rect><rect x="107" y="69" width="34" height="21" rx="6" fill="#e7def6"></rect>
+<path d="m73 51 6 6 10-11m26 34 6 6 10-11" stroke="#4d9786" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</header>
+<section class="panel" aria-labelledby="builderTitle">
+<div class="eyebrow">1 · Construa a comparação</div>
+<h2 id="builderTitle">Alternativas e critérios</h2>
+<p class="lead">Renomeie os exemplos, adicione suas próprias opções e remova o que não fizer sentido para o problema. Mantenha pelo menos duas alternativas e dois critérios.</p>
+<div class="two">
+<div>
+<h3>Alternativas <span class="count" id="alternativeCount"></span></h3>
+<ul id="alternativeList" class="list"></ul>
+<form id="addAlternative" class="add-form" novalidate>
+<input id="alternativeName" class="field" maxlength="45" aria-label="Nome da nova alternativa" placeholder="Ex.: Debate orientado">
+<button type="submit" class="btn primary">+ Alternativa</button>
+</form>
+</div>
+<div>
+<h3>Critérios <span class="count" id="criterionCount"></span></h3>
+<ul id="criterionList" class="list"></ul>
+<form id="addCriterion" class="add-form" novalidate>
+<input id="criterionName" class="field" maxlength="45" aria-label="Nome do novo critério" placeholder="Ex.: Facilidade de acesso">
+<button type="submit" class="btn primary">+ Critério</button>
+</form>
+</div>
+</div>
+</section>
+<div class="workspace">
+<div class="main-column">
+<section class="panel" aria-labelledby="matrixTitle">
+<div class="eyebrow">2 · Defina o que importa</div>
+<h2 id="matrixTitle">Notas, pesos e justificativas</h2>
+<p class="lead">Peso: 0 a 5 (zero desativa o critério). Nota: 1 a 5 (quanto maior, mais favorável). Você pode escrever uma justificativa para cada nota e alterá-la depois.</p>
+<div class="table-region" role="region" tabindex="0" aria-label="Matriz de decisão, role horizontalmente se necessário">
+<table class="matrix" id="matrix">
+<caption class="sr-only">Tabela com pesos por critério, notas e justificativas de cada alternativa</caption>
+<thead id="matrixHead"></thead><tbody id="matrixBody"></tbody>
+</table>
+</div>
+<p class="formula"><strong>Cálculo:</strong> pontuação = soma de (peso × nota) ÷ soma dos pesos ativos. O resultado fica entre 1 e 5; sem pesos ativos, não há classificação.</p>
+</section>
+<section class="panel" aria-labelledby="rankingTitle">
+<div class="eyebrow">3 · Interprete o resultado</div>
+<h2 id="rankingTitle">Classificação calculada</h2>
+<p class="lead">As barras representam as médias ponderadas da configuração atual. Empates reais recebem a mesma posição; arredondar os números para exibição não cria empates artificiais.</p>
+<div class="summary" id="leaderSummary" data-state="ok">
+<strong id="leaderTitle">Aguardando cálculo</strong>
+<p id="leaderText"></p>
+</div>
+<ol class="ranking" id="ranking" aria-label="Classificação das alternativas"></ol>
+</section>
+</div>
+<aside class="sidebar">
+<section class="panel" aria-labelledby="sensitivityTitle">
+<div class="eyebrow">4 · Experimente outro cenário</div>
+<h2 id="sensitivityTitle">Análise de sensibilidade</h2>
+<p class="lead">Experimente outro peso sem alterar a matriz. Compare a classificação atual com a simulação e só aplique se quiser.</p>
+<div class="sensitivity-controls">
+<div><label for="scenarioCriterion">Critério a testar</label><select id="scenarioCriterion" class="field"></select></div>
+<div><label for="scenarioWeight">Peso simulado (0 a 5)</label>
+<input id="scenarioWeight" type="range" min="0" max="5" step="1" value="3" aria-describedby="scenarioWeightText">
+<div class="weight-row"><span id="scenarioWeightText">Peso atual: 3</span><output id="scenarioValue" for="scenarioWeight">3</output></div>
+</div>
+</div>
+<div class="scenario" aria-labelledby="scenarioTitle">
+<strong id="scenarioTitle">Resultado da simulação</strong>
+<p id="scenarioSummary"></p>
+<ul id="scenarioList" class="scenario-list"></ul>
+</div>
+<div class="sensitivity-actions">
+<button type="button" class="btn primary" id="applyScenario">Aplicar peso</button>
+<button type="button" class="btn" id="restoreScenario">Cancelar simulação</button>
+</div>
+</section>
+<section class="panel" aria-labelledby="restartTitle">
+<h2 id="restartTitle">Recomeçar a análise</h2>
+<p class="lead">O conjunto inicial permite experimentar comparações, mas você pode substituí-lo por alternativas e critérios do seu tema.</p>
+<button class="btn" id="reset" type="button">Restaurar exemplo inicial</button>
+<div class="reset-confirm" id="resetConfirmation" hidden>
+<p>Restaurar todas as alternativas, critérios, pesos, notas e justificativas do exemplo? As alterações atuais serão descartadas.</p>
+<div class="sensitivity-actions">
+<button class="btn" type="button" id="cancelReset">Cancelar</button>
+<button class="btn danger" type="button" id="confirmReset">Sim, restaurar</button>
+</div>
+</div>
+</section>
+</aside>
+</div>
+<p class="notice">Este laboratório é demonstrativo e não escolhe automaticamente a solução correta. Pesos, notas e justificativas devem ser discutidos e verificados pelo estudante; não são evidências científicas nem notas do Moodle. As escolhas ficam apenas nesta página e desaparecem ao recarregar.</p>
+<div class="sr-only" id="announcer" role="status" aria-live="polite" aria-atomic="true"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  const seed={
+    criteria:[
+      {id:"impact",name:"Aprendizagem demonstrada",weight:5},
+      {id:"time",name:"Viabilidade no tempo",weight:3},
+      {id:"access",name:"Acessibilidade",weight:4},
+      {id:"participation",name:"Participação ativa",weight:2}
+    ],
+    alternatives:[
+      {id:"workshop",name:"Oficina prática",ratings:{
+        impact:{value:5,reason:"Produzir e testar uma atividade deixa evidências do que foi aprendido."},
+        time:{value:3,reason:"Exige preparação de materiais e tempo de execução."},
+        access:{value:3,reason:"É preciso oferecer alternativas aos materiais e à manipulação física."},
+        participation:{value:5,reason:"A construção envolve participação ativa na atividade."}
+      }},
+      {id:"quiz",name:"Quiz com feedback",ratings:{
+        impact:{value:4,reason:"Respostas e feedback revelam o que já foi compreendido."},
+        time:{value:5,reason:"Pode ser aplicado em sessões curtas e repetidas."},
+        access:{value:4,reason:"Controles acessíveis e feedback textual ampliam a participação."},
+        participation:{value:4,reason:"Perguntas com retorno incentivam novas tentativas."}
+      }},
+      {id:"project",name:"Projeto colaborativo",ratings:{
+        impact:{value:5,reason:"Uma entrega conjunta permite observar aplicação do conteúdo."},
+        time:{value:2,reason:"Organização de grupos e etapas costuma consumir mais tempo."},
+        access:{value:4,reason:"Diferentes papéis podem apoiar formas diversas de contribuir."},
+        participation:{value:5,reason:"Discussões e entregas oferecem oportunidades de colaboração."}
+      }}
+    ],
+    nextCriterion:1,nextAlternative:1
+  };
+  const state=JSON.parse(JSON.stringify(seed));
+  const $=id=>document.getElementById(id);
+  const nameInputs=new Map();
+  const maxAlternatives=5,maxCriteria=6;
+  let scenarioCriterion="time",scenarioWeight=3;
+  const text=(tag,className,value)=>{
+    const el=document.createElement(tag);
+    if(className)el.className=className;
+    if(value!==undefined)el.textContent=value;
+    return el;
+  };
+  const clean=(value,max)=>String(value??"").trim().replace(/\s+/g," ").slice(0,max);
+  const findAlternative=id=>state.alternatives.find(a=>a.id===id);
+  const findCriterion=id=>state.criteria.find(c=>c.id===id);
+  const display=value=>Number(value).toFixed(2).replace(".",",");
+  function announce(message){$("announcer").textContent=message;}
+  function calculate(override){
+    const weightOf=c=>Object.hasOwn(override||{},c.id)?override[c.id]:c.weight;
+    const totalWeight=state.criteria.reduce((sum,c)=>sum+weightOf(c),0);
+    const entries=state.alternatives.map(a=>{
+      const numerator=state.criteria.reduce((sum,c)=>sum+weightOf(c)*a.ratings[c.id].value,0);
+      return {id:a.id,name:a.name,score:totalWeight?numerator/totalWeight:null};
+    });
+    if(!totalWeight)return {totalWeight,entries,leaders:[]};
+    entries.sort((a,b)=>b.score-a.score);
+    let rank=1;
+    entries.forEach((entry,index)=>{
+      if(index>0&&Math.abs(entry.score-entries[index-1].score)>1e-10)rank=index+1;
+      entry.rank=rank;
+    });
+    const top=entries[0].score;
+    return {totalWeight,entries,leaders:entries.filter(e=>Math.abs(e.score-top)<1e-10)};
+  }
+  function shortLeaders(result){
+    if(!result.totalWeight)return "sem classificação";
+    return result.leaders.map(e=>e.name).join(" e ")+(result.leaders.length>1?" (empate)":"");
+  }
+  function noteFor(alternative){
+    const prioritized=state.criteria.filter(c=>c.weight>0).slice().sort((a,b)=>b.weight-a.weight);
+    if(!prioritized.length)return "Defina ao menos um peso positivo para justificar a classificação.";
+    const priority=prioritized[0],rating=alternative.ratings[priority.id];
+    return "Critério de maior peso: "+priority.name+" (peso "+priority.weight+", nota "+rating.value+"/5). "+(rating.reason||"Justificativa ainda não informada.");
+  }
+  function renderManagement(){
+    nameInputs.clear();
+    const groups=[
+      {items:state.alternatives,list:$("alternativeList"),kind:"alternative",limit:maxAlternatives,min:2},
+      {items:state.criteria,list:$("criterionList"),kind:"criterion",limit:maxCriteria,min:2}
+    ];
+    for(const group of groups){
+      group.list.replaceChildren();
+      for(const item of group.items){
+        const row=text("li","entry");
+        const label=text("label");
+        const title=text("span","",group.kind==="alternative"?"Alternativa":"Critério");
+        const input=text("input");
+        input.type="text";input.maxLength=45;input.value=item.name;
+        input.setAttribute("aria-label","Renomear "+(group.kind==="alternative"?"alternativa: ":"critério: ")+item.name);
+        input.addEventListener("change",()=>rename(group.kind,item.id,input));
+        label.append(title,input);
+        const remove=text("button","","Excluir");
+        remove.type="button";
+        remove.setAttribute("aria-label","Excluir "+(group.kind==="alternative"?"alternativa ":"critério ")+item.name);
+        remove.disabled=group.items.length<=group.min;
+        remove.addEventListener("click",()=>removeItem(group.kind,item.id));
+        row.append(label,remove);
+        group.list.appendChild(row);
+        nameInputs.set(item.id,input);
+      }
+    }
+    $("alternativeCount").textContent=state.alternatives.length+"/"+maxAlternatives;
+    $("criterionCount").textContent=state.criteria.length+"/"+maxCriteria;
+  }
+  function rename(kind,id,input){
+    const item=kind==="alternative"?findAlternative(id):findCriterion(id);
+    if(!item)return;
+    const name=clean(input.value,45);
+    if(name.length<2){input.value=item.name;announce("Informe pelo menos dois caracteres.");return;}
+    const peers=kind==="alternative"?state.alternatives:state.criteria;
+    if(peers.some(x=>x.id!==id&&x.name.toLocaleLowerCase("pt-BR")===name.toLocaleLowerCase("pt-BR"))){
+      input.value=item.name;announce("Já existe outro item com esse nome.");return;
+    }
+    if(name===item.name)return;
+    item.name=name;
+    renderAll();
+    nameInputs.get(id)?.focus();
+    announce("Nome alterado para "+name+".");
+  }
+  function removeItem(kind,id){
+    if(kind==="alternative"){
+      if(state.alternatives.length<=2){announce("Mantenha pelo menos duas alternativas.");return;}
+      state.alternatives=state.alternatives.filter(a=>a.id!==id);
+    }else{
+      if(state.criteria.length<=2){announce("Mantenha pelo menos dois critérios.");return;}
+      state.criteria=state.criteria.filter(c=>c.id!==id);
+      state.alternatives.forEach(a=>delete a.ratings[id]);
+      if(scenarioCriterion===id){
+        scenarioCriterion=state.criteria[0].id;
+        scenarioWeight=findCriterion(scenarioCriterion).weight;
+      }
+    }
+    renderAll();
+    $(kind==="alternative"?"alternativeName":"criterionName").focus();
+    announce("Item removido. As pontuações foram recalculadas.");
+  }
+  function addAlternative(){
+    const input=$("alternativeName"),name=clean(input.value,45);
+    if(name.length<2){announce("Informe pelo menos dois caracteres para a alternativa.");input.focus();return;}
+    if(state.alternatives.length>=maxAlternatives){announce("Limite de cinco alternativas atingido.");return;}
+    if(state.alternatives.some(a=>a.name.toLocaleLowerCase("pt-BR")===name.toLocaleLowerCase("pt-BR"))){
+      announce("Já existe uma alternativa com esse nome.");return;
+    }
+    const ratings={};
+    state.criteria.forEach(c=>{ratings[c.id]={value:3,reason:"Defina uma justificativa para esta nota."};});
+    const id="customA"+state.nextAlternative++;
+    state.alternatives.push({id,name,ratings});
+    input.value="";
+    renderAll();
+    nameInputs.get(id)?.focus();
+    announce("Alternativa adicionada: "+name+". As notas iniciais são 3 e podem ser editadas.");
+  }
+  function addCriterion(){
+    const input=$("criterionName"),name=clean(input.value,45);
+    if(name.length<2){announce("Informe pelo menos dois caracteres para o critério.");input.focus();return;}
+    if(state.criteria.length>=maxCriteria){announce("Limite de seis critérios atingido.");return;}
+    if(state.criteria.some(c=>c.name.toLocaleLowerCase("pt-BR")===name.toLocaleLowerCase("pt-BR"))){
+      announce("Já existe um critério com esse nome.");return;
+    }
+    const id="customC"+state.nextCriterion++;
+    state.criteria.push({id,name,weight:1});
+    state.alternatives.forEach(a=>{a.ratings[id]={value:3,reason:"Defina uma justificativa para esta nota."};});
+    input.value="";
+    renderAll();
+    nameInputs.get(id)?.focus();
+    announce("Critério adicionado: "+name+", com peso inicial 1.");
+  }
+  function renderMatrix(){
+    const head=$("matrixHead"),body=$("matrixBody");
+    head.replaceChildren();body.replaceChildren();
+    const titleRow=text("tr");
+    const corner=text("th","","Critério / Peso");
+    corner.scope="col";titleRow.appendChild(corner);
+    for(const a of state.alternatives){
+      const th=text("th","",a.name);th.scope="col";titleRow.appendChild(th);
+    }
+    head.appendChild(titleRow);
+    for(const c of state.criteria){
+      const tr=text("tr");tr.dataset.criterion=c.id;
+      const th=text("th");th.scope="row";
+      th.appendChild(text("strong","",c.name));
+      const weightLabel=text("label");
+      weightLabel.appendChild(text("span","score-label","Peso (0 a 5)"));
+      const weight=text("input","weight");
+      weight.type="number";weight.min="0";weight.max="5";weight.step="1";weight.value=String(c.weight);
+      weight.setAttribute("aria-label","Peso do critério "+c.name);
+      weight.addEventListener("change",()=>{
+        const raw=Number(weight.value);
+        if(!Number.isInteger(raw)||raw<0||raw>5){
+          weight.value=String(c.weight);
+          announce("O peso deve ser um número inteiro entre zero e cinco.");return;
+        }
+        c.weight=raw;
+        renderRanking();renderSensitivity();
+        announce("Peso de "+c.name+" atualizado para "+raw+". Classificação recalculada.");
+      });
+      weightLabel.appendChild(weight);th.appendChild(weightLabel);
+      th.appendChild(text("p","explanation","Peso zero exclui este critério do cálculo."));
+      tr.appendChild(th);
+      for(const a of state.alternatives){
+        const rating=a.ratings[c.id],td=text("td");
+        const scoreLabel=text("label");
+        scoreLabel.appendChild(text("span","score-label","Nota de "+a.name));
+        const score=text("select");
+        score.setAttribute("aria-label","Nota de "+a.name+" para "+c.name);
+        for(let value=1;value<=5;value++){
+          const option=text("option","",value+"/5");option.value=String(value);score.appendChild(option);
+        }
+        score.value=String(rating.value);
+        score.addEventListener("change",()=>{
+          const number=Number(score.value);
+          if(!Number.isInteger(number)||number<1||number>5){score.value=String(rating.value);return;}
+          rating.value=number;
+          renderRanking();renderSensitivity();
+          announce("Nota de "+a.name+" em "+c.name+" atualizada para "+number+".");
+        });
+        scoreLabel.appendChild(score);
+        const reasonLabel=text("label");
+        reasonLabel.appendChild(text("span","reason-label","Justificativa"));
+        const reason=text("input","reason");
+        reason.type="text";reason.maxLength=115;reason.value=rating.reason;
+        reason.setAttribute("aria-label","Justificativa da nota de "+a.name+" para "+c.name);
+        reason.addEventListener("change",()=>{
+          rating.reason=clean(reason.value,115);
+          reason.value=rating.reason;
+          renderRanking();announce("Justificativa atualizada.");
+        });
+        reasonLabel.appendChild(reason);
+        td.append(scoreLabel,reasonLabel);tr.appendChild(td);
+      }
+      body.appendChild(tr);
+    }
+  }
+  function renderRanking(){
+    const result=calculate(),list=$("ranking");
+    list.replaceChildren();
+    const block=$("leaderSummary");
+    block.dataset.state=result.totalWeight?"ok":"none";
+    if(!result.totalWeight){
+      $("leaderTitle").textContent="Sem pesos ativos";
+      $("leaderText").textContent="Todos os critérios têm peso zero. Atribua um peso positivo para gerar uma classificação.";
+      list.appendChild(text("li","empty","Não existe classificação sem um critério ativo."));
+      return;
+    }
+    const leaders=result.leaders;
+    $("leaderTitle").textContent=leaders.length>1?"Empate na liderança":"Liderança no cenário atual";
+    $("leaderText").textContent=leaders.length>1
+      ?leaders.map(a=>a.name).join(" e ")+" têm exatamente a mesma média ponderada ("+display(leaders[0].score)+"/5)."
+      :leaders[0].name+" recebeu a maior média ponderada ("+display(leaders[0].score)+"/5), considerando os pesos e notas definidos.";
+    for(const entry of result.entries){
+      const item=text("li","rank-item");
+      item.dataset.leader=String(entry.rank===1);
+      const top=text("div","rank-header");
+      const label=text("div","rank-title");
+      label.append(text("span","rank-pos",entry.rank+"º lugar"),text("strong","",entry.name));
+      top.append(label,text("strong","rank-score",display(entry.score)+"/5"));
+      const track=text("div","bar-track");track.setAttribute("aria-hidden","true");
+      const fill=text("div","bar-fill");fill.style.width=(entry.score/5*100).toFixed(3)+"%";
+      track.appendChild(fill);
+      item.append(top,track,text("p","rank-reason",noteFor(findAlternative(entry.id))));
+      item.setAttribute("aria-label",entry.rank+"º lugar: "+entry.name+", "+display(entry.score)+" de 5.");
+      list.appendChild(item);
+    }
+  }
+  function renderScenarioSelect(){
+    const select=$("scenarioCriterion"),old=scenarioCriterion;
+    select.replaceChildren();
+    for(const c of state.criteria){
+      const option=text("option","",c.name);option.value=c.id;select.appendChild(option);
+    }
+    if(findCriterion(old))scenarioCriterion=old;
+    else scenarioCriterion=state.criteria[0].id;
+    select.value=scenarioCriterion;
+    if(!Number.isInteger(scenarioWeight))scenarioWeight=findCriterion(scenarioCriterion).weight;
+    $("scenarioWeight").value=String(scenarioWeight);
+  }
+  function rankChange(current,scenario){
+    if(!current.totalWeight&&!scenario.totalWeight)return "Sem pesos ativos nos dois cenários.";
+    if(!current.totalWeight)return "A simulação cria a primeira classificação possível.";
+    if(!scenario.totalWeight)return "Este teste desativa todos os critérios e elimina a classificação.";
+    const a=current.leaders.map(e=>e.id).sort().join("|"),b=scenario.leaders.map(e=>e.id).sort().join("|");
+    if(a===b)return "A liderança permanece a mesma neste cenário; os valores ainda podem mudar.";
+    return "A liderança mudaria de "+shortLeaders(current)+" para "+shortLeaders(scenario)+".";
+  }
+  function renderSensitivity(){
+    const criterion=findCriterion(scenarioCriterion);
+    if(!criterion)return;
+    $("scenarioValue").textContent=String(scenarioWeight);
+    $("scenarioWeightText").textContent="Peso atual: "+criterion.weight;
+    const current=calculate(),scenario=calculate({[criterion.id]:scenarioWeight});
+    const change=rankChange(current,scenario);
+    $("scenarioSummary").textContent="Se o peso de "+criterion.name+" mudar de "+criterion.weight+" para "+scenarioWeight+": "+change;
+    const list=$("scenarioList");list.replaceChildren();
+    for(const alternative of state.alternatives){
+      const before=current.entries.find(e=>e.id===alternative.id);
+      const after=scenario.entries.find(e=>e.id===alternative.id);
+      const row=text("li");
+      row.append(text("span","",alternative.name));
+      const from=before.score===null?"sem nota":display(before.score);
+      const to=after.score===null?"sem nota":display(after.score);
+      const rank=before.rank&&after.rank?" ("+before.rank+"º → "+after.rank+"º)":"";
+      row.append(text("strong","",from+" → "+to+rank));
+      list.appendChild(row);
+    }
+    $("applyScenario").disabled=scenarioWeight===criterion.weight;
+    $("restoreScenario").disabled=scenarioWeight===criterion.weight;
+  }
+  function renderAll(){
+    renderManagement();renderMatrix();renderScenarioSelect();renderRanking();renderSensitivity();
+  }
+  function applyScenario(){
+    const criterion=findCriterion(scenarioCriterion);
+    if(!criterion)return;
+    if(criterion.weight===scenarioWeight)return;
+    criterion.weight=scenarioWeight;
+    renderMatrix();renderRanking();renderSensitivity();
+    $("scenarioWeight").focus();
+    announce("Peso de "+criterion.name+" aplicado: "+scenarioWeight+". Classificação atualizada.");
+  }
+  function restoreScenario(){
+    const criterion=findCriterion(scenarioCriterion);
+    if(!criterion)return;
+    scenarioWeight=criterion.weight;
+    $("scenarioWeight").value=String(scenarioWeight);
+    renderSensitivity();$("scenarioWeight").focus();
+    announce("Simulação cancelada; a matriz não foi alterada.");
+  }
+  function reset(){
+    const fresh=JSON.parse(JSON.stringify(seed));
+    state.alternatives=fresh.alternatives;
+    state.criteria=fresh.criteria;
+    state.nextAlternative=fresh.nextAlternative;
+    state.nextCriterion=fresh.nextCriterion;
+    scenarioCriterion="time";scenarioWeight=3;
+    $("resetConfirmation").hidden=true;
+    $("alternativeName").value="";$("criterionName").value="";
+    renderAll();$("reset").focus();
+    announce("Exemplo inicial restaurado com três alternativas e quatro critérios.");
+  }
+  $("addAlternative").addEventListener("submit",event=>{event.preventDefault();addAlternative();});
+  $("addCriterion").addEventListener("submit",event=>{event.preventDefault();addCriterion();});
+  $("scenarioCriterion").addEventListener("change",()=>{
+    const id=$("scenarioCriterion").value;
+    if(!findCriterion(id))return;
+    scenarioCriterion=id;scenarioWeight=findCriterion(id).weight;
+    $("scenarioWeight").value=String(scenarioWeight);
+    renderSensitivity();
+    announce("Teste de sensibilidade para "+findCriterion(id).name+".");
+  });
+  $("scenarioWeight").addEventListener("input",()=>{
+    const value=Number($("scenarioWeight").value);
+    if(!Number.isInteger(value)||value<0||value>5)return;
+    scenarioWeight=value;
+    renderSensitivity();
+  });
+  $("applyScenario").addEventListener("click",applyScenario);
+  $("restoreScenario").addEventListener("click",restoreScenario);
+  $("reset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=false;
+    $("cancelReset").focus();
+    announce("Confirme ou cancele a restauração do exemplo inicial.");
+  });
+  $("cancelReset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=true;$("reset").focus();announce("Reinício cancelado.");
+  });
+  $("confirmReset").addEventListener("click",reset);
+  renderAll();
+})();
+</script>
+</body>
+</html>
