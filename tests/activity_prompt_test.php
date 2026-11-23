@@ -99,6 +99,24 @@ final class activity_prompt_test extends \advanced_testcase {
     }
 
     /**
+     * Visual tab and content panel wrappers remain present with scoped styles.
+     */
+    public function test_prompt_selector_uses_connected_tab_styling(): void {
+        $template = file_get_contents(__DIR__ . "/../templates/prompt_selector.mustache");
+        $styles = file_get_contents(__DIR__ . "/../styles.css");
+        $this->assertNotFalse($template);
+        $this->assertNotFalse($styles);
+        $this->assertStringContainsString('class="mod-mcp-prompt-tabs"', $template);
+        $this->assertStringContainsString('class="mod-mcp-prompt-content"', $template);
+        $this->assertStringContainsString(".mod-mcp-prompt-tabs .nav-link.active", $styles);
+        $this->assertStringContainsString("border-bottom-color: var(--bs-body-bg", $styles);
+        $this->assertStringContainsString("overflow-x: auto", $styles);
+        $this->assertStringContainsString("--bs-tertiary-bg", $styles);
+        $this->assertStringContainsString("--bs-primary", $styles);
+        $this->assertStringContainsString(":focus-visible", $styles);
+    }
+
+    /**
      * An unknown type must not silently turn into a quiz.
      */
     public function test_unknown_prompt_type_is_rejected(): void {
