@@ -47,19 +47,28 @@ define(["core/ajax"], function(Ajax) {
             const variables = {};
             let count = 0;
             let total = 0;
-            for (let i = 0; i < computed.length && count < 256; i++) {
-                const name = computed.item(i);
-                if (typeof name !== "string" ||
-                        !/^--[a-zA-Z][a-zA-Z0-9_-]{0,127}$/.test(name)) {
-                    continue;
+            const addVariable = (name) => {
+                if (count >= 256 || typeof name !== "string" ||
+                        !/^--[a-zA-Z][a-zA-Z0-9_-]{0,127}$/.test(name) ||
+                        Object.prototype.hasOwnProperty.call(variables, name)) {
+                    return;
                 }
                 const value = computed.getPropertyValue(name).trim();
                 if (!value || value.length > 4096 || total + name.length + value.length > 65536) {
-                    continue;
+                    return;
                 }
                 variables[name] = value;
                 total += name.length + value.length;
                 count++;
+            };
+
+            // These brand tokens must not be dropped when a theme exposes more
+            // than 256 custom properties (for example, Moodle Design System tokens).
+            // Read them directly rather than relying on CSSStyleDeclaration enumeration.
+            ["--bs-primary", "--bs-accent", "--bs-primary-rgb", "--bs-accent-rgb"]
+                .forEach(addVariable);
+            for (let i = 0; i < computed.length && count < 256; i++) {
+                addVariable(computed.item(i));
             }
 
             // Support explicit Boost-compatible dark/light selections on the parent page.
