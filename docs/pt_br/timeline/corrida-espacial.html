@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Corrida Espacial | Centro de Missões</title>
+<style>
+:root{--paper:#f4f0e7;--ink:#182b43;--navy:#0b1730;--signal:#ffc467;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper)}
+*{box-sizing:border-box}body{margin:0;min-width:320px;background:radial-gradient(circle at 90% 0%,#d6e0e5,transparent 42%),var(--paper)}
+button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #2179bd;outline-offset:3px}button:disabled{opacity:.35;cursor:not-allowed}
+.shell{max-width:1280px;margin:auto;padding:clamp(15px,3.2vw,38px)}
+header{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.eyebrow{font:800 .73rem ui-monospace,Consolas,monospace;letter-spacing:.17em;color:#647186;margin:0 0 12px;text-transform:uppercase}
+h1{font-size:clamp(2.1rem,5vw,4.2rem);line-height:1;letter-spacing:-.06em;margin:0}
+header p:last-child{line-height:1.6;max-width:660px;color:#536477;margin:13px 0 0}
+.seal{border:2px solid #263c52;border-radius:99px;padding:11px 15px;background:#fffdf7;font:800 .76rem ui-monospace,monospace;white-space:nowrap}
+.panel{background:var(--navy);border-radius:21px;overflow:hidden;color:#e7f3ff;box-shadow:0 18px 36px #15223a29}
+.panelbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:13px 20px;border-bottom:1px solid #46546c;color:#c8d8e4;font:750 .7rem ui-monospace,monospace;letter-spacing:.12em}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,1fr)}
+.art{display:flex;flex-direction:column;justify-content:space-between;gap:10px;padding:clamp(19px,3vw,30px);min-height:415px;border-right:1px solid #41516a;position:relative;isolation:isolate;background:radial-gradient(circle at center,#164265 0,transparent 54%),#0b1730}
+.art:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.5;background-image:radial-gradient(#d9eafa 1px,transparent 1px);background-size:37px 37px}
+.tagline{font:800 .7rem ui-monospace,monospace;letter-spacing:.1em;color:var(--signal)}
+.diagram{display:grid;place-items:center;min-height:225px;position:relative}
+.diagram:before,.diagram:after{content:"";position:absolute;border:1px dashed #a8d5e277;border-radius:50%;width:min(88%,400px);height:58%;transform:rotate(-24deg)}
+.diagram:after{width:min(60%,250px);height:85%;transform:rotate(23deg);opacity:.5}
+.craft{position:relative;z-index:1;display:block;width:min(100%,390px);height:270px;color:var(--signal);filter:drop-shadow(0 12px 20px #050c20)}
+.artnotes{font:650 .72rem ui-monospace,monospace;line-height:1.6;color:#b7cada}
+.artnotes strong{display:inline-block;color:var(--signal);margin-right:9px}
+.content{display:flex;flex-direction:column;padding:clamp(20px,3vw,37px)}
+.meta{font:850 .78rem ui-monospace,monospace;letter-spacing:.06em;color:var(--signal)}
+.meta strong{font-size:1.4rem;margin:0 12px}
+.content h2{font-size:clamp(1.65rem,3.2vw,2.75rem);line-height:1.12;letter-spacing:-.04em;margin:20px 0 9px}
+.subtitle{color:#d2e1ef;font:750 .8rem ui-monospace,monospace;margin:0 0 16px}
+.summary{line-height:1.7;margin:0 0 19px;color:#e4ecf6}
+.note{border-left:3px solid var(--signal);background:#ffffff0a;margin-bottom:11px;padding:9px 13px}
+.note b{display:block;color:var(--signal);font:850 .7rem ui-monospace,monospace;letter-spacing:.12em;margin-bottom:5px}
+.note p{font-size:.89rem;line-height:1.55;margin:0;color:#d6e3ef}
+.actions{margin-top:auto;display:flex;justify-content:space-between;gap:10px;padding-top:18px}
+.actions button{min-height:44px;border:1px solid #b3c8d7;background:transparent;color:#f2f8fc;border-radius:10px;padding:12px 16px;font-weight:790}
+.actions button:last-child{background:var(--signal);color:#0b1730;border-color:var(--signal)}
+.actions button:not(:disabled):hover{filter:brightness(1.12);background-color:#36526b}
+.actions button:last-child:not(:disabled):hover{background:var(--signal)}
+.heading2{margin:30px 0 14px}.heading2 h2,.quiz h2{margin:0;font-size:1.25rem}.heading2 p,.quiz>p{margin:7px 0 0;color:#536477;line-height:1.55;font-size:.9rem}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.filter{border:1px solid #95a6b0;background:transparent;border-radius:999px;padding:9px 13px;color:#21374d;font-weight:760;min-height:42px;font-size:.83rem}
+.filter[aria-pressed="true"]{color:#fff;background:#243a55;border-color:#243a55}
+.track-wrap{border:1px solid #c9d5d9;border-radius:17px;background:#e3e9eb;padding:20px 13px 10px;position:relative}
+.track-wrap:before{content:"";position:absolute;left:0;right:0;top:70px;border-top:2px dashed #9cafb9}
+.track{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:14px;scrollbar-color:#849aab #e3e9eb}
+.stop{flex:0 0 156px;min-height:116px;text-align:left;border:1px solid #9dabb4;border-radius:12px;position:relative;padding:13px;background:#fffcf4;color:#20374d;scroll-snap-align:center}
+.stop:before{content:"";position:absolute;top:42px;right:13px;width:11px;height:11px;border-radius:50%;background:white;border:3px solid #849bab}
+.stop.visited:before{background:#4a879d;border-color:#4a879d}
+.stop[aria-current="true"]{border:2px solid #e08547;background:#fff2df}
+.stop[aria-current="true"]:before{background:#e08547;border-color:#e08547}
+.stop time{display:block;font:900 1.27rem ui-monospace,monospace}
+.stop b{display:block;margin-top:17px;font-size:.87rem}
+.stop small{display:block;margin-top:6px;line-height:1.35;color:#566d7d}
+.progress{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:15px 3px 21px}
+.progress span{font-size:.85rem;font-weight:800}
+.bar{flex:1;min-width:105px;height:10px;border:1px solid #9fb8c4;background:#d9e1e3;border-radius:99px;overflow:hidden}
+.bar div{height:100%;width:7%;background:#de8445;transition:width .18s}
+.reset{border:0;background:transparent;padding:9px 2px;text-decoration:underline;color:#1e5f92;font-weight:780}
+.quiz{background:#fffcf6;border:1px solid #d6d4ce;border-radius:18px;padding:clamp(16px,2.8vw,28px)}
+.questions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+.question{border:1px solid #d4d9da;border-radius:11px;padding:14px;min-width:0}
+.question legend{font-weight:800;font-size:.91rem;line-height:1.45;padding:0 5px}
+.options{display:grid;gap:7px;margin-top:10px}
+.option{min-height:44px;text-align:left;background:#f2f6f5;color:#263b50;border:1px solid #9eacb8;border-radius:8px;padding:10px;font-size:.84rem}
+.option[aria-pressed="true"]{background:#e4f1df;border-color:#458967}
+.feedback{color:#8c4930;min-height:40px;font-size:.83rem;line-height:1.5;margin:11px 0 0}.feedback.correct{color:#256a44}
+.fineprint{border-top:1px solid #d8d8d0;color:#586979;font-size:.8rem;line-height:1.65;padding-top:14px;margin:19px 0 0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:850px){header{align-items:start;flex-direction:column}.stage{grid-template-columns:1fr}.art{min-height:300px;border-right:0;border-bottom:1px solid #44536e}.diagram{min-height:185px}.craft{height:205px}.questions{grid-template-columns:1fr}}
+@media(max-width:500px){.shell{padding:13px}.panel{border-radius:13px}.art{min-height:215px;padding:17px}.diagram{min-height:125px}.craft{height:145px}.content{padding:19px}.content h2{font-size:1.8rem}.stop{flex-basis:140px}.actions button{padding:10px 12px}.panelbar{padding:11px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}.track{scroll-snap-type:none}}
+</style>
+</head>
+<body>
+<main class="shell">
+<header><div><p class="eyebrow">Arquivo interativo · exploração histórica</p><h1>Corrida Espacial</h1><p>Do primeiro sinal em órbita aos novos pousos lunares. Explore as conquistas, os riscos e os projetos de cooperação que transformaram nossa relação com o espaço.</p></div><span class="seal">1957 → 2023 · 14 MARCOS</span></header>
+<section class="panel" aria-labelledby="mission-title">
+ <div class="panelbar"><span>CENTRO DE CONTROLE / HISTÓRICO</span><span>● SINAL RECEBIDO</span></div>
+ <div class="stage">
+  <div class="art">
+   <span class="tagline" id="visual-kind">SATÉLITE</span>
+   <div class="diagram"><svg class="craft" role="img" viewBox="0 0 380 270" aria-labelledby="craft-title craft-desc"><title id="craft-title">Ilustração da missão</title><desc id="craft-desc">Representação original e esquemática sem escala.</desc><defs>
+<symbol id="ship-sputnik" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><circle cx="189" cy="125" r="55"/><path d="M145 89 70 33M229 84l75-58M152 162 53 231m178-76 97 74M139 125h101m-51-56v111"/><circle cx="189" cy="125" r="10"/></g></symbol>
+<symbol id="ship-vostok" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M154 62q36-58 72 0l26 69v73l-62 35-62-35v-73z"/><circle cx="190" cy="133" r="34"/><path d="M160 190h60m-39-33h18m-64 52-24 30m134-30 24 30"/></g></symbol>
+<symbol id="ship-tereshkova" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5"><circle cx="190" cy="124" r="67"/><circle cx="190" cy="114" r="34"/><path d="M159 106q31-33 62 0M155 157l-26 57 61-24 61 24-26-57M190 57V29M99 124h21m141 0h21"/></g></symbol>
+<symbol id="ship-apollo" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M145 173h90l-17-66h-56zM162 107l28-46 28 46M155 173l-23 48h40l18-48m32 0 23 48h-40l-15-48M95 244q95-38 190 0"/><circle cx="190" cy="134" r="14"/></g></symbol>
+<symbol id="ship-salyut" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M55 109h60l22-24h105l27 24h56v66h-56l-27 24H137l-22-24H55zM151 86v114m81-114v114M170 114h43m-43 24h43m-43 24h43M22 142h33m270 0h33"/><circle cx="191" cy="143" r="12"/></g></symbol>
+<symbol id="ship-voyager" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5"><circle cx="207" cy="128" r="52"/><path d="M156 128q51 38 103 0m-52-52v104m-1-52-104 72m104-72 108-73M103 200H50m52 0 23 31m190-176 36-31"/><rect x="48" y="183" width="55" height="34" rx="3"/></g></symbol>
+<symbol id="ship-shuttle" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M190 28q-17 29-20 64l-5 59-92 58v23l117-29 117 29v-23l-92-58-5-59q-3-35-20-64zM175 90h30m-36 36h42M190 204v35l-37 18v-31m37 13 37 18v-31"/></g></symbol>
+<symbol id="ship-hubble" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M131 89h118v92H131zM158 89V58h64v31m-64 92v31h64v-31M131 110H42v52h89m118-52h89v52h-89M71 110v52m32-52v52m176-52v52m31-52v52M190 212v32"/><circle cx="190" cy="135" r="20"/></g></symbol>
+<symbol id="ship-iss" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M25 134h330M161 95h58v77h-58zM114 117h47m58 0h47M114 153h47m58 0h47"/><rect x="40" y="85" width="74" height="98"/><rect x="266" y="85" width="74" height="98"/><path d="M78 85v98m-38-49h74m190-49v98m-38-49h74M179 95V59h23v36m-23 77v35h23v-35"/></g></symbol>
+<symbol id="ship-rovers" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M104 121h175v59H104zM124 121l25-31h85l26 31M189 90V51m-29 0h57v19h-57zM109 180l-25 31h211l-25-31"/><circle cx="107" cy="215" r="18"/><circle cx="190" cy="215" r="18"/><circle cx="275" cy="215" r="18"/><path d="M64 250h251"/></g></symbol>
+<symbol id="ship-rosetta" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M59 151h262v38H59zM99 151v38m45-38v38m45-38v38m45-38v38m45-38v38M167 81h47v70h-47zM179 81V55m23 26V55M181 189l-14 47m33-47 14 47"/><circle cx="190" cy="113" r="14"/></g></symbol>
+<symbol id="ship-webb" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><path d="m190 39 34 19v39l-34 20-34-20V58zm-34 19-34-19-34 19v39l34 20 34-20m68-39 34-19 34 19v39l-34 20-34-20m-102 20v39l34 20 34-20v-39m0 0v39l34 20 34-20v-39m-102 59v39l34 20 34-20v-39M84 224q105 37 212 0l-23 26H107z"/></g></symbol>
+<symbol id="ship-artemis" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5"><path d="m190 22 36 53 18 103H136l18-103zM151 178h78l16 44H135zM157 117h65m-31 105v34m-47-34-20 32m111-32 20 32M111 155H81l-22 53h44m166-53h30l22 53h-44"/><circle cx="190" cy="100" r="13"/></g></symbol>
+<symbol id="ship-chandrayaan" viewBox="0 0 380 270"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M135 110h110v81H135zM156 110V79h69v31M143 191l-28 41m130-41 28 41M97 232h51m93 0h51M135 132H43v48h92m110-48h92v48h-92M86 132v48m208-48v48m-104-101V44"/><circle cx="190" cy="159" r="17"/><path d="M62 251q121-34 256 0"/></g></symbol></defs><use id="craft-use" href="#ship-sputnik"></use></svg></div>
+   <div class="artnotes"><strong id="counter">01 / 14</strong><span id="origin">URSS</span><p>Ilustrações SVG originais e simbólicas; não representam projetos técnicos em escala.</p></div>
+  </div>
+  <article class="content">
+   <div class="meta"><span id="date">04 out 1957</span><strong id="year">1957</strong><span id="number">MISSÃO 01</span></div>
+   <h2 id="mission-title">O primeiro satélite artificial em órbita</h2><p class="subtitle" id="subtitle">Sputnik 1</p>
+   <p class="summary" id="summary"></p>
+   <div class="note"><b>O QUE MUDOU</b><p id="impact"></p></div>
+   <div class="note"><b>DETALHE HISTÓRICO</b><p id="caveat"></p></div>
+   <div class="actions"><button type="button" id="prev">← Anterior</button><button type="button" id="next">Próxima missão →</button></div>
+  </article>
+ </div>
+</section>
+<div class="heading2"><h2>Rota de missões</h2><p>Escolha uma categoria e selecione os marcos. Use as setas, Home e End do teclado na faixa.</p></div>
+<div class="filters" id="filters" role="group" aria-label="Filtrar a linha do tempo"></div>
+<nav class="track-wrap" aria-label="Missões em ordem cronológica"><div class="track" id="track"></div></nav>
+<div class="progress"><span id="progress-text">1 de 14 marcos visitados</span><div class="bar" id="progress-bar" role="progressbar" aria-label="Marcos explorados" aria-valuemin="0" aria-valuemax="14" aria-valuenow="1"><div id="progress-fill"></div></div><button type="button" id="reset" class="reset">Reiniciar exploração</button></div>
+<section class="quiz" aria-labelledby="quiz-title"><h2 id="quiz-title">Sala de briefing · teste seus conhecimentos</h2><p>Responda três perguntas com feedback. A avaliação é formativa e não gera nota oficial.</p><div class="questions" id="questions"></div><p class="fineprint">Recorte didático de missões, não uma lista completa. Datas e feitos têm contextos históricos específicos; os desenhos são esquemáticos. O progresso e as respostas existem somente na memória desta página, sem gravação no Moodle.</p></section>
+<p id="live" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+</main>
+<script>
+"use strict";
+const missions = [{"id":"sputnik","year":1957,"date":"04 out 1957","name":"Sputnik 1","group":"pioneiros","origin":"URSS","kind":"Satélite","title":"Primeiro satélite artificial em órbita","summary":"O Sputnik 1 transmitia sinais de rádio enquanto orbitava a Terra, marcando a entrada da humanidade na era espacial.","impact":"Seu lançamento intensificou a disputa científica e tecnológica entre potências e demonstrou a viabilidade de satélites artificiais.","caveat":"Não tinha câmeras nem tripulantes.","color":"#ffc467"},{"id":"vostok","year":1961,"date":"12 abr 1961","name":"Vostok 1","group":"pioneiros","origin":"URSS","kind":"Voo humano","title":"O primeiro humano alcança o espaço","summary":"Yuri Gagarin realizou uma volta orbital da Terra em um voo de cerca de 108 minutos.","impact":"A missão comprovou a possibilidade de seres humanos viajarem em órbita.","caveat":"Gagarin ejetou da cápsula antes de aterrissar, conforme o plano da missão.","color":"#fba58a"},{"id":"tereshkova","year":1963,"date":"16 jun 1963","name":"Vostok 6","group":"pioneiros","origin":"URSS","kind":"Voo humano","title":"Valentina Tereshkova viaja ao espaço","summary":"Tereshkova tornou-se a primeira mulher no espaço e permaneceu quase três dias em órbita.","impact":"Sua missão foi um marco de representação, embora barreiras para mulheres nos programas espaciais persistissem.","caveat":"Foi a primeira mulher no espaço, não a primeira pessoa.","color":"#e1a8f9"},{"id":"apollo","year":1969,"date":"20 jul 1969","name":"Apollo 11","group":"pioneiros","origin":"EUA","kind":"Missão lunar","title":"O primeiro pouso humano na Lua","summary":"Neil Armstrong e Buzz Aldrin caminharam na Lua; Michael Collins permaneceu em órbita lunar no módulo de comando.","impact":"A missão consolidou capacidades de engenharia, computação, comunicação e navegação em plena Guerra Fria.","caveat":"A Apollo 11 envolveu três astronautas e milhares de profissionais em terra.","color":"#ffe18c"},{"id":"salyut","year":1971,"date":"19 abr 1971","name":"Salyut 1","group":"orbita","origin":"URSS","kind":"Estação orbital","title":"A primeira estação espacial é lançada","summary":"A Salyut 1 foi construída para permitir permanências humanas prolongadas em órbita terrestre.","impact":"A experiência com estações abriu caminho para pesquisas em microgravidade e sistemas de suporte à vida.","caveat":"A tripulação da Soyuz 11, que ocupou a estação, morreu no retorno à Terra.","color":"#a6efca"},{"id":"voyager","year":1977,"date":"ago–set 1977","name":"Voyager 1 e 2","group":"sondas","origin":"EUA","kind":"Sondas","title":"Sondas exploram o Sistema Solar externo","summary":"A Voyager 2 foi lançada em agosto, seguida pela Voyager 1 em setembro, para investigar planetas gigantes e suas luas.","impact":"Os dados transformaram o conhecimento sobre Júpiter, Saturno e, com a Voyager 2, Urano e Netuno.","caveat":"A Voyager 2 foi lançada antes da Voyager 1.","color":"#a2cdff"},{"id":"shuttle","year":1981,"date":"12 abr 1981","name":"STS-1 Columbia","group":"orbita","origin":"EUA","kind":"Ônibus espacial","title":"Começam os voos orbitais do ônibus espacial","summary":"John Young e Robert Crippen realizaram o primeiro voo orbital do ônibus espacial Columbia.","impact":"O orbitador reutilizável viabilizou missões sucessivas, lançamentos e construção de estruturas orbitais.","caveat":"Nem todas as partes do sistema eram reutilizáveis.","color":"#ffb39b"},{"id":"hubble","year":1990,"date":"24 abr 1990","name":"Hubble","group":"observatorios","origin":"NASA / ESA","kind":"Telescópio","title":"O Hubble observa acima da atmosfera","summary":"O telescópio Hubble entrou em órbita terrestre em 1990 e recebeu reparos após a descoberta de um problema óptico.","impact":"Suas observações transformaram estudos sobre galáxias, estrelas e expansão cósmica.","caveat":"O Hubble não foi o primeiro telescópio espacial.","color":"#b3bdf5"},{"id":"iss","year":1998,"date":"nov–dez 1998","name":"ISS","group":"orbita","origin":"Parceria internacional","kind":"Estação orbital","title":"Começa a montagem da ISS","summary":"Zarya e Unity foram os primeiros módulos conectados da Estação Espacial Internacional em 1998.","impact":"A ISS se tornou uma plataforma de pesquisa e cooperação entre agências de vários países.","caveat":"A presença humana contínua só começou em novembro de 2000.","color":"#85e6cb"},{"id":"rovers","year":2004,"date":"jan 2004","name":"Spirit e Opportunity","group":"sondas","origin":"EUA","kind":"Rovers","title":"Robôs investigam o solo de Marte","summary":"Spirit e Opportunity pousaram em Marte e examinaram geologia e vestígios de ambientes antigos associados à água.","impact":"Os rovers ampliaram a investigação científica móvel na superfície marciana.","caveat":"Não foram os primeiros rovers em Marte: Sojourner chegou em 1997.","color":"#ffb180"},{"id":"rosetta","year":2014,"date":"12 nov 2014","name":"Rosetta / Philae","group":"sondas","origin":"ESA","kind":"Cometa","title":"Uma sonda alcança a superfície de um cometa","summary":"Philae foi liberado pela Rosetta e tocou o cometa 67P/Churyumov-Gerasimenko em 2014.","impact":"A missão trouxe dados sobre materiais preservados desde fases antigas do Sistema Solar.","caveat":"Philae quicou e ficou em uma posição desfavorável após o contato.","color":"#cbb6f7"},{"id":"webb","year":2021,"date":"25 dez 2021","name":"James Webb","group":"observatorios","origin":"NASA / ESA / CSA","kind":"Telescópio","title":"O James Webb parte para o espaço","summary":"Lançado em 2021, o telescópio James Webb começou observações científicas divulgadas em 2022, sobretudo no infravermelho.","impact":"Ajuda a estudar galáxias distantes, formação estelar e atmosferas de exoplanetas.","caveat":"Opera perto de Sol–Terra L2, e não em órbita lunar.","color":"#ffdb86"},{"id":"artemis","year":2022,"date":"nov–dez 2022","name":"Artemis I","group":"sondas","origin":"EUA","kind":"Missão lunar","title":"Uma nave não tripulada contorna a Lua","summary":"A Artemis I testou a nave Orion sem astronautas, em uma viagem lunar com retorno à Terra.","impact":"O teste avaliou tecnologias de navegação, reentrada e recuperação para missões futuras.","caveat":"Não pousou na Lua nem levou tripulantes.","color":"#b6c4fa"},{"id":"chandrayaan","year":2023,"date":"23 ago 2023","name":"Chandrayaan-3","group":"sondas","origin":"Índia","kind":"Pouso lunar","title":"A Índia pousa na região polar sul lunar","summary":"A missão Chandrayaan-3, da ISRO, realizou um pouso controlado e liberou o rover Pragyan na superfície da Lua.","impact":"O feito ampliou o grupo de países capazes de realizar pousos lunares suaves.","caveat":"O pouso ocorreu na região polar sul, não exatamente no polo sul geográfico.","color":"#ffc398"}];
+const groups=[["all","Todas"],["pioneiros","Primeiros voos"],["orbita","Naves e estações"],["sondas","Sondas e pousos"],["observatorios","Observatórios"]];
+const checks=[
+ {question:"Qual foi o primeiro satélite artificial em órbita?",answers:["Voyager 1","Sputnik 1","Hubble"],right:1,why:"O Sputnik 1 foi lançado em 1957, décadas antes dos outros dois."},
+ {question:"Qual missão de 2022 voou ao redor da Lua sem tripulantes?",answers:["Artemis I","Apollo 11","Vostok 1"],right:0,why:"A Artemis I testou a nave Orion sem astronautas."},
+ {question:"Onde o telescópio James Webb opera?",answers:["Na superfície lunar","Na órbita baixa da Terra","Perto da região Sol–Terra L2"],right:2,why:"O Webb atua próximo à região de L2 e observa principalmente no infravermelho."}
+];
+const el=id=>document.getElementById(id);
+const state={filter:"all",active:missions[0].id,seen:new Set([missions[0].id]),answers:new Map()};
+function visible(){return missions.filter(m=>state.filter==="all"||m.group===state.filter);}
+function renderFilters(){
+ const host=el("filters");host.replaceChildren();
+ groups.forEach(([id,label])=>{
+  const b=document.createElement("button");b.type="button";b.className="filter";b.textContent=label;b.setAttribute("aria-pressed",id===state.filter?"true":"false");
+  b.addEventListener("click",()=>changeFilter(id));host.append(b);
+ });
+}
+function renderTrack(){
+ const host=el("track");host.replaceChildren();
+ const list=visible();
+ list.forEach((m,index)=>{
+  const b=document.createElement("button");b.type="button";b.className="stop";b.setAttribute("aria-current",m.id===state.active?"true":"false");
+  b.setAttribute("aria-label",m.year+", "+m.name+": "+m.kind);b.classList.toggle("visited",state.seen.has(m.id));
+  const time=document.createElement("time");time.textContent=String(m.year);
+  const title=document.createElement("b");title.textContent=m.name;
+  const kind=document.createElement("small");kind.textContent=m.kind;
+  b.append(time,title,kind);
+  b.addEventListener("click",()=>select(m.id));
+  b.addEventListener("keydown",event=>{
+   let target=null;
+   if(event.key==="ArrowRight")target=Math.min(index+1,list.length-1);
+   if(event.key==="ArrowLeft")target=Math.max(index-1,0);
+   if(event.key==="Home")target=0;
+   if(event.key==="End")target=list.length-1;
+   if(target!==null){event.preventDefault();select(list[target].id);const btn=host.querySelectorAll(".stop")[target];if(btn)btn.focus();}
+  });
+  host.append(b);
+ });
+}
+function select(id){
+ const list=visible(),index=list.findIndex(m=>m.id===id);if(index<0)return;
+ const m=list[index];state.active=id;state.seen.add(id);
+ document.documentElement.style.setProperty("--signal",m.color);
+ const values={date:m.date,year:String(m.year),number:"MISSÃO "+String(missions.indexOf(m)+1).padStart(2,"0"),"mission-title":m.title,subtitle:m.name+" · "+m.kind,summary:m.summary,impact:m.impact,caveat:m.caveat,"visual-kind":m.kind.toUpperCase(),origin:m.origin.toUpperCase(),counter:String(missions.indexOf(m)+1).padStart(2,"0")+" / "+missions.length,"craft-title":m.name+" – ilustração","craft-desc":"Desenho vetorial original e esquemático da missão "+m.name+". Não está em escala."};
+ Object.entries(values).forEach(([key,text])=>el(key).textContent=text);
+ el("craft-use").setAttribute("href","#ship-"+m.id);
+ el("prev").disabled=index===0;el("next").disabled=index===list.length-1;
+ el("progress-text").textContent=state.seen.size+" de "+missions.length+" marcos visitados";
+ el("progress-bar").setAttribute("aria-valuenow",String(state.seen.size));
+ el("progress-fill").style.width=(100*state.seen.size/missions.length)+"%";
+ renderTrack();
+ const host=el("track"),target=host.querySelectorAll(".stop")[index];
+ if(target)host.scrollTo({left:Math.max(0,target.offsetLeft-host.offsetLeft-host.clientWidth/2+target.clientWidth/2),behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+ el("live").textContent="Marco "+(missions.indexOf(m)+1)+" de "+missions.length+": "+m.year+", "+m.name;
+}
+function changeFilter(id){
+ if(!groups.some(g=>g[0]===id))return;
+ state.filter=id;renderFilters();
+ const list=visible();if(!list.some(m=>m.id===state.active))state.active=list[0].id;
+ select(state.active);
+ el("live").textContent="Categoria "+groups.find(g=>g[0]===id)[1]+", "+list.length+" missões.";
+}
+el("prev").addEventListener("click",()=>{const list=visible(),index=list.findIndex(m=>m.id===state.active);if(index>0)select(list[index-1].id);});
+el("next").addEventListener("click",()=>{const list=visible(),index=list.findIndex(m=>m.id===state.active);if(index>=0&&index<list.length-1)select(list[index+1].id);});
+function drawQuestions(){
+ const host=el("questions");host.replaceChildren();
+ checks.forEach((q,i)=>{
+  const box=document.createElement("fieldset");box.className="question";
+  const legend=document.createElement("legend");legend.textContent=(i+1)+". "+q.question;
+  const options=document.createElement("div");options.className="options";
+  const feedback=document.createElement("p");feedback.className="feedback";feedback.setAttribute("aria-live","polite");
+  feedback.textContent="Selecione uma alternativa.";
+  const buttons=q.answers.map((answer,k)=>{
+   const b=document.createElement("button");b.className="option";b.type="button";b.textContent=answer;b.setAttribute("aria-pressed","false");
+   b.addEventListener("click",()=>{
+    state.answers.set(i,k);buttons.forEach((other,n)=>other.setAttribute("aria-pressed",n===k?"true":"false"));
+    const correct=k===q.right;feedback.textContent=(correct?"Correto. ":"Reveja. ")+q.why;feedback.classList.toggle("correct",correct);
+   });options.append(b);return b;
+  });
+  box.append(legend,options,feedback);host.append(box);
+ });
+}
+el("reset").addEventListener("click",()=>{
+ state.seen.clear();state.seen.add(missions[0].id);state.answers.clear();state.filter="all";
+ drawQuestions();renderFilters();select(missions[0].id);el("live").textContent="Exploração reiniciada.";
+});
+drawQuestions();renderFilters();select(missions[0].id);
+</script>
+</body>
+</html>

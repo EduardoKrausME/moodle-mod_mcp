@@ -1,0 +1,32 @@
+name: Documentation timelines
+
+on:
+  push:
+    paths:
+      - 'docs/pt_br/timeline/**'
+      - 'docs/pt_br/tests/catalog.test.mjs'
+      - 'docs/pt_br/tests/timeline.test.mjs'
+      - 'docs/pt_br/tests/space-race.test.mjs'
+      - '.github/workflows/docs-timeline.yml'
+  pull_request:
+    paths:
+      - 'docs/pt_br/timeline/**'
+      - 'docs/pt_br/tests/catalog.test.mjs'
+      - 'docs/pt_br/tests/timeline.test.mjs'
+      - 'docs/pt_br/tests/space-race.test.mjs'
+      - '.github/workflows/docs-timeline.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate timeline manifests, HTML and interactions
+        run: node --test docs/pt_br/tests/catalog.test.mjs docs/pt_br/tests/timeline.test.mjs docs/pt_br/tests/space-race.test.mjs
