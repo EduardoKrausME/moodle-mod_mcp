@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>O Caso do Rio Contaminado - Investigação ambiental interativa</title>
+<style>
+:root{color-scheme:light;--bg:#edf2ec;--paper:#fffefa;--ink:#1e3439;--muted:#50676c;--line:#cbdcd3;--green:#1b6956;--green-ink:#fff;--river:#5daec1;--gold:#ad762f;--bad:#ac5047;--focus:#0757bd;--forest:#143e3b;--shadow:0 12px 35px #143b3120}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.53;cursor:not-allowed}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+[hidden]{display:none!important}.shell{max-width:1260px;margin:auto;padding:clamp(12px,3vw,32px)}
+.hero{border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1.08fr .92fr;background:var(--forest);color:#fff;box-shadow:var(--shadow)}
+.hero-text{padding:clamp(26px,4.8vw,53px);align-self:center}.eyebrow{color:#eac887;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;font-weight:850;margin:0 0 16px}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;letter-spacing:-.03em;line-height:1.1}h1{font-size:clamp(2.5rem,5.3vw,4.9rem);margin:0 0 18px}h2{font-size:clamp(1.78rem,3vw,2.43rem);margin:0 0 13px}
+h3{font-size:1.06rem;margin:0 0 10px}.hero-text>p:not(.eyebrow){color:#e1ebe3;max-width:50ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.chips span{font-size:.78rem;font-weight:750;color:#f9e7c8;padding:6px 11px;border-radius:22px;border:1px solid #83b0a0}
+.hero-visual{background:#315e54;min-height:230px}.hero-visual svg{display:block;width:100%;height:100%;max-height:370px}
+.disclaimer,.footnote{font-size:.83rem;color:var(--muted);margin:15px 3px 23px}
+.progress{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:20px 0}.progress span{border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:20px;padding:7px 12px;font-weight:800;font-size:.82rem}
+.progress span.active{background:var(--green);color:var(--green-ink);border-color:var(--green)}.progress span.done{border-color:var(--green);color:var(--green)}
+.panel{background:var(--paper);padding:clamp(19px,3vw,33px);border:1px solid var(--line);border-radius:19px;box-shadow:0 8px 21px #143c2d0b}
+.sub{font-size:.76rem;letter-spacing:.1em;font-weight:850;text-transform:uppercase;color:var(--green);margin:0 0 8px}.lead{max-width:74ch;color:var(--muted);margin:0 0 17px}
+.topline{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap}.counter{font-size:.87rem;font-weight:800;padding:9px 13px;background:#e0f0e5;color:#225f4b;border-radius:12px}
+.map-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(270px,.75fr);gap:16px;align-items:start}
+.map-scroll{background:#dceadf;border:1px solid #b7d3c5;overflow:auto;border-radius:14px;scrollbar-color:#638c85 transparent}
+.map-scroll svg{display:block;min-width:880px;width:100%;height:auto}.map-scroll .land{fill:#bfd8bb}.map-scroll .field{fill:#b4ca8c;stroke:#8faf70;stroke-width:3}.map-scroll .facility{fill:#e8ddc5;stroke:#8b9b91;stroke-width:3}
+.map-scroll .river{fill:none;stroke:var(--river);stroke-width:46;stroke-linecap:round;stroke-linejoin:round}.map-scroll .river-inner{fill:none;stroke:#b7e4df;stroke-width:9;stroke-linecap:round}
+.map-scroll .tributary{fill:none;stroke:#66b6c9;stroke-width:27;stroke-linecap:round;stroke-linejoin:round}
+.map-scroll .trib-inner{fill:none;stroke:#b9e7e5;stroke-width:5;stroke-linecap:round}.map-scroll .map-caption{font:800 21px system-ui;fill:#375d53}
+.sample-pin{cursor:pointer}.pin-halo{fill:#ffffff;stroke:#326c63;stroke-width:3}.pin-core{fill:#e6f4ec;stroke:#347b68;stroke-width:2}
+.sample-pin.collected .pin-core{fill:#9dddba}.sample-pin.selected .pin-halo,.sample-pin:focus .pin-halo{stroke:#154dbe;stroke-width:7}
+.sample-pin:focus{outline:none}.pin-text{font:900 22px system-ui;fill:#1e493e;text-anchor:middle;pointer-events:none}
+.pin-label-bg{fill:#fcfcf4;stroke:#8bac9d;stroke-width:1}.pin-label{font:800 15px system-ui;fill:#264a43;text-anchor:middle;pointer-events:none}
+.caption{font-size:.78rem;color:var(--muted);margin:9px 0 14px}
+.site-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.site-btn{padding:10px 12px;text-align:left;min-height:52px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:11px}
+.site-btn[aria-pressed="true"]{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green);background:#e9f6ed}.site-btn strong,.site-btn small{display:block}
+.site-btn strong{font-size:.85rem}.site-btn small{font-size:.78rem;color:var(--muted)}
+.observation{background:#f0f5ec;border:1px solid var(--line);padding:18px;border-radius:14px}
+.observation strong{display:block}.observation p{color:var(--muted);margin:7px 0}.observation .record{border-left:4px solid var(--green);padding:10px 13px;background:#dff1e6;color:#214a3e;border-radius:0 10px 10px 0}
+.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:13px 0}
+.metric{border:1px solid var(--line);border-radius:11px;padding:11px;background:var(--paper)}
+.metric span,.metric strong,.metric small{display:block}.metric span{font-size:.78rem;color:var(--muted)}.metric strong{font-size:1.28rem;font-variant-numeric:tabular-nums}.metric small{font-size:.73rem;color:var(--muted)}
+.gauge{height:7px;background:#c7d8d2;border-radius:8px;overflow:hidden;margin-top:7px}.gauge i{display:block;background:#3b907d;height:100%;border-radius:8px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.primary,.secondary{min-height:45px;border-radius:10px;padding:10px 17px;font-weight:850}
+.primary{background:var(--green);border:1px solid var(--green);color:var(--green-ink)}.secondary{color:var(--green);background:transparent;border:1px solid var(--green)}
+.primary:not(:disabled):hover{filter:brightness(1.1)}
+.table-scroll{overflow-x:auto;margin:20px 0}.sample-table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:700px}
+.sample-table th{text-align:left;background:#e5f1e9;color:#245c4c;font-weight:850}.sample-table td,.sample-table th{padding:10px 13px;border-bottom:1px solid var(--line)}
+.sample-table tbody tr:nth-child(even){background:#f2f6f1}.sample-table td:not(:first-child){font-variant-numeric:tabular-nums}
+.records{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:16px 0}
+.record-btn{min-height:114px;text-align:left;background:#f6f8f2;border:1px solid var(--line);border-radius:13px;color:var(--ink);padding:15px;display:grid;gap:5px}
+.record-btn[aria-pressed="true"]{background:#e6f3e9;border-color:var(--green)}.record-btn small{color:var(--muted)}.record-btn strong{line-height:1.3}
+.document{background:#ebf3e9;border-left:5px solid var(--green);padding:18px 21px;border-radius:0 13px 13px 0;min-height:155px}
+.document blockquote{margin:12px 0;font-family:Georgia,serif;border-left:3px solid #a0b8a9;background:#f8fcf8;padding:10px 13px}
+.document p{margin:10px 0}.document .kind{font-size:.77rem;color:var(--green);font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+fieldset{border:0;padding:0;margin:20px 0 23px}legend{font-weight:850;font-size:1.09rem;margin:0 0 12px}
+.choices{display:grid;gap:9px}.option{display:flex;align-items:start;gap:12px;padding:13px 15px;border:1px solid var(--line);border-radius:11px;cursor:pointer}
+.option:has(input:checked){border-color:var(--green);background:#e5f4e9}.option input{width:19px;height:19px;flex:0 0 auto;margin:4px 0 0;accent-color:var(--green)}
+.option strong,.option small{display:block}.option strong{font-size:.93rem}.option small{font-size:.79rem;color:var(--muted);margin-top:4px}
+.evidence-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.error{color:var(--bad);font-weight:750;min-height:20px}
+.result{padding:19px;border:1px solid #82b99e;background:#e5f2e9;border-radius:14px}
+.result.partial{background:#fbf0d9;border-color:#cfb17c}.result.review{background:#fbe4df;border-color:#c6928c}
+.result .grade{font-size:.77rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#23664e}.result h3{font-family:Georgia,serif;font-size:1.7rem;font-weight:500}
+.result p{margin:8px 0}.report-cards{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:17px 0}
+.report-card{border:1px solid var(--line);border-radius:13px;padding:16px}.report-card h3{font-size:.99rem}.report-card p{font-size:.89rem;margin:8px 0}
+details{border:1px solid var(--line);border-radius:12px;margin:14px 0;padding:14px 18px}summary{cursor:pointer;font-weight:800}
+@media(max-width:960px){.hero,.map-layout{grid-template-columns:1fr}.hero-visual svg{max-height:230px}.records{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:575px){.shell{padding:11px}.hero,.panel{border-radius:14px}.records,.site-buttons,.evidence-options,.report-cards{grid-template-columns:1fr}.actions>button{flex:1 1 auto}.map-scroll svg{min-width:880px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#101c21;--paper:#203137;--ink:#f1f4ee;--muted:#c1d0d0;--line:#456067;--green:#93e1bb;--green-ink:#12332a;--bad:#ffb4ac;--focus:#ffe09a;--shadow:none}.hero{background:#102f31}.counter{background:#255042;color:#c5f3dc}.site-btn[aria-pressed="true"],.record-btn[aria-pressed="true"],.option:has(input:checked){background:#285047}.observation,.record-btn{background:#2a403b}.observation .record,.document{background:#204940;color:#dbf9e8}.metric{background:#263b3c}.sample-table th{background:#295245;color:#d9f5e7}.sample-table tbody tr:nth-child(even){background:#273d3b}.document blockquote{background:#315047}.result{background:#22463a}.result.partial{background:#473a27}.result.review{background:#482d30}.result .grade{color:#b5efcf}.gauge{background:#4b6361}}
+</style>
+</head>
+<body>
+<main class="shell">
+ <section class="hero" aria-labelledby="title">
+  <div class="hero-text">
+   <p class="eyebrow">Dossiê ambiental 004 · Rio Claro</p>
+   <h1 id="title">O Caso do Rio Contaminado</h1>
+   <p>Peixes debilitados, água turva e relatos conflitantes. Sua equipe tem seis frascos de coleta e precisa distinguir o que os dados mostram daquilo que ainda é apenas hipótese.</p>
+   <div class="chips"><span>8 pontos no mapa</span><span>6 amostras possíveis</span><span>4 etapas de investigação</span></div>
+  </div>
+  <div class="hero-visual">
+   <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="hero-svg-title hero-svg-desc">
+    <title id="hero-svg-title">Paisagem ilustrada de rio com dois afluentes</title>
+    <desc id="hero-svg-desc">Ilustração vetorial original de um rio que atravessa uma floresta e recebe dois afluentes, com áreas de plantio e pequenas construções distantes.</desc>
+    <rect width="640" height="360" fill="#447d66"/><path d="M0 0H640V112Q501 110 390 97T0 110Z" fill="#85b49a"/>
+    <path d="M0 304Q132 246 228 261T422 254T640 291V360H0Z" fill="#356b60"/>
+    <path d="M-45 207Q100 179 202 211T418 206T700 164" stroke="#b4e0d8" stroke-width="76" fill="none" stroke-linecap="round"/>
+    <path d="M-45 207Q100 179 202 211T418 206T700 164" stroke="#65adbb" stroke-width="56" fill="none" stroke-linecap="round"/>
+    <path d="M260 -30Q282 79 370 120T425 210" stroke="#a1d5c9" stroke-width="28" fill="none" stroke-linecap="round"/>
+    <path d="M474 405Q448 317 500 271T526 191" stroke="#a1d5c9" stroke-width="31" fill="none" stroke-linecap="round"/>
+    <g fill="#315e4c"><circle cx="64" cy="50" r="31"/><circle cx="112" cy="73" r="23"/><circle cx="155" cy="37" r="28"/><circle cx="549" cy="51" r="34"/><circle cx="608" cy="73" r="23"/><circle cx="77" cy="308" r="30"/><circle cx="569" cy="310" r="29"/></g>
+    <g fill="#9bc486"><rect x="337" y="15" width="31" height="59" rx="3"/><rect x="388" y="8" width="31" height="59" rx="3"/></g>
+    <g fill="#e6cb9e"><rect x="444" y="305" width="54" height="27" rx="3"/><path d="m437 308 34-23 34 23" fill="#936a56"/></g>
+    <circle cx="288" cy="225" r="17" fill="#f0d4a3" stroke="#fdf7e9" stroke-width="4"/><path d="M288 213v24M276 225h24" stroke="#346f72" stroke-width="3"/>
+   </svg>
+  </div>
+ </section>
+ <p class="disclaimer">Todos os valores são índices comparativos inventados de 0 a 100, sem unidades físicas, limites de potabilidade, toxicologia ou equivalência a medidas laboratoriais reais. O mapa, a bacia, os depoimentos e as instituições são fictícios. Esta atividade não registra dados ou notas no Moodle.</p>
+ <div class="progress" aria-label="Etapas do estudo">
+  <span class="active" id="progress-1">01 · Amostras</span><span id="progress-2">02 · Registros</span><span id="progress-3">03 · Hipóteses</span><span id="progress-4">04 · Parecer</span>
+ </div>
+ <section class="panel" id="sampling" aria-labelledby="sample-title">
+  <div class="topline"><div><p class="sub">Etapa 1 · Coleta de campo</p><h2 id="sample-title" tabindex="-1">Onde vale investigar?</h2></div><strong class="counter" id="sample-count" aria-live="polite">0 de 6 frascos usados</strong></div>
+  <p class="lead">Explore os oito pontos. Selecionar uma estação é gratuito; coletar uma amostra utiliza um dos seis frascos. Escolha pelo menos quatro pontos para comparar o rio antes e depois dos encontros com os afluentes.</p>
+  <div class="map-layout">
+   <div>
+    <div class="map-scroll">
+     <svg viewBox="0 0 1200 600" role="group" aria-labelledby="river-title river-desc" xmlns="http://www.w3.org/2000/svg">
+      <title id="river-title">Mapa interativo da bacia fictícia do Rio Claro</title>
+      <desc id="river-desc">O Rio Claro corre da esquerda para a direita e recebe o Córrego das Pedras ao norte e o Córrego do Cedro ao sul. Oito estações selecionáveis aparecem ao longo do rio e dos afluentes. Todas possuem botões equivalentes abaixo.</desc>
+      <rect width="1200" height="600" fill="#dbe8d6"/>
+      <path class="land" d="M0 0h570v179L0 207Z"/><path class="field" d="M592 428q107-73 224-22l82 194H580Z"/><path class="facility" d="M882 440h194v113H882Z"/>
+      <g fill="#a1c9a1"><circle cx="65" cy="97" r="41"/><circle cx="163" cy="137" r="30"/><circle cx="248" cy="79" r="37"/><circle cx="1069" cy="105" r="42"/><circle cx="1119" cy="189" r="33"/></g>
+      <path class="river" d="M-30 310Q160 285 289 294T530 315T815 303T1230 295"/>
+      <path class="tributary" d="M374 -25Q343 52 408 142T448 305"/>
+      <path class="tributary" d="M686 625Q681 544 705 474T734 306"/>
+      <path class="river-inner" d="M-30 310Q160 285 289 294T530 315T815 303T1230 295"/>
+      <path class="trib-inner" d="M374 -25Q343 52 408 142T448 305"/>
+      <path class="trib-inner" d="M686 625Q681 544 705 474T734 306"/>
+      <g stroke="#6b9569" stroke-width="6" opacity=".7"><path d="m631 436 80 63M670 429l67 74M721 422l48 71"/></g>
+      <g fill="#af937b"><rect x="325" y="65" width="50" height="37" rx="4"/><rect x="940" y="452" width="58" height="54" rx="4"/></g>
+      <path d="M927 448l43-27 45 27" fill="#b68f6c"/>
+      <g font-family="system-ui,sans-serif" font-weight="850" font-size="20" fill="#436756">
+       <text x="30" y="38">BACIA FICTÍCIA · RIO CLARO</text><text x="86" y="360">RIO CLARO →</text><text x="300" y="66">AFLUENTE PEDRAS</text>
+       <text x="725" y="578">AFLUENTE CEDRO</text><text x="927" y="532">GALPÃO</text><text x="566" y="560">FAIXA RURAL</text>
+      </g>
+      <g class="sample-pin" data-site="r1" role="button" tabindex="0" aria-pressed="false" aria-label="R1, Nascente do Rio Claro; selecionar ponto"><circle class="pin-halo" cx="119" cy="308" r="35"/><circle class="pin-core" cx="119" cy="308" r="26"/><text class="pin-text" x="119" y="315">R1</text><rect class="pin-label-bg" x="49" y="344" width="140" height="30" rx="10"/><text class="pin-label" x="119" y="364">R1 · Nascente</text></g>
+<g class="sample-pin" data-site="r2" role="button" tabindex="0" aria-pressed="false" aria-label="R2, Antes do encontro com Pedras; selecionar ponto"><circle class="pin-halo" cx="301" cy="285" r="35"/><circle class="pin-core" cx="301" cy="285" r="26"/><text class="pin-text" x="301" y="292">R2</text><rect class="pin-label-bg" x="231" y="321" width="140" height="30" rx="10"/><text class="pin-label" x="301" y="341">R2 · Rio antes</text></g>
+<g class="sample-pin" data-site="p1" role="button" tabindex="0" aria-pressed="false" aria-label="P1, Córrego das Pedras; selecionar ponto"><circle class="pin-halo" cx="407" cy="140" r="35"/><circle class="pin-core" cx="407" cy="140" r="26"/><text class="pin-text" x="407" y="147">P1</text><rect class="pin-label-bg" x="337" y="176" width="140" height="30" rx="10"/><text class="pin-label" x="407" y="196">P1 · Pedras</text></g>
+<g class="sample-pin" data-site="r3" role="button" tabindex="0" aria-pressed="false" aria-label="R3, Após encontro com Pedras; selecionar ponto"><circle class="pin-halo" cx="529" cy="310" r="35"/><circle class="pin-core" cx="529" cy="310" r="26"/><text class="pin-text" x="529" y="317">R3</text><rect class="pin-label-bg" x="459" y="346" width="140" height="30" rx="10"/><text class="pin-label" x="529" y="366">R3 · Rio médio</text></g>
+<g class="sample-pin" data-site="c1" role="button" tabindex="0" aria-pressed="false" aria-label="C1, Córrego do Cedro; selecionar ponto"><circle class="pin-halo" cx="707" cy="498" r="35"/><circle class="pin-core" cx="707" cy="498" r="26"/><text class="pin-text" x="707" y="505">C1</text><rect class="pin-label-bg" x="637" y="534" width="140" height="30" rx="10"/><text class="pin-label" x="707" y="554">C1 · Cedro</text></g>
+<g class="sample-pin" data-site="r4" role="button" tabindex="0" aria-pressed="false" aria-label="R4, Após encontro com Cedro; selecionar ponto"><circle class="pin-halo" cx="823" cy="303" r="35"/><circle class="pin-core" cx="823" cy="303" r="26"/><text class="pin-text" x="823" y="310">R4</text><rect class="pin-label-bg" x="753" y="339" width="140" height="30" rx="10"/><text class="pin-label" x="823" y="359">R4 · Rio após</text></g>
+<g class="sample-pin" data-site="r5" role="button" tabindex="0" aria-pressed="false" aria-label="R5, Vila das Águas; selecionar ponto"><circle class="pin-halo" cx="983" cy="330" r="35"/><circle class="pin-core" cx="983" cy="330" r="26"/><text class="pin-text" x="983" y="337">R5</text><rect class="pin-label-bg" x="913" y="366" width="140" height="30" rx="10"/><text class="pin-label" x="983" y="386">R5 · Vila</text></g>
+<g class="sample-pin" data-site="r6" role="button" tabindex="0" aria-pressed="false" aria-label="R6, Trecho final monitorado; selecionar ponto"><circle class="pin-halo" cx="1111" cy="291" r="35"/><circle class="pin-core" cx="1111" cy="291" r="26"/><text class="pin-text" x="1111" y="298">R6</text><rect class="pin-label-bg" x="1041" y="327" width="140" height="30" rx="10"/><text class="pin-label" x="1111" y="347">R6 · Final</text></g>
+     </svg>
+    </div>
+    <p class="caption">Arraste horizontalmente para explorar o mapa em telas pequenas; o fluxo principal segue para a direita. Os botões abaixo permitem as mesmas escolhas por teclado e leitor de tela. Pontos verdes já foram coletados.</p>
+    <div id="site-buttons" class="site-buttons" aria-label="Selecionar estações por texto"></div>
+   </div>
+   <aside class="observation" aria-labelledby="station-title">
+    <p class="sub" id="station-type">Estação selecionada</p>
+    <h3 id="station-title" tabindex="-1">R1 · Nascente do Rio Claro</h3>
+    <p id="observation-text"></p>
+    <p class="small" id="station-status"></p>
+    <div id="lab-values" hidden></div>
+    <div class="actions"><button type="button" class="primary" id="collect">Coletar amostra</button></div>
+   </aside>
+  </div>
+  <h3 style="margin-top:24px">Caderno de coleta</h3>
+  <p class="small">Índices fictícios comparativos. Turbidez, condutividade e nutrientes maiores não identificam uma fonte; oxigenação menor não é um diagnóstico biológico. Não interprete esses números como critérios ambientais.</p>
+  <div class="table-scroll"><table class="sample-table"><thead><tr><th scope="col">Amostra</th><th scope="col">Turbidez</th><th scope="col">Condutividade</th><th scope="col">Nutrientes</th><th scope="col">Oxigenação</th></tr></thead><tbody id="sample-rows"><tr><td colspan="5">Nenhuma amostra coletada.</td></tr></tbody></table></div>
+  <div class="actions"><button type="button" class="primary" id="go-records" disabled>Consultar registros e depoimentos</button><span id="collect-hint" class="small">Colete pelo menos quatro amostras.</span></div>
+ </section>
+ <section class="panel" id="records" aria-labelledby="records-title" hidden>
+  <div class="topline"><div><p class="sub">Etapa 2 · Evidências documentais</p><h2 id="records-title" tabindex="-1">O que dizem os registros?</h2></div><strong class="counter" id="record-count">0 de 6 registros lidos</strong></div>
+  <p class="lead">Leia pelo menos três documentos, considerando o que cada um sustenta e seus limites. Uma atividade próxima do rio pode ser relevante para investigar, mas proximidade não estabelece responsabilidade.</p>
+  <div id="record-buttons" class="records"></div>
+  <div class="document" id="record-detail" role="region" aria-label="Registro selecionado" aria-live="polite" aria-atomic="true"><h3>Abra um registro</h3><p>O conteúdo e uma observação crítica serão apresentados aqui.</p></div>
+  <div class="actions"><button type="button" class="secondary" id="back-map">Voltar à coleta</button><button type="button" class="primary" id="go-analysis" disabled>Formular conclusão provisória</button></div>
+ </section>
+ <section class="panel" id="analysis" aria-labelledby="analysis-title" hidden>
+  <p class="sub">Etapa 3 · Interpretação</p><h2 id="analysis-title" tabindex="-1">O padrão mostra uma causa?</h2>
+  <p class="lead">Use os índices do próprio estudo para formular uma interpretação provisória. A maior anomalia observada não aponta automaticamente uma pessoa, atividade ou instalação responsável.</p>
+  <form id="analysis-form" novalidate>
+   <fieldset><legend>1. Qual hipótese provisória os dados sustentam melhor?</legend><div class="choices" id="hypotheses"></div></fieldset>
+   <fieldset><legend>2. Cite exatamente duas amostras coletadas que ajudem a comparar o padrão espacial</legend><p class="small">Só é possível citar estações que você realmente analisou.</p><div class="evidence-options" id="sample-options"></div></fieldset>
+   <fieldset><legend>3. Qual procedimento produziria evidências adicionais mais úteis?</legend><div class="choices" id="followups"></div></fieldset>
+   <fieldset><legend>4. Qual resposta preventiva é mais responsável enquanto a causa não é conhecida?</legend><div class="choices" id="precautions"></div></fieldset>
+   <p class="error" id="form-error" role="alert"></p>
+   <div class="actions"><button type="button" class="secondary" id="back-records">Revisar registros</button><button type="submit" class="primary">Emitir parecer fundamentado</button></div>
+  </form>
+ </section>
+ <section class="panel" id="report" aria-labelledby="report-title" hidden>
+  <p class="sub">Etapa 4 · Relatório ambiental</p><h2 id="report-title" tabindex="-1">Sua análise e as incertezas</h2>
+  <div class="result" id="result" aria-live="polite" aria-atomic="true"></div>
+  <div class="report-cards" id="report-cards"></div>
+  <details><summary>Consultar interpretação de referência</summary>
+   <p>Os indicadores fictícios apresentam a mudança relativa mais ampla no Córrego do Cedro (C1), seguida de alterações no rio após seu encontro (R4) e mais a jusante (R5/R6). O Córrego das Pedras (P1) também tem turbidez maior que R2, mas não apresenta a mesma elevação relativa de condutividade e marcador de nutrientes. Isso é um padrão espacial, não prova de uma substância específica nem de uma fonte responsável. Chuva, uso do solo, drenagens e instalações próximas são hipóteses que exigem amostras repetidas, controles a montante, dados temporais, vazões, inspeções autorizadas e análise técnica real. Até lá, medidas preventivas proporcionais devem ser consideradas pelos órgãos competentes sem acusações antecipadas.</p>
+  </details>
+  <div class="actions"><button type="button" class="secondary" id="review-analysis">Revisar decisões</button><button type="button" class="secondary" id="report-map">Revisar amostras</button><button type="button" class="primary" id="restart">Recomeçar investigação</button></div>
+ </section>
+ <p class="footnote">Cenário, mapa, ilustrações, registros, depoimentos e índices desenvolvidos originalmente para esta atividade fictícia. Não foram usados dados reais de qualidade da água. Não há downloads, serviços externos, armazenamento local, identificação do estudante ou integração de nota Moodle.</p>
+</main>
+<script type="application/json" id="case-data">{"title":"O Caso do Rio Contaminado","location":"Bacia fictícia do Rio Claro","metrics":[{"key":"turb","name":"Turbidez relativa","short":"Turbidez","description":"Índice comparativo de partículas em suspensão; valores maiores indicam mais partículas no cenário, sem equivalência a NTU."},{"key":"cond","name":"Condutividade relativa","short":"Condutividade","description":"Índice comparativo de resposta elétrica; não identifica sozinho substâncias ou fontes."},{"key":"nut","name":"Marcador relativo de nutrientes","short":"Nutrientes","description":"Indicador didático não específico; não mede uma concentração real."},{"key":"oxygen","name":"Oxigenação relativa","short":"Oxigenação","description":"Índice didático de oxigenação; valores menores sugerem menor disponibilidade relativa, mas não representam mg/L."}],"sites":[{"id":"r1","label":"R1","name":"Nascente do Rio Claro","stream":"Rio Claro · referência a montante","x":119,"y":308,"metrics":{"turb":10,"cond":22,"nut":17,"oxygen":82},"observation":"Água aparentemente clara em área de vegetação preservada.","insight":"Serve como referência comparativa no rio principal, sem estabelecer sozinho um padrão ambiental.","limit":"Uma medição pontual não representa todas as variações de uma bacia."},{"id":"r2","label":"R2","name":"Antes do encontro com Pedras","stream":"Rio Claro · a montante do primeiro afluente","x":301,"y":285,"metrics":{"turb":12,"cond":23,"nut":17,"oxygen":80},"observation":"O rio principal ainda não recebeu os dois afluentes monitorados.","insight":"Mostra índices relativamente próximos aos da nascente neste conjunto fictício.","limit":"O resultado não elimina fontes difusas a montante."},{"id":"p1","label":"P1","name":"Córrego das Pedras","stream":"Afluente norte · área com solo exposto","x":407,"y":140,"metrics":{"turb":64,"cond":26,"nut":19,"oxygen":66},"observation":"O córrego apresenta material em suspensão perto de um talude exposto.","insight":"A turbidez comparativa está elevada, mas condutividade e nutrientes não acompanham o mesmo aumento.","limit":"Não estabelece se o material veio da obra, das margens ou de outra área."},{"id":"r3","label":"R3","name":"Após encontro com Pedras","stream":"Rio Claro · entre os afluentes","x":529,"y":310,"metrics":{"turb":34,"cond":26,"nut":21,"oxygen":73},"observation":"Após o primeiro encontro, a água aparenta maior quantidade de partículas.","insight":"Há mudança principalmente na turbidez do rio principal em comparação com R2.","limit":"A diferença não prova uma origem exclusiva; mistura e variações temporais podem influenciar."},{"id":"c1","label":"C1","name":"Córrego do Cedro","stream":"Afluente sul · faixa rural e de serviços","x":707,"y":498,"metrics":{"turb":89,"cond":72,"nut":78,"oxygen":30},"observation":"Há água turva e relato de alteração de cor em trecho próximo à foz.","insight":"Este ponto concentra as maiores alterações relativas em vários indicadores do conjunto fictício.","limit":"Identifica uma anomalia espacial; não distingue agricultura, drenagem, galpão, sedimentos ou outras causas."},{"id":"r4","label":"R4","name":"Após encontro com Cedro","stream":"Rio Claro · imediatamente após o segundo afluente","x":823,"y":303,"metrics":{"turb":70,"cond":64,"nut":66,"oxygen":40},"observation":"O rio apresenta aspecto mais turvo após receber o segundo afluente.","insight":"Há diferenças simultâneas em vários indicadores quando comparado aos pontos anteriores.","limit":"Concentrações, vazões e cronologia não foram verificadas; o resultado não permite imputar responsabilidade."},{"id":"r5","label":"R5","name":"Vila das Águas","stream":"Rio Claro · comunidade ribeirinha","x":983,"y":330,"metrics":{"turb":60,"cond":57,"nut":58,"oxygen":44},"observation":"Moradores relatam alteração na aparência da água e avistamento de peixes debilitados.","insight":"O padrão relativo de vários indicadores permanece alterado a jusante.","limit":"Relatos de peixes não identificam contaminante ou nexo causal."},{"id":"r6","label":"R6","name":"Trecho final monitorado","stream":"Rio Claro · ponto distante a jusante","x":1111,"y":291,"metrics":{"turb":51,"cond":50,"nut":48,"oxygen":51},"observation":"O rio chega ao trecho final com alterações ainda visíveis.","insight":"Os índices diminuem em comparação com R4, mas ainda diferem da referência a montante.","limit":"Uma aparente redução não prova diluição segura, recuperação ecológica ou ausência de perigo."}],"records":[{"id":"rain","kind":"Meteorologia","title":"Chuva na noite anterior","text":"O observatório comunitário registrou chuva intensa em diferentes partes da bacia durante a madrugada anterior à coleta.","lesson":"Uma chuva pode mobilizar sedimentos e materiais diversos, mas precedência temporal não demonstra sozinha a origem das alterações."},{"id":"works","kind":"Observação de campo","title":"Talude e obras na bacia de Pedras","text":"Uma equipe registrou solo descoberto junto a uma estrada próxima ao Córrego das Pedras. Não foi medida a contribuição de sedimentos desse ponto.","lesson":"A proximidade da obra torna uma hipótese plausível para material em suspensão, mas precisa de amostragem e rastreamento."},{"id":"rural","kind":"Atividade da bacia","title":"Uso agrícola na região do Cedro","text":"A região do Córrego do Cedro contém áreas de cultivo e manejo de solo, sem documentação de descarga ou prática irregular neste caso fictício.","lesson":"Uso do solo é uma pista para pesquisar caminhos de escoamento, não uma evidência de culpa."},{"id":"shed","kind":"Registro administrativo","title":"Galpão próximo ao Cedro","text":"Há um galpão de processamento licenciado na bacia do Cedro. O registro consultado não inclui análises de efluentes nem demonstra descarte irregular.","lesson":"Presença de uma instalação não estabelece nexo causal. Seriam necessários registros, inspeção e medições apropriadas."},{"id":"witness","kind":"Depoimento","title":"Relato dos moradores","text":"Uma moradora afirma ter notado água mais escura após a chuva e peixes debilitados dois dias depois. Não existem neste dossiê exames dos animais ou medições anteriores ao evento.","lesson":"O depoimento orienta perguntas e coleta complementar, mas não confirma tóxico, agente nem momento exato da mudança."},{"id":"quality","kind":"Qualidade da coleta","title":"Amostras e verificação independente","text":"As medições simuladas são do mesmo período. Uma duplicata do ponto C1 apresentou valores próximos aos índices do primeiro ensaio, mas não houve campanha de antes e depois da chuva.","lesson":"Repetibilidade de uma leitura ajuda a avaliar consistência, não prova a causa nem identifica a origem do material."}],"hypotheses":[{"id":"gradient","title":"A alteração mais acentuada aparece na bacia do Cedro, mas sua origem permanece indeterminada.","detail":"Interpretar o padrão espacial e reconhecer que ainda faltam dados de processo e tempo."},{"id":"works","title":"A obra junto ao Córrego das Pedras explica sozinha todas as alterações.","detail":"Atribuir o conjunto de indicadores ao material em suspensão perto da estrada."},{"id":"facility","title":"O galpão do Cedro causou a contaminação, portanto já é responsável pelo evento.","detail":"Tomar a localização de uma instalação como prova direta de descarga."},{"id":"rain","title":"Como choveu antes, a chuva necessariamente foi a causa única e natural.","detail":"Usar a coincidência temporal para excluir outras origens sem investigação."}],"nextSteps":[{"id":"paired","title":"Repetir medições pareadas a montante e a jusante dos encontros, em diferentes condições de chuva, com controle de qualidade e registro de vazões.","detail":"Acrescentar controle temporal, localização e rastreabilidade antes de testar fontes possíveis."},{"id":"target","title":"Coletar apenas em frente ao galpão até encontrar um resultado que confirme a suspeita.","detail":"Selecionar a amostragem a partir da conclusão desejada."},{"id":"publish","title":"Divulgar um responsável sem nova coleta, porque a alteração no mapa já seria suficiente.","detail":"Tratar a proximidade espacial como atribuição causal."}],"precautions":[{"id":"protect","title":"Acionar órgãos e responsáveis técnicos, recomendar avaliação preventiva das captações e acompanhar fauna e moradores sem indicar culpados.","detail":"Proteger pessoas e ambiente sem antecipar a conclusão técnica ou medidas oficiais."},{"id":"silence","title":"Não comunicar a situação até haver confirmação completa da fonte.","detail":"Adiar qualquer cuidado provisório enquanto informações são reunidas."},{"id":"blame","title":"Publicar acusação nominal e restringir o local sem avaliação técnica competente.","detail":"Transformar hipótese em conclusão e definir medidas sem verificação."}]}</script>
+<script>
+"use strict";
+const caseData=JSON.parse(document.getElementById("case-data").textContent);
+(function(){
+ const $=id=>document.getElementById(id);
+ const text=(tag,value,cls)=>{const e=document.createElement(tag);e.textContent=value;if(cls)e.className=cls;return e;};
+ const sites=Object.fromEntries(caseData.sites.map(site=>[site.id,site]));
+ const collected=[],opened=new Set();
+ let selected="r1",activeRecord=null,step=1,chosenSamples=[];
+ function validateData(){
+  if(caseData.sites.length!==8||caseData.records.length!==6)throw Error("Dados da investigação inválidos");
+  for(const list of [caseData.sites,caseData.records,caseData.hypotheses,caseData.nextSteps,caseData.precautions]){
+   if(new Set(list.map(x=>x.id)).size!==list.length)throw Error("IDs duplicados no cenário");
+  }
+  for(const site of caseData.sites){
+   if(caseData.metrics.some(metric=>!Number.isInteger(site.metrics[metric.key])||site.metrics[metric.key]<0||site.metrics[metric.key]>100))throw Error("Índice inválido");
+  }
+ }
+ function focus(id){$(id).focus({preventScroll:true});$(id).scrollIntoView({block:"start",behavior:"auto"});}
+ function navigate(next){
+  if(next===2&&collected.length<4)return;
+  if(next===3&&(collected.length<4||opened.size<3))return;
+  step=next;
+  for(const [index,id] of ["sampling","records","analysis","report"].entries()){
+   $(id).hidden=index+1!==next;
+   $("progress-"+(index+1)).className=index+1===next?"active":index+1<next?"done":"";
+  }
+  if(next===1){renderStation();renderMap();focus("sample-title");}
+  if(next===2){renderDocs();focus("records-title");}
+  if(next===3){renderReferences();focus("analysis-title");}
+  if(next===4)focus("report-title");
+ }
+ function select(id,origin){
+  if(!sites[id])return;
+  selected=id;renderMap();renderStation();
+  if(origin==="svg")focus("station-title");
+ }
+ function renderMap(){
+  const list=$("site-buttons");list.replaceChildren();
+  for(const site of caseData.sites){
+   const was=collected.includes(site.id);
+   const marker=document.querySelector('[data-site="'+site.id+'"]');
+   marker.classList.toggle("selected",selected===site.id);
+   marker.classList.toggle("collected",was);
+   marker.setAttribute("aria-pressed",String(selected===site.id));
+   marker.setAttribute("aria-label",site.label+": "+site.name+"; "+(was?"amostra coletada":"sem amostra")+"; selecionar");
+   const btn=text("button","","site-btn");btn.type="button";btn.setAttribute("aria-pressed",String(selected===site.id));
+   btn.append(text("strong",site.label+" · "+site.name),text("small",was?"Amostra coletada":"Aguardando coleta"));
+   btn.addEventListener("click",()=>select(site.id,"list"));list.append(btn);
+  }
+ }
+ function renderStation(){
+  const site=sites[selected],was=collected.includes(site.id);
+  $("station-type").textContent=site.stream;
+  $("station-title").textContent=site.label+" · "+site.name;
+  $("observation-text").textContent="Observação de campo: "+site.observation;
+  $("station-status").textContent=was?"A amostra foi coletada e seus índices estão disponíveis.":"A leitura completa só é exibida após coletar a amostra.";
+  $("collect").disabled=was||collected.length>=6;
+  $("collect").textContent=was?"Amostra já coletada":collected.length>=6?"Frascos esgotados":"Coletar amostra";
+  const panel=$("lab-values");panel.hidden=!was;panel.replaceChildren();
+  if(!was)return;
+  const grid=text("div","","metrics");
+  for(const metric of caseData.metrics){
+   const n=site.metrics[metric.key],c=text("div","","metric");
+   c.append(text("span",metric.short),text("strong",n+" / 100"),text("small","Índice comparativo fictício"));
+   const track=text("div","","gauge"),bar=text("i");
+   bar.style.width=n+"%";track.append(bar);c.append(track);grid.append(c);
+  }
+  panel.append(grid,text("p","Leitura contextual: "+site.insight),text("p","Limitação: "+site.limit));
+ }
+ function renderTable(){
+  const body=$("sample-rows");body.replaceChildren();
+  if(!collected.length){const row=document.createElement("tr"),cell=text("td","Nenhuma amostra coletada.");cell.colSpan=5;row.append(cell);body.append(row);return;}
+  for(const id of collected){
+   const s=sites[id],row=document.createElement("tr");
+   row.append(text("th",s.label+" · "+s.name));
+   row.firstChild.scope="row";
+   for(const metric of caseData.metrics)row.append(text("td",String(s.metrics[metric.key])));
+   body.append(row);
+  }
+ }
+ function renderSampling(){
+  $("sample-count").textContent=collected.length+" de 6 frascos usados";
+  $("collect-hint").textContent=collected.length<4?"Colete mais "+(4-collected.length)+" amostra(s) para continuar.":collected.length===6?"Frascos utilizados. Você pode consultar os registros.":"Você pode avançar ou coletar mais "+(6-collected.length)+" amostra(s).";
+  $("go-records").disabled=collected.length<4;
+  renderTable();renderMap();renderStation();
+ }
+ function collect(){
+  if(step!==1||collected.includes(selected)||collected.length>=6)return;
+  collected.push(selected);renderSampling();
+  $("station-status").textContent="Amostra coletada. "+sites[selected].insight+" Limitação: "+sites[selected].limit;
+ }
+ function renderDocs(){
+  const list=$("record-buttons");list.replaceChildren();
+  for(const record of caseData.records){
+   const btn=text("button","","record-btn");btn.type="button";btn.setAttribute("aria-pressed",String(activeRecord===record.id));
+   btn.append(text("small",record.kind+(opened.has(record.id)?" · Lido":" · Não lido")),text("strong",record.title));
+   btn.addEventListener("click",()=>openRecord(record.id));list.append(btn);
+  }
+  $("record-count").textContent=opened.size+" de 6 registros lidos";
+  $("go-analysis").disabled=opened.size<3;
+ }
+ function openRecord(id){
+  const record=caseData.records.find(r=>r.id===id);
+  if(!record)return;
+  activeRecord=id;opened.add(id);renderDocs();
+  const root=$("record-detail");root.replaceChildren();
+  root.append(text("h3",record.title),text("span",record.kind,"kind"),text("blockquote",record.text),text("p","Leitura crítica: "+record.lesson));
+ }
+ function renderOptions(rootId,items,name){
+  const root=$(rootId);root.replaceChildren();
+  for(const option of items){
+   const label=text("label","","option"),input=document.createElement("input"),body=text("span");
+   input.type="radio";input.name=name;input.value=option.id;input.id=name+"-"+option.id;
+   body.append(text("strong",option.title),text("small",option.detail));
+   label.append(input,body);root.append(label);
+  }
+ }
+ function renderReferences(){
+  chosenSamples=Array.from(document.querySelectorAll('input[name="samples"]:checked')).map(e=>e.value);
+  const root=$("sample-options");root.replaceChildren();
+  for(const id of collected){
+   const site=sites[id],label=text("label","","option"),input=document.createElement("input"),body=text("span");
+   input.type="checkbox";input.name="samples";input.value=id;input.checked=chosenSamples.includes(id);
+   body.append(text("strong",site.label+" · "+site.name),text("small","Turbidez "+site.metrics.turb+" · Nutrientes "+site.metrics.nut+" · Oxigenação "+site.metrics.oxygen));
+   label.append(input,body);root.append(label);
+  }
+ }
+ function radio(name){return document.querySelector('input[name="'+name+'"]:checked')?.value||null;}
+ function assess(hypothesis,evidence,nextStep,precaution){
+  const goodHyp=hypothesis==="gradient";
+  const goodEvidence=evidence.includes("c1")&&evidence.includes("r4");
+  const goodMethod=nextStep==="paired";
+  const goodPrecaution=precaution==="protect";
+  const score=[goodHyp,goodEvidence,goodMethod,goodPrecaution].filter(Boolean).length;
+  const level=score===4?"strong":score>=2?"partial":"review";
+  return {score,level,goodHyp,goodEvidence,goodMethod,goodPrecaution};
+ }
+ function reportContent(hyp,evidence,method,precaution){
+  const answer=assess(hyp,evidence,method,precaution);
+  const box=$("result");box.className="result"+(answer.level==="strong"?"":answer.level==="partial"?" partial":" review");
+  box.replaceChildren();
+  box.append(text("p",answer.level==="strong"?"Raciocínio consistente":answer.level==="partial"?"Hipótese com lacunas":"Conclusões que precisam de revisão","grade"),
+    text("h3",answer.level==="strong"?"Você preservou a distinção entre indício e causa.":answer.level==="partial"?"Você encontrou parte do padrão; falta confirmar algumas relações.":"Sua interpretação ainda extrapola o que foi medido."),
+    text("p",answer.goodHyp?"Você localizou o principal contraste relativo na bacia do Cedro sem presumir uma origem específica.":"Os dados não sustentam atribuir o episódio inteiro a uma obra, galpão ou chuva como causa única demonstrada."),
+    text("p",answer.goodEvidence?"C1 e R4 são um par útil: a alteração no afluente e sua persistência após o encontro aparecem em vários índices.":"O par escolhido não cruza diretamente C1 e R4. Esse contraste ajuda a avaliar se a anomalia do afluente aparece depois no rio principal."),
+    text("p",answer.goodMethod?"Sua proposta cria controles espaciais e temporais para testar hipóteses concorrentes.":"É preciso evitar coleta seletiva ou divulgação antes de testar hipóteses com controles e rastreabilidade."),
+    text("p",answer.goodPrecaution?"A resposta preventiva considera moradores e ambiente sem imputar responsabilidade sem prova.":"Proteção proporcional e comunicação técnica são preferíveis tanto à omissão quanto à acusação antecipada."),
+    text("p","Esta devolutiva é formativa e local; não é nota oficial, laudo ambiental ou conclusão sobre um incidente real."));
+  const cards=$("report-cards");cards.replaceChildren();
+  const makeCard=(heading,body)=>{
+   const n=text("section","","report-card");n.append(text("h3",heading),text("p",body));cards.append(n);
+  };
+  const r2=sites.r2.metrics,c1=sites.c1.metrics,r4=sites.r4.metrics;
+  makeCard("Contraste espacial disponível",
+   collected.includes("c1")&&collected.includes("r4")?
+   "C1 tem índices de turbidez "+c1.turb+", condutividade "+c1.cond+" e nutrientes "+c1.nut+"; R4 apresenta "+r4.turb+", "+r4.cond+" e "+r4.nut+". São valores fictícios que indicam associação espacial, não causalidade.":
+   "Não há um par C1/R4 completo na coleta. Sem ele, é mais difícil avaliar a passagem das alterações do afluente ao rio principal.");
+  makeCard("Referência a montante",collected.includes("r2")?
+   "R2 apresenta turbidez "+r2.turb+", condutividade "+r2.cond+" e nutrientes "+r2.nut+". Isso serve como comparação inicial, mas não substitui campanhas repetidas.":
+   "R2 não foi coletado. Uma referência a montante ajuda a controlar diferenças entre trechos e a evitar atribuições prematuras.");
+  makeCard("Fontes realmente escolhidas",evidence.map(id=>sites[id].label+" · "+sites[id].name).join(" / ")+". Uma seleção diferente pode alterar a força da interpretação, mas não cria prova de responsabilidade.");
+  makeCard("Limites e próxima investigação","Faltam série temporal, vazões, análises com unidades reais, identificação de substâncias, verificação da cadeia de custódia e rastreamento das contribuições de cada afluente. Relatos e atividades próximas exigem checagem independente.");
+ }
+ function submit(event){
+  event.preventDefault();
+  if(step!==3)return;
+  const hyp=radio("hypothesis"),method=radio("method"),precaution=radio("precaution");
+  const refs=Array.from(document.querySelectorAll('input[name="samples"]:checked')).map(e=>e.value);
+  if(!hyp||!method||!precaution||refs.length!==2){
+   $("form-error").textContent="Selecione uma hipótese, exatamente duas amostras, um procedimento e uma resposta preventiva.";return;
+  }
+  $("form-error").textContent="";chosenSamples=refs;
+  reportContent(hyp,refs,method,precaution);navigate(4);
+ }
+ function reset(){
+  collected.length=0;opened.clear();selected="r1";activeRecord=null;chosenSamples=[];
+  $("analysis-form").reset();$("record-detail").replaceChildren(text("h3","Abra um registro"),text("p","O conteúdo e uma observação crítica serão apresentados aqui."));
+  $("form-error").textContent="";renderSampling();renderDocs();navigate(1);
+ }
+ validateData();
+ renderOptions("hypotheses",caseData.hypotheses,"hypothesis");
+ renderOptions("followups",caseData.nextSteps,"method");
+ renderOptions("precautions",caseData.precautions,"precaution");
+ document.querySelectorAll("[data-site]").forEach(pin=>{
+  pin.addEventListener("click",()=>select(pin.dataset.site,"svg"));
+  pin.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();select(pin.dataset.site,"svg");}});
+ });
+ $("collect").addEventListener("click",collect);
+ $("go-records").addEventListener("click",()=>navigate(2));
+ $("back-map").addEventListener("click",()=>navigate(1));
+ $("go-analysis").addEventListener("click",()=>navigate(3));
+ $("back-records").addEventListener("click",()=>navigate(2));
+ $("analysis-form").addEventListener("change",()=>{$("form-error").textContent="";});
+ $("analysis-form").addEventListener("submit",submit);
+ $("review-analysis").addEventListener("click",()=>navigate(3));
+ $("report-map").addEventListener("click",()=>navigate(1));
+ $("restart").addEventListener("click",reset);
+ renderSampling();renderDocs();
+})();
+</script>
+</body>
+</html>
