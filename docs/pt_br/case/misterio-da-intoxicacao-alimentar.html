@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>O Mistério da Intoxicação Alimentar - Estudo de caso interativo</title>
+<style>
+:root{color-scheme:light;--bg:#eaf0ed;--paper:#fffcf5;--ink:#21353a;--muted:#51676a;--line:#d2ddd5;--dark:#183c42;--accent:#1d665c;--on-accent:#fff;--focus:#1455b8;--warn:#aa6f2b;--red:#aa4544;--soft:#e9f4e9;--shadow:0 13px 34px #16342c17}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}[hidden]{display:none!important}
+main{max-width:1270px;margin:auto;padding:clamp(12px,2.9vw,31px)}
+.hero{display:grid;grid-template-columns:1.04fr .96fr;background:var(--dark);color:#fff;border-radius:23px;overflow:hidden;box-shadow:var(--shadow)}
+.hero-copy{padding:clamp(24px,4.2vw,47px);align-self:center}
+.kicker{font-size:.77rem;font-weight:850;text-transform:uppercase;letter-spacing:.11em;color:var(--accent);margin:0 0 9px}
+.hero .kicker{color:#f5ce91;margin-bottom:19px}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;line-height:1.13;letter-spacing:-.024em}
+h1{font-size:clamp(2.35rem,5.2vw,4.6rem);margin:0 0 20px}h2{font-size:clamp(1.8rem,3.2vw,2.45rem);margin:0 0 13px}h3{font-size:1.07rem;margin:0 0 10px}
+.hero-copy>p:not(.kicker){color:#d9e7e3;max-width:53ch}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}.chips span{border:1px solid #90aea8;color:#f9e3b5;border-radius:20px;padding:6px 11px;font-size:.78rem;font-weight:800}
+.hero-art{display:grid;place-items:center;background:#25515a}.hero-art svg{width:100%;height:100%;max-height:400px;display:block}
+.disclaimer,.footnote,.fine{font-size:.83rem;color:var(--muted)}.disclaimer{margin:17px 4px 24px}
+.steps{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.step{padding:7px 13px;border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:30px;font-size:.8rem;font-weight:800}
+.step.current{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}.step.done{color:var(--accent);border-color:var(--accent)}
+.panel{min-width:0;padding:clamp(18px,2.9vw,32px);border:1px solid var(--line);border-radius:20px;background:var(--paper);box-shadow:var(--shadow)}
+.topline{display:flex;align-items:start;justify-content:space-between;gap:12px;flex-wrap:wrap}.count{padding:8px 12px;border-radius:10px;font-size:.81rem;font-weight:850;color:#23604d;background:#e2f1e6}
+.lead{max-width:75ch;color:var(--muted);margin:0 0 19px}
+.map-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr);gap:17px}
+.map-scroll{border:1px solid #b5c9be;background:#dce9e2;border-radius:15px;overflow-x:auto;scrollbar-color:#52887c transparent}
+.map-scroll svg{display:block;width:100%;min-width:850px;height:auto}
+.map-scroll .room{fill:#c8d9cc;stroke:#9db6a5;stroke-width:5}
+.map-scroll .corridor{fill:#ecf0e5;stroke:#91a9a2;stroke-width:5;stroke-dasharray:10 12}
+.map-scroll .zone{cursor:pointer}.map-scroll .zone-face{fill:#f8fbf2;stroke:#739688;stroke-width:4}
+.map-scroll .zone.selected .zone-face,.map-scroll .zone:focus .zone-face{stroke:#1755bf;stroke-width:8}
+.map-scroll .zone.visited .zone-face{fill:#e4f4e5}.map-scroll .zone:focus{outline:none}
+.map-scroll .zone-icon{fill:#c4e5d4;stroke:#57977a;stroke-width:2}
+.map-scroll .icon-letter{font:900 18px system-ui,sans-serif;text-anchor:middle;fill:#26594d;pointer-events:none}
+.map-scroll .zone-name{font:850 23px system-ui,sans-serif;fill:#2b514b;pointer-events:none}
+.map-scroll .zone-sub{font:600 17px system-ui,sans-serif;fill:#54786c;pointer-events:none}
+.map-scroll .zone-visited{fill:#dedfd7;stroke:#86a49a}.map-scroll .zone.visited .zone-visited{fill:#42976e}
+.map-scroll .map-text{font:800 19px system-ui,sans-serif;fill:#547f6d}
+.map-caption{font-size:.8rem;color:var(--muted);margin:10px 0 15px}
+.zone-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.zone-button{padding:10px 13px;min-height:57px;text-align:left;border-radius:12px;background:var(--paper);border:1px solid var(--line);color:var(--ink)}
+.zone-button[aria-pressed="true"]{border-color:var(--accent);background:#e8f4eb;box-shadow:inset 0 0 0 1px var(--accent)}
+.zone-button strong,.zone-button small{display:block}.zone-button strong{font-size:.87rem}.zone-button small{font-size:.76rem;color:var(--muted)}
+.zone-detail{border:1px solid var(--line);border-radius:15px;padding:19px;background:#eff5ec}
+.zone-detail h3{font-family:Georgia,serif;font-size:1.36rem;font-weight:500}
+.zone-detail p{margin:10px 0}.explain{padding:11px 13px;border-radius:0 10px 10px 0;border-left:4px solid var(--accent);background:#e0f0e3}
+.card-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:17px 0}
+.event-card,.witness-card{width:100%;text-align:left;background:#f6f7f0;border:1px solid var(--line);border-radius:13px;padding:14px;color:var(--ink);min-height:126px;display:grid;gap:8px}
+.event-card:not(:disabled):hover,.witness-card:not(:disabled):hover{border-color:var(--accent)}
+.event-card[aria-pressed="true"],.witness-card[aria-pressed="true"]{border-color:var(--accent);background:#e5f1e7;box-shadow:inset 0 0 0 1px var(--accent)}
+.event-card strong,.witness-card strong{font-size:.95rem;line-height:1.3}.event-card span,.witness-card span{color:var(--muted);font-size:.81rem}
+.event-card small,.witness-card small{font-size:.75rem;color:var(--accent);font-weight:850}
+.document{border-left:5px solid var(--accent);border-radius:0 13px 13px 0;background:#e8f2e6;padding:19px;min-height:130px}
+.document h3{margin-top:0}.document blockquote{margin:13px 0;border-left:3px solid #9db5a1;background:#f8fbf5;padding:12px;font-family:Georgia,serif}
+.document p{margin:9px 0}.document .source{font-size:.77rem;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;font-weight:850}
+.questions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.question{border:1px solid var(--accent);background:var(--paper);color:var(--accent);padding:10px 12px;border-radius:10px;text-align:left}
+.question[aria-pressed="true"]{background:#dceddf}.answer{background:#f2ecdf;border-left:4px solid #b38852;border-radius:0 10px 10px 0;padding:13px 16px;margin:10px 0}
+.table-scroll{overflow-x:auto;margin-top:16px}
+table{border-collapse:collapse;width:100%;font-size:.85rem}
+th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+thead th{background:#e4f1e8;color:#245c4b}
+tbody tr:nth-child(even){background:#f2f6f1}
+.comparison-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:17px 0}
+.compare{background:#f6f8f2;border:1px solid var(--line);padding:15px;border-radius:12px;text-align:left;color:var(--ink);display:grid;gap:6px}
+.compare[aria-pressed="true"]{border-color:var(--accent);background:#e6f3e8}
+.compare strong{font-size:.94rem}.compare small{color:var(--muted);font-size:.81rem}
+.rates{display:grid;grid-template-columns:1fr .9fr;gap:17px;margin:18px 0}
+.rate-box{background:#edf5ed;border:1px solid var(--line);padding:16px;border-radius:14px}
+.rate-box strong{display:block}.rate-box p{margin:7px 0;font-size:.9rem}
+.rate-box svg{width:100%;height:auto;max-width:490px}
+.rate-box svg .bar-exposed{fill:#34876d}.rate-box svg .bar-control{fill:#b8915b}
+.rate-box svg .rate-axis{font:14px system-ui,sans-serif;fill:#345b51}.rate-box svg .rate-label{font:800 16px system-ui,sans-serif;fill:#234c40}
+label.option{display:flex;gap:11px;align-items:start;padding:13px;border:1px solid var(--line);border-radius:11px;cursor:pointer}
+label.option:has(input:checked){border-color:var(--accent);background:#e5f2e8}
+label.option input{width:19px;height:19px;margin:3px 0 0;flex:0 0 auto;accent-color:var(--accent)}
+label.option strong,label.option small{display:block}label.option strong{font-size:.94rem}label.option small{font-size:.8rem;color:var(--muted);margin-top:5px}
+.options{display:grid;gap:9px}.sources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+fieldset{margin:22px 0 25px;padding:0;border:0}legend{font-weight:850;font-size:1.06rem;margin-bottom:11px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.primary,.secondary{min-height:45px;border-radius:10px;padding:10px 16px;font-weight:850}
+.primary{background:var(--accent);color:var(--on-accent);border:1px solid var(--accent)}.secondary{border:1px solid var(--accent);background:transparent;color:var(--accent)}
+.primary:not(:disabled):hover{filter:brightness(1.14)}
+.error{color:var(--red);min-height:20px;font-weight:800}
+.report-result{border-radius:15px;padding:20px;border:1px solid #8db9a0;background:#e4f2e8}
+.report-result.partial{background:#fdf0d7;border-color:#d0ae72}.report-result.review{background:#f8e3db;border-color:#c99583}
+.report-result h3{font:500 1.65rem Georgia,serif}
+.report-result p{margin:9px 0}.report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+.report-cell{border:1px solid var(--line);padding:15px;border-radius:13px}.report-cell p{font-size:.88rem;color:var(--muted);margin:8px 0}
+.confirm{background:#fff1d9;border:1px solid #d4ab73;border-radius:12px;padding:15px;margin-top:17px}.confirm p{margin:0;font-weight:800}
+details{border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin-top:18px}summary{cursor:pointer;font-weight:850}
+@media(max-width:980px){.hero,.map-layout{grid-template-columns:1fr}.hero-art svg{max-height:270px}.card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){main{padding:11px}.panel,.hero{border-radius:14px}.zone-buttons,.card-grid,.comparison-grid,.rates,.sources,.report-grid{grid-template-columns:1fr}.actions>button{flex:1 1 auto}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#111e25;--paper:#22343b;--ink:#f2f6ec;--muted:#c1d1d1;--line:#4c646a;--accent:#9ae3c2;--on-accent:#12352b;--focus:#ffd591;--shadow:none}.hero{background:#14343c}.count{background:#2a5340;color:#dcf8e3}.step{background:var(--paper)}.zone-detail,.event-card,.witness-card,.compare,.rate-box{background:#2a4140}.zone-button[aria-pressed="true"],.event-card[aria-pressed="true"],.witness-card[aria-pressed="true"],.compare[aria-pressed="true"],label.option:has(input:checked){background:#2c4e42}.document,.explain{background:#284b3c}.document blockquote{background:#325146}.answer{background:#453b2f}.question{background:var(--paper)}.question[aria-pressed="true"]{background:#335848}.rate-box svg .rate-axis,.rate-box svg .rate-label{fill:#e4f0e9}.rate-box svg .bar-exposed{fill:#9ae3c2}.rate-box svg .bar-control{fill:#e4bd7f}thead th{background:#2c5246;color:#e2fae7}tbody tr:nth-child(even){background:#283e3e}.report-result{background:#264936}.report-result.partial{background:#493c27}.report-result.review{background:#4c3131}.confirm{background:#453a2b}.error{color:#ffb7a5}}
+</style>
+</head>
+<body>
+<main>
+<section class="hero" aria-labelledby="case-title">
+ <div class="hero-copy">
+  <p class="kicker">Dossiê 007 · Cozinha do Pátio da Serra</p>
+  <h1 id="case-title">O Mistério da Intoxicação Alimentar</h1>
+  <p>Depois de um jantar, seis pessoas relataram mal-estar. Há anotações ambíguas sobre armazenamento, preparos compartilhados e pedidos diferentes. Sua tarefa não é escolher um culpado, mas investigar o que as evidências realmente permitem afirmar.</p>
+  <div class="chips"><span>7 ambientes interativos</span><span>8 registros cronológicos</span><span>4 depoimentos</span><span>12 pedidos fictícios</span></div>
+ </div><div class="hero-art"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 390" role="img" aria-labelledby="hero-food-title hero-food-desc">
+<title id="hero-food-title">Investigação de alimentos na cozinha do Pátio da Serra</title>
+<desc id="hero-food-desc">Ilustração original vetorial de uma bancada de restaurante com prato de folhas e molho, panela fechada, sobremesa e prancheta de investigação. Nada na imagem identifica um alimento como causador.</desc>
+<rect width="650" height="390" fill="#21464b"/><path d="M0 276 650 248v142H0Z" fill="#122f3a"/>
+<path d="M0 292 650 276M0 340l650-15" stroke="#5f8c83" stroke-width="8"/>
+<ellipse cx="217" cy="280" rx="175" ry="49" fill="#d3dcd1"/><ellipse cx="217" cy="268" rx="150" ry="38" fill="#f6f3df"/>
+<g fill="#75ad72"><ellipse cx="158" cy="254" rx="25" ry="14" transform="rotate(-22 158 254)"/><ellipse cx="193" cy="239" rx="28" ry="16" transform="rotate(18 193 239)"/><ellipse cx="238" cy="255" rx="28" ry="16" transform="rotate(-21 238 255)"/><ellipse cx="267" cy="242" rx="25" ry="17" transform="rotate(34 267 242)"/></g>
+<path d="M183 264q45-17 79 8" stroke="#e7cca4" stroke-width="11" fill="none" stroke-linecap="round"/>
+<rect x="338" y="222" width="126" height="85" rx="8" fill="#d6e1dc"/><path d="M324 217h154l-18-26H340Z" fill="#8aa5a3" stroke="#ecf4e5" stroke-width="5"/><circle cx="401" cy="189" r="7" fill="#f0cb89"/>
+<rect x="479" y="244" width="107" height="56" rx="9" fill="#d6af7c"/><path d="M479 251q49-57 107 0" fill="#f1e4c9"/><path d="M495 256q39-24 76 0" fill="none" stroke="#bb8971" stroke-width="4"/>
+<rect x="448" y="57" width="144" height="167" rx="10" fill="#ebead9" transform="rotate(7 448 57)"/>
+<rect x="490" y="41" width="63" height="18" rx="7" fill="#a5b5ac"/>
+<path d="M474 103l20 5 9-8M474 139l20 5 9-8M474 175l20 5 9-8" stroke="#307b6e" stroke-width="5" fill="none"/>
+<path d="M517 112h49M517 149h51M516 184h42" stroke="#87a29a" stroke-width="5" stroke-linecap="round"/>
+<circle cx="92" cy="80" r="42" fill="#d0ece5" stroke="#d8f4e4" stroke-width="6"/><path d="M93 55v53M72 81h43" stroke="#588c84" stroke-width="7" stroke-linecap="round"/>
+<path d="M105 127q53 21 87-17" fill="none" stroke="#e5ca88" stroke-width="4" stroke-dasharray="6 6"/>
+</svg></div>
+</section>
+<p class="disclaimer">Todos os personagens, alimentos, temperaturas, horários e relatos são fictícios. Os valores em °C são anotações simuladas, NÃO limites oficiais de segurança ou demonstração da temperatura interna de alimentos. Relato de mal-estar não é diagnóstico, e esta simulação não identifica agentes causais, fontes confirmadas ou responsáveis. Não substitui avaliação sanitária ou médica.</p>
+<nav class="steps" aria-label="Etapas da investigação">
+ <span class="step current" id="step-1">01 · Cozinha</span><span class="step" id="step-2">02 · Cronologia</span><span class="step" id="step-3">03 · Depoimentos e pedidos</span><span class="step" id="step-4">04 · Parecer</span><span class="step" id="step-5">05 · Relatório</span>
+</nav>
+<div class="actions" style="margin:0 0 17px"><button class="secondary" type="button" id="restart-anytime">Reiniciar investigação</button></div>
+<div class="confirm" id="reset-confirm" hidden><p>Apagar todas as decisões e recomeçar a investigação?</p><div class="actions"><button class="secondary" type="button" id="cancel-reset">Cancelar</button><button class="primary" type="button" id="approve-reset">Sim, recomeçar</button></div></div>
+<section id="zones-panel" class="panel" aria-labelledby="zones-heading">
+ <div class="topline"><div><p class="kicker">Etapa 1 · Inspeção fictícia</p><h2 id="zones-heading" tabindex="-1">Onde pode estar a pista?</h2></div><strong class="count" id="zone-count" aria-live="polite">0 de 7 ambientes examinados</strong></div>
+ <p class="lead">Explore pelo menos quatro ambientes antes de consultar os registros. Um ambiente com uma anotação incompleta exige mais perguntas, não uma conclusão imediata sobre contaminação.</p>
+ <div class="map-layout">
+  <div>
+   <div class="map-scroll"><svg viewBox="0 0 1140 610" role="group" aria-labelledby="floor-title floor-desc" xmlns="http://www.w3.org/2000/svg">
+    <title id="floor-title">Planta interativa da cozinha fictícia Pátio da Serra</title>
+    <desc id="floor-desc">Planta original com sete áreas: recebimento, câmara fria, preparo de molhos, linha de cocção, sobremesas, lavagem de utensílios e expedição. Cada área selecionável possui botão equivalente abaixo.</desc>
+    <rect width="1140" height="610" fill="#d7e6da"/><rect class="room" x="22" y="69" width="1094" height="513" rx="24"/>
+    <rect class="corridor" x="35" y="284" width="1070" height="28" rx="10"/>
+    <path d="M18 55h1104M18 573h1104" stroke="#8cb09c" stroke-width="11"/>
+    <text class="map-text" x="39" y="42">PLANTA DO RESTAURANTE · ESQUEMA FICTÍCIO</text>
+    <g class="zone" data-zone="recebimento" role="button" tabindex="0" aria-label="Recebimento; selecionar área" aria-pressed="false">
+  <rect class="zone-face" x="42" y="92" width="270" height="178" rx="14"/>
+  <circle class="zone-icon" cx="82" cy="135" r="24"/>
+  <text class="icon-letter" x="82" y="142">R</text>
+  <text class="zone-name" x="58" y="199">Recebimento</text>
+  <text class="zone-sub" x="58" y="231">Entrada de insumos</text>
+  <rect class="zone-visited" x="282" y="108" width="16" height="16" rx="8"/>
+ </g>
+<g class="zone" data-zone="refrigeracao" role="button" tabindex="0" aria-label="Câmara fria 2; selecionar área" aria-pressed="false">
+  <rect class="zone-face" x="339" y="92" width="265" height="178" rx="14"/>
+  <circle class="zone-icon" cx="379" cy="135" r="24"/>
+  <text class="icon-letter" x="379" y="142">°C</text>
+  <text class="zone-name" x="355" y="199">Câmara fria</text>
+  <text class="zone-sub" x="355" y="231">Armazenamento</text>
+  <rect class="zone-visited" x="574" y="108" width="16" height="16" rx="8"/>
+ </g>
+<g class="zone" data-zone="preparo-frio" role="button" tabindex="0" aria-label="Bancada de molhos; selecionar área" aria-pressed="false">
+  <rect class="zone-face" x="631" y="92" width="461" height="178" rx="14"/>
+  <circle class="zone-icon" cx="671" cy="135" r="24"/>
+  <text class="icon-letter" x="671" y="142">MF</text>
+  <text class="zone-name" x="647" y="199">Preparo frio</text>
+  <text class="zone-sub" x="647" y="231">Preparação</text>
+  <rect class="zone-visited" x="1062" y="108" width="16" height="16" rx="8"/>
+ </g>
+<g class="zone" data-zone="cozinha-quente" role="button" tabindex="0" aria-label="Linha de cocção; selecionar área" aria-pressed="false">
+  <rect class="zone-face" x="42" y="324" width="270" height="230" rx="14"/>
+  <circle class="zone-icon" cx="82" cy="367" r="24"/>
+  <text class="icon-letter" x="82" y="374">CQ</text>
+  <text class="zone-name" x="58" y="431">Cocção</text>
+  <text class="zone-sub" x="58" y="463">Preparo quente</text>
+  <rect class="zone-visited" x="282" y="340" width="16" height="16" rx="8"/>
+ </g>
+<g class="zone" data-zone="sobremesas" role="button" tabindex="0" aria-label="Mesa de sobremesas; selecionar área" aria-pressed="false">
+  <rect class="zone-face" x="339" y="324" width="265" height="230" rx="14"/>
+  <circle class="zone-icon" cx="379" cy="367" r="24"/>
+  <text class="icon-letter" x="379" y="374">D</text>
+  <text class="zone-name" x="355" y="431">Sobremesas</text>
+  <text class="zone-sub" x="355" y="463">Montagem e serviço</text>
+  <rect class="zone-visited" x="574" y="340" width="16" height="16" rx="8"/>
+ </g>
+<g class="zone" data-zone="higiene" role="button" tabindex="0" aria-label="Lavagem e utensílios; selecionar área" aria-pressed="false">
+  <rect class="zone-face" x="631" y="324" width="218" height="230" rx="14"/>
+  <circle class="zone-icon" cx="671" cy="367" r="24"/>
+  <text class="icon-letter" x="671" y="374">H</text>
+  <text class="zone-name" x="647" y="431">Higiene</text>
+  <text class="zone-sub" x="647" y="463">Higienização</text>
+  <rect class="zone-visited" x="819" y="340" width="16" height="16" rx="8"/>
+ </g>
+<g class="zone" data-zone="expedicao" role="button" tabindex="0" aria-label="Passe de serviço; selecionar área" aria-pressed="false">
+  <rect class="zone-face" x="877" y="324" width="215" height="230" rx="14"/>
+  <circle class="zone-icon" cx="917" cy="367" r="24"/>
+  <text class="icon-letter" x="917" y="374">S</text>
+  <text class="zone-name" x="893" y="431">Expedição</text>
+  <text class="zone-sub" x="893" y="463">Saída para salão</text>
+  <rect class="zone-visited" x="1062" y="340" width="16" height="16" rx="8"/>
+ </g>
+   </svg></div>
+   <p class="map-caption">A planta permite seleção por toque, mouse, Enter ou Espaço. Em telas pequenas, deslize horizontalmente; a lista abaixo oferece as mesmas áreas como botões HTML.</p>
+   <div id="zone-buttons" class="zone-buttons"></div>
+  </div>
+  <aside class="zone-detail" aria-labelledby="zone-title">
+   <p class="kicker" id="zone-type">Ambiente selecionado</p><h3 id="zone-title" tabindex="-1">Recebimento</h3>
+   <p id="zone-observation"></p><p class="explain" id="zone-clue"></p><p id="zone-limitation" class="fine"></p><p class="fine" id="zone-related"></p>
+  </aside>
+ </div>
+ <div class="actions"><button class="primary" type="button" id="to-timeline" disabled>Examinar cronologia</button><span class="fine" id="zone-hint">Examine pelo menos 4 ambientes.</span></div>
+</section>
+<section id="timeline-panel" class="panel" hidden aria-labelledby="timeline-heading">
+ <div class="topline"><div><p class="kicker">Etapa 2 · Registros de preparo</p><h2 id="timeline-heading" tabindex="-1">A sequência confirma alguma causa?</h2></div><strong class="count" id="event-count" aria-live="polite">0 de 8 registros examinados</strong></div>
+ <p class="lead">Examine pelo menos quatro registros. Compare horários de recebimento, manipulação, serviço e relatos, mas lembre que uma sequência temporal não comprova que um alimento tenha provocado sintomas.</p>
+ <div id="event-list" class="card-grid"></div><div id="event-detail" class="document" role="region" aria-live="polite" aria-atomic="true" aria-label="Registro cronológico selecionado"><h3>Selecione um registro</h3><p>Veja o relato, a confiabilidade e suas limitações.</p></div>
+ <div class="actions"><button class="secondary" type="button" id="timeline-back">Rever a cozinha</button><button class="primary" type="button" id="to-interviews" disabled>Confrontar depoimentos e pedidos</button></div>
+</section>
+<section id="interviews-panel" class="panel" hidden aria-labelledby="interviews-heading">
+ <div class="topline"><div><p class="kicker">Etapa 3 · Fontes e comparação de exposição</p><h2 id="interviews-heading" tabindex="-1">Quem pediu cada alimento?</h2></div><strong class="count" id="interview-count" aria-live="polite">0 depoimentos · 0 perguntas</strong></div>
+ <p class="lead">Ouça pelo menos duas pessoas, faça duas perguntas e compare pelo menos dois alimentos. Não é necessário chegar a uma conclusão antes de investigar exposições simultâneas e outras refeições.</p>
+ <h3>Depoimentos</h3><div id="witness-list" class="card-grid"></div>
+ <div id="witness-detail" class="document" role="region" aria-live="polite" aria-atomic="true" aria-label="Depoimento selecionado"><h3>Escolha uma pessoa</h3><p>As respostas revelam limites dos registros e da memória.</p></div>
+ <div id="questions" class="questions"></div>
+ <h3 style="margin-top:24px">Pedidos reconstruídos: amostra de 12 clientes fictícios</h3>
+ <p class="fine">"Sim" indica que o item foi pedido, não necessariamente consumido. "Relatou" indica um relato posterior de mal-estar, não diagnóstico. Esta seleção pequena e sem grupo de controle adequado não permite conclusões clínicas.</p>
+ <div class="table-scroll"><table aria-label="Tabela fictícia de pedidos e relatos de mal-estar"><thead><tr><th scope="col">Código</th><th scope="col">Molho frio</th><th scope="col">Sobremesa</th><th scope="col">Prato quente</th><th scope="col">Relatou mal-estar</th></tr></thead><tbody id="exposure-rows"></tbody></table></div>
+ <p class="fine">Selecione alimentos para calcular as proporções descritivas com base nos doze pedidos. O gráfico tem os mesmos dados em texto.</p>
+ <div id="compare-list" class="comparison-grid"></div>
+ <div class="rates">
+  <div class="rate-box" id="comparison-detail" role="region" aria-live="polite" aria-label="Comparação selecionada"><h3>Escolha um alimento</h3><p>Os totais e percentuais serão calculados com os registros fictícios.</p></div>
+  <div class="rate-box">
+   <svg id="rates-svg" viewBox="0 0 500 270" role="img" aria-labelledby="rates-title rates-desc" xmlns="http://www.w3.org/2000/svg"><title id="rates-title">Comparação dos relatos entre pedidos com e sem alimento</title><desc id="rates-desc">O gráfico será atualizado após selecionar um alimento, e os números estarão escritos ao lado.</desc><g id="rates-plot"></g></svg>
+  </div>
+ </div>
+ <p class="count" id="comparison-count" aria-live="polite">0 de 3 alimentos comparados</p>
+ <div class="actions"><button class="secondary" type="button" id="interviews-back">Rever cronologia</button><button class="primary" type="button" id="to-analysis" disabled>Elaborar parecer</button></div>
+</section>
+<section id="analysis-panel" class="panel" hidden aria-labelledby="analysis-heading">
+ <p class="kicker">Etapa 4 · Argumentação</p><h2 id="analysis-heading" tabindex="-1">Qual conclusão as fontes sustentam?</h2>
+ <p class="lead">Seu parecer precisa separar relatos, registros de temperatura, associação entre pedidos e confirmação de causa. Selecione duas evidências que você realmente examinou, reconhecendo seus limites.</p>
+ <form id="analysis-form" novalidate>
+  <fieldset><legend>1. Qual hipótese provisória é defensável?</legend><div id="hypotheses" class="options"></div></fieldset>
+  <fieldset><legend>2. Selecione exatamente duas fontes examinadas para fundamentar sua hipótese</legend><p class="fine">Podem ser inspeções, registros, depoimentos questionados ou a comparação de pedidos. Escolha fontes complementares sempre que possível.</p><div id="evidence-options" class="sources"></div></fieldset>
+  <fieldset><legend>3. Qual interpretação das anotações e proporções é apropriada?</legend><div id="interpretations" class="options"></div></fieldset>
+  <fieldset><legend>4. Qual procedimento ajudaria a verificar hipóteses sem seleção tendenciosa?</legend><div id="investigations" class="options"></div></fieldset>
+  <fieldset><legend>5. Como responder preventivamente sem apontar responsáveis?</legend><div id="safeguards" class="options"></div></fieldset>
+  <p id="analysis-error" class="error" role="alert"></p>
+  <div class="actions"><button class="secondary" type="button" id="analysis-back">Rever exposições</button><button class="primary" type="submit">Gerar relatório fundamentado</button></div>
+ </form>
+</section>
+<section id="report-panel" class="panel" hidden aria-labelledby="report-heading">
+ <p class="kicker">Etapa 5 · Relatório</p><h2 id="report-heading" tabindex="-1">Conclusões, lacunas e próximos passos</h2>
+ <div class="report-result" id="report-result" role="status" aria-live="polite"></div>
+ <div id="report-grid" class="report-grid"></div>
+ <details><summary>Ver interpretação de referência e principais limitações</summary>
+  <p>Os números fictícios de pedidos podem sugerir associação com preparações frias, mas pedidos e consumo efetivo são diferentes. A sobremesa também aparece entre vários relatos, e há pessoas com mal-estar que não pediram molho frio. As fichas com valores de temperatura não têm método, produto ou duração suficientemente documentados. Uma checklist sem assinatura e um depoimento impreciso não demonstram contato cruzado, nem autorizam acusação contra trabalhadores ou fornecedores. Faltam entrevista epidemiológica completa, exames apropriados, análise de alimentos e ambientes, rastreabilidade de lotes e verificação técnica dos registros. Medidas preventivas proporcionais e encaminhamento aos profissionais/autoridades competentes podem ser necessários independentemente de confirmação final, conforme avaliação real.</p>
+ </details>
+ <div class="actions"><button class="secondary" type="button" id="review-analysis">Rever argumentos</button><button class="secondary" type="button" id="review-kitchen">Rever a cozinha</button><button class="primary" type="button" id="restart">Reiniciar estudo de caso</button></div>
+</section>
+<p class="footnote">Planta e ilustração SVG originais; dados, pessoas, alimentos, registros, horários e temperaturas inventados exclusivamente para este caso. A atividade funciona localmente no navegador, sem bibliotecas ou chamadas externas, sem registrar dados pessoais, notas oficiais ou resultados no Moodle.</p>
+</main>
+<script id="case-data" type="application/json">{"venue":"Restaurante fictício Pátio da Serra","zones":[{"id":"recebimento","name":"Recebimento","short":"Recebimento","type":"Entrada de insumos","x":42,"y":92,"w":270,"h":178,"observation":"Uma planilha registra recebimento de laticínios e verduras às 15h05. Um campo de medição foi preenchido posteriormente com caneta diferente.","clue":"Há informação incompleta sobre a condição dos insumos na chegada; o preenchimento posterior precisa ser contextualizado.","limitation":"O aspecto visual ou a anotação isolada não confirma microrganismo, inadequação nem a origem de um eventual agravo.","related":"E1 · Recebimento de insumos"},{"id":"refrigeracao","name":"Câmara fria 2","short":"Câmara fria","type":"Armazenamento","x":339,"y":92,"w":265,"h":178,"observation":"O visor mostrava 10,5 °C às 17h10. Há lacuna de registro entre 16h40 e 17h10; a sonda não foi aferida na data do evento.","clue":"A leitura e a lacuna justificam verificar a trajetória de temperatura e a calibração do instrumento.","limitation":"Uma leitura do ar não mede temperatura do alimento nem duração de exposição; não é prova de contaminação.","related":"E3 · Registrador de temperatura"},{"id":"preparo-frio","name":"Bancada de molhos","short":"Preparo frio","type":"Preparação","x":631,"y":92,"w":461,"h":178,"observation":"Molho frio de ervas (lote M-06) foi preparado às 16h20. A ficha marca '12' sem unidade e sem identificação do termômetro.","clue":"É necessário obter a receita, o instrumento, as condições de preparação e uma amostra representativa do lote.","limitation":"Não é possível interpretar o número '12' como temperatura confirmada do molho, nem deduzir agente causal.","related":"E2 · Ficha do molho M-06"},{"id":"cozinha-quente","name":"Linha de cocção","short":"Cocção","type":"Preparo quente","x":42,"y":324,"w":270,"h":230,"observation":"O prato quente foi servido em vários horários. O livro de preparo registra uma leitura de 71 °C às 18h35, sem informação sobre o ponto medido.","clue":"O documento pode orientar a reconstituição dos lotes, mas precisa de método e identificação do alimento.","limitation":"Um único número não confirma condições adequadas de todo o lote e não exclui falha posterior.","related":"E4 · Ficha do prato quente"},{"id":"sobremesas","name":"Mesa de sobremesas","short":"Sobremesas","type":"Montagem e serviço","x":339,"y":324,"w":265,"h":230,"observation":"A sobremesa com creme (lote D-04) foi finalizada às 17h35 e recebeu anotação de 7 °C às 18h30, sem descrição da etapa.","clue":"É importante verificar se a medição foi do ambiente, do produto ou de uma embalagem.","limitation":"O registro não comprova, por si, segurança ou contaminação; o horário de montagem difere do de serviço.","related":"E5 · Registro do creme D-04"},{"id":"higiene","name":"Lavagem e utensílios","short":"Higiene","type":"Higienização","x":631,"y":324,"w":218,"h":230,"observation":"Uma checklist indica higienização às 18h45, mas a linha está sem assinatura. Foi relatada troca de utensílio entre duas preparações.","clue":"Higienização, troca de utensílios e possíveis contatos cruzados merecem reconstituição, sem acusar um trabalhador.","limitation":"Falta de assinatura não demonstra ausência de limpeza; um relato de troca não prova transferência de agente.","related":"E6 · Checklist de utensílios"},{"id":"expedicao","name":"Passe de serviço","short":"Expedição","type":"Saída para salão","x":877,"y":324,"w":215,"h":230,"observation":"As mesas receberam combinações diferentes de molho frio, prato quente e sobremesa. O mapa de pedidos foi montado depois do relato inicial.","clue":"A comparação de expostos e não expostos pode sugerir quais alimentos merecem investigação adicional.","limitation":"Pedidos não garantem consumo efetivo; relatos de sintomas não são diagnósticos e a amostra de clientes é pequena.","related":"E7 · Mapa de pedidos"}],"events":[{"id":"e1","time":"15h05","type":"Entrada","title":"Recebimento de insumos","record":"Verduras e laticínios chegaram com lacres anotados como intactos. A planilha contém um campo preenchido depois, com caneta distinta.","reliability":"Registro contemporâneo com alteração posterior não explicada.","supports":"Estabelece horário provável do recebimento e existência da planilha.","limits":"Não permite concluir qualidade microbiológica nem responsabilizar fornecedores."},{"id":"e2","time":"16h20","type":"Preparo","title":"Molho de ervas M-06","record":"A produção fria anotou '12', mas não registrou unidade, tipo de instrumento ou identificação do ponto medido.","reliability":"Registro incompleto que exige verificação independente.","supports":"Confirma que houve preparo do lote e uma anotação não interpretável por si só.","limits":"O número não prova temperatura do alimento, falha ou agente infeccioso."},{"id":"e3","time":"17h10","type":"Armazenamento","title":"Câmara fria 2","record":"O visor indicou 10,5 °C em uma única leitura. Há lacuna entre 16h40 e 17h10 e não há calibração documentada no dia.","reliability":"Leitura pontual de equipamento sem verificação completa.","supports":"Documenta um valor mostrado pelo visor naquele instante.","limits":"Não informa temperatura do produto, tempo de exposição nem causa de queixas."},{"id":"e4","time":"18h35","type":"Cocção","title":"Registro do prato quente","record":"Uma ficha apresenta 71 °C, sem identificar a posição de medição nem os horários de todos os serviços.","reliability":"Leitura isolada com descrição incompleta da técnica.","supports":"Indica que uma medição de temperatura foi registrada.","limits":"Não demonstra condição de todos os pratos ou de toda a cadeia após preparo."},{"id":"e5","time":"18h30","type":"Sobremesa","title":"Creme D-04","record":"Ficha da sobremesa registra 7 °C, mas não especifica se a leitura foi do ambiente, do centro do alimento ou da embalagem.","reliability":"Registro contextual insuficiente para interpretar a medição.","supports":"Mostra anotação vinculada ao lote de sobremesa.","limits":"Não descarta a sobremesa como hipótese nem demonstra risco microbiológico."},{"id":"e6","time":"18h45","type":"Higiene","title":"Checklist sem assinatura","record":"A linha de higienização não contém assinatura. Uma funcionária lembra de utensílio retirado da bancada, sem lembrar qual preparo o recebeu.","reliability":"Fonte mista: documento incompleto e lembrança retrospectiva.","supports":"Identifica uma lacuna de rastreabilidade na rotina de utensílios.","limits":"Não é prova de higienização ausente ou contato cruzado."},{"id":"e7","time":"19h00–20h15","type":"Serviço","title":"Pedidos de 12 clientes","record":"Um mapa reconstruído depois do evento indica os itens pedidos por 12 clientes codificados. Não foram confirmados consumo integral ou outros alimentos fora do restaurante.","reliability":"Registro reconstruído, sujeito a erros de lembrança e seleção.","supports":"Permite comparação didática entre presença de alimentos nos pedidos e relatos posteriores.","limits":"Não define fonte única nem permite inferência causal para a população."},{"id":"e8","time":"22h10–23h05","type":"Relatos","title":"Seis pessoas relatam mal-estar","record":"Seis de 12 pessoas ilustrativas comunicaram desconforto. Não há exames, identificação de agente, verificação clínica nem investigação de exposições anteriores.","reliability":"Autorrelatos não verificados clinicamente.","supports":"Houve relatos de sintomas após o jantar nesta simulação.","limits":"Não se pode confirmar intoxicação, etiologia, incubação ou relação causal com o jantar."}],"witnesses":[{"id":"chefe","name":"Nina","role":"Cozinheira responsável","initial":"O molho frio foi preparado à tarde, e eu lembro de termos mudado os recipientes de lugar para liberar a bancada.","questions":[{"id":"registro","label":"O que significa '12' na ficha?","answer":"Não tenho certeza; aquele campo era usado às vezes para horário e às vezes para leitura de equipamento.","lesson":"Sem unidade e método, a anotação é ambígua."},{"id":"troca","label":"Os utensílios foram compartilhados?","answer":"Houve movimentação de recipientes, mas não vi um utensílio passar diretamente de uma preparação para outra.","lesson":"Uma possibilidade de contato cruzado não é evidência de que tenha ocorrido."}]},{"id":"estoque","name":"Caio","role":"Responsável pelo estoque","initial":"Vi o visor da câmara fria perto do fim da tarde, mas não medi a temperatura dos produtos.","questions":[{"id":"sonda","label":"O visor estava aferido?","answer":"Não localizei uma ficha de calibração daquele dia; o sensor é do ar interno, não do centro dos alimentos.","lesson":"Um equipamento pode exibir um número sem que se conheça sua precisão para a pergunta investigada."},{"id":"intervalo","label":"Sabe por quanto tempo a leitura ficou naquele valor?","answer":"Não. O registro entre 16h40 e 17h10 está incompleto.","lesson":"Tempo de exposição não pode ser calculado a partir de leitura pontual."}]},{"id":"servico","name":"Lia","role":"Atendente do salão","initial":"Algumas pessoas consumiram o molho frio com o prato quente e outras escolheram sobremesa. Eu ajudei a reconstruir os pedidos.","questions":[{"id":"consumo","label":"Os pedidos registram consumo real?","answer":"Não necessariamente. Houve divisão de porções e uma mesa tinha alimentos trazidos de fora, mas não anotei quais.","lesson":"Exposição relatada ou pedida pode não corresponder ao consumo e introduz viés de classificação."},{"id":"grupos","label":"Todos os que reclamaram pediram o mesmo item?","answer":"Não. Há pelo menos um relato entre quem não pediu o molho frio.","lesson":"A presença de um alimento em vários pedidos não implica fonte única."}]},{"id":"cliente","name":"Rui","role":"Cliente fictício","initial":"Na noite do jantar, conversei com amigos que também relataram desconforto. Não sabemos ainda se foi relacionado ao restaurante.","questions":[{"id":"inicio","label":"Todos os relatos começaram ao mesmo tempo?","answer":"Não, e alguns foram feitos bem depois. Os horários foram informados de memória.","lesson":"Cronologia autorreferida é insuficiente para inferir agente, período de incubação ou fonte."},{"id":"outros","label":"Houve outras refeições ou contatos?","answer":"Sim. Não houve coleta completa dessas informações para todo o grupo.","lesson":"Exposições externas são hipóteses de confusão que precisam ser investigadas."}]}],"people":[{"id":"A01","sauce":true,"dessert":true,"hot":true,"report":true},{"id":"A02","sauce":true,"dessert":false,"hot":true,"report":true},{"id":"A03","sauce":true,"dessert":true,"hot":false,"report":true},{"id":"A04","sauce":true,"dessert":false,"hot":true,"report":true},{"id":"A05","sauce":true,"dessert":true,"hot":true,"report":true},{"id":"A06","sauce":true,"dessert":false,"hot":true,"report":false},{"id":"A07","sauce":true,"dessert":true,"hot":false,"report":false},{"id":"A08","sauce":true,"dessert":false,"hot":true,"report":false},{"id":"A09","sauce":false,"dessert":true,"hot":true,"report":true},{"id":"A10","sauce":false,"dessert":true,"hot":true,"report":false},{"id":"A11","sauce":false,"dessert":false,"hot":true,"report":false},{"id":"A12","sauce":false,"dessert":false,"hot":false,"report":false}],"foods":[{"id":"sauce","name":"Molho frio M-06","detail":"Item montado na área de preparação fria; seus registros de preparo e armazenamento têm lacunas."},{"id":"dessert","name":"Sobremesa D-04","detail":"Creme montado e armazenado separadamente; registros não demonstram a condição interna do alimento."},{"id":"hot","name":"Prato quente","detail":"Preparação de cocção com anotação pontual; distribuição e contato posterior não foram avaliados."}],"hypotheses":[{"id":"cold","title":"A preparação fria merece investigação prioritária, mas a fonte e a relação causal seguem desconhecidas.","detail":"Reconhece associação nos pedidos, documentos com lacunas e hipóteses concorrentes."},{"id":"sauce-proved","title":"O molho frio foi comprovadamente a causa dos relatos.","detail":"Converte uma associação descritiva em confirmação laboratorial inexistente."},{"id":"dessert-proved","title":"A sobremesa foi definitivamente a causa, pois também aparece em muitos pedidos.","detail":"Atribui causalidade sem distinguir exposições concomitantes."},{"id":"staff-blame","title":"Uma funcionária causou o episódio por não assinar a checklist.","detail":"Transforma falha documental em imputação pessoal."}],"interpretations":[{"id":"association","title":"Uma diferença na proporção de relatos orienta a coleta, mas não prova contaminação nem agente.","detail":"Reconhece amostra pequena, exposição incerta, possíveis confundidores e ausência de exames."},{"id":"proof","title":"O maior percentual de relatos entre expostos prova qual alimento estava contaminado.","detail":"Confunde associação numérica com causa verificada."},{"id":"temperature","title":"Uma leitura pontual de temperatura confirma uma infração e explica os sintomas.","detail":"Ignora unidade, instrumentação, duração e ausência de análise microbiológica."}],"investigations":[{"id":"verify","title":"Preservar lotes e registros; envolver profissionais e autoridades competentes para entrevista padronizada, inspeção e amostragens adequadas.","detail":"Amplia comparabilidade, rastreabilidade e análise técnica sem antecipar o resultado."},{"id":"selective","title":"Testar apenas o molho até encontrar um resultado que confirme a hipótese inicial.","detail":"Seleciona evidência para uma conclusão predefinida."},{"id":"discard","title":"Descartar todos os dados porque ninguém teve exame laboratorial.","detail":"Desperdiça pistas úteis para uma investigação orientada."}],"safeguards":[{"id":"proportionate","title":"Comunicar os relatos e adotar medidas preventivas proporcionais com orientação das autoridades competentes, sem acusar trabalhadores ou fornecedores.","detail":"Prioriza saúde e preservação de dados, reconhecendo incerteza."},{"id":"publish","title":"Divulgar como culpada a pessoa da checklist incompleta.","detail":"Atribui responsabilidade não demonstrada."},{"id":"ignore","title":"Ignorar os relatos até existir prova laboratorial conclusiva.","detail":"Adia acompanhamento e providências de proteção."}]}</script>
+<script>
+"use strict";
+const DATA=JSON.parse(document.getElementById("case-data").textContent);
+(function(){
+const $=id=>document.getElementById(id);
+const el=(tag,value,cls)=>{const x=document.createElement(tag);x.textContent=value??"";if(cls)x.className=cls;return x;};
+const svg=(tag,attrs,content)=>{const x=document.createElementNS("http://www.w3.org/2000/svg",tag);for(const [k,v] of Object.entries(attrs))x.setAttribute(k,String(v));if(content!==undefined)x.textContent=content;return x;};
+const zones=Object.fromEntries(DATA.zones.map(x=>[x.id,x]));
+const inspected=new Set(),opened=new Set(),heard=new Set(),asked=new Set(),compared=new Set();
+let activeZone="recebimento",activeEvent=null,activeWitness=null,activeFood=null,currentStep=1,resetOpen=false,resetSource="restart-anytime",usedRefs=[];
+function assertData(){
+ const groups=[DATA.zones,DATA.events,DATA.witnesses,DATA.people,DATA.foods,DATA.hypotheses,DATA.interpretations,DATA.investigations,DATA.safeguards];
+ for(const group of groups)if(new Set(group.map(x=>x.id)).size!==group.length)throw Error("IDs duplicados no caso");
+ if(DATA.zones.length!==7||DATA.events.length!==8||DATA.witnesses.length!==4||DATA.people.length!==12)throw Error("Cenário incompleto");
+ if(DATA.people.some(person=>DATA.foods.some(food=>typeof person[food.id]!=="boolean")||typeof person.report!=="boolean"))throw Error("Exposição inválida");
+}
+function focus(id){const x=$(id);x.focus({preventScroll:true});x.scrollIntoView({block:"start",behavior:"auto"});}
+function canAdvance(to){
+ if(to===2)return inspected.size>=4;
+ if(to===3)return inspected.size>=4&&opened.size>=4;
+ if(to===4)return opened.size>=4&&heard.size>=2&&asked.size>=2&&compared.size>=2;
+ return true;
+}
+function navigate(to){
+ if(to>1&&!canAdvance(to))return;
+ currentStep=to;
+ ["zones-panel","timeline-panel","interviews-panel","analysis-panel","report-panel"].forEach((name,i)=>{
+  $(name).hidden=i!==to-1;
+  $("step-"+(i+1)).className="step"+(i===to-1?" current":i<to-1?" done":"");
+ });
+ if(to===1){renderZones();focus("zones-heading");}
+ if(to===2){renderEvents();focus("timeline-heading");}
+ if(to===3){renderWitnesses();renderComparison();focus("interviews-heading");}
+ if(to===4){renderSources();focus("analysis-heading");}
+ if(to===5)focus("report-heading");
+}
+function selectZone(id,source){
+ if(!zones[id])return;
+ inspected.add(id);activeZone=id;
+ renderZones();
+ if(source==="svg")focus("zone-title");
+}
+function renderZones(){
+ const list=$("zone-buttons");list.replaceChildren();
+ for(const zone of DATA.zones){
+  const selected=zone.id===activeZone,visited=inspected.has(zone.id);
+  const pin=document.querySelector('[data-zone="'+zone.id+'"]');
+  pin.classList.toggle("visited",visited);pin.classList.toggle("selected",selected);
+  pin.setAttribute("aria-pressed",String(selected));
+  pin.setAttribute("aria-label",zone.name+"; "+(visited?"já examinado":"ainda não examinado")+"; selecionar área");
+  const btn=el("button","","zone-button");btn.type="button";btn.setAttribute("aria-pressed",String(selected));
+  btn.append(el("strong",zone.name),el("small",visited?"Examinado":"Não examinado"));
+  btn.addEventListener("click",()=>selectZone(zone.id,"list"));
+  list.append(btn);
+ }
+ const z=zones[activeZone];
+ $("zone-type").textContent=z.type;$("zone-title").textContent=z.name;
+ $("zone-observation").textContent="Observação: "+z.observation;
+ $("zone-clue").textContent="O que investigar: "+z.clue;
+ $("zone-limitation").textContent="Limite: "+z.limitation;
+ $("zone-related").textContent="Registro relacionado: "+z.related;
+ $("zone-count").textContent=inspected.size+" de 7 ambientes examinados";
+ $("zone-hint").textContent=inspected.size>=4?"Você pode avançar ou examinar os demais ambientes.":"Examine mais "+(4-inspected.size)+" ambiente(s) para avançar.";
+ $("to-timeline").disabled=inspected.size<4;
+}
+function renderEvents(){
+ const list=$("event-list");list.replaceChildren();
+ for(const event of DATA.events){
+  const btn=el("button","","event-card");btn.type="button";btn.setAttribute("aria-pressed",String(activeEvent===event.id));
+  btn.append(el("small",event.time+" · "+event.type),el("strong",event.title),el("span",opened.has(event.id)?"Registro examinado":"Não examinado"));
+  btn.addEventListener("click",()=>openEvent(event.id));list.append(btn);
+ }
+ $("event-count").textContent=opened.size+" de 8 registros examinados";
+ $("to-interviews").disabled=!canAdvance(3);
+}
+function openEvent(id){
+ const item=DATA.events.find(x=>x.id===id);if(!item)return;
+ activeEvent=id;opened.add(id);renderEvents();
+ $("event-detail").replaceChildren(el("h3",item.time+" · "+item.title),el("span",item.type,"source"),el("blockquote",item.record),el("p","Confiabilidade: "+item.reliability),el("p","O que sustenta: "+item.supports),el("p","O que NÃO demonstra: "+item.limits));
+}
+function renderWitnesses(){
+ const list=$("witness-list");list.replaceChildren();
+ for(const witness of DATA.witnesses){
+  const btn=el("button","","witness-card");btn.type="button";btn.setAttribute("aria-pressed",String(activeWitness===witness.id));
+  btn.append(el("small",witness.role),el("strong",witness.name),el("span",heard.has(witness.id)?"Depoimento lido":"Não ouvido"));
+  btn.addEventListener("click",()=>openWitness(witness.id));list.append(btn);
+ }
+ $("interview-count").textContent=heard.size+" depoimentos · "+asked.size+" perguntas";
+ renderAdvance();
+}
+function openWitness(id){
+ const item=DATA.witnesses.find(x=>x.id===id);if(!item)return;
+ activeWitness=id;heard.add(id);renderWitnesses();
+ $("witness-detail").replaceChildren(el("h3",item.name+" · "+item.role),el("blockquote",item.initial),el("p","Um depoimento orienta a investigação, mas é necessário confrontá-lo com registros independentes."));
+ renderQuestions();
+}
+function renderQuestions(){
+ const list=$("questions");list.replaceChildren();
+ const witness=DATA.witnesses.find(x=>x.id===activeWitness);
+ if(!witness)return;
+ for(const question of witness.questions){
+  const key=witness.id+":"+question.id,btn=el("button",question.label,"question");
+  btn.type="button";btn.setAttribute("aria-pressed",String(asked.has(key)));
+  btn.addEventListener("click",()=>ask(witness.id,question.id));list.append(btn);
+ }
+ for(const question of witness.questions){
+  if(!asked.has(witness.id+":"+question.id))continue;
+  const div=el("div","","answer");
+  div.append(el("strong","Pergunta: "+question.label),el("p","Resposta: "+question.answer),el("p","Leitura crítica: "+question.lesson));list.append(div);
+ }
+}
+function ask(witnessId,questionId){
+ if(currentStep!==3||activeWitness!==witnessId)return;
+ const person=DATA.witnesses.find(x=>x.id===witnessId);
+ if(!person?.questions.some(x=>x.id===questionId))return;
+ asked.add(witnessId+":"+questionId);
+ renderWitnesses();renderQuestions();
+}
+function rates(key){
+ const yes=DATA.people.filter(p=>p[key]),no=DATA.people.filter(p=>!p[key]);
+ const a=yes.filter(p=>p.report).length,b=no.filter(p=>p.report).length;
+ return {yesCount:yes.length,yesReported:a,noCount:no.length,noReported:b,yesRate:a/yes.length*100,noRate:b/no.length*100};
+}
+function comparisonTable(){
+ const tbody=$("exposure-rows");tbody.replaceChildren();
+ for(const p of DATA.people){
+  const tr=document.createElement("tr");
+  for(const value of [p.id,p.sauce?"Sim":"Não",p.dessert?"Sim":"Não",p.hot?"Sim":"Não",p.report?"Sim":"Não"]){
+   tr.append(el("td",value));
+  }
+  tbody.append(tr);
+ }
+}
+function renderComparison(){
+ const root=$("compare-list");root.replaceChildren();
+ for(const food of DATA.foods){
+  const data=rates(food.id),btn=el("button","","compare");btn.type="button";
+  btn.setAttribute("aria-pressed",String(activeFood===food.id));
+  btn.append(el("strong",food.name),el("small",data.yesReported+"/"+data.yesCount+" com pedido e relato; "+data.noReported+"/"+data.noCount+" sem pedido e relato"),el("small",compared.has(food.id)?"Comparação examinada":"Toque para comparar"));
+  btn.addEventListener("click",()=>selectFood(food.id));root.append(btn);
+ }
+ $("comparison-count").textContent=compared.size+" de 3 alimentos comparados";
+ renderAdvance();
+ if(activeFood)drawComparison(activeFood);
+}
+function renderAdvance(){
+ $("to-analysis").disabled=!canAdvance(4);
+}
+function selectFood(id){
+ if(!DATA.foods.some(f=>f.id===id))return;
+ activeFood=id;compared.add(id);renderComparison();
+}
+function drawComparison(id){
+ const food=DATA.foods.find(x=>x.id===id),r=rates(id),root=$("comparison-detail");
+ root.replaceChildren(el("h3",food.name),el("p",food.detail),
+ el("p","Pediu: "+r.yesReported+" relatos em "+r.yesCount+" pedidos ("+r.yesRate.toFixed(1).replace(".",",")+"%)."),
+ el("p","Não pediu: "+r.noReported+" relatos em "+r.noCount+" pedidos ("+r.noRate.toFixed(1).replace(".",",")+"%)."),
+ el("p","Diferença descritiva: "+(r.yesRate-r.noRate).toFixed(1).replace(".",",")+" pontos percentuais. Não representa probabilidade de doença, risco causal ou valor de diagnóstico."),
+ el("p","Os grupos não são comparáveis de forma controlada; pedidos simultâneos e exposições externas podem produzir associação."));
+ const plot=$("rates-plot");plot.replaceChildren();
+ for(let n=0;n<=4;n++){
+  const yy=222-n*48;
+  plot.append(svg("line",{x1:140,y1:yy,x2:470,y2:yy,stroke:"#9bbcb0","stroke-opacity":".5"}));
+  plot.append(svg("text",{x:124,y:yy+5,"text-anchor":"end",class:"rate-axis"},(n*25)+"%"));
+ }
+ for(const [i,arr] of [[0,{label:"Pediu",rate:r.yesRate,count:r.yesReported,total:r.yesCount,cls:"bar-exposed"}],[1,{label:"Não pediu",rate:r.noRate,count:r.noReported,total:r.noCount,cls:"bar-control"}]]){
+  const x=210+i*150,height=arr.rate/100*192,y=222-height;
+  plot.append(svg("rect",{x,y,width:72,height,rx:5,class:arr.cls}));
+  plot.append(svg("text",{x:x+36,y:242,"text-anchor":"middle",class:"rate-label"},arr.label));
+  plot.append(svg("text",{x:x+36,y:Math.max(19,y-7),"text-anchor":"middle",class:"rate-label"},arr.count+"/"+arr.total));
+ }
+ $("rates-desc").textContent=food.name+": "+r.yesReported+" relatos entre "+r.yesCount+" pedidos; "+r.noReported+" relatos entre "+r.noCount+" não pedidos. Gráfico ilustrativo da proporção na amostra fictícia, sem significado causal.";
+}
+function formOptions(id,options,name){
+ const root=$(id);root.replaceChildren();
+ for(const item of options){
+  const label=el("label","","option"),input=document.createElement("input"),wrap=el("span");
+  input.type="radio";input.name=name;input.value=item.id;
+  wrap.append(el("strong",item.title),el("small",item.detail));label.append(input,wrap);root.append(label);
+ }
+}
+function listSources(){
+ const items=[];
+ for(const zone of DATA.zones.filter(z=>inspected.has(z.id)))items.push({id:"zone:"+zone.id,label:"Ambiente · "+zone.name,detail:zone.observation,limit:zone.limitation});
+ for(const event of DATA.events.filter(e=>opened.has(e.id)))items.push({id:"event:"+event.id,label:"Registro · "+event.title,detail:event.supports,limit:event.limits});
+ for(const witness of DATA.witnesses)for(const q of witness.questions.filter(q=>asked.has(witness.id+":"+q.id)))items.push({id:"question:"+witness.id+":"+q.id,label:"Depoimento · "+witness.name+": "+q.label,detail:q.answer,limit:q.lesson});
+ if(compared.size>=2)items.push({id:"comparison",label:"Comparação · Pedidos de alimentos e relatos",detail:"Proporções descritivas calculadas entre pedidos com e sem alimentos.",limit:"Pedido não é confirmação de consumo; não há diagnóstico nem controle para outros fatores."});
+ return items;
+}
+function renderSources(){
+ const previous=Array.from(document.querySelectorAll('input[name="evidence"]:checked')).map(x=>x.value);
+ const root=$("evidence-options");root.replaceChildren();
+ const items=listSources(),validIds=new Set(items.map(x=>x.id));
+ usedRefs=previous.filter(x=>validIds.has(x));
+ for(const item of items){
+  const label=el("label","","option"),input=document.createElement("input"),body=el("span");
+  input.type="checkbox";input.name="evidence";input.value=item.id;input.checked=usedRefs.includes(item.id);
+  body.append(el("strong",item.label),el("small",item.detail));
+  label.append(input,body);root.append(label);
+ }
+}
+function radio(name){return document.querySelector('input[name="'+name+'"]:checked')?.value||null;}
+function evaluate(answer){
+ const crediblePair=answer.refs.includes("comparison")&&answer.refs.some(id=>["zone:refrigeracao","zone:preparo-frio","event:e2","event:e3"].includes(id));
+ const flags=[
+   answer.hypothesis==="cold",
+   answer.interpretation==="association",
+   answer.investigation==="verify",
+   answer.safeguard==="proportionate",
+   crediblePair
+ ];
+ const score=flags.filter(Boolean).length;
+ const tier=score>=4?"strong":score>=2?"partial":"review";
+ return {tier,score,flags,crediblePair};
+}
+function renderReport(answer){
+ const outcome=evaluate(answer),root=$("report-result");
+ root.className="report-result"+(outcome.tier==="strong"?"":outcome.tier==="partial"?" partial":" review");
+ root.replaceChildren(
+  el("p",outcome.tier==="strong"?"Parecer prudente e bem fundamentado":outcome.tier==="partial"?"Parecer com lacunas de interpretação":"Parecer exige revisão das inferências","kicker"),
+  el("h3",outcome.tier==="strong"?"Você separou associação, investigação e responsabilidade.":outcome.tier==="partial"?"Há bons pontos no raciocínio, mas faltam controles e justificativas.":"O dossiê não autoriza uma causa ou pessoa responsável comprovada."),
+  el("p",outcome.flags[0]?"Você tratou o preparo frio como prioridade investigativa, não como origem já estabelecida.":"A hipótese escolhida atribui certeza além do que a documentação e os relatos permitem."),
+  el("p",outcome.flags[1]?"Você reconheceu que proporções de relatos nos pedidos não provam causa ou diagnóstico.":"Os valores e a cronologia são descritivos; não demonstram agente, contaminação ou nexo causal."),
+  el("p",outcome.crediblePair?"Suas duas fontes combinam uma comparação de pedidos com uma lacuna de preparo ou armazenamento; juntas ajudam a formular perguntas, não a imputar responsabilidade.":"Sua seleção de evidências não reúne diretamente a comparação de pedidos e um registro de preparo/armazenamento. Esse confronto é útil para definir novas coletas."),
+  el("p",outcome.flags[2]?"A investigação proposta prevê preservação e verificação independente.":"O procedimento escolhido não oferece controles suficientes ou antecipa a conclusão."),
+  el("p",outcome.flags[3]?"Sua resposta é proporcional e evita responsabilização antecipada.":"Uma suspeita não justifica acusações públicas ou inação diante de relatos."),
+  el("p","Este relatório é somente formativo, produzido localmente, e não constitui diagnóstico, laudo, conclusão sanitária ou nota Moodle.")
+ );
+ const cards=$("report-grid");cards.replaceChildren();
+ function add(title,message){const div=el("section","","report-cell");div.append(el("h3",title),el("p",message));cards.append(div);}
+ const sources=Object.fromEntries(listSources().map(x=>[x.id,x]));
+ add("Fontes realmente citadas",answer.refs.map(id=>{const source=sources[id];return source.label+". Limite: "+source.limit;}).join(" "));
+ const sauce=rates("sauce"),dessert=rates("dessert"),hot=rates("hot");
+ add("Comparação fictícia de alimentos","Molho: "+sauce.yesReported+"/"+sauce.yesCount+" entre pedidos com molho versus "+sauce.noReported+"/"+sauce.noCount+" sem; sobremesa: "+dessert.yesReported+"/"+dessert.yesCount+" versus "+dessert.noReported+"/"+dessert.noCount+"; prato quente: "+hot.yesReported+"/"+hot.yesCount+" versus "+hot.noReported+"/"+hot.noCount+". Dados de pedidos, não exposições confirmadas.");
+ add("Rastreabilidade e incerteza","Documentos examinados: "+opened.size+"/8; ambientes: "+inspected.size+"/7; testemunhas: "+heard.size+"/4; perguntas: "+asked.size+"; alimentos comparados: "+compared.size+"/3. Faltam consumo real, outros contatos, métodos de medição, duração de armazenamento e resultados laboratoriais.");
+ add("Próximo passo escolhido",DATA.investigations.find(x=>x.id===answer.investigation).title+" A identificação de agentes, decisões sanitárias e avaliações clínicas pertencem a profissionais habilitados e órgãos competentes.");
+}
+function submit(e){
+ e.preventDefault();if(currentStep!==4)return;
+ const hypothesis=radio("hypothesis"),interpretation=radio("interpretation"),investigation=radio("investigation"),safeguard=radio("safeguard");
+ const refs=Array.from(document.querySelectorAll('input[name="evidence"]:checked')).map(x=>x.value);
+ const allowed=new Set(listSources().map(x=>x.id));
+ if(!hypothesis||!interpretation||!investigation||!safeguard||refs.length!==2||!refs.every(x=>allowed.has(x))){
+  $("analysis-error").textContent="Escolha hipótese, exatamente duas fontes examinadas, interpretação, próximo procedimento e resposta preventiva.";return;
+ }
+ $("analysis-error").textContent="";usedRefs=refs;renderReport({hypothesis,refs,interpretation,investigation,safeguard});navigate(5);
+}
+function reset(){
+ inspected.clear();opened.clear();heard.clear();asked.clear();compared.clear();
+ activeZone="recebimento";activeEvent=null;activeWitness=null;activeFood=null;usedRefs=[];resetOpen=false;
+ $("analysis-form").reset();
+ $("event-detail").replaceChildren(el("h3","Selecione um registro"),el("p","Veja o relato, a confiabilidade e suas limitações."));
+ $("witness-detail").replaceChildren(el("h3","Escolha uma pessoa"),el("p","As respostas revelam limites dos registros e da memória."));
+ $("questions").replaceChildren();
+ $("comparison-detail").replaceChildren(el("h3","Escolha um alimento"),el("p","Os totais e percentuais serão calculados com os registros fictícios."));
+ $("rates-plot").replaceChildren();$("rates-desc").textContent="O gráfico será atualizado após selecionar um alimento.";
+ $("analysis-error").textContent="";$("reset-confirm").hidden=true;
+ renderZones();renderEvents();renderWitnesses();renderComparison();navigate(1);
+}
+function askReset(source){resetSource=source;$("reset-confirm").hidden=false;resetOpen=true;$("cancel-reset").focus();}
+function cancelReset(){$("reset-confirm").hidden=true;resetOpen=false;$(resetSource).focus();}
+assertData();
+formOptions("hypotheses",DATA.hypotheses,"hypothesis");
+formOptions("interpretations",DATA.interpretations,"interpretation");
+formOptions("investigations",DATA.investigations,"investigation");
+formOptions("safeguards",DATA.safeguards,"safeguard");
+document.querySelectorAll("[data-zone]").forEach(zone=>{
+ zone.addEventListener("click",()=>selectZone(zone.dataset.zone,"svg"));
+ zone.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectZone(zone.dataset.zone,"svg");}});
+});
+$("to-timeline").addEventListener("click",()=>navigate(2));
+$("timeline-back").addEventListener("click",()=>navigate(1));
+$("to-interviews").addEventListener("click",()=>navigate(3));
+$("interviews-back").addEventListener("click",()=>navigate(2));
+$("to-analysis").addEventListener("click",()=>navigate(4));
+$("analysis-back").addEventListener("click",()=>navigate(3));
+$("analysis-form").addEventListener("change",()=>{$("analysis-error").textContent="";});
+$("analysis-form").addEventListener("submit",submit);
+$("review-analysis").addEventListener("click",()=>navigate(4));
+$("review-kitchen").addEventListener("click",()=>navigate(1));
+$("restart").addEventListener("click",()=>askReset("restart"));
+$("restart-anytime").addEventListener("click",()=>askReset("restart-anytime"));
+$("cancel-reset").addEventListener("click",cancelReset);
+$("approve-reset").addEventListener("click",reset);
+comparisonTable();renderZones();renderEvents();renderWitnesses();renderComparison();
+})();
+</script>
+</body>
+</html>
