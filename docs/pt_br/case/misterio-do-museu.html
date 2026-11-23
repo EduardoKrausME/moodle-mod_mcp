@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>O Mistério do Museu - A bússola que desapareceu</title>
+<style>
+:root{color-scheme:light;--bg:#f3f0ea;--card:#fffdf9;--ink:#21323a;--soft:#53646c;--line:#d5ddd8;--green:#206358;--on-green:#fff;--amber:#af6235;--hero:#102c38;--focus:#075dc0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}
+:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+main{max-width:1180px;margin:auto;padding:clamp(14px,3vw,32px)}
+.hero{display:grid;grid-template-columns:1fr 1fr;overflow:hidden;background:var(--hero);border-radius:23px;color:#fff;box-shadow:0 16px 36px #102c3817}
+.hero-copy{padding:clamp(22px,4.5vw,48px);align-self:center}
+.kicker{font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:850;color:#efcb8b;margin:0 0 15px}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;letter-spacing:-.03em;line-height:1.1}
+h1{font-size:clamp(2.3rem,5vw,4.2rem);margin:0 0 20px}h2{font-size:clamp(1.8rem,3.2vw,2.5rem);margin:0 0 13px}h3{margin:0 0 9px}
+.hero p:not(.kicker){color:#d8e4e3;max-width:48ch}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.chips span{border:1px solid #68848a;border-radius:22px;padding:6px 11px;color:#f1ece1;font-size:.79rem}
+.art{background:#1b3947;display:grid;place-items:center;min-height:265px}.art svg{width:100%;height:100%;display:block;max-height:410px}
+.disclaimer,.footer-note{font-size:.84rem;color:var(--soft);margin:18px 3px}
+.steps{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:24px 0}
+.step{padding:8px 15px;border:1px solid var(--line);background:var(--card);color:var(--soft);border-radius:25px;font-size:.85rem;font-weight:800}
+.step.active{background:var(--green);border-color:var(--green);color:var(--on-green)}.step.done{border-color:var(--green);color:var(--green)}
+.rule{width:22px;height:1px;background:var(--line)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,3vw,34px)}
+[hidden]{display:none!important}
+.topline{display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:12px}
+.sub{font-size:.76rem;text-transform:uppercase;letter-spacing:.1em;font-weight:900;color:var(--amber);margin:0 0 8px}
+.muted{color:var(--soft)}.lead{max-width:75ch;color:var(--soft);margin:0 0 23px}
+.count{border-radius:12px;background:#e4f2eb;color:#1d5a4e;padding:10px 15px;font-weight:850}
+.context{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:20px 0}
+.context>div{border:1px solid var(--line);border-radius:14px;background:var(--bg);padding:16px}
+.context strong{display:block;font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-bottom:8px}.context p{font-size:.92rem;margin:0}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:15px 0 20px}
+.source{min-height:140px;background:var(--card);border:1.5px solid var(--line);border-radius:15px;text-align:left;padding:18px;display:flex;flex-direction:column;gap:9px;color:var(--ink);transition:border .16s,transform .16s}
+.source:hover{transform:translateY(-2px);border-color:var(--green)}
+.source[aria-pressed="true"]{border-color:var(--green);background:#e7f4ef;box-shadow:inset 0 0 0 1px var(--green)}
+.source .meta{display:flex;justify-content:space-between;gap:6px;font-size:.77rem;font-weight:800}
+.source .meta span:first-child{color:var(--green)}.source .state{color:var(--soft)}
+.source .name{font-weight:850;line-height:1.25}.source .kind{color:var(--soft);font-size:.8rem;margin-top:auto}
+.document{background:#eaf4ee;border-left:5px solid var(--green);border-radius:0 13px 13px 0;padding:18px 21px;min-height:150px}
+.document h3{color:#155348}.document p{margin:8px 0}
+.document blockquote{font-family:Georgia,serif;margin:12px 0;background:#fff8ed;border-left:3px solid #bb9560;padding:11px 15px;color:#27353a}
+.doc-type{font-size:.77rem;font-weight:800;text-transform:uppercase;color:#416d61}
+.actions{display:flex;align-items:center;flex-wrap:wrap;gap:11px;margin-top:23px}
+.primary,.secondary{min-height:46px;border-radius:10px;padding:10px 17px;font-weight:800}
+.primary{background:var(--green);color:var(--on-green);border:1px solid var(--green)}
+.secondary{background:var(--card);color:var(--green);border:1px solid var(--green)}
+.helper{font-size:.84rem;color:var(--soft)}
+fieldset{padding:0;border:0;margin:18px 0 24px}
+legend{font-size:1.08rem;font-weight:850;margin-bottom:11px}
+.choices{display:grid;gap:10px}
+.option{display:flex;align-items:start;gap:12px;padding:13px 15px;border:1px solid var(--line);border-radius:13px;cursor:pointer}
+.option:has(input:checked){border-color:var(--green);background:#e7f4ef}
+.option input{width:19px;height:19px;flex:0 0 auto;accent-color:var(--green);margin:3px 0 0}
+.option strong,.option small{display:block}.option strong{font-size:.95rem}
+.option small{color:var(--soft);font-size:.83rem;margin-top:3px}
+.citations{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.error{font-weight:800;color:#a43d32;min-height:23px}
+.result{background:#e9f4ed;border:1px solid #aac8b2;border-radius:16px;padding:20px}
+.result.reconsider{background:#fff0df;border-color:#e5bc8d}
+.result .label{font-size:.75rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#195b4b}
+.result.reconsider .label{color:#8f502b}
+.result h3{font-family:Georgia,serif;font-size:1.7rem;font-weight:500}
+.result p{margin:10px 0}.result ul{padding-left:23px}
+details{border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-top:20px}
+summary{cursor:pointer;font-weight:800}
+@media(max-width:850px){.hero{grid-template-columns:1fr}.art svg{max-height:250px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.grid,.context,.citations{grid-template-columns:1fr}main{padding:12px}.hero,.panel{border-radius:15px}.step{font-size:.72rem;padding:7px 9px}.rule{width:7px}.source{min-height:110px}.actions>*{flex:1 1 auto}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0e1c23;--card:#1b2d35;--ink:#eff4ee;--soft:#c0d0d0;--line:#43575d;--green:#8ce0c4;--on-green:#082b22;--amber:#f3b77f;--focus:#ffd17a}.hero{background:#102e3b}.count{background:#174139;color:#b6efd9}.source[aria-pressed="true"],.option:has(input:checked){background:#224338}.document{background:#21453b}.document h3{color:#c1f2de}.document blockquote{background:#172e37;color:#e3f2e9}.doc-type{color:#c1f2de}.result{background:#1d4036;border-color:#417965}.result.reconsider{background:#483321;border-color:#9d7851}.result .label{color:#b1ebd5}.result.reconsider .label{color:#ffc793}.error{color:#ffa7a2}}
+</style>
+</head>
+<body>
+<main>
+  <section class="hero" aria-labelledby="title">
+    <div class="hero-copy">
+      <p class="kicker">Dossiê 047 · Investigação por evidências</p>
+      <h1 id="title">A bússola que desapareceu</h1>
+      <p>Às 21h30, a bússola náutica não estava mais na vitrine da Sala Azul. Foi um furto, um desvio ou uma transferência para conservação? Você precisa descobrir o que pode ser afirmado.</p>
+      <div class="chips"><span>Museu do Farol · ficção</span><span>12 a 15 minutos</span></div>
+    </div>
+    <div class="art">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 410" role="img" aria-labelledby="svg-title svg-desc">
+        <title id="svg-title">A vitrine vazia da Sala Azul</title>
+        <desc id="svg-desc">Ilustração SVG original de uma sala de museu à noite com quadros, luzes de teto e vitrine central vazia. Não há pistas escondidas na imagem.</desc>
+        <defs><linearGradient id="bg" x2="0.9" y2="1"><stop stop-color="#355561"/><stop offset="1" stop-color="#112935"/></linearGradient><linearGradient id="light" x1="0" x2="0" y2="1"><stop stop-color="#fff0b8" stop-opacity=".48"/><stop offset="1" stop-color="#fff0b8" stop-opacity="0"/></linearGradient></defs>
+        <rect width="660" height="410" fill="url(#bg)"/>
+        <path d="M0 0 130 76V304L0 344M660 0 530 76V304L660 344" fill="#254450" stroke="#66838c" stroke-width="2"/>
+        <path d="M130 304H530L660 344V410H0V344Z" fill="#304b55"/>
+        <path d="M0 410 130 304M660 410 530 304M330 304V410" stroke="#719095" stroke-width="2"/>
+        <path d="M130 76H530V304H130Z" fill="#233b47"/>
+        <path d="M235 15H425L535 305H125Z" fill="url(#light)"/>
+        <ellipse cx="330" cy="308" rx="160" ry="24" fill="#f6d183" opacity=".16"/>
+        <rect x="45" y="91" width="97" height="139" fill="#b78f59"/><rect x="55" y="101" width="77" height="119" fill="#183642"/>
+        <path d="m65 189 20-43 20 33 17-49" fill="none" stroke="#e9c289" stroke-width="3"/>
+        <rect x="532" y="105" width="83" height="115" fill="#b78f59"/><rect x="541" y="114" width="65" height="97" fill="#183642"/>
+        <circle cx="574" cy="158" r="21" stroke="#e9c289" stroke-width="2" fill="none"/><path d="M574 130V187M545 158H603" stroke="#e9c289" stroke-width="2"/>
+        <rect x="276" y="262" width="108" height="77" rx="4" fill="#c6a274"/>
+        <rect x="264" y="253" width="132" height="13" fill="#ebcb91"/>
+        <rect x="245" y="116" width="170" height="138" rx="4" fill="#caeee8" fill-opacity=".1" stroke="#c1e0db" stroke-width="4"/>
+        <path d="M262 125V245M399 125V245" stroke="#edf9f1" stroke-opacity=".6" stroke-width="2"/>
+        <path d="M281 225H379" fill="none" stroke="#f5e2b5" stroke-dasharray="5 6" stroke-width="3"/>
+        <rect x="290" y="278" width="80" height="34" fill="#1c3843"/>
+        <text x="330" y="291" fill="#f2d4a0" text-anchor="middle" font-family="system-ui" font-size="10">PEÇA 047</text>
+        <text x="330" y="302" fill="#d4e3dd" text-anchor="middle" font-family="system-ui" font-size="7">BÚSSOLA NÁUTICA</text>
+        <path d="M238 18H422" stroke="#f3db9e" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="330" cy="19" r="10" fill="#f8e5b8"/>
+      </svg>
+    </div>
+  </section>
+  <p class="disclaimer">Caso inteiramente fictício, com documentos simulados. Atividade formativa no navegador: não registra notas, respostas ou conclusões oficiais no Moodle.</p>
+
+  <div class="steps" aria-label="Etapas da atividade">
+    <span id="step1" class="step active">01 · Examinar</span><span class="rule" aria-hidden="true"></span>
+    <span id="step2" class="step">02 · Decidir</span><span class="rule" aria-hidden="true"></span>
+    <span id="step3" class="step">03 · Relatório</span>
+  </div>
+
+  <section class="panel" id="investigate" aria-labelledby="investigate-title">
+    <div class="topline">
+      <div><p class="sub">Etapa 1 · Arquivo aberto</p><h2 id="investigate-title" tabindex="-1">Examine o que realmente sabemos</h2></div>
+      <div class="count" id="count" aria-live="polite">0 de 6 fontes examinadas</div>
+    </div>
+    <p class="lead">A segurança encontrou a vitrine vazia às 21h30. Consulte pelo menos quatro fontes, observe o que cada documento prova e quais conclusões ainda não são possíveis.</p>
+    <div class="context">
+      <div><strong>Constatação inicial</strong><p>A peça 047 já não estava na vitrine; não havia confirmação do destino.</p></div>
+      <div><strong>Sua missão</strong><p>Construir uma hipótese, justificar com dois registros e escolher um próximo procedimento verificável.</p></div>
+    </div>
+    <h3>Fontes da investigação</h3>
+    <div class="grid">
+      <button type="button" class="source" data-source="sensor" aria-pressed="false"><span class="meta"><span>E-01 · Sistema</span><span class="state">Não lido</span></span><span class="name">Alerta da vitrine</span><span class="kind">Registro automatizado</span></button>
+      <button type="button" class="source" data-source="order" aria-pressed="false"><span class="meta"><span>E-02 · Documento</span><span class="state">Não lido</span></span><span class="name">Ordem de conservação</span><span class="kind">Registro administrativo</span></button>
+      <button type="button" class="source" data-source="camera" aria-pressed="false"><span class="meta"><span>E-03 · Imagem</span><span class="state">Não lido</span></span><span class="name">Câmera do corredor</span><span class="kind">Descrição de fotograma</span></button>
+      <button type="button" class="source" data-source="badge" aria-pressed="false"><span class="meta"><span>E-04 · Acesso</span><span class="state">Não lido</span></span><span class="name">Registro do crachá</span><span class="kind">Log de entrada</span></button>
+      <button type="button" class="source" data-source="inventory" aria-pressed="false"><span class="meta"><span>E-05 · Inventário</span><span class="state">Não lido</span></span><span class="name">Entrada no laboratório</span><span class="kind">Ficha de recebimento</span></button>
+      <button type="button" class="source" data-source="rumor" aria-pressed="false"><span class="meta"><span>E-06 · Relato</span><span class="state">Não lido</span></span><span class="name">O furgão suspeito</span><span class="kind">Relato não confirmado</span></button>
+    </div>
+    <div class="document" id="document" role="region" aria-label="Documento selecionado" aria-live="polite" aria-atomic="true"><h3>Selecione uma fonte</h3><p>O conteúdo do registro aparecerá aqui com uma explicação de seus limites.</p></div>
+    <div class="actions"><button class="primary" type="button" id="continue" disabled>Ir para a decisão</button><span class="helper" id="progress-hint">Examine pelo menos 4 fontes.</span></div>
+  </section>
+
+  <section class="panel" id="decide" aria-labelledby="decide-title" hidden>
+    <p class="sub">Etapa 2 · Hipótese e procedimento</p>
+    <h2 id="decide-title" tabindex="-1">O que os registros sustentam?</h2>
+    <p class="lead">Uma hipótese é uma explicação sujeita a verificação, não uma acusação. Escolha a explicação mais consistente, duas fontes examinadas e a próxima ação.</p>
+    <form id="case-form" novalidate>
+      <fieldset><legend>1. Qual hipótese é a mais consistente neste momento?</legend><div class="choices">
+        <label class="option"><input type="radio" name="hypothesis" value="outsider"><span><strong>Um visitante roubou a bússola.</strong><small>O relato do furgão seria suficiente para explicar o desaparecimento.</small></span></label>
+        <label class="option"><input type="radio" name="hypothesis" value="employee"><span><strong>Uma funcionária desviou a peça.</strong><small>O crachá e a câmera permitiriam concluir que houve intenção criminosa.</small></span></label>
+        <label class="option"><input type="radio" name="hypothesis" value="transfer"><span><strong>A peça foi transferida preventivamente para conservação.</strong><small>Há um motivo ambiental, ordem administrativa e registro de recebimento.</small></span></label>
+      </div></fieldset>
+      <fieldset><legend>2. Selecione exatamente duas fontes examinadas para sustentar sua hipótese</legend>
+        <div class="citations" id="citations"></div>
+      </fieldset>
+      <fieldset><legend>3. Qual é o próximo procedimento mais responsável?</legend><div class="choices">
+        <label class="option"><input type="radio" name="action" value="verify"><span><strong>Conferir presencialmente a caixa Q-12, o lacre 842 e o inventário.</strong><small>Verifica a transferência sem tratar o documento como prova física definitiva.</small></span></label>
+        <label class="option"><input type="radio" name="action" value="accuse"><span><strong>Acusar a pessoa que aparece na câmera.</strong><small>Converte um deslocamento filmado em afirmação sobre intenção.</small></span></label>
+        <label class="option"><input type="radio" name="action" value="publish"><span><strong>Anunciar publicamente que houve furto.</strong><small>Fecha a interpretação antes de conferir o destino da peça.</small></span></label>
+      </div></fieldset>
+      <p id="error" class="error" role="alert"></p>
+      <div class="actions"><button type="button" id="back" class="secondary">Revisar documentos</button><button type="submit" class="primary">Emitir relatório</button></div>
+    </form>
+  </section>
+
+  <section class="panel" id="report" aria-labelledby="report-title" hidden>
+    <p class="sub">Etapa 3 · Conclusão</p>
+    <h2 id="report-title" tabindex="-1">Relatório da investigação</h2>
+    <div id="feedback" class="result" aria-live="polite"></div>
+    <details><summary>Ver resolução comentada</summary><p>A hipótese mais bem sustentada é a transferência para conservação. E-01 indica um motivo para agir; E-02 documenta autorização, e E-05 registra recebimento da peça 047 na caixa Q-12. E-03 e E-04 são compatíveis com o percurso, mas não identificam com segurança conteúdo ou intenção. E-06 é um relato sem vínculo demonstrado. Mesmo com esses registros, ainda é necessário conferir fisicamente a peça e o lacre 842 antes de dar o caso por encerrado.</p></details>
+    <div class="actions"><button class="secondary" id="revise" type="button">Revisar decisão</button><button class="primary" id="restart" type="button">Recomeçar investigação</button></div>
+  </section>
+  <p class="footer-note">Ilustração SVG criada para o exercício, sem imagens ou recursos externos. Personagens, registros, sensores, horários e museu são fictícios. Nenhum dado pessoal é coletado.</p>
+</main>
+<script>
+(function(){
+"use strict";
+const evidence={
+ sensor:{title:"E-01 · Alerta da vitrine",kind:"Sistema automático",record:"21h08 | Umidade relativa: 82%. Limite configurado: 60%.",fact:"O sensor acusou umidade acima do limite operacional, que pode justificar uma avaliação de conservação.",limit:"Não prova que a bússola foi retirada nem identifica quem a movimentou."},
+ order:{title:"E-02 · Ordem de conservação",kind:"Documento administrativo",record:"21h10 | Peça 047: retirada preventiva autorizada. Destino: laboratório, caixa Q-12. Equipe responsável: conservação.",fact:"Existe uma autorização explícita que prevê retirada e destino.",limit:"Uma ordem não comprova, sozinha, que o procedimento foi executado."},
+ camera:{title:"E-03 · Câmera do corredor",kind:"Descrição de imagem",record:"21h14 | Pessoa uniformizada atravessa o corredor levando uma caixa escura em direção ao laboratório.",fact:"O registro descreve deslocamento com caixa naquele horário.",limit:"O conteúdo da caixa, a identidade da pessoa e sua intenção não podem ser confirmados pela imagem."},
+ badge:{title:"E-04 · Registro do crachá",kind:"Log eletrônico",record:"21h16 | Crachá NX-03, atribuído à conservadora Nina, usado na entrada do laboratório.",fact:"A credencial vinculada à conservação acessou o laboratório.",limit:"O uso de uma credencial não identifica necessariamente quem a utilizou."},
+ inventory:{title:"E-05 · Entrada no laboratório",kind:"Ficha assinada",record:"21h26 | Peça 047 registrada na caixa Q-12, lacre 842, para quarentena preventiva. Dois responsáveis assinaram.",fact:"O inventário registra o recebimento de peça com identificação correspondente e lacre específico.",limit:"O registro precisa ser confrontado com a peça e o lacre físicos."},
+ rumor:{title:"E-06 · O furgão suspeito",kind:"Relato verbal",record:"Um visitante comentou ter visto um furgão perto da doca por volta das nove da noite.",fact:"Existe um relato não confirmado sobre um veículo.",limit:"Não há comprovação de horário, carga, relação com a peça ou ocorrência de furto."}
+};
+const ids=Object.keys(evidence),seen=new Set();
+let step=1,checkedRefs=[];
+const $=id=>document.getElementById(id);
+const item=(tag,value)=>{const el=document.createElement(tag);el.textContent=value;return el;};
+function openEvidence(id){
+ if(!Object.prototype.hasOwnProperty.call(evidence,id))return;
+ seen.add(id);
+ document.querySelectorAll("[data-source]").forEach(button=>{
+  const name=button.dataset.source;
+  button.setAttribute("aria-pressed",String(id===name));
+  button.querySelector(".state").textContent=seen.has(name)?"Examinado":"Não lido";
+ });
+ const source=evidence[id],box=$("document");
+ box.replaceChildren(item("h3",source.title),item("span",source.kind),item("blockquote",source.record),item("p","O que sabemos: "+source.fact),item("p","Limite: "+source.limit));
+ box.querySelector("span").className="doc-type";
+ $("count").textContent=seen.size+" de 6 fontes examinadas";
+ $("continue").disabled=seen.size<4;
+ $("progress-hint").textContent=seen.size>=4?"Você pode avançar ou continuar examinando.":"Examine mais "+(4-seen.size)+" fonte(s).";
+}
+function navigate(next){
+ step=next;
+ $("investigate").hidden=next!==1;
+ $("decide").hidden=next!==2;
+ $("report").hidden=next!==3;
+ for(let i=1;i<=3;i++)$("step"+i).className="step"+(i===next?" active":i<next?" done":"");
+ const heading=$(next===1?"investigate-title":next===2?"decide-title":"report-title");
+ heading.focus({preventScroll:true});heading.scrollIntoView({block:"start",behavior:"auto"});
+}
+function references(){
+ checkedRefs=Array.from(document.querySelectorAll('input[name="ref"]:checked')).map(input=>input.value);
+ const box=$("citations");box.replaceChildren();
+ ids.forEach(id=>{
+  const source=evidence[id],label=document.createElement("label"),input=document.createElement("input"),span=document.createElement("span");
+  label.className="option";input.type="checkbox";input.name="ref";input.value=id;input.disabled=!seen.has(id);input.checked=checkedRefs.includes(id);
+  span.append(item("strong",source.title),item("small",seen.has(id)?"Examinada; pode ser citada":"Examine esta fonte antes de citá-la"));
+  label.append(input,span);box.append(label);
+ });
+}
+function selection(name){const input=document.querySelector('input[name="'+name+'"]:checked');return input?input.value:null;}
+function renderReport(hypothesis,refs,action){
+ const strong=refs.includes("order")&&refs.includes("inventory");
+ const best=hypothesis==="transfer"&&strong&&action==="verify";
+ const feedback=$("feedback");feedback.className="result"+(best?"":" reconsider");feedback.replaceChildren();
+ const label=item("p",best?"Hipótese bem fundamentada":"Revisão recomendada");label.className="label";feedback.append(label);
+ feedback.append(item("h3",best?"Você formulou uma hipótese verificável.":"Ainda há afirmações que precisam de apoio."));
+ feedback.append(item("p",hypothesis==="transfer"?"A transferência preventiva é compatível com o alerta ambiental, a autorização e o registro de recebimento.":"O desaparecimento da vitrine, a câmera ou um rumor não bastam para afirmar furto ou desvio; o conjunto documental favorece a transferência para conservação."));
+ feedback.append(item("p",strong?"Você cruzou E-02 (autorização) e E-05 (recebimento), registros que se complementam.":"As duas fontes mais fortes para demonstrar o percurso documental são E-02 (autorização) e E-05 (recebimento). E-01 explica o motivo, mas não prova a transferência."));
+ feedback.append(item("p",action==="verify"?"Sua ação verifica fisicamente o destino documentado antes de encerrar a apuração.":"A ação escolhida antecipa uma acusação ou divulgação sem conferência física, com risco de causar danos indevidos."));
+ feedback.append(item("h3","Fontes selecionadas"));
+ const list=document.createElement("ul");
+ refs.forEach(id=>list.append(item("li",evidence[id].title+": "+evidence[id].fact)));
+ feedback.append(list,item("p","Conclusão provisória: conferir presencialmente a caixa Q-12 e o lacre 842. Uma ficha preenchida não substitui a verificação do objeto."));
+}
+document.querySelectorAll("[data-source]").forEach(button=>button.addEventListener("click",()=>openEvidence(button.dataset.source)));
+$("continue").addEventListener("click",()=>{if(seen.size<4)return;references();navigate(2);});
+$("back").addEventListener("click",()=>{checkedRefs=Array.from(document.querySelectorAll('input[name="ref"]:checked')).map(input=>input.value);navigate(1);});
+$("case-form").addEventListener("change",()=>{$("error").textContent="";});
+$("case-form").addEventListener("submit",event=>{
+ event.preventDefault();if(step!==2)return;
+ const hypothesis=selection("hypothesis"),action=selection("action");
+ const refs=Array.from(document.querySelectorAll('input[name="ref"]:checked')).map(input=>input.value);
+ if(!hypothesis||!action||refs.length!==2){$("error").textContent="Selecione uma hipótese, exatamente duas fontes e uma próxima ação.";return;}
+ checkedRefs=refs;$("error").textContent="";
+ renderReport(hypothesis,refs,action);navigate(3);
+});
+$("revise").addEventListener("click",()=>{references();navigate(2);});
+$("restart").addEventListener("click",()=>{
+ seen.clear();checkedRefs=[];$("case-form").reset();$("citations").replaceChildren();
+ $("document").replaceChildren(item("h3","Selecione uma fonte"),item("p","O conteúdo do registro aparecerá aqui com uma explicação de seus limites."));
+ document.querySelectorAll("[data-source]").forEach(button=>{button.setAttribute("aria-pressed","false");button.querySelector(".state").textContent="Não lido";});
+ $("count").textContent="0 de 6 fontes examinadas";$("continue").disabled=true;$("progress-hint").textContent="Examine pelo menos 4 fontes.";$("error").textContent="";navigate(1);
+});
+})();
+</script>
+</body>
+</html>

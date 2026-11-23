@@ -2,6 +2,24 @@
   "version": 1,
   "category": "case",
   "title": "Estudo de caso",
-  "description": "Cenários com escolhas e consequências.",
-  "examples": []
+  "description": "Investigações em que o estudante examina evidências, formula hipóteses e justifica decisões.",
+  "examples": [
+    {
+      "id": "misterio-do-museu",
+      "title": "O Mistério do Museu - A bússola que desapareceu",
+      "description": "Examine documentos, registros eletrônicos e relatos para investigar o desaparecimento de uma peça histórica, sem confundir indício e prova.",
+      "howItWorks": "Abra pelo menos quatro entre seis fontes, analise seus limites, escolha uma hipótese, cite exatamente duas evidências e decida um procedimento antes de ler o relatório comentado.",
+      "path": "case/misterio-do-museu.html",
+      "minutes": 15,
+      "features": [
+        "Seis fontes com limites explícitos",
+        "Investigação e hipóteses",
+        "Seleção de evidências",
+        "Relatório formativo",
+        "SVG original e acessibilidade",
+        "HTML independente"
+      ],
+      "prompt": "Crie um estudo de caso interativo para o mod_mcp com a qualidade investigativa, profundidade pedagógica, design autoral e acessibilidade do exemplo \"O Mistério do Museu - A bússola que desapareceu\". Use-o somente como referência de mecânica: não copie tema, enredo, documentos ou visual.\n\nNa sua PRIMEIRA resposta, antes de gerar HTML, CSS, JavaScript, fontes, pistas, ilustrações ou usar ferramentas de gravação, pergunte EXATAMENTE: \"Qual tipo de conteúdo você deseja trabalhar nesta atividade? Conte o assunto ou tema e, se quiser, informe o público, o objetivo de aprendizagem e os materiais de referência.\" AGUARDE a resposta do professor e não presuma que o assunto será museu. Se o objetivo cognitivo não estiver claro, pergunte apenas se o professor deseja compreender, aplicar, analisar, avaliar evidências ou criar soluções; nunca repita perguntas respondidas.\n\nCrie uma investigação original e coerente para o conteúdo escolhido, com contexto inicial, no mínimo seis fontes distintas (registros, documentos, observações e relatos), descrição do que cada fonte permite afirmar e seus limites, três hipóteses plausíveis, três próximos procedimentos e um relatório final de feedback contextualizado. Exija exame de ao menos quatro fontes e seleção de exatamente duas referências antes da conclusão. Diferencie evidência, interpretação, inferência, boato e confirmação independente, sem antecipar a hipótese final ou transformar um indício em acusação. Evite dados inventados sobre pessoas reais; quando os dados forem simulados, declare isso explicitamente. A análise deve ensinar o porquê de um procedimento, não apenas apontar certo ou errado.\n\nEntregue HTML autossuficiente com CSS e JavaScript internos, apenas a atividade, sem menu, cabeçalho institucional, rodapé, bibliotecas externas ou CDN. Crie uma ilustração SVG original com title, desc e descrição textual equivalente, sem guardar informações essenciais apenas na imagem. Construa cartas de fontes, painel de documentos, formulário de hipótese com evidências e relatório. Adapte a identidade visual ao assunto, em vez de repetir layout genérico. Garanta responsividade, teclado, toque, foco visível, labels, mensagens aria-live, contraste, dark mode, prefers-reduced-motion, avanço, revisão e reinício. Para textos externos, use createElement/textContent e nunca innerHTML ou eval.\n\nOs exemplos da galeria são formativos e locais, sem nota oficial do Moodle, persistência automática ou coleta de dados. Para progresso real, utilize apenas as APIs publicadas em .chatgpt/API.md, controlando versão e conflitos; se houver avaliação oficial, não exponha gabarito no HTML e use JSON e correção no servidor. Sem conexão ChatGPT ou Claude (usando o protocolo MCP), forneça o HTML para copiar e colar no gerenciador; com conexão, siga rascunho, prévia, revisão, aprovação explícita e só depois publicação."
+    }
+  ]
 }
