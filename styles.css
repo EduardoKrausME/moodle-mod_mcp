@@ -69,16 +69,6 @@
     min-width: 0;
 }
 
-.mod-mcp-prompt-selector .mod-mcp-prompt-image {
-    flex: 0 0 auto;
-    display: block;
-    width: min(35%, 240px);
-    height: auto;
-    max-height: 180px;
-    object-fit: contain;
-    border-radius: .5rem;
-}
-
 .mod-mcp-prompt-selector [data-prompt-panel][hidden] {
     display: none !important;
 }
@@ -90,9 +80,7 @@
     }
 
     .mod-mcp-prompt-selector .mod-mcp-prompt-image {
-        align-self: center;
-        width: min(100%, 280px);
-        max-height: 200px;
+        width: 240px;
     }
 
     .mod-mcp-prompt-selector .mod-mcp-prompt-tabs .nav-link {
