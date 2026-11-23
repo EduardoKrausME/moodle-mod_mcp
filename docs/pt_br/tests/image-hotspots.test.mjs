@@ -1,164 +1,206 @@
 /**
- * Regressões para o jogo 10 - Identifique na imagem.
- * Execute: node --test docs/pt_br/tests/image-hotspots.test.mjs
+ * Independent interactive hotspot-image tests.
+ * Run: node --test docs/pt_br/tests/image-hotspots.test.mjs
  */
-import test from 'node:test';
-import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
-import {resolve,dirname} from 'node:path';
-import {fileURLToPath} from 'node:url';
-import {Script} from 'node:vm';
-
-const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
-const path='game-identifique-na-imagem/componentes-da-placa-mae.html';
-const html=await readFile(resolve(root,path),'utf8');
-const js=html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
-assert.ok(js,'a atividade deve conter JavaScript incorporado');
-const configStart=js.indexOf('const DATA='),configEnd=js.indexOf('const root=',configStart);
-const helpersStart=js.indexOf('function validate(data)'),helpersEnd=js.indexOf('// End pure logic.',helpersStart);
-assert.ok(configStart>=0&&configEnd>configStart&&helpersStart>configEnd&&helpersEnd>helpersStart);
-const code=js.slice(configStart,configEnd)+js.slice(helpersStart,helpersEnd);
-const {DATA,LABEL_ORDER,TARGET_ORDER,validate,initialState,countSolved,nextIndex,target,validState,guess}=
- new Function(code+'return {DATA,LABEL_ORDER,TARGET_ORDER,validate,initialState,countSolved,nextIndex,target,validState,guess};')();
-
-test('HTML completo sem navegação institucional ou arquivos remotos',()=>{
- assert.match(html,/^<!doctype html>/i);
- assert.match(html,/<html lang="pt-BR">/);
- assert.match(html,/<main id="activity">/);
- assert.match(html,/<style>[\s\S]+<\/style>/);
- assert.match(html,/<svg id="board-svg"[\s\S]+<\/svg>/);
- assert.doesNotMatch(html,/<(?:header|nav|footer|img)\b/i);
- assert.doesNotMatch(html,/<script[^>]+src=/i);
- assert.doesNotThrow(()=>new Script(js));
+import test from "node:test";
+import assert from "node:assert/strict";
+import {readFile} from "node:fs/promises";
+import {Script,runInNewContext} from "node:vm";
+const root=new URL("../",import.meta.url);
+const read=path=>readFile(new URL(path,root),"utf8");
+const load=async()=>{
+  const html=await read("custom/explorador-de-imagens-com-pontos-interativos.html");
+  const script=html.match(/<script>([\s\S]*?)<\/script>/i)?.[1];
+  assert.ok(script);
+  return {html,script};
+};
+test("standalone SVG image with descriptive alternatives, responsive navigation and no remote dependencies",async()=>{
+  const {html,script}=await load();
+  assert.match(html,/^<!doctype html>/i);
+  assert.match(html,/<html lang="pt-BR">/);
+  assert.equal((html.match(/<script>/g)||[]).length,1);
+  assert.doesNotMatch(html,/<script[^>]+src=|<link[^>]+href=|<footer\b|@import\b/i);
+  assert.doesNotThrow(()=>new Script(script));
+  for(const pattern of [
+    /<svg[^>]*viewBox="0 0 1000 600"/,/<title id="illustrationTitle">/,
+    /<desc id="illustrationDescription">/,/role="img"/,/aria-labelledby="illustrationTitle illustrationDescription"/,
+    /<progress id="progress"/,/role="region"/,/tabindex="0"/,
+    /aria-live="polite"/,/role="status"/,/aria-expanded="false"/,
+    /@media\(max-width:730px\)/,/prefers-reduced-motion:reduce/,
+    /id="hotspots"/,/id="stepList"/,/id="reviewList"/,
+    /id="resetConfirmation"/,/id="confirmReset"/,/id="nextPoint"/,
+    /ArrowRight/,/ArrowLeft/,/Home/,/End/
+  ]) assert.match(html,pattern);
+  assert.doesNotMatch(script,/innerHTML\s*=|localStorage|sessionStorage|fetch\(|XMLHttpRequest|document\.cookie/);
 });
-
-test('imagem original e seis hotspots com coordenadas válidas e sem sobreposição',()=>{
- assert.equal(validate(DATA),true);
- assert.equal(DATA.type,'image_hotspots');
- assert.equal(DATA.image.src,'#board-svg');
- assert.equal(DATA.hotspots.length,6);
- assert.deepEqual([...new Set(DATA.hotspots.map(p=>p.number))],[1,2,3,4,5,6]);
- for(const p of DATA.hotspots){
-  assert.ok(p.x>0&&p.x<1&&p.y>0&&p.y<1);
-  assert.ok(p.region&&p.explanation&&p.label);
- }
- const overlap=structuredClone(DATA);
- overlap.hotspots[1].x=overlap.hotspots[0].x;
- overlap.hotspots[1].y=overlap.hotspots[0].y;
- assert.equal(validate(overlap),false);
- const outside=structuredClone(DATA);
- outside.hotspots[2].x=1.3;
- assert.equal(validate(outside),false);
+test("eight located hotspots form unique, complete educational explanations",async()=>{
+  const {script}=await load();
+  const source=script.match(/const points=(\[[\s\S]*?\]);\s*const \$=/);
+  assert.ok(source);
+  const points=runInNewContext(source[1]);
+  assert.equal(points.length,8);
+  assert.equal(new Set(points.map(p=>p.id)).size,8);
+  for(const point of points){
+    assert.ok(point.x>=10&&point.x<=90,"hotspot within visible art");
+    assert.ok(point.y>=10&&point.y<=96,"hotspot within visible art");
+    for(const key of ["title","subtitle","tag","explanation","insight","question"]){
+      assert.ok(typeof point[key]==="string"&&point[key].length>=(key==="tag"?3:12),key+" for "+point.id);
+    }
+  }
+  assert.equal(points[0].id,"nascente");
+  assert.equal(points[7].id,"rio");
+  assert.ok(points.some(p=>p.id==="eta"));
+  assert.ok(points.some(p=>p.id==="ete"));
 });
-
-test('IDs, rótulos e números duplicados são rejeitados',()=>{
- const duplicateId=structuredClone(DATA);
- duplicateId.hotspots[1].id=duplicateId.hotspots[0].id;
- assert.equal(validate(duplicateId),false);
- const duplicateNumber=structuredClone(DATA);
- duplicateNumber.hotspots[1].number=duplicateNumber.hotspots[0].number;
- assert.equal(validate(duplicateNumber),false);
- const duplicateLabel=structuredClone(DATA);
- duplicateLabel.hotspots[1].label=duplicateLabel.hotspots[0].label;
- assert.equal(validate(duplicateLabel),false);
+test("guided discovery, revisits, arrow navigation, review and confirmation reset",async()=>{
+  const {html,script}=await load();
+  class Element {
+    constructor(tag,id=""){
+      this.tag=tag;this.id=id;this.children=[];this.parentNode=null;this.handlers={};this.attributes={};
+      this.dataset={};this.style={};this.value="";this.textContent="";this.disabled=false;this.hidden=false;
+      this.title="";this.className="";
+    }
+    append(...nodes){for(const n of nodes){n.parentNode=this;this.children.push(n);}}
+    appendChild(n){n.parentNode=this;this.children.push(n);}
+    replaceChildren(...nodes){this.children=[];this.append(...nodes);}
+    setAttribute(k,v){this.attributes[k]=String(v);}
+    getAttribute(k){return this.attributes[k];}
+    addEventListener(k,fn){this.handlers[k]=fn;}
+    focus(){this.focused=true;}
+    click(){if(!this.disabled)this.handlers.click?.();}
+    keydown(key){if(this.disabled)return false;let prevented=false;this.handlers.keydown?.({key,preventDefault(){prevented=true;}});return prevented;}
+  }
+  const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+  const nodes=new Map(ids.map(id=>[id,new Element("div",id)]));
+  for(const match of html.matchAll(/<([a-z]+)\b[^>]*\bid="([^"]+)"[^>]*>/gi)){
+    const el=nodes.get(match[2]);el.tag=match[1].toLowerCase();el.hidden=/\shidden(?:\s|>)/.test(match[0]);
+  }
+  const document={
+    getElementById(id){const el=nodes.get(id);assert.ok(el,"DOM element "+id);return el;},
+    createElement(tag){return new Element(tag);}
+  };
+  runInNewContext(script,{document});
+  const $=id=>nodes.get(id);
+  const hot=()=>$("hotspots").children;
+  const steps=()=>$("stepList").children.map(li=>li.children[0]);
+  const review=()=>$("reviewList").children.map(li=>li.children[0]);
+  assert.equal(hot().length,8);
+  assert.equal(steps().length,8);
+  assert.deepEqual(Array.from(hot(),h=>h.disabled),[false,true,true,true,true,true,true,true]);
+  assert.equal($("progress").value,0);
+  assert.equal($("progressPercent").textContent,"0%");
+  assert.ok($("reviewToggle").disabled);
+  assert.equal($("nextPoint").disabled,false,"start action should be available");
+  assert.equal($("nextPoint").textContent,"Começar pelo ponto 1");
+  assert.equal(hot()[0].keydown("ArrowRight"),true);
+  assert.ok(hot()[0].focused);
+  // Visited through textual list, then map and next action.
+  steps()[0].click();
+  assert.equal($("progress").value,1);
+  assert.equal($("progressPercent").textContent,"13%");
+  assert.equal(hot()[1].disabled,false);
+  assert.ok(!$("nextPoint").disabled);
+  assert.ok(!$("reviewToggle").disabled);
+  assert.equal($("detailsTitle").textContent,"Nascente e bacia de captação");
+  assert.equal($("reflection").hidden,false);
+  assert.equal(steps()[0].children[2].textContent,"Visitado");
+  // Arrow moves focus without counting a visit.
+  hot()[0].keydown("ArrowRight");
+  assert.ok(hot()[1].focused);
+  assert.equal($("progress").value,1);
+  hot()[0].keydown("End");
+  assert.ok(hot()[1].focused);
+  hot()[1].click();
+  assert.equal($("progress").value,2);
+  hot()[1].click();
+  assert.equal($("progress").value,2,"revisit does not add a second discovery");
+  $("nextPoint").click();
+  assert.equal($("progress").value,3);
+  assert.ok(hot()[2].focused,"next button focuses the new hotspot");
+  assert.equal($("detailsTitle").textContent,"Estação de tratamento de água");
+  // The review area opens only for visited items.
+  $("reviewToggle").click();
+  assert.equal($("reviewPanel").hidden,false);
+  assert.equal($("reviewToggle").getAttribute("aria-expanded"),"true");
+  assert.equal(review().length,3);
+  assert.ok($("reviewTitle").focused);
+  review()[0].click();
+  assert.equal($("progress").value,3);
+  assert.ok(hot()[0].focused,"review moves focus to the matching hotspot");
+  // Dismissal and cancellation keep current progress.
+  $("reviewToggle").click();
+  assert.equal($("reviewPanel").hidden,true);
+  $("reset").click();
+  assert.equal($("resetConfirmation").hidden,false);
+  assert.ok($("cancelReset").focused);
+  $("cancelReset").click();
+  assert.equal($("progress").value,3);
+  assert.equal($("resetConfirmation").hidden,true);
+  // Continue guided route through each remaining stop.
+  for(let i=3;i<8;i++)hot()[i].click();
+  assert.equal($("progress").value,8);
+  assert.equal($("progressPercent").textContent,"100%");
+  assert.equal($("completion").hidden,false);
+  assert.equal($("nextPoint").disabled,true);
+  assert.equal(review().length,8,"review list refreshes as points are visited");
+  $("reset").click();$("confirmReset").click();
+  assert.equal($("progress").value,0);
+  assert.equal($("completion").hidden,true);
+  assert.equal($("reviewPanel").hidden,true);
+  assert.equal($("resetConfirmation").hidden,true);
+  assert.equal($("reviewToggle").disabled,true);
+  assert.equal(hot()[0].disabled,false);
+  assert.equal(hot()[7].disabled,true);
+  assert.ok(hot()[0].focused);
 });
-
-test('lista de rótulos e sequência de perguntas contêm seis IDs distintos',()=>{
- assert.equal(new Set(LABEL_ORDER).size,6);
- assert.equal(new Set(TARGET_ORDER).size,6);
- const ids=new Set(DATA.hotspots.map(p=>p.id));
- for(const id of LABEL_ORDER.concat(TARGET_ORDER))assert.ok(ids.has(id));
- assert.notDeepEqual(LABEL_ORDER,DATA.hotspots.map(p=>p.id),'a posição do rótulo não deve dar a resposta');
+test("free exploration permits out-of-order visits and guided mode preserves them",async()=>{
+  const {html,script}=await load();
+  class Element {
+    constructor(tag,id=""){this.tag=tag;this.id=id;this.children=[];this.handlers={};this.dataset={};this.attributes={};this.style={};this.hidden=false;this.disabled=false;this.textContent="";}
+    append(...items){this.children.push(...items);}
+    appendChild(item){this.children.push(item);}
+    replaceChildren(...items){this.children=items;}
+    setAttribute(k,v){this.attributes[k]=String(v);}
+    addEventListener(k,f){this.handlers[k]=f;}
+    focus(){this.focused=true;}
+    click(){if(!this.disabled)this.handlers.click?.();}
+  }
+  const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+  const els=new Map(ids.map(id=>[id,new Element("div",id)]));
+  const document={getElementById(id){const el=els.get(id);assert.ok(el);return el;},createElement(tag){return new Element(tag);}};
+  runInNewContext(script,{document});
+  const $=id=>els.get(id),hot=()=>$("hotspots").children;
+  assert.equal(hot()[7].disabled,true);
+  $("freeMode").click();
+  assert.equal($("freeMode").attributes["aria-pressed"],"true");
+  assert.equal(hot()[7].disabled,false);
+  hot()[7].click();
+  assert.equal($("progress").value,1);
+  assert.equal($("detailsTitle").textContent,"Rio e proteção do ambiente");
+  $("freeMode").click();
+  assert.equal(hot()[7].disabled,false,"already visited remains available");
+  assert.equal(hot()[6].disabled,true,"unvisited late stage locks again");
+  assert.equal(hot()[1].disabled,true,"guided mode waits for the first unvisited point");
+  assert.equal(hot()[0].disabled,false,"first unvisited point is available");
+  $("nextPoint").click();
+  assert.equal($("progress").value,2);
+  assert.equal(hot()[0].dataset.visited,"true");
+  assert.equal(hot()[1].disabled,false,"second point unlocks only after first discovery");
+  assert.equal(hot()[7].dataset.visited,"true");
+  assert.equal($("progressPercent").textContent,"25%");
 });
-
-test('acerto e erro são verificados por IDs, sem aproximação de texto',()=>{
- const start=initialState();
- assert.equal(validState(start,DATA),true);
- const miss=guess(start,'cpu','ram',DATA);
- assert.equal(miss.changed,true);
- assert.equal(miss.correct,false);
- assert.equal(miss.state.errors,1);
- assert.equal(miss.state.attempts,1);
- assert.equal(countSolved(miss.state),0);
- assert.equal(validState(miss.state,DATA),true);
- const right=guess(miss.state,'cpu','cpu',DATA);
- assert.equal(right.changed,true);
- assert.equal(right.correct,true);
- assert.deepEqual(right.state.assignments,{cpu:'cpu'});
- assert.equal(right.state.errors,1);
- assert.equal(validState(right.state,DATA),true);
- assert.equal(guess(right.state,'cpu','cpu',DATA).changed,false,'o ponto encontrado não pode contar novamente');
- assert.equal(guess(start,'nada','cpu',DATA).changed,false,'ID desconhecido deve ser ignorado');
-});
-
-test('o modo de perguntas avança para o próximo componente não resolvido',()=>{
- let state=initialState();
- assert.equal(target(state),TARGET_ORDER[0]);
- state=guess(state,TARGET_ORDER[0],TARGET_ORDER[0],DATA).state;
- assert.equal(target(state),TARGET_ORDER[1]);
- assert.equal(nextIndex(state),1);
- for(const id of TARGET_ORDER.slice(1))state=guess(state,id,id,DATA).state;
- assert.equal(state.completed,true);
- assert.equal(state.targetIndex,6);
- assert.equal(target(state),null);
- assert.equal(countSolved(state),6);
- assert.equal(validState(state,DATA),true);
- assert.equal(guess(state,'cpu','ram',DATA).changed,false);
-});
-
-test('estado malformado ou adulterado não é restaurável',()=>{
- const unknown=initialState();
- unknown.assignments={intruso:'cpu'};
- assert.equal(validState(unknown,DATA),false);
- const swapped=initialState();
- swapped.assignments={cpu:'ram'};
- swapped.attempts=1;
- swapped.targetIndex=1;
- assert.equal(validState(swapped,DATA),false);
- const corrupt=initialState();
- corrupt.completed=true;
- assert.equal(validState(corrupt,DATA),false);
- const invalidCounter=initialState();
- invalidCounter.errors=2;invalidCounter.attempts=1;
- assert.equal(validState(invalidCounter,DATA),false);
-});
-
-test('responsividade, zoom e listagem textual acessível estão presentes',()=>{
- assert.match(html,/id="viewport"[^>]*tabindex="0"/);
- assert.match(html,/id="points"[^>]*aria-label=/);
- assert.match(html,/id="mode-label"/);
- assert.match(html,/id="mode-locate"/);
- assert.match(html,/id="zoom-in"/);
- assert.match(html,/id="zoom-out"/);
- assert.match(html,/aria-live="polite"/);
- assert.match(html,/@media\(max-width:820px\)/);
- assert.match(html,/prefers-reduced-motion:reduce/);
- assert.match(js,/pin\.style\.left=spot\.x\*100\+"%"/);
- assert.match(js,/pin\.style\.top=spot\.y\*100\+"%"/);
- assert.match(js,/stage\.style\.width=zoom\+"%"/);
- assert.match(js,/event\.key==="Escape"/);
- assert.match(js,/ArrowDown/);
-});
-
-test('persistência Moodle é opcional e não atribui conclusão acadêmica',()=>{
- assert.match(js,/function getState\(/);
- assert.match(js,/function restoreState\(/);
- assert.match(js,/function destroy\(/);
- assert.match(js,/function handleAction\(/);
- assert.match(js,/progress\.load\(/);
- assert.match(js,/progress\.save\(/);
- assert.doesNotMatch(js,/completion\.complete\(/);
-});
-
-test('JSON local e geral incluem o mesmo exemplo com prompt que aguarda o professor',async()=>{
- const local=JSON.parse(await readFile(resolve(root,'game-identifique-na-imagem/examples.json'),'utf8'));
- const general=JSON.parse(await readFile(resolve(root,'games/examples.json'),'utf8'));
- const id='identifique-na-imagem-placa-mae';
- const a=local.examples.find(e=>e.id===id),b=general.examples.find(e=>e.id===id);
- assert.ok(a&&b);
- assert.deepEqual(a,b);
- assert.equal(a.path,path);
- assert.match(a.prompt,/Qual tipo de conteúdo você deseja trabalhar/);
- assert.match(a.prompt,/Aguarde a resposta/);
- assert.match(a.prompt,/\.chatgpt\/games\/10-identifique-na-imagem\.md/);
+test("catalog adds one new entry without modifying the previous nine",async()=>{
+  const catalog=JSON.parse(await read("custom/examples.json"));
+  const previous=["flashcards-de-revisao","mapa-mental-exploravel","roteiro-de-estudo-personalizado","votacao-rapida","comparador-de-tecnicas","mapa-conceitual-interativo","quadro-de-organizacao-de-ideias","construtor-de-fluxogramas","matriz-de-decisao-interativa"];
+  assert.equal(catalog.category,"custom");
+  assert.equal(catalog.version,1);
+  assert.equal(catalog.examples.length,10);
+  assert.deepEqual(catalog.examples.slice(0,9).map(e=>e.id),previous);
+  const item=catalog.examples[9];
+  assert.equal(item.id,"explorador-de-imagens-com-pontos-interativos");
+  assert.equal(item.path,"custom/explorador-de-imagens-com-pontos-interativos.html");
+  assert.match(item.prompt,/Qual tipo de conteúdo você deseja trabalhar/);
+  assert.match(item.prompt,/Aguarde a resposta/);
+  assert.match(item.prompt,/revisão dos itens visitados/);
+  for(const old of catalog.examples.slice(0,9))assert.ok(old.prompt.length>350);
 });
