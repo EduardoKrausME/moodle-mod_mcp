@@ -64,7 +64,7 @@ test('validação rejeita dicas vazias, IDs duplicados e alias equivalente depoi
 });
 
 test('normalização aceita aliases, variações de caixa, acentos, hífen e pontuação',()=>{
- assert.equal(normalize('  CÓDIGO–FONTE! '),'codigo fonte');
+ assert.equal(normalize('  CÓDIGO\u2013FONTE! '),'codigo fonte');
  assert.equal(isAnswer(DATA.rounds[5],'CODIGO FONTE'),true);
  assert.equal(isAnswer(DATA.rounds[2],'so'),true);
  assert.equal(isAnswer(DATA.rounds[0],' um ALGORITMO! '),true);
