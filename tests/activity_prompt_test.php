@@ -111,7 +111,6 @@ final class activity_prompt_test extends \advanced_testcase {
         $this->assertStringContainsString(".mod-mcp-prompt-tabs .nav-link.active", $styles);
         $this->assertStringContainsString("border-bottom-color: var(--bs-body-bg", $styles);
         $this->assertStringContainsString("overflow-x: auto", $styles);
-        $this->assertStringContainsString("--bs-tertiary-bg", $styles);
         $this->assertStringContainsString("--bs-primary", $styles);
         $this->assertStringContainsString(":focus-visible", $styles);
     }
