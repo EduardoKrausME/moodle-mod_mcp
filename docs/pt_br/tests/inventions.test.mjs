@@ -50,13 +50,13 @@ test('14 invenções em ordem cronológica, ilustradas e contextualizadas com fo
  assert.deepEqual([...new Set(inventions.map(x=>x.phase))].sort(),['conhecimento','digital','industrial','origens']);
 });
 
-test('catálogo preserva exatamente os dois exemplos anteriores e registra o prompt correto',()=>{
- assert.deepEqual(manifest.examples.map(x=>x.id),['historia-do-mundo','corrida-espacial','grandes-invencoes-da-humanidade']);
+test('catálogo preserva os três primeiros exemplos e admite novas timelines',()=>{
+ assert.deepEqual(manifest.examples.slice(0,3).map(x=>x.id),['historia-do-mundo','corrida-espacial','grandes-invencoes-da-humanidade']);
  const last=manifest.examples[2];
  assert.equal(last.path,'timeline/grandes-invencoes-da-humanidade.html');
  assert.ok(last.prompt.includes('Qual tipo de conteúdo você deseja trabalhar'));
  assert.ok(last.prompt.includes('Aguarde a resposta do professor'));
- assert.equal(new Set(manifest.examples.map(x=>x.path)).size,3);
+ assert.equal(new Set(manifest.examples.map(x=>x.path)).size,manifest.examples.length);
 });
 
 class FakeElement{

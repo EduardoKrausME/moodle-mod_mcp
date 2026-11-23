@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tempo Profundo | Evolução da Vida na Terra</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#213b36;--dark:#112d2b;--leaf:#70d0b3;--ink:#213b36;--pale:#f3f7ed;--paper:#fffdf7;--line:#cbd9ca;background:#f3f7ed}
+*{box-sizing:border-box}body{margin:0;min-width:320px;background:#f3f7ed}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #e6a538;outline-offset:3px}button:disabled{opacity:.39;cursor:not-allowed}
+.wrap{max-width:1380px;padding:clamp(13px,2.8vw,36px);margin:0 auto}
+.hero{border-radius:25px;background:radial-gradient(ellipse at 85% 0%,#2e6758,transparent 55%),#112d2b;color:white;padding:clamp(22px,4vw,48px);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-70px;top:-90px;width:340px;height:340px;border:2px solid #a4f2c627;border-radius:50%;box-shadow:0 0 0 40px #a4f2c608,0 0 0 84px #a4f2c608;pointer-events:none}
+.eyebrow{font-size:.72rem;letter-spacing:.23em;color:#b3e4cf;text-transform:uppercase;font-weight:850;margin:0 0 13px}
+.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,5vw,4.45rem);line-height:1.07;letter-spacing:-.04em;max-width:850px;margin:0}
+.hero p:last-child{max-width:760px;line-height:1.67;color:#d9ebdf;margin:14px 0 0}
+.clockarea{background:#fffdf7;border:1px solid #b3cfbf;margin:-12px clamp(10px,2vw,24px) 18px;padding:20px clamp(14px,2vw,24px) 15px;position:relative;z-index:1;border-radius:14px;box-shadow:0 8px 26px #1d4c3a16}
+.clockhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.clockhead h2{font-size:1rem;margin:0;color:#244c40}
+.clockhead strong{font:900 1.3rem ui-monospace,Consolas,monospace;color:#1c6050}
+.clockhead p{color:#556a60;font-size:.83rem;line-height:1.55;margin:7px 0 0}
+.timebar{position:relative;height:24px;background:linear-gradient(to right,#3d5f77 0%,#3d5f77 88.28%,#8dbe76 88.28%,#8dbe76 94.52%,#d6ad70 94.52%,#d6ad70 98.565%,#8a7fc3 98.565%,#8a7fc3 100%);border-radius:7px;margin:19px 0 7px;border:1px solid #9db2a7}
+.timebar:before{content:"";position:absolute;top:-6px;bottom:-6px;left:var(--position,0%);width:3px;background:#132c26;z-index:2;box-shadow:0 0 0 2px white;transform:translateX(-1px)}
+.timebar:after{content:"";position:absolute;left:var(--position,0%);top:-12px;border:7px solid transparent;border-top-color:#132c26;transform:translateX(-7px)}
+.timeaxis{display:flex;justify-content:space-between;font:750 .69rem ui-monospace,Consolas,monospace;color:#56665f}
+.work{display:grid;grid-template-columns:275px minmax(0,1fr);gap:18px;align-items:start}
+.strata{background:#e7ede3;border:1px solid #c9d7c7;border-radius:17px;padding:18px 13px;position:relative}
+.strata h2,.educate h2{font-size:1.05rem;margin:0 5px 7px}
+.strata>p{color:#62736a;font-size:.81rem;line-height:1.55;margin:0 5px 15px}
+.era-filters{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:13px}
+.era-filter{border:1px solid #94ac98;border-radius:9px;background:#fffdf7;color:#2b5146;min-height:43px;font-size:.73rem;font-weight:830;padding:7px}
+.era-filter[aria-pressed="true"]{background:#214b42;color:#fff;border-color:#214b42}
+.strata-list{max-height:605px;overflow-y:auto;display:grid;gap:6px;padding:3px 1px 5px;scrollbar-color:#7b9e8c transparent}
+.stratum{border:1px solid #bdcec0;border-left:7px solid var(--era,#7bac9b);border-radius:9px;padding:9px 10px;background:#fffdf7;min-height:59px;text-align:left;color:#294c42}
+.stratum[aria-current="true"]{background:#1d483e;color:#fff;border-color:#1d483e;box-shadow:inset 0 0 0 2px var(--era)}
+.stratum .age{display:block;font:780 .7rem ui-monospace,Consolas,monospace;opacity:.8}
+.stratum .name{display:block;font-size:.83rem;font-weight:850;line-height:1.25;margin-top:3px}
+.stratum.seen:not([aria-current="true"]){background:#ecf6ee}
+.strata-bottom{margin-top:13px;padding-top:12px;border-top:1px solid #b2c9b6}
+.count{font-size:.78rem;font-weight:800;color:#49645a}.fillbar{height:8px;background:#cfdecf;border-radius:99px;overflow:hidden;margin:9px 0}.fillbar span{display:block;height:100%;width:6%;background:#398c73;transition:width .2s}
+.reset{border:0;background:transparent;color:#1b6b62;text-decoration:underline;font-weight:780;padding:9px 0}
+.fossil{background:white;border:1px solid #c9d7c7;border-radius:17px;overflow:hidden}
+.fossil-head{padding:clamp(17px,3vw,30px) clamp(17px,3vw,33px) 0}
+.overline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#587268;font:850 .75rem ui-monospace,Consolas,monospace;letter-spacing:.09em}
+.era-pill{background:#e0f1e7;color:#245b46;padding:7px 10px;border-radius:99px;font-family:system-ui,sans-serif;font-size:.75rem;letter-spacing:0}
+.fossil h2{font-family:Georgia,serif;letter-spacing:-.027em;line-height:1.12;font-size:clamp(1.7rem,3.5vw,3.1rem);margin:17px 0 6px;color:#173f35}
+.fossil-date{margin:0 0 15px;color:#8a5c39;font-size:.9rem;font-weight:840}
+.specimen{position:relative;display:grid;place-items:center;min-height:290px;isolation:isolate;background:radial-gradient(circle at 50% 40%,#e3f0df,transparent 56%),repeating-linear-gradient(175deg,#eef2e7 0 26px,#e7ede0 27px 29px);border-block:1px solid #c9dccb}
+.specimen:before{content:"";position:absolute;inset:18px;pointer-events:none;border:1px dashed #9eb8a7;border-radius:50% 47% 53% 44%;opacity:.7}
+.specimen svg{width:min(91%,500px);height:275px;color:#285e52;position:relative;z-index:1;filter:drop-shadow(7px 10px 0 #6f9b7b16)}
+.specimen-label{position:absolute;left:16px;top:13px;font:850 .7rem ui-monospace,monospace;letter-spacing:.12em;color:#5c8675}
+.specimen-label.end{left:auto;top:auto;right:16px;bottom:12px}
+.facts{padding:clamp(17px,3vw,31px)}
+.facts .description{font-size:1rem;line-height:1.73;color:#364f46;margin:0 0 17px}
+.factpair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fact{border-radius:11px;border:1px solid #d7e3d6;background:#f8faf4;padding:14px}
+.fact b{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#327561;margin-bottom:7px}
+.fact p{margin:0;color:#4c6356;font-size:.88rem;line-height:1.59}
+.source{font-size:.8rem;color:#56665d;line-height:1.6;margin:15px 0}
+.source a{color:#12675d;font-weight:800;overflow-wrap:anywhere}
+.actions{display:flex;align-items:center;justify-content:space-between;gap:11px}
+.actions button{border:1px solid #2d6656;background:transparent;color:#245c4d;padding:11px 15px;min-height:44px;border-radius:10px;font-weight:850}
+.actions button:last-child{background:#275b4d;color:white}
+.educate{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.branch,.quiz{background:#fffdf8;border:1px solid #cbd9ca;border-radius:17px;padding:clamp(17px,2.6vw,27px)}
+.educate p{color:#536a60;line-height:1.58;font-size:.88rem;margin:8px 0 15px}
+.branch-illustration{display:block;width:100%;height:135px;color:#438b74;background:#ecf4e9;border-radius:11px;border:1px solid #d3e5d5;padding:10px}
+.branch-choices{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}
+.branch-choices button{border:1px solid #8db2a0;border-radius:9px;background:#eff7ee;padding:9px 11px;min-height:44px;color:#265748;font-size:.8rem;font-weight:830}
+.branch-choices button[aria-pressed="true"]{background:#225847;color:#fff}
+.branch-explain{font-size:.86rem!important;background:#e7f3e9;border-left:4px solid #4d9f7c;padding:12px;border-radius:0 8px 8px 0;min-height:75px;margin:0!important}
+.quiz h2{margin-bottom:6px}
+.question{border:0;border-top:1px solid #d6dfd5;margin:15px 0 0;padding:12px 0 0}
+.question legend{font-weight:830;color:#244e42;font-size:.88rem;line-height:1.4;padding:0 4px}
+.options{display:flex;flex-wrap:wrap;gap:8px;margin:11px 0}
+.option{border:1px solid #a7bfae;border-radius:9px;background:#f0f7f0;min-height:42px;color:#235444;padding:8px 12px;font-size:.84rem;font-weight:800}
+.option[aria-pressed="true"]{background:#234f41;color:#fff}
+.feedback{font-size:.8rem!important;line-height:1.48!important;margin:8px 0!important;color:#895837!important}
+.feedback.good{color:#196c48!important}
+.finalnote{padding:17px 2px 4px;color:#60746b;font-size:.8rem;line-height:1.66}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:1000px){.work{grid-template-columns:1fr}.strata-list{display:flex;overflow-x:auto;overflow-y:hidden;max-height:none;padding:7px 2px 15px}.stratum{flex:0 0 155px;scroll-snap-align:center}.strata{padding:15px}.era-filters{display:flex;flex-wrap:wrap}.strata-bottom{margin-top:3px}.educate{grid-template-columns:1fr}}
+@media(max-width:580px){.wrap{padding:11px}.hero{border-radius:13px;padding:23px 18px}.clockarea{padding:20px 12px 13px;margin:-9px 7px 15px}.timeaxis{font-size:.6rem}.strata{border-radius:12px}.fossil-head,.facts{padding:18px}.fossil h2{font-size:1.9rem}.specimen{min-height:215px}.specimen svg{height:205px}.factpair{grid-template-columns:1fr}.actions button{padding:11px 10px}.educate{gap:13px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header class="hero"><p class="eyebrow">Museu virtual de paleobiologia · tempo profundo</p><h1>Evolução da Vida na Terra</h1><p>Uma viagem de 4,6 bilhões de anos que passa por microrganismos, mares antigos, florestas, dinossauros e a diversidade atual. Explore diferentes ramos da vida, sem imaginar uma escada que termina nos humanos.</p></header>
+<section class="clockarea" aria-label="Régua proporcional do tempo geológico">
+ <div class="clockhead"><div><h2>Se a Terra tivesse apenas 24 horas de história...</h2><p>O marcador mostra o horário aproximado do acontecimento selecionado. A régua abaixo é proporcional ao tempo, diferentemente da lista de eventos.</p></div><strong id="earth-clock">00:00:00</strong></div>
+ <div id="timebar" class="timebar" role="img" aria-label="Régua proporcional da história da Terra, do início ao presente"></div>
+ <div class="timeaxis"><span>00h · formação</span><span>12h</span><span>24h · presente</span></div>
+</section>
+<div class="work">
+<aside class="strata" aria-label="Coluna do tempo geológico"><h2>Camadas do tempo</h2><p>Filtre as grandes eras. Use ↑ ↓, Home e End na lista para navegar pelas descobertas.</p>
+ <div class="era-filters" id="era-filters" role="group" aria-label="Filtrar períodos"></div>
+ <nav class="strata-list" id="strata-list" aria-label="Marcos da evolução da vida, do mais antigo ao mais recente"></nav>
+ <div class="strata-bottom"><span class="count" id="visited-count">1 de 17 marcos explorados</span><div id="visited-meter" class="fillbar" role="progressbar" aria-label="Marcos visitados" aria-valuemin="0" aria-valuemax="17" aria-valuenow="1"><span id="visited-fill"></span></div><button type="button" class="reset" id="restart">Reiniciar exploração</button></div>
+</aside>
+<section class="fossil" aria-labelledby="fossil-title"><div class="fossil-head"><div class="overline"><span id="fossil-number">AMOSTRA 01 / 17</span><span class="era-pill" id="fossil-era">Pré-Cambriano</span></div>
+ <h2 id="fossil-title">A formação da Terra</h2><p class="fossil-date" id="fossil-date">c. 4,6 bilhões de anos</p></div>
+ <div class="specimen"><span class="specimen-label">RECONSTRUÇÃO DIDÁTICA</span><svg viewBox="0 0 420 300" role="img" aria-labelledby="specimen-title specimen-desc"><title id="specimen-title">Ilustração original</title><desc id="specimen-desc">Desenho esquemático, sem escala.</desc><defs>
+<symbol id="life-planet" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5"><circle cx="208" cy="145" r="112"/><path d="M130 60q-35 55 4 77l40-8 36 34-12 62m53-174-21 50 47 23 37 58-42 51m-169-20 42-8 15 36m38-207q66 102 1 220"/><ellipse cx="208" cy="145" rx="58" ry="112"/><path d="M96 145h224M120 82h177M120 209h177"/></g></symbol>
+<symbol id="life-microbes" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><ellipse cx="136" cy="140" rx="43" ry="72" transform="rotate(-24 136 140)"/><ellipse cx="260" cy="135" rx="57" ry="34" transform="rotate(19 260 135)"/><circle cx="209" cy="230" r="36"/><path d="M128 118q22 28 5 58m107-39q26-23 48 7M198 223l16 19m-69-134-32-15m165 38 31-21M93 188l-35 19"/></g></symbol>
+<symbol id="life-oxygen" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M62 228q53-35 107 0t106 0t87 0M74 199q59-29 113 0t108 0t57 0"/><circle cx="136" cy="117" r="27"/><circle cx="252" cy="92" r="30"/><circle cx="270" cy="155" r="18"/><path d="M136 75V42m0 127v26m70-103-25-18m100 20 39-19m-37 82 26 24M88 118H59"/></g></symbol>
+<symbol id="life-cell" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M208 38c59-13 130 54 120 119s-83 112-153 99S78 195 88 131 154 48 208 38z"/><circle cx="213" cy="145" r="48"/><circle cx="219" cy="141" r="17"/><path d="M117 91q25-19 41-3m105 126q31 3 37-21M137 198q21-25 44-7M280 92q-25 13-19 36"/></g></symbol>
+<symbol id="life-colony" viewBox="0 0 420 300"><g stroke="currentColor" stroke-width="4" fill="none"><circle cx="208" cy="74" r="32"/><circle cx="152" cy="120" r="32"/><circle cx="262" cy="120" r="32"/><circle cx="208" cy="166" r="32"/><circle cx="152" cy="212" r="32"/><circle cx="262" cy="212" r="32"/><path d="M186 95l-13 8m67 0-13-8m-53 41 15 17m39 0 15-17m-75 61 17-18m45 0 15 18"/></g></symbol>
+<symbol id="life-ediacara" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5"><path d="M208 250V59M208 95q-63-18-77-55 66 3 77 55zm0 0q66-20 79-55-62 5-79 55zm0 51q-78-13-93-55 74-6 93 55zm0 0q75-15 91-55-66-6-91 55zm0 50q-75-2-102-44 69-16 102 44zm0 0q73-3 101-44-68-15-101 44zM78 250h262"/></g></symbol>
+<symbol id="life-trilobite" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M210 44q-79 3-85 70l19 117 66 30 66-30 19-117q-8-67-85-70zM210 44v217M126 112h169M133 137h154M140 165h140M144 190h132M152 217h116"/><path d="M125 110l-29-9m196 9 30-9M134 156l-33 6m185-6 33 6"/></g></symbol>
+<symbol id="life-landplant" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M74 253h274M208 249V68M208 104q-81 7-93-51 75-7 93 51zm0 27q86-17 103-74-83-3-103 74zm0 48q-72-2-101-59 76-13 101 59zm0 33q79-8 101-66-76 0-101 66z"/><path d="M208 240q-31-13-53-2m53 0q28-13 55-2"/></g></symbol>
+<symbol id="life-tetrapod" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M67 167q70-75 159-54l57 22 51 39-50 35-96 2-65-22-58 34m123-104 29 55-29 37m-48-47-21 48-39 23m206-71 35-26"/><circle cx="294" cy="163" r="6"/><path d="M49 239q55-16 108 0t104 0t101 0"/></g></symbol>
+<symbol id="life-extinction" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M55 247q45-58 90-31t73-55 97 57 53 29M78 175h54l21-35 32 30 25-72 44 47 31-24 28 45M187 70l-25-33m25 33 23-37M211 172l13 31m-41 8-25 25m97-34 37 24"/><path d="M55 247h314"/></g></symbol>
+<symbol id="life-dinosaur" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M36 202q49-5 77-40l68-20 55-2 36-57 36-12 24 24-13 26-37 10-25 44-45 32-65 5-32 25m70-30-17 50m64-50 20 50M88 186l-32-32M312 94l21 4M48 260h331"/><circle cx="302" cy="91" r="5"/></g></symbol>
+<symbol id="life-mammal" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M77 213q13-91 104-88l33-46 44 36 30-15 25 42 36 21-8 53-58 18-77-2-31 22-33-19-52 7z"/><path d="M196 126l-3-55m33 45 32-43m-22 156 23 24m-115-33-10 33M81 210 50 183"/><circle cx="303" cy="158" r="7"/></g></symbol>
+<symbol id="life-bird" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M49 173q67 6 128-80l32 40 35-58q43 83 120 98-83 37-153 26-83 23-162-26zM210 132l-20 97 21 37 17-37-17-97M76 173l68 10m132 0 60-10m-145-80-14-34m83 6-16 10"/></g></symbol>
+<symbol id="life-flower" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="210" cy="130" r="27"/><ellipse cx="210" cy="69" rx="25" ry="38"/><ellipse cx="210" cy="194" rx="25" ry="38"/><ellipse cx="148" cy="130" rx="38" ry="25"/><ellipse cx="272" cy="130" rx="38" ry="25"/><path d="M210 219v53m0-29q-48-46-78-23 24 35 78 23zm0 0q49-45 79-23-21 34-79 23z"/></g></symbol>
+<symbol id="life-impact" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><circle cx="206" cy="177" r="89"/><path d="M45 35l115 114m-75-14 80 14-13-75M206 88v178M119 177h176M154 108l103 140m0-140L154 248M48 268h323"/><circle cx="206" cy="177" r="20"/></g></symbol>
+<symbol id="life-hominin" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="214" cy="73" r="34"/><path d="M207 107l-8 91m-1-45-59 43m59-44 56 47m-56-1-39 74m39-74 63 74M74 274h280"/><path d="M320 70v122m-34-68 34-43 32 43m-66 24 34-40 34 40"/></g></symbol>
+<symbol id="life-human" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="210" cy="67" r="32"/><path d="M210 100v103m0-82-72 60m72-60 72 60m-72 22-45 72m45-72 45 72M80 276h260"/><path d="M122 69q-36 22-39 58m213-58q36 23 39 58" stroke-dasharray="8 10"/></g></symbol>
+</defs><use id="specimen-use" href="#life-planet"></use></svg><span class="specimen-label end">SVG ORIGINAL · SEM ESCALA</span></div>
+ <div class="facts"><p class="description" id="fossil-description"></p><div class="factpair"><div class="fact"><b>Por que foi importante</b><p id="fossil-impact"></p></div><div class="fact"><b>O que ainda não sabemos ou não devemos simplificar</b><p id="fossil-limits"></p></div></div>
+ <p class="source">Para aprofundar: <a id="fossil-source" href="https://www.nhm.ac.uk/" target="_blank" rel="noopener noreferrer">Fonte científica</a></p>
+ <div class="actions"><button type="button" id="previous">← Marco anterior</button><button type="button" id="next">Próximo marco →</button></div>
+ </div>
+</section></div>
+<div class="educate">
+<section class="branch" aria-labelledby="branch-title"><h2 id="branch-title">Árvore, não escada</h2><p>Em evolução, as espécies se ramificam a partir de ancestrais comuns, sem uma hierarquia de seres “superiores” ou “inferiores”.</p>
+ <svg class="branch-illustration" role="img" aria-labelledby="branch-svg-title branch-svg-desc" viewBox="0 0 600 150"><title id="branch-svg-title">Esquema de árvore evolutiva ramificada</title><desc id="branch-svg-desc">Um tronco divide-se em ramos: um para mamíferos e outros para dinossauros, incluindo as aves.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M27 73h115l75-45h125l60 45h100m-285-45 54 98h100m-129-53 37-45"/></g><g font-size="18" fill="#235b46" font-family="system-ui,sans-serif" font-weight="750"><text x="26" y="57">ancestrais</text><text x="385" y="27">mamíferos</text><text x="400" y="64">dinossauros</text><text x="405" y="88">incluindo aves</text><text x="290" y="143">outros ramos</text></g>
+ </svg>
+ <div class="branch-choices" id="branch-choices" role="group" aria-label="Explorar relações evolutivas"></div><p class="branch-explain" id="branch-explanation" aria-live="polite">Selecione uma relação evolutiva para investigar.</p>
+</section>
+<section class="quiz" aria-labelledby="quiz-title"><h2 id="quiz-title">Laboratório de evidências</h2><p>Três perguntas para verificar ideias importantes. As respostas são formativas, sem registro de notas.</p><div id="questions"></div></section>
+</div>
+<p class="finalnote">Escala aproximada de 4,6 bilhões de anos, utilizada somente como analogia de 24 horas. “c.” significa aproximadamente; as idades de eventos biológicos são estimativas e podem mudar com novas evidências. Nenhuma ilustração representa um fóssil real ou reconstrução em escala. Nada é salvo no Moodle.</p>
+<p id="announce" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+</main>
+<script>
+"use strict";
+const events = [{"id":"terra","ageMa":4600,"date":"c. 4,6 bilhões de anos","short":"A Terra se forma","era":"pre","period":"Hadeano","topic":"Planeta jovem","title":"A formação da Terra","body":"Material do Sistema Solar primitivo se agregou por acreção; a superfície passou por transformações intensas enquanto o planeta esfriava.","impact":"Meteoritos, minerais antigos e métodos de datação radiométrica permitem reconstruir parte dessa história.","care":"É uma data aproximada. A Terra se formou há cerca de 4,54 bilhões de anos; arredondamos para 4,6 bilhões no relógio didático.","motif":"planet","source":"NASA / JPL · Earth Timeline","url":"https://nightsky.jpl.nasa.gov/documents/802/EarthTimeline.pdf"},{"id":"microbios","ageMa":3500,"date":"c. 3,5 bilhões de anos","short":"Vida microbiana registrada","era":"pre","period":"Arqueano","topic":"Primeiros vestígios","title":"Microrganismos deixam sinais nas rochas","body":"Estruturas como estromatólitos e outros registros antigos indicam comunidades microbianas muito antigas.","impact":"A vida microscópica dominou a maior parte da história terrestre e alterou ambientes de forma gradual.","care":"Esses fósseis não marcam necessariamente o instante em que a vida surgiu; vestígios mais antigos são objeto de discussão.","motif":"microbes","source":"Smithsonian · History of Life on Earth","url":"https://naturalhistory.si.edu/education/teaching-resources/life-science/early-life-earth-animal-origins"},{"id":"oxigenio","ageMa":2400,"date":"c. 2,4 bilhões de anos","short":"Grande Evento de Oxigenação","era":"pre","period":"Proterozoico","topic":"Mudança ambiental","title":"O oxigênio transforma a atmosfera","body":"A atividade de organismos fotossintetizantes, incluindo ancestrais das cianobactérias atuais, contribuiu para o acúmulo de oxigênio atmosférico.","impact":"A mudança afetou muitos microrganismos e abriu possibilidades metabólicas para novas formas de vida.","care":"O processo durou muito tempo e envolveu fluxos químicos, não uma mudança instantânea em um dia.","motif":"oxygen","source":"Smithsonian · History of Life on Earth","url":"https://naturalhistory.si.edu/education/teaching-resources/life-science/early-life-earth-animal-origins"},{"id":"eucariotos","ageMa":1800,"date":"c. 1,8 bilhão de anos","short":"Células eucarióticas","era":"pre","period":"Proterozoico","topic":"Complexidade celular","title":"Células com núcleo aparecem no registro","body":"Linhagens eucarióticas desenvolveram células com estruturas internas complexas. A origem dos eucariotos envolveu relações evolutivas entre diferentes microrganismos.","impact":"Essa organização celular tornou possível uma ampla diversidade posterior de protistas, fungos, plantas e animais.","care":"O registro fóssil é fragmentário, e a origem exata das primeiras células eucarióticas continua debatida.","motif":"cell","source":"National Park Service · Diversification of Life","url":"https://www.nps.gov/subjects/fossils/diversification-of-life.htm"},{"id":"multicelulares","ageMa":1000,"date":"c. 1 bilhão de anos","short":"Organismos multicelulares","era":"pre","period":"Proterozoico","topic":"Cooperação celular","title":"Muitas células passam a formar um organismo","body":"Diversas linhagens desenvolveram multicelularidade de maneira independente, com células trabalhando de forma coordenada.","impact":"A cooperação celular permitiu novas formas, tamanhos e especialização de funções.","care":"Multicelularidade não apareceu uma única vez e não significa necessariamente um animal.","motif":"colony","source":"Natural History Museum · Origin of Life","url":"https://www.nhm.ac.uk/discover/origin-of-life-on-earth.html"},{"id":"ediacara","ageMa":575,"date":"c. 575 milhões de anos","short":"Organismos ediacaranos","era":"pre","period":"Ediacarano","topic":"Vida marinha","title":"Corpos grandes aparecem nos mares","body":"Fósseis de organismos macroscópicos de corpo mole registram comunidades do período Ediacarano, com formas corporais muito diferentes de muitas atuais.","impact":"Essas comunidades ajudam a investigar a diversificação da vida complexa antes do Cambriano.","care":"Nem todos esses fósseis podem ser classificados com segurança como ancestrais diretos de animais atuais.","motif":"ediacara","source":"Natural History Museum · Origin of Life","url":"https://www.nhm.ac.uk/discover/origin-of-life-on-earth.html"},{"id":"cambriano","ageMa":539,"date":"c. 539 milhões de anos","short":"Diversificação cambriana","era":"paleo","period":"Cambriano","topic":"Ecossistemas marinhos","title":"Animais se diversificam nos oceanos","body":"Durante dezenas de milhões de anos, vários grupos animais ampliaram sua diversidade e muitos deixaram esqueletos ou partes mineralizadas no registro fóssil.","impact":"A variedade de formas e interações ecológicas aumentou no ambiente marinho.","care":"A chamada 'explosão cambriana' não ocorreu num único instante e não representa o surgimento da vida.","motif":"trilobite","source":"National Park Service · Diversification of Life","url":"https://www.nps.gov/subjects/fossils/diversification-of-life.htm"},{"id":"plantas","ageMa":470,"date":"c. 470 milhões de anos","short":"Plantas na terra firme","era":"paleo","period":"Ordoviciano","topic":"Conquista do ambiente terrestre","title":"Linhagens vegetais colonizam o continente","body":"Evidências de esporos indicam plantas terrestres antigas. Sua expansão ocorreu com adaptações para evitar desidratação e reproduzir fora da água.","impact":"A vegetação transformou solos, ciclos de nutrientes e ambientes para diversos outros seres vivos.","care":"A colonização foi gradual; formas microscópicas e outras linhagens podem ter ocupado a terra antes das plantas modernas.","motif":"landplant","source":"National Park Service · Diversification of Life","url":"https://www.nps.gov/subjects/fossils/diversification-of-life.htm"},{"id":"tetrapodes","ageMa":375,"date":"c. 375 milhões de anos","short":"Transição de vertebrados","era":"paleo","period":"Devoniano","topic":"Novas formas de locomoção","title":"Vertebrados com membros aparecem em ambientes rasos","body":"Entre os sarcopterígios, linhagens com nadadeiras robustas deram origem aos primeiros tetrápodes, em uma transição documentada por fósseis como Tiktaalik e outros.","impact":"Membros e adaptações respiratórias contribuíram para novas maneiras de explorar margens de água e ambientes terrestres.","care":"A história não envolve um peixe individual 'decidindo sair' da água: houve populações e muitas formas intermediárias.","motif":"tetrapod","source":"National Park Service · Diversification of Life","url":"https://www.nps.gov/subjects/fossils/diversification-of-life.htm"},{"id":"permi","ageMa":252,"date":"c. 252 milhões de anos","short":"Extinção do fim do Permiano","era":"paleo","period":"Limite Permiano–Triássico","topic":"Crise da biodiversidade","title":"Uma grande extinção reorganiza a biosfera","body":"Mudanças ambientais intensas, associadas a grandes episódios de vulcanismo e alterações climáticas e oceânicas, coincidiram com a maior extinção em massa conhecida no registro geológico.","impact":"A recuperação dos ecossistemas abriu espaço para novas diversificações posteriores, sem rumo predefinido.","care":"As porcentagens de espécies perdidas variam conforme o grupo e as estimativas; não se deve inventar uma cifra exata.","motif":"extinction","source":"International Commission on Stratigraphy · Geologic Chart","url":"https://stratigraphy.org/chart/"},{"id":"dinossauros","ageMa":230,"date":"c. 230 milhões de anos","short":"Primeiros dinossauros","era":"meso","period":"Triássico","topic":"Ramos de arcossauros","title":"Aparecem as primeiras linhagens de dinossauros","body":"No Triássico, dinossauros surgiram dentro de um conjunto de répteis arcossauros, inicialmente coexistindo com muitos outros grupos.","impact":"Ao longo do Mesozoico, dinossauros se diversificaram em inúmeros estilos de vida e tamanhos.","care":"Nem todos eram gigantes, e 'dinossauro' não é sinônimo de todo réptil que viveu nessa época.","motif":"dinosaur","source":"Natural History Museum · Origin of Life","url":"https://www.nhm.ac.uk/discover/origin-of-life-on-earth.html"},{"id":"mamiferos","ageMa":210,"date":"c. 210 milhões de anos","short":"Primeiros mamíferos","era":"meso","period":"Triássico final","topic":"Outro ramo evolutivo","title":"Os primeiros mamíferos coexistem com dinossauros","body":"Entre os sinapsídeos, linhagens de mamíferos antigos já apresentavam adaptações como dentes diferenciados e mudanças na mandíbula e audição.","impact":"Durante o Mesozoico, mamíferos diversificaram-se enquanto dinossauros dominavam vários ambientes terrestres.","care":"Mamíferos não descendem de dinossauros; são ramos evolutivos diferentes e coexistentes.","motif":"mammal","source":"Natural History Museum · Origin of Life","url":"https://www.nhm.ac.uk/discover/origin-of-life-on-earth.html"},{"id":"aves","ageMa":150,"date":"c. 150 milhões de anos","short":"Aves primitivas","era":"meso","period":"Jurássico final","topic":"Dinossauros com penas","title":"Dinossauros deram origem às aves","body":"Fósseis como Archaeopteryx mostram uma combinação de penas, asas, dentes e outras características relacionadas a dinossauros terópodes.","impact":"A evolução do voo e das penas transformou a ocupação de ambientes e originou a linhagem das aves atuais.","care":"As aves são dinossauros vivos; as penas não surgiram exclusivamente para o voo.","motif":"bird","source":"Natural History Museum · Origin of Life","url":"https://www.nhm.ac.uk/discover/origin-of-life-on-earth.html"},{"id":"flores","ageMa":130,"date":"c. 130 milhões de anos","short":"Plantas com flores","era":"meso","period":"Cretáceo","topic":"Reprodução vegetal","title":"Angiospermas ampliam sua diversidade","body":"Plantas com flores aparecem e se diversificam no Cretáceo, estabelecendo relações variadas com polinizadores, dispersores de sementes e ecossistemas terrestres.","impact":"A diversidade de flores e frutos transformou muitas cadeias ecológicas e interações com animais.","care":"O tempo e o local de origem exatos das angiospermas ainda são pesquisados; plantas terrestres já existiam muito antes.","motif":"flower","source":"Natural History Museum · Origin of Life","url":"https://www.nhm.ac.uk/discover/origin-of-life-on-earth.html"},{"id":"kpg","ageMa":66,"date":"66 milhões de anos","short":"Extinção do fim do Cretáceo","era":"ceno","period":"Limite K–Pg","topic":"Impacto e extinção","title":"Desaparecem os dinossauros não avianos","body":"Um grande impacto de asteroide, associado a mudanças ambientais globais, está ligado à extinção em massa no limite Cretáceo–Paleógeno.","impact":"Aves sobreviventes e vários grupos de mamíferos se diversificaram em novos ambientes ao longo do Cenozoico.","care":"Não desapareceram todos os dinossauros: as aves são descendentes sobreviventes desse grupo.","motif":"impact","source":"International Commission on Stratigraphy · Geologic Chart","url":"https://stratigraphy.org/chart/"},{"id":"homininios","ageMa":6,"date":"c. 6 milhões de anos","short":"Linhagem dos hominínios","era":"ceno","period":"Neógeno","topic":"Evolução ramificada","title":"O ramo dos hominínios se diversifica","body":"Após a divergência entre as linhagens que levaram aos humanos e aos chimpanzés atuais, apareceram vários hominínios, com combinações distintas de características.","impact":"A história humana inclui múltiplas espécies, dispersões e adaptações, não uma marcha de uma espécie para a seguinte.","care":"Seres humanos não descendem dos chimpanzés atuais; compartilhamos ancestrais comuns.","motif":"hominin","source":"Smithsonian · Human Origins","url":"https://humanorigins.si.edu/evidence/human-fossils/species/homo-sapiens"},{"id":"sapiens","ageMa":0.3,"date":"c. 300 mil anos","short":"Homo sapiens","era":"ceno","period":"Quaternário","topic":"Nossa espécie","title":"Homo sapiens surge na África","body":"Fósseis e evidências genéticas situam a origem de Homo sapiens na África, em um processo populacional complexo ao longo de centenas de milhares de anos.","impact":"A cultura cumulativa e a transmissão de conhecimentos ampliaram possibilidades de adaptação em muitas regiões.","care":"Nossa espécie ocupa apenas uma pequena fração do tempo geológico e não é o objetivo final da evolução.","motif":"human","source":"Smithsonian · Human Origins","url":"https://humanorigins.si.edu/evidence/human-fossils/species/homo-sapiens"}];
+const ERAS=[
+{id:"all",label:"Tudo",name:"Todas as eras",color:"#6f9d83"},
+{id:"pre",label:"Pré-Cambriano",name:"Pré-Cambriano",color:"#6797ab"},
+{id:"paleo",label:"Paleozoico",name:"Paleozoico",color:"#7f9d56"},
+{id:"meso",label:"Mesozoico",name:"Mesozoico",color:"#c48c48"},
+{id:"ceno",label:"Cenozoico",name:"Cenozoico",color:"#977bc2"}
+];
+const BRANCHES=[
+{id:"aves",name:"Aves e dinossauros",content:"As aves são a linhagem sobrevivente de dinossauros terópodes. A extinção de 66 milhões de anos eliminou dinossauros não avianos, mas não todas as linhagens de dinossauros."},
+{id:"mamiferos",name:"Mamíferos e dinossauros",content:"Mamíferos e dinossauros surgiram de ramos distintos de vertebrados terrestres e coexistiram durante o Mesozoico. Um grupo não descende do outro."},
+{id:"humanos",name:"Humanos e primatas",content:"Seres humanos e chimpanzés atuais possuem ancestrais comuns. Não descendemos de chimpanzés modernos, e houve muitas outras espécies de hominínios."}
+];
+const QUESTIONS=[
+{question:"O que significa a 'explosão cambriana'?",options:["O aparecimento de toda a vida num dia","Uma diversificação de animais ao longo de milhões de anos","A extinção de todos os animais marinhos"],right:1,why:"A diversificação cambriana ocorreu ao longo de muitos milhões de anos; a vida é muito mais antiga."},
+{question:"Qual grupo de dinossauros sobrevive até hoje?",options:["As aves","Todos os grandes saurópodes","Nenhum"],right:0,why:"Aves são dinossauros terópodes e sobreviveram à extinção do fim do Cretáceo."},
+{question:"Qual frase descreve melhor a evolução humana?",options:["Chimpanzés atuais evoluíram para seres humanos","Todos os fósseis fazem parte de uma única escada evolutiva","Humanos e chimpanzés atuais têm ancestrais comuns"],right:2,why:"A evolução produz ramificações de linhagens, não uma sequência inevitável que termina em nossa espécie."}
+];
+const el=id=>document.getElementById(id);
+const state={filter:"all",active:events[0].id,seen:new Set([events[0].id]),answers:new Map(),branch:null};
+function visible(){return events.filter(e=>state.filter==="all"||e.era===state.filter);}
+function dayTime(ageMa){
+ const t=Math.round((4600-ageMa)/4600*86400);
+ const h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;
+ return [h,m,s].map(n=>String(n).padStart(2,"0")).join(":");
+}
+function renderFilters(){
+ const host=el("era-filters");host.replaceChildren();
+ ERAS.forEach(era=>{
+  const button=document.createElement("button");button.type="button";button.className="era-filter";button.textContent=era.label;
+  button.setAttribute("aria-pressed",String(state.filter===era.id));
+  button.addEventListener("click",()=>setFilter(era.id));host.append(button);
+ });
+}
+function renderList(){
+ const host=el("strata-list"),list=visible();host.replaceChildren();
+ list.forEach((event,index)=>{
+  const button=document.createElement("button");button.type="button";button.className="stratum";
+  const era=ERAS.find(e=>e.id===event.era);
+  button.style.setProperty("--era",era.color);
+  button.classList.toggle("seen",state.seen.has(event.id));
+  button.setAttribute("aria-current",String(event.id===state.active));
+  button.setAttribute("aria-label",event.date+": "+event.short);
+  const age=document.createElement("span");age.className="age";age.textContent=event.date;
+  const label=document.createElement("span");label.className="name";label.textContent=event.short;
+  button.append(age,label);
+  button.addEventListener("click",()=>select(event.id));
+  button.addEventListener("keydown",e=>{
+    let n=null;
+    if(e.key==="ArrowDown"||e.key==="ArrowRight")n=Math.min(index+1,list.length-1);
+    if(e.key==="ArrowUp"||e.key==="ArrowLeft")n=Math.max(index-1,0);
+    if(e.key==="Home")n=0;
+    if(e.key==="End")n=list.length-1;
+    if(n!==null){e.preventDefault();select(list[n].id);host.querySelectorAll(".stratum")[n].focus();}
+  });
+  host.append(button);
+ });
+}
+function select(id){
+ const list=visible();const index=list.findIndex(e=>e.id===id);
+ if(index<0)return;
+ const e=list[index];state.active=id;state.seen.add(id);
+ const era=ERAS.find(t=>t.id===e.era);
+ const fields={
+  "fossil-number":"AMOSTRA "+String(events.indexOf(e)+1).padStart(2,"0")+" / "+events.length,
+  "fossil-era":era.name+" · "+e.period,
+  "fossil-title":e.title,"fossil-date":e.date,
+  "fossil-description":e.body,"fossil-impact":e.impact,"fossil-limits":e.care,
+  "fossil-source":e.source,
+  "specimen-title":"Ilustração: "+e.short,
+  "specimen-desc":"Desenho esquemático original do evento "+e.short+". Não representa reconstrução paleontológica em escala.",
+  "earth-clock":dayTime(e.ageMa),
+  "visited-count":state.seen.size+" de "+events.length+" marcos explorados"
+ };
+ Object.entries(fields).forEach(([id,value])=>el(id).textContent=value);
+ el("fossil-source").href=e.url;
+ el("specimen-use").setAttribute("href","#life-"+e.motif);
+ const progress=((4600-e.ageMa)/4600*100);
+ el("timebar").style.setProperty("--position",progress+"%");
+ el("timebar").setAttribute("aria-label","Acontecimento "+e.short+" em "+dayTime(e.ageMa)+" de um dia equivalente à história da Terra.");
+ el("previous").disabled=index===0;el("next").disabled=index===list.length-1;
+ el("visited-meter").setAttribute("aria-valuenow",String(state.seen.size));
+ el("visited-fill").style.width=state.seen.size/events.length*100+"%";
+ renderList();
+ const host=el("strata-list"),target=host.querySelectorAll(".stratum")[index];
+ if(target){
+  const behavior=window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
+  if(window.matchMedia("(max-width: 1000px)").matches)host.scrollTo({left:Math.max(0,target.offsetLeft-host.offsetLeft-host.clientWidth/2+target.clientWidth/2),behavior});
+  else host.scrollTo({top:Math.max(0,target.offsetTop-host.offsetTop-host.clientHeight/2+target.clientHeight/2),behavior});
+ }
+ el("announce").textContent="Marco "+(events.indexOf(e)+1)+": "+e.short+", "+e.date+". Na escala de um dia: "+dayTime(e.ageMa);
+}
+function setFilter(id){
+ if(!ERAS.some(x=>x.id===id))return;
+ state.filter=id;renderFilters();
+ const subset=visible();if(!subset.some(x=>x.id===state.active))state.active=subset[0].id;
+ select(state.active);
+ el("announce").textContent="Filtro "+ERAS.find(x=>x.id===id).name+": "+subset.length+" marcos.";
+}
+el("previous").addEventListener("click",()=>{
+ const list=visible(),idx=list.findIndex(x=>x.id===state.active);if(idx>0)select(list[idx-1].id);
+});
+el("next").addEventListener("click",()=>{
+ const list=visible(),idx=list.findIndex(x=>x.id===state.active);if(idx>=0&&idx<list.length-1)select(list[idx+1].id);
+});
+function renderBranches(){
+ const host=el("branch-choices");host.replaceChildren();
+ BRANCHES.forEach(branch=>{
+  const button=document.createElement("button");button.type="button";button.textContent=branch.name;
+  button.setAttribute("aria-pressed",String(state.branch===branch.id));
+  button.addEventListener("click",()=>{
+    state.branch=branch.id;renderBranches();
+    el("branch-explanation").textContent=branch.content;
+  });
+  host.append(button);
+ });
+}
+function renderQuiz(){
+ const host=el("questions");host.replaceChildren();
+ QUESTIONS.forEach((q,index)=>{
+  const box=document.createElement("fieldset");box.className="question";
+  const title=document.createElement("legend");title.textContent=(index+1)+". "+q.question;
+  const options=document.createElement("div");options.className="options";
+  const feedback=document.createElement("p");feedback.className="feedback";feedback.setAttribute("aria-live","polite");
+  feedback.textContent="Escolha uma alternativa.";
+  const buttons=q.options.map((value,i)=>{
+    const button=document.createElement("button");button.type="button";button.className="option";button.textContent=value;
+    button.setAttribute("aria-pressed","false");
+    button.addEventListener("click",()=>{
+      state.answers.set(index,i);
+      buttons.forEach((b,k)=>b.setAttribute("aria-pressed",String(k===i)));
+      const correct=i===q.right;
+      feedback.textContent=(correct?"Correto. ":"Reveja. ")+q.why;
+      feedback.classList.toggle("good",correct);
+    });
+    options.append(button);return button;
+  });
+  box.append(title,options,feedback);host.append(box);
+ });
+}
+el("restart").addEventListener("click",()=>{
+ state.filter="all";state.active=events[0].id;state.seen.clear();state.seen.add(events[0].id);
+ state.answers.clear();state.branch=null;
+ renderFilters();renderBranches();renderQuiz();select(state.active);
+ el("branch-explanation").textContent="Selecione uma relação evolutiva para investigar.";
+ el("announce").textContent="Exploração reiniciada, primeiro marco da Terra.";
+});
+renderFilters();renderBranches();renderQuiz();select(events[0].id);
+</script>
+</body>
+</html>
