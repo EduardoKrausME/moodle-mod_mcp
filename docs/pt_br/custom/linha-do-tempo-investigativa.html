@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Linha do tempo investigativa - Arquivo Aurora</title>
+<style>
+:root{font:16px/1.52 system-ui,-apple-system,"Segoe UI",sans-serif;color:#24364b;background:#f4f7f7;--ink:#24364b;--muted:#617387;--line:#dce7e9;--blue:#305d9c;--green:#277a68;--amber:#a96b35;--paper:#fff}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(16px,3.1vw,42px);background:radial-gradient(ellipse at 86% 0,#daece9,transparent 47%),#f4f7f7}
+button,input,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.48;cursor:not-allowed}
+button:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex="0"]:focus-visible{outline:3px solid #d1892a;outline-offset:3px}
+[hidden]{display:none!important}
+main{max-width:1230px;margin:auto}
+.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#2b7c84;font-weight:850}
+header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}
+h1{font-size:clamp(30px,4vw,45px);line-height:1.1;letter-spacing:-.045em;margin:9px 0 12px}
+header p{max-width:785px;color:var(--muted);margin:0}
+.hero-art{max-width:21%;width:170px;flex:none}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:clamp(16px,2.5vw,26px);box-shadow:0 12px 36px #254b5610;min-width:0}
+.panel h2{font-size:21px;letter-spacing:-.025em;line-height:1.25;margin:4px 0 10px}
+.panel h3{font-size:15px;margin:12px 0 8px}
+.lead{font-size:13px;color:var(--muted);margin:0 0 16px}
+.toolbar{display:flex;gap:16px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.progress-wrap{flex:1 1 260px;max-width:530px}
+.progress-label{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13px;color:#526c7b;margin-bottom:7px}
+.progress-label strong{font-size:19px;color:#227765}
+progress{display:block;width:100%;height:10px;border:0;border-radius:99px;background:#e2ebef;overflow:hidden}
+progress::-webkit-progress-bar{background:#e2ebef;border-radius:99px}
+progress::-webkit-progress-value{background:linear-gradient(90deg,#5286b5,#3b9b7d);border-radius:99px}
+progress::-moz-progress-bar{background:#3b9b7d;border-radius:99px}
+.btn{border:1px solid #bed0d9;background:#fff;border-radius:10px;padding:9px 14px;min-height:42px;color:#2b5a7a;font-size:13px;font-weight:800}
+.btn:hover:not(:disabled){background:#eef6f7}
+.btn.primary{background:#2b657f;color:white;border-color:#2b657f}
+.btn.primary:hover:not(:disabled){background:#225872}
+.btn.danger{border-color:#dfb5ab;color:#975242}
+.buttons{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.layout{display:grid;grid-template-columns:minmax(0,1.32fr) minmax(300px,.8fr);gap:16px;align-items:start}
+.primary-column{display:grid;gap:16px;min-width:0}
+.sidebar{display:grid;gap:16px;position:sticky;top:15px}
+.timeline-svg{display:block;width:100%;height:auto;background:#f4faf8;border-radius:13px;border:1px solid #d4e7e6}
+.timeline-svg .spine{stroke:#98baca;stroke-width:5;stroke-linecap:round}
+.timeline-svg .bead{fill:#f6fafb;stroke:#5a95ad;stroke-width:3}
+.timeline-svg .bead.correct{fill:#4fa28b;stroke:#2c7764}
+.timeline-svg .bead.wrong{fill:#eed5b2;stroke:#ab7a3f}
+.timeline-svg .slot-number{font:bold 13px system-ui;fill:#315e75;text-anchor:middle;dominant-baseline:middle}
+.timeline-svg .slot-caption{font:12px system-ui;fill:#49697b;text-anchor:middle}
+.timeline-svg .slot-caption.sub{font-size:11px;fill:#63808c}
+.timeline-svg .arrow{fill:none;stroke:#6c9dad;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.time-hint{font-size:12px;color:var(--muted);margin:11px 0 0}
+.sequence{list-style:none;padding:0;margin:15px 0 0;display:grid;gap:10px}
+.event{display:flex;gap:11px;align-items:stretch;background:#fcfeff;border:1px solid #d9e6ea;border-radius:14px;padding:13px;transition:box-shadow .2s,border-color .2s}
+.event[data-checked=right]{background:#f1faf6;border-color:#a8d2bf}
+.event[data-checked=wrong]{background:#fff9f0;border-color:#e7c79e}
+.event[data-selected=true]{box-shadow:0 0 0 2px #81a9bf66;border-color:#84a9bc}
+.event[data-dragging=true]{box-shadow:0 14px 29px #18445d45;opacity:.88;z-index:3;position:relative}
+.position{font-size:14px;font-weight:900;min-width:28px;color:#537a8f;padding-top:4px}
+.event-main{min-width:0;flex:1}
+.handle{width:100%;text-align:left;background:transparent;border:0;border-radius:8px;padding:3px 4px;cursor:grab;touch-action:none;color:var(--ink)}
+.handle:active{cursor:grabbing}
+.handle strong{display:block;font-size:15px;line-height:1.3;overflow-wrap:anywhere}
+.handle span{display:block;margin-top:5px;font-size:12px;color:#677b8a;line-height:1.4}
+.event-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px}
+.pill{display:inline-flex;border-radius:99px;padding:4px 8px;background:#e9f1f7;color:#3a6583;font-size:11px;font-weight:800}
+.pill.seen{background:#def3e9;color:#23785d}
+.event-check{font-size:11px;color:#816946;font-weight:800}
+.event-check.right{color:#2b7d62}
+.event-buttons{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.event-buttons button{font-size:12px;font-weight:750;border:1px solid #c9dce2;background:#fff;color:#33647b;border-radius:8px;min-height:34px;padding:6px 10px}
+.event-buttons button:hover:not(:disabled){background:#eef7f9}
+.event-buttons .evidence-button{background:#e9f4f7;border-color:#9fc7d0;color:#26657c}
+.event-buttons button:disabled{opacity:.4}
+.status{background:#f3f8fa;border:1px solid #d7e8ed;border-radius:12px;margin-top:14px;padding:13px 15px;color:#3b6177;font-size:13px}
+.status[data-kind=success]{background:#effaf5;border-color:#acd9c3;color:#286b55}
+.status[data-kind=warning]{background:#fff7eb;border-color:#ecd2ab;color:#865d2f}
+.status strong{display:block;margin-bottom:4px}
+.status p{margin:0;line-height:1.45}
+.evidence-badge{display:inline-flex;background:#e6f4f0;color:#2a776a;border-radius:99px;padding:5px 9px;font-weight:850;font-size:11px}
+.evidence-badge.inference{background:#fff0de;color:#925d2e}
+.evidence-head{font-size:13px;color:#577080;font-weight:800;margin:14px 0 7px}
+.evidence-date{display:block;font-size:19px;font-weight:900;color:#2c6181;letter-spacing:-.02em;margin-top:8px}
+.evidence-text{font-size:14px;color:#455f70;margin:12px 0 0}
+.evidence-interpretation{font-size:13px;padding:12px 13px;background:#f1f7f7;border-left:3px solid #65a5a0;border-radius:0 10px 10px 0;color:#3e6064;margin-top:15px}
+.evidence-interpretation strong{display:block;margin-bottom:5px}
+.evidence-question{font-size:13px;border-top:1px solid #e3ecee;padding-top:14px;margin:15px 0;color:#426479}
+.evidence-question strong{display:block;margin-bottom:4px}
+.evidence-footer{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.evidence-placeholder{padding:19px;background:#f7fbfc;border-radius:12px;color:#5c7485;font-size:13px}
+.review-list{list-style:none;display:grid;gap:8px;margin:12px 0 0;padding:0}
+.review-list button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:9px;text-align:left;padding:11px 12px;border-radius:10px;border:1px solid #d7e6e9;background:#f9fcfc;color:#305d75;font-size:12px}
+.review-list button:hover{background:#eef7f7}
+.review-list span:first-child{font-weight:800}
+.review-list small{font-size:11px;color:#638078}
+.review-empty{color:var(--muted);font-size:13px}
+.personal-note{width:100%;min-height:92px;border:1px solid #bbd0db;border-radius:11px;padding:11px;resize:vertical;color:var(--ink);font-size:13px}
+.reflection-note{font-size:12px;color:var(--muted);margin:10px 0 0}
+.confirm{border:1px solid #e6c69f;border-radius:12px;background:#fff8ee;padding:15px;margin-top:14px}
+.confirm p{font-size:13px;color:#7e592d;margin:0 0 12px}
+.finish{border:1px solid #aadbc7;background:#ecfaf2;border-radius:12px;padding:15px;margin-top:15px}
+.finish strong{display:block;color:#286d53}
+.finish p{font-size:13px;color:#476958;margin:5px 0 0}
+.bottom-note{font-size:12px;color:#647985;padding:13px 15px;margin-top:17px;border-left:3px solid #83aeb7;border-radius:0 10px 10px 0;background:#edf6f6}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:1020px){.layout{grid-template-columns:1fr}.sidebar{position:static;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:690px){.sidebar{grid-template-columns:1fr}.hero-art{display:none}.panel{border-radius:16px}.event{gap:6px;padding:10px}.event-buttons{gap:5px}}
+@media(max-width:440px){.timeline-svg{min-width:0}.event-buttons button{flex:1}.buttons{width:100%}.buttons .btn{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div><span class="kicker">Arquivo Aurora · Investigação cronológica</span><h1>Linha do tempo investigativa</h1>
+<p>Seis registros de um experimento escolar fictício foram embaralhados. Examine cada evidência, descubra quando ela foi produzida e reorganize os acontecimentos para explicar a sequência da investigação.</p></div>
+<svg class="hero-art" viewBox="0 0 170 143" role="img" aria-label="Ilustração de registros conectados ao longo do tempo" fill="none">
+<path d="M21 72h132" stroke="#83b5b1" stroke-width="5" stroke-linecap="round"></path><path d="m141 61 12 11-12 11" stroke="#83b5b1" stroke-width="5" stroke-linecap="round"></path>
+<rect x="16" y="17" width="48" height="43" rx="8" fill="#fff" stroke="#86abc0" stroke-width="3"></rect><rect x="60" y="82" width="48" height="43" rx="8" fill="#fff" stroke="#86abc0" stroke-width="3"></rect><rect x="113" y="17" width="43" height="43" rx="8" fill="#fff" stroke="#86abc0" stroke-width="3"></rect>
+<path d="M26 29h27M26 38h18M70 94h27M70 103h18M123 29h23M123 38h14" stroke="#a8c7d1" stroke-width="4" stroke-linecap="round"></path>
+<circle cx="40" cy="72" r="8" fill="#377e98" stroke="#fff" stroke-width="3"></circle><circle cx="86" cy="72" r="8" fill="#377e98" stroke="#fff" stroke-width="3"></circle><circle cx="135" cy="72" r="8" fill="#377e98" stroke="#fff" stroke-width="3"></circle>
+</svg>
+</header>
+<section class="panel toolbar" aria-label="Andamento da investigação">
+<div class="progress-wrap">
+<div class="progress-label"><span id="evidenceCount">0 de 6 fontes examinadas</span><strong id="evidencePercent">0%</strong></div>
+<progress id="evidenceProgress" max="6" value="0" aria-label="Fontes examinadas"></progress>
+</div>
+<div class="buttons">
+<button type="button" id="validate" class="btn primary">Verificar ordem</button>
+<button type="button" id="reset" class="btn">Reiniciar investigação</button>
+</div>
+</section>
+<div class="layout">
+<div class="primary-column">
+<section class="panel" aria-labelledby="timelineHeading">
+<div class="kicker">1 · Hipóteses sobre a sequência</div>
+<h2 id="timelineHeading">A linha do tempo em construção</h2>
+<p class="lead">O diagrama acompanha a ordem dos cartões abaixo. Reorganize os registros para reconstruir a cronologia; validar mostra posições corretas, sem entregar a resposta completa.</p>
+<svg id="timeline" class="timeline-svg" viewBox="0 0 690 125" role="img" aria-labelledby="timelineTitle timelineDesc" focusable="false">
+<title id="timelineTitle">Linha do tempo montada pelo estudante</title>
+<desc id="timelineDesc">Seis posições representando a ordem atual dos acontecimentos.</desc>
+<g id="timelineDrawing"></g>
+</svg>
+<p class="time-hint">Os números indicam posições na linha, não horários. Os horários documentados aparecem ao examinar as evidências.</p>
+</section>
+<section class="panel" aria-labelledby="orderTitle">
+<div class="kicker">2 · Reordene os registros</div>
+<h2 id="orderTitle">Cartões fora de ordem</h2>
+<p class="lead">Use os botões Subir/Descer ou coloque o foco no título e pressione ↑ / ↓, com Shift para ir diretamente ao início ou ao fim. Você também pode arrastar um cartão com mouse ou toque; os movimentos não apagam as evidências examinadas.</p>
+<ol id="events" class="sequence"></ol>
+<div class="status" id="feedback" tabindex="-1" role="status" aria-live="polite" data-kind="neutral">
+<strong id="feedbackTitle">Aguardando sua investigação</strong>
+<p id="feedbackBody">Comece abrindo uma evidência para descobrir seus dados e a posição dela no tempo.</p>
+</div>
+<div class="finish" id="completion" hidden>
+<strong>Sequência reconstruída.</strong>
+<p>Todas as seis evidências foram examinadas e os acontecimentos estão em ordem. A conclusão continua provisória: avaliar explicações exige analisar a qualidade dos registros, e não apenas sua cronologia.</p>
+</div>
+</section>
+</div>
+<div class="sidebar">
+<section class="panel" aria-labelledby="evidenceHeading">
+<div class="kicker">3 · Leia as fontes</div>
+<h2 id="evidenceHeading" tabindex="-1">Mesa de evidências</h2>
+<div id="evidencePlaceholder" class="evidence-placeholder">Selecione “Examinar evidência” em qualquer cartão para revelar a data, o tipo de registro e o que ele permite concluir.</div>
+<div id="evidenceContent" hidden>
+<span class="evidence-badge" id="evidenceType"></span>
+<h3 id="evidenceTitle"></h3>
+<span id="evidenceDate" class="evidence-date"></span>
+<p id="evidenceSource" class="evidence-head"></p>
+<p id="evidenceText" class="evidence-text"></p>
+<div class="evidence-interpretation"><strong>O que este registro permite afirmar?</strong><span id="evidenceInference"></span></div>
+<p class="evidence-question"><strong>Questão para refletir</strong><span id="evidenceQuestion"></span></p>
+</div>
+<div class="evidence-footer"><button type="button" id="backToCard" class="btn" disabled>Voltar ao cartão</button></div>
+</section>
+<section class="panel" aria-labelledby="reviewHeading">
+<div class="kicker">4 · Reveja o que encontrou</div>
+<h2 id="reviewHeading">Arquivo consultado</h2>
+<p class="lead">As fontes examinadas continuam disponíveis mesmo quando você altera a ordem.</p>
+<ul id="reviewList" class="review-list"></ul>
+<p id="reviewEmpty" class="review-empty">Você ainda não examinou nenhuma fonte.</p>
+</section>
+<section class="panel" aria-labelledby="notesHeading">
+<div class="kicker">5 · Elabore uma interpretação</div>
+<h2 id="notesHeading">Minha explicação</h2>
+<label class="lead" for="studentNote">Por que você acredita que esta sequência está correta?</label>
+<textarea id="studentNote" class="personal-note" maxlength="700" placeholder="Ex.: o registro da coleta deve ocorrer depois da preparação, porque..."></textarea>
+<p class="reflection-note">Este campo é uma anotação pessoal; não altera a validação e não é enviado ao Moodle.</p>
+</section>
+</div>
+</div>
+<div id="resetConfirmation" class="confirm" hidden role="group" aria-label="Confirmar reinício da investigação">
+<p>Reiniciar restaura a ordem embaralhada, fecha as evidências, limpa a anotação e zera o progresso desta página. Deseja continuar?</p>
+<div class="buttons">
+<button type="button" id="cancelReset" class="btn">Cancelar</button>
+<button type="button" id="confirmReset" class="btn danger">Sim, reiniciar</button>
+</div>
+</div>
+<p class="bottom-note">Todos os registros, horários, pessoas e acontecimentos deste caso são fictícios, criados para exercitar análise cronológica e distinção entre observação e hipótese. A atividade funciona localmente, sem salvamento, avaliação automática de justificativas ou publicação no Moodle.</p>
+<div class="sr-only" id="announcer" role="status" aria-live="polite" aria-atomic="true"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  const records=[
+    {id:"r1",order:0,title:"Preparar o experimento",short:"Preparação",clock:"08h10",kind:"Registro de procedimento",category:"observacao",source:"Diário fictício da turma - anotação 01",
+      summary:"Um grupo organizou materiais e registrou as condições iniciais do jardim experimental.",
+      evidence:"Às 08h10, o grupo anotou os materiais separados, identificou os dois canteiros do experimento e definiu como faria as medições.",
+      inference:"O diário confirma uma preparação anterior às coletas, mas não comprova, por si só, qual seria o resultado.",
+      question:"Por que definir um procedimento antes das medições ajuda a comparar registros?"},
+    {id:"r2",order:1,title:"Realizar a primeira medição",short:"Medição inicial",clock:"08h35",kind:"Planilha de observação",category:"observacao",source:"Tabela sintética de medições - linha 02",
+      summary:"Foram registradas as primeiras leituras dos dois canteiros.",
+      evidence:"A planilha indica 08h35 para o primeiro conjunto de leituras, com campos preenchidos para os dois canteiros.",
+      inference:"Existe um registro temporal de observação. A planilha não demonstra, sozinha, a causa das diferenças entre os canteiros.",
+      question:"Uma única medição é suficiente para atribuir uma causa a uma diferença?"},
+    {id:"r3",order:2,title:"Discutir uma hipótese",short:"Hipótese",clock:"09h05",kind:"Nota de interpretação",category:"hipotese",source:"Caderno de discussão - anotação 03",
+      summary:"O grupo propôs uma explicação possível para as diferenças percebidas.",
+      evidence:"A nota marcada como 09h05 diz: 'Talvez a exposição à sombra explique parte da variação observada'.",
+      inference:"A frase é uma hipótese, não uma conclusão demonstrada. Ela precisa ser examinada por registros e comparações posteriores.",
+      question:"Como você distinguiria uma interpretação de uma observação direta?"},
+    {id:"r4",order:3,title:"Organizar um teste comparativo",short:"Teste",clock:"09h40",kind:"Registro de procedimento",category:"observacao",source:"Plano sintético de teste - anotação 04",
+      summary:"O grupo definiu uma verificação para comparar condições.",
+      evidence:"Às 09h40, os estudantes registraram uma proposta de comparar observações realizadas sob condições definidas.",
+      inference:"O documento descreve o planejamento de um teste após a formulação da hipótese, mas ainda não contém os resultados.",
+      question:"Por que um plano de teste não deve ser apresentado como evidência de resultado?"},
+    {id:"r5",order:4,title:"Conferir os resultados reunidos",short:"Comparação",clock:"10h30",kind:"Planilha de observação",category:"observacao",source:"Resumo fictício das comparações - anotação 05",
+      summary:"As leituras foram organizadas lado a lado para identificar diferenças e limites.",
+      evidence:"O resumo marcado como 10h30 relaciona as medições e registra limitações de amostragem e de controle das condições.",
+      inference:"A comparação oferece elementos para avaliar a hipótese, mas as limitações registradas restringem a força da inferência.",
+      question:"Que limitações podem impedir uma conclusão definitiva mesmo após comparar resultados?"},
+    {id:"r6",order:5,title:"Redigir uma conclusão provisória",short:"Síntese",clock:"11h15",kind:"Nota de interpretação",category:"hipotese",source:"Relatório provisório da turma - anotação 06",
+      summary:"Os estudantes registraram o que os dados sugeriam e quais perguntas ficaram abertas.",
+      evidence:"O relatório das 11h15 descreve uma interpretação provisória, reconhece dados insuficientes e propõe novas observações.",
+      inference:"A conclusão é provisória e não deve converter uma hipótese plausível em certeza. Novos registros podem exigir revisão.",
+      question:"Por que admitir incertezas torna uma conclusão científica mais responsável?"}
+  ];
+  const initial=["r3","r1","r5","r2","r6","r4"];
+  const $=id=>document.getElementById(id);
+  const byId=new Map(records.map(record=>[record.id,record]));
+  const order=initial.slice();
+  const inspected=new Set(),handles=new Map();
+  let selected=null,attempts=0,lastResult=null,drag=null,suppressClick=null;
+  function node(tag,className,value){
+    const item=document.createElement(tag);
+    if(className)item.className=className;
+    if(value!==undefined)item.textContent=value;
+    return item;
+  }
+  function announce(message){$("announcer").textContent=message;}
+  function correctCount(){return order.reduce((sum,id,index)=>sum+(byId.get(id).order===index?1:0),0);}
+  function completed(){return inspected.size===records.length&&correctCount()===records.length;}
+  function invalidate(){lastResult=null;}
+  function visibleClue(record){return inspected.has(record.id)?record.clock+" · "+record.kind:"Horário protegido na evidência";}
+  function renderProgress(){
+    $("evidenceProgress").value=inspected.size;
+    $("evidenceCount").textContent=inspected.size+" de "+records.length+" fontes examinadas";
+    $("evidencePercent").textContent=Math.round(inspected.size/records.length*100)+"%";
+  }
+  function renderTimeline(){
+    const g=$("timelineDrawing");g.replaceChildren();
+    const ns="http://www.w3.org/2000/svg";
+    const svg=(tag,attrs,value)=>{
+      const x=document.createElementNS(ns,tag);
+      for(const [key,val] of Object.entries(attrs))x.setAttribute(key,String(val));
+      if(value!==undefined)x.textContent=value;
+      return x;
+    };
+    g.appendChild(svg("path",{class:"spine",d:"M 53 40 H 637"}));
+    for(let i=0;i<order.length;i++){
+      const record=byId.get(order[i]),x=56+i*115.4;
+      const status=lastResult?(record.order===i?"correct":"wrong"):"";
+      g.appendChild(svg("circle",{cx:x,cy:40,r:16,class:"bead "+status}));
+      g.appendChild(svg("text",{x,y:40,class:"slot-number"},String(i+1)));
+      g.appendChild(svg("text",{x,y:79,class:"slot-caption"},record.short));
+      g.appendChild(svg("text",{x,y:100,class:"slot-caption sub"},inspected.has(record.id)?record.clock:"Pista oculta"));
+    }
+    $("timelineDesc").textContent="Ordem atual: "+order.map((id,i)=>(i+1)+". "+byId.get(id).title).join("; ")+".";
+  }
+  function focusHandle(id){
+    const button=handles.get(id);
+    if(button)button.focus();
+  }
+  function reorder(id,to,source){
+    const from=order.indexOf(id);
+    if(from<0)return false;
+    const target=Math.max(0,Math.min(order.length-1,to));
+    if(from===target)return false;
+    order.splice(from,1);order.splice(target,0,id);
+    invalidate();render();
+    focusHandle(id);
+    announce(byId.get(id).title+" agora está na posição "+(target+1)+". A linha do tempo foi atualizada.");
+    return true;
+  }
+  function pointerStart(event,id,button){
+    if(event.button!==undefined&&event.button!==0)return;
+    suppressClick=null;
+    drag={id,y:event.clientY,moved:false};
+    if(button.setPointerCapture&&event.pointerId!==undefined)button.setPointerCapture(event.pointerId);
+  }
+  function pointerMove(event,id){
+    if(!drag||drag.id!==id)return;
+    const dy=event.clientY-drag.y;
+    if(!drag.moved&&Math.abs(dy)<8)return;
+    drag.moved=true;
+    if(event.preventDefault)event.preventDefault();
+    const li=handles.get(id)?.parentNode?.parentNode;
+    if(li){li.dataset.dragging="true";li.style.transform="translateY("+dy+"px)";}
+  }
+  function pointerEnd(event,cancelled){
+    if(!drag)return;
+    const info=drag;drag=null;
+    const card=handles.get(info.id)?.parentNode?.parentNode;
+    if(card){card.dataset.dragging="false";card.style.transform="";}
+    if(cancelled||!info.moved)return;
+    suppressClick=info.id;
+    // Target card midpoints are measured in viewport coordinates.
+    const target=order.findIndex(id=>{
+      const sibling=handles.get(id)?.parentNode?.parentNode;
+      if(!sibling)return false;
+      const bounds=sibling.getBoundingClientRect();
+      return event.clientY<bounds.top+bounds.height/2;
+    });
+    reorder(info.id,target<0?order.length-1:target,"pointer");
+  }
+  function renderCards(){
+    const list=$("events");list.replaceChildren();handles.clear();
+    order.forEach((id,index)=>{
+      const item=byId.get(id),li=node("li","event");
+      li.dataset.selected=String(selected===id);
+      li.dataset.checked=lastResult?(item.order===index?"right":"wrong"):"unchecked";
+      const rank=node("span","position",String(index+1).padStart(2,"0"));
+      const content=node("div","event-main");
+      const handle=node("button","handle");
+      handle.type="button";
+      handle.append(node("strong","",item.title),node("span","",item.summary));
+      handle.setAttribute("aria-label","Mover "+item.title+", atualmente posição "+(index+1)+". Use setas para reordenar.");
+      handle.addEventListener("click",event=>{
+        if(suppressClick===id&&event?.detail!==0){suppressClick=null;return;}
+        suppressClick=null;inspect(id);
+      });
+      handle.addEventListener("keydown",event=>{
+        if(event.key!=="ArrowUp"&&event.key!=="ArrowDown"&&event.key!=="Home"&&event.key!=="End")return;
+        event.preventDefault();
+        const to=event.key==="Home"||event.shiftKey&&event.key==="ArrowUp"?0:
+          event.key==="End"||event.shiftKey&&event.key==="ArrowDown"?order.length-1:
+          index+(event.key==="ArrowUp"?-1:1);
+        reorder(id,to,"keyboard");
+      });
+      handle.addEventListener("pointerdown",event=>pointerStart(event,id,handle));
+      handle.addEventListener("pointermove",event=>pointerMove(event,id));
+      handle.addEventListener("pointerup",event=>pointerEnd(event,false));
+      handle.addEventListener("pointercancel",event=>pointerEnd(event,true));
+      handles.set(id,handle);
+      const meta=node("div","event-meta");
+      meta.append(node("span","pill"+(inspected.has(id)?" seen":""),inspected.has(id)?"Fonte examinada":"Fonte não examinada"),node("span","",visibleClue(item)));
+      if(lastResult){
+        const right=item.order===index;
+        meta.append(node("span","event-check"+(right?" right":""),right?"Posição correta":"Reveja a posição"));
+      }
+      const controls=node("div","event-buttons");
+      const inspectButton=node("button","evidence-button",inspected.has(id)?"Rever evidência":"Examinar evidência");
+      inspectButton.type="button";
+      inspectButton.setAttribute("aria-label","Examinar evidência de "+item.title);
+      inspectButton.addEventListener("click",()=>inspect(id));
+      const up=node("button","","↑ Subir"),down=node("button","","↓ Descer");
+      up.type="button";down.type="button";up.disabled=index===0;down.disabled=index===order.length-1;
+      up.setAttribute("aria-label","Mover "+item.title+" para cima");
+      down.setAttribute("aria-label","Mover "+item.title+" para baixo");
+      up.addEventListener("click",()=>reorder(id,index-1,"button"));
+      down.addEventListener("click",()=>reorder(id,index+1,"button"));
+      controls.append(inspectButton,up,down);
+      content.append(handle,meta,controls);
+      li.append(rank,content);list.appendChild(li);
+    });
+  }
+  function renderEvidence(){
+    const record=selected?byId.get(selected):null;
+    $("evidencePlaceholder").hidden=!!record;
+    $("evidenceContent").hidden=!record;
+    $("backToCard").disabled=!record;
+    if(!record)return;
+    const inference=record.category==="hipotese";
+    $("evidenceType").textContent=inference?"Interpretação / hipótese":"Observação / procedimento";
+    $("evidenceType").className="evidence-badge"+(inference?" inference":"");
+    $("evidenceTitle").textContent=record.title;
+    $("evidenceDate").textContent=record.clock+" · Dia 1";
+    $("evidenceSource").textContent=record.source;
+    $("evidenceText").textContent=record.evidence;
+    $("evidenceInference").textContent=record.inference;
+    $("evidenceQuestion").textContent=record.question;
+  }
+  function renderReview(){
+    const list=$("reviewList");list.replaceChildren();
+    $("reviewEmpty").hidden=inspected.size>0;
+    records.filter(item=>inspected.has(item.id)).forEach(record=>{
+      const li=node("li");
+      const button=node("button");
+      button.type="button";
+      button.append(node("span","",record.title),node("small","",record.clock));
+      button.setAttribute("aria-label","Rever "+record.title+", registro "+record.clock);
+      button.addEventListener("click",()=>inspect(record.id));
+      li.appendChild(button);list.appendChild(li);
+    });
+  }
+  function renderFeedback(){
+    const box=$("feedback");
+    if(completed()){
+      box.dataset.kind="success";
+      $("feedbackTitle").textContent="Todas as etapas estão em ordem";
+      $("feedbackBody").textContent="A linha do tempo combina com os horários documentados. Reveja a diferença entre registros de observação e interpretações provisórias.";
+    }else if(!lastResult){
+      box.dataset.kind="neutral";
+      $("feedbackTitle").textContent="Organize e confira os registros";
+      $("feedbackBody").textContent="Examine as fontes, compare os horários, reordene e depois use Verificar ordem. Nenhuma resposta é salva.";
+    }else{
+      const right=correctCount(),remaining=records.length-inspected.size;
+      box.dataset.kind="warning";
+      $("feedbackTitle").textContent=right+" de "+records.length+" posições corretas";
+      $("feedbackBody").textContent=right===records.length
+        ?"A ordem está correta; faltam "+remaining+" fonte(s) para examinar e concluir a investigação."
+        :"Compare as evidências dos cartões marcados para revisão. Use os horários e as relações de antes/depois; nenhum movimento será feito automaticamente.";
+    }
+    $("completion").hidden=!completed();
+  }
+  function render(){
+    renderProgress();renderTimeline();renderCards();renderEvidence();renderReview();renderFeedback();
+    $("resetConfirmation").hidden=true;
+  }
+  function inspect(id){
+    const record=byId.get(id);
+    if(!record)return;
+    const newVisit=!inspected.has(id);
+    inspected.add(id);selected=id;
+    render();$("evidenceHeading").focus();
+    announce((newVisit?"Nova fonte examinada: ":"Fonte reaberta: ")+record.title+". Horário "+record.clock+". "+inspected.size+" de "+records.length+" fontes consultadas.");
+  }
+  function validateOrder(){
+    attempts++;lastResult=true;
+    render();
+    $("feedback").focus?.();
+    announce("Verificação "+attempts+": "+correctCount()+" de "+records.length+" posições corretas.");
+  }
+  function restart(){
+    order.splice(0,order.length,...initial);
+    inspected.clear();selected=null;attempts=0;lastResult=null;drag=null;suppressClick=null;
+    $("studentNote").value="";
+    render();focusHandle(order[0]);
+    announce("Investigação reiniciada. Os seis cartões voltaram à ordem original e nenhuma fonte está examinada.");
+  }
+  $("validate").addEventListener("click",validateOrder);
+  $("backToCard").addEventListener("click",()=>{if(selected)focusHandle(selected);});
+  $("reset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=false;
+    $("cancelReset").focus();
+    announce("Confirme ou cancele o reinício completo.");
+  });
+  $("cancelReset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=true;$("reset").focus();
+    announce("Reinício cancelado; sua investigação foi preservada.");
+  });
+  $("confirmReset").addEventListener("click",restart);
+  render();
+})();
+</script>
+</body>
+</html>
