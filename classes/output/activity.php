@@ -38,17 +38,24 @@ final class activity {
      * Supported ChatGPT/Claude authoring modes. These modes guide content generation;
      * all modes share the same HTML revision, sandbox and publication lifecycle.
      *
-     * @return array<string, array{label: string, prompt: string}>
+     * @return array<string, array{label: string, prompt: string, description: string}>
      */
     public static function prompt_types(): array {
         return [
-            "interactive" => ["label" => "promptselectinteractive", "prompt" => "promptquiz"],
-            "page" => ["label" => "promptselectpage", "prompt" => "promptpage"],
-            "survey" => ["label" => "promptselectsurvey", "prompt" => "promptsurvey"],
-            "timeline" => ["label" => "promptselecttimeline", "prompt" => "prompttimeline"],
-            "case" => ["label" => "promptselectcase", "prompt" => "promptcase"],
-            "simulation" => ["label" => "promptselectsimulation", "prompt" => "promptsimulation"],
-            "custom" => ["label" => "promptselectcustom", "prompt" => "promptcustom"],
+            "interactive" => ["label" => "promptselectinteractive", "prompt" => "promptquiz",
+                "description" => "promptdescriptioninteractive"],
+            "page" => ["label" => "promptselectpage", "prompt" => "promptpage",
+                "description" => "promptdescriptionpage"],
+            "survey" => ["label" => "promptselectsurvey", "prompt" => "promptsurvey",
+                "description" => "promptdescriptionsurvey"],
+            "timeline" => ["label" => "promptselecttimeline", "prompt" => "prompttimeline",
+                "description" => "promptdescriptiontimeline"],
+            "case" => ["label" => "promptselectcase", "prompt" => "promptcase",
+                "description" => "promptdescriptioncase"],
+            "simulation" => ["label" => "promptselectsimulation", "prompt" => "promptsimulation",
+                "description" => "promptdescriptionsimulation"],
+            "custom" => ["label" => "promptselectcustom", "prompt" => "promptcustom",
+                "description" => "promptdescriptioncustom"],
         ];
     }
 
@@ -58,9 +65,13 @@ final class activity {
     public static function prompt_options(stdClass $mcp, stdClass $cm): array {
         $options = [];
         foreach (self::prompt_types() as $type => $configuration) {
+            $label = get_string($configuration["label"], "mcp");
             $options[] = [
                 "type" => $type,
-                "label" => get_string($configuration["label"], "mcp"),
+                "label" => $label,
+                "description" => get_string($configuration["description"], "mcp"),
+                "imageurl" => (new moodle_url("/mod/mcp/pix/material_types/{$type}.png"))->out(false),
+                "imagealt" => get_string("promptimagealt", "mcp", $label),
                 "prompt" => self::prompt($mcp, $cm, $type),
             ];
         }

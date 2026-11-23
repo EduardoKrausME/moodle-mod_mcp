@@ -41,10 +41,18 @@
     {{#promptoptions}}
         <div id="mcp-prompt-{{type}}-{{cmid}}" role="tabpanel" tabindex="0"
              aria-labelledby="mcp-prompt-tab-{{type}}-{{cmid}}" data-prompt-panel="{{type}}" hidden>
-            <label class="form-label" for="mcp-prompt-{{type}}-text-{{cmid}}">
-                {{#str}}copyinstructions, mcp{{/str}}
-            </label>
+            <div class="mod-mcp-prompt-intro">
+                <div class="mod-mcp-prompt-intro-text">
+                    <label class="form-label" for="mcp-prompt-{{type}}-text-{{cmid}}">
+                        {{#str}}copyinstructions, mcp{{/str}}
+                    </label>
+                    <p id="mcp-prompt-{{type}}-desc-{{cmid}}" class="mb-0">{{description}}</p>
+                </div>
+                <img class="mod-mcp-prompt-image" src="{{imageurl}}" alt="{{imagealt}}"
+                     width="240" loading="lazy">
+            </div>
             <textarea id="mcp-prompt-{{type}}-text-{{cmid}}" class="form-control mb-2"
+                      aria-describedby="mcp-prompt-{{type}}-desc-{{cmid}}"
                       rows="8" readonly>{{prompt}}</textarea>
             <div class="d-flex flex-wrap align-items-center mb-3">
                 <button type="button" class="btn btn-primary me-2 mb-2" data-copy-prompt

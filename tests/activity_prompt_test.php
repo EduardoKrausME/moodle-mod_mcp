@@ -71,6 +71,27 @@ final class activity_prompt_test extends \advanced_testcase {
     }
 
     /**
+     * Each authoring mode has localized guidance and its matching bundled illustration.
+     */
+    public function test_authoring_modes_have_descriptions_and_images(): void {
+        foreach (activity::prompt_types() as $type => $configuration) {
+            $this->assertArrayHasKey("description", $configuration);
+            $description = get_string($configuration["description"], "mcp");
+            $this->assertNotEmpty($description);
+            $this->assertStringNotContainsString("[[", $description);
+            $this->assertFileExists(__DIR__ . "/../pix/material_types/{$type}.png");
+        }
+
+        $this->assertNotEmpty(get_string("promptimagealt", "mcp", "Example"));
+        $template = file_get_contents(__DIR__ . "/../templates/prompt_selector.mustache");
+        $this->assertNotFalse($template);
+        foreach (["{{description}}", "{{imageurl}}", "{{imagealt}}",
+                  'class="mod-mcp-prompt-intro"', "aria-describedby="] as $expected) {
+            $this->assertStringContainsString($expected, $template);
+        }
+    }
+
+    /**
      * The authoring selector must expose a copy action and an accessible status.
      */
     public function test_prompt_selector_has_copy_controls(): void {

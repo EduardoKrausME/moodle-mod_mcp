@@ -56,11 +56,45 @@
     background-color: var(--bs-body-bg, #fff);
 }
 
+
+.mod-mcp-prompt-selector .mod-mcp-prompt-intro {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mod-mcp-prompt-selector .mod-mcp-prompt-intro-text {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.mod-mcp-prompt-selector .mod-mcp-prompt-image {
+    flex: 0 0 auto;
+    display: block;
+    width: min(35%, 240px);
+    height: auto;
+    max-height: 180px;
+    object-fit: contain;
+    border-radius: .5rem;
+}
+
 .mod-mcp-prompt-selector [data-prompt-panel][hidden] {
     display: none !important;
 }
 
 @media (max-width: 575.98px) {
+    .mod-mcp-prompt-selector .mod-mcp-prompt-intro {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .mod-mcp-prompt-selector .mod-mcp-prompt-image {
+        align-self: center;
+        width: min(100%, 280px);
+        max-height: 200px;
+    }
+
     .mod-mcp-prompt-selector .mod-mcp-prompt-tabs .nav-link {
         padding: .7rem .85rem;
     }
