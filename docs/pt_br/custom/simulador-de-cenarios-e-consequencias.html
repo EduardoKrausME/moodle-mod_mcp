@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulador de cenários e consequências - Feira de Ciências</title>
+<style>
+:root{color-scheme:light;font:16px/1.53 system-ui,-apple-system,"Segoe UI",sans-serif;color:#25394b;background:#f3f7f6;--ink:#25394b;--muted:#617587;--line:#dbe9e8;--teal:#237d79;--navy:#365c91;--gold:#bd7738;--purple:#8068ac}
+*{box-sizing:border-box}body{margin:0;padding:clamp(15px,3vw,40px);background:radial-gradient(ellipse at 90% 0%,#dfecef,transparent 46%),#f3f7f6}
+button{font:inherit;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}button:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #d59539;outline-offset:3px}[hidden]{display:none!important}
+main{max-width:1320px;margin:auto}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:900;color:#257b7b}
+header{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:19px}
+header h1{font-size:clamp(30px,4.2vw,45px);letter-spacing:-.045em;line-height:1.12;margin:8px 0 11px}
+header p{margin:0;color:var(--muted);max-width:830px}
+header svg{width:133px;max-width:19%;flex:none}
+.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:clamp(16px,2.2vw,24px);box-shadow:0 12px 34px #23495511;min-width:0}
+.panel h2{font-size:21px;letter-spacing:-.02em;line-height:1.24;margin:4px 0 10px}
+.panel h3{font-size:15px;line-height:1.3;margin:13px 0 8px}
+.lead{font-size:13px;color:var(--muted);line-height:1.55;margin:0 0 15px}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:16px}
+.progress-group{flex:1 1 290px;max-width:560px}
+.progress-label{display:flex;gap:8px;align-items:baseline;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:6px}
+.progress-label strong{font-size:20px;color:#247a71}
+progress{display:block;width:100%;height:10px;background:#e3ebed;border:0;border-radius:99px;overflow:hidden}
+progress::-webkit-progress-bar{background:#e3ebed;border-radius:99px}
+progress::-webkit-progress-value{background:linear-gradient(90deg,#5e85be,#3aa58d);border-radius:99px;transition:width .2s}
+progress::-moz-progress-bar{background:#3aa58d;border-radius:99px}
+.btn{border:1px solid #bcd2d7;border-radius:10px;background:#fff;color:#315e78;min-height:42px;padding:9px 14px;font-size:13px;font-weight:820}
+.btn:hover:not(:disabled){background:#eef7f7}
+.btn.primary{background:#226d80;color:#fff;border-color:#226d80}
+.btn.primary:hover:not(:disabled){background:#1c5e70}
+.btn.danger{color:#985348;border-color:#e2bab3}
+.btn.small{min-height:35px;padding:6px 11px;font-size:12px}
+.buttons{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.scene-panel{margin-bottom:16px}
+.scene-panel h2{font-size:17px;margin-bottom:12px}
+.scene-svg{display:block;width:100%;height:auto;border-radius:14px;border:1px solid #c9e4de;background:#d9eeec}
+.scene-svg .milestone .marker{fill:#f6fbfa;stroke:#7ca9ad;stroke-width:4}
+.scene-svg .milestone .mark-label{fill:#486d7a;font:800 18px system-ui;text-anchor:middle;dominant-baseline:middle}
+.scene-svg .milestone[data-phase=done] .marker{fill:#3a9d86;stroke:#19765f}
+.scene-svg .milestone[data-phase=done] .mark-label{fill:#fff}
+.scene-svg .milestone[data-phase=active] .marker{fill:#efb465;stroke:#aa702d;stroke-width:5}
+.scene-svg .milestone[data-phase=active] .mark-label{fill:#56371b}
+.scene-svg .milestone[data-phase=pending]{opacity:.58}
+.scene-caption{font-size:12px;color:#5f7885;margin:10px 0 0}
+.content{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.86fr);gap:16px;align-items:start}
+.left{display:grid;gap:16px;min-width:0}
+.right{display:grid;gap:16px;position:sticky;top:16px}
+.stage-number{display:inline-flex;background:#e8f4f2;color:#237569;font-size:11px;font-weight:900;letter-spacing:.08em;border-radius:99px;padding:5px 10px;text-transform:uppercase}
+.stage-story{color:#4d677a;font-size:14px;line-height:1.55;margin:12px 0}
+.stage-question{font-size:18px;line-height:1.35;font-weight:850;margin:15px 0;color:#294864}
+.choice-list{list-style:none;display:grid;grid-template-columns:1fr;gap:10px;margin:15px 0 0;padding:0}
+.choice{width:100%;display:block;text-align:left;border:1px solid #cddedf;border-radius:14px;background:#fcfefe;color:var(--ink);padding:15px 16px;min-height:105px}
+.choice:hover:not(:disabled){border-color:#8abcb5;background:#f0faf7}
+.choice strong{display:block;font-size:15px;line-height:1.3}
+.choice span{display:block;font-size:13px;color:#5b7080;margin-top:7px}
+.choice small{display:block;font-size:11px;color:#57768a;font-weight:850;margin-top:10px;line-height:1.4}
+.choice:focus-visible{outline:3px solid #d59539}
+.last-feedback{background:#f1f7f9;border-left:3px solid #6f9cbb;border-radius:0 12px 12px 0;margin-top:16px;padding:13px 15px}
+.last-feedback strong{font-size:14px;color:#305b78;display:block}
+.last-feedback p{font-size:13px;color:#526c7c;margin:6px 0 0}
+.last-feedback .warning{color:#97612c;font-weight:800}
+.complete{background:#f1faf6;border:1px solid #b9dacc;padding:16px;border-radius:14px}
+.complete strong{font-size:17px;color:#276a57}
+.complete p{font-size:13px;color:#456c5c;margin:8px 0 0}
+.metrics{display:grid;gap:13px;margin-top:15px}
+.metric{border:1px solid #e1e9ef;border-radius:12px;padding:12px;background:#fafcfe}
+.metric-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:13px}
+.metric-head strong{color:#405c79}
+.metric-head b{font-size:19px;letter-spacing:-.025em;color:#345f91}
+.metric p{font-size:11px;color:#738398;margin:7px 0 0}
+.metric progress{height:9px;margin-top:7px}
+.metric[data-low=true]{background:#fff8f0;border-color:#ecd0b1}
+.metric[data-low=true] .metric-head b{color:#9c6b32}
+.metric[data-low=true] progress::-webkit-progress-value{background:#bf8746}
+.metric[data-low=true] progress::-moz-progress-bar{background:#bf8746}
+.history{list-style:none;display:grid;gap:9px;margin:15px 0 0;padding:0}
+.history li{border:1px solid #e2e9eb;border-radius:12px;padding:13px 14px;background:#fafcfc}
+.history-head{display:flex;align-items:baseline;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.history-head strong{font-size:13px;color:#315f73}
+.history-head small{font-size:11px;color:#688091}
+.history-choice{font-size:14px;font-weight:800;color:#354a62;margin:6px 0}
+.history-note{font-size:12px;color:#5c7283;margin:6px 0 10px;line-height:1.5}
+.history-deltas{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.delta{font-size:11px;background:#e8eef7;color:#496987;padding:4px 7px;border-radius:99px;font-weight:800}
+.delta[data-negative=true]{background:#fff0e1;color:#986032}
+.history-empty{padding:12px;border-radius:11px;background:#f6f9fa;color:var(--muted);font-size:13px}
+.compare-info{font-size:13px;color:#5f7284;margin:13px 0}
+.compare-route{display:grid;gap:10px;margin:12px 0}
+.route{padding:11px 13px;background:#f5f8fc;border-radius:12px;border:1px solid #e1e9f0}
+.route strong{display:block;font-size:12px;color:#345878}
+.route p{font-size:12px;color:#5c7284;line-height:1.5;margin:7px 0 0}
+.compare-table-wrap{overflow-x:auto;border:1px solid #dce7ea;border-radius:11px}
+.compare-table{border-collapse:collapse;width:100%;min-width:390px;font-size:12px}
+.compare-table th,.compare-table td{padding:10px;border-bottom:1px solid #e1e9ea;text-align:left}
+.compare-table tr:last-child td{border-bottom:0}
+.compare-table th{background:#eaf2f5;color:#345d72}
+.compare-table td:last-child{font-weight:900}
+.compare-table td[data-trend=up]{color:#237761}
+.compare-table td[data-trend=down]{color:#9e6033}
+.compare-caption{font-size:12px;color:#526e7e;margin:12px 0 0}
+.confirm{border:1px solid #e8c6a1;background:#fff8ee;border-radius:12px;padding:14px;margin-top:15px}
+.confirm p{font-size:13px;color:#7c5b36;margin:0 0 10px}
+.method{font-size:12px;color:#647887;background:#edf4f7;border-left:3px solid #82aeb9;padding:13px 15px;margin:16px 0 0;border-radius:0 11px 11px 0}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:1050px){.content{grid-template-columns:1fr}.right{position:static;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}}
+@media(max-width:740px){.right{grid-template-columns:1fr}.scene-svg{min-width:0}.panel{border-radius:16px}.scene-panel{padding:14px}}
+@media(max-width:470px){header svg{display:none}.buttons{width:100%}.buttons .btn{flex:1}.choice{padding:13px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div><span class="eyebrow">Laboratório de decisões · Caso inteiramente fictício</span><h1>Feira de Ciências: escolhas em cadeia</h1>
+<p>Você coordena uma feira escolar imaginária e precisa equilibrar recursos, participação, sustentabilidade e confiança. Cada escolha muda o estado da iniciativa e interfere nas decisões seguintes; aqui não existe uma pontuação única que indique a resposta correta.</p></div>
+<svg viewBox="0 0 140 126" role="img" aria-label="Ilustração de escola com duas escolhas e setas" fill="none" focusable="false">
+<rect x="27" y="19" width="86" height="79" rx="9" fill="#f9fdfb" stroke="#73a6a7" stroke-width="4"></rect><path d="M22 20 70 4l47 16" stroke="#6c9da5" stroke-width="5" stroke-linecap="round"></path>
+<path d="M38 37h24v26H38zM77 37h24v26H77z" fill="#b9dfe5"></path><rect x="57" y="70" width="26" height="28" rx="3" fill="#9dbcb4"></rect>
+<path d="M70 98v17m0 0-24 10m24-10 24 10" stroke="#70a99d" stroke-width="4" stroke-linecap="round"></path>
+</svg>
+</header>
+<section class="panel toolbar" aria-label="Andamento e ações">
+<div class="progress-group">
+<div class="progress-label"><span id="stageProgressLabel">0 de 4 decisões realizadas</span><strong id="stagePercent">0%</strong></div>
+<progress id="stageProgress" max="4" value="0" aria-label="Decisões realizadas na simulação"></progress>
+</div>
+<div class="buttons">
+<button class="btn" id="undo" type="button" disabled>Desfazer última escolha</button>
+<button class="btn" id="reset" type="button">Reiniciar simulação</button>
+</div>
+</section>
+<section class="panel scene-panel" aria-labelledby="sceneTitle">
+<h2 id="sceneTitle">O percurso da feira</h2>
+<svg class="scene-svg" viewBox="0 0 1000 250" role="img" aria-labelledby="sceneSvgTitle sceneSvgDesc" focusable="false">
+<title id="sceneSvgTitle">Ilustração de uma feira de ciências na escola</title>
+<desc id="sceneSvgDesc">Escola e barracas de apresentação com quatro marcos de decisão sobre convite, materiais, imprevisto e compartilhamento. A conclusão de cada marco é indicada também pelo texto de progresso abaixo.</desc>
+<defs><linearGradient id="sceneSky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#d5e9f1"/><stop offset="1" stop-color="#f0f8f3"/></linearGradient></defs>
+<rect width="1000" height="250" fill="url(#sceneSky)"></rect>
+<path d="M0 184q100-23 200-3 140 25 256-5 107-24 204 7t340-8v75H0Z" fill="#b5dec7"></path>
+<path d="M0 216h1000" stroke="#e0d9bf" stroke-width="24"></path><path d="M0 216h1000" stroke="#b9c9c0" stroke-width="3" stroke-dasharray="18 15"></path>
+<rect x="45" y="83" width="178" height="101" rx="6" fill="#f8f4e9" stroke="#749baa" stroke-width="4"></rect>
+<path d="m37 84 96-49 99 49Z" fill="#6b9ba9"></path>
+<rect x="66" y="103" width="41" height="42" rx="3" fill="#c3e0e6"></rect><rect x="158" y="103" width="41" height="42" rx="3" fill="#c3e0e6"></rect>
+<rect x="120" y="132" width="28" height="52" fill="#a9bbc2"></rect>
+<path d="M332 117h125M332 117l19-32h88l18 32" stroke="#8a819b" stroke-width="5" fill="none"></path><path d="M341 121v58m110-58v58" stroke="#8a819b" stroke-width="5"></path>
+<path d="M332 115h125l-25 31h-75Z" fill="#ead6ad"></path>
+<path d="M527 125h124l-20-34h-83Z" fill="#8dc8ba" stroke="#59968a" stroke-width="4"></path><path d="M540 125v55m100-55v55" stroke="#639e91" stroke-width="5"></path>
+<rect x="550" y="139" width="75" height="32" rx="5" fill="#f8fffb" stroke="#88b0a6" stroke-width="3"></rect>
+<path d="m575 157 12-15 13 15" stroke="#68a79e" stroke-width="4" fill="none"></path>
+<g fill="#4d9b79"><circle cx="727" cy="116" r="35"></circle><circle cx="770" cy="136" r="29"></circle><circle cx="930" cy="119" r="39"></circle></g>
+<g stroke="#897559" stroke-width="9" stroke-linecap="round"><path d="M735 141v47M929 148v44"></path></g>
+<path d="M287 197c130-12 305-6 442 0" stroke="#558d9c" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 9"></path>
+<g id="sceneNode0" class="milestone" data-phase="active"><circle class="marker" cx="286" cy="197" r="22"></circle><text class="mark-label" x="286" y="197">1</text></g>
+<g id="sceneNode1" class="milestone" data-phase="pending"><circle class="marker" cx="420" cy="197" r="22"></circle><text class="mark-label" x="420" y="197">2</text></g>
+<g id="sceneNode2" class="milestone" data-phase="pending"><circle class="marker" cx="572" cy="197" r="22"></circle><text class="mark-label" x="572" y="197">3</text></g>
+<g id="sceneNode3" class="milestone" data-phase="pending"><circle class="marker" cx="726" cy="197" r="22"></circle><text class="mark-label" x="726" y="197">4</text></g>
+<g font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="13" font-weight="750" fill="#3c6c76" text-anchor="middle">
+<text x="286" y="235">Convite</text><text x="420" y="235">Materiais</text><text x="572" y="235">Chuva</text><text x="726" y="235">Resultados</text>
+</g>
+</svg>
+<p class="scene-caption">Os marcos indicam decisões já realizadas e a próxima etapa. Os indicadores representam valores didáticos inventados, não dados de uma escola real.</p>
+</section>
+<div class="content">
+<div class="left">
+<section class="panel" aria-labelledby="decisionTitle">
+<div class="eyebrow">Escolhas com consequências</div>
+<div id="choicePanel">
+<span class="stage-number" id="stageLabel">Etapa 1 de 4</span>
+<h2 id="decisionTitle" tabindex="-1">Como convidar a comunidade?</h2>
+<p class="stage-story" id="stageStory"></p>
+<p class="stage-question" id="stageQuestion"></p>
+<ul id="choiceList" class="choice-list"></ul>
+</div>
+<div id="completePanel" class="complete" hidden>
+<strong id="outcomeTitle" tabindex="-1">Trajetória concluída</strong>
+<p id="outcomeText"></p>
+</div>
+<div id="lastFeedback" class="last-feedback" hidden>
+<strong id="lastFeedbackTitle"></strong>
+<p id="lastFeedbackText"></p>
+<p id="lastFeedbackWarning" class="warning" hidden></p>
+</div>
+</section>
+<section class="panel" aria-labelledby="historyTitle">
+<div class="eyebrow">Revisão e causalidade</div>
+<h2 id="historyTitle">Como chegamos até aqui?</h2>
+<p class="lead">Os efeitos são acumulados e aplicados com limites de 0 a 100. Revise uma etapa para tentar outro caminho; as decisões posteriores são removidas porque dependem do novo contexto.</p>
+<ol id="history" class="history"></ol>
+<p id="historyEmpty" class="history-empty">Nenhuma decisão tomada ainda. Escolha uma alternativa na primeira etapa.</p>
+</section>
+</div>
+<div class="right">
+<section class="panel" aria-labelledby="metricsTitle">
+<div class="eyebrow">Estado acumulado</div>
+<h2 id="metricsTitle">Indicadores da feira</h2>
+<p class="lead">Escala ilustrativa de 0 a 100. Um valor alto pode representar vantagem em um aspecto, mas não elimina os conflitos com os demais.</p>
+<div id="metrics" class="metrics"></div>
+</section>
+<section class="panel" aria-labelledby="compareTitle">
+<div class="eyebrow">Experimente outros caminhos</div>
+<h2 id="compareTitle">Comparar trajetórias</h2>
+<p class="lead">Conclua as quatro decisões e guarde esse percurso como referência. Depois revise uma escolha, finalize a nova trajetória e compare os resultados na mesma quantidade de etapas.</p>
+<button id="saveBaseline" class="btn primary" type="button" disabled>Guardar caminho de referência</button>
+<p id="compareInfo" class="compare-info">Conclua as quatro etapas para guardar uma referência.</p>
+<div id="compareResults" hidden>
+<div class="compare-route">
+<div class="route"><strong>Caminho de referência</strong><p id="baselineRoute"></p></div>
+<div class="route"><strong>Caminho atual</strong><p id="currentRoute"></p></div>
+</div>
+<div class="compare-table-wrap">
+<table class="compare-table">
+<caption class="sr-only">Comparação numérica de quatro indicadores após quatro decisões em cada trajetória</caption>
+<thead><tr><th scope="col">Indicador</th><th scope="col">Referência</th><th scope="col">Atual</th><th scope="col">Diferença</th></tr></thead>
+<tbody id="comparisonBody"></tbody>
+</table>
+</div>
+<p id="comparisonSummary" class="compare-caption"></p>
+</div>
+</section>
+</div>
+</div>
+<div id="resetConfirmation" class="confirm" hidden role="group" aria-label="Confirmar reinício da simulação">
+<p>Reiniciar apagará suas escolhas, os indicadores acumulados e o caminho de referência. Deseja começar novamente?</p>
+<div class="buttons"><button class="btn" type="button" id="cancelReset">Cancelar</button><button class="btn danger" type="button" id="confirmReset">Sim, reiniciar</button></div>
+</div>
+<p class="method">Os quatro indicadores partem de valores arbitrários e cada escolha aplica efeitos fictícios, limitados à escala de 0 a 100. O simulador foi criado para discutir relações de causa, consequência, prioridades e incerteza; não é previsão científica, ferramenta de gestão real ou atividade de avaliação registrada no Moodle. Tudo permanece somente nesta página.</p>
+<div id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  const indicators=[
+    {key:"resources",title:"Recursos",description:"Margem simulada de materiais e orçamento"},
+    {key:"participation",title:"Participação",description:"Alcance e envolvimento do público"},
+    {key:"sustainability",title:"Sustentabilidade",description:"Uso responsável de materiais e energia"},
+    {key:"trust",title:"Confiança",description:"Percepção de transparência e compromisso"}
+  ];
+  const seed={resources:70,participation:45,sustainability:55,trust:50};
+  const stages=[
+    {id:"invitation",title:"Como convidar a comunidade?",question:"Qual formato de convite escolher para a feira?",
+      story:"A feira ainda está no planejamento. A equipe precisa divulgar o evento, mas o orçamento e a participação são limitados.",
+      contextKey:null,threshold:0,high:"",low:"",
+      options:[
+        {id:"open",title:"Convite aberto em toda a comunidade",detail:"Maior alcance, com esforço extra de organização.",delta:{resources:-16,participation:19,sustainability:-1,trust:10},
+          feedback:"A abertura amplia a participação e a confiança, mas consome recursos para acolher mais visitantes."},
+        {id:"limited",title:"Reservar convites para poucos grupos",detail:"Menos custo, mas uma parcela do público fica de fora.",delta:{resources:9,participation:-14,sustainability:4,trust:-13},
+          feedback:"O controle economiza recursos, porém a redução de acesso pode prejudicar envolvimento e confiança."},
+        {id:"hybrid",title:"Divulgação híbrida e inscrições acessíveis",detail:"Combina convite presencial com comunicação digital.",delta:{resources:-9,participation:12,sustainability:5,trust:6},
+          feedback:"O convite híbrido distribui o alcance, mas exige atenção para não excluir quem tem menos acesso digital."}
+      ]},
+    {id:"materials",title:"Como organizar os materiais?",question:"Quais recursos serão usados nas bancadas?",
+      story:"A equipe precisa preparar os experimentos. Os materiais escolhidos afetarão o custo, a experiência e os resíduos gerados.",
+      contextKey:"participation",threshold:58,
+      high:"A divulgação atraiu bastante interesse; a infraestrutura precisará atender um público maior.",
+      low:"A procura ainda está tímida; materiais bem escolhidos podem ajudar a tornar as atividades mais atraentes.",
+      options:[
+        {id:"reuse",title:"Reutilizar materiais disponíveis",detail:"Prioriza reaproveitamento e adapta os experimentos.",delta:{resources:10,participation:-4,sustainability:20,trust:7},
+          feedback:"O reaproveitamento reduz a demanda por compras e resíduos, mas pode limitar algumas experiências."},
+        {id:"purchase",title:"Comprar kits novos para todas as mesas",detail:"Amplia opções de demonstração, com custos e descarte.",delta:{resources:-23,participation:8,sustainability:-15,trust:3},
+          feedback:"Os kits facilitam a preparação, porém pressionam o orçamento e elevam o impacto material da feira."},
+        {id:"partners",title:"Pedir empréstimos e apoio de parceiros",detail:"Combina equipamentos compartilhados e colaboração.",delta:{resources:3,participation:10,sustainability:12,trust:7},
+          feedback:"O empréstimo pode ampliar atividades e reduzir desperdício, mas depende de acordos e devoluções organizadas."}
+      ]},
+    {id:"rain",title:"E se chover no dia do evento?",question:"Como responder ao imprevisto sem ignorar consequências?",
+      story:"Uma previsão fictícia de chuva forte exige uma nova escolha. A segurança e a participação devem ser consideradas.",
+      contextKey:"resources",threshold:50,
+      high:"A equipe ainda dispõe de alguma margem de recursos para adaptar a infraestrutura.",
+      low:"Os recursos ficaram escassos; mudar o plano exigirá priorizar o que pode ser mantido.",
+      options:[
+        {id:"covered",title:"Transferir a feira para espaços cobertos",detail:"Reorganiza as bancadas e mantém encontro presencial.",delta:{resources:-14,participation:11,sustainability:-3,trust:9},
+          feedback:"O espaço coberto preserva o encontro, mas demanda logística, recursos e atenção à acessibilidade."},
+        {id:"postpone",title:"Adiar a feira e comunicar a decisão",detail:"Economiza parte do preparo imediato, mas perde público.",delta:{resources:8,participation:-15,sustainability:2,trust:-9},
+          feedback:"O adiamento diminui pressão imediata, porém prejudica a continuidade e requer comunicação antecipada."},
+        {id:"remote",title:"Criar apresentações remotas acessíveis",detail:"Reduz deslocamentos e exige suporte digital.",delta:{resources:-7,participation:3,sustainability:6,trust:2},
+          feedback:"O formato remoto mantém parte da programação, mas precisa oferecer alternativas a quem não dispõe de conexão."}
+      ]},
+    {id:"share",title:"Como compartilhar os resultados?",question:"Que formato de encerramento escolher para a comunidade?",
+      story:"A feira chega ao fim e a equipe precisa decidir como prestar contas e compartilhar aprendizados.",
+      contextKey:"trust",threshold:50,
+      high:"A comunidade demonstra confiança; o encerramento pode aprofundar a troca de conhecimentos.",
+      low:"Algumas pessoas pedem mais explicações sobre as decisões; transparência pode ser fundamental nesta etapa.",
+      options:[
+        {id:"inclusive",title:"Mostra pública com relatos acessíveis",detail:"Apresenta projetos, dificuldades e resultados em formatos diversos.",delta:{resources:-9,participation:12,sustainability:4,trust:14},
+          feedback:"A prestação de contas acessível fortalece a confiança, mas exige trabalho adicional de preparação."},
+        {id:"compact",title:"Produzir um relatório simples de divulgação",detail:"Reúne informações básicas, com menor interação.",delta:{resources:5,participation:-3,sustainability:-4,trust:4},
+          feedback:"O relatório oferece registro com menor custo, mas reduz oportunidades de escuta e participação."},
+        {id:"silent",title:"Encerrar sem compartilhar resultados",detail:"Poupa recursos imediatos e limita o retorno à comunidade.",delta:{resources:12,participation:-9,sustainability:0,trust:-15},
+          feedback:"O encerramento silencioso preserva recursos no curto prazo, porém reduz transparência e engajamento."}
+      ]}
+  ];
+  const $=id=>document.getElementById(id);
+  const choices=[];
+  let baseline=null;
+  const clamp=(value)=>Math.max(0,Math.min(100,value));
+  const findOption=(stageIndex,id)=>stages[stageIndex]?.options.find(option=>option.id===id);
+  const signed=value=>(value>0?"+":"")+String(value);
+  function node(tag,className,value){
+    const el=document.createElement(tag);
+    if(className)el.className=className;
+    if(value!==undefined)el.textContent=value;
+    return el;
+  }
+  function announce(message){$("announcer").textContent=message;}
+  function simulate(path){
+    const state={...seed},steps=[];
+    for(let i=0;i<path.length;i++){
+      const stage=stages[i],option=findOption(i,path[i]);
+      if(!stage||!option)throw Error("Caminho inválido na etapa "+(i+1));
+      const before={...state},actual={};
+      for(const indicator of indicators){
+        const key=indicator.key;
+        state[key]=clamp(state[key]+option.delta[key]);
+        actual[key]=state[key]-before[key];
+      }
+      steps.push({stage,option,before,after:{...state},actual});
+    }
+    return {state,steps};
+  }
+  function narrative(stage,state){
+    if(!stage.contextKey)return stage.story;
+    return stage.story+" "+(state[stage.contextKey]>=stage.threshold?stage.high:stage.low);
+  }
+  function concern(state){
+    const low=indicators.filter(i=>state[i.key]<30);
+    if(!low.length)return "";
+    return "Atenção: "+low.map(i=>i.title.toLocaleLowerCase("pt-BR")).join(", ")+" ficou abaixo de 30 neste cenário fictício.";
+  }
+  function outcome(state){
+    const strong=indicators.filter(i=>state[i.key]>=75).map(i=>i.title.toLocaleLowerCase("pt-BR"));
+    const weak=indicators.filter(i=>state[i.key]<40).map(i=>i.title.toLocaleLowerCase("pt-BR"));
+    const first=strong.length
+      ?"A trajetória fortaleceu especialmente "+strong.join(" e ")+". "
+      :"A trajetória terminou sem indicadores acima de 75. ";
+    const second=weak.length
+      ?"Os aspectos que exigem maior atenção são "+weak.join(" e ")+"."
+      :"Nenhum indicador terminou abaixo de 40, mas as trocas entre prioridades continuam importantes.";
+    return first+second+" Refaça uma decisão para observar como o contexto seguinte se altera.";
+  }
+  function renderScene(){
+    for(let i=0;i<stages.length;i++){
+      const mark=$("sceneNode"+i);
+      mark.dataset.phase=i<choices.length?"done":i===choices.length?"active":"pending";
+    }
+    $("stageProgress").value=choices.length;
+    $("stageProgressLabel").textContent=choices.length+" de "+stages.length+" decisões realizadas";
+    $("stagePercent").textContent=Math.round(choices.length/stages.length*100)+"%";
+    $("undo").disabled=choices.length===0;
+  }
+  function renderMetrics(state){
+    const list=$("metrics");list.replaceChildren();
+    for(const i of indicators){
+      const section=node("section","metric");
+      section.dataset.low=String(state[i.key]<30);
+      const header=node("div","metric-head");
+      header.append(node("strong","",i.title),node("b","",state[i.key]+"/100"));
+      const progress=node("progress");progress.max=100;progress.value=state[i.key];
+      progress.setAttribute("aria-label",i.title+": "+state[i.key]+" de 100");
+      section.append(header,progress,node("p","",i.description));
+      list.appendChild(section);
+    }
+  }
+  function renderDecisions(currentState){
+    const complete=choices.length===stages.length;
+    $("choicePanel").hidden=complete;
+    $("completePanel").hidden=!complete;
+    const list=$("choiceList");list.replaceChildren();
+    if(complete){
+      $("outcomeTitle").textContent="Feira concluída - quatro escolhas realizadas";
+      $("outcomeText").textContent=outcome(currentState);
+      return;
+    }
+    const stage=stages[choices.length];
+    $("stageLabel").textContent="Etapa "+(choices.length+1)+" de "+stages.length;
+    $("decisionTitle").textContent=stage.title;
+    $("stageStory").textContent=narrative(stage,currentState);
+    $("stageQuestion").textContent=stage.question;
+    for(const option of stage.options){
+      const li=node("li"),button=node("button","choice");
+      button.type="button";
+      button.append(node("strong","",option.title),node("span","",option.detail));
+      const deltaText=indicators.map(i=>i.title+" "+signed(option.delta[i.key])).join(" · ");
+      button.append(node("small","", "Efeitos previstos: "+deltaText));
+      button.setAttribute("aria-label",option.title+". "+option.detail+". Efeitos previstos: "+deltaText);
+      button.addEventListener("click",()=>choose(option.id));
+      li.appendChild(button);list.appendChild(li);
+    }
+  }
+  function renderFeedback(simulated){
+    const last=simulated.steps.at(-1);
+    $("lastFeedback").hidden=!last;
+    if(!last)return;
+    $("lastFeedbackTitle").textContent="Última consequência: "+last.option.title;
+    $("lastFeedbackText").textContent=last.option.feedback;
+    const warning=concern(last.after);
+    $("lastFeedbackWarning").hidden=!warning;
+    $("lastFeedbackWarning").textContent=warning;
+  }
+  function deltaChip(key,value){
+    const i=indicators.find(i=>i.key===key);
+    const chip=node("span","delta",i.title+" "+signed(value));
+    chip.dataset.negative=String(value<0);
+    return chip;
+  }
+  function renderHistory(simulated){
+    const list=$("history");list.replaceChildren();
+    $("historyEmpty").hidden=simulated.steps.length>0;
+    simulated.steps.forEach((entry,index)=>{
+      const li=node("li");
+      const head=node("div","history-head");
+      head.append(node("strong","", "Etapa "+(index+1)+" - "+entry.stage.title),node("small","","Decisão registrada"));
+      li.append(head,node("p","history-choice",entry.option.title),node("p","history-note",entry.option.feedback));
+      const impacts=node("div","history-deltas");
+      for(const i of indicators)impacts.appendChild(deltaChip(i.key,entry.actual[i.key]));
+      li.appendChild(impacts);
+      const review=node("button","btn small","Revisar esta decisão");
+      review.type="button";
+      review.setAttribute("aria-label","Revisar etapa "+(index+1)+": "+entry.stage.title+"; as escolhas seguintes serão removidas");
+      review.addEventListener("click",()=>revise(index));
+      li.appendChild(review);list.appendChild(li);
+    });
+  }
+  function routeDescription(path){
+    return path.map((id,i)=>(i+1)+". "+findOption(i,id).title).join(" | ");
+  }
+  function renderComparison(){
+    const full=choices.length===stages.length;
+    $("saveBaseline").disabled=!full;
+    $("saveBaseline").textContent=baseline?"Substituir caminho de referência":"Guardar caminho de referência";
+    const results=$("compareResults"),info=$("compareInfo");
+    results.hidden=!baseline||!full;
+    if(!baseline||!full)$("comparisonBody").replaceChildren();
+    if(!baseline){
+      info.textContent=full
+        ?"Caminho concluído. Guarde-o e revise uma decisão para comparar outras consequências."
+        :"Complete as quatro decisões para guardar um caminho de referência.";
+      return;
+    }
+    if(!full){
+      info.textContent="Existe um caminho de referência com quatro etapas. O caminho atual tem "+choices.length+" de quatro escolhas; conclua-o antes de comparar indicadores.";
+      return;
+    }
+    const a=simulate(baseline),b=simulate(choices);
+    const changed=choices.filter((id,index)=>id!==baseline[index]).length;
+    info.textContent=changed
+      ?"Dois percursos completos: "+changed+" escolha(s) diferente(s)."
+      :"Os dois percursos são idênticos. Revise uma decisão para experimentar outro caminho.";
+    $("baselineRoute").textContent=routeDescription(baseline);
+    $("currentRoute").textContent=routeDescription(choices);
+    const tbody=$("comparisonBody");tbody.replaceChildren();
+    for(const indicator of indicators){
+      const key=indicator.key,difference=b.state[key]-a.state[key];
+      const row=node("tr");
+      const heading=node("th","",indicator.title);
+      heading.setAttribute("scope","row");
+      row.append(heading,node("td","",String(a.state[key])),node("td","",String(b.state[key])));
+      const diff=node("td","",signed(difference));
+      diff.dataset.trend=difference>0?"up":difference<0?"down":"same";
+      row.appendChild(diff);tbody.appendChild(row);
+    }
+    $("comparisonSummary").textContent=changed
+      ?"Diferenças ilustrativas entre os dois caminhos completos. Um aumento em um indicador não comprova que a estratégia seja melhor em todos os aspectos."
+      :"Mesmas escolhas, mesmos efeitos determinísticos. Para comparar consequências, altere pelo menos uma decisão.";
+  }
+  function render(){
+    const simulated=simulate(choices);
+    renderScene();renderMetrics(simulated.state);renderDecisions(simulated.state);
+    renderFeedback(simulated);renderHistory(simulated);renderComparison();
+    $("resetConfirmation").hidden=true;
+  }
+  function choose(id){
+    if(choices.length>=stages.length)return;
+    const index=choices.length,option=findOption(index,id);
+    if(!option)return;
+    choices.push(id);render();
+    if(choices.length===stages.length)$("outcomeTitle").focus();
+    else $("decisionTitle").focus();
+    announce("Etapa "+(index+1)+" concluída: "+option.title+". Indicadores atualizados; próxima etapa disponível.");
+  }
+  function revise(index){
+    if(!Number.isInteger(index)||index<0||index>=choices.length)return;
+    const lost=choices.length-index;
+    choices.splice(index);
+    render();$("decisionTitle").focus();
+    announce("Retorno à etapa "+(index+1)+". "+lost+" escolha(s) removida(s), pois dependiam das decisões revisadas. Caminho de referência preservado.");
+  }
+  function undo(){
+    if(!choices.length)return;
+    choices.pop();render();$("decisionTitle").focus();
+    announce("Última decisão desfeita. Efeitos acumulados recalculados.");
+  }
+  function saveBaseline(){
+    if(choices.length!==stages.length)return;
+    baseline=choices.slice();render();$("saveBaseline").focus();
+    announce("Caminho completo guardado. Revise uma decisão e conclua outra trajetória para comparar.");
+  }
+  function reset(){
+    choices.splice(0);baseline=null;
+    render();$("reset").focus();
+    announce("Simulação reiniciada. Quatro decisões disponíveis; indicadores e comparação restaurados.");
+  }
+  $("undo").addEventListener("click",undo);
+  $("saveBaseline").addEventListener("click",saveBaseline);
+  $("reset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=false;
+    $("cancelReset").focus();
+    announce("Confirme ou cancele o reinício. A referência também será apagada.");
+  });
+  $("cancelReset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=true;$("reset").focus();
+    announce("Reinício cancelado. Suas escolhas foram preservadas.");
+  });
+  $("confirmReset").addEventListener("click",reset);
+  render();
+})();
+</script>
+</body>
+</html>
