@@ -38,6 +38,7 @@ $string['connectionnew'] = 'Configurar conexão MCP';
 $string['connectionrequired'] = 'Sua conta Moodle ainda não possui uma conexão MCP ativa. Primeiro conecte o ChatGPT ou Claude a este Moodle e autorize o acesso com a sua conta; depois volte a esta atividade e use o prompt abaixo.';
 $string['content'] = 'Documento HTML (incluindo CSS e JavaScript)';
 $string['content_help'] = 'Utilize um documento HTML completo com estilos e scripts internos. Os scripts são executados em um iframe isolado.';
+$string['promptfreedom'] = 'Essas são apenas sugestões: você não precisa se limitar a elas. Peça à inteligência artificial para acrescentar outros recursos, interações ou qualquer ideia que desejar. O limite é a sua imaginação.';
 $string['copyinstructions'] = 'Copie este prompt para construir a atividade no ChatGPT ou Claude:';
 $string['copyprompt'] = 'Copiar comando';
 $string['copypromptfailed'] = 'Não foi possível copiar automaticamente. Selecione o comando e copie manualmente.';

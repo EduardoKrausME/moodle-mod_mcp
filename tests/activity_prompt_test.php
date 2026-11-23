@@ -85,10 +85,15 @@ final class activity_prompt_test extends \advanced_testcase {
         }
 
         $this->assertNotEmpty(get_string("promptimagealt", "mcp", "Example"));
+        $freedom = get_string("promptfreedom", "mcp");
+        $this->assertStringContainsString("inteligência artificial", $freedom);
+        $this->assertStringContainsString("imaginação", $freedom);
         $template = file_get_contents(__DIR__ . "/../templates/prompt_selector.mustache");
         $this->assertNotFalse($template);
         foreach (["{{description}}", "{{imageurl}}", "{{imagealt}}",
-                  'class="mod-mcp-prompt-intro"', "aria-describedby="] as $expected) {
+                  'class="mod-mcp-prompt-intro"', "{{#str}}promptfreedom, mcp{{/str}}",
+                  'aria-describedby="mcp-prompt-{{type}}-desc-{{cmid}} mcp-prompt-{{type}}-freedom-{{cmid}}"'
+                 ] as $expected) {
             $this->assertStringContainsString($expected, $template);
         }
     }
