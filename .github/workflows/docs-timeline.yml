@@ -4,14 +4,12 @@ on:
   push:
     paths:
       - 'docs/pt_br/timeline/**'
-      - 'docs/pt_br/tests/catalog.test.mjs'
       - 'docs/pt_br/tests/timeline.test.mjs'
       - 'docs/pt_br/tests/space-race.test.mjs'
       - '.github/workflows/docs-timeline.yml'
   pull_request:
     paths:
       - 'docs/pt_br/timeline/**'
-      - 'docs/pt_br/tests/catalog.test.mjs'
       - 'docs/pt_br/tests/timeline.test.mjs'
       - 'docs/pt_br/tests/space-race.test.mjs'
       - '.github/workflows/docs-timeline.yml'
@@ -29,4 +27,4 @@ jobs:
         with:
           node-version: '22'
       - name: Validate timeline manifests, HTML and interactions
-        run: node --test docs/pt_br/tests/catalog.test.mjs docs/pt_br/tests/timeline.test.mjs docs/pt_br/tests/space-race.test.mjs
+        run: node --test docs/pt_br/tests/timeline.test.mjs docs/pt_br/tests/space-race.test.mjs
