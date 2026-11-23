@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planejador de aprendizagem - Meu plano, meu ritmo</title>
+<style>
+:root{color-scheme:light;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:#27374e;background:#f5f7fc;--ink:#27374e;--muted:#5b6e84;--line:#dfe6f0;--blue:#426aa6;--indigo:#6056a9;--green:#237f70}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(15px,3.3vw,41px);background:radial-gradient(ellipse at 91% 1%,#e1e7f9,transparent 46%),#f5f7fc}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}button:disabled{opacity:.52;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #d99028;outline-offset:3px}
+[hidden]{display:none!important}
+main{max-width:1280px;margin:auto}
+.eyebrow{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:850;color:#5a60a9}
+header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:23px}
+h1{font-size:clamp(29px,4vw,44px);letter-spacing:-.04em;line-height:1.13;margin:9px 0 11px}
+header p{color:var(--muted);max-width:780px;margin:0}
+header svg{width:165px;max-width:23%;flex:none}
+.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:clamp(17px,2.4vw,25px);box-shadow:0 12px 34px #273e5a0e;min-width:0}
+.panel h2{font-size:21px;letter-spacing:-.025em;line-height:1.22;margin:4px 0 8px}
+.panel h3{font-size:15px;line-height:1.25;margin:12px 0 8px}
+.hint{font-size:13px;color:var(--muted);margin:0 0 14px}
+.setup{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:16px;margin-bottom:16px}
+.field{display:grid;gap:6px;margin:9px 0 12px}
+.field label{font-size:12px;font-weight:850;color:#4a617c}
+.control{min-width:0;width:100%;border:1px solid #bdcbdd;border-radius:10px;background:#fff;color:var(--ink);min-height:43px;padding:9px 11px}
+.field textarea.control{min-height:92px;resize:vertical}
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.btn{background:#fff;color:#365a87;border:1px solid #c2d0e2;border-radius:10px;min-height:42px;padding:9px 14px;font-size:13px;font-weight:800}
+.btn:hover:not(:disabled){background:#f0f5fb}
+.btn.primary{background:#435fa6;border-color:#435fa6;color:#fff}
+.btn.primary:hover:not(:disabled){background:#385397}
+.btn.danger{color:#984b4b;border-color:#e2b9b8}
+.actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.caution{font-size:12px;color:#6a637e;margin:12px 0 0}
+.confirm{background:#fff8ee;border:1px solid #ecd1ab;border-radius:12px;padding:14px;margin-top:15px}
+.confirm p{font-size:13px;margin:0 0 11px;color:#77552e}
+.statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:16px 0 0}
+.stat{border-radius:12px;padding:13px 14px;background:#f3f6fc;border:1px solid #e2e9f4}
+.stat strong{font-size:23px;letter-spacing:-.04em;display:block;line-height:1.15;color:#365b91}
+.stat span{display:block;font-size:12px;color:#60718b;margin-top:3px}
+.stat.warning{background:#fff7ed;border-color:#edd8b8}
+.stat.warning strong{color:#99643b}
+.progressline{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:15px 0 7px;color:#556c83;font-size:13px}
+.progressline strong{font-size:20px;color:#237e67}
+progress{display:block;width:100%;height:11px;border:0;overflow:hidden;border-radius:99px;background:#e4eaf1}
+progress::-webkit-progress-bar{background:#e4eaf1;border-radius:99px}
+progress::-webkit-progress-value{background:linear-gradient(90deg,#5a75bf,#39aa86);border-radius:99px;transition:width .25s}
+progress::-moz-progress-bar{background:#39aa86;border-radius:99px}
+.work{display:grid;grid-template-columns:minmax(0,1.47fr) minmax(290px,.83fr);gap:16px;align-items:start}
+.left-col{display:grid;gap:16px;min-width:0}
+.sidebar{display:grid;gap:16px;position:sticky;top:15px}
+.section-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.section-top h2{margin:3px 0}
+.section-top .actions{gap:7px}
+.counter{font-size:12px;font-weight:750;color:#607286}
+.task-list{list-style:none;padding:0;margin:13px 0 0;display:grid;gap:10px}
+.task-item{border:1px solid #dde6ef;border-radius:14px;background:#fcfdff;padding:14px}
+.task-item[data-done=true]{background:#f5fbf8;border-color:#c5dfd5}
+.task-item[data-selected=true]{border-color:#759ed2;box-shadow:0 0 0 2px #8ba8d22c}
+.task-main{display:flex;align-items:flex-start;gap:12px}
+.task-check{width:20px;height:20px;margin:2px 0 0;accent-color:#23856e;flex:none;cursor:pointer}
+.task-copy{flex:1;min-width:0}
+.task-copy strong{display:block;font-size:15px;line-height:1.3;overflow-wrap:anywhere}
+.task-item[data-done=true] .task-copy strong{text-decoration:line-through;color:#65867a}
+.task-copy p{font-size:12px;color:#60738b;margin:5px 0 0;overflow-wrap:anywhere;line-height:1.45}
+.task-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 0 32px;color:#667a91;font-size:11px}
+.pill{background:#e9eef9;color:#45649a;border-radius:99px;padding:4px 9px;font-weight:800}
+.task-item[data-done=true] .pill{background:#d9f0e5;color:#2e7e66}
+.task-actions{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0 32px}
+.task-actions button{padding:6px 10px;border-radius:8px;border:1px solid #d0dce9;color:#496b8c;background:#fff;font-size:12px;font-weight:750;min-height:34px}
+.task-actions button:hover:not(:disabled){background:#edf4fa}
+.task-actions button.remove{color:#9b5651;border-color:#e5c4bf}
+.task-empty{background:#f8fbfc;border:1px dashed #becedc;border-radius:13px;padding:19px;color:var(--muted);font-size:13px}
+.editor{background:#f8faff;border:1px solid #dde6f4;padding:15px;border-radius:14px;margin-top:16px}
+.editor h3{margin:0 0 10px}
+.editor .actions{margin-top:10px}
+.schedule{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:11px;margin-top:16px}
+.day{border:1px solid #dce5ef;border-radius:13px;background:#f9fbff;padding:14px;min-width:0}
+.day-head{display:flex;align-items:baseline;justify-content:space-between;gap:7px}
+.day-head strong{font-size:14px;color:#324d78}.day-head span{font-size:12px;font-weight:800;color:#597497}
+.day-track{height:9px;background:#e8edf5;border-radius:99px;overflow:hidden;margin:10px 0}
+.day-fill{height:100%;background:#688ac1;border-radius:99px;transition:width .2s}
+.day-list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.segment{background:#fff;border:1px solid #e2e9f2;border-radius:10px;padding:10px;font-size:12px;line-height:1.4;color:#3c526f}
+.segment strong{display:block;font-size:12px;line-height:1.3}
+.segment small{display:block;font-size:11px;color:#697b8d;margin-top:5px}
+.day-empty{color:#75889b;font-size:12px;margin:10px 0 0}
+.overflow{margin-top:13px;border:1px solid #ead0aa;background:#fff9ee;border-radius:12px;padding:13px}
+.overflow strong{display:block;color:#895c31;font-size:13px;margin-bottom:5px}
+.overflow p{font-size:12px;color:#8a6b45;margin:0 0 7px}
+.overflow ul{padding-left:19px;margin:8px 0 0;font-size:12px;color:#775937}
+.status-note{margin:14px 0 0;font-size:12px;color:var(--muted)}
+.review-list{list-style:none;display:grid;gap:9px;padding:0;margin:13px 0 0}
+.review-item{background:#f1f8f5;border:1px solid #c9e2d6;border-radius:11px;padding:12px}
+.review-item strong{font-size:13px;display:block}
+.review-item p{font-size:12px;color:#56766d;margin:5px 0 10px;line-height:1.45}
+.review-item button{border:1px solid #a8cdbc;background:#fff;color:#26745c;border-radius:8px;font-size:12px;font-weight:800;padding:7px 10px}
+.review-empty{font-size:13px;color:var(--muted);margin:11px 0 0}
+.notice{margin:18px 0 0;font-size:12px;color:var(--muted);padding:13px 15px;background:#edf2fa;border-left:3px solid #8ca4ce;border-radius:0 10px 10px 0}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:1040px){.work{grid-template-columns:1fr}.sidebar{grid-template-columns:repeat(2,minmax(0,1fr));position:static}}
+@media(max-width:730px){.setup,.sidebar{grid-template-columns:1fr}.schedule{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{border-radius:16px}}
+@media(max-width:510px){header svg{display:none}.schedule,.dual{grid-template-columns:1fr}.task-actions{margin-left:0}.task-meta{margin-left:0}.section-top .actions{width:100%}.section-top .actions .btn{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div><span class="eyebrow">Oficina de planejamento · Tempo e prioridades</span><h1>Meu plano, meu ritmo</h1>
+<p>Defina seu objetivo, ajuste quanto tempo pode estudar e monte etapas que caibam na sua semana. O planejamento distribui automaticamente a duração das tarefas ainda pendentes, sem apagar o que você já concluiu.</p></div>
+<svg viewBox="0 0 164 142" role="img" aria-label="Ilustração de caderno de planejamento e relógio" focusable="false" fill="none">
+<rect x="20" y="10" width="103" height="125" rx="12" fill="#fff" stroke="#8c9fc8" stroke-width="4"></rect>
+<path d="M36 12v122" stroke="#d2dbea" stroke-width="4"></path><path d="M52 37h49M52 59h35M52 82h49M52 105h37" stroke="#d2deed" stroke-width="5" stroke-linecap="round"></path>
+<path d="m53 59 7 7 11-13" stroke="#47a18a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="121" cy="100" r="33" fill="#e4f5ee" stroke="#60a791" stroke-width="4"></circle>
+<path d="M121 80v22l14 8" stroke="#358673" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</header>
+<div class="setup">
+<section class="panel" aria-labelledby="objectiveTitle">
+<div class="eyebrow">1 · O que aprender</div>
+<h2 id="objectiveTitle">Objetivo de aprendizagem</h2>
+<p class="hint">Escolha um modelo como ponto de partida; depois, todas as atividades poderão ser editadas, removidas ou reorganizadas livremente.</p>
+<div class="field"><label for="goalSelect">Objetivo</label><select class="control" id="goalSelect">
+<option value="concept">Compreender um conceito</option>
+<option value="skill">Praticar uma habilidade</option>
+<option value="exam">Preparar uma avaliação</option>
+<option value="project">Desenvolver um projeto</option>
+<option value="custom">Meu próprio objetivo</option>
+</select></div>
+<div class="field" id="customGoalWrap" hidden><label for="customGoal">Descreva seu objetivo</label><input class="control" id="customGoal" maxlength="80" placeholder="Ex.: Entender os principais tipos de energia"></div>
+<div class="actions"><button class="btn primary" type="button" id="loadGoal">Carregar modelo do objetivo</button><span id="activeGoal" class="counter">Plano atual: Compreender um conceito</span></div>
+<div id="goalConfirmation" class="confirm" hidden>
+<p>Trocar o modelo substituirá as tarefas e marcará todas como pendentes. Sua disponibilidade de tempo continuará igual. Confirmar?</p>
+<div class="actions"><button class="btn" type="button" id="cancelGoal">Cancelar</button><button class="btn danger" type="button" id="confirmGoal">Substituir tarefas</button></div>
+</div>
+</section>
+<section class="panel" aria-labelledby="timeTitle">
+<div class="eyebrow">2 · Quando estudar</div>
+<h2 id="timeTitle">Disponibilidade</h2>
+<p class="hint">O tempo é dividido em sessões numeradas, sem pressupor datas ou horários. Atividades grandes podem ocupar mais de uma sessão.</p>
+<div class="dual">
+<div class="field"><label for="minutesDay">Minutos por sessão</label><input class="control" id="minutesDay" type="number" min="15" max="120" step="5" value="40" inputmode="numeric"></div>
+<div class="field"><label for="days">Quantidade de sessões</label><input class="control" id="days" type="number" min="1" max="7" step="1" value="5" inputmode="numeric"></div>
+</div>
+<div class="statgrid" aria-label="Resumo do planejamento">
+<div class="stat"><strong id="capacity">200 min</strong><span>Tempo disponível</span></div>
+<div class="stat"><strong id="pendingMinutes">150 min</strong><span>Trabalho pendente</span></div>
+<div class="stat"><strong id="completedMinutes">0 min</strong><span>Tempo estimado concluído</span></div>
+<div class="stat" id="balanceCard"><strong id="balance">50 min</strong><span id="balanceTitle">Capacidade não utilizada</span></div>
+</div>
+<div class="progressline"><span id="progressText">0 de 5 etapas concluídas</span><strong id="progressPercent">0%</strong></div>
+<progress id="progress" max="5" value="0" aria-label="Etapas de aprendizagem concluídas"></progress>
+</section>
+</div>
+<div class="work">
+<div class="left-col">
+<section class="panel" aria-labelledby="tasksTitle">
+<div class="section-top">
+<div><div class="eyebrow">3 · Ajuste as atividades</div><h2 id="tasksTitle">Etapas do meu plano</h2></div>
+<div class="actions"><button class="btn" type="button" id="undo" disabled>Desfazer</button><button class="btn primary" type="button" id="newTask">+ Nova etapa</button></div>
+</div>
+<p class="hint">Marque cada etapa concluída, edite a duração estimada, altere a ordem ou exclua o que não for necessário. Ao mudar o tempo, o cronograma é recalculado, mas as etapas concluídas permanecem marcadas.</p>
+<ol class="task-list" id="taskList"></ol>
+<p class="task-empty" id="emptyTasks" hidden>Não há etapas neste plano. Use “Nova etapa” para começar.</p>
+<div class="editor" id="taskEditor" hidden>
+<h3 id="editorTitle">Nova etapa</h3>
+<form id="taskForm" novalidate>
+<div class="field"><label for="taskTitle">Título da atividade</label><input class="control" id="taskTitle" maxlength="75" placeholder="Ex.: Resolver três problemas sobre o tema"></div>
+<div class="field"><label for="taskDetails">Descrição ou orientação</label><textarea class="control" id="taskDetails" maxlength="240" placeholder="Como realizar a atividade? O que revisar ao final?"></textarea></div>
+<div class="field"><label for="taskMinutes">Duração estimada (5 a 240 minutos)</label><input class="control" id="taskMinutes" type="number" min="5" max="240" step="5" value="25"></div>
+<div class="actions"><button class="btn primary" type="submit" id="saveTask">Adicionar etapa</button><button class="btn" type="button" id="cancelTask">Cancelar</button></div>
+</form>
+</div>
+</section>
+<section class="panel" aria-labelledby="calendarTitle">
+<div class="eyebrow">4 · Visualize sua distribuição</div>
+<h2 id="calendarTitle">Plano por sessão</h2>
+<p class="hint">As atividades pendentes são encaixadas na ordem escolhida. Quando uma não cabe inteira, sua duração é dividida entre sessões; o que ultrapassa o tempo previsto aparece como pendência, nunca é descartado.</p>
+<div class="schedule" id="schedule"></div>
+<div class="overflow" id="overflow" hidden>
+<strong id="overflowTitle">Atividades além da capacidade</strong>
+<p>Esses minutos ainda não cabem nas sessões selecionadas. Amplie o tempo, adicione sessões ou ajuste as estimativas.</p>
+<ul id="overflowList"></ul>
+</div>
+<p class="status-note" id="scheduleNote"></p>
+</section>
+</div>
+<div class="sidebar">
+<section class="panel" aria-labelledby="reviewTitle">
+<div class="eyebrow">5 · Revise o percurso</div>
+<h2 id="reviewTitle">Atividades concluídas</h2>
+<p class="hint">Releia o que já realizou e, se precisar repetir uma atividade, reabra-a. O sistema refaz o cronograma sem apagar as demais conclusões.</p>
+<ul class="review-list" id="reviewList"></ul>
+<p class="review-empty" id="emptyReview">Ainda não há atividades concluídas.</p>
+</section>
+<section class="panel" aria-labelledby="resetTitle">
+<h2 id="resetTitle">Recomeçar</h2>
+<p class="hint">Restaure o plano de exemplo e a disponibilidade inicial. Você também pode desfazer o reinício imediatamente.</p>
+<button class="btn" type="button" id="reset">Restaurar plano inicial</button>
+<div class="confirm" id="resetConfirmation" hidden>
+<p>Restaurar o objetivo, as tarefas, os tempos e os checklists iniciais? As alterações desta sessão serão substituídas.</p>
+<div class="actions"><button class="btn" type="button" id="cancelReset">Cancelar</button><button class="btn danger" type="button" id="confirmReset">Sim, restaurar</button></div>
+</div>
+</section>
+</div>
+</div>
+<p class="notice">As durações são estimativas para fins didáticos, não cronômetros nem previsões do desempenho real. O plano funciona localmente no navegador, sem gravação de dados, notas ou atividades no Moodle; as alterações desaparecem ao recarregar a página.</p>
+<div class="sr-only" id="announcer" role="status" aria-live="polite" aria-atomic="true"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  const goals={
+    concept:{label:"Compreender um conceito",tasks:[
+      ["Identificar o que já sei","Registre ideias prévias e uma dúvida que deseja esclarecer.",20],
+      ["Estudar referências básicas","Leia ou observe uma explicação, anotando conceitos centrais.",35],
+      ["Construir conexões","Relacione ideias em um esquema ou explique com exemplos.",40],
+      ["Aplicar e comparar","Resolva um problema que exija utilizar o novo conceito.",35],
+      ["Revisar e explicar","Explique o assunto sem consultar e registre lacunas restantes.",20]
+    ]},
+    skill:{label:"Praticar uma habilidade",tasks:[
+      ["Observar um procedimento","Identifique etapas, materiais e cuidados importantes.",20],
+      ["Executar com orientação","Siga um exemplo comentado e anote dificuldades.",40],
+      ["Praticar de forma independente","Realize variações da tarefa sem consultar o modelo.",50],
+      ["Conferir resultados","Compare seu processo com critérios claros e corrija erros.",30],
+      ["Repetir pontos frágeis","Pratique novamente o que ainda precisa de atenção.",25]
+    ]},
+    exam:{label:"Preparar uma avaliação",tasks:[
+      ["Mapear conteúdos","Liste assuntos e identifique os de maior dificuldade.",20],
+      ["Revisar conceitos centrais","Organize ideias principais e exemplos de aplicação.",35],
+      ["Responder questões","Resolva questões variadas sem consultar as respostas.",55],
+      ["Analisar erros","Identifique causas dos erros e estude dúvidas específicas.",40],
+      ["Simular e revisar","Faça uma revisão final e avalie o que ainda precisa melhorar.",30]
+    ]},
+    project:{label:"Desenvolver um projeto",tasks:[
+      ["Definir o desafio","Escreva o objetivo do projeto e seus critérios de conclusão.",25],
+      ["Pesquisar alternativas","Reúna referências, restrições e possíveis soluções.",45],
+      ["Planejar a execução","Organize recursos, responsáveis e pequenas entregas.",35],
+      ["Produzir uma versão inicial","Construa e teste uma primeira solução.",65],
+      ["Avaliar e apresentar","Revise os resultados e justifique decisões tomadas.",35]
+    ]},
+    custom:{label:"Meu próprio objetivo",tasks:[
+      ["Definir o resultado esperado","Descreva o que gostaria de aprender ou conseguir fazer.",20],
+      ["Selecionar referências","Escolha materiais e identifique conceitos essenciais.",30],
+      ["Experimentar na prática","Realize uma tarefa relacionada ao objetivo definido.",45],
+      ["Verificar dificuldades","Confira erros, dúvidas e pontos para melhorar.",30],
+      ["Revisar o que aprendi","Explique os resultados e planeje a próxima revisão.",20]
+    ]}
+  };
+  const initial={
+    goal:"concept",customName:"",dailyMinutes:40,days:5,
+    tasks:goals.concept.tasks.map((entry,index)=>({id:"t"+(index+1),title:entry[0],details:entry[1],minutes:entry[2],done:false})),
+    nextId:6
+  };
+  const $=id=>document.getElementById(id);
+  const copy=value=>JSON.parse(JSON.stringify(value));
+  const state=copy(initial),history=[],checks=new Map(),rowButtons=new Map();
+  const maxTasks=18;
+  let editing=null,pendingGoal=null;
+  const minutesLabel=n=>n+" min";
+  function make(tag,className,value){
+    const node=document.createElement(tag);
+    if(className)node.className=className;
+    if(value!==undefined)node.textContent=value;
+    return node;
+  }
+  function announce(message){$("announcer").textContent=message;}
+  function clean(value,max){return String(value??"").trim().replace(/\s+/g," ").slice(0,max);}
+  function findTask(id){return state.tasks.find(t=>t.id===id);}
+  function remember(){
+    history.push(copy(state));
+    if(history.length>40)history.shift();
+    $("undo").disabled=false;
+  }
+  function restore(snapshot){
+    state.goal=snapshot.goal;state.customName=snapshot.customName;
+    state.dailyMinutes=snapshot.dailyMinutes;state.days=snapshot.days;
+    state.tasks=snapshot.tasks;state.nextId=snapshot.nextId;
+  }
+  function goalTitle(){return state.goal==="custom"&&state.customName?state.customName:goals[state.goal].label;}
+  function pendingTasks(){return state.tasks.filter(t=>!t.done);}
+  function allocate(){
+    const sessions=Array.from({length:state.days},(_,i)=>({index:i+1,segments:[],used:0}));
+    const overflow=[];
+    let sessionIndex=0;
+    for(const task of pendingTasks()){
+      let remaining=task.minutes;
+      while(remaining>0&&sessionIndex<sessions.length){
+        const slot=sessions[sessionIndex],available=state.dailyMinutes-slot.used;
+        if(available<=0){sessionIndex++;continue;}
+        const taken=Math.min(available,remaining);
+        slot.segments.push({id:task.id,title:task.title,minutes:taken});
+        slot.used+=taken;remaining-=taken;
+        if(slot.used===state.dailyMinutes)sessionIndex++;
+      }
+      if(remaining>0)overflow.push({id:task.id,title:task.title,minutes:remaining});
+    }
+    const counts=new Map();
+    sessions.forEach(slot=>slot.segments.forEach(seg=>counts.set(seg.id,(counts.get(seg.id)||0)+1)));
+    sessions.forEach(slot=>{
+      const seen=new Map();
+      slot.segments.forEach(seg=>{
+        // Parts are counted across all sessions, not per day.
+        const preceding=sessions.slice(0,slot.index-1).reduce((n,s)=>n+s.segments.filter(x=>x.id===seg.id).length,0);
+        const inSlot=seen.get(seg.id)||0;
+        seg.part=preceding+inSlot+1;seen.set(seg.id,inSlot+1);
+        seg.parts=(counts.get(seg.id)||0)+(overflow.some(x=>x.id===seg.id)?1:0);
+      });
+    });
+    return {sessions,overflow,
+      overflowMinutes:overflow.reduce((sum,x)=>sum+x.minutes,0),
+      scheduledMinutes:sessions.reduce((sum,slot)=>sum+slot.used,0)};
+  }
+  function renderGoal(){
+    $("goalSelect").value=state.goal;
+    $("customGoalWrap").hidden=state.goal!=="custom";
+    $("customGoal").value=state.customName;
+    $("activeGoal").textContent="Plano atual: "+goalTitle();
+  }
+  function renderSummary(){
+    $("minutesDay").value=String(state.dailyMinutes);
+    $("days").value=String(state.days);
+    const completed=state.tasks.filter(t=>t.done);
+    const doneMinutes=completed.reduce((sum,t)=>sum+t.minutes,0);
+    const pending=pendingTasks().reduce((sum,t)=>sum+t.minutes,0);
+    const capacity=state.days*state.dailyMinutes;
+    const balance=capacity-pending;
+    $("capacity").textContent=minutesLabel(capacity);
+    $("pendingMinutes").textContent=minutesLabel(pending);
+    $("completedMinutes").textContent=minutesLabel(doneMinutes);
+    $("balance").textContent=minutesLabel(Math.abs(balance));
+    $("balanceTitle").textContent=balance>=0?"Capacidade não utilizada":"Tempo além da capacidade";
+    $("balanceCard").className=balance<0?"stat warning":"stat";
+    const total=state.tasks.length;
+    $("progress").max=Math.max(1,total);
+    $("progress").value=completed.length;
+    $("progressText").textContent=completed.length+" de "+total+" etapas concluídas";
+    $("progressPercent").textContent=total?Math.round(completed.length/total*100)+"%":"0%";
+  }
+  function renderTasks(){
+    const list=$("taskList");list.replaceChildren();checks.clear();rowButtons.clear();
+    $("emptyTasks").hidden=state.tasks.length>0;
+    state.tasks.forEach((task,index)=>{
+      const li=make("li","task-item");li.dataset.done=String(task.done);li.dataset.selected=String(task.id===editing);
+      const top=make("div","task-main");
+      const check=make("input","task-check");
+      check.type="checkbox";check.checked=task.done;
+      check.setAttribute("aria-label","Marcar "+task.title+" como "+(task.done?"pendente":"concluída"));
+      check.addEventListener("change",()=>{
+        const next=!!check.checked;
+        if(task.done===next)return;
+        remember();task.done=next;
+        render();
+        checks.get(task.id)?.focus();
+        announce(task.title+(next?" concluída.":" reaberta.")+" Cronograma redistribuído.");
+      });
+      checks.set(task.id,check);
+      const copyBox=make("div","task-copy");
+      copyBox.append(make("strong","",task.title),make("p","",task.details||"Sem orientação adicional."));
+      top.append(check,copyBox);li.appendChild(top);
+      const meta=make("div","task-meta");
+      meta.append(make("span","pill",minutesLabel(task.minutes)),make("span","",task.done?"Concluída":"Pendente"));
+      li.appendChild(meta);
+      const buttons=make("div","task-actions");
+      const edit=make("button","","Editar");
+      edit.type="button";edit.setAttribute("aria-label","Editar "+task.title);
+      edit.addEventListener("click",()=>openEditor(task.id));
+      const up=make("button","","↑ Subir");
+      up.type="button";up.disabled=index===0;
+      up.setAttribute("aria-label","Subir "+task.title+" na ordem");
+      up.addEventListener("click",()=>moveTask(task.id,-1));
+      const down=make("button","","↓ Descer");
+      down.type="button";down.disabled=index===state.tasks.length-1;
+      down.setAttribute("aria-label","Descer "+task.title+" na ordem");
+      down.addEventListener("click",()=>moveTask(task.id,1));
+      const remove=make("button","remove","Excluir");
+      remove.type="button";remove.setAttribute("aria-label","Excluir "+task.title);
+      remove.addEventListener("click",()=>removeTask(task.id));
+      buttons.append(edit,up,down,remove);
+      li.appendChild(buttons);list.appendChild(li);
+      rowButtons.set(task.id,edit);
+    });
+  }
+  function renderSchedule(){
+    const data=allocate(),root=$("schedule");
+    root.replaceChildren();
+    for(const slot of data.sessions){
+      const day=make("section","day");
+      day.setAttribute("aria-label","Sessão "+slot.index);
+      const head=make("div","day-head");
+      head.append(make("strong","","Sessão "+slot.index),make("span","",slot.used+" / "+state.dailyMinutes+" min"));
+      const bar=make("div","day-track");bar.setAttribute("aria-hidden","true");
+      const fill=make("div","day-fill");fill.style.width=slot.used/state.dailyMinutes*100+"%";bar.appendChild(fill);
+      day.append(head,bar);
+      if(!slot.segments.length)day.append(make("p","day-empty","Tempo livre nesta sessão."));
+      else{
+        const list=make("ul","day-list");
+        for(const seg of slot.segments){
+          const li=make("li","segment");
+          li.append(make("strong","",seg.title));
+          const part=seg.parts>1?" · parte "+seg.part+"/"+seg.parts:"";
+          li.append(make("small","",minutesLabel(seg.minutes)+part));
+          list.appendChild(li);
+        }
+        day.appendChild(list);
+      }
+      root.appendChild(day);
+    }
+    $("overflow").hidden=data.overflowMinutes===0;
+    $("overflowTitle").textContent=data.overflowMinutes+" minutos fora do tempo previsto";
+    const list=$("overflowList");list.replaceChildren();
+    data.overflow.forEach(seg=>list.appendChild(make("li","",seg.title+" · "+minutesLabel(seg.minutes)+" restantes")));
+    $("scheduleNote").textContent=data.overflowMinutes
+      ?"Faltam "+data.overflowMinutes+" minutos na disponibilidade atual. Nenhuma atividade foi apagada; aumente o tempo ou as sessões para acomodar tudo."
+      :data.scheduledMinutes
+        ?data.scheduledMinutes+" minutos distribuídos nas "+state.days+" sessões, sem ultrapassar os limites escolhidos."
+        :"Não há trabalho pendente para distribuir. Você pode adicionar ou reabrir atividades.";
+  }
+  function renderReview(){
+    const list=$("reviewList");list.replaceChildren();
+    const completed=state.tasks.filter(t=>t.done);
+    $("emptyReview").hidden=completed.length>0;
+    for(const task of completed){
+      const li=make("li","review-item");
+      li.append(make("strong","",task.title),make("p","",task.details||"Sem orientação adicional."));
+      const reopen=make("button","","Reabrir atividade");
+      reopen.type="button";
+      reopen.setAttribute("aria-label","Reabrir atividade "+task.title);
+      reopen.addEventListener("click",()=>{
+        remember();task.done=false;render();checks.get(task.id)?.focus();
+        announce(task.title+" reaberta e inserida no cronograma.");
+      });
+      li.appendChild(reopen);list.appendChild(li);
+    }
+  }
+  function render(){
+    renderGoal();renderSummary();renderTasks();renderSchedule();renderReview();
+    $("undo").disabled=history.length===0;
+  }
+  function openEditor(id){
+    const task=id?findTask(id):null;
+    editing=task?task.id:null;
+    $("taskEditor").hidden=false;
+    $("editorTitle").textContent=task?"Editar etapa":"Nova etapa";
+    $("saveTask").textContent=task?"Salvar etapa":"Adicionar etapa";
+    $("taskTitle").value=task?task.title:"";
+    $("taskDetails").value=task?task.details:"";
+    $("taskMinutes").value=String(task?task.minutes:25);
+    $("taskTitle").focus();
+    // Mark the row without replacing focused controls.
+    Array.from($("taskList").children).forEach((row,index)=>{row.dataset.selected=String(state.tasks[index].id===editing);});
+    announce(task?"Editando: "+task.title+".":"Criando uma nova etapa.");
+  }
+  function closeEditor(focus){
+    editing=null;$("taskEditor").hidden=true;
+    if(focus)$("newTask").focus();
+    Array.from($("taskList").children).forEach(row=>row.dataset.selected="false");
+  }
+  function submitTask(){
+    const title=clean($("taskTitle").value,75),details=clean($("taskDetails").value,240);
+    const duration=Number($("taskMinutes").value);
+    if(title.length<3){announce("Digite um título de pelo menos três caracteres.");$("taskTitle").focus();return;}
+    if(!Number.isInteger(duration)||duration<5||duration>240||duration%5!==0){
+      announce("A duração deve ser um múltiplo de cinco, entre 5 e 240 minutos.");$("taskMinutes").focus();return;
+    }
+    if(state.tasks.some(t=>t.id!==editing&&t.title.toLocaleLowerCase("pt-BR")===title.toLocaleLowerCase("pt-BR"))){
+      announce("Já existe uma etapa com esse título.");$("taskTitle").focus();return;
+    }
+    const existing=editing?findTask(editing):null;
+    if(editing&&!existing){announce("Etapa não encontrada.");return;}
+    if(!existing&&state.tasks.length>=maxTasks){announce("Limite de 18 etapas atingido.");return;}
+    if(existing&&existing.title===title&&existing.details===details&&existing.minutes===duration){
+      closeEditor(true);announce("Nenhuma alteração na etapa.");return;
+    }
+    remember();
+    let id;
+    if(existing){
+      existing.title=title;existing.details=details;existing.minutes=duration;id=existing.id;
+    }else{
+      id="t"+state.nextId++;
+      state.tasks.push({id,title,details,minutes:duration,done:false});
+    }
+    const updated=!!existing;
+    closeEditor(false);render();rowButtons.get(id)?.focus();
+    announce(updated?"Etapa atualizada. O tempo foi redistribuído.":"Etapa adicionada ao planejamento.");
+  }
+  function removeTask(id){
+    const task=findTask(id);if(!task)return;
+    remember();state.tasks=state.tasks.filter(t=>t.id!==id);
+    if(editing===id)closeEditor(false);
+    render();$("newTask").focus();announce(task.title+" excluída. Use Desfazer para restaurar.");
+  }
+  function moveTask(id,direction){
+    const index=state.tasks.findIndex(t=>t.id===id);
+    const next=index+direction;
+    if(index<0||next<0||next>=state.tasks.length)return;
+    remember();
+    const [task]=state.tasks.splice(index,1);
+    state.tasks.splice(next,0,task);
+    render();rowButtons.get(id)?.focus();
+    announce(task.title+" movida na ordem. O cronograma foi reorganizado.");
+  }
+  function changeTime(id,min,max,step,field){
+    const input=$(id),number=Number(input.value);
+    if(!Number.isInteger(number)||number<min||number>max||number%step!==0){
+      input.value=String(state[field]);
+      announce("Valor inválido. Use números entre "+min+" e "+max+(step>1?", de "+step+" em "+step:"")+".");return;
+    }
+    if(number===state[field])return;
+    remember();state[field]=number;render();
+    input.focus();announce("Disponibilidade atualizada. As etapas pendentes foram redistribuídas.");
+  }
+  function newGoalTasks(goal){
+    return goals[goal].tasks.map((entry,index)=>({
+      id:"t"+(index+1),title:entry[0],details:entry[1],minutes:entry[2],done:false
+    }));
+  }
+  function applyGoal(){
+    if(!pendingGoal)return;
+    remember();
+    state.goal=pendingGoal.goal;state.customName=pendingGoal.title;
+    state.tasks=newGoalTasks(state.goal);state.nextId=state.tasks.length+1;
+    pendingGoal=null;editing=null;
+    $("goalConfirmation").hidden=true;
+    closeEditor(false);render();
+    $("newTask").focus();
+    announce("Novo modelo carregado: "+goalTitle()+". As durações foram distribuídas conforme sua disponibilidade.");
+  }
+  function requestGoal(){
+    const goal=$("goalSelect").value;
+    if(!Object.hasOwn(goals,goal)){announce("Escolha um objetivo válido.");return;}
+    const title=goal==="custom"?clean($("customGoal").value,80):"";
+    if(goal==="custom"&&title.length<3){
+      announce("Descreva seu objetivo em pelo menos três caracteres.");$("customGoal").focus();return;
+    }
+    if(goal===state.goal&&title===state.customName){
+      announce("Este modelo já está ativo. Edite as tarefas abaixo sem substituí-las.");return;
+    }
+    pendingGoal={goal,title};
+    if(state.tasks.length){
+      $("goalConfirmation").hidden=false;$("cancelGoal").focus();
+      announce("Confirme a substituição das tarefas antes de carregar o novo modelo.");
+    }else applyGoal();
+  }
+  function undo(){
+    if(!history.length)return;
+    restore(history.pop());pendingGoal=null;editing=null;
+    $("goalConfirmation").hidden=true;$("resetConfirmation").hidden=true;
+    closeEditor(false);render();$("undo").focus();
+    announce("Última alteração desfeita. Cronograma e progresso recalculados.");
+  }
+  function reset(){
+    remember();restore(copy(initial));editing=null;pendingGoal=null;
+    $("resetConfirmation").hidden=true;$("goalConfirmation").hidden=true;
+    closeEditor(false);render();$("reset").focus();
+    announce("Planejamento inicial restaurado. Você pode desfazer o reinício.");
+  }
+  $("goalSelect").addEventListener("change",()=>{
+    $("customGoalWrap").hidden=$("goalSelect").value!=="custom";
+  });
+  $("loadGoal").addEventListener("click",requestGoal);
+  $("cancelGoal").addEventListener("click",()=>{
+    pendingGoal=null;$("goalConfirmation").hidden=true;
+    $("goalSelect").value=state.goal;$("customGoalWrap").hidden=state.goal!=="custom";
+    $("customGoal").value=state.customName;$("loadGoal").focus();
+    announce("Troca de objetivo cancelada. As tarefas foram preservadas.");
+  });
+  $("confirmGoal").addEventListener("click",applyGoal);
+  $("minutesDay").addEventListener("change",()=>changeTime("minutesDay",15,120,5,"dailyMinutes"));
+  $("days").addEventListener("change",()=>changeTime("days",1,7,1,"days"));
+  $("taskForm").addEventListener("submit",event=>{event.preventDefault();submitTask();});
+  $("newTask").addEventListener("click",()=>openEditor(null));
+  $("cancelTask").addEventListener("click",()=>{closeEditor(true);announce("Edição cancelada.");});
+  $("undo").addEventListener("click",undo);
+  $("reset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=false;$("cancelReset").focus();
+    announce("Confirme ou cancele a restauração do planejamento inicial.");
+  });
+  $("cancelReset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=true;$("reset").focus();announce("Reinício cancelado.");
+  });
+  $("confirmReset").addEventListener("click",reset);
+  render();
+})();
+</script>
+</body>
+</html>
