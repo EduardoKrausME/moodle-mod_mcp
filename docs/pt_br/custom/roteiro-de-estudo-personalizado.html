@@ -1,11 +1,387 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Roteiro de estudo personalizado</title><style>
-:root{font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#26334e;background:#fff5ea;--accent:#bc713b}*{box-sizing:border-box}body{margin:0;padding:42px 35px}main{max-width:850px;margin:auto}.eyebrow{letter-spacing:1.5px;font-size:11px;font-weight:800;color:var(--accent)}h1{font-size:39px;line-height:1.15;letter-spacing:-1px;margin:7px 0 14px}h2{font-size:22px;margin:9px 0 16px}p{color:#65728b;margin:10px 0 17px}header p{max-width:650px;font-size:15px}.panel{margin-top:25px;padding:28px;background:#fff;border:1px solid #e1e3f0;border-radius:18px;box-shadow:0 10px 26px #28324c0c}.label{display:inline-block;color:var(--accent);font-size:11px;font-weight:800;background:#f4f1ff;border-radius:6px;padding:7px 10px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:19px 0}.choice{font:inherit;font-weight:660;text-align:left;border:1px solid #d9dcea;background:#fff;border-radius:12px;padding:17px;min-height:72px;cursor:pointer;color:#364361}.choice:hover,.choice[aria-pressed=true]{border-color:var(--accent);background:#f4f1ff}.btn{border:1px solid var(--accent);background:var(--accent);color:white;font:inherit;font-weight:750;font-size:13px;border-radius:10px;padding:12px 17px;cursor:pointer}.btn.light{color:var(--accent);background:#fff}.callout{background:#f2efff;border-left:4px solid var(--accent);border-radius:0 12px 12px 0;padding:16px;margin:20px 0;color:#435273}.row{padding:15px 0;border-bottom:1px solid #eceef5}.range-title{display:flex;justify-content:space-between;gap:10px;color:#45526c;font-weight:700}.range-title output{color:var(--accent)}input[type=range]{display:block;width:100%;margin:15px 0;accent-color:var(--accent)}.metric{background:#f4f2ff;padding:22px;border-radius:13px;margin-top:22px}.metric strong{display:block;font-size:32px;color:var(--accent)}.meter{height:9px;background:#e3e1f2;border-radius:5px;overflow:hidden;margin:12px 0}.meter span{height:100%;display:block;background:var(--accent)}.branch{display:block;width:100%;text-align:left;margin:9px 0;padding:17px;border:1px solid #e1e3ee;background:#fff;border-radius:12px;cursor:pointer}.branch[aria-expanded=true]{border-color:var(--accent);background:#f4f1ff}.branch strong,.branch span{display:block}.branch span{font-size:13px;color:#68738a;margin-top:7px}.flash{background:var(--accent);border:0;border-radius:17px;min-height:230px;width:100%;color:white;font:inherit;font-size:24px;font-weight:750;padding:30px;cursor:pointer}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.small{font-size:12px;color:#778198}button:focus-visible,input:focus-visible{outline:3px solid #9b8ff2;outline-offset:3px}@media(max-width:630px){body{padding:25px 17px}h1{font-size:30px}.panel{padding:19px}.choices{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}</style></head><body><main><header><span class="eyebrow">EU ESCOLHO · TRILHA DE ESTUDOS</span><h1>Roteiro de estudo personalizado</h1><p>Escolha um objetivo e receba um roteiro inicial.</p></header><div id="app"></div></main><script>(function customRender(c){
-const r=document.querySelector("#app");let i=0,revealed=false,chosen=-1,open=[];
-const esc=x=>{const n=document.createElement("div");n.textContent=x;return n.innerHTML;};
-function render(){
-if(c.mode==="flash"){const x=c.items[i];r.innerHTML=`<section class="panel"><span class="label">CARTÃO ${i+1} DE ${c.items.length}</span><p>Toque no cartão para revelar a resposta.</p><button class="flash" id="reveal">${esc(revealed?x[1]:x[0])}</button><div class="actions"><button id="prev" class="btn light" ${i===0?"disabled":""}>Anterior</button><button id="next" class="btn">${i===c.items.length-1?"Recomeçar":"Próximo"}</button></div></section>`;r.querySelector("#reveal").onclick=()=>{revealed=!revealed;render();};r.querySelector("#prev").onclick=()=>{i--;revealed=false;render();};r.querySelector("#next").onclick=()=>{i=(i+1)%c.items.length;revealed=false;render();};return;}
-if(c.mode==="map"){r.innerHTML=`<section class="panel"><span class="label">MAPA MENTAL</span><h2>Explore os ramos de ${esc(c.topic)}</h2>${c.items.map((x,n)=>`<button class="branch" data-i="${n}" aria-expanded="${open.includes(n)}"><strong>${esc(x[0])}</strong><span>${open.includes(n)?esc(x[1]):"Clique para expandir"}</span></button>`).join("")}</section>`;r.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const k=+b.dataset.i;open=open.includes(k)?open.filter(n=>n!==k):[...open,k];render();});return;}
-if(chosen>=0&&c.mode==="route"){const x=c.items[chosen];r.innerHTML=`<section class="panel"><span class="label">TRILHA SUGERIDA</span><h2>${esc(x[0])}</h2><p>${esc(x[1])}</p><button class="btn" id="again">Escolher novamente</button></section>`;r.querySelector("#again").onclick=()=>{chosen=-1;render();};return;}
-r.innerHTML=`<section class="panel"><span class="label">${esc(c.mode==="vote"?"ENQUETE LOCAL":c.mode==="compare"?"COMPARADOR":"ESCOLHA SUA TRILHA")}</span><h2>${esc(c.question)}</h2><div class="choices">${c.items.map((x,n)=>`<button class="choice" data-i="${n}" aria-pressed="${chosen===n}">${esc(x[0])}</button>`).join("")}</div>${chosen>=0?`<div class="callout">${esc(c.items[chosen][1])}</div>`:""}<p class="small">Esta interação é demonstrativa e não envia dados ao Moodle.</p></section>`;r.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{chosen=+b.dataset.i;render();});
-}render();
-})({"title":"Roteiro de estudo personalizado","subtitle":"Escolha um objetivo e receba um roteiro inicial.","kicker":"EU ESCOLHO · TRILHA DE ESTUDOS","color":"#bc713b","bg":"#fff5ea","mode":"route","question":"O que você quer fazer primeiro?","topic":"O que você quer fazer primeiro?","items":[["Aprender um conceito","Comece com uma explicação curta e tente recuperar a definição sem consultar."],["Praticar uma habilidade","Resolva um problema simples, receba feedback e aumente a dificuldade."],["Revisar para avaliação","Identifique os tópicos e faça exercícios de recuperação."],["Aplicar em projeto","Defina um problema real e planeje uma primeira versão pequena."]]});</script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roteiro de estudo personalizado - Minha trilha</title>
+<style>
+:root{font:16px/1.52 system-ui,-apple-system,"Segoe UI",sans-serif;color:#27354d;background:#f5f7fc;--ink:#24334c;--muted:#596b82;--line:#dfe6f0;--purple:#6246b5;--purple-soft:#eee9fc;--mint:#167663;--mint-soft:#e8f6ef;--orange:#a95b2e;--orange-soft:#fff0e4}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(16px,3.5vw,42px);background:radial-gradient(ellipse at 85% 0%,#eee8ff,transparent 43%),#f5f7fc}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.55}
+button:focus-visible,input:focus-visible{outline:3px solid #da8b36;outline-offset:4px}
+button[hidden],[hidden]{display:none!important}
+main{max-width:1170px;margin:auto}
+.eyebrow{font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:var(--purple);font-weight:850}
+header{margin-bottom:25px}
+h1{font-size:clamp(30px,4vw,45px);line-height:1.14;letter-spacing:-.04em;margin:10px 0}
+header p{color:var(--muted);max-width:780px;margin:0;font-size:16px}
+.route-selection{background:#fff;border:1px solid var(--line);border-radius:22px;padding:clamp(18px,2.8vw,26px);margin-bottom:20px;box-shadow:0 12px 35px #2d3d6410}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:17px}
+.section-heading h2{margin:0;font-size:21px;letter-spacing:-.02em}
+.section-heading p{color:var(--muted);font-size:13px;margin:0}
+.route-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.route-card{display:flex;flex-direction:column;align-items:flex-start;gap:9px;min-width:0;min-height:152px;padding:16px;text-align:left;background:#fbfcff;border:2px solid #e1e6f0;border-radius:16px;color:var(--ink);transition:transform .2s,box-shadow .2s,border-color .2s}
+.route-card:hover{transform:translateY(-2px);box-shadow:0 9px 19px #27334f12}
+.route-card[aria-pressed=true]{border-color:var(--purple);background:#f7f4ff;box-shadow:0 0 0 3px #6246b517}
+.route-glyph{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:var(--purple-soft);color:var(--purple);font-size:21px;font-weight:900}
+.route-card:nth-child(2) .route-glyph{background:#e9f6f5;color:#126b68}
+.route-card:nth-child(3) .route-glyph{background:#fff0e4;color:#a95b2e}
+.route-card:nth-child(4) .route-glyph{background:#eaf0ff;color:#3158a8}
+.route-card strong{font-size:15px;line-height:1.24}
+.route-card small{font-size:12px;color:var(--muted);line-height:1.32}
+.layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.8fr);gap:18px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:clamp(18px,3vw,30px);box-shadow:0 12px 35px #2d3d6410;min-width:0}
+.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;padding-bottom:24px;border-bottom:1px solid #e9edf4}
+.hero h2{font-size:clamp(24px,3.1vw,30px);letter-spacing:-.03em;line-height:1.18;margin:7px 0}
+.hero p{font-size:14px;color:var(--muted);max-width:590px;margin:0}
+.hero svg{width:140px;max-width:31%;flex:none;fill:none;stroke:#8b7bc9;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.hero svg circle{fill:#eee9fc;stroke:#9274d0}
+.hero svg .complete{fill:#96d6c0;stroke:#36a888}
+.steps{list-style:none;margin:26px 0 0;padding:0}
+.step{position:relative;display:grid;grid-template-columns:47px minmax(0,1fr);gap:14px;padding-bottom:26px}
+.step:not(:last-child)::before{content:"";position:absolute;left:22px;top:46px;bottom:0;width:3px;background:repeating-linear-gradient(to bottom,#c7d3e5 0 7px,transparent 7px 13px);z-index:0}
+.step[data-state=done]:not(:last-child)::before{background:#64bc9f}
+.step-number{position:relative;z-index:1;display:grid;place-items:center;width:46px;height:46px;border-radius:15px;background:var(--purple-soft);color:var(--purple);font-size:15px;font-weight:900;border:2px solid #d7c8f5}
+.step[data-state=done] .step-number{background:var(--mint-soft);border-color:#9bd8c3;color:var(--mint)}
+.step[data-state=locked] .step-number{background:#f2f5f9;border-color:#e1e6ef;color:#8493a7}
+.step-card{border:1px solid #e2e7f0;border-radius:16px;background:#fff;overflow:hidden}
+.step[data-state=active] .step-card{border-color:#bdb2e7;box-shadow:0 4px 16px #6657ab13}
+.step[data-state=done] .step-card{border-color:#a9dac7;background:#fbfefc}
+.step[data-state=locked] .step-card{background:#f8f9fb;color:#78869a}
+.step-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:17px 18px 8px}
+.step-head h3{font-size:17px;line-height:1.25;margin:0 0 6px;letter-spacing:-.015em}
+.step-head p{font-size:13px;color:var(--muted);margin:0}
+.step-badge{font-size:11px;font-weight:800;padding:5px 8px;border-radius:20px;color:var(--purple);background:#f2effc;flex:none;white-space:nowrap}
+.step[data-state=done] .step-badge{background:var(--mint-soft);color:var(--mint)}
+.step[data-state=locked] .step-badge{background:#e9edf3;color:#65778e}
+.step-time{padding:0 18px 11px;color:#6e7990;font-size:12px}
+.tasks{padding:0 13px 14px;display:grid;gap:6px}
+.task{display:flex;align-items:flex-start;gap:11px;border-radius:10px;padding:10px 8px;min-height:46px;cursor:pointer}
+.task:hover{background:#f6f8fc}
+.task[data-checked=true]{background:#edf9f3}
+.task input{flex:none;width:19px;height:19px;accent-color:#16816b;margin:2px 0 0;cursor:pointer}
+.task input:disabled{cursor:not-allowed}
+.task span{font-size:14px;line-height:1.42}
+.task[data-checked=true] span{color:#276a56}
+.step[data-state=locked] .task{cursor:not-allowed;opacity:.55}
+.lock-reason{margin:0 18px 16px;color:#64768a;font-size:12px;border-top:1px dashed #dbe2e9;padding-top:12px}
+.sidebar{position:sticky;top:18px}
+.sidebar .eyebrow{color:#526cc1}
+.sidebar h2{font-size:23px;line-height:1.2;margin:8px 0}
+.sidebar .objective{font-size:14px;color:var(--muted);margin:0 0 21px}
+.progress-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:9px}
+.progress-row strong{font-size:32px;line-height:1;color:var(--purple)}
+.progress-row span{font-size:12px;color:var(--muted)}
+.progress-track{appearance:none;display:block;width:100%;height:12px;overflow:hidden;border-radius:20px;border:none;background:#e9edf5}
+.progress-track::-webkit-progress-bar{background:#e9edf5;border-radius:20px}
+.progress-track::-webkit-progress-value{background:linear-gradient(90deg,#7258c4,#40ad8e);border-radius:20px;transition:width .25s}
+.progress-track::-moz-progress-bar{background:#40ad8e;border-radius:20px}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:17px 0}
+.metric{padding:13px 12px;background:#f5f7fb;border-radius:13px}
+.metric strong{display:block;font-size:21px;color:var(--ink)}
+.metric span{font-size:11px;color:var(--muted)}
+.outcome{padding:15px 16px;border-radius:14px;background:#f3f0ff;color:#3b3574;margin:18px 0}
+.outcome strong{display:block;font-size:12px;margin-bottom:5px}
+.outcome p{font-size:14px;line-height:1.45;margin:0}
+.action{border:1px solid var(--purple);border-radius:12px;min-height:46px;padding:11px 15px;font-weight:800;color:#fff;background:var(--purple)}
+.action:hover{filter:brightness(.96)}
+.action.outline{border-color:#d0d8e6;color:#42546b;background:white}
+.sidebar .action{width:100%}
+.sidebar .action+.action{margin-top:9px}
+.confirm{padding:14px;margin-top:12px;border:1px solid #edd0b6;border-radius:14px;background:#fff9f2}
+.confirm p{margin:0 0 12px;font-size:13px;color:#725234}
+.confirm-actions{display:flex;gap:7px}
+.confirm-actions .action{font-size:12px;min-height:40px;padding:7px 9px}
+.confirm-actions .action+.action{margin-top:0}
+.confirm-actions .danger{background:#a14b35;border-color:#a14b35}
+.completion{margin-top:24px;border:1px solid #b5ddc9;border-radius:17px;padding:21px;background:linear-gradient(130deg,#edf9f3,#f8fdfb)}
+.completion h3{font-size:23px;color:#1c6652;letter-spacing:-.02em;margin:7px 0}
+.completion p{color:#37695b;font-size:14px;margin:0 0 16px}
+.completion .action{background:#1d7660;border-color:#1d7660}
+.notice{padding-top:18px;margin-top:18px;border-top:1px solid var(--line);font-size:12px;line-height:1.5;color:var(--muted)}
+.live{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:940px){.route-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:1fr}.sidebar{position:static}.route-card{min-height:128px}}
+@media(max-width:500px){.route-selection,.panel{border-radius:16px;padding:17px}.route-grid{gap:9px}.route-card{padding:12px;min-height:160px}.hero svg{width:95px}.step{grid-template-columns:36px minmax(0,1fr);gap:9px}.step-number{width:35px;height:35px;border-radius:11px}.step:not(:last-child)::before{left:16px;top:35px}.step-head{padding:14px 13px 8px;flex-wrap:wrap}.step-time{padding:0 13px 11px}.tasks{padding:0 8px 11px}.step-head h3{font-size:16px}.task span{font-size:13px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<span class="eyebrow">Eu escolho · Planejamento de aprendizagem</span>
+<h1>Monte sua trilha de estudos</h1>
+<p>Escolha o que deseja alcançar, siga etapas conectadas e marque as tarefas realizadas. Cada objetivo abre um percurso diferente, com orientações para estudar no seu ritmo.</p>
+</header>
+<section class="route-selection" aria-labelledby="routeTitle">
+<div class="section-heading"><h2 id="routeTitle">1. Qual é seu objetivo?</h2><p>Você pode alternar entre percursos sem perder as marcações desta sessão.</p></div>
+<div class="route-grid" id="routeGrid" role="group" aria-label="Objetivos de aprendizagem"></div>
+</section>
+<div class="layout">
+<section class="panel" aria-labelledby="pathTitle">
+<div class="hero">
+<div>
+<span class="eyebrow">2. Sua trilha</span>
+<h2 id="pathTitle">Entender um conceito</h2>
+<p id="pathDescription"></p>
+</div>
+<svg viewBox="0 0 150 130" aria-hidden="true" focusable="false">
+<path d="M25 20C85 20 52 54 112 54S86 107 120 107"></path>
+<circle cx="25" cy="20" r="13"></circle><circle cx="112" cy="54" r="13"></circle><circle cx="57" cy="84" r="13"></circle><circle class="complete" cx="120" cy="107" r="13"></circle>
+<path d="m18 20 5 5 10-12m72 41 5 5 10-12m-68 35 5 5 10-12m46 25 5 5 10-12" stroke="#fff" stroke-width="2.5"></path>
+</svg>
+</div>
+<ol class="steps" id="steps"></ol>
+<section class="completion" id="completion" aria-labelledby="completionTitle" hidden>
+<span class="eyebrow">Percurso concluído</span>
+<h3 id="completionTitle" tabindex="-1">Objetivo alcançado!</h3>
+<p id="completionMessage"></p>
+<button type="button" class="action" id="restartFromCompletion">Recomeçar este percurso</button>
+</section>
+</section>
+<aside class="panel sidebar" aria-labelledby="progressTitle">
+<span class="eyebrow">Acompanhamento local</span>
+<h2 id="progressTitle">Seu progresso</h2>
+<p class="objective" id="progressIntro"></p>
+<div class="progress-row"><strong id="percentage">0%</strong><span id="completedText">0 de 12 tarefas</span></div>
+<progress class="progress-track" id="progress" max="12" value="0" aria-label="Tarefas concluídas no percurso selecionado"></progress>
+<div class="metrics">
+<div class="metric"><strong id="completedStages">0/4</strong><span>Etapas concluídas</span></div>
+<div class="metric"><strong id="totalMinutes">12 min</strong><span>Tempo sugerido</span></div>
+</div>
+<div class="outcome"><strong>Ao concluir, você poderá:</strong><p id="outcome"></p></div>
+<button type="button" class="action" id="nextTask">Ir para próxima tarefa</button>
+<button type="button" class="action outline" id="resetRoute">Reiniciar este percurso</button>
+<div class="confirm" id="confirmReset" hidden>
+<p>Reiniciar apaga as marcações deste percurso. Os outros permanecem como estão.</p>
+<div class="confirm-actions">
+<button class="action outline" type="button" id="cancelReset">Cancelar</button>
+<button class="action danger" type="button" id="confirmResetButton">Apagar e reiniciar</button>
+</div>
+</div>
+<div class="notice">Esta demonstração usa apenas escolhas feitas nesta página. Não consulta dados do Moodle, não registra notas nem preserva o progresso depois que a página é recarregada.</div>
+</aside>
+</div>
+<div class="live" role="status" aria-live="polite" aria-atomic="true" id="announcer"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  const routes = [
+    {id:"conceito",glyph:"◇",title:"Entender um conceito",short:"Compreender e explicar ideias",description:"Parta das ideias principais, estabeleça relações e use o que aprendeu para explicar uma situação concreta.",goal:"Explicar um conceito com suas próprias palavras e demonstrar como ele funciona em um exemplo.",steps:[
+      {id:"explorar",title:"Explore a ideia",reason:"Comece reunindo referências e identificando o significado central.",minutes:3,tasks:["Escreva a pergunta que você deseja responder.","Leia uma explicação curta de uma fonte confiável.","Identifique três termos essenciais e seus significados."]},
+      {id:"relacionar",title:"Conecte os conceitos",reason:"Transforme informações soltas em relações que fazem sentido.",minutes:3,tasks:["Resuma o conceito em duas frases suas.","Encontre uma relação com algo que você já conhece.","Registre um exemplo concreto de aplicação."]},
+      {id:"explicar",title:"Explique sem consultar",reason:"Tente recuperar o que aprendeu antes de rever suas anotações.",minutes:4,tasks:["Explique o conceito em voz alta ou por escrito.","Compare sua explicação com a fonte consultada.","Corrija uma lacuna ou imprecisão encontrada."]},
+      {id:"aplicar",title:"Aplique e revise",reason:"Use o conhecimento em uma situação e identifique o próximo passo.",minutes:4,tasks:["Escolha uma situação real em que o conceito seja útil.","Descreva como o conceito ajuda a compreendê-la.","Anote uma dúvida para aprofundar depois."]}
+    ]},
+    {id:"habilidade",glyph:"↗",title:"Praticar uma habilidade",short:"Treinar com dificuldade gradual",description:"Pratique primeiro com apoio, depois de forma independente, e revise o resultado antes de avançar.",goal:"Executar uma habilidade simples sem orientação passo a passo e explicar como melhorar seu desempenho.",steps:[
+      {id:"preparar",title:"Defina o desafio",reason:"Um objetivo observável facilita a prática e a verificação.",minutes:3,tasks:["Escolha a habilidade específica a desenvolver.","Liste os materiais ou conhecimentos necessários.","Defina como reconhecer uma execução satisfatória."]},
+      {id:"guiar",title:"Pratique com apoio",reason:"Use uma demonstração como referência antes da tentativa independente.",minutes:5,tasks:["Observe ou leia um exemplo resolvido.","Repita a sequência com ajuda do exemplo.","Identifique um passo que ainda gera dificuldade."]},
+      {id:"executar",title:"Tente por conta própria",reason:"Teste a habilidade sem depender de instruções a cada ação.",minutes:6,tasks:["Execute uma tarefa semelhante sem consultar o exemplo.","Confira o resultado com critérios definidos.","Refaça a parte que apresentou mais dificuldade."]},
+      {id:"evoluir",title:"Aumente o desafio",reason:"Uma pequena variação revela o que já foi consolidado.",minutes:4,tasks:["Experimente uma variação um pouco mais difícil.","Compare o desempenho com a tentativa inicial.","Defina a próxima habilidade que precisa praticar."]}
+    ]},
+    {id:"avaliacao",glyph:"✓",title:"Preparar uma avaliação",short:"Revisar e testar a memória",description:"Organize os assuntos, teste o que consegue lembrar e concentre as próximas sessões nos pontos que exigem atenção.",goal:"Identificar os assuntos dominados e produzir um plano de revisão baseado nas próprias dificuldades.",steps:[
+      {id:"mapear",title:"Mapeie os assuntos",reason:"Uma visão geral ajuda a distribuir o esforço de estudo.",minutes:3,tasks:["Liste os temas que serão avaliados.","Sinalize os dois temas em que sente mais dificuldade.","Separe materiais confiáveis para conferir respostas."]},
+      {id:"recordar",title:"Recupere da memória",reason:"Lembrar sem consultar dá pistas sobre o que precisa ser revisto.",minutes:4,tasks:["Escreva cinco perguntas relevantes sobre os temas.","Tente responder sem abrir suas anotações.","Marque perguntas que exigiram consulta."]},
+      {id:"corrigir",title:"Pratique com feedback",reason:"A correção explica os erros e orienta a próxima tentativa.",minutes:5,tasks:["Resolva exemplos ou exercícios relacionados.","Confira cada resposta e identifique o motivo do erro.","Refaça pelo menos um exercício corrigido."]},
+      {id:"planejar",title:"Prepare a próxima revisão",reason:"Uma revisão posterior fortalece os pontos ainda frágeis.",minutes:3,tasks:["Faça uma checagem rápida dos temas difíceis.","Liste o que ainda não consegue explicar com clareza.","Agende uma nova revisão dos pontos pendentes."]}
+    ]},
+    {id:"projeto",glyph:"▦",title:"Aplicar em projeto",short:"Criar uma solução pequena",description:"Transforme uma necessidade real em uma entrega pequena, testável e aberta a melhorias.",goal:"Planejar, produzir e validar uma pequena solução para um problema concreto.",steps:[
+      {id:"problema",title:"Defina o problema",reason:"Uma solução começa com a compreensão das necessidades envolvidas.",minutes:4,tasks:["Descreva um problema observável que deseja resolver.","Identifique quem é afetado por ele.","Defina o que seria uma melhoria perceptível."]},
+      {id:"planejamento",title:"Organize a primeira versão",reason:"Escolha um escopo pequeno que possa ser testado rapidamente.",minutes:5,tasks:["Liste três funcionalidades ou ações possíveis.","Escolha somente a entrega essencial para começar.","Defina critérios de sucesso para essa entrega."]},
+      {id:"construcao",title:"Crie e teste",reason:"Experimente a solução com evidências, sem depender apenas da intuição.",minutes:8,tasks:["Produza uma versão simples da entrega.","Peça a alguém para testar ou revisar o resultado.","Registre uma dificuldade encontrada no teste."]},
+      {id:"melhoria",title:"Reflita e melhore",reason:"Use o teste para decidir o que corrigir primeiro.",minutes:4,tasks:["Corrija o problema mais importante identificado.","Compare o resultado com o objetivo inicial.","Descreva uma melhoria para uma próxima versão."]}
+    ]}
+  ];
+  const byId = id => document.getElementById(id);
+  const routeById = new Map(routes.map(route => [route.id,route]));
+  const progressByRoute = new Map(routes.map(route => [route.id,new Set()]));
+  const routeButtons = new Map();
+  let selectedRoute = routes[0].id;
+  let stageViews = [];
+  const taskKey = (stepIndex,taskIndex) => stepIndex + ":" + taskIndex;
+  const create = (tag,className,text) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  };
+  const currentRoute = () => routeById.get(selectedRoute);
+  const progressSet = () => progressByRoute.get(selectedRoute);
+  const taskTotal = route => route.steps.reduce((total,step) => total+step.tasks.length,0);
+  function announce(message) { byId("announcer").textContent = message; }
+  function stageIsComplete(index) {
+    const step = currentRoute().steps[index],done = progressSet();
+    return step.tasks.every((task,j) => done.has(taskKey(index,j)));
+  }
+  function stageIsUnlocked(index) {
+    if (index === 0) return true;
+    for (let i=0;i<index;i++) if (!stageIsComplete(i)) return false;
+    return true;
+  }
+  function makeRouteButtons() {
+    const grid = byId("routeGrid");
+    routes.forEach(route => {
+      const button = create("button","route-card");
+      button.type = "button";
+      button.setAttribute("aria-pressed","false");
+      button.setAttribute("aria-label","Selecionar percurso: "+route.title);
+      const glyph = create("span","route-glyph",route.glyph);
+      glyph.setAttribute("aria-hidden","true");
+      button.append(glyph,create("strong","",route.title),create("small","",route.short));
+      button.addEventListener("click",() => chooseRoute(route.id));
+      routeButtons.set(route.id,button);
+      grid.appendChild(button);
+    });
+  }
+  function buildStages() {
+    stageViews = [];
+    const container = byId("steps");
+    container.replaceChildren();
+    currentRoute().steps.forEach((step,index) => {
+      const item = create("li","step");
+      const number = create("span","step-number",String(index+1));
+      number.setAttribute("aria-hidden","true");
+      const content = create("div","step-card");
+      const heading = create("div","step-head");
+      const text = create("div");
+      const title = create("h3","",step.title);
+      title.id = "stage-"+selectedRoute+"-"+index;
+      const subtitle = create("p","",step.reason);
+      text.append(title,subtitle);
+      const badge = create("span","step-badge","Disponível");
+      heading.append(text,badge);
+      const time = create("div","step-time",step.minutes+" min estimados");
+      const tasks = create("div","tasks");
+      tasks.setAttribute("role","group");
+      tasks.setAttribute("aria-label","Tarefas: "+step.title);
+      const taskViews = [];
+      step.tasks.forEach((labelText,taskIndex) => {
+        const label = create("label","task");
+        const input = create("input");
+        input.type = "checkbox";
+        input.id = "task-"+selectedRoute+"-"+index+"-"+taskIndex;
+        const caption = create("span","",labelText);
+        label.append(input,caption);
+        tasks.appendChild(label);
+        input.addEventListener("change",() => toggleTask(index,taskIndex,input.checked));
+        taskViews.push({label,input});
+      });
+      const lockReason = create("p","lock-reason","Conclua as tarefas da etapa anterior para liberar esta etapa.");
+      content.append(heading,time,tasks,lockReason);
+      item.append(number,content);
+      container.appendChild(item);
+      stageViews.push({item,number,badge,lockReason,taskViews});
+    });
+  }
+  function updateView() {
+    const route=currentRoute(),done=progressSet();
+    const total=taskTotal(route),completed=done.size;
+    let finishedStages=0;
+    stageViews.forEach((view,index) => {
+      const unlocked=stageIsUnlocked(index);
+      const finished=unlocked&&stageIsComplete(index);
+      if (finished) finishedStages++;
+      view.item.dataset.state=finished?"done":unlocked?"active":"locked";
+      view.badge.textContent=finished?"Concluída":unlocked?"Em andamento":"Bloqueada";
+      view.number.textContent=finished?"✓":String(index+1);
+      view.lockReason.hidden=unlocked;
+      view.taskViews.forEach(({input,label},taskIndex) => {
+        const checked=done.has(taskKey(index,taskIndex));
+        input.checked=checked;
+        input.disabled=!unlocked;
+        label.dataset.checked=String(checked);
+      });
+    });
+    const pct=Math.round(completed/total*100);
+    byId("percentage").textContent=pct+"%";
+    byId("completedText").textContent=completed+" de "+total+" tarefas";
+    byId("progress").max=total;
+    byId("progress").value=completed;
+    byId("completedStages").textContent=finishedStages+"/"+route.steps.length;
+    byId("totalMinutes").textContent=route.steps.reduce((sum,step)=>sum+step.minutes,0)+" min";
+    const completedAll=completed===total;
+    byId("completion").hidden=!completedAll;
+    byId("completionMessage").textContent=completedAll
+      ? "Você concluiu as "+route.steps.length+" etapas do percurso '"+route.title+"'. Revise suas anotações e tente aplicar o que aprendeu em uma nova situação."
+      : "";
+    byId("nextTask").disabled=completedAll;
+    byId("nextTask").textContent=completedAll?"Todas as tarefas concluídas":"Ir para próxima tarefa";
+  }
+  function chooseRoute(id) {
+    const route=routeById.get(id);
+    if (!route) return;
+    selectedRoute=id;
+    byId("confirmReset").hidden=true;
+    routeButtons.forEach((button,key) => button.setAttribute("aria-pressed",String(key===id)));
+    byId("pathTitle").textContent=route.title;
+    byId("pathDescription").textContent=route.description;
+    byId("progressIntro").textContent="Marque as tarefas realizadas. A próxima etapa será liberada ao terminar a anterior.";
+    byId("outcome").textContent=route.goal;
+    buildStages();
+    updateView();
+    announce("Percurso selecionado: "+route.title+". "+progressSet().size+" tarefas marcadas nesta sessão.");
+  }
+  function toggleTask(stepIndex,taskIndex,checked) {
+    if (!stageIsUnlocked(stepIndex)) {
+      updateView();
+      return;
+    }
+    const beforeComplete=stageIsComplete(stepIndex);
+    const route=currentRoute(),done=progressSet(),key=taskKey(stepIndex,taskIndex);
+    const beforeAll=done.size===taskTotal(route);
+    if (checked) done.add(key);
+    else {
+      done.delete(key);
+      // Invalidates dependent stages so the progress never includes locked tasks.
+      for (let i=stepIndex+1;i<route.steps.length;i++)
+        for (let j=0;j<route.steps[i].tasks.length;j++) done.delete(taskKey(i,j));
+    }
+    updateView();
+    if (!beforeAll&&done.size===taskTotal(route)) announce("Percurso concluído! Todas as tarefas foram realizadas.");
+    else if (!beforeComplete&&stageIsComplete(stepIndex)) announce("Etapa "+(stepIndex+1)+" concluída. A próxima etapa está liberada.");
+    else if (!checked) announce("Tarefa desmarcada. As etapas seguintes, quando já realizadas, foram reiniciadas para respeitar a sequência.");
+    else announce("Tarefa marcada como realizada. "+done.size+" de "+taskTotal(route)+" concluídas.");
+  }
+  function focusNext() {
+    for (let i=0;i<stageViews.length;i++) {
+      if (!stageIsUnlocked(i)) continue;
+      for (const {input} of stageViews[i].taskViews) {
+        if (!input.checked&&!input.disabled) {
+          input.focus();
+          announce("Próxima tarefa disponível na etapa "+(i+1)+".");
+          return;
+        }
+      }
+    }
+    byId("completionTitle").focus();
+  }
+  function requestReset() {
+    byId("confirmReset").hidden=false;
+    byId("cancelReset").focus();
+    announce("Confirme ou cancele o reinício deste percurso.");
+  }
+  function cancelReset() {
+    byId("confirmReset").hidden=true;
+    byId("resetRoute").focus();
+  }
+  function resetCurrentRoute() {
+    progressSet().clear();
+    byId("confirmReset").hidden=true;
+    updateView();
+    stageViews[0].taskViews[0].input.focus();
+    announce("Marcações do percurso '"+currentRoute().title+"' reiniciadas.");
+  }
+  makeRouteButtons();
+  byId("nextTask").addEventListener("click",focusNext);
+  byId("resetRoute").addEventListener("click",requestReset);
+  byId("cancelReset").addEventListener("click",cancelReset);
+  byId("confirmResetButton").addEventListener("click",resetCurrentRoute);
+  byId("restartFromCompletion").addEventListener("click",requestReset);
+  chooseRoute(selectedRoute);
+})();
+</script>
+</body>
+</html>
