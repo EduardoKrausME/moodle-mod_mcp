@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quadro de organização de ideias - Oficina Kanban</title>
+<style>
+:root{color-scheme:light;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;--ink:#24354b;--sub:#5e7287;--border:#dce6ed;--indigo:#4759a8;--teal:#16796f;background:#f3f7f8;color:var(--ink)}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(15px,3.2vw,42px);background:radial-gradient(ellipse at 88% 0%,#dfebf6,transparent 46%),#f3f7f8}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+button:disabled{opacity:.48;cursor:not-allowed}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #d48b2d;outline-offset:3px}
+[hidden]{display:none!important}
+main{max-width:1370px;margin:0 auto}
+.eyebrow{font-size:12px;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:#246f7b}
+h1{font-size:clamp(30px,4vw,46px);line-height:1.12;letter-spacing:-.04em;margin:9px 0}
+header p{max-width:820px;color:var(--sub);margin:0 0 21px}
+header .intro{display:flex;align-items:center;justify-content:space-between;gap:22px}
+.hero-art{width:175px;max-width:24%;flex:none}
+.panel{background:#fff;border:1px solid var(--border);border-radius:20px;box-shadow:0 12px 34px #29415e10;padding:clamp(16px,2.6vw,25px)}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:17px;justify-content:space-between;margin-bottom:18px}
+.toolbar-main{display:flex;flex-wrap:wrap;gap:8px}
+.btn{border:1px solid #bfd0df;border-radius:11px;padding:10px 15px;background:#fff;color:#33566f;font-size:13px;font-weight:800;min-height:43px}
+.btn:hover:not(:disabled){background:#eff6fa}
+.btn.primary{background:#425fa4;border-color:#425fa4;color:white}
+.btn.primary:hover:not(:disabled){background:#344f91}
+.btn.danger{color:#934553;border-color:#dbb7bb}
+.counter{font-size:13px;color:#46687e;font-weight:750}
+.progress-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-size:13px;color:var(--sub);margin:0 0 7px}
+.progress-head strong{font-size:20px;color:#267763}
+.progress{width:100%;height:10px;border:0;border-radius:99px;background:#e7ecef;overflow:hidden}
+.progress::-webkit-progress-bar{background:#e7ecef;border-radius:99px}
+.progress::-webkit-progress-value{background:linear-gradient(90deg,#4c76b2,#39a888);border-radius:99px;transition:width .25s}
+.progress::-moz-progress-bar{background:#39a888;border-radius:99px}
+.summary-hint{font-size:12px;color:var(--sub);margin:11px 0 0}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 325px;gap:18px;align-items:start}
+.board-wrap{min-width:0}
+.board-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px;margin:0 0 13px}
+.board-head h2{font-size:22px;letter-spacing:-.02em;margin:0}
+.board-head p{font-size:12px;margin:0;color:var(--sub)}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start}
+.lane{min-width:0;min-height:410px;border:1px solid var(--lane-border);border-radius:16px;background:var(--lane-bg);padding:12px}
+.lane[data-column=ideas]{--lane-bg:#edf5fc;--lane-border:#c8ddeb;--lane-ink:#376895}
+.lane[data-column=plan]{--lane-bg:#f2effb;--lane-border:#d8cfee;--lane-ink:#69559a}
+.lane[data-column=doing]{--lane-bg:#fff6eb;--lane-border:#f0d7b5;--lane-ink:#9b6a32}
+.lane[data-column=done]{--lane-bg:#edf8f2;--lane-border:#b9ddc9;--lane-ink:#257b61}
+.lane.is-drop-target{outline:3px dashed var(--lane-ink);outline-offset:1px}
+.lane-header{display:flex;align-items:center;justify-content:space-between;gap:5px;margin:3px 2px 14px}
+.lane-header h3{font-size:14px;line-height:1.2;margin:0;color:var(--lane-ink)}
+.lane-count{display:grid;place-items:center;min-width:26px;height:26px;padding:0 7px;border-radius:99px;background:#fff;color:var(--lane-ink);font-size:12px;font-weight:850}
+.lane-list{list-style:none;margin:0;padding:0;display:grid;gap:10px;min-height:300px;align-content:start}
+.card{position:relative;list-style:none;margin:0;border:1px solid #d6e1e9;border-radius:13px;background:#fff;box-shadow:0 6px 16px #2b486717;min-width:0;overflow:hidden}
+.card.is-selected{border-color:#5075bb;box-shadow:0 0 0 2px #5075bb55,0 6px 16px #2b486717}
+.card.is-dragging{opacity:.78;z-index:5;box-shadow:0 16px 30px #29415e38;pointer-events:none}
+.card-handle{display:block;text-align:left;width:100%;padding:13px;border:0;background:transparent;color:var(--ink);border-radius:12px;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.card-handle:active{cursor:grabbing}
+.card-title{display:block;font-size:14px;line-height:1.28;font-weight:800;overflow-wrap:anywhere}
+.card-description{display:block;font-size:12px;color:var(--sub);line-height:1.36;margin:8px 0 0;overflow-wrap:anywhere}
+.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-top:12px}
+.priority{display:inline-flex;align-items:center;font-size:10px;font-weight:850;padding:4px 7px;border-radius:99px}
+.priority[data-priority=high]{background:#ffebed;color:#ab3f53}
+.priority[data-priority=medium]{background:#fff0d9;color:#95632b}
+.priority[data-priority=low]{background:#e5f3ee;color:#2c7964}
+.card-pos{font-size:10px;color:#6b8293}
+.lane-empty{font-size:12px;color:#7890a2;background:#ffffffaa;border:1px dashed #cad8e2;border-radius:11px;padding:13px 9px;text-align:center}
+.sidebar{position:sticky;top:15px;display:grid;gap:16px}
+.sidebar h2{font-size:21px;line-height:1.2;letter-spacing:-.02em;margin:0 0 8px}
+.sidebar p{font-size:13px;color:var(--sub);margin:0 0 15px}
+.field{display:grid;gap:6px;margin:12px 0}
+.field label{font-size:12px;color:#425d72;font-weight:800}
+.field input,.field select,.field textarea{width:100%;min-width:0;border-radius:10px;border:1px solid #b6cada;padding:10px 11px;color:var(--ink);background:white;min-height:43px}
+.field textarea{min-height:92px;resize:vertical}
+.field .hint{font-size:11px;color:var(--sub)}
+.form-actions{display:flex;flex-wrap:wrap;gap:7px}
+.form-actions .btn{flex:1}
+.move-panel{margin:15px 0 0;padding:15px;border:1px solid #dce6ed;border-radius:13px;background:#f8fafc}
+.move-panel h3{font-size:13px;margin:0 0 7px}
+.move-panel p{margin:0 0 11px;font-size:12px}
+.move-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.move-grid button{min-height:38px;padding:5px;border:1px solid #bdcfde;border-radius:9px;background:#fff;color:#345f85;font-size:11px;font-weight:850}
+.move-grid button:hover:not(:disabled){background:#e9f2f9}
+.danger-area{border-top:1px solid #e4eaf0;padding-top:14px;margin-top:15px}
+.confirm{margin-top:13px;background:#fff7ee;color:#77562f;border:1px solid #e4c7a4;border-radius:12px;padding:13px}
+.confirm p{margin:0 0 12px;color:#77562f}
+.confirm-actions{display:flex;gap:8px}
+.confirm-actions .btn{flex:1}
+.notice{font-size:12px;color:var(--sub);padding:14px 16px;border-left:3px solid #67a1ad;background:#edf5f8;border-radius:0 11px 11px 0;margin-top:16px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:1200px){.layout{grid-template-columns:1fr}.sidebar{position:static;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.board{grid-template-columns:repeat(4,minmax(195px,1fr));overflow-x:auto;padding-bottom:6px}}
+@media(max-width:690px){.sidebar{grid-template-columns:1fr}.board{grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible}.lane{min-height:270px}.lane-list{min-height:195px}.hero-art{display:none}}
+@media(max-width:420px){.board{grid-template-columns:1fr}.lane{min-height:170px}.lane-list{min-height:70px}.toolbar-main{width:100%}.toolbar-main .btn{flex:1}.move-grid{grid-template-columns:repeat(2,1fr)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="intro">
+<div><span class="eyebrow">Oficina de planejamento · Kanban educativo</span><h1>Quadro de organização de ideias</h1><p>Transforme ideias em atividades, organize prioridades e acompanhe as etapas de um projeto de aprendizagem. Você decide o que entra, muda de lugar e está concluído.</p></div>
+<svg class="hero-art" viewBox="0 0 200 138" fill="none" aria-hidden="true" focusable="false">
+<rect x="8" y="12" width="54" height="112" rx="11" fill="#dbeaf5" stroke="#82aac4" stroke-width="3"></rect>
+<rect x="73" y="12" width="54" height="112" rx="11" fill="#e9e3f8" stroke="#ae9bd6" stroke-width="3"></rect>
+<rect x="138" y="12" width="54" height="112" rx="11" fill="#e1f4e8" stroke="#8fbea6" stroke-width="3"></rect>
+<path d="M20 35h30M85 35h30M150 35h30" stroke="#6e849f" stroke-width="4" stroke-linecap="round"></path>
+<rect x="19" y="48" width="32" height="27" rx="5" fill="#fff"></rect><rect x="84" y="48" width="32" height="41" rx="5" fill="#fff"></rect>
+<rect x="149" y="48" width="32" height="36" rx="5" fill="#fff"></rect>
+<path d="m157 66 6 6 11-13" stroke="#2c9574" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</header>
+<section class="panel toolbar" aria-label="Acompanhamento e ações">
+<div style="flex:1 1 280px;max-width:500px">
+<div class="progress-head"><span id="progressLabel">1 de 5 atividades concluídas</span><strong id="percentage">20%</strong></div>
+<progress id="progress" class="progress" max="5" value="1" aria-label="Atividades concluídas no quadro"></progress>
+<p class="summary-hint">Conclua uma atividade movendo-a para a coluna Concluído. O progresso é atualizado automaticamente.</p>
+</div>
+<div class="toolbar-main">
+<button id="createCard" type="button" class="btn primary">+ Novo cartão</button>
+<button id="undo" type="button" class="btn" disabled>Desfazer</button>
+<button id="reset" type="button" class="btn">Reiniciar quadro</button>
+</div>
+<span class="counter" id="boardCount">5 cartões</span>
+</section>
+<div class="layout">
+<section class="board-wrap" aria-labelledby="boardTitle">
+<div class="board-head"><h2 id="boardTitle">Fluxo de ideias</h2><p>Arraste um cartão ou use as setas do teclado para movê-lo.</p></div>
+<div class="board" id="board" role="group" aria-label="Quadro Kanban com quatro etapas">
+<section class="lane" data-column="ideas" aria-labelledby="laneIdeas"><div class="lane-header"><h3 id="laneIdeas">Banco de ideias</h3><span class="lane-count" id="countIdeas">2</span></div><ol class="lane-list" id="listIdeas"></ol></section>
+<section class="lane" data-column="plan" aria-labelledby="lanePlan"><div class="lane-header"><h3 id="lanePlan">Planejando</h3><span class="lane-count" id="countPlan">1</span></div><ol class="lane-list" id="listPlan"></ol></section>
+<section class="lane" data-column="doing" aria-labelledby="laneDoing"><div class="lane-header"><h3 id="laneDoing">Em ação</h3><span class="lane-count" id="countDoing">1</span></div><ol class="lane-list" id="listDoing"></ol></section>
+<section class="lane" data-column="done" aria-labelledby="laneDone"><div class="lane-header"><h3 id="laneDone">Concluído</h3><span class="lane-count" id="countDone">1</span></div><ol class="lane-list" id="listDone"></ol></section>
+</div>
+<p class="notice">Toque ou clique no cartão para editá-lo. Para reorganizar sem arrastar, use as setas (←/→ entre colunas, ↑/↓ na mesma coluna) quando o cartão estiver em foco ou os botões do painel lateral.</p>
+</section>
+<aside class="sidebar">
+<section class="panel" aria-labelledby="editorTitle">
+<h2 id="editorTitle">Criar cartão</h2>
+<p id="editorHelp">Descreva uma ideia ou tarefa concreta que será acompanhada no quadro.</p>
+<form id="cardForm" novalidate>
+<div class="field"><label for="cardTitle">Título da atividade</label><input id="cardTitle" maxlength="70" placeholder="Ex.: Preparar perguntas de revisão" autocomplete="off" required></div>
+<div class="field"><label for="cardDescription">Descrição</label><textarea id="cardDescription" maxlength="260" placeholder="O que precisa ser feito e como saber se ficou pronto?"></textarea></div>
+<div class="field"><label for="cardPriority">Prioridade</label><select id="cardPriority">
+<option value="medium">Média</option><option value="high">Alta</option><option value="low">Baixa</option>
+</select></div>
+<div class="field"><label for="cardColumn">Etapa</label><select id="cardColumn">
+<option value="ideas">Banco de ideias</option><option value="plan">Planejando</option><option value="doing">Em ação</option><option value="done">Concluído</option>
+</select></div>
+<div class="form-actions">
+<button type="submit" id="saveCard" class="btn primary">Criar cartão</button><button type="button" id="cancelEdit" class="btn" hidden>Cancelar edição</button>
+</div>
+</form>
+<div class="move-panel" id="movePanel" hidden>
+<h3>Organizar cartão selecionado</h3><p>Movimente entre etapas ou altere a ordem na coluna, sem precisar arrastar.</p>
+<div class="move-grid" role="group" aria-label="Movimentação do cartão selecionado">
+<button type="button" id="moveLeft" aria-label="Mover cartão para etapa anterior">← Anterior</button>
+<button type="button" id="moveRight" aria-label="Mover cartão para próxima etapa">Próxima →</button>
+<button type="button" id="moveUp" aria-label="Subir cartão na coluna">↑ Subir</button>
+<button type="button" id="moveDown" aria-label="Descer cartão na coluna">↓ Descer</button>
+</div>
+</div>
+<div class="danger-area" id="deleteArea" hidden>
+<button type="button" id="deleteCard" class="btn danger">Excluir cartão selecionado</button>
+</div>
+</section>
+<section class="panel" aria-labelledby="tipTitle">
+<h2 id="tipTitle">Como usar com a turma</h2>
+<p>Peça que os estudantes registrem as tarefas em cartões, priorizem o que falta planejar e movam cada entrega entre as etapas conforme avançam.</p>
+<p>O quadro já tem cinco atividades ilustrativas. Edite, remova ou crie outras para montar o próprio plano de estudo.</p>
+<div class="notice">Este exemplo não envia atividades ao Moodle, não registra notas e não mantém o estado após recarregar a página. O botão Desfazer recupera mudanças feitas nesta sessão.</div>
+</section>
+</aside>
+</div>
+<div class="confirm panel" id="resetConfirmation" hidden role="group" aria-label="Confirmar reinício">
+<p>Restaurar os cartões iniciais e descartar as alterações desta sessão? Você poderá usar Desfazer para recuperar o quadro anterior.</p>
+<div class="confirm-actions"><button type="button" id="cancelReset" class="btn">Cancelar</button><button type="button" id="confirmReset" class="btn danger">Restaurar quadro inicial</button></div>
+</div>
+<div class="sr-only" id="announcer" role="status" aria-live="polite" aria-atomic="true"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  const columns=[
+    {id:"ideas",title:"Banco de ideias",list:"listIdeas",count:"countIdeas"},
+    {id:"plan",title:"Planejando",list:"listPlan",count:"countPlan"},
+    {id:"doing",title:"Em ação",list:"listDoing",count:"countDoing"},
+    {id:"done",title:"Concluído",list:"listDone",count:"countDone"}
+  ];
+  const priorities={low:"Baixa",medium:"Média",high:"Alta"};
+  const seed={
+    cards:[
+      {id:"c1",title:"Pesquisar exemplos reais",description:"Reunir situações que ilustrem o tema escolhido para a atividade.",priority:"medium"},
+      {id:"c2",title:"Criar perguntas investigativas",description:"Escrever perguntas que levem a turma a explorar hipóteses.",priority:"high"},
+      {id:"c3",title:"Organizar um roteiro",description:"Definir a sequência das etapas e os materiais necessários.",priority:"medium"},
+      {id:"c4",title:"Testar uma atividade",description:"Experimentar a proposta com um colega e anotar pontos de melhoria.",priority:"high"},
+      {id:"c5",title:"Definir o objetivo de aprendizagem",description:"Registrar o que os estudantes deverão conseguir fazer ao concluir.",priority:"low"}
+    ],
+    lanes:{ideas:["c1","c2"],plan:["c3"],doing:["c4"],done:["c5"]},
+    nextId:6
+  };
+  const $=id=>document.getElementById(id);
+  const clone=value=>JSON.parse(JSON.stringify(value));
+  const state=clone(seed),history=[],buttons=new Map();
+  let selectedId=null,dragging=null;
+  const maxCards=24;
+  const getCard=id=>state.cards.find(c=>c.id===id);
+  const columnOf=id=>columns.find(c=>state.lanes[c.id].includes(id))?.id;
+  const clean=(value,max)=>String(value||"").trim().replace(/\s+/g," ").slice(0,max);
+  function announcement(message){$("announcer").textContent=message;}
+  function el(tag,className,text){
+    const n=document.createElement(tag);
+    if(className)n.className=className;
+    if(text!==undefined)n.textContent=text;
+    return n;
+  }
+  function saveHistory(){
+    history.push(clone(state));
+    if(history.length>40)history.shift();
+    $("undo").disabled=false;
+  }
+  function rehydrate(snapshot){
+    state.cards=snapshot.cards;
+    state.lanes=snapshot.lanes;
+    state.nextId=snapshot.nextId;
+  }
+  function updateEditor(){
+    const card=getCard(selectedId);
+    $("editorTitle").textContent=card?"Editar cartão":"Criar cartão";
+    $("editorHelp").textContent=card?"Edite este cartão ou mova-o entre as etapas.":"Descreva uma ideia ou tarefa concreta que será acompanhada no quadro.";
+    $("cardTitle").value=card?card.title:"";
+    $("cardDescription").value=card?card.description:"";
+    $("cardPriority").value=card?card.priority:"medium";
+    $("cardColumn").value=card?columnOf(card.id):"ideas";
+    $("saveCard").textContent=card?"Salvar alterações":"Criar cartão";
+    $("cancelEdit").hidden=!card;
+    $("movePanel").hidden=!card;
+    $("deleteArea").hidden=!card;
+    updateMoveButtons();
+  }
+  function updateMoveButtons(){
+    const card=getCard(selectedId);
+    if(!card)return;
+    const where=columnOf(card.id),index=columns.findIndex(c=>c.id===where);
+    const position=state.lanes[where].indexOf(card.id);
+    $("moveLeft").disabled=index===0;
+    $("moveRight").disabled=index===columns.length-1;
+    $("moveUp").disabled=position===0;
+    $("moveDown").disabled=position===state.lanes[where].length-1;
+  }
+  function selectCard(id,focusEditor=false){
+    if(!getCard(id))return;
+    selectedId=id;
+    buttons.forEach((button,key)=>{
+      button.parentNode?.classList?.toggle("is-selected",key===id);
+      button.setAttribute("aria-pressed",String(key===id));
+    });
+    updateEditor();
+    if(focusEditor)$("cardTitle").focus();
+    announcement("Selecionado: "+getCard(id).title+". Edite o cartão ou use as setas para movê-lo.");
+  }
+  function createCardElement(card,column,index){
+    const wrapper=el("li","card");
+    wrapper.dataset.cardId=card.id;
+    const button=el("button","card-handle");
+    button.type="button";
+    button.setAttribute("aria-label",card.title+". "+columns.find(c=>c.id===column).title+". "+priorities[card.priority]+". Use as setas para mover ou clique para editar.");
+    button.setAttribute("aria-pressed",String(card.id===selectedId));
+    const title=el("strong","card-title",card.title);
+    button.appendChild(title);
+    if(card.description)button.appendChild(el("span","card-description",card.description));
+    const bottom=el("span","card-bottom");
+    const priority=el("span","priority","Prioridade "+priorities[card.priority]);
+    priority.dataset.priority=card.priority;
+    bottom.append(priority,el("span","card-pos",String(index+1)+"º"));
+    button.appendChild(bottom);
+    wrapper.appendChild(button);
+    if(card.id===selectedId)wrapper.classList.add("is-selected");
+    button.addEventListener("click",()=>selectCard(card.id));
+    button.addEventListener("keydown",event=>{
+      const moves={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};
+      if(!moves[event.key])return;
+      event.preventDefault();
+      const [horizontal,vertical]=moves[event.key];
+      if(horizontal)moveHorizontal(card.id,horizontal);
+      else moveVertical(card.id,vertical);
+    });
+    button.addEventListener("pointerdown",event=>{
+      if(event.button!==undefined&&event.button!==0)return;
+      dragging={id:card.id,startX:event.clientX,startY:event.clientY,moved:false};
+      if(button.setPointerCapture&&event.pointerId!==undefined)button.setPointerCapture(event.pointerId);
+    });
+    button.addEventListener("pointermove",event=>{
+      if(!dragging||dragging.id!==card.id)return;
+      const dx=event.clientX-dragging.startX,dy=event.clientY-dragging.startY;
+      if(Math.hypot(dx,dy)<8&&!dragging.moved)return;
+      dragging.moved=true;
+      if(event.preventDefault)event.preventDefault();
+      wrapper.classList.add("is-dragging");
+      wrapper.style.transform="translate("+dx+"px,"+dy+"px)";
+      for(const lane of $("board").querySelectorAll(".lane")){
+        const box=lane.getBoundingClientRect();
+        lane.classList.toggle("is-drop-target",event.clientX>=box.left&&event.clientX<=box.right&&event.clientY>=box.top&&event.clientY<=box.bottom);
+      }
+    });
+    button.addEventListener("pointerup",event=>finishDrag(event,false));
+    button.addEventListener("pointercancel",event=>finishDrag(event,true));
+    buttons.set(card.id,button);
+    return wrapper;
+  }
+  function finishDrag(event,cancel){
+    if(!dragging)return;
+    const info=dragging;dragging=null;
+    const wrapper=buttons.get(info.id)?.parentNode;
+    if(wrapper){wrapper.style.transform="";wrapper.classList.remove("is-dragging");}
+    for(const lane of $("board").querySelectorAll(".lane"))lane.classList.remove("is-drop-target");
+    if(cancel||!info.moved)return;
+    const target=columns.find(c=>{
+      const lane=$("board").querySelector('[data-column="'+c.id+'"]');
+      const box=lane.getBoundingClientRect();
+      return event.clientX>=box.left&&event.clientX<=box.right&&event.clientY>=box.top&&event.clientY<=box.bottom;
+    });
+    if(!target){announcement("Cartão mantido na etapa atual: solte dentro de uma coluna para mover.");return;}
+    const sameColumn=columnOf(info.id)===target.id;
+    const ordered=state.lanes[target.id].filter(id=>id!==info.id);
+    let position=ordered.length;
+    for(let i=0;i<ordered.length;i++){
+      const element=buttons.get(ordered[i])?.parentNode;
+      if(!element)continue;
+      const bounds=element.getBoundingClientRect();
+      if(event.clientY<bounds.top+bounds.height/2){position=i;break;}
+    }
+    if(moveCard(info.id,target.id,position)){
+      announcement(getCard(info.id).title+" movido por arraste para "+target.title+".");
+    }else if(sameColumn)announcement("O cartão permaneceu na mesma posição.");
+  }
+  function render(){
+    buttons.clear();
+    for(const col of columns){
+      const list=$(col.list);
+      list.replaceChildren();
+      const ids=state.lanes[col.id];
+      $(col.count).textContent=String(ids.length);
+      if(!ids.length)list.appendChild(el("li","lane-empty","Nenhum cartão aqui. Mova uma ideia para começar."));
+      else ids.forEach((id,index)=>{
+        const card=getCard(id);
+        if(card)list.appendChild(createCardElement(card,col.id,index));
+      });
+    }
+    const total=state.cards.length,completed=state.lanes.done.length;
+    const percent=total?Math.round(completed/total*100):0;
+    $("progress").max=Math.max(total,1);
+    $("progress").value=completed;
+    $("percentage").textContent=percent+"%";
+    $("progressLabel").textContent=completed+" de "+total+" atividades concluídas";
+    $("boardCount").textContent=total+" cartões";
+    $("undo").disabled=history.length===0;
+    updateMoveButtons();
+    if(selectedId&&!getCard(selectedId)){
+      selectedId=null;updateEditor();
+    }
+    buttons.forEach((button,id)=>button.setAttribute("aria-pressed",String(id===selectedId)));
+  }
+  function restoreFocus(id){
+    const btn=buttons.get(id);
+    if(btn)btn.focus();
+  }
+  function moveCard(id,dest,at){
+    if(!getCard(id)||!state.lanes[dest])return false;
+    const previous=columnOf(id);
+    if(!previous)return false;
+    const originIndex=state.lanes[previous].indexOf(id);
+    const without=state.lanes[dest].filter(other=>other!==id);
+    const insertAt=Math.max(0,Math.min(without.length,at));
+    if(previous===dest&&originIndex===insertAt)return false;
+    saveHistory();
+    state.lanes[previous]=state.lanes[previous].filter(other=>other!==id);
+    state.lanes[dest].splice(insertAt,0,id);
+    selectedId=id;
+    render();
+    updateEditor();
+    restoreFocus(id);
+    return true;
+  }
+  function moveHorizontal(id,delta){
+    const from=columnOf(id),index=columns.findIndex(c=>c.id===from);
+    const dest=columns[index+delta];
+    if(!dest)return false;
+    const position=Math.min(state.lanes[from].indexOf(id),state.lanes[dest.id].length);
+    const changed=moveCard(id,dest.id,position);
+    if(changed)announcement(getCard(id).title+" movido para "+dest.title+".");
+    return changed;
+  }
+  function moveVertical(id,delta){
+    const stage=columnOf(id);
+    if(!stage)return false;
+    const index=state.lanes[stage].indexOf(id);
+    const changed=moveCard(id,stage,index+delta);
+    if(changed)announcement(getCard(id).title+" reordenado na coluna.");
+    return changed;
+  }
+  function createNew(){
+    selectedId=null;updateEditor();
+    $("cardTitle").focus();
+    announcement("Novo cartão. Preencha título, descrição, prioridade e etapa.");
+  }
+  function validate(title,description,priority,column){
+    if(title.length<3){announcement("Informe um título com pelo menos três caracteres.");$("cardTitle").focus();return false;}
+    if(!Object.hasOwn(priorities,priority)||!state.lanes[column]){announcement("Escolha prioridade e etapa válidas.");return false;}
+    if(state.cards.some(card=>card.id!==selectedId&&card.title.toLocaleLowerCase("pt-BR")===title.toLocaleLowerCase("pt-BR"))){
+      announcement("Já existe um cartão com esse título.");$("cardTitle").focus();return false;
+    }
+    if(!getCard(selectedId)&&state.cards.length>=maxCards){announcement("Limite de 24 cartões atingido.");return false;}
+    return true;
+  }
+  function submitCard(){
+    const title=clean($("cardTitle").value,70),description=clean($("cardDescription").value,260);
+    const priority=$("cardPriority").value,column=$("cardColumn").value;
+    if(!validate(title,description,priority,column))return;
+    const existing=getCard(selectedId);
+    if(existing){
+      const before=columnOf(existing.id);
+      const unchanged=existing.title===title&&existing.description===description&&existing.priority===priority&&before===column;
+      if(unchanged){announcement("Nenhuma alteração no cartão.");return;}
+      saveHistory();
+      existing.title=title;existing.description=description;existing.priority=priority;
+      if(before!==column){
+        state.lanes[before]=state.lanes[before].filter(id=>id!==existing.id);
+        state.lanes[column].push(existing.id);
+      }
+      render();updateEditor();restoreFocus(existing.id);
+      announcement("Cartão atualizado: "+title+".");
+    }else{
+      saveHistory();
+      const card={id:"c"+state.nextId++,title,description,priority};
+      state.cards.push(card);
+      state.lanes[column].push(card.id);
+      selectedId=card.id;
+      render();updateEditor();restoreFocus(card.id);
+      announcement("Cartão criado na etapa "+columns.find(c=>c.id===column).title+": "+title+".");
+    }
+  }
+  function removeCard(){
+    const card=getCard(selectedId);
+    if(!card)return;
+    saveHistory();
+    const from=columnOf(card.id);
+    state.cards=state.cards.filter(c=>c.id!==card.id);
+    state.lanes[from]=state.lanes[from].filter(id=>id!==card.id);
+    selectedId=null;
+    render();updateEditor();$("createCard").focus();
+    announcement("Cartão excluído: "+card.title+". Use Desfazer para recuperá-lo.");
+  }
+  function undo(){
+    if(!history.length)return;
+    rehydrate(history.pop());
+    if(!getCard(selectedId))selectedId=null;
+    render();updateEditor();$("undo").focus();
+    announcement("Última alteração desfeita.");
+  }
+  function resetBoard(){
+    saveHistory();
+    rehydrate(clone(seed));
+    selectedId=null;
+    render();updateEditor();
+    $("resetConfirmation").hidden=true;
+    $("createCard").focus();
+    announcement("Quadro inicial restaurado. Use Desfazer para recuperar o trabalho.");
+  }
+  $("cardForm").addEventListener("submit",event=>{event.preventDefault();submitCard();});
+  $("createCard").addEventListener("click",createNew);
+  $("cancelEdit").addEventListener("click",createNew);
+  $("deleteCard").addEventListener("click",removeCard);
+  $("undo").addEventListener("click",undo);
+  $("reset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=false;$("cancelReset").focus();
+    announcement("Confirme ou cancele a restauração do quadro inicial.");
+  });
+  $("cancelReset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=true;$("reset").focus();announcement("Reinício cancelado.");
+  });
+  $("confirmReset").addEventListener("click",resetBoard);
+  $("moveLeft").addEventListener("click",()=>moveHorizontal(selectedId,-1));
+  $("moveRight").addEventListener("click",()=>moveHorizontal(selectedId,1));
+  $("moveUp").addEventListener("click",()=>moveVertical(selectedId,-1));
+  $("moveDown").addEventListener("click",()=>moveVertical(selectedId,1));
+  updateEditor();
+  render();
+})();
+</script>
+</body>
+</html>
