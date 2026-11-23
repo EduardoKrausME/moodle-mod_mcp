@@ -1,11 +1,377 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mapa mental explorável</title><style>
-:root{font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#26334e;background:#eff9ff;--accent:#297da5}*{box-sizing:border-box}body{margin:0;padding:42px 35px}main{max-width:850px;margin:auto}.eyebrow{letter-spacing:1.5px;font-size:11px;font-weight:800;color:var(--accent)}h1{font-size:39px;line-height:1.15;letter-spacing:-1px;margin:7px 0 14px}h2{font-size:22px;margin:9px 0 16px}p{color:#65728b;margin:10px 0 17px}header p{max-width:650px;font-size:15px}.panel{margin-top:25px;padding:28px;background:#fff;border:1px solid #e1e3f0;border-radius:18px;box-shadow:0 10px 26px #28324c0c}.label{display:inline-block;color:var(--accent);font-size:11px;font-weight:800;background:#f4f1ff;border-radius:6px;padding:7px 10px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:19px 0}.choice{font:inherit;font-weight:660;text-align:left;border:1px solid #d9dcea;background:#fff;border-radius:12px;padding:17px;min-height:72px;cursor:pointer;color:#364361}.choice:hover,.choice[aria-pressed=true]{border-color:var(--accent);background:#f4f1ff}.btn{border:1px solid var(--accent);background:var(--accent);color:white;font:inherit;font-weight:750;font-size:13px;border-radius:10px;padding:12px 17px;cursor:pointer}.btn.light{color:var(--accent);background:#fff}.callout{background:#f2efff;border-left:4px solid var(--accent);border-radius:0 12px 12px 0;padding:16px;margin:20px 0;color:#435273}.row{padding:15px 0;border-bottom:1px solid #eceef5}.range-title{display:flex;justify-content:space-between;gap:10px;color:#45526c;font-weight:700}.range-title output{color:var(--accent)}input[type=range]{display:block;width:100%;margin:15px 0;accent-color:var(--accent)}.metric{background:#f4f2ff;padding:22px;border-radius:13px;margin-top:22px}.metric strong{display:block;font-size:32px;color:var(--accent)}.meter{height:9px;background:#e3e1f2;border-radius:5px;overflow:hidden;margin:12px 0}.meter span{height:100%;display:block;background:var(--accent)}.branch{display:block;width:100%;text-align:left;margin:9px 0;padding:17px;border:1px solid #e1e3ee;background:#fff;border-radius:12px;cursor:pointer}.branch[aria-expanded=true]{border-color:var(--accent);background:#f4f1ff}.branch strong,.branch span{display:block}.branch span{font-size:13px;color:#68738a;margin-top:7px}.flash{background:var(--accent);border:0;border-radius:17px;min-height:230px;width:100%;color:white;font:inherit;font-size:24px;font-weight:750;padding:30px;cursor:pointer}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.small{font-size:12px;color:#778198}button:focus-visible,input:focus-visible{outline:3px solid #9b8ff2;outline-offset:3px}@media(max-width:630px){body{padding:25px 17px}h1{font-size:30px}.panel{padding:19px}.choices{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}</style></head><body><main><header><span class="eyebrow">EU ESCOLHO · MAPA MENTAL</span><h1>Mapa mental explorável</h1><p>Expanda os ramos de um projeto digital.</p></header><div id="app"></div></main><script>(function customRender(c){
-const r=document.querySelector("#app");let i=0,revealed=false,chosen=-1,open=[];
-const esc=x=>{const n=document.createElement("div");n.textContent=x;return n.innerHTML;};
-function render(){
-if(c.mode==="flash"){const x=c.items[i];r.innerHTML=`<section class="panel"><span class="label">CARTÃO ${i+1} DE ${c.items.length}</span><p>Toque no cartão para revelar a resposta.</p><button class="flash" id="reveal">${esc(revealed?x[1]:x[0])}</button><div class="actions"><button id="prev" class="btn light" ${i===0?"disabled":""}>Anterior</button><button id="next" class="btn">${i===c.items.length-1?"Recomeçar":"Próximo"}</button></div></section>`;r.querySelector("#reveal").onclick=()=>{revealed=!revealed;render();};r.querySelector("#prev").onclick=()=>{i--;revealed=false;render();};r.querySelector("#next").onclick=()=>{i=(i+1)%c.items.length;revealed=false;render();};return;}
-if(c.mode==="map"){r.innerHTML=`<section class="panel"><span class="label">MAPA MENTAL</span><h2>Explore os ramos de ${esc(c.topic)}</h2>${c.items.map((x,n)=>`<button class="branch" data-i="${n}" aria-expanded="${open.includes(n)}"><strong>${esc(x[0])}</strong><span>${open.includes(n)?esc(x[1]):"Clique para expandir"}</span></button>`).join("")}</section>`;r.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const k=+b.dataset.i;open=open.includes(k)?open.filter(n=>n!==k):[...open,k];render();});return;}
-if(chosen>=0&&c.mode==="route"){const x=c.items[chosen];r.innerHTML=`<section class="panel"><span class="label">TRILHA SUGERIDA</span><h2>${esc(x[0])}</h2><p>${esc(x[1])}</p><button class="btn" id="again">Escolher novamente</button></section>`;r.querySelector("#again").onclick=()=>{chosen=-1;render();};return;}
-r.innerHTML=`<section class="panel"><span class="label">${esc(c.mode==="vote"?"ENQUETE LOCAL":c.mode==="compare"?"COMPARADOR":"ESCOLHA SUA TRILHA")}</span><h2>${esc(c.question)}</h2><div class="choices">${c.items.map((x,n)=>`<button class="choice" data-i="${n}" aria-pressed="${chosen===n}">${esc(x[0])}</button>`).join("")}</div>${chosen>=0?`<div class="callout">${esc(c.items[chosen][1])}</div>`:""}<p class="small">Esta interação é demonstrativa e não envia dados ao Moodle.</p></section>`;r.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{chosen=+b.dataset.i;render();});
-}render();
-})({"title":"Mapa mental explorável","subtitle":"Expanda os ramos de um projeto digital.","kicker":"EU ESCOLHO · MAPA MENTAL","color":"#297da5","bg":"#eff9ff","mode":"map","question":"Projeto digital","topic":"Projeto digital","items":[["Pessoas","Usuários, equipe e responsabilidades."],["Tecnologia","Aplicações, dados e infraestrutura."],["Processos","Fluxos, decisões e qualidade."],["Resultados","Entregas, indicadores e evolução."]]});</script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa mental explorável - Projeto digital</title>
+<style>
+:root{color-scheme:light;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;--ink:#19314c;--muted:#52647b;--line:#d9e5ed;--blue:#236fbd;--mint:#157b70;--focus:#dc8b2f;color:var(--ink);background:#eef6f8}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(15px,3vw,40px);background:radial-gradient(circle at 80% 0%,#deefff,transparent 45%),#eef6f8}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--focus);outline-offset:4px;position:relative;z-index:3}
+button:disabled{opacity:.5;cursor:not-allowed}
+.explorer{max-width:1220px;margin:0 auto}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:23px}
+.eyebrow{color:#146d79;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+h1{font-size:clamp(28px,3.7vw,43px);line-height:1.14;letter-spacing:-.04em;margin:8px 0 10px}
+.head p{color:var(--muted);max-width:680px;margin:0}
+.guide{color:#456179;font-size:13px;max-width:235px}
+.toolbar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}
+.toolbar-actions{display:flex;flex-wrap:wrap;gap:8px}
+.tool{border:1px solid #c8dce5;border-radius:12px;background:#fff;color:#28506b;min-height:42px;padding:9px 15px;font-weight:750;font-size:13px}
+.tool:hover{background:#e7f3f9}
+.count{font-size:13px;color:#416073;font-weight:700}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 298px;gap:18px;align-items:start}
+.map-panel{min-width:0;padding:22px clamp(14px,2.4vw,29px) 26px;border:1px solid var(--line);border-radius:22px;background:#fff;box-shadow:0 15px 45px #1c536014}
+.map-heading{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:13px}
+.map-heading strong{font-size:15px}
+.map-heading span{color:var(--muted);font-size:12px}
+.canvas{position:relative;isolation:isolate;overflow:hidden;border-radius:18px;padding:26px clamp(14px,2.4vw,24px) 24px;background-color:#f5f9fc;background-image:linear-gradient(#dfeaf255 1px,transparent 1px),linear-gradient(90deg,#dfeaf255 1px,transparent 1px);background-size:26px 26px;border:1px solid #e3edf3}
+.links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:-1;overflow:visible}
+.edge{fill:none;stroke-linecap:round}
+.edge--root{stroke:#8aa8cd;stroke-width:3.5;stroke-dasharray:6 8}
+.edge--leaf{stroke:#95c3c5;stroke-width:2.5}
+.hub{display:flex;flex-direction:column;align-items:center;gap:6px;width:min(270px,88%);margin:0 auto 43px;border:0;border-radius:18px;padding:21px 23px;background:linear-gradient(135deg,#113f67,#246f9d);box-shadow:0 15px 25px #1d54732a;color:#fff;text-align:center;min-height:119px}
+.hub-symbol{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#ffffff31;font-size:17px}
+.hub strong{font-size:20px;line-height:1.2}
+.hub small{color:#d1efff;font-size:12px}
+.hub[aria-pressed=true]{box-shadow:0 0 0 4px #83cbe3,0 15px 25px #1d54732a}
+.branches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;position:relative}
+.branch-group{min-width:0;padding:0}
+.branch-button{display:flex;width:100%;min-height:93px;align-items:center;gap:11px;text-align:left;border:2px solid #cbdfea;background:#fff;border-radius:15px;padding:13px 13px;box-shadow:0 9px 20px #19496913;color:var(--ink)}
+.branch-group[data-tone=sky] .branch-button{border-color:#a9cfee}
+.branch-group[data-tone=coral] .branch-button{border-color:#e9bcbc}
+.branch-group[data-tone=jade] .branch-button{border-color:#9ad3c3}
+.branch-group[data-tone=violet] .branch-button{border-color:#c8bce9}
+.branch-button[aria-expanded=true]{background:#fafdff;border-width:2px}
+.branch-button[data-selected=true]{box-shadow:0 0 0 3px #2c81b74b,0 9px 20px #19496913}
+.number{display:grid;place-items:center;flex:none;width:41px;height:41px;border-radius:12px;background:#d9edfa;color:#1b608c;font-weight:850;font-size:13px}
+.branch-group[data-tone=coral] .number{background:#ffeded;color:#ac4b47}
+.branch-group[data-tone=jade] .number{background:#e2f6ee;color:#16725c}
+.branch-group[data-tone=violet] .number{background:#eeebfb;color:#6853a0}
+.branch-copy{display:grid;gap:4px;min-width:0;flex:1}
+.branch-copy strong{font-size:16px}
+.branch-copy small{font-size:12px;line-height:1.3;color:var(--muted)}
+.chevron{flex:none;font-size:20px;color:#577b95;transition:transform .2s}
+.branch-button[aria-expanded=true] .chevron{transform:rotate(180deg)}
+.leaf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:27px 0 0}
+.leaf-grid[hidden]{display:none!important}
+.leaf{display:grid;gap:6px;min-height:78px;align-content:center;text-align:left;padding:12px 13px;background:#fff;border:1.5px solid #b8d9dd;border-radius:12px;color:#21485a;box-shadow:0 5px 12px #254d5c0f}
+.leaf strong{font-size:13px;line-height:1.25}
+.leaf small{font-size:11px;line-height:1.35;color:#617887}
+.leaf[aria-pressed=true]{border-color:#217e85;background:#e9f8f7;box-shadow:0 0 0 2px #31a5a23d}
+.legend{display:flex;flex-wrap:wrap;gap:15px;margin-top:16px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:21px;height:0;border-top:3px dashed #8aa8cd;margin:0 7px 3px 0}
+.legend i.solid{border-top-style:solid;border-top-color:#95c3c5}
+.detail{min-width:0;position:sticky;top:16px;padding:26px;border:1px solid #b9d6e6;border-radius:22px;background:linear-gradient(155deg,#153e61,#172e50);color:white;box-shadow:0 16px 35px #1c536026}
+.detail-label{color:#9be4e9;text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:800}
+.detail h2{margin:11px 0 9px;font-size:clamp(22px,2.8vw,29px);line-height:1.15;letter-spacing:-.025em}
+.detail p{color:#e3eef7;margin:0 0 17px;font-size:14px}
+.detail h3{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:#9be4e9;margin:25px 0 10px}
+.detail ul{margin:0;padding-left:20px;color:#f1f7fc;font-size:13px}
+.detail li{margin:9px 0}
+.detail-note{margin-top:20px;border-top:1px solid #ffffff30;padding-top:17px;color:#d9eaf4;font-size:13px}
+.detail button{margin-top:20px;width:100%;border:1px solid #a9d9eb;border-radius:11px;background:#e5f6fd;min-height:43px;color:#174260;font-weight:800;font-size:13px}
+.live{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.footer-note{margin-top:15px;font-size:12px;color:#526c7e}
+@media(max-width:1050px){.layout{grid-template-columns:minmax(0,1fr)}.detail{position:static}.head{align-items:start;flex-direction:column;gap:10px}.guide{max-width:none}}
+@media(max-width:620px){.map-panel{padding:15px}.canvas{padding:20px 14px}.branches{grid-template-columns:1fr;gap:21px}.hub{margin-bottom:35px}.leaf-grid{margin-top:17px}.branch-button{min-height:82px}.detail{padding:22px}.legend{gap:10px}}
+@media(max-width:365px){.leaf-grid{grid-template-columns:1fr}.tool{flex:1}.toolbar-actions{width:100%}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="explorer">
+<div class="head">
+<div>
+<span class="eyebrow">Exploração de conceitos</span>
+<h1>Mapa mental explorável</h1>
+<p>Descubra como pessoas, tecnologia, processos e resultados se conectam em um projeto digital. Expanda cada ramo e selecione um conceito para aprofundar.</p>
+</div>
+<p class="guide">Dica: use Tab para navegar, Enter ou Espaço para ativar e as setas entre os quatro ramos.</p>
+</div>
+<div class="toolbar">
+<span class="count" id="branchCount">1 de 4 ramos expandidos</span>
+<div class="toolbar-actions">
+<button class="tool" id="expandAll" type="button">Expandir todos</button>
+<button class="tool" id="collapseAll" type="button">Recolher todos</button>
+<button class="tool" id="reset" type="button">Reiniciar</button>
+</div>
+</div>
+<div class="layout">
+<section class="map-panel" aria-label="Mapa conceitual interativo">
+<div class="map-heading"><strong>Projeto digital: visão conectada</strong><span>Selecione um nó para ver os detalhes</span></div>
+<div class="canvas" id="canvas">
+<svg id="links" class="links" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"></svg>
+<button class="hub" id="hub" type="button" aria-pressed="true">
+<span class="hub-symbol" aria-hidden="true">✦</span>
+<strong>Projeto digital</strong>
+<small>Conceito central · 4 dimensões</small>
+</button>
+<div class="branches" id="branches"></div>
+</div>
+<div class="legend" aria-hidden="true"><span><i></i> Conceito → dimensão</span><span><i class="solid"></i> Dimensão → ideia</span></div>
+</section>
+<aside class="detail" id="detail" aria-labelledby="detailTitle">
+<span class="detail-label" id="detailLabel">Visão geral</span>
+<h2 id="detailTitle" tabindex="-1">Projeto digital</h2>
+<p id="detailDescription"></p>
+<h3>Explore estas relações</h3>
+<ul id="detailPoints"></ul>
+<div class="detail-note" id="detailNote"></div>
+<button type="button" id="backToMap">Voltar ao mapa</button>
+</aside>
+</div>
+<p class="footer-note">Esta atividade é demonstrativa: não envia suas escolhas ao Moodle nem registra notas.</p>
+<div class="live" role="status" aria-live="polite" aria-atomic="true" id="announcer"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  const branches = [
+    {
+      id:"pessoas",tone:"sky",title:"Pessoas",subtitle:"Quem constrói e utiliza",summary:"Todo projeto digital depende de pessoas com necessidades, responsabilidades e conhecimentos diferentes.",
+      note:"Conexão importante: compreender quem usa o produto ajuda a definir escolhas de tecnologia e processos.",
+      insights:["Identificar necessidades antes de definir funcionalidades.","Distribuir responsabilidades e manter canais de colaboração."],
+      leaves:[
+        {id:"usuarios",title:"Usuários",subtitle:"Necessidades",summary:"As pessoas que utilizam a solução ajudam a revelar objetivos reais, dificuldades e barreiras de acesso.",note:"Exemplo: entrevistar estudantes e professores antes de redesenhar uma atividade digital.",insights:["Registrar tarefas que precisam executar.","Testar acessibilidade e facilidade de uso."]},
+        {id:"equipe",title:"Equipe",subtitle:"Colaboração",summary:"Papéis claros e comunicação consistente evitam retrabalho e tornam as decisões mais visíveis.",note:"Exemplo: combinar quem cria conteúdos, quem valida e quem acompanha o funcionamento.",insights:["Estabelecer responsáveis por cada entrega.","Revisar decisões com quem será afetado."]}
+      ]
+    },
+    {
+      id:"tecnologia",tone:"violet",title:"Tecnologia",subtitle:"Com o que construímos",summary:"Aplicações, dados e infraestrutura viabilizam a experiência, mas precisam atender a uma necessidade concreta.",
+      note:"Conexão importante: tecnologia deve apoiar o objetivo, e não definir sozinha o projeto.",
+      insights:["Selecionar soluções adequadas à equipe e ao público.","Pensar em proteção de dados e manutenção desde o início."],
+      leaves:[
+        {id:"aplicacoes",title:"Aplicações",subtitle:"Interfaces",summary:"Interfaces e serviços transformam necessidades em funcionalidades que podem ser utilizadas no dia a dia.",note:"Exemplo: uma página interativa que funciona no celular e por teclado.",insights:["Priorizar clareza e acessibilidade.","Testar os principais fluxos com usuários."]},
+        {id:"infraestrutura",title:"Infraestrutura",subtitle:"Dados e operação",summary:"Hospedagem, armazenamento, segurança e monitoramento dão suporte à operação da solução.",note:"Exemplo: prever cópias de segurança e atualizações antes da publicação.",insights:["Definir políticas de acesso aos dados.","Preparar recuperação em caso de falha."]}
+      ]
+    },
+    {
+      id:"processos",tone:"coral",title:"Processos",subtitle:"Como tomamos decisões",summary:"Fluxos de trabalho tornam o projeto previsível, ajudam a identificar problemas e criam oportunidades de melhoria.",
+      note:"Conexão importante: processos conectam o trabalho da equipe aos resultados esperados.",
+      insights:["Descrever etapas essenciais sem burocracia desnecessária.","Validar mudanças pequenas antes de ampliar o alcance."],
+      leaves:[
+        {id:"fluxos",title:"Fluxos",subtitle:"Etapas",summary:"Um fluxo explicita a ordem das tarefas, quem participa e o que precisa acontecer antes da próxima etapa.",note:"Exemplo: elaborar → revisar → testar → publicar um material educacional.",insights:["Definir entradas e saídas de cada etapa.","Eliminar aprovações repetidas sem benefício."]},
+        {id:"qualidade",title:"Qualidade",subtitle:"Verificações",summary:"Critérios de aceitação e testes ajudam a identificar defeitos antes que eles afetem os usuários.",note:"Exemplo: conferir navegação por teclado, uso no celular e compreensão das instruções.",insights:["Estabelecer critérios mensuráveis.","Registrar problemas e verificar correções."]}
+      ]
+    },
+    {
+      id:"resultados",tone:"jade",title:"Resultados",subtitle:"O que muda na prática",summary:"Entregas são importantes, mas o valor do projeto aparece quando as pessoas conseguem alcançar seus objetivos.",
+      note:"Conexão importante: o que foi aprendido com os resultados alimenta o próximo ciclo do projeto.",
+      insights:["Avaliar se o produto resolve o problema inicial.","Usar evidências para decidir o que melhorar."],
+      leaves:[
+        {id:"entregas",title:"Entregas",subtitle:"O que ficou pronto",summary:"Entregas são produtos ou etapas concluídas que podem ser demonstradas e avaliadas.",note:"Exemplo: disponibilizar um módulo interativo acessível e testado.",insights:["Conferir o que foi efetivamente publicado.","Documentar limitações conhecidas."]},
+        {id:"indicadores",title:"Indicadores",subtitle:"Evolução",summary:"Indicadores oferecem sinais para acompanhar adoção, dificuldades e qualidade ao longo do tempo.",note:"Exemplo: observar quantas pessoas concluíram uma atividade, sem confundir conclusão com aprendizagem.",insights:["Escolher métricas ligadas ao objetivo.","Interpretar números junto com feedback qualitativo."]}
+      ]
+    }
+  ];
+  const overview = {
+    title:"Projeto digital",summary:"Projetos digitais combinam pessoas, tecnologia, processos e resultados. Explore as conexões para perceber por que nenhuma dessas dimensões funciona bem isoladamente.",
+    note:"Comece por qualquer ramo. Os conceitos ilustram um projeto genérico e podem ser adaptados a outras áreas de conhecimento.",
+    insights:["Pessoas dão contexto às necessidades.","Tecnologia viabiliza soluções.","Processos organizam o trabalho.","Resultados orientam melhorias."]
+  };
+  const $ = id => document.getElementById(id);
+  const expanded = new Set(["pessoas"]);
+  const controls = new Map();
+  let selected = "root";
+  let lastFocused = $("hub");
+  let scheduled = false;
+  const branchButtons = [];
+  const ns = "http://www.w3.org/2000/svg";
+  function element(tag, className, value) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (value !== undefined) node.textContent = value;
+    return node;
+  }
+  function announce(message) { $("announcer").textContent = message; }
+  function addBranch(branch, index) {
+    const group = element("section","branch-group");
+    group.dataset.tone = branch.tone;
+    const button = element("button","branch-button");
+    button.type = "button";
+    button.id = "branch-" + branch.id;
+    button.setAttribute("aria-controls","children-" + branch.id);
+    button.setAttribute("aria-expanded",String(expanded.has(branch.id)));
+    button.setAttribute("aria-label",branch.title + ": expandir ou recolher ramo e ver detalhes");
+    const number = element("span","number",String(index + 1).padStart(2,"0"));
+    number.setAttribute("aria-hidden","true");
+    const copy = element("span","branch-copy");
+    const title = element("strong","",branch.title);
+    const subtitle = element("small","",branch.subtitle);
+    copy.append(title,subtitle);
+    const chevron = element("span","chevron","⌄");
+    chevron.setAttribute("aria-hidden","true");
+    button.append(number,copy,chevron);
+    button.addEventListener("click",() => {
+      toggleBranch(branch.id);
+      select(branch.id,button);
+    });
+    button.addEventListener("keydown",event => {
+      const next = ["ArrowRight","ArrowDown"].includes(event.key);
+      const previous = ["ArrowLeft","ArrowUp"].includes(event.key);
+      if (next || previous || event.key === "Home" || event.key === "End") {
+        event.preventDefault();
+        const destination = event.key === "Home" ? 0 : event.key === "End" ? branchButtons.length - 1 : (index + (next ? 1 : -1) + branchButtons.length) % branchButtons.length;
+        branchButtons[destination].focus();
+      } else if (event.key === "Escape" && expanded.has(branch.id)) {
+        event.preventDefault();
+        toggleBranch(branch.id,false);
+      }
+    });
+    branchButtons.push(button);
+    const leaves = element("div","leaf-grid");
+    leaves.id = "children-" + branch.id;
+    leaves.hidden = !expanded.has(branch.id);
+    branch.leaves.forEach(leaf => {
+      const item = element("button","leaf");
+      item.type = "button";
+      item.id = "leaf-" + leaf.id;
+      item.setAttribute("aria-pressed","false");
+      item.setAttribute("aria-label","Explorar " + leaf.title);
+      item.append(element("strong","",leaf.title),element("small","",leaf.subtitle));
+      item.addEventListener("click",() => select(leaf.id,item));
+      item.addEventListener("keydown",event => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          toggleBranch(branch.id,false);
+          button.focus();
+        } else if (["ArrowLeft","ArrowRight"].includes(event.key)) {
+          event.preventDefault();
+          const nodes = Array.from(leaves.querySelectorAll("button"));
+          const at = nodes.indexOf(item);
+          nodes[(at + (event.key === "ArrowRight" ? 1 : -1) + nodes.length) % nodes.length].focus();
+        }
+      });
+      leaves.appendChild(item);
+      controls.set(leaf.id,{button:item,data:leaf,parent:branch.id,kind:"leaf"});
+    });
+    group.append(button,leaves);
+    $("branches").appendChild(group);
+    controls.set(branch.id,{button,data:branch,kind:"branch",leaves});
+  }
+  branches.forEach(addBranch);
+  function paintSelected() {
+    $("hub").setAttribute("aria-pressed",String(selected === "root"));
+    controls.forEach((entry,id) => {
+      if (entry.kind === "leaf") entry.button.setAttribute("aria-pressed",String(id === selected));
+      else entry.button.dataset.selected = String(id === selected);
+    });
+  }
+  function renderDetails() {
+    const entry = selected === "root" ? null : controls.get(selected);
+    const info = entry ? entry.data : overview;
+    $("detailLabel").textContent = entry ? entry.kind === "branch" ? "Dimensão do projeto" : "Conceito associado" : "Visão geral";
+    $("detailTitle").textContent = info.title;
+    $("detailDescription").textContent = info.summary;
+    $("detailNote").textContent = info.note;
+    const list = $("detailPoints");
+    list.replaceChildren();
+    info.insights.forEach(insight => list.appendChild(element("li","",insight)));
+    paintSelected();
+  }
+  function select(id, button) {
+    if (id !== "root" && !controls.has(id)) return;
+    selected = id;
+    lastFocused = button;
+    renderDetails();
+    announce("Detalhes de " + (id === "root" ? overview.title : controls.get(id).data.title) + " disponíveis no painel de informações.");
+  }
+  function toggleBranch(id,force) {
+    const entry = controls.get(id);
+    if (!entry || entry.kind !== "branch") return;
+    const open = force === undefined ? !expanded.has(id) : !!force;
+    if (open) expanded.add(id);
+    else {
+      expanded.delete(id);
+      if (controls.get(selected)?.parent === id) selected = id;
+    }
+    entry.button.setAttribute("aria-expanded",String(open));
+    entry.leaves.hidden = !open;
+    $("branchCount").textContent = expanded.size + " de " + branches.length + " ramos expandidos";
+    renderDetails();
+    scheduleLines();
+    announce(entry.data.title + (open ? " expandido." : " recolhido."));
+  }
+  function all(open) {
+    branches.forEach(branch => toggleBranch(branch.id,open));
+    if (!open && controls.get(selected)?.kind === "leaf") selected = "root";
+    renderDetails();
+    scheduleLines();
+    announce(open ? "Todos os ramos expandidos." : "Todos os ramos recolhidos.");
+  }
+  function reset() {
+    expanded.clear();
+    expanded.add("pessoas");
+    selected = "root";
+    branches.forEach(branch => {
+      const entry = controls.get(branch.id);
+      const open = expanded.has(branch.id);
+      entry.button.setAttribute("aria-expanded",String(open));
+      entry.leaves.hidden = !open;
+    });
+    $("branchCount").textContent = "1 de " + branches.length + " ramos expandidos";
+    renderDetails();
+    scheduleLines();
+    $("hub").focus();
+    lastFocused = $("hub");
+    announce("Mapa reiniciado. O ramo Pessoas está expandido.");
+  }
+  function centerOf(node,stage) {
+    const rect = node.getBoundingClientRect();
+    return {x:rect.left-stage.left+rect.width/2, top:rect.top-stage.top, bottom:rect.bottom-stage.top};
+  }
+  function link(svg,from,to,kind) {
+    const path = document.createElementNS(ns,"path");
+    const distance = Math.max(24,(to.top-from.bottom)*.48);
+    const shape = "M "+from.x.toFixed(1)+" "+from.bottom.toFixed(1)
+      +" C "+from.x.toFixed(1)+" "+(from.bottom+distance).toFixed(1)
+      +" "+to.x.toFixed(1)+" "+(to.top-distance).toFixed(1)
+      +" "+to.x.toFixed(1)+" "+to.top.toFixed(1);
+    path.setAttribute("d",shape);
+    path.setAttribute("class","edge edge--"+kind);
+    svg.appendChild(path);
+  }
+  function drawLines() {
+    const canvas = $("canvas");
+    const bounds = canvas.getBoundingClientRect();
+    const svg = $("links");
+    svg.replaceChildren();
+    if (bounds.width <= 0 || bounds.height <= 0) return;
+    svg.setAttribute("viewBox","0 0 "+bounds.width+" "+bounds.height);
+    const root = centerOf($("hub"),bounds);
+    branches.forEach(branch => {
+      const entry = controls.get(branch.id);
+      const parent = centerOf(entry.button,bounds);
+      link(svg,root,parent,"root");
+      if (expanded.has(branch.id)) {
+        branch.leaves.forEach(leaf => link(svg,parent,centerOf(controls.get(leaf.id).button,bounds),"leaf"));
+      }
+    });
+  }
+  function scheduleLines() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      drawLines();
+    });
+  }
+  $("hub").addEventListener("click",() => select("root",$("hub")));
+  $("expandAll").addEventListener("click",() => all(true));
+  $("collapseAll").addEventListener("click",() => all(false));
+  $("reset").addEventListener("click",reset);
+  $("backToMap").addEventListener("click",() => {
+    const active = lastFocused && !lastFocused.closest?.("[hidden]") ? lastFocused : $("hub");
+    active.focus();
+  });
+  window.addEventListener("resize",scheduleLines);
+  if (typeof ResizeObserver !== "undefined") new ResizeObserver(scheduleLines).observe($("canvas"));
+  renderDetails();
+  scheduleLines();
+})();
+</script>
+</body>
+</html>
