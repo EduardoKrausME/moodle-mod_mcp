@@ -30,7 +30,6 @@ define(["core/ajax"], function(Ajax) {
         }
         console.log("[mod_mcp/bridge] Inicializando para cmid:", config.cmid);
 
-
         /**
          * The iframe has an opaque origin and cannot inherit CSS variables. Copy the
          * computed custom properties of the iframe element, which already includes

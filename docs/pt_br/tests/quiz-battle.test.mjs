@@ -422,7 +422,6 @@ test('SDK opcional salva progresso versionado e não gera nota Moodle',()=>{
  assert.doesNotMatch(js,/attempt\.finish\(/);
 });
 
-
 test('timeout e confirmação simultânea não permitem dois resultados na mesma rodada',()=>{
  let s=start({timed:true});
  s=act(s,'timeout').state;

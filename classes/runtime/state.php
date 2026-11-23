@@ -118,7 +118,6 @@ final class state {
         });
     }
 
-
     /**
      * Current learning position, independently of Moodle activity completion.
      *

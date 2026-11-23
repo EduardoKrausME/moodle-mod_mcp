@@ -38,7 +38,6 @@ test("sandbox SDK keeps credentials outside the iframe and matches parent messag
     assert.equal((await result).version, 3);
 });
 
-
 test("structured progress SDK calls the documented actions without sending a user ID", async() => {
     const events = {};
     const calls = [];
@@ -70,7 +69,6 @@ test("structured progress SDK calls the documented actions without sending a use
     }});
     assert.equal((await save).version, 2);
 });
-
 
 test("iframe navigation starts only after the parent bridge registers its message listener", async() => {
     const template = fs.readFileSync(
@@ -154,7 +152,6 @@ test("parent bridge rejects messages from another window and never trusts reques
     await new Promise((resolve) => setImmediate(resolve));
     assert.equal(requests.length, 3);
 });
-
 
 test("sandbox SDK tracks the real height, including later growth and shrinkage", () => {
     const events = {};
@@ -298,7 +295,6 @@ test("parent bridge resizes only its own iframe on valid measurements", () => {
     events.load();
     assert.equal(outgoing.at(-1).type, "measure");
 });
-
 
 test("sandbox SDK applies only the trusted parent's theme variables", () => {
     const listeners = {};

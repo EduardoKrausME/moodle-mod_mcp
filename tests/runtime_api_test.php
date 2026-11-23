@@ -85,7 +85,6 @@ final class runtime_api_test extends advanced_testcase {
         ]);
     }
 
-
     /**
      * Structured progress retains custom state and belongs only to the current student.
      */
