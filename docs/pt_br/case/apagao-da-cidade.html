@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>O Apagão da Cidade - Estudo de caso interativo</title>
+<style>
+:root{color-scheme:light;--bg:#ecf1ed;--card:#fffdf9;--ink:#20323a;--muted:#56646a;--line:#cbdad3;--teal:#195e56;--navy:#14333f;--accent:#e5ae6b;--red:#9f483e;--focus:#144bbc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+button{cursor:pointer;font:inherit}button:disabled{opacity:.57;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+[hidden]{display:none!important}
+main{max-width:1260px;margin:auto;padding:clamp(12px,2.8vw,30px)}
+.hero{background:var(--navy);color:#fff;border-radius:23px;overflow:hidden;display:grid;grid-template-columns:1fr .8fr}
+.hero-copy{padding:clamp(24px,4vw,44px)}
+.eyebrow{font-size:.75rem;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:#ecc591;margin:0 0 17px}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;line-height:1.12;letter-spacing:-.03em}
+h1{font-size:clamp(2.45rem,5.3vw,4.6rem);margin:0 0 20px}
+h2{font-size:clamp(1.8rem,3.2vw,2.5rem);margin:0 0 13px}
+h3{font-size:1.07rem;margin:0 0 10px}
+.hero p:not(.eyebrow){color:#d6e6e5;max-width:53ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chips span{border:1px solid #7fa1a2;border-radius:20px;padding:5px 11px;font-size:.8rem;font-weight:750;color:#f5dfba}
+.skyline{display:grid;place-items:center;background:#24434f}
+.skyline svg{width:100%;height:100%;max-height:370px}
+.note,.small{font-size:.84rem;color:var(--muted)}
+.note{margin:16px 2px 24px}
+.layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(310px,.8fr);align-items:start;gap:18px}
+.panel{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(18px,2.7vw,30px)}
+.topline{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap}
+.kicker{font-size:.76rem;font-weight:850;letter-spacing:.1em;color:var(--teal);text-transform:uppercase;margin:0 0 8px}
+.clock{font-variant-numeric:tabular-nums;background:#e2efe8;color:#226152;padding:8px 12px;border-radius:11px}
+.lead{color:var(--muted);margin:0 0 20px;max-width:75ch}
+.map{background:#dcebe3;border:1px solid #b5cbc3;border-radius:17px;overflow:hidden}
+.map svg{width:100%;display:block;height:auto;touch-action:manipulation}
+.map .district{fill:#bed0c4;stroke:#94aea3;stroke-width:3}
+.map .river{fill:#88c4d4}
+.map .road{fill:none;stroke:#f9fcf8;stroke-width:24;stroke-linecap:round}
+.map .dash{fill:none;stroke:#9cb6ae;stroke-width:2;stroke-dasharray:9 12}
+.map .pin{cursor:pointer}
+.map .target{fill:#f5d4ca;stroke:#a84c40;stroke-width:4}
+.map .pin[data-band="partial"] .target{fill:#f6dfa5;stroke:#a97733}
+.map .pin[data-band="stable"] .target{fill:#b9e6cc;stroke:#23806a}
+.map .pin.selected .target,.map .pin:focus .target{stroke:#1854bf;stroke-width:8}
+.map .label-bg{fill:#f7faf5;stroke:#819b94}
+.map .label-map{font:800 17px system-ui,sans-serif;fill:#1b3b44;text-anchor:middle;pointer-events:none}
+.map .icon{font:900 26px system-ui,sans-serif;fill:#203b44;text-anchor:middle;pointer-events:none}
+.legend{display:flex;gap:9px 17px;flex-wrap:wrap;margin:13px 0;font-size:.79rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:7px}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block;border:1px solid #667}
+.dot.red{background:#f5d4ca}.dot.yellow{background:#f6dfa5}.dot.green{background:#b9e6cc}
+.sites{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.site-button{min-height:53px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-align:left;padding:10px 12px}
+.site-button[aria-pressed="true"]{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal);background:#e8f4ed}
+.site-button strong,.site-button small{display:block}
+.site-button strong{font-size:.85rem}.site-button small{font-size:.77rem;color:var(--muted)}
+.selection{border-top:1px solid var(--line);padding-top:20px;margin-top:25px}
+.tasks{display:grid;gap:11px}
+.task{border:1px solid var(--line);border-radius:14px;background:#f5f8f4;padding:16px;color:var(--ink);text-align:left;display:grid;gap:6px}
+.task:not(:disabled):hover{background:#e9f3ed;border-color:var(--teal)}
+.task strong{font-size:.96rem}.task span{font-size:.84rem;color:var(--muted)}
+.task em{font-style:normal;font-weight:800;font-size:.81rem;color:var(--teal)}
+.console{position:sticky;top:14px}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:15px 0}
+.metric{border-radius:12px;background:#edf3ed;border:1px solid var(--line);padding:13px}
+.metric small{display:block;font-size:.76rem;color:var(--muted)}
+.metric strong{font-size:1.55rem;font-variant-numeric:tabular-nums}
+.team{border:1px solid var(--line);border-radius:11px;padding:11px;margin:8px 0}
+.team strong,.team span{display:block}.team strong{font-size:.9rem}.team span{font-size:.81rem;color:var(--muted)}
+.team.busy{background:#fff3dc;border-color:#caad76}
+.timeline{display:flex;gap:5px;margin:10px 0 20px}
+.timeline i{height:8px;flex:1;border-radius:5px;background:#d9e1dd}
+.timeline i.past{background:#458b74}.timeline i.current{background:#c28c4b}
+.event{border-left:4px solid var(--teal);padding:13px 15px;background:#eaf3ec;border-radius:0 10px 10px 0;font-size:.85rem}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:17px}
+.primary,.secondary{min-height:45px;border-radius:10px;padding:10px 14px;font-weight:850}
+.primary{border:1px solid var(--teal);background:var(--teal);color:#fff}
+.secondary{border:1px solid var(--teal);background:transparent;color:var(--teal)}
+.primary:not(:disabled):hover{filter:brightness(1.12)}
+.confirm{background:#fff0dc;border:1px solid #c7a46f;border-radius:11px;padding:14px;margin-top:13px}
+.confirm p{margin:0;font-weight:750}
+.log{padding-left:20px;max-height:280px;overflow:auto;font-size:.82rem}
+.log li{margin-bottom:7px}
+.report{margin-top:18px}
+.ending{border:1px solid #74ac8a;background:#e5f2e9;padding:19px;border-radius:14px}
+.ending.partial{background:#fff0d9;border-color:#cdad73}
+.ending.critical{background:#fae4e0;border-color:#bb7970}
+.ending h3{font-family:Georgia,serif;font-size:1.6rem;font-weight:500}
+.ending p{margin:8px 0}
+.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:17px 0}
+.summary div{border:1px solid var(--line);border-radius:11px;padding:12px}
+.summary small,.summary strong{display:block}.summary small{color:var(--muted)}.summary strong{font-size:1.35rem;font-variant-numeric:tabular-nums}
+@media(max-width:960px){.layout,.hero{grid-template-columns:1fr}.console{position:static}.skyline svg{max-height:220px}}
+@media(max-width:570px){main{padding:11px}.panel,.hero{border-radius:14px}.sites,.summary{grid-template-columns:1fr}.actions>button{flex:1 1 auto}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#101e23;--card:#1e3036;--ink:#f0f4ed;--muted:#bfd0d0;--line:#476169;--teal:#91deca;--focus:#ffd284}.hero{background:#142d39}.clock{background:#225044;color:#bbecd9}.site-button[aria-pressed="true"]{background:#23473d}.task{background:#263d42}.task:not(:disabled):hover{background:#315348}.metric{background:#293f3e}.team.busy{background:#463b27;border-color:#a99160}.event{background:#2b443c}.primary{color:#122e28}.confirm{background:#443827}.ending{background:#1e4934}.ending.partial{background:#4a3823}.ending.critical{background:#4c2b2b}}
+</style>
+</head>
+<body>
+<main>
+<section class="hero" aria-labelledby="title">
+ <div class="hero-copy"><p class="eyebrow">Centro de crise · Caso 03 · Cidade fictícia</p><h1 id="title">O Apagão da Cidade</h1>
+ <p>Uma tempestade interrompeu serviços de Santa Lume. Hospitais, abastecimento, semáforos e bairros dependem de três equipes, enquanto o relógio avança. Qual prioridade protege melhor a população?</p>
+ <div class="chips"><span>7 locais no mapa</span><span>3 equipes</span><span>6 turnos de 30 minutos</span></div></div>
+ <div class="skyline"><svg viewBox="0 0 640 350" role="img" aria-labelledby="sky-title sky-desc" xmlns="http://www.w3.org/2000/svg">
+ <title id="sky-title">Cidade sem iluminação</title><desc id="sky-desc">Ilustração SVG original de prédios escuros, um raio e poucos pontos luminosos durante uma tempestade.</desc>
+ <rect width="640" height="350" fill="#163445"/><path d="M0 273 45 273V181H112V265H155V135H205V266H259V174H312V265H350V127H406V244H457V170H511V261H560V157H612V261H640V350H0Z" fill="#294854"/>
+ <path d="M199 30 164 115H208L168 216 290 103H237L264 30Z" fill="#f4c383"/>
+ <path d="M0 323Q185 293 320 327T640 314" fill="none" stroke="#668888" stroke-width="9"/>
+ <g fill="#cfddbb"><rect x="67" y="195" width="12" height="12"/><rect x="166" y="153" width="11" height="11"/><rect x="277" y="199" width="10" height="12"/><rect x="366" y="150" width="10" height="10"/><rect x="473" y="192" width="12" height="11"/></g>
+ </svg></div>
+</section>
+<p class="note">Todos os locais, horários, impactos e índices de 0 a 100 são fictícios. A exposição acumulada é uma pontuação pedagógica, não uma estimativa de pessoas, risco ou perdas reais. Esta atividade não salva respostas nem registra notas oficiais no Moodle.</p>
+<div class="layout">
+ <section class="panel" aria-labelledby="map-title">
+ <div class="topline"><div><p class="kicker">Central de crise · Santa Lume</p><h2 id="map-title">Onde agir primeiro?</h2></div><strong class="clock" id="clock" aria-live="polite">18h00 · 0/6</strong></div>
+ <p class="lead">Selecione um local no mapa ou pelos botões de texto. Equipes ocupadas só ficam livres quando o reparo termina, e os benefícios só são aplicados depois de avançar o relógio.</p>
+ <div class="map"><svg id="map" viewBox="0 0 960 600" role="group" aria-labelledby="map-svg-title map-svg-desc" xmlns="http://www.w3.org/2000/svg">
+ <title id="map-svg-title">Mapa interativo de Santa Lume</title><desc id="map-svg-desc">Planta conceitual de uma cidade fictícia com dois bairros, centro, hospital, estação de água, subestação e cruzamentos. Cada ponto é selecionável; todos os mesmos pontos estão listados em botões abaixo.</desc>
+ <rect width="960" height="600" fill="#dce9e0"/>
+ <path class="district" d="M30 55 441 55 440 280 28 280Z"/><path class="district" d="M468 55 936 55 936 280 468 280Z"/>
+ <path class="district" d="M469 315 939 316 937 569 466 566Z"/><path class="district" d="M28 315 437 315 440 565 28 567Z"/>
+ <path class="river" d="M0 532Q200 487 307 544T677 540T960 512V600H0Z"/>
+ <path class="road" d="M48 302H928M453 60V562M70 142H912M82 441H916"/><path class="dash" d="M48 302H928M453 60V562M70 142H912M82 441H916"/>
+ <g fill="#a3bdb0"><rect x="86" y="83" width="59" height="39" rx="4"/><rect x="276" y="81" width="61" height="40" rx="4"/><rect x="530" y="84" width="60" height="38" rx="4"/><rect x="681" y="82" width="61" height="41" rx="4"/><rect x="817" y="83" width="60" height="40" rx="4"/><rect x="562" y="485" width="56" height="30" rx="4"/><rect x="830" y="483" width="60" height="34" rx="4"/></g>
+ <text x="25" y="30" font-family="system-ui" font-size="17" font-weight="800" fill="#547267">MAPA ESQUEMÁTICO · SANTA LUME</text>
+ <g class="pin" data-site="aurora" role="button" tabindex="0" aria-label="Selecionar Bairro Aurora" aria-pressed="false" data-band="critical">
+ <circle class="target" cx="175" cy="194" r="34"/><text class="icon" x="175" y="202">A</text>
+ <rect class="label-bg" x="93" y="230" width="164" height="34" rx="8"/><text class="label-map" x="175" y="253">Bairro Aurora</text></g>
+<g class="pin" data-site="rede" role="button" tabindex="0" aria-label="Selecionar Subestação Norte" aria-pressed="false" data-band="critical">
+ <circle class="target" cx="397" cy="192" r="34"/><text class="icon" x="397" y="200">⚡</text>
+ <rect class="label-bg" x="315" y="228" width="164" height="34" rx="8"/><text class="label-map" x="397" y="251">Subestação Norte</text></g>
+<g class="pin" data-site="colina" role="button" tabindex="0" aria-label="Selecionar Bairro Colina" aria-pressed="false" data-band="critical">
+ <circle class="target" cx="769" cy="172" r="34"/><text class="icon" x="769" y="180">C</text>
+ <rect class="label-bg" x="687" y="208" width="164" height="34" rx="8"/><text class="label-map" x="769" y="231">Bairro Colina</text></g>
+<g class="pin" data-site="hospital" role="button" tabindex="0" aria-label="Selecionar Hospital Municipal" aria-pressed="false" data-band="critical">
+ <circle class="target" cx="598" cy="292" r="34"/><text class="icon" x="598" y="300">+</text>
+ <rect class="label-bg" x="516" y="328" width="164" height="34" rx="8"/><text class="label-map" x="598" y="351">Hospital Municipal</text></g>
+<g class="pin" data-site="agua" role="button" tabindex="0" aria-label="Selecionar Estação de Água" aria-pressed="false" data-band="critical">
+ <circle class="target" cx="176" cy="426" r="34"/><text class="icon" x="176" y="434">◆</text>
+ <rect class="label-bg" x="94" y="462" width="164" height="34" rx="8"/><text class="label-map" x="176" y="485">Estação de Água</text></g>
+<g class="pin" data-site="transito" role="button" tabindex="0" aria-label="Selecionar Corredor de Semáforos" aria-pressed="false" data-band="critical">
+ <circle class="target" cx="445" cy="376" r="34"/><text class="icon" x="445" y="384">●</text>
+ <rect class="label-bg" x="363" y="412" width="164" height="34" rx="8"/><text class="label-map" x="445" y="435">Corredor de Semáforos</text></g>
+<g class="pin" data-site="mercado" role="button" tabindex="0" aria-label="Selecionar Centro Mercado" aria-pressed="false" data-band="critical">
+ <circle class="target" cx="748" cy="459" r="34"/><text class="icon" x="748" y="467">M</text>
+ <rect class="label-bg" x="666" y="495" width="164" height="34" rx="8"/><text class="label-map" x="748" y="518">Centro Mercado</text></g>
+ </svg></div>
+ <div class="legend" aria-label="Legenda de condições"><span><b class="dot red"></b> 0–39 crítico</span><span><b class="dot yellow"></b> 40–74 parcial</span><span><b class="dot green"></b> 75–100 recuperado</span></div>
+ <div id="sites" class="sites" aria-label="Seleção dos locais por texto"></div>
+ <section class="selection" aria-labelledby="selected-title"><p class="kicker" id="site-type">Infraestrutura</p><h2 id="selected-title" tabindex="-1">Subestação Norte</h2><p class="lead" id="selected-status"></p><h3>Intervenções disponíveis</h3><div class="tasks" id="tasks"></div></section>
+ </section>
+ <aside class="panel console" aria-labelledby="console-title">
+ <p class="kicker">Coordenação dos recursos</p><h2 id="console-title">Equipes e tempo</h2><p class="small">Janelas de 30 minutos entre 18h e 21h. Trabalho de 60 minutos ocupa dois intervalos.</p>
+ <div class="metrics"><div class="metric"><small>Turnos restantes</small><strong id="remaining">6</strong></div><div class="metric"><small>Exposição acumulada</small><strong id="burden">0</strong></div></div>
+ <h3>Equipes</h3><div id="crews"></div><h3 style="margin-top:22px">Relógio operacional</h3><div class="timeline" id="timeline" aria-label="Seis intervalos"></div>
+ <div class="event" id="event" role="status" aria-live="polite">Selecione um local e envie uma equipe.</div>
+ <div class="actions"><button type="button" class="primary" id="advance">Avançar 30 minutos</button><button type="button" class="secondary" id="undo" disabled>Desfazer última ação</button><button type="button" class="secondary" id="restart">Reiniciar</button></div>
+ <div class="confirm" id="confirm" hidden><p>Descartar todas as decisões e reiniciar a crise?</p><div class="actions"><button type="button" class="secondary" id="cancel">Cancelar</button><button type="button" class="primary" id="approve">Sim, reiniciar</button></div></div>
+ <h3 style="margin-top:23px">Registro de decisões</h3><ol id="log" class="log"><li>Nenhuma decisão registrada.</li></ol>
+ <p class="small">Metas fictícias: hospital ≥70; água ≥65; trânsito ≥55; média dos bairros ≥50; exposição ≤205. Situação crítica: hospital abaixo de 28, água abaixo de 26 ou exposição acima de 245. Não são limites técnicos ou médicos reais.</p>
+ </aside>
+</div>
+<section class="panel report" id="report" hidden aria-labelledby="report-title">
+ <p class="kicker">Relatório final · 21h00</p><h2 id="report-title" tabindex="-1">O custo das prioridades</h2>
+ <div id="ending" class="ending" aria-live="polite"></div><div id="summary" class="summary"></div>
+ <h3>Decisões, eventos e consequências</h3><ol id="report-events" class="log" style="max-height:none"></ol>
+ <div class="actions"><button type="button" class="secondary" id="report-undo">Rever última operação</button><button type="button" class="primary" id="report-reset">Tentar outra estratégia</button></div>
+</section>
+<p class="note">Ilustração e mapa SVG originais. Santa Lume, suas equipes, incidentes e índices foram criados apenas para esta atividade. Não há dependências remotas, acesso ao Moodle ou armazenamento de dados pessoais.</p>
+</main>
+<script type="application/json" id="case-data">{"name":"Santa Lume","turns":6,"startHour":18,"stepMinutes":30,"start":{"rede":0,"hospital":18,"agua":23,"transito":15,"aurora":16,"colina":18,"mercado":20},"sites":[{"id":"aurora","name":"Bairro Aurora","type":"Residencial","x":175,"y":194,"icon":"A"},{"id":"rede","name":"Subestação Norte","type":"Infraestrutura elétrica","x":397,"y":192,"icon":"⚡"},{"id":"colina","name":"Bairro Colina","type":"Residencial","x":769,"y":172,"icon":"C"},{"id":"hospital","name":"Hospital Municipal","type":"Saúde","x":598,"y":292,"icon":"+"},{"id":"agua","name":"Estação de Água","type":"Abastecimento","x":176,"y":426,"icon":"◆"},{"id":"transito","name":"Corredor de Semáforos","type":"Mobilidade","x":445,"y":376,"icon":"●"},{"id":"mercado","name":"Centro Mercado","type":"Serviços e moradia","x":748,"y":459,"icon":"M"}],"teams":[{"id":"eletrica","name":"Equipe elétrica"},{"id":"hidraulica","name":"Equipe hidráulica"},{"id":"apoio","name":"Equipe de apoio"}],"tasks":[{"id":"rede","site":"rede","team":"eletrica","duration":2,"title":"Recompor a subestação","detail":"Uma hora de trabalho para recuperar parte da alimentação de vários setores.","set":{"rede":100},"add":{"hospital":9,"agua":11,"transito":16,"aurora":28,"colina":28,"mercado":23},"effect":"A subestação volta a alimentar parcialmente hospitais, bairros, água e mobilidade, sem substituir os reparos locais.","lesson":"Reparar um nó central tem efeitos sistêmicos, mas pode adiar intervenções imediatas."},{"id":"gerador","site":"hospital","team":"eletrica","duration":1,"title":"Ativar o gerador hospitalar","detail":"Recuperação rápida dos circuitos essenciais, ocupando a equipe elétrica por 30 minutos.","set":{"hospital":87},"effect":"Os circuitos internos do hospital recuperam capacidade operacional provisória.","lesson":"Atender primeiro a uma estrutura crítica pode ser melhor do que maximizar a cobertura geral."},{"id":"triagem","site":"hospital","team":"apoio","duration":1,"title":"Organizar triagem de contingência","detail":"Reduz pressão sobre o hospital sem corrigir o fornecimento.","set":{"hospital":56},"effect":"Acolhimento e triagem emergenciais melhoram a continuidade assistencial.","lesson":"Uma resposta operacional pode mitigar danos sem resolver a causa da falha."},{"id":"bombas","site":"agua","team":"hidraulica","duration":2,"title":"Reativar bombas prioritárias","detail":"Reparo estrutural do abastecimento que exige uma hora da equipe hidráulica.","set":{"agua":95},"effect":"A estação volta a alimentar os circuitos prioritários.","lesson":"O abastecimento interfere nas condições de atendimento do hospital e dos bairros."},{"id":"reservas","site":"agua","team":"hidraulica","duration":1,"title":"Distribuir reservas de água","detail":"Resposta mais rápida, com alcance inferior ao reparo das bombas.","set":{"agua":64},"effect":"Reservas e pontos temporários diminuem a interrupção.","lesson":"Soluções provisórias compram tempo e não equivalem à recuperação estrutural."},{"id":"agua-movel","site":"agua","team":"apoio","duration":1,"title":"Abrir pontos móveis de água","detail":"Cobertura parcial de emergência sem mobilizar a equipe hidráulica.","set":{"agua":48},"effect":"São criados pontos comunitários de distribuição.","lesson":"Equipes de apoio podem diminuir a exposição da população sem substituir técnicos."},{"id":"manual","site":"transito","team":"apoio","duration":1,"title":"Controlar cruzamentos manualmente","detail":"Libera corredores de urgência sem recuperar a rede semafórica.","set":{"transito":68},"effect":"Cruzamentos críticos passam a contar com orientação presencial.","lesson":"Organização do trânsito evita uma dependência exclusiva da eletricidade."},{"id":"semaforos","site":"transito","team":"eletrica","duration":2,"title":"Recuperar controladores dos semáforos","detail":"Restaura boa parte da sinalização, com uma hora de trabalho.","set":{"transito":94},"effect":"O controle eletrônico dos principais cruzamentos é restabelecido.","lesson":"A solução permanente compete por equipe e tempo com outros serviços."},{"id":"aurora-apoio","site":"aurora","team":"apoio","duration":1,"title":"Abrir abrigo comunitário no Aurora","detail":"Acolhimento, recarga provisória e iluminação de emergência.","set":{"aurora":63},"effect":"Famílias do Aurora passam a contar com um ponto de apoio.","lesson":"Proteger moradores é mais amplo do que restaurar a energia nas casas."},{"id":"aurora-rede","site":"aurora","team":"eletrica","duration":2,"title":"Recuperar alimentador do Aurora","detail":"Reparo abrangente das residências, após uma hora.","set":{"aurora":96},"effect":"A alimentação elétrica de parte relevante do bairro volta.","lesson":"Bairros precisam disputar prioridades com infraestruturas críticas."},{"id":"colina-agua","site":"colina","team":"hidraulica","duration":1,"title":"Repor reservatórios do Colina","detail":"Atendimento provisório sem interromper a equipe elétrica.","set":{"colina":58},"effect":"Reservatórios locais reduzem a vulnerabilidade dos moradores.","lesson":"Água e eletricidade podem exigir soluções complementares no mesmo bairro."},{"id":"colina-rede","site":"colina","team":"eletrica","duration":2,"title":"Recuperar alimentador do Colina","detail":"Normaliza boa parte das residências após uma hora.","set":{"colina":94},"effect":"A alimentação elétrica do bairro é parcialmente restabelecida.","lesson":"Uma cidade resiliente precisa evitar deixar sempre as mesmas áreas para depois."},{"id":"mercado-apoio","site":"mercado","team":"apoio","duration":1,"title":"Iluminar corredor de serviços","detail":"Mantém comércio essencial e orientação comunitária.","set":{"mercado":64},"effect":"Um corredor de abastecimento e serviços do centro fica acessível.","lesson":"A resposta de emergência pode preservar serviços mesmo com a rede desligada."},{"id":"mercado-rede","site":"mercado","team":"eletrica","duration":2,"title":"Recuperar circuito do Centro","detail":"Reparo elétrico abrangente que ocupa uma hora da equipe.","set":{"mercado":92},"effect":"O centro recupera circuitos de moradia e serviços prioritários.","lesson":"Decisões sobre cobertura elétrica também envolvem prioridades territoriais."}]}</script>
+<script>
+"use strict";
+const data=JSON.parse(document.getElementById("case-data").textContent);
+
+function clamp(n){return Math.min(100,Math.max(0,n));}
+function timeLabel(t){const m=data.startHour*60+t*data.stepMinutes;return String(Math.floor(m/60)).padStart(2,"0")+"h"+String(m%60).padStart(2,"0");}
+function replay(actions){
+ const s={turn:0,values:{...data.start},busy:[],completed:[],burden:0,events:[],last:[]};
+ for(const a of actions){
+  if(a.kind==="dispatch"){
+   const task=data.tasks.find(t=>t.id===a.id);
+   if(!task||s.turn>=data.turns)throw Error("Tarefa inválida");
+   if(s.completed.includes(task.id)||s.busy.some(b=>b.id===task.id))throw Error("Tarefa repetida");
+   if(s.busy.some(b=>b.team===task.team))throw Error("Equipe ocupada");
+   if(s.turn+task.duration>data.turns)throw Error("Tempo insuficiente");
+   s.busy.push({id:task.id,team:task.team,due:s.turn+task.duration});
+   s.events.push(timeLabel(s.turn)+": "+task.title+" — equipe mobilizada");
+  }else if(a.kind==="advance"){
+   if(s.turn>=data.turns)throw Error("Prazo encerrado");
+   s.turn++;
+   const notices=[],finished=s.busy.filter(b=>b.due<=s.turn);
+   s.busy=s.busy.filter(b=>b.due>s.turn);
+   for(const job of finished){
+    const t=data.tasks.find(task=>task.id===job.id);
+    for(const [key,val] of Object.entries(t.set||{}))s.values[key]=clamp(Math.max(s.values[key],val));
+    for(const [key,val] of Object.entries(t.add||{}))s.values[key]=clamp(s.values[key]+val);
+    s.completed.push(job.id);notices.push("Concluído: "+t.title+". "+t.effect);
+   }
+   if(s.turn===3&&s.values.rede<100){
+    s.values.transito=clamp(s.values.transito-11);s.values.mercado=clamp(s.values.mercado-7);
+    notices.push("Nova oscilação na rede: perdas adicionais no trânsito e no centro.");
+   }
+   const v=s.values,bonus=v.rede===100?2:0;
+   for(const [key,limit,loss] of [["hospital",75,5],["agua",75,4],["transito",65,4],["aurora",60,3],["colina",60,3],["mercado",60,3]]){
+    if(v[key]<limit)v[key]=clamp(v[key]-Math.max(1,loss-bonus));
+   }
+   if(v.agua<40){
+    v.hospital=clamp(v.hospital-3);v.aurora=clamp(v.aurora-2);v.colina=clamp(v.colina-2);
+    notices.push("Falta de água amplia dificuldades no hospital e nos bairros.");
+   }
+   const delta=Math.round(((100-v.hospital)*4+(100-v.agua)*4+(100-v.transito)*2+(100-v.aurora)+(100-v.colina)+(100-v.mercado))/25);
+   s.burden+=delta;notices.push("Exposição didática: +"+delta+" neste intervalo.");
+   s.last=notices;
+   notices.forEach(n=>s.events.push(timeLabel(s.turn)+": "+n));
+  }else throw Error("Ação desconhecida");
+ }
+ return s;
+}
+function unavailable(task,s){
+ if(s.completed.includes(task.id))return "Concluído";
+ if(s.busy.some(b=>b.id===task.id))return "Em execução";
+ if(s.busy.some(b=>b.team===task.team))return "Equipe ocupada";
+ if(s.turn+task.duration>data.turns)return "Tempo insuficiente";
+ return "";
+}
+function outcome(s){
+ const v=s.values;
+ if(v.hospital<28||v.agua<26||s.burden>245)return {kind:"critical",title:"Crise agravada",detail:"A cidade encerra a janela com pelo menos um serviço essencial em condição crítica didática, ou exposição acumulada excessiva.",reflect:"Que equipe poderia ter sido mobilizada antes? Quais bairros receberam pouca atenção?"};
+ if(v.hospital>=70&&v.agua>=65&&v.transito>=55&&((v.aurora+v.colina+v.mercado)/3)>=50&&s.burden<=205)
+  return {kind:"stable",title:"Serviços essenciais estabilizados",detail:"A cidade atingiu as metas fictícias de hospital, água, mobilidade e cobertura média dos bairros, com exposição acumulada controlada.",reflect:"Qual reparo teve impacto mais amplo? Onde uma medida temporária foi suficiente?"};
+ return {kind:"partial",title:"Recuperação desigual",detail:"A cidade conseguiu recuperar parte dos serviços, mas ainda há áreas em situação vulnerável ou uma meta didática não foi atingida.",reflect:"Como você redistribuiria equipes e tempo sem abandonar os bairros?"};
+}
+
+(function(){
+ const $=id=>document.getElementById(id);
+ const el=(tag,content,cls)=>{const n=document.createElement(tag);n.textContent=content||"";if(cls)n.className=cls;return n;};
+ let actions=[],selected="rede",confirm=false,resetOrigin="restart",message="Selecione um local e envie uma equipe.";
+ let state=replay(actions);
+ const taskById=Object.fromEntries(data.tasks.map(t=>[t.id,t]));
+ const siteById=Object.fromEntries(data.sites.map(s=>[s.id,s]));
+ function band(n){return n<40?"critical":n<75?"partial":"stable";}
+ function focus(id){const node=$(id);node.focus({preventScroll:true});node.scrollIntoView({block:"nearest",behavior:"auto"});}
+ function selectSite(id,origin){
+  if(!siteById[id])return;
+  selected=id;render();
+  focus("selected-title");
+ }
+ function renderSites(){
+  const list=$("sites");list.replaceChildren();
+  for(const site of data.sites){
+   const n=state.values[site.id],g=document.querySelector('[data-site="'+site.id+'"]');
+   g.dataset.band=band(n);g.classList.toggle("selected",site.id===selected);g.setAttribute("aria-pressed",String(site.id===selected));
+   g.setAttribute("aria-label",site.name+", índice didático "+n+" de 100. Selecionar local.");
+   const btn=el("button","","site-button");btn.type="button";btn.setAttribute("aria-pressed",String(site.id===selected));
+   btn.append(el("strong",site.name),el("small",n+" / 100 · "+(n<40?"crítico":n<75?"parcial":"recuperado")));
+   btn.addEventListener("click",()=>selectSite(site.id,"list"));list.append(btn);
+  }
+ }
+ function renderTasks(){
+  const site=siteById[selected];
+  $("site-type").textContent=site.type;
+  $("selected-title").textContent=site.name;
+  $("selected-status").textContent="Condição atual: "+state.values[site.id]+" de 100 pontos didáticos. Selecione uma intervenção adequada à equipe livre e ao tempo restante.";
+  const list=$("tasks");list.replaceChildren();
+  if(state.turn===data.turns){list.append(el("p","O prazo terminou. Consulte o relatório abaixo."));return;}
+  for(const task of data.tasks.filter(t=>t.site===selected)){
+   const reason=unavailable(task,state),crew=data.teams.find(c=>c.id===task.team);
+   const btn=el("button","","task");btn.type="button";btn.disabled=!!reason;
+   btn.append(el("strong",task.title),el("span",task.detail),el("em",crew.name+" · "+(task.duration*30)+" min · "+(reason||"disponível")));
+   btn.addEventListener("click",()=>dispatch(task.id));list.append(btn);
+  }
+ }
+ function renderCrews(){
+  const root=$("crews");root.replaceChildren();
+  for(const crew of data.teams){
+   const job=state.busy.find(j=>j.team===crew.id);
+   const block=el("div","","team"+(job?" busy":""));
+   const status=job?"Ocupada até "+timeLabel(job.due)+" · "+taskById[job.id].title:"Disponível para envio";
+   block.append(el("strong",crew.name),el("span",status));root.append(block);
+  }
+ }
+ function renderTimeline(){
+  const root=$("timeline");root.replaceChildren();
+  for(let i=0;i<data.turns;i++){
+   const tick=el("i");tick.className=i<state.turn?"past":i===state.turn?"current":"";
+   tick.setAttribute("aria-label","Intervalo "+(i+1)+(i<state.turn?" concluído":i===state.turn?" atual":" futuro"));root.append(tick);
+  }
+ }
+ function renderReport(){
+  $("report").hidden=state.turn!==data.turns;
+  if(state.turn!==data.turns)return;
+  const final=outcome(state),end=$("ending");end.className="ending"+(final.kind==="stable"?"":final.kind==="partial"?" partial":" critical");
+  end.replaceChildren(el("h3",final.title),el("p",final.detail),el("p","Para refletir: "+final.reflect));
+  const metrics=$("summary");metrics.replaceChildren();
+  const rows=[["Hospital",state.values.hospital+"/100"],["Água",state.values.agua+"/100"],["Semáforos",state.values.transito+"/100"],["Bairros",Math.round((state.values.aurora+state.values.colina+state.values.mercado)/3)+"/100"],["Exposição",state.burden+" pontos"],["Tarefas concluídas",String(state.completed.length)]];
+  for(const [label,val] of rows){const n=el("div");n.append(el("small",label),el("strong",val));metrics.append(n);}
+  const events=$("report-events");events.replaceChildren();state.events.forEach(event=>events.append(el("li",event)));
+ }
+ function render(){
+  state=replay(actions);
+  $("clock").textContent=timeLabel(state.turn)+" · "+state.turn+"/"+data.turns;
+  $("remaining").textContent=String(data.turns-state.turn);$("burden").textContent=String(state.burden);
+  $("event").textContent=message;
+  $("advance").disabled=state.turn>=data.turns;
+  $("undo").disabled=!actions.length;
+  $("confirm").hidden=!confirm;
+  renderSites();renderTasks();renderCrews();renderTimeline();
+  const list=$("log");list.replaceChildren();
+  (state.events.length?state.events.slice(-12):["Nenhuma decisão registrada."]).forEach(e=>list.append(el("li",e)));
+  renderReport();
+ }
+ function dispatch(id){
+  if(confirm||state.turn>=data.turns)return;
+  const task=taskById[id];
+  if(!task||unavailable(task,state))return;
+  const next=[...actions,{kind:"dispatch",id}];
+  try{state=replay(next);actions=next;message=data.teams.find(c=>c.id===task.team).name+" enviada: "+task.title+". Conclusão prevista para "+timeLabel(state.turn+task.duration)+".";render();$("advance").focus();}
+  catch(e){message="Não foi possível enviar: "+e.message;render();}
+ }
+ function advance(){
+  if(confirm||state.turn>=data.turns)return;
+  actions.push({kind:"advance"});state=replay(actions);
+  message=state.last.join(" ");render();
+  if(state.turn===data.turns)focus("report-title");else $("advance").focus();
+ }
+ function undo(){
+  if(confirm||!actions.length)return;
+  const removed=actions.pop();state=replay(actions);
+  message=(removed.kind==="advance"?"Turno desfeito. ":"Envio cancelado. ")+"Equipes, indicadores e exposição foram recalculados a partir das decisões restantes.";
+  render();$("undo").focus();
+ }
+ function requestReset(origin){if(confirm)return;resetOrigin=origin;confirm=true;render();$("cancel").focus();}
+ function cancelReset(){confirm=false;render();$(resetOrigin).focus();}
+ function reset(){actions=[];selected="rede";confirm=false;message="Simulação reiniciada. Escolha a primeira intervenção.";render();focus("selected-title");}
+ document.querySelectorAll("[data-site]").forEach(g=>{
+  g.addEventListener("click",()=>selectSite(g.dataset.site,"svg"));
+  g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectSite(g.dataset.site,"svg");}});
+ });
+ $("advance").addEventListener("click",advance);$("undo").addEventListener("click",undo);$("report-undo").addEventListener("click",undo);
+ $("restart").addEventListener("click",()=>requestReset("restart"));
+ $("report-reset").addEventListener("click",()=>requestReset("report-reset"));
+ $("cancel").addEventListener("click",cancelReset);$("approve").addEventListener("click",reset);
+ render();
+})();
+</script>
+</body></html>
