@@ -81,6 +81,7 @@ final class save_content extends activity_tool {
     public function preview(array $arguments, authenticated_identity $identity): array {
         $activity = $this->activity($arguments);
         $html = trim(service::normalize_html($arguments["html"]));
+        service::validate_theme_colours((int)$activity->course, $html);
         return ["cmid" => $arguments["cmid"], "draftrevision" => (int)$activity->draftrevision,
             "expectedrevision" => (int)$arguments["expectedrevision"],
             "bytes" => strlen($html), "sha256" => hash("sha256", $html),

@@ -129,3 +129,4 @@ $string['studentview'] = 'Visualização do estudante';
 $string['submissionsclosed'] = 'Esta tentativa já foi finalizada.';
 $string['trackinglimit'] = 'O limite de eventos de interação desta atividade foi atingido.';
 $string['yourgrade'] = 'Sua nota: {$a}';
+$string['fixedbrandcolour'] = 'A cor fixa "{$a->colour}" não é permitida na propriedade CSS "{$a->property}". Use var({$a->primary}, #0d6efd), var({$a->accent}, var({$a->primary}, #0d6efd)) ou uma variável semântica do tema. Cores neutras e valores de fallback dentro de var() são permitidos.';

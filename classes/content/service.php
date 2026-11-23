@@ -67,6 +67,7 @@ final class service {
         if ($expectedrevision !== null && (int)$activity->draftrevision !== $expectedrevision) {
             throw new moodle_exception("revisionconflict", "mcp");
         }
+        self::validate_theme_colours((int)$activity->course, $html);
         $current = $activity->draftrevision ?
             $DB->get_record("mcp_revisions", ["id" => $activity->draftrevision], "*", MUST_EXIST) : null;
         $hash = hash("sha256", $html);
@@ -86,6 +87,24 @@ final class service {
         ]);
         $transaction->allow_commit();
         return $revisionid;
+    }
+
+    /**
+     * Enforce the effective course or site theme in all HTML authoring entry points.
+     *
+     * @param int $courseid Activity course ID.
+     * @param string $html Authored HTML.
+     */
+    public static function validate_theme_colours(int $courseid, string $html): void {
+        global $CFG, $DB;
+        $theme = (string)($CFG->theme ?? "");
+        if (!empty($CFG->allowcoursethemes)) {
+            $coursetheme = $DB->get_field("course", "theme", ["id" => $courseid]);
+            if (is_string($coursetheme) && $coursetheme !== "") {
+                $theme = $coursetheme;
+            }
+        }
+        colour_validator::validate($html, $theme);
     }
 
     /**
@@ -128,6 +147,7 @@ final class service {
         if (!$draft || trim($draft->content) === "") {
             throw new moodle_exception("invaliddata");
         }
+        self::validate_theme_colours((int)$activity->course, (string)$draft->content);
         // A published quiz must have a complete self-contained JSON pool.
         metadata::validate((string)($activity->activitytype ?? ""),
             $activity->informationjson);
