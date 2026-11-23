@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Construtor de fluxogramas - Oficina de decisões</title>
+<style>
+:root{color-scheme:light;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;--ink:#20364a;--muted:#586f82;--border:#dce6e9;--blue:#346a96;--teal:#157e78;--amber:#b76a28;--violet:#6655a7;background:#eef5f6;color:var(--ink)}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(14px,3vw,39px);background:radial-gradient(ellipse at 83% 0%,#deecf7,transparent 45%),#eef5f6}
+button,input,select{font:inherit}
+button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #e29a37;outline-offset:4px}
+[hidden]{display:none!important}
+main{max-width:1320px;margin:auto}
+.eyebrow{font-size:12px;letter-spacing:.11em;color:#247982;text-transform:uppercase;font-weight:850}
+header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:21px}
+header h1{font-size:clamp(29px,4vw,44px);line-height:1.12;letter-spacing:-.04em;margin:9px 0}
+header p{max-width:810px;color:var(--muted);margin:0}
+header svg{width:154px;max-width:21%;flex:none}
+.panel{min-width:0;background:#fff;border:1px solid var(--border);border-radius:21px;padding:clamp(16px,2.4vw,24px);box-shadow:0 12px 35px #1b485516}
+.panel h2{font-size:20px;letter-spacing:-.02em;margin:3px 0 8px;line-height:1.2}
+.panel h3{font-size:15px;margin:14px 0 8px}
+.muted{font-size:13px;color:var(--muted);margin:0 0 13px}
+.toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:14px;justify-content:space-between;margin-bottom:17px}
+.toolbar form{display:flex;flex-wrap:wrap;align-items:center;gap:8px;flex:1}
+.field-label{font-size:12px;font-weight:850;color:#3e6676}
+.field{border:1px solid #b9cdd6;border-radius:10px;padding:9px 12px;min-height:43px;min-width:0;background:white;color:var(--ink)}
+.toolbar .field[type=text]{flex:1 1 200px}
+.btn{min-height:43px;padding:9px 15px;border-radius:10px;border:1px solid #bdd0d6;background:#fff;color:#2a6377;font-size:13px;font-weight:800}
+.btn:hover:not(:disabled){background:#edf6f8}
+.btn.primary{background:#266f88;border-color:#266f88;color:white}
+.btn.primary:hover:not(:disabled){background:#1c6078}
+.btn.danger{border-color:#e6b9b4;color:#99493e}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.count{font-size:12px;font-weight:750;color:#4f7385}
+.layout{display:grid;grid-template-columns:minmax(0,1.63fr) minmax(298px,.8fr);gap:16px;align-items:start}
+.visual h2{margin-bottom:12px}
+.visual .panel-heading{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px}
+.scroller{overflow-x:auto;overscroll-behavior-x:contain;border-radius:16px;border:1px solid #cadee3;max-width:100%;background:#f5fafa}
+.canvas{position:relative;height:575px;min-width:680px;isolation:isolate;background-image:linear-gradient(#cfe3e744 1px,transparent 1px),linear-gradient(90deg,#cfe3e744 1px,transparent 1px);background-size:23px 23px}
+.edges{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:visible}
+.edge-line{stroke:#7aa0b3;stroke-width:3;fill:none;stroke-linecap:round}
+.edge-tag{fill:#fff;stroke:#b8ced6;stroke-width:1}
+.edge-name{fill:#264f65;font:750 12px system-ui,-apple-system,"Segoe UI",sans-serif;text-anchor:middle;dominant-baseline:middle}
+.node-layer{position:absolute;inset:0;z-index:1;pointer-events:none}
+.flow-node{position:absolute;display:flex;justify-content:center;align-items:center;flex-direction:column;gap:6px;width:155px;min-height:77px;padding:14px 10px;color:#254f66;background:#fff;border:2px solid #8bb5c5;border-radius:13px;box-shadow:0 8px 19px #1b4b591f;transform:translate(-50%,-50%);text-align:center;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;pointer-events:auto;z-index:1}
+.flow-node:active{cursor:grabbing}
+.flow-node strong{font-size:13px;line-height:1.26;overflow-wrap:anywhere}
+.flow-node small{font-size:10px;letter-spacing:.025em;color:#567789;line-height:1.1}
+.flow-node[data-type=start]{border-radius:99px;background:#e7f6ef;border-color:#6bbca3;color:#176550}
+.flow-node[data-type=end]{border-radius:99px;background:#f4eafb;border-color:#c4a4db;color:#674a8c}
+.flow-node[data-type=decision]{background:transparent;border-color:transparent;box-shadow:none;width:166px;min-height:128px;padding:24px 25px;z-index:2}
+.flow-node[data-type=decision]::before{content:"";position:absolute;inset:0;background:#fff0db;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border:0;filter:drop-shadow(0 5px 7px #a86b2d20);z-index:-1}
+.flow-node[data-type=decision] strong{font-size:12px;color:#865026;max-width:110px}
+.flow-node[data-type=decision] small{color:#a56d3d}
+.flow-node[data-selected=true]{outline:3px solid #3773b2;outline-offset:4px}
+.flow-node[data-type=decision][data-selected=true]{outline-offset:0;border-radius:13px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 0;color:var(--muted);font-size:12px}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend b{display:inline-block;width:15px;height:15px;background:#e7f6ef;border:1px solid #66ac9e;border-radius:9px}
+.legend .process{background:#fff;border-radius:3px;border-color:#8bb5c5}
+.legend .decision{background:#fff0db;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border:0}
+.legend .end{background:#f4eafb;border-color:#c4a4db}
+.board-help{margin:14px 0 0;font-size:12px;color:var(--muted)}
+.sidebar{display:grid;gap:15px;position:sticky;top:15px}
+.sidebar .panel{padding:20px}
+.field-row{display:grid;gap:6px;margin:13px 0}
+.field-row label{font-size:12px;color:#486778;font-weight:850}
+.field-row .field{width:100%}
+.editor-actions{display:flex;flex-wrap:wrap;gap:7px}
+.editor-actions .btn{flex:1 1 auto}
+.move-control{margin-top:14px;padding:13px;background:#f4f8fa;border:1px solid #e0ebef;border-radius:12px}
+.move-control h3{margin:0 0 7px;font-size:13px}
+.move-grid{display:grid;grid-template-columns:repeat(3,42px);grid-template-rows:repeat(2,40px);gap:7px;justify-content:center}
+.move-grid button{background:#fff;border:1px solid #bbd0db;border-radius:9px;font-size:19px;color:#315d78;padding:0}
+.move-grid button:hover{background:#e5f1f7}
+.move-grid .up{grid-column:2;grid-row:1}.move-grid .left{grid-column:1;grid-row:2}.move-grid .down{grid-column:2;grid-row:2}.move-grid .right{grid-column:3;grid-row:2}
+.form-explain{font-size:12px;color:var(--muted);margin:0}
+.link-list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:7px}
+.link-list button{width:100%;display:flex;justify-content:space-between;gap:8px;align-items:center;padding:11px 12px;background:#f9fcfd;color:#33566e;border:1px solid #dce6e9;border-radius:11px;text-align:left;font-size:12px;line-height:1.35}
+.link-list button:hover,.link-list button[aria-current=true]{background:#edf7fb;border-color:#90bbcd}
+.link-list b{font-size:11px;color:#286f8a;flex:none}
+.check-results{margin-top:12px;border:1px solid #cde3da;border-radius:12px;padding:14px;background:#f0faf5}
+.check-results[data-state=issues]{background:#fff9ed;border-color:#e8d2aa}
+.check-results strong{font-size:13px;color:#226858}
+.check-results[data-state=issues] strong{color:#815d2b}
+.check-results ul{margin:8px 0 0;padding-left:18px;font-size:12px;color:#4e6774}
+.check-results li{margin:5px 0}
+.check-results p{font-size:12px;margin:8px 0 0;color:#416956}
+.confirm{padding:14px;margin-top:15px;border:1px solid #ebc6a4;border-radius:12px;background:#fff7ed;color:#70532f;font-size:13px}
+.confirm p{margin:0 0 11px}
+.confirm .actions{justify-content:flex-start}
+.footer-note{font-size:12px;color:#607686;padding:13px 15px;background:#eff6f8;border-left:3px solid #70a5b1;border-radius:0 10px 10px 0;margin:17px 0 0}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;padding:0;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:1100px){.layout{grid-template-columns:1fr}.sidebar{position:static;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}}
+@media(max-width:680px){.sidebar{grid-template-columns:1fr}.toolbar form{flex:1 1 100%}header svg{display:none}.canvas{height:540px}.panel{border-radius:16px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div><span class="eyebrow">Oficina de processos · Construção livre</span><h1>Construtor de fluxogramas</h1>
+<p>Modele etapas e decisões de um processo: adicione nós, organize o desenho, ligue cada etapa e verifique se todos os caminhos levam a uma conclusão.</p></div>
+<svg viewBox="0 0 170 135" fill="none" aria-hidden="true" focusable="false">
+<rect x="7" y="9" width="50" height="29" rx="15" fill="#d8f2e6" stroke="#75bca4" stroke-width="2"></rect><path d="M32 38v21h47m-8-7 8 7-8 7" stroke="#7ba1b2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="m102 38 29 29-29 29-29-29z" fill="#fff0dc" stroke="#c9945c" stroke-width="2"></path>
+<path d="M102 96v20H42" stroke="#7ba1b2" stroke-width="3"></path><rect x="18" y="105" width="48" height="24" rx="6" fill="#e3effa" stroke="#7ba1b2" stroke-width="2"></rect>
+</svg>
+</header>
+<section class="panel toolbar" aria-label="Ferramentas do fluxograma">
+<form id="addForm" novalidate>
+<label class="field-label" for="newType">Novo nó</label>
+<select class="field" id="newType"><option value="process">Processo</option><option value="decision">Decisão</option><option value="end">Fim</option><option value="start">Início</option></select>
+<input class="field" id="newLabel" type="text" maxlength="48" required placeholder="Nome da etapa ou pergunta" aria-label="Nome do novo nó">
+<button class="btn primary" type="submit" id="addNode">Adicionar nó</button>
+</form>
+<div class="actions">
+<span class="count" id="counter">5 nós · 5 conexões</span>
+<button class="btn" id="undo" type="button" disabled>Desfazer</button>
+<button class="btn" id="reset" type="button">Reiniciar</button>
+</div>
+</section>
+<div class="layout">
+<section class="panel visual" aria-labelledby="boardTitle">
+<div class="panel-heading"><h2 id="boardTitle">Desenho do fluxo</h2><span class="count">Arraste ou use as setas</span></div>
+<div class="scroller" id="scroller">
+<div class="canvas" id="canvas" role="group" aria-label="Fluxograma com nós móveis e conexões direcionais">
+<svg class="edges" id="connections" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+<defs><marker id="flowArrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M1 1 8 4.5 1 8" stroke="#7aa0b3" fill="none" stroke-width="1.6"></path></marker></defs>
+<g id="edgeLayer"></g>
+</svg>
+<div class="node-layer" id="nodeLayer"></div>
+</div>
+</div>
+<div class="legend" aria-hidden="true"><span><b></b>Início</span><span><b class="process"></b>Processo</span><span><b class="decision"></b>Decisão</span><span><b class="end"></b>Fim</span></div>
+<p class="board-help">Toque ou clique para selecionar um nó. Arraste para movê-lo; pelo teclado, use Tab para selecioná-lo e as setas para mover (Shift + seta move mais). Há também botões de movimento no painel lateral. Em telas estreitas, deslize o espaço vazio do quadro horizontalmente.</p>
+</section>
+<div class="sidebar">
+<section class="panel" aria-labelledby="editorTitle">
+<h2 id="editorTitle">Editar nó selecionado</h2>
+<p class="muted" id="nodeHint">Selecione um nó para alterar seu nome ou tipo e movê-lo no quadro.</p>
+<div id="nodeEditor" hidden>
+<div class="field-row"><label for="nodeName">Nome ou pergunta</label><input id="nodeName" class="field" maxlength="48"></div>
+<div class="field-row"><label for="nodeType">Tipo de nó</label><select class="field" id="nodeType"><option value="start">Início</option><option value="process">Processo</option><option value="decision">Decisão</option><option value="end">Fim</option></select></div>
+<div class="editor-actions"><button type="button" class="btn primary" id="saveNode">Salvar nó</button><button type="button" class="btn danger" id="deleteNode">Excluir nó</button></div>
+<div class="move-control">
+<h3>Mover sem arrastar</h3>
+<div class="move-grid" role="group" aria-label="Mover nó selecionado">
+<button class="up" type="button" id="moveUp" aria-label="Mover para cima">↑</button>
+<button class="left" type="button" id="moveLeft" aria-label="Mover para esquerda">←</button>
+<button class="down" type="button" id="moveDown" aria-label="Mover para baixo">↓</button>
+<button class="right" type="button" id="moveRight" aria-label="Mover para direita">→</button>
+</div>
+</div>
+</div>
+</section>
+<section class="panel" aria-labelledby="linksTitle">
+<h2 id="linksTitle">Conexões e decisões</h2>
+<p class="muted">Crie ou edite uma seta. Decisões têm duas saídas exclusivas: <strong>Sim</strong> e <strong>Não</strong>; Início e Processo têm apenas uma saída.</p>
+<form id="edgeForm" novalidate>
+<div class="field-row"><label for="edgeFrom">De</label><select class="field" id="edgeFrom"></select></div>
+<div class="field-row"><label for="edgeTo">Para</label><select class="field" id="edgeTo"></select></div>
+<div class="field-row" id="branchGroup" hidden><label for="edgeBranch">Saída da decisão</label><select class="field" id="edgeBranch"><option value="Sim">Sim</option><option value="Não">Não</option></select></div>
+<div class="field-row" id="wordGroup"><label for="edgeWord">Palavra de ligação</label><input class="field" id="edgeWord" maxlength="32" placeholder="Ex.: segue para" required></div>
+<div class="editor-actions">
+<button type="submit" id="saveEdge" class="btn primary">Criar conexão</button>
+<button type="button" class="btn" id="cancelEdge" hidden>Cancelar edição</button>
+<button type="button" class="btn danger" id="deleteEdge" hidden>Excluir conexão</button>
+</div>
+</form>
+<h3>Proposições do mapa</h3>
+<ul id="edgeList" class="link-list"></ul>
+<p id="noEdges" class="muted" hidden>Adicione conexões para descrever o processo.</p>
+</section>
+<section class="panel" aria-labelledby="validationTitle">
+<h2 id="validationTitle">Verificar o fluxo</h2>
+<p class="muted">Confira se o desenho tem um início, um fim alcançável e caminhos completos para todas as decisões.</p>
+<button type="button" id="validate" class="btn primary">Validar fluxograma</button>
+<div id="validation" class="check-results" role="status" aria-live="polite" data-state="ok">
+<strong id="validationHeading">Pronto para verificar</strong>
+<ul id="validationList"></ul>
+<p id="validationNote">Esta verificação usa apenas a estrutura atual do desenho.</p>
+</div>
+</section>
+</div>
+</div>
+<div class="confirm" id="resetConfirmation" hidden role="group" aria-label="Confirmar reinício">
+<p>Restaurar o fluxograma inicial? O estado atual será colocado no histórico, então é possível desfazer o reinício.</p>
+<div class="actions"><button class="btn" type="button" id="cancelReset">Cancelar</button><button class="btn danger" type="button" id="confirmReset">Sim, restaurar</button></div>
+</div>
+<p class="footer-note">Esta atividade é uma demonstração de edição local: não grava fluxos no Moodle, não avalia estudantes e não mantém alterações depois que a página é recarregada. Os exemplos são fictícios.</p>
+<div class="sr-only" id="announcer" role="status" aria-live="polite" aria-atomic="true"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  const types={start:"Início",process:"Processo",decision:"Decisão",end:"Fim"};
+  const seed={
+    nodes:[
+      {id:"n1",type:"start",label:"Início",x:14,y:45},
+      {id:"n2",type:"process",label:"Reunir dados",x:36,y:45},
+      {id:"n3",type:"decision",label:"Dados suficientes?",x:60,y:45},
+      {id:"n4",type:"end",label:"Concluir",x:86,y:24},
+      {id:"n5",type:"process",label:"Revisar fontes",x:84,y:78}
+    ],
+    edges:[
+      {id:"e1",from:"n1",to:"n2",label:"segue para"},
+      {id:"e2",from:"n2",to:"n3",label:"verificar"},
+      {id:"e3",from:"n3",to:"n4",label:"Sim"},
+      {id:"e4",from:"n3",to:"n5",label:"Não"},
+      {id:"e5",from:"n5",to:"n3",label:"reavaliar"}
+    ],
+    nextNode:6,nextEdge:6
+  };
+  const $=id=>document.getElementById(id);
+  const clone=value=>JSON.parse(JSON.stringify(value));
+  const state=clone(seed),history=[],nodeControls=new Map();
+  const svgNS="http://www.w3.org/2000/svg";
+  const maxNodes=14,maxEdges=28;
+  let selectedNode="n3",editingEdge=null,dragging=null;
+  const findNode=id=>state.nodes.find(node=>node.id===id);
+  const clean=(value,max)=>String(value||"").trim().replace(/\s+/g," ").slice(0,max);
+  const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+  const say=message=>{$("announcer").textContent=message;};
+  function el(tag,className,value){
+    const element=document.createElement(tag);
+    if(className)element.className=className;
+    if(value!==undefined)element.textContent=value;
+    return element;
+  }
+  function svg(tag,attributes){
+    const node=document.createElementNS(svgNS,tag);
+    Object.entries(attributes||{}).forEach(([key,value])=>node.setAttribute(key,String(value)));
+    return node;
+  }
+  function snapshot(){return clone(state);}
+  function remember(previous){
+    history.push(previous||snapshot());
+    if(history.length>50)history.shift();
+    $("undo").disabled=false;
+  }
+  function restore(next){
+    state.nodes=next.nodes;state.edges=next.edges;
+    state.nextNode=next.nextNode;state.nextEdge=next.nextEdge;
+  }
+  function nextPosition(){
+    const candidates=[];
+    for(const y of [18,36,55,76,88])for(const x of [17,36,57,79,87])candidates.push({x,y});
+    const distance=point=>Math.min(...state.nodes.map(node=>(node.x-point.x)**2+(node.y-point.y)**2));
+    candidates.sort((a,b)=>distance(b)-distance(a));
+    return candidates[0]||{x:50,y:50};
+  }
+  function countOutgoing(id,excluded){
+    return state.edges.filter(edge=>edge.from===id&&edge.id!==excluded);
+  }
+  function verifyEdge(from,to,label,excluded){
+    const source=findNode(from),target=findNode(to);
+    if(!source||!target)return "Escolha dois nós existentes.";
+    if(from===to)return "Uma conexão deve unir dois nós diferentes.";
+    if(source.type==="end")return "Um nó Fim não pode ter conexões de saída.";
+    if(target.type==="start")return "Um nó Início não pode receber conexões.";
+    const others=countOutgoing(from,excluded);
+    if(state.edges.some(edge=>edge.id!==excluded&&edge.from===from&&edge.to===to))
+      return "Já existe uma conexão nessa direção entre os dois nós.";
+    if(source.type==="decision"){
+      if(!["Sim","Não"].includes(label))return "Uma decisão deve ter a saída Sim ou Não.";
+      if(others.some(edge=>edge.label===label))return "Essa saída da decisão já está conectada. Edite a conexão existente.";
+      if(others.length>=2)return "A decisão já possui duas saídas.";
+    }else{
+      if(others.length>=1)return "Nós Início e Processo permitem apenas uma saída.";
+      if(clean(label,32).length<2)return "A palavra de ligação precisa ter pelo menos dois caracteres.";
+    }
+    return "";
+  }
+  function verifyTypeChange(id,type){
+    const incoming=state.edges.filter(edge=>edge.to===id);
+    const outgoing=countOutgoing(id);
+    if(type==="start"){
+      if(state.nodes.some(node=>node.id!==id&&node.type==="start"))return "O fluxo aceita somente um nó Início.";
+      if(incoming.length)return "Remova as conexões de entrada antes de transformar este nó em Início.";
+      if(outgoing.length>1)return "Um nó Início não pode ter mais de uma saída.";
+    }
+    if(type==="end"&&outgoing.length)return "Remova as saídas antes de transformar este nó em Fim.";
+    if(type==="process"&&outgoing.length>1)return "Um Processo pode ter apenas uma saída; remova a excedente.";
+    if(type==="decision"){
+      if(outgoing.length>2)return "Uma decisão permite no máximo duas saídas.";
+      if(outgoing.some(edge=>!["Sim","Não"].includes(edge.label)))
+        return "Edite as palavras de ligação de saída para Sim/Não antes de transformar em Decisão.";
+      if(outgoing.length===2&&outgoing[0].label===outgoing[1].label)
+        return "Uma decisão não pode repetir o mesmo ramo.";
+    }
+    return "";
+  }
+  function center(node,width,height){
+    return {x:node.x*width/100,y:node.y*height/100};
+  }
+  function drawEdges(){
+    const canvas=$("canvas"),layer=$("edgeLayer");
+    const width=canvas.clientWidth||790,height=canvas.clientHeight||575;
+    $("connections").setAttribute("viewBox","0 0 "+width+" "+height);
+    layer.replaceChildren();
+    for(const edge of state.edges){
+      const from=findNode(edge.from),to=findNode(edge.to);
+      if(!from||!to)continue;
+      const a=center(from,width,height),b=center(to,width,height);
+      const dx=b.x-a.x,dy=b.y-a.y,length=Math.hypot(dx,dy)||1;
+      const ax=a.x+dx/length*68,ay=a.y+dy/length*(from.type==="decision"?55:30);
+      const bx=b.x-dx/length*68,by=b.y-dy/length*(to.type==="decision"?55:30);
+      const curve=Math.min(90,Math.abs(bx-ax)/2);
+      const direction=bx>=ax?1:-1;
+      const d="M "+ax.toFixed(1)+" "+ay.toFixed(1)
+        +" C "+(ax+curve*direction).toFixed(1)+" "+ay.toFixed(1)
+        +" "+(bx-curve*direction).toFixed(1)+" "+by.toFixed(1)
+        +" "+bx.toFixed(1)+" "+by.toFixed(1);
+      layer.appendChild(svg("path",{class:"edge-line",d,"marker-end":"url(#flowArrow)"}));
+      const mx=(ax+bx)/2,my=(ay+by)/2-16;
+      const w=Math.max(48,Math.min(200,edge.label.length*7+20));
+      layer.appendChild(svg("rect",{class:"edge-tag",x:(mx-w/2).toFixed(1),y:(my-12).toFixed(1),width:w,height:24,rx:9}));
+      const text=svg("text",{class:"edge-name",x:mx.toFixed(1),y:my.toFixed(1)});
+      text.textContent=edge.label;
+      layer.appendChild(text);
+    }
+  }
+  function positionButton(node){
+    const button=nodeControls.get(node.id);
+    if(button){button.style.left=node.x+"%";button.style.top=node.y+"%";}
+  }
+  function syncSelected(){
+    nodeControls.forEach((button,id)=>{
+      button.dataset.selected=String(id===selectedNode);
+      button.setAttribute("aria-pressed",String(id===selectedNode));
+    });
+    const node=findNode(selectedNode);
+    $("nodeEditor").hidden=!node;
+    $("nodeHint").textContent=node?"Edite o nome, altere o tipo ou mova o nó selecionado.":"Selecione um nó para alterar seu nome ou tipo e movê-lo no quadro.";
+    if(node){$("nodeName").value=node.label;$("nodeType").value=node.type;}
+  }
+  function selectNode(id){
+    if(!findNode(id))return;
+    selectedNode=id;syncSelected();
+    say("Nó selecionado: "+findNode(id).label+". Use as setas para mover.");
+  }
+  function nudge(id,dx,dy,step=2){
+    const node=findNode(id);
+    if(!node)return false;
+    const nx=clamp(node.x+dx*step,11,89),ny=clamp(node.y+dy*step,13,87);
+    if(nx===node.x&&ny===node.y)return false;
+    remember();
+    node.x=nx;node.y=ny;positionButton(node);drawEdges();
+    say(node.label+" movido. Use Desfazer para recuperar a posição.");
+    return true;
+  }
+  function pointerDown(event,id,button){
+    if(event.button!==undefined&&event.button!==0)return;
+    if(!findNode(id))return;
+    dragging={id,original:snapshot(),moved:false};
+    selectNode(id);
+    if(button.setPointerCapture&&event.pointerId!==undefined)button.setPointerCapture(event.pointerId);
+  }
+  function pointerMove(event,id){
+    if(!dragging||dragging.id!==id)return;
+    const board=$("canvas"),r=board.getBoundingClientRect();
+    if(!r.width||!r.height)return;
+    const node=findNode(id);
+    if(!node)return;
+    const nx=clamp((event.clientX-r.left)/r.width*100,11,89),ny=clamp((event.clientY-r.top)/r.height*100,13,87);
+    if(Math.abs(nx-node.x)<.3&&Math.abs(ny-node.y)<.3)return;
+    if(event.preventDefault)event.preventDefault();
+    node.x=nx;node.y=ny;dragging.moved=true;positionButton(node);drawEdges();
+  }
+  function pointerEnd(cancel=false){
+    if(!dragging)return;
+    const prior=dragging;dragging=null;
+    if(!prior.moved)return;
+    if(cancel){restore(prior.original);render();say("Arraste cancelado.");return;}
+    remember(prior.original);
+    say(findNode(prior.id).label+" reposicionado. Você pode desfazer.");
+  }
+  function renderNodes(){
+    $("nodeLayer").replaceChildren();nodeControls.clear();
+    for(const node of state.nodes){
+      const button=el("button","flow-node");
+      button.type="button";
+      button.dataset.type=node.type;
+      button.setAttribute("aria-label",types[node.type]+": "+node.label+". Selecione ou mova com as setas.");
+      button.setAttribute("aria-pressed",String(node.id===selectedNode));
+      button.append(el("strong","",node.label),el("small","",types[node.type]));
+      button.addEventListener("click",()=>selectNode(node.id));
+      button.addEventListener("keydown",event=>{
+        const keys={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};
+        if(!keys[event.key])return;
+        event.preventDefault();
+        const [dx,dy]=keys[event.key];
+        nudge(node.id,dx,dy,event.shiftKey?7:2);
+      });
+      button.addEventListener("pointerdown",event=>pointerDown(event,node.id,button));
+      button.addEventListener("pointermove",event=>pointerMove(event,node.id));
+      button.addEventListener("pointerup",()=>pointerEnd(false));
+      button.addEventListener("pointercancel",()=>pointerEnd(true));
+      $("nodeLayer").appendChild(button);
+      nodeControls.set(node.id,button);positionButton(node);
+    }
+    syncSelected();
+  }
+  function options(select,selected){
+    select.replaceChildren();
+    for(const node of state.nodes){
+      const option=el("option","",types[node.type]+" · "+node.label);
+      option.value=node.id;select.appendChild(option);
+    }
+    if(state.nodes.some(node=>node.id===selected))select.value=selected;
+    else select.value=state.nodes[0]?.id||"";
+  }
+  function updateLinkInput(){
+    const source=findNode($("edgeFrom").value);
+    const isDecision=source?.type==="decision";
+    $("branchGroup").hidden=!isDecision;
+    $("wordGroup").hidden=!!isDecision;
+    $("saveEdge").disabled=state.nodes.length<2;
+  }
+  function clearLinkEditor(){
+    editingEdge=null;
+    $("edgeWord").value="";
+    $("edgeBranch").value="Sim";
+    $("saveEdge").textContent="Criar conexão";
+    $("cancelEdge").hidden=true;$("deleteEdge").hidden=true;
+  }
+  function fillEdgeEditor(edgeId){
+    const edge=state.edges.find(item=>item.id===edgeId);
+    if(!edge)return;
+    editingEdge=edge.id;
+    $("edgeFrom").value=edge.from;
+    $("edgeTo").value=edge.to;
+    $("edgeWord").value=edge.label;
+    $("edgeBranch").value=["Sim","Não"].includes(edge.label)?edge.label:"Sim";
+    $("saveEdge").textContent="Salvar conexão";
+    $("cancelEdge").hidden=false;$("deleteEdge").hidden=false;
+    updateLinkInput();
+  }
+  function renderLinks(){
+    const previousFrom=$("edgeFrom").value,previousTo=$("edgeTo").value;
+    options($("edgeFrom"),previousFrom);
+    options($("edgeTo"),previousTo);
+    if(!previousTo||previousFrom===previousTo){
+      $("edgeTo").value=state.nodes.find(node=>node.id!==$("edgeFrom").value)?.id||"";
+    }
+    if(editingEdge&&state.edges.some(edge=>edge.id===editingEdge))fillEdgeEditor(editingEdge);
+    else clearLinkEditor();
+    updateLinkInput();
+    const list=$("edgeList");
+    list.replaceChildren();
+    $("noEdges").hidden=state.edges.length!==0;
+    for(const edge of state.edges){
+      const source=findNode(edge.from),target=findNode(edge.to);
+      if(!source||!target)continue;
+      const row=el("li");
+      const button=el("button");
+      button.type="button";
+      button.setAttribute("aria-current",String(editingEdge===edge.id));
+      button.setAttribute("aria-label","Editar conexão: "+source.label+" "+edge.label+" "+target.label);
+      button.append(el("span","",source.label+" → "+edge.label+" → "+target.label),el("b","","Editar"));
+      button.addEventListener("click",()=>{
+        fillEdgeEditor(edge.id);
+        renderLinks();$("edgeWord").hidden||$("edgeBranch").focus();
+        if(!$("wordGroup").hidden)$("edgeWord").focus();
+        say("Conexão selecionada para edição: "+edge.label+".");
+      });
+      row.appendChild(button);list.appendChild(row);
+    }
+  }
+  function displayValidation(issues){
+    const box=$("validation"),list=$("validationList");
+    box.dataset.state=issues.length?"issues":"ok";
+    $("validationHeading").textContent=issues.length?issues.length+" ponto(s) a corrigir":"Fluxo estruturalmente consistente";
+    list.replaceChildren();
+    issues.forEach(issue=>list.appendChild(el("li","",issue)));
+    $("validationNote").textContent=issues.length
+      ?"Revise as conexões e execute a verificação novamente."
+      :"Todos os nós têm caminho até um Fim e as saídas necessárias estão presentes. A verificação não garante correção pedagógica.";
+  }
+  function invalidateValidation(){
+    $("validation").dataset.state="ok";
+    $("validationHeading").textContent="Alterações realizadas - verifique novamente";
+    $("validationList").replaceChildren();
+    $("validationNote").textContent="A última verificação não corresponde mais ao desenho atual.";
+  }
+  function validateFlow(){
+    const issues=[];
+    const starts=state.nodes.filter(node=>node.type==="start");
+    const ends=state.nodes.filter(node=>node.type==="end");
+    if(starts.length!==1)issues.push("É necessário exatamente um nó Início.");
+    if(!ends.length)issues.push("Adicione pelo menos um nó Fim.");
+    const outgoing=new Map(state.nodes.map(node=>[node.id,[]]));
+    const incoming=new Map(state.nodes.map(node=>[node.id,[]]));
+    for(const edge of state.edges){
+      if(!outgoing.has(edge.from)||!incoming.has(edge.to)){
+        issues.push("Existe uma conexão com nó inexistente.");continue;
+      }
+      outgoing.get(edge.from).push(edge);
+      incoming.get(edge.to).push(edge);
+    }
+    for(const node of state.nodes){
+      const out=outgoing.get(node.id),ins=incoming.get(node.id);
+      if(node.type==="start"&&ins.length)issues.push("Início não deve receber conexões.");
+      if(node.type==="end"&&out.length)issues.push("Fim não deve ter saídas.");
+      if(node.type==="decision"){
+        if(out.filter(edge=>edge.label==="Sim").length!==1||out.filter(edge=>edge.label==="Não").length!==1)
+          issues.push("Decisão '"+node.label+"' precisa de uma saída Sim e uma Não.");
+      }else if(node.type!=="end"&&out.length!==1)issues.push("Nó '"+node.label+"' precisa de exatamente uma saída.");
+    }
+    if(starts.length===1){
+      const queue=[starts[0].id],visited=new Set();
+      while(queue.length){
+        const id=queue.shift();
+        if(visited.has(id))continue;
+        visited.add(id);
+        for(const edge of outgoing.get(id)||[])queue.push(edge.to);
+      }
+      for(const node of state.nodes)if(!visited.has(node.id))issues.push("Nó '"+node.label+"' não é alcançável a partir do Início.");
+    }
+    if(ends.length){
+      const reverseQueue=ends.map(node=>node.id),reachesEnd=new Set();
+      while(reverseQueue.length){
+        const id=reverseQueue.shift();
+        if(reachesEnd.has(id))continue;
+        reachesEnd.add(id);
+        for(const edge of incoming.get(id)||[])reverseQueue.push(edge.from);
+      }
+      for(const node of state.nodes)if(!reachesEnd.has(node.id))issues.push("Nó '"+node.label+"' não possui caminho até um Fim.");
+    }
+    displayValidation(issues);
+    say(issues.length?"Verificação encontrou "+issues.length+" pontos para corrigir.":"Fluxograma validado estruturalmente.");
+    return issues;
+  }
+  function render(){
+    if(!findNode(selectedNode))selectedNode=state.nodes[0]?.id||null;
+    if(editingEdge&&!state.edges.some(edge=>edge.id===editingEdge))editingEdge=null;
+    renderNodes();renderLinks();drawEdges();
+    $("counter").textContent=state.nodes.length+" nós · "+state.edges.length+" conexões";
+    $("undo").disabled=history.length===0;
+    $("resetConfirmation").hidden=true;
+    invalidateValidation();
+  }
+  function addNode(){
+    const type=$("newType").value,label=clean($("newLabel").value,48);
+    if(!Object.hasOwn(types,type)){say("Escolha um tipo válido de nó.");return;}
+    if(label.length<2){say("Informe pelo menos dois caracteres para o nó.");$("newLabel").focus();return;}
+    if(state.nodes.length>=maxNodes){say("O limite de 14 nós foi atingido.");return;}
+    if(type==="start"&&state.nodes.some(node=>node.type==="start")){say("O fluxo já possui um nó Início. Renomeie o existente se necessário.");return;}
+    remember();
+    const position=nextPosition(),id="n"+state.nextNode++;
+    state.nodes.push({id,type,label,x:position.x,y:position.y});
+    selectedNode=id;editingEdge=null;
+    $("newLabel").value="";
+    render();nodeControls.get(id)?.focus();
+    say("Nó "+types[type]+" criado: "+label+".");
+  }
+  function saveNode(){
+    const node=findNode(selectedNode);
+    if(!node)return;
+    const label=clean($("nodeName").value,48),type=$("nodeType").value;
+    if(label.length<2){say("O nome do nó precisa de pelo menos dois caracteres.");$("nodeName").focus();return;}
+    if(!Object.hasOwn(types,type)){say("Tipo de nó inválido.");return;}
+    const reason=verifyTypeChange(node.id,type);
+    if(reason){say(reason);return;}
+    if(node.label===label&&node.type===type){say("Nenhuma alteração no nó.");return;}
+    remember();node.label=label;node.type=type;
+    render();$("nodeName").focus();say("Nó alterado: "+label+".");
+  }
+  function deleteNode(){
+    const node=findNode(selectedNode);
+    if(!node)return;
+    const label=node.label;
+    remember();state.nodes=state.nodes.filter(n=>n.id!==node.id);
+    state.edges=state.edges.filter(e=>e.from!==node.id&&e.to!==node.id);
+    selectedNode=state.nodes[0]?.id||null;editingEdge=null;
+    render();$("newLabel").focus();
+    say("Nó '"+label+"' e suas conexões foram excluídos. Use Desfazer para restaurá-los.");
+  }
+  function addOrSaveEdge(){
+    const from=$("edgeFrom").value,to=$("edgeTo").value,source=findNode(from);
+    const label=source?.type==="decision"?$("edgeBranch").value:clean($("edgeWord").value,32);
+    const reason=verifyEdge(from,to,label,editingEdge);
+    if(reason){say(reason);return;}
+    const existing=editingEdge?state.edges.find(edge=>edge.id===editingEdge):null;
+    if(editingEdge&&!existing){say("A conexão selecionada não existe.");clearLinkEditor();return;}
+    if(!existing&&state.edges.length>=maxEdges){say("Limite de 28 conexões atingido.");return;}
+    if(existing&&existing.from===from&&existing.to===to&&existing.label===label){
+      say("A conexão não foi alterada.");return;
+    }
+    remember();
+    if(existing){existing.from=from;existing.to=to;existing.label=label;}
+    else state.edges.push({id:"e"+state.nextEdge++,from,to,label});
+    const edited=!!existing;
+    editingEdge=null;
+    render();$("edgeWord").focus();
+    say(edited?"Conexão atualizada.":"Conexão criada e desenhada no fluxograma.");
+  }
+  function deleteEdge(){
+    if(!editingEdge)return;
+    if(!state.edges.some(edge=>edge.id===editingEdge))return;
+    remember();state.edges=state.edges.filter(edge=>edge.id!==editingEdge);
+    editingEdge=null;render();$("edgeFrom").focus();
+    say("Conexão removida. Use Desfazer para recuperá-la.");
+  }
+  function undo(){
+    if(!history.length)return;
+    restore(history.pop());
+    if(!findNode(selectedNode))selectedNode=state.nodes[0]?.id||null;
+    editingEdge=null;render();$("undo").focus();
+    say("Última alteração desfeita.");
+  }
+  function reset(){
+    remember();restore(clone(seed));
+    selectedNode="n3";editingEdge=null;
+    render();nodeControls.get("n3")?.focus();
+    say("Fluxograma inicial restaurado. Você pode desfazer o reinício.");
+  }
+  $("addForm").addEventListener("submit",event=>{event.preventDefault();addNode();});
+  $("saveNode").addEventListener("click",saveNode);
+  $("deleteNode").addEventListener("click",deleteNode);
+  [["moveUp",0,-1],["moveDown",0,1],["moveLeft",-1,0],["moveRight",1,0]].forEach(([id,x,y])=>{
+    $(id).addEventListener("click",()=>nudge(selectedNode,x,y,4));
+  });
+  $("edgeFrom").addEventListener("change",updateLinkInput);
+  $("edgeForm").addEventListener("submit",event=>{event.preventDefault();addOrSaveEdge();});
+  $("cancelEdge").addEventListener("click",()=>{
+    editingEdge=null;renderLinks();$("edgeFrom").focus();say("Edição da conexão cancelada.");
+  });
+  $("deleteEdge").addEventListener("click",deleteEdge);
+  $("undo").addEventListener("click",undo);
+  $("validate").addEventListener("click",validateFlow);
+  $("reset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=false;$("cancelReset").focus();
+    say("Confirme ou cancele a restauração do fluxograma inicial.");
+  });
+  $("cancelReset").addEventListener("click",()=>{
+    $("resetConfirmation").hidden=true;$("reset").focus();say("Reinício cancelado.");
+  });
+  $("confirmReset").addEventListener("click",reset);
+  if(typeof ResizeObserver!=="undefined")new ResizeObserver(drawEdges).observe($("canvas"));
+  window.addEventListener("resize",drawEdges);
+  render();
+})();
+</script>
+</body>
+</html>
