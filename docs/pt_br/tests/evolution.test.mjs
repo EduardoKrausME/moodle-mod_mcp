@@ -110,7 +110,7 @@ test('navegação, eras, teclado, links científicos e relógio de 24 horas',()=
  get('era-filters').children[4].click();
  get('strata-list').children.at(-1).click();
  assert.equal(get('earth-clock').textContent,'23:59:54');
- assert.equal(get('visited-meter').attrs['aria-valuemax'],'17');
+ assert.match(html,/id="visited-meter"[^>]*aria-valuemax="17"/);
  assert.match(get('fossil-source').href,/^https:\/\//);
 });
 
