@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grandes Invenções | Caderno de Ideias</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;--ink:#1d3041;--muted:#556570;--blue:#194b66;--accent:#bb583d;--paper:#f4eddd;--white:#fffdf7;--line:#d7cbbb;background:var(--paper);color:var(--ink)}
+*{box-sizing:border-box}body{margin:0;min-width:320px;background:linear-gradient(90deg,#d8c6a94d 0 2px,transparent 2px 100%),#f4eddd;background-size:26px 26px}
+button,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #136ba0;outline-offset:3px}button:disabled{cursor:not-allowed;opacity:.38}
+.sheet{max-width:1330px;margin:auto;padding:clamp(15px,3vw,42px)}
+.intro{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end;margin:0 0 25px}
+.eyebrow{font:900 .73rem ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.18em;text-transform:uppercase;color:#a24b36;margin:0 0 10px}
+h1{font-family:Georgia,serif;letter-spacing:-.047em;font-size:clamp(2.2rem,4.8vw,4.2rem);line-height:1.05;margin:0}
+.intro p:last-child{line-height:1.65;color:#4c5f70;max-width:730px;margin:12px 0 0}
+.quality-stamp{align-self:center;transform:rotate(-7deg);border:3px double #a85b42;color:#994b35;padding:13px;border-radius:5px;font:900 .78rem ui-monospace,monospace;text-align:center;letter-spacing:.06em;white-space:nowrap}
+.workbench{display:grid;grid-template-columns:minmax(225px,.37fr) minmax(0,1fr);border:1px solid #c6b6a1;border-radius:19px;box-shadow:8px 10px 0 #83705f1c;background:var(--white);overflow:hidden}
+.rail{padding:23px 15px;border-right:1px solid #d6c9b7;background:#e9e0d1}
+.rail-head{padding:0 7px 15px;border-bottom:1px solid #b6a99c}
+.rail h2,.challenge h2{margin:0;font-size:1.1rem;font-weight:850}
+.rail-head p{font-size:.8rem;line-height:1.55;color:#556574;margin:7px 0 0}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 17px;padding:0 4px}
+.filter{font-size:.73rem;min-height:36px;border:1px solid #c0ad9d;border-radius:7px;background:#fff9ef;color:#4a5260;padding:7px 10px;font-weight:800}
+.filter[aria-pressed="true"]{background:#194b66;color:#fff;border-color:#194b66}
+.timeline{display:grid;align-content:start;gap:4px;max-height:590px;overflow-y:auto;padding:4px 4px 14px 18px;scrollbar-color:#ac8e72 #e9e0d1}
+.entry{display:flex;gap:9px;align-items:center;min-height:57px;text-align:left;position:relative;padding:8px 8px 8px 12px;border:1px solid transparent;background:none;color:#314558;border-radius:10px}
+.entry:before{position:absolute;content:"";left:-15px;top:0;bottom:0;border-left:2px solid #b8a995}
+.entry:after{position:absolute;content:"";left:-19px;top:23px;width:10px;height:10px;background:#e9e0d1;border:2px solid #987e64;border-radius:50%}
+.entry.visited:after{background:#426f5c}
+.entry[aria-current="true"]{background:#fff8ee;border-color:#a9684b;box-shadow:inset 4px 0 #b85f40}
+.entry[aria-current="true"]:after{background:#b85f40;border-color:#b85f40}
+.entry .when{min-width:63px;font-size:.66rem;font-family:ui-monospace,monospace;line-height:1.35;color:#6c5e50;font-weight:750}
+.entry .name{font-size:.82rem;font-weight:820;line-height:1.32}
+.rail-foot{margin:15px 6px 0;padding-top:12px;border-top:1px solid #bfb19e}
+.meter{height:9px;border-radius:99px;background:#cdbdae;border:1px solid #bba993;overflow:hidden;margin-top:9px}
+.meter-fill{width:7.14%;height:100%;background:#2e7d68;transition:width .2s}
+.progress-label{font-size:.75rem;color:#526375;font-weight:750}
+.reset{margin-top:10px;border:0;padding:7px 0;background:none;text-decoration:underline;font-size:.79rem;font-weight:760;color:#235e79}
+.dossier{padding:clamp(17px,3.1vw,39px);background-image:linear-gradient(transparent 31px,#cad8dc77 32px);background-size:100% 32px;background-position:0 14px}
+.dossier-top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.index{font:900 .75rem ui-monospace,monospace;letter-spacing:.09em;color:#8e4b36}
+.location{font-size:.75rem;color:#456477;font-weight:800;border-radius:99px;background:#e4edeb;padding:7px 11px}
+.dossier h2{font-family:Georgia,serif;font-size:clamp(1.65rem,3.7vw,2.9rem);line-height:1.1;letter-spacing:-.025em;margin:0 0 8px;max-width:840px}
+.timeline-date{font:850 .87rem ui-monospace,monospace;color:#af583a;margin:0 0 20px}
+.figure{position:relative;border:1px solid #b7d0d5;border-radius:12px;display:grid;place-items:center;min-height:235px;background-color:#e6f1f2;background-image:linear-gradient(#aac7cc4b 1px,transparent 1px),linear-gradient(90deg,#aac7cc4b 1px,transparent 1px);background-size:25px 25px;overflow:hidden}
+.figure:before,.figure:after{content:"";position:absolute;pointer-events:none;border:1px solid #8baeb887;border-radius:50%;width:210px;height:210px}
+.figure:after{width:315px;height:315px}
+.drawing{width:min(94%,430px);height:240px;color:#174c6d;position:relative;z-index:1;filter:drop-shadow(4px 5px 0 #b5d4d24b)}
+.figure-marker{position:absolute;z-index:2;top:10px;left:12px;font:900 .68rem ui-monospace,monospace;color:#2f6073;letter-spacing:.08em}
+.figure-marker.right{left:auto;right:12px;top:auto;bottom:10px}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;margin:17px 0 0}
+.tab{border:1px solid #c8b8a8;border-radius:8px 8px 0 0;padding:10px 13px;background:#ece4d6;color:#4d5d65;font-size:.8rem;font-weight:830;min-height:43px}
+.tab[aria-selected="true"]{color:#fff;background:#194b66;border-color:#194b66}
+.explanation{background:#fffdf7;border:1px solid #c8b8a8;border-top:4px solid #194b66;border-radius:0 11px 11px 11px;padding:19px;min-height:148px}
+.explanation h3{font-size:1rem;margin:0 0 9px;color:#204861}
+.explanation p{line-height:1.69;margin:0;color:#354b5c}
+.context-note{margin:14px 0 0;border-left:3px solid #b85f40;padding:8px 12px;background:#f8eee2;color:#615247;font-size:.86rem;line-height:1.57}
+.source{font-size:.8rem;color:#556575;margin:13px 0 0;line-height:1.6}
+.source a{font-weight:800;color:#115d86;text-underline-offset:3px;overflow-wrap:anywhere}
+.nav-actions{display:flex;justify-content:space-between;gap:10px;margin:23px 0 0}
+.nav-actions button{min-height:44px;padding:10px 15px;border-radius:9px;font-weight:850;border:1px solid #194b66;background:#fff9ed;color:#194b66}
+.nav-actions button:last-child{background:#194b66;color:#fff}
+.challenge{margin-top:25px;background:#fffdf7;border:1px solid #c9b8a0;border-radius:16px;padding:clamp(16px,2.5vw,26px);box-shadow:6px 6px 0 #887a6640}
+.challenge-top{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.challenge-top p{line-height:1.58;font-size:.86rem;color:#506473;margin:7px 0 0;max-width:790px}
+.mode-label{font:850 .71rem ui-monospace,monospace;color:#994b35;letter-spacing:.1em}
+.order-list{list-style:none;padding:0;display:grid;gap:8px;margin:20px 0 14px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.order-item{display:grid;grid-template-columns:27px 1fr auto;align-items:center;gap:8px;border:1px solid #c1cace;background:#eef5f3;border-radius:9px;min-height:72px;padding:8px 10px}
+.position{font:900 .95rem ui-monospace,monospace;color:#1b596d}
+.order-item b{font-size:.86rem;line-height:1.35}.move{display:flex;gap:4px}
+.move button{min-width:37px;min-height:40px;background:#fff;border:1px solid #b4c4c9;border-radius:6px;color:#23526d;font-weight:900}
+.challenge-actions{display:flex;flex-wrap:wrap;align-items:center;gap:11px}
+.verify{border:0;background:#ab5638;color:#fff;padding:12px 16px;border-radius:9px;font-weight:850;min-height:44px}
+.challenge-feedback{font-size:.88rem;color:#764326;line-height:1.5;margin:0;flex:1;min-width:160px}
+.challenge-feedback.good{color:#236346}
+.disclaimer{font-size:.8rem;color:#5d6b72;line-height:1.7;margin:19px 0 0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:910px){.workbench{grid-template-columns:1fr}.rail{border-right:0;border-bottom:1px solid #d4c4af}.rail-head{padding-bottom:8px}.timeline{grid-auto-flow:column;grid-auto-columns:145px;display:grid;overflow-x:auto;overflow-y:hidden;max-height:none;padding:12px 5px 13px;scroll-snap-type:x proximity}.entry{flex-direction:column;align-items:flex-start;justify-content:center;min-height:84px;scroll-snap-align:start}.entry:before{display:none}.entry:after{left:6px;top:5px;width:7px;height:7px}.entry .when{padding-left:10px}.rail-foot{margin:0;padding-top:12px}.order-list{grid-template-columns:1fr}}
+@media(max-width:540px){.sheet{padding:12px}.intro{grid-template-columns:1fr}.quality-stamp{display:none}.dossier{padding:19px 15px}.dossier h2{font-size:1.95rem}.figure{min-height:180px}.drawing{height:185px}.tabs{gap:4px}.tab{padding:9px 8px;font-size:.75rem}.entry{min-width:132px}.nav-actions button{padding:10px 11px}.order-item{grid-template-columns:22px 1fr auto}.move button{min-width:36px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.timeline{scroll-snap-type:none}}
+</style>
+</head>
+<body>
+<main class="sheet">
+<div class="intro"><div><p class="eyebrow">Caderno de projetos / invenções que mudaram a vida</p><h1>Grandes Invenções da Humanidade</h1><p>Uma história de soluções, erros, colaboração e consequências. Abra cada desenho, descubra qual problema a tecnologia tentou resolver e investigue o que mudou depois.</p></div><span class="quality-stamp">14 INVENTOS<br>EM EXPOSIÇÃO</span></div>
+<div class="workbench">
+<aside class="rail" aria-label="Índice do caderno">
+ <div class="rail-head"><h2>Índice cronológico</h2><p>Escolha uma invenção. Use ↑ ↓, Home e End nos cartões; no celular, deslize a lista.</p></div>
+ <div class="filters" id="filters" role="group" aria-label="Filtrar invenções por período"></div>
+ <nav id="timeline" class="timeline" aria-label="Marcos históricos das invenções"></nav>
+ <div class="rail-foot"><span id="progress-label" class="progress-label">1 de 14 invenções exploradas</span><div id="meter" class="meter" role="progressbar" aria-label="Invenções exploradas" aria-valuemin="0" aria-valuemax="14" aria-valuenow="1"><div id="meter-fill" class="meter-fill"></div></div><button id="reset" type="button" class="reset">Recomeçar visita</button></div>
+</aside>
+<section class="dossier" aria-labelledby="invention-title">
+ <div class="dossier-top"><span id="sheet-index" class="index">FICHA 01 / 14</span><span id="invention-region" class="location">Eurásia · Mecânica</span></div>
+ <h2 id="invention-title">Mover cargas com roda e eixo</h2><p id="invention-date" class="timeline-date">c. 3500 a.C.</p>
+ <div class="figure"><span class="figure-marker">ESQUEMA DE PRINCÍPIO</span><svg class="drawing" viewBox="0 0 420 300" role="img" aria-labelledby="drawing-title drawing-desc"><title id="drawing-title">Ilustração original de invenção</title><desc id="drawing-desc">Desenho esquemático original, não é uma reconstrução exata.</desc><defs>
+<symbol id="sk-wheel" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><circle cx="208" cy="147" r="100"/><circle cx="208" cy="147" r="21"/><path d="M208 47v79m0 42v79M108 147h79m42 0h79M137 76l56 56m30 30 56 56m0-142-56 56m-30 30-56 56"/><path d="M54 258h309M75 256v-22m267 22v-22"/></g></symbol>
+<symbol id="sk-writing" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M91 48h235l17 210H76zM119 82h49m29 0h34m41 0h31M125 119l22 9 14-9m26 0h47m27 0 25 12 18-12M120 170l22 13 15-13m30 0h45m28 0 25 15 17-15M130 217h35m27 0h53m18 0h29"/></g></symbol>
+<symbol id="sk-paper" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M101 40h177l45 49v164H101zM278 40v50h45M123 66H80v174h20M147 114h120m-120 28h132m-132 28h115m-115 28h137m-137 27h90"/></g></symbol>
+<symbol id="sk-type" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5"><rect x="62" y="67" width="93" height="82" rx="3"/><rect x="163" y="67" width="93" height="82" rx="3"/><rect x="264" y="67" width="93" height="82" rx="3"/><rect x="107" y="159" width="93" height="83" rx="3"/><rect x="208" y="159" width="93" height="83" rx="3"/><path d="M88 115h42m-22-23v44M185 105l22 28 27-28m-25 29v-42M288 92h47l-47 42h47M135 191h40m-20-19v53m75-30h49m-24-24v52"/></g></symbol>
+<symbol id="sk-compass" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><circle cx="210" cy="147" r="106"/><circle cx="210" cy="147" r="84" stroke-dasharray="7 10"/><path d="m210 53 22 94-22 94-22-94z"/><circle cx="210" cy="147" r="11"/><path d="M210 25v16m0 211v20M88 147H68m265 0h19M137 75l-11-11m157 155 11 11m-157-11-11 11M283 75l11-11"/></g></symbol>
+<symbol id="sk-press" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"><path d="M93 68h234M124 68v171m171-171v171M91 239h240M155 202h111m-102-26h93m-86-56h81m-36-52v91m-40-103h81m-40 0-25-18"/><path d="M143 239v29m143-29v29m-103-68v-24m28 0v24m28-24v24"/></g></symbol>
+<symbol id="sk-steam" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="120" y="103" width="175" height="125" rx="10"/><path d="M140 103V62h45v41M238 103V46h34v57M120 146h175m-175 36h175M73 227h274M156 228v29m102-29v29"/><circle cx="307" cy="210" r="48"/><circle cx="307" cy="210" r="13"/><path d="M307 162v35m0 26v35m-48-48h35m26 0h35M143 65q-24-21 0-43m35 33q-19-27 5-42"/></g></symbol>
+<symbol id="sk-vaccine" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><path d="M218 36c-32 25-68 29-113 36v73c0 54 34 92 113 126 74-34 105-70 105-126V72c-44-7-79-10-105-36z"/><path d="M147 151h142M218 80v139M174 102h88v91h-88z" opacity=".7"/><path d="M180 146l24 25 49-55"/></g></symbol>
+<symbol id="sk-telegraph" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="71" y="206" width="275" height="45" rx="7"/><path d="M95 201l84-51 43 8 58 48M178 150l27-67 70 27-53 48M202 82h62m-82 29h43"/><circle cx="112" cy="224" r="9"/><circle cx="310" cy="224" r="9"/><path d="M61 76h42m14 0h11m20 0h42m16 0h11m20 0h42"/></g></symbol>
+<symbol id="sk-lamp" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M164 193c-5-28-40-48-40-92a86 86 0 0 1 172 0c0 43-35 65-40 92zM167 193h86v41h-86zM175 237h70m-62 19h53"/><path d="M182 189v-55l26-17 25 17v55m-51-55 25 29 26-29"/><path d="M209 7v19m-112 90H76m267 0h-21M127 32l-17-18m182 18 17-18"/></g></symbol>
+<symbol id="sk-airplane" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M56 146h307M92 146l53-58h152l31 58m-232 0 59 42h145l36-42M209 88v100M157 88l-33-34m173 34 34-34M117 188l-17 28m198-28 16 28M77 234h270"/><circle cx="208" cy="145" r="26"/><path d="M203 119v52m-22-27h54"/></g></symbol>
+<symbol id="sk-transistor" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M145 80q65-62 129 0v121H145zM164 201v58m46-58v58m45-58v58M173 117h74m-74 29h74M190 146v34l-25 21m57-55v34l32 21"/><circle cx="210" cy="81" r="14"/><path d="M85 251h49m152 0h49M98 225v26m223-26v26"/></g></symbol>
+<symbol id="sk-web" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M93 77 210 143 330 65M93 77l13 140 104-74 117 79 3-157M106 217l221 5M210 143V33m0 110 5 109M93 77 210 33l120 32M106 217l109 35 112-30"/><circle cx="93" cy="77" r="16"/><circle cx="210" cy="143" r="22"/><circle cx="330" cy="65" r="16"/><circle cx="106" cy="217" r="16"/><circle cx="327" cy="222" r="16"/><circle cx="210" cy="33" r="12"/><circle cx="215" cy="252" r="12"/></g></symbol>
+<symbol id="sk-transformer" viewBox="0 0 420 300"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M64 68h48v48H64zm0 79h48v48H64zm0 79h48v48H64zM304 68h48v48h-48zm0 79h48v48h-48zm0 79h48v48h-48z"/><path d="M112 92 304 92m-192 0 192 79m-192-79 192 158M112 171 304 92m-192 79h192m-192 0 192 79m-192 79 192-158m-192 79 192-158m-192 158h192" opacity=".65"/><circle cx="208" cy="171" r="35" fill="#fffdfa"/><path d="m194 172 10 11 18-24"/></g></symbol>
+</defs><use id="drawing-use" href="#sk-wheel"></use></svg><span class="figure-marker right">SEM ESCALA · SVG AUTORAL</span></div>
+ <div class="tabs" role="tablist" aria-label="Perspectivas da invenção"><button class="tab" type="button" id="tab-problem" role="tab" aria-controls="explanation" aria-selected="true">01 · O problema</button><button class="tab" type="button" id="tab-solution" role="tab" aria-controls="explanation" aria-selected="false" tabindex="-1">02 · A solução</button><button class="tab" type="button" id="tab-impact" role="tab" aria-controls="explanation" aria-selected="false" tabindex="-1">03 · O impacto</button></div>
+ <div id="explanation" class="explanation" role="tabpanel" aria-labelledby="tab-problem" tabindex="0"><h3 id="explanation-title">Qual problema precisava ser resolvido?</h3><p id="explanation-text"></p></div>
+ <p class="context-note"><strong>Importante:</strong> <span id="invention-caveat"></span></p>
+ <p class="source">Referência histórica: <a id="invention-source" target="_blank" rel="noopener noreferrer" href="https://www.getty.edu/">Fonte consultada</a>. Os desenhos são esquemáticos e criados para esta atividade.</p>
+ <div class="nav-actions"><button type="button" id="previous">← Invenção anterior</button><button type="button" id="following">Próxima invenção →</button></div>
+</section></div>
+<section class="challenge" aria-labelledby="challenge-title">
+ <div class="challenge-top"><div><span class="mode-label">LABORATÓRIO DE HISTÓRIA</span><h2 id="challenge-title">Monte sua própria cronologia</h2><p>Quatro invenções estão fora de ordem. Mova cada uma com os botões até ficar da mais antiga para a mais recente e confira a sequência. Você pode consultar as fichas durante o exercício.</p></div><span class="mode-label">DESAFIO FORMATIVO · SEM NOTA</span></div>
+ <ol class="order-list" id="order-list" aria-label="Ordem escolhida para as invenções"></ol>
+ <div class="challenge-actions"><button type="button" class="verify" id="check-order">Conferir sequência</button><button type="button" class="reset" id="restart-order">Recomeçar desafio</button><p class="challenge-feedback" id="order-feedback" role="status" aria-live="polite">Organize os quatro marcos antes de conferir.</p></div>
+ <p class="disclaimer">Esta é uma seleção pedagógica, não uma lista de criadores isolados nem de datas exatas de todas as invenções. Processos são coletivos e muitas tecnologias surgiram em diferentes lugares. Os resultados do desafio ficam apenas em memória e não são enviados ao Moodle.</p>
+</section>
+<p id="announcer" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+</main>
+<script>
+"use strict";
+const inventions = [{"id":"roda","year":-3500,"when":"c. 3500 a.C.","short":"Roda e eixo","phase":"origens","region":"Eurásia","label":"Mecânica","title":"Mover cargas com roda e eixo","problem":"Transportar cargas pesadas em terra demandava muito esforço com trenós e tração direta.","solution":"A combinação entre uma roda que gira e um eixo permite deslocamentos contínuos com menos atrito de rolamento em superfícies adequadas. As primeiras rodas também tiveram usos em cerâmica.","impact":"Carros, carroças, mecanismos e sistemas de transmissão passaram a contar com novas soluções de movimento.","careful":"As evidências mais antigas surgem em regiões da Eurásia no quarto milênio a.C.; não há consenso sobre um inventor individual nem uma data única. Roda não serve igualmente para todo terreno.","source":"UNESCO · History of Humanity, vol. II","url":"https://unesdoc.unesco.org/ark:/48223/pf0000115493","motif":"wheel"},{"id":"escrita","year":-3400,"when":"c. 3400 a.C.","short":"Escrita","phase":"origens","region":"Mesopotâmia e outros centros","label":"Comunicação","title":"Registrar informações para além da memória","problem":"O crescimento das cidades e das trocas ampliou a necessidade de registrar quantidades, responsabilidades e acordos.","solution":"Sistemas de sinais gráficos se desenvolveram na Mesopotâmia e, de forma independente, em outras regiões, permitindo registros administrativos e posteriormente textos complexos.","impact":"A escrita transformou a administração, a transmissão de conhecimento e o registro de leis e narrativas.","careful":"Os primeiros sistemas não eram alfabetos modernos; diferentes povos criaram tradições de escrita independentes. A data mesopotâmica é aproximada.","source":"Getty · Mesopotamia: Civilization Begins","url":"https://www.getty.edu/art/exhibitions/mesopotamia/explore.html","motif":"writing"},{"id":"papel","year":105,"when":"105 d.C.","short":"Papel","phase":"conhecimento","region":"China","label":"Material","title":"Aperfeiçoar um suporte leve para escrever","problem":"Superfícies de escrita como madeira, seda e outros materiais podiam ser caros, pesados ou pouco práticos.","solution":"Na China, técnicas de produzir folhas com fibras vegetais já existiam antes da era comum. Em 105 d.C., a tradição escrita registra o aperfeiçoamento e a apresentação de um processo associado a Cai Lun.","impact":"O papel favoreceu burocracias, ensino, circulação de textos e, mais tarde, a expansão das tecnologias de impressão.","careful":"Cai Lun não deve ser descrito como único inventor do papel: há evidências arqueológicas de papéis anteriores a 105 d.C.","source":"University of Oxford · Origins of Paper","url":"https://www.cabinet.ox.ac.uk/origins-paper","motif":"paper"},{"id":"tipos","year":1040,"when":"c. 1040 d.C.","short":"Tipos móveis","phase":"conhecimento","region":"China","label":"Reprodução","title":"Reutilizar caracteres para imprimir textos","problem":"Gravar blocos inteiros de madeira para cada página exigia preparar uma matriz nova e pouco flexível.","solution":"Bi Sheng desenvolveu na China um sistema de tipos móveis de argila no século XI, com caracteres individuais reorganizáveis para novas páginas.","impact":"A possibilidade de reutilizar unidades de impressão criou caminhos técnicos para composição e reprodução de textos.","careful":"A impressão por blocos já existia na Ásia; tipos móveis metálicos foram desenvolvidos também na Coreia antes de Gutenberg. A adoção variou conforme as escritas e os custos.","source":"Columbia University · Song Dynasty Printing","url":"https://afe.easia.columbia.edu/songdynasty-module/tech-printing.html","motif":"type"},{"id":"bussola","year":1100,"when":"sécs. XI–XII","short":"Bússola náutica","phase":"conhecimento","region":"China","label":"Navegação","title":"Orientar viagens pelo magnetismo","problem":"Nuvens, mar aberto e baixa visibilidade limitavam a orientação por estrelas, costa e outros sinais naturais.","solution":"Conhecimentos chineses sobre magnetismo foram aplicados a agulhas orientadas e, durante a dinastia Song, ao uso náutico da bússola.","impact":"A técnica contribuiu para viagens e rotas marítimas mais extensas e seguras, em combinação com cartas e observação.","careful":"O magnetismo era conhecido muito antes de seu uso marítimo. A bússola não elimina a necessidade de outros instrumentos nem indica o norte geográfico exato sem correções.","source":"Columbia University · Song Dynasty Compass","url":"https://afe.easia.columbia.edu/songdynasty-module/tech-compass.html","motif":"compass"},{"id":"imprensa","year":1450,"when":"c. 1450 d.C.","short":"Imprensa europeia","phase":"conhecimento","region":"Mainz, Europa","label":"Reprodução","title":"Produzir livros em escala muito maior","problem":"Copiar livros à mão ou preparar matrizes extensas restringia a velocidade de reprodução e o acesso aos exemplares.","solution":"Na Europa do século XV, Gutenberg combinou tipos metálicos, tinta apropriada, molde e prensa em um sistema de impressão comercial.","impact":"A circulação de obras e debates ganhou escala, transformando o mercado editorial, os estudos e a comunicação.","careful":"Impressão e tipos móveis já existiam na Ásia. O marco de 1450 descreve uma inovação de sistema na Europa, não a primeira impressão do mundo.","source":"Smarthistory · Printmaking in Europe","url":"https://smarthistory.org/printmaking-europe-14001800/","motif":"press"},{"id":"vapor","year":1712,"when":"1712","short":"Máquina a vapor","phase":"industrial","region":"Grã-Bretanha","label":"Energia","title":"Transformar calor em trabalho mecânico","problem":"Retirar água de minas profundas exigia bombeamento mais potente do que os métodos usuais.","solution":"Thomas Newcomen instalou uma máquina atmosférica a vapor para acionar bombas. Melhorias posteriores, como as de James Watt, ampliaram a eficiência.","impact":"Motores térmicos contribuíram para a mineração, o desenvolvimento industrial e novas formas de usar energia.","careful":"A máquina de Newcomen não era locomotiva e não foi a primeira experiência humana com vapor: foi um marco de aplicação prática.","source":"ASME · Newcomen Engine","url":"https://www.asme.org/about-asme/engineering-history/landmarks/70-newcomen-engine","motif":"steam"},{"id":"vacina","year":1796,"when":"1796","short":"Vacinação","phase":"industrial","region":"Europa; antecedentes globais","label":"Saúde","title":"Prevenir a varíola com um novo método","problem":"A varíola causava mortes e sequelas, e práticas anteriores de variolação envolviam riscos relevantes.","solution":"Edward Jenner realizou em 1796 um experimento histórico usando material associado à varíola bovina. Isso ajudou a impulsionar o desenvolvimento da vacinação.","impact":"Vacinas se tornaram uma tecnologia essencial de prevenção e, após séculos de esforços coletivos, contribuíram para erradicar a varíola.","careful":"Práticas de variolação eram utilizadas na Ásia e África muito antes de Jenner. O experimento histórico envolvendo criança e exposição à doença não é modelo ético para a medicina atual.","source":"OMS · History of Smallpox Vaccination","url":"https://www.who.int/news-room/spotlight/history-of-vaccination/history-of-smallpox-vaccination","motif":"vaccine"},{"id":"telegrafo","year":1844,"when":"24 mai 1844","short":"Telégrafo elétrico","phase":"industrial","region":"Estados Unidos; redes globais","label":"Comunicação","title":"Enviar mensagens elétricas à distância","problem":"Mensagens transportadas por mensageiros ou navios demoravam horas, dias ou semanas para atravessar grandes distâncias.","solution":"Sistemas de telégrafo elétrico codificavam mensagens em sinais transmitidos por fios. Em 1844, uma demonstração pública conectou Washington a Baltimore.","impact":"A transmissão rápida de notícias mudou comércio, imprensa, coordenação de transportes e serviços públicos.","careful":"Vários pesquisadores e inventores contribuíram para o telégrafo. Morse e Alfred Vail não foram os únicos envolvidos no desenvolvimento da tecnologia.","source":"Library of Congress · Morse Papers","url":"https://www.loc.gov/collections/samuel-morse-papers/articles-and-essays/collection-highlights/invention-of-the-telegraph/","motif":"telegraph"},{"id":"lampada","year":1879,"when":"1878–1879","short":"Lâmpada incandescente","phase":"industrial","region":"Europa e Estados Unidos","label":"Energia","title":"Tornar a iluminação elétrica mais prática","problem":"A iluminação dependia de chamas ou sistemas elétricos caros e pouco adequados a ambientes menores.","solution":"Inventores como Joseph Swan e Thomas Edison desenvolveram e demonstraram lâmpadas incandescentes mais práticas no final da década de 1870.","impact":"Iluminação e redes de distribuição elétrica alteraram ambientes de trabalho, espaços públicos e a vida noturna.","careful":"Edison não inventou sozinho toda a iluminação elétrica. O avanço dependeu também de geradores, distribuição, materiais e numerosas equipes.","source":"US Department of Energy · History of the Light Bulb","url":"https://www.energy.gov/articles/history-light-bulb","motif":"lamp"},{"id":"aviao","year":1903,"when":"17 dez 1903","short":"Avião motorizado","phase":"industrial","region":"Estados Unidos; pioneiros globais","label":"Transporte","title":"Voar com propulsão e controle","problem":"Sustentar um veículo mais pesado que o ar exigia resolver simultaneamente sustentação, propulsão e controle.","solution":"Os irmãos Wright realizaram voos motorizados, controlados e sustentados em Kitty Hawk, em 1903, apoiados em experimentos anteriores com planadores.","impact":"A aviação abriu novas possibilidades de transporte, observação, comunicação e, também, guerra.","careful":"Houve contribuição de diversos pioneiros, incluindo Santos-Dumont, cujos voos públicos ocorreram em 1906. Critérios de demonstração e reconhecimento histórico diferem.","source":"Smithsonian NASM · Flight Before the Airplane","url":"https://airandspace.si.edu/explore/stories/flight-airplane","motif":"airplane"},{"id":"transistor","year":1947,"when":"dez 1947","short":"Transistor","phase":"digital","region":"Estados Unidos","label":"Eletrônica","title":"Controlar sinais com semicondutores","problem":"Válvulas eletrônicas ocupavam espaço, consumiam energia e dificultavam a miniaturização de equipamentos.","solution":"John Bardeen e Walter Brattain demonstraram um transistor de contato pontual nos Bell Labs; William Shockley participou do programa e de desenvolvimentos posteriores.","impact":"O transistor tornou possível a evolução de circuitos eletrônicos compactos e, posteriormente, microprocessadores.","careful":"O dispositivo de 1947 não era o transistor moderno de silício. A transformação industrial exigiu muitas outras invenções e aperfeiçoamentos.","source":"Computer History Museum · Silicon Engine","url":"https://www.computerhistory.org/siliconengine/invention-of-the-point-contact-transistor/","motif":"transistor"},{"id":"web","year":1989,"when":"1989–1991","short":"World Wide Web","phase":"digital","region":"CERN, Europa; rede mundial","label":"Informação","title":"Conectar documentos por hiperlinks","problem":"Compartilhar informações entre computadores e equipes de pesquisa era fragmentado e complicado.","solution":"Tim Berners-Lee propôs em 1989 uma rede de documentos ligados por hiperlinks; browsers e servidores começaram a operar no CERN e a circular em 1991.","impact":"A Web facilitou publicação e acesso descentralizado a documentos, impulsionando serviços e novas formas de comunicação.","careful":"A internet já existia antes da Web. São tecnologias distintas, ainda que relacionadas.","source":"CERN · A Short History of the Web","url":"https://home.cern/science/computing/the-birth-of-the-web/short-history-web/","motif":"web"},{"id":"transformer","year":2017,"when":"2017","short":"Arquitetura Transformer","phase":"digital","region":"Pesquisa internacional","label":"Computação","title":"A atenção transforma o processamento de sequências","problem":"Modelos de linguagem e tradução enfrentavam dificuldades para capturar relações em longas sequências e treinar com eficiência.","solution":"O artigo 'Attention Is All You Need' apresentou uma arquitetura baseada em mecanismos de atenção, chamada Transformer, que marcou uma mudança na pesquisa em aprendizado de máquina.","impact":"A arquitetura ajudou a fundamentar várias famílias de modelos de linguagem e aplicações modernas de inteligência artificial.","careful":"A IA não nasceu em 2017 e Transformer não é sinônimo de toda IA. Houve décadas de pesquisa anterior e muitos desenvolvimentos posteriores.","source":"Google Research · Attention Is All You Need","url":"https://research.google/pubs/attention-is-all-you-need/","motif":"transformer"}];
+const groups=[["all","Todas"],["origens","Origens"],["conhecimento","Conhecimento"],["industrial","Máquinas e saúde"],["digital","Mundo digital"]];
+const tabOrder=["problem","solution","impact"];
+const tabHeadings={problem:"Qual problema precisava ser resolvido?",solution:"Como a tecnologia funcionou?",impact:"O que mudou depois?"};
+const el=id=>document.getElementById(id);
+const state={filter:"all",active:inventions[0].id,tab:"problem",visited:new Set([inventions[0].id]),order:["web","papel","transistor","vapor"]};
+const visible=()=>inventions.filter(item=>state.filter==="all"||item.phase===state.filter);
+function drawFilters(){
+ const host=el("filters");host.replaceChildren();
+ for(const [id,title] of groups){
+  const button=document.createElement("button");button.className="filter";button.type="button";button.textContent=title;
+  button.setAttribute("aria-pressed",id===state.filter?"true":"false");
+  button.addEventListener("click",()=>applyFilter(id));host.append(button);
+ }
+}
+function drawNavigation(){
+ const host=el("timeline"),items=visible();
+ host.replaceChildren();
+ items.forEach((item,i)=>{
+  const button=document.createElement("button");button.type="button";button.className="entry";button.setAttribute("aria-current",state.active===item.id?"true":"false");
+  button.classList.toggle("visited",state.visited.has(item.id));
+  button.setAttribute("aria-label",item.when+": "+item.short);
+  const time=document.createElement("span");time.className="when";time.textContent=item.when;
+  const name=document.createElement("span");name.className="name";name.textContent=item.short;
+  button.append(time,name);
+  button.addEventListener("click",()=>select(item.id));
+  button.addEventListener("keydown",event=>{
+   let target=null;
+   if(event.key==="ArrowDown"||event.key==="ArrowRight")target=Math.min(items.length-1,i+1);
+   if(event.key==="ArrowUp"||event.key==="ArrowLeft")target=Math.max(0,i-1);
+   if(event.key==="Home")target=0;
+   if(event.key==="End")target=items.length-1;
+   if(target!==null){event.preventDefault();select(items[target].id);const btn=host.querySelectorAll(".entry")[target];if(btn)btn.focus();}
+  });
+  host.append(button);
+ });
+}
+function drawTab(){
+ const item=inventions.find(i=>i.id===state.active);
+ if(!item)return;
+ for(const key of tabOrder){
+  const tab=el("tab-"+key);
+  tab.setAttribute("aria-selected",key===state.tab?"true":"false");
+  tab.tabIndex=key===state.tab?0:-1;
+ }
+ el("explanation").setAttribute("aria-labelledby","tab-"+state.tab);
+ el("explanation-title").textContent=tabHeadings[state.tab];
+ el("explanation-text").textContent=item[state.tab];
+}
+function select(id){
+ const items=visible(),index=items.findIndex(item=>item.id===id);
+ if(index<0)return;
+ const item=items[index];state.active=id;state.visited.add(id);
+ el("sheet-index").textContent="FICHA "+String(inventions.indexOf(item)+1).padStart(2,"0")+" / "+inventions.length;
+ el("invention-region").textContent=item.region+" · "+item.label;
+ el("invention-title").textContent=item.title;
+ el("invention-date").textContent=item.when;
+ el("invention-caveat").textContent=item.careful;
+ el("invention-source").textContent=item.source;
+ el("invention-source").href=item.url;
+ el("drawing-use").setAttribute("href","#sk-"+item.motif);
+ el("drawing-title").textContent="Ilustração original: "+item.short;
+ el("drawing-desc").textContent="Ilustração vetorial autoral, esquemática e sem escala da tecnologia "+item.short+".";
+ el("previous").disabled=index===0;el("following").disabled=index===items.length-1;
+ el("progress-label").textContent=state.visited.size+" de "+inventions.length+" invenções exploradas";
+ el("meter").setAttribute("aria-valuenow",String(state.visited.size));
+ el("meter-fill").style.width=String(state.visited.size/inventions.length*100)+"%";
+ drawNavigation();drawTab();
+ const host=el("timeline"),target=host.querySelectorAll(".entry")[index];
+ if(target){
+  const smooth=window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
+  if(window.matchMedia("(max-width: 910px)").matches)host.scrollTo({left:Math.max(0,target.offsetLeft-host.offsetLeft-host.clientWidth/2+target.clientWidth/2),behavior:smooth});
+  else host.scrollTo({top:Math.max(0,target.offsetTop-host.offsetTop-host.clientHeight/2+target.clientHeight/2),behavior:smooth});
+ }
+ el("announcer").textContent="Ficha "+(inventions.indexOf(item)+1)+": "+item.short+", "+item.when;
+}
+function applyFilter(id){
+ if(!groups.some(g=>g[0]===id))return;
+ state.filter=id;drawFilters();
+ const items=visible();if(!items.some(i=>i.id===state.active))state.active=items[0].id;
+ select(state.active);
+ el("announcer").textContent="Filtro "+groups.find(g=>g[0]===id)[1]+": "+items.length+" invenções.";
+}
+for(const [index,key] of tabOrder.entries()){
+ const tab=el("tab-"+key);
+ tab.addEventListener("click",()=>{state.tab=key;drawTab();});
+ tab.addEventListener("keydown",event=>{
+  let pos=null;
+  if(event.key==="ArrowRight")pos=(index+1)%tabOrder.length;
+  if(event.key==="ArrowLeft")pos=(index+tabOrder.length-1)%tabOrder.length;
+  if(event.key==="Home")pos=0;
+  if(event.key==="End")pos=tabOrder.length-1;
+  if(pos!==null){event.preventDefault();state.tab=tabOrder[pos];drawTab();el("tab-"+state.tab).focus();}
+ });
+}
+el("previous").addEventListener("click",()=>{const items=visible(),i=items.findIndex(m=>m.id===state.active);if(i>0)select(items[i-1].id);});
+el("following").addEventListener("click",()=>{const items=visible(),i=items.findIndex(m=>m.id===state.active);if(i>=0&&i<items.length-1)select(items[i+1].id);});
+el("reset").addEventListener("click",()=>{state.filter="all";state.tab="problem";state.visited.clear();state.visited.add(inventions[0].id);drawFilters();select(inventions[0].id);el("announcer").textContent="Visita reiniciada. Primeira invenção selecionada.";});
+function renderOrder(){
+ const list=el("order-list");list.replaceChildren();
+ state.order.forEach((id,index)=>{
+  const item=inventions.find(i=>i.id===id);
+  const li=document.createElement("li");li.className="order-item";
+  const position=document.createElement("span");position.className="position";position.textContent=String(index+1).padStart(2,"0");
+  const label=document.createElement("b");label.textContent=item.short;
+  const controls=document.createElement("div");controls.className="move";
+  for(const [direction,name] of [[-1,"Subir"],[1,"Descer"]]){
+   const button=document.createElement("button");button.type="button";button.textContent=direction<0?"↑":"↓";
+   button.setAttribute("aria-label",name+" "+item.short);button.disabled=index+direction<0||index+direction>=state.order.length;
+   button.addEventListener("click",()=>{
+    const j=index+direction;
+    [state.order[index],state.order[j]]=[state.order[j],state.order[index]];
+    renderOrder();el("order-feedback").textContent="Ordem alterada. Confira quando terminar.";
+    el("order-feedback").classList.remove("good");
+    const next=el("order-list").querySelectorAll("li")[j];
+    if(next){const focusButton=next.querySelectorAll("button")[direction<0?0:1];if(focusButton&&!focusButton.disabled)focusButton.focus();}
+   });
+   controls.append(button);
+  }
+  li.append(position,label,controls);list.append(li);
+ });
+}
+el("check-order").addEventListener("click",()=>{
+ const sorted=state.order.every((id,i,a)=>i===0||inventions.find(x=>x.id===a[i-1]).year<inventions.find(x=>x.id===id).year);
+ el("order-feedback").textContent=sorted?"Correto! Papel, máquina a vapor, transistor e Web aparecem nesta ordem histórica.":"Ainda não. Procure o papel na China antiga, o motor a vapor no século XVIII, o transistor no século XX e a Web no final do século XX.";
+ el("order-feedback").classList.toggle("good",sorted);
+});
+el("restart-order").addEventListener("click",()=>{state.order=["web","papel","transistor","vapor"];renderOrder();el("order-feedback").textContent="Desafio reiniciado.";el("order-feedback").classList.remove("good");});
+drawFilters();renderOrder();select(inventions[0].id);
+</script>
+</body>
+</html>
