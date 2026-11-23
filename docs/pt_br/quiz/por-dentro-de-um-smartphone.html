@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Quiz de 12 desafios ilustrados sobre SoC, CPU, GPU, NPU, RAM, armazenamento flash, telas, câmeras, comunicação, sensores, energia, temperatura, segurança e ciclo de vida do smartphone.">
+<title>Por dentro de um smartphone | Quiz Laboratório de Engenharia</title>
+<style>
+:root{color-scheme:light;--papyrus:#f6eedb;--paper:#fffaf0;--ink:#3d2c29;--muted:#6b5b4f;--brick:#a54232;--brick2:#7f2d29;--gold:#c39c5b;--navy:#303b50;--olive:#677154;--line:#d3bea0;--mono:Consolas,"Liberation Mono",monospace;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--serif:Georgia,"Times New Roman",serif;background:var(--papyrus);color:var(--ink);font-family:var(--sans)}
+*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:290px;line-height:1.74;background:radial-gradient(ellipse at 20% 3%,#fae7c5,transparent 39%),var(--papyrus)}
+a{color:#79352a;text-underline-offset:4px}a:hover{color:#4d3627}button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}:focus-visible{outline:3px solid #2b6192;outline-offset:4px}[hidden]{display:none!important}
+.wrap{width:min(1170px,calc(100% - 44px));margin:auto}.skip{position:absolute;left:12px;top:-110px;padding:12px 17px;color:var(--ink);background:white;z-index:20}.skip:focus{top:12px}.kicker{font:850 .75rem/1.6 var(--sans);color:#8c392f;letter-spacing:.13em;text-transform:uppercase}
+.masthead{background:linear-gradient(135deg,#a04437,#642826);color:#fff3db;position:relative;overflow:hidden}.masthead:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,#e0a06a55,transparent 51%),repeating-linear-gradient(35deg,transparent 0 14px,#ffe8bf0a 14px 15px);pointer-events:none}
+.folio{position:relative;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center;border-bottom:1px solid #e2b67b99;padding:22px 0;color:#f9e2c7;font:800 .72rem/1.5 var(--sans);letter-spacing:.09em;text-transform:uppercase}.folio strong{color:#fff1c6}
+.hero-grid{position:relative;display:grid;grid-template-columns:.94fr 1.06fr;gap:32px;align-items:center;min-height:475px;padding:50px 0 43px}.masthead .kicker{color:#ffe0ab}.hero-title{font:normal clamp(2.65rem,6vw,6rem)/1.02 var(--serif);letter-spacing:-.06em;margin:18px 0 28px}.hero-title em{font-style:italic;font-weight:normal;color:#ffe0a8}.hero-lead{max-width:560px;color:#ffe8d1;line-height:1.86;font-size:1.07rem}.hero-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:23px}.hero-tags span{background:#fff3d51c;border:1px solid #f7d8aa9c;color:#fff0d7;padding:8px 12px;font:760 .76rem/1.4 var(--sans)}.hero-plate{min-width:0;margin:0}.hero-plate svg{display:block;width:100%;height:auto;filter:drop-shadow(8px 14px 16px #53231f4e)}.hero-plate figcaption{font-size:.8rem;line-height:1.7;color:#fbe0c0;margin-top:12px}
+.color-band{height:16px;background-color:#e5c899;background-image:linear-gradient(45deg,#874a38 25%,transparent 25%),linear-gradient(-45deg,#874a38 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#874a38 75%),linear-gradient(-45deg,transparent 75%,#874a38 75%);background-position:0 0,0 8px,8px -8px,-8px 0;background-size:16px 16px}
+.progress-section{padding:26px 0 19px}.progress-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font:760 .78rem var(--sans);color:#79503f;margin-bottom:10px}.progress-track{height:10px;background:#e6d2b4;border:1px solid #bea480;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#667451,#a54232);transition:width .25s ease}.progress-caption{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:11px;color:#745542;font:.83rem/1.6 var(--sans)}.notice{background:#efe1c9;border-left:4px solid #667451;padding:14px 17px;color:#563e30;font-size:.88rem;line-height:1.8}
+.main-shell{padding:25px 0 67px}.question-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:24px;align-items:start}.plate{margin:0;padding:17px;background:#eadcc4;border:1px solid #c3ad8b}.plate-number{display:flex;justify-content:space-between;gap:11px;flex-wrap:wrap;padding-bottom:13px;margin-bottom:12px;border-bottom:1px solid #c9b08b;color:#843d30;font:800 .73rem var(--sans);letter-spacing:.06em}.plate-picture{min-height:340px;background:#f6e8d0;display:grid;place-items:center}.plate-picture svg{display:block;width:100%;height:auto;max-height:450px}.plate figcaption{border-top:1px solid #cbb18e;padding-top:12px;margin-top:12px;color:#65503f;font-size:.82rem;line-height:1.76}.plate-note{margin-top:11px;color:#6c5541;font:.76rem var(--sans)}
+.question-card{min-height:567px;padding:clamp(20px,3vw,33px);background:#fffbf1;border:1px solid #c7ac88;display:flex;flex-direction:column}.question-index{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#8e3b30;border-bottom:1px solid #d2b99a;padding-bottom:16px;font:800 .75rem var(--sans)}.question-card h2{font:normal clamp(1.62rem,2.95vw,2.5rem)/1.21 var(--serif);letter-spacing:-.025em;margin:20px 0 15px}.question-instruction{color:#614d40;line-height:1.8;font-size:.94rem;margin-bottom:18px}
+.answers{margin:0;padding:0;border:0;min-width:0}.answers legend{font:800 .8rem var(--sans);color:#824332;margin-bottom:10px}.options{display:grid;gap:9px}.option{display:flex;align-items:center;gap:12px;padding:11px 13px;min-height:59px;background:#fff7e6;border:1px solid #d4bea0;cursor:pointer}.option:hover{background:#f5e5d0;border-color:#a54232}.option.selected{border:2px solid #923f33;background:#f5decb;padding:10px 12px}.option input{width:20px;height:20px;flex:none;accent-color:#8c3a2f}.option-copy{min-width:0;overflow-wrap:anywhere;color:#463127;font-size:.9rem;line-height:1.57}.option-art{flex:none;display:grid;place-items:center;width:76px;height:56px;background:#eddfc8;border:1px solid #bea17b}.option-art svg{width:74px;height:54px}
+.sequence{list-style:none;padding:0;margin:0;display:grid;gap:8px}.sequence-item{display:grid;grid-template-columns:27px minmax(0,1fr) auto;gap:9px;align-items:center;background:#fff6e2;border:1px solid #d7bea0;padding:10px}.sequence-item .num{font:.84rem var(--mono);color:#8a3c2e}.sequence-item .label{font-size:.9rem;line-height:1.48}.order-buttons{display:flex;gap:5px}.order-buttons button{border:1px solid #bba184;color:#704032;background:#fff8eb;width:35px;height:35px}.order-buttons button:not(:disabled):hover{background:#ead5b9}.answer-help{font-size:.84rem;color:#76604e;line-height:1.78;margin:13px 0 0}
+.feedback{border-left:5px solid #bd8f55;background:#f1e3cc;color:#5b4030;padding:16px 18px;margin:20px 0 0;line-height:1.78}.feedback.correct{border-color:#677154;background:#e0e9d6;color:#3c563b}.feedback strong{display:block;font:780 1.04rem var(--serif);margin-bottom:7px}.feedback p{margin:0}.feedback .feedback-extra{font-size:.83rem;margin-top:8px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto;padding-top:24px}.btn{background:#8e3b30;color:#fff8ed;border:1px solid #8e3b30;font:800 .9rem var(--sans);min-height:45px;padding:11px 15px}.btn:hover:not(:disabled){background:#6d2e27}.btn.secondary{background:#fff8e8;color:#713a2e;border-color:#ad8966}.btn.secondary:hover:not(:disabled){background:#efdfc8}.btn.teal{background:#4b614d;color:#fff9ed;border-color:#4b614d}.btn.teal:hover:not(:disabled){background:#384d3a}.btn.next{margin-left:auto}
+.tips{margin:20px 0;padding:15px 19px;background:#efe1cb;border-left:4px solid #a54232;color:#574334;font-size:.9rem}.tips b{color:#863a30}
+.summary{max-width:975px;margin:auto;background:#fffbf1;border:1px solid #c6ad89;padding:clamp(23px,4vw,48px)}.summary h2{font:normal clamp(2.1rem,4vw,3.6rem)/1.12 var(--serif);letter-spacing:-.04em;margin:14px 0 19px}.summary>p{color:#645241}.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:22px 0}.stat{background:#f0e2cb;padding:14px;border-top:4px solid #a54232}.stat:nth-child(2){border-color:#677154}.stat:nth-child(3){border-color:#c39c5b}.stat b{display:block;color:#7c392f;font:normal 2.5rem var(--serif)}.stat span{font:800 .75rem var(--sans);color:#6b5241}
+.review-list{list-style:none;display:grid;gap:11px;padding:0}.review-item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:#fbf1df;border:1px solid #d5bb9b;padding:13px 15px}.review-item strong{font-size:.95rem}.review-item p{font-size:.84rem;color:#66513f;margin:4px 0 0}.review-item button{border:1px solid #b69674;background:#fff8ed;color:#7e3c2e;padding:10px 12px}
+.references{border-top:1px solid #d3bea0;color:#65513f;padding:36px 0 53px;font-size:.85rem;line-height:1.8}.references h2{font:normal 1.65rem var(--serif)}.references p{margin:11px 0}
+.motion-reduce *,.motion-reduce *:before,.motion-reduce *:after{animation:none!important;transition:none!important}
+@media(max-width:950px){.hero-grid{grid-template-columns:1fr .85fr;min-height:0}.question-grid{grid-template-columns:1fr}.plate-picture{min-height:230px}.question-card{min-height:0}}
+@media(max-width:620px){.wrap{width:calc(100% - 28px)}.hero-grid{grid-template-columns:1fr;gap:19px;padding:31px 0;min-height:0}.hero-title{font-size:clamp(2.5rem,10vw,4.4rem)}.hero-plate{max-width:420px}.plate{padding:10px}.plate-picture{min-height:0}.question-card{padding:17px}.btn{flex:1 1 40%}.btn.next{margin-left:0}.option-art{width:61px;height:44px}.option-art svg{width:59px;height:42px}.summary-stats{grid-template-columns:1fr}.review-item{grid-template-columns:1fr}.sequence-item{grid-template-columns:23px minmax(0,1fr) 76px}.order-buttons button{width:33px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+/* Laboratório de Engenharia: circuitos escuros, verde PCB e acentos lilás */
+:root{--papyrus:#f3f1eb;--paper:#fffef9;--ink:#20262b;--muted:#5e6771;--brick:#587b68;--brick2:#335e55;--gold:#b9f08a;--navy:#182025;--olive:#3c7b6d;--cream:#e7ede6;--line:#c9cdd0}
+body{background:radial-gradient(ellipse at 2% 0%,#ece5f2,transparent 31%),#f3f1eb;color:#20262b}
+a{color:#335990}a:hover{color:#8c4d78}:focus-visible{outline:3px solid #9c74d0;outline-offset:4px}
+.kicker{color:#68528d}.masthead{background:#171e1d;color:#f7f8e8}
+.masthead:before{background:radial-gradient(ellipse at 74% 30%,#5c675e70 0,transparent 46%),radial-gradient(ellipse at 14% 83%,#52467a4a 0,transparent 40%);opacity:.8}
+.folio{color:#bacbc0;border-color:#6a7e71;font:800 .74rem/1.5 var(--mono)}.folio strong{color:#cdf39a}
+.masthead .kicker{color:#c8b4ed}.hero-title{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#f7f8e8;font-weight:800;letter-spacing:-.074em}
+.hero-title em{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:800;font-style:normal;color:#c6ef93}
+.hero-lead{color:#cfdcd4;line-height:1.86}.hero-tags span{background:#344139;border-color:#718c7e;color:#e8f6ce;font-family:var(--mono)}
+.hero-plate{transform:none}.hero-plate svg{filter:drop-shadow(8px 16px 19px #0006)}.hero-plate figcaption{color:#b4c4b8}
+.color-band{height:12px;background:repeating-linear-gradient(90deg,#b2e28e 0 35px,#292f35 35px 49px,#a897d0 49px 72px,#f3b394 72px 91px)}
+.progress-track{background:#dfe6e0;border-color:#bcc9c4}.progress-fill{background:linear-gradient(90deg,#538b70,#a897d0)}
+.progress-meta,.progress-caption{color:#48685b}.notice{background:#e7e1ec;color:#474250;border-left-color:#8262b0}
+.plate{background:#e5e7e0;border-color:#c6cbc4}.plate-number{color:#4c6654;border-color:#b6c5b9}.plate-picture{background:#dae6df}
+.plate figcaption{color:#51665b;border-color:#b7c4bc}.plate-note{color:#596d5e}
+.question-card{background:#fffef9;border-color:#c5cbc3}.question-index{color:#6a538a;border-color:#bfc4bb}
+.question-card h2{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:800;letter-spacing:-.045em;color:#2e3d40}.question-instruction,.answer-help{color:#536266}.answers legend{color:#695083}
+.option,.sequence-item{background:#f1f4ec;border-color:#b8c9c0;color:#2d3e3a}.option:hover{border-color:#739782;background:#e8f1e5}.option.selected{border-color:#36715d;background:#e2f0df}.option input{accent-color:#397a61}
+.option-art{background:#e5e8e0;border-color:#bdc8bb}.sequence-item .num{color:#68518a}.order-buttons button{background:#fffef8;border-color:#a4b7ad;color:#3d6557}.order-buttons button:not(:disabled):hover{background:#e1ede1}
+.feedback{background:#f5e8dd;color:#6f4938;border-left-color:#f3b394}.feedback.correct{background:#e3f1dc;color:#325d44;border-left-color:#649a6a}
+.btn{background:#356d59;border-color:#356d59;color:#fffdf7}.btn:hover:not(:disabled){background:#244e41}.btn.secondary{background:#fbfaf5;border-color:#9eaf9c;color:#476359}.btn.secondary:hover:not(:disabled){background:#e8eee5}
+.btn.teal{background:#725a9b;border-color:#725a9b;color:#fffcf8}.btn.teal:hover:not(:disabled){background:#56447e}
+.tips{background:#e8e8ed;color:#555467;border-left-color:#8570b3}.tips b{color:#5e4a91}
+.summary{background:#fffef9;border-color:#c6cbc3}.summary h2{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:800}
+.summary-stats .stat{background:#ebe8ef;border-color:#937dbc}.summary-stats .stat:nth-child(2){border-color:#6b9e72}.summary-stats .stat:nth-child(3){border-color:#f3b394}.stat b{color:#66508d}
+.review-item{background:#ebeee8;border-color:#c5cdc3}.review-item button{background:#376f5b;border-color:#376f5b;color:#fffef6}
+.references{color:#5e6771;border-color:#c9cdd0}.references a{color:#335990}
+@media(max-width:650px){.hero-grid{grid-template-columns:1fr}.hero-plate{max-width:540px}.hero-title{font-size:clamp(2.7rem,10.7vw,4.6rem)}.option-art{width:64px;height:48px}.option-art svg{width:62px;height:46px}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#atividade">Ir para a questão</a>
+<header class="masthead"><div class="wrap">
+ <div class="folio"><strong>LABORATÓRIO DE ENGENHARIA · QUIZ 10 / 10</strong><span>DESMONTAR / INVESTIGAR / CONECTAR</span></div>
+ <div class="hero-grid"><div>
+  <div class="kicker">Anatomia de um dispositivo conectado</div>
+  <h1 class="hero-title">Por dentro de um<br><em>smartphone.</em></h1>
+  <p class="hero-lead">Atrás de um toque na tela, processadores executam instruções, memórias armazenam dados, antenas recebem sinais e a bateria alimenta tudo. Explore doze desafios para compreender como hardware, software, energia e segurança cooperam.</p>
+  <div class="hero-tags"><span>12 desafios comentados</span><span>12 diagramas SVG inéditos</span><span>Processos e decisões reais</span></div>
+ </div>
+ <figure class="hero-plate">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 455" role="img" aria-labelledby="smartHeroTitle smartHeroDesc">
+   <title id="smartHeroTitle">Vista explodida ilustrada de um smartphone com display, placa, chip, bateria e câmera</title>
+   <desc id="smartHeroDesc">Desenho vetorial original em perspectiva simplificada de camadas do smartphone: tela à esquerda, placa principal verde com circuitos e processador no meio, bateria e câmera à direita e contorno do chassi ao fundo. Linhas pontilhadas relacionam os componentes; não corresponde ao projeto de um aparelho real.</desc>
+   <defs><linearGradient id="hCase" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#47655c"/><stop offset="1" stop-color="#172e2c"/></linearGradient><linearGradient id="hScreen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b9f08a"/><stop offset=".5" stop-color="#52998d"/><stop offset="1" stop-color="#625888"/></linearGradient></defs>
+   <rect x="1" y="1" width="638" height="453" rx="12" fill="#192221" stroke="#4b6155" stroke-width="2"/>
+   <g opacity=".15" stroke="#a6cbad"><path d="M20 0V455M60 0V455M100 0V455M140 0V455M180 0V455M220 0V455M260 0V455M300 0V455M340 0V455M380 0V455M420 0V455M460 0V455M500 0V455M540 0V455M580 0V455M620 0V455M0 25H640M0 65H640M0 105H640M0 145H640M0 185H640M0 225H640M0 265H640M0 305H640M0 345H640M0 385H640M0 425H640"/></g>
+   <text x="24" y="33" fill="#b9f08a" font-family="Consolas,monospace" font-size="13">ESQUEMA EXPLODIDO / COMPONENTES NÃO EM ESCALA</text>
+   <g transform="translate(59 79) rotate(-13 117 164)"><rect x="0" y="0" width="186" height="340" rx="25" fill="#101919" stroke="#c2cbbd" stroke-width="6"/><rect x="13" y="18" width="160" height="302" rx="13" fill="url(#hScreen)"/><path d="M27 271Q96 155 161 242V309H27Z" fill="#182f46" opacity=".55"/><rect x="66" y="8" width="54" height="9" rx="5" fill="#101919"/><circle cx="93" cy="301" r="8" fill="#ccedab" opacity=".8"/></g>
+   <g transform="translate(269 71) rotate(5 95 171)"><rect x="0" y="0" width="193" height="339" rx="25" fill="#29534a" stroke="#8bc6a6" stroke-width="5"/><rect x="12" y="14" width="169" height="309" rx="15" fill="#194f47" stroke="#427d63" stroke-width="2"/>
+    <g fill="none" stroke="#95c983" stroke-width="4"><path d="M20 51H81V81H108M28 174H71V142H102M24 256H70V206H105M173 79H128V116M173 237H137V196M82 296V248H112"/></g>
+    <rect x="75" y="101" width="92" height="87" rx="7" fill="#22292e" stroke="#b9f08a" stroke-width="5"/><rect x="89" y="116" width="64" height="57" rx="3" fill="#3d474a" stroke="#8477ba" stroke-width="2"/><text x="103" y="152" fill="#d5f9ac" font-family="Consolas,monospace" font-size="23">SoC</text>
+    <rect x="22" y="194" width="61" height="48" rx="4" fill="#252d36" stroke="#d1c6ee" stroke-width="3"/><text x="29" y="222" fill="#d1c6ee" font-family="Consolas,monospace" font-size="14">RAM</text>
+    <rect x="108" y="257" width="56" height="42" rx="4" fill="#1c2929" stroke="#f4b68e" stroke-width="3"/><text x="113" y="283" fill="#f4b68e" font-family="Consolas,monospace" font-size="13">RF</text>
+    <g fill="#0d2525" stroke="#a7dfc1" stroke-width="3"><circle cx="44" cy="43" r="16"/><circle cx="80" cy="43" r="16"/><circle cx="118" cy="43" r="16"/></g>
+    <g fill="#c3a9e9"><circle cx="44" cy="43" r="8"/><circle cx="80" cy="43" r="8"/><circle cx="118" cy="43" r="8"/></g>
+   </g>
+   <g transform="translate(485 85) rotate(13 70 170)"><rect x="0" y="0" width="130" height="325" rx="23" fill="url(#hCase)" stroke="#94a6a0" stroke-width="5"/><rect x="13" y="66" width="104" height="192" rx="12" fill="#504a53" stroke="#b9c4b4" stroke-width="3"/><text x="32" y="151" fill="#e6dff3" font-family="Consolas,monospace" font-size="17">BATERIA</text><path d="M42 173H88M65 151V194" stroke="#b9f08a" stroke-width="7"/><g fill="#101c20" stroke="#c6c2d2" stroke-width="4"><circle cx="42" cy="31" r="16"/><circle cx="85" cy="31" r="16"/></g></g>
+   <g fill="none" stroke="#b9f08a" stroke-width="3" stroke-dasharray="7 8"><path d="M243 235H267M464 236H481"/></g>
+   <rect x="23" y="406" width="216" height="30" rx="4" fill="#33483e"/><text x="33" y="426" fill="#def8c4" font-family="Consolas,monospace" font-size="12">TELA / INTERAÇÃO</text>
+   <rect x="262" y="414" width="178" height="28" rx="4" fill="#33483e"/><text x="270" y="434" fill="#def8c4" font-family="Consolas,monospace" font-size="12">PLACA / CIRCUITOS</text>
+  </svg>
+  <figcaption>Vista explodida autoral e simplificada. Os componentes não representam um modelo comercial nem um manual de reparo.</figcaption>
+ </figure></div></div></header>
+<div class="color-band" aria-hidden="true"></div>
+<div class="wrap">
+ <section class="progress-section" aria-label="Acompanhamento do quiz">
+  <div class="progress-meta"><span id="progressStep">QUESTÃO 01 / 12</span><span id="progressDone">0 de 12 conferidas</span></div>
+  <div class="progress-track" id="progressBar" role="progressbar" aria-label="Questões conferidas" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-caption"><span id="progressTopic">Arquitetura, sinais e segurança</span><button class="btn secondary" type="button" id="motionToggle" aria-pressed="false">Reduzir movimentos</button></div>
+  <p class="notice">Atividade formativa independente: não envia respostas ao Moodle nem lança notas oficiais. Diagramas ilustram princípios de arquitetura e não representam especificações, medições, circuitos de fabricantes ou instruções de reparo.</p>
+ </section>
+ <main id="atividade" class="main-shell">
+  <section id="questionScreen" class="question-grid" aria-label="Questão atual">
+   <figure class="plate">
+    <div class="plate-number"><span id="plateNum">PRANCHA 01</span><span id="plateLabel">ESTRUTURA</span></div>
+    <div id="platePicture" class="plate-picture"></div>
+    <figcaption id="plateCaption">Esquema de engenharia de um componente ou processo digital.</figcaption>
+    <div class="plate-note">SVG original · Ilustração de arquitetura, sem medidas reais</div>
+   </figure>
+   <div class="question-card">
+    <div class="question-index"><span id="questionSection">01 / ESTRUTURA</span><span id="questionType">ESCOLHA ÚNICA</span></div>
+    <h2 id="questionTitle" tabindex="-1">Carregando a primeira questão…</h2>
+    <p id="questionInstruction" class="question-instruction"></p>
+    <div id="answerMount"></div>
+    <p class="answer-help" id="answerHelp"></p>
+    <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+    <div class="actions">
+     <button type="button" id="previousButton" class="btn secondary">Anterior</button>
+     <button type="button" id="checkButton" class="btn">Conferir resposta</button>
+     <button type="button" id="nextButton" class="btn teal next">Próxima questão →</button>
+    </div>
+   </div>
+  </section>
+  <section id="summaryScreen" class="summary" hidden aria-labelledby="summaryTitle">
+   <div class="kicker">Conclusão / revisão comentada</div>
+   <h2 id="summaryTitle" tabindex="-1">Você conectou os componentes e as decisões?</h2>
+   <p>O resultado corresponde apenas a esta sessão local e não é nota acadêmica. Releia os comentários para compreender como processamento, armazenamento, rádio, sensores, bateria e software interagem, com limites de energia, segurança e vida útil.</p>
+   <div class="summary-stats">
+    <div class="stat"><b id="totalReviewed">0</b><span>QUESTÕES CONFERIDAS</span></div>
+    <div class="stat"><b id="totalMastered">0</b><span>RESPOSTAS CORRETAS AO FINAL</span></div>
+    <div class="stat"><b id="totalFirst">0</b><span>ACERTOS NA PRIMEIRA TENTATIVA</span></div>
+   </div>
+   <h3 style="font:normal 1.65rem Georgia,serif;margin:22px 0 14px">Revisitar pranchas</h3>
+   <ol id="reviewList" class="review-list"></ol>
+   <div class="actions"><button class="btn secondary" type="button" id="restartButton">Recomeçar do zero</button><button class="btn teal" type="button" id="reviewFirstButton">Rever a primeira questão</button></div>
+  </section>
+ </main>
+ <aside class="tips" aria-label="Instruções de investigação do smartphone"><b>Explore por dentro:</b> observe cada desenho e relacione a função ao componente. Selecione uma ou mais alternativas, confira para ler a explicação e avance ou volte quando quiser. Na última questão, ordene as etapas com ↑ e ↓. Ao finalizar, revise e reinicie.</aside>
+ <section class="references" aria-labelledby="sourcesTitle"><h2 id="sourcesTitle">Referências, origem dos desenhos e limites</h2>
+<p>As 12 pranchas SVG, a vista explodida do smartphone e os desenhos das alternativas são ilustrações originais, genéricas e sem escala. Não correspondem a projetos elétricos reais, layouts de chips, hardware de uma marca, medições de velocidade ou duração de bateria, ensaios de segurança ou instruções de manutenção. Funcionalidades e limites dependem do modelo, sistema, aplicativos, redes, condições térmicas e configurações. Questões sobre permissões descrevem boas práticas gerais, sem diagnosticar um aplicativo real como malicioso.</p>
+<p>Referências técnicas: <a href="https://developer.android.com/guide/platform" target="_blank" rel="noopener noreferrer">Android Developers - Visão geral da plataforma</a>; <a href="https://developer.android.com/reference/android/hardware/camera2/package-summary" target="_blank" rel="noopener noreferrer">Android - Camera2</a>; <a href="https://source.android.com/docs/core/power/thermal-mitigation" target="_blank" rel="noopener noreferrer">AOSP - Gerenciamento térmico</a>; <a href="https://support.apple.com/guide/security/hardware-security-overview-secf020d1074/web" target="_blank" rel="noopener noreferrer">Apple Platform Security - Hardware</a>; <a href="https://www.bluetooth.com/learn-about-bluetooth/tech-overview/" target="_blank" rel="noopener noreferrer">Bluetooth SIG - Visão técnica</a>; <a href="https://www.gps.gov/trilateration" target="_blank" rel="noopener noreferrer">GPS.gov - Posicionamento</a>; <a href="https://www.itu.int/en/ITU-D/Environment/Pages/Publications/The-Global-E-waste-Monitor-2024.aspx" target="_blank" rel="noopener noreferrer">ITU - Global E-waste Monitor 2024</a>.</p></section>
+</div>
+<script>
+(function(){
+'use strict';
+var root=document, total=12;
+var $=function(id){return root.getElementById(id);};
+var questions=[{"section":"Anatomia dos componentes","figure":"exploded","type":"single","title":"Qual afirmação descreve melhor a organização interna de um smartphone?","instruction":"Analise a vista explodida: tela, câmera, bateria e placa têm funções conectadas, mas distintas.","options":[["a","Tela, placa, bateria, sensores e rádios cooperam; não existe um único chip responsável por tudo"],["b","Todos os dados ficam armazenados apenas na tela"],["c","A câmera substitui bateria e processador"],["d","A placa principal só serve para manter a carcaça rígida"]],"correct":"a","hint":"Pense em um sistema de processamento, comunicação, entrada, saída e alimentação.","explain":"Um smartphone combina SoC, memória, armazenamento, sistema de energia, circuitos de rádio, câmeras, sensores e interface de tela. Hardware e software coordenam tarefas; a organização específica varia entre modelos.","caption":"Camadas fictícias de tela, placa principal, câmera e bateria, sem representar um produto comercial.","figureTitle":"Anatomia dos componentes · Prancha 01"},{"section":"CPU, GPU e NPU","figure":"soc","type":"multiple","title":"Quais funções são corretamente associadas a unidades de processamento?","instruction":"Selecione todos os pares coerentes e lembre que a divisão de tarefas depende do aplicativo e do chip.","options":[["a","CPU: executa instruções gerais e coordena diversas tarefas"],["b","GPU: processa em paralelo muitas operações úteis a gráficos e outras cargas"],["c","NPU: pode acelerar determinadas operações de aprendizado de máquina"],["d","NPU: é uma bateria adicional dedicada à câmera"],["e","GPU: é necessariamente a memória permanente das fotografias"]],"correct":["a","b","c"],"hint":"Há núcleos e aceleradores distintos num SoC; nenhum deles é sinônimo de armazenamento.","explain":"CPU é de propósito geral, GPU explora paralelismo e NPU pode acelerar cargas de IA compatíveis. Muitos SoCs também integram ISP, processadores de sinais, controladores e mecanismos de segurança. A implementação varia conforme o produto.","caption":"Desenho didático de SoC com três blocos funcionais de computação e conexões internas.","figureTitle":"CPU, GPU e NPU · Prancha 02"},{"section":"RAM versus flash","figure":"memory","type":"single","title":"Por que um aplicativo aberto usa RAM enquanto fotos permanecem armazenadas após desligar?","instruction":"Diferencie memória volátil de armazenamento não volátil.","options":[["a","RAM sustenta dados temporários em uso; flash é não volátil e persiste sem alimentação"],["b","RAM é sempre o mesmo circuito do display"],["c","Flash só existe enquanto o aparelho está ligado"],["d","RAM e flash são nomes de dois protocolos de rádio"]],"correct":"a","hint":"Pergunte qual memória perde seu conteúdo quando falta energia.","explain":"RAM armazena dados de trabalho em uso e é tipicamente volátil; memória flash NAND preserva arquivos e sistemas quando o aparelho desliga. Ambas possuem controladores, hierarquias e limitações de desempenho, e a RAM não é uma cópia permanente de tudo.","caption":"Dois compartimentos originais com sinais de volátil e persistente, sem especificações de capacidade.","figureTitle":"RAM versus flash · Prancha 03"},{"section":"Display e toque","figure":"touch","type":"single","title":"Quando alguém toca um botão no display, o que precisa acontecer para o aplicativo reagir?","instruction":"Diferencie superfície sensível ao toque, sistema operacional e desenho dos pixels.","options":[["a","Sensores de toque identificam a interação, o sistema encaminha eventos ao aplicativo e a interface pode ser atualizada"],["b","O dedo acessa diretamente os transistores do processador sem software"],["c","O alto-falante interpreta a posição do toque"],["d","Os pixels armazenam automaticamente todos os eventos para sempre"]],"correct":"a","hint":"A tela mostra informações, mas a interpretação de um toque envolve sensor, controlador e software.","explain":"Uma camada de detecção de toque e controladores permitem que o sistema interprete coordenadas e gestos, encaminhe eventos e recomponha a imagem exibida. O funcionamento varia conforme tecnologia de display e interface.","caption":"Corte conceitual do display com camadas de pixels, toque e fluxo até software.","figureTitle":"Display e toque · Prancha 04"},{"section":"O caminho da fotografia","figure":"camera","type":"sequence","title":"Ordene um fluxo simplificado desde tocar em capturar até salvar uma fotografia.","instruction":"Use ↑ e ↓. Este é um fluxo didático; etapas reais podem ocorrer em paralelo ou em ordem diferente.","items":[["save","Imagem codificada e metadados permitidos são gravados no armazenamento"],["process","ISP e outros processadores tratam o sinal e aplicam processamento de imagem"],["tap","Pessoa solicita a captura na interface do aplicativo"],["sensor","O sensor recebe luz e converte a exposição em sinais elétricos/digitais"],["request","Aplicativo e sistema validam acesso e configuram a captura"],["encode","O sistema gera arquivo em um formato apropriado e aplica decisões de codificação"]],"correct":["tap","request","sensor","process","encode","save"],"hint":"Parta da interação, passe por permissão/configuração, aquisição da imagem, processamento e gravação.","explain":"A captura envolve comando, acesso à câmera, sensor de imagem, tratamento por ISP/software, codificação e gravação, com etapas sobrepostas em sistemas reais. Sensor e algoritmo trabalham juntos; uma fotografia não sai como arquivo final diretamente do sensor.","caption":"Seis blocos representam um pipeline simplificado de captura de foto e armazenamento.","figureTitle":"O caminho da fotografia · Prancha 05"},{"section":"Wi-Fi, Bluetooth e celular","figure":"wireless","type":"multiple","title":"Quais afirmações sobre comunicações sem fio são apropriadas?","instruction":"Considere funções e infraestrutura diferentes, sem exigir que todos os recursos estejam ativos.","options":[["a","Wi-Fi pode transportar dados por uma rede local e permitir acesso à internet por um roteador ou ponto de acesso"],["b","Bluetooth pode conectar acessórios próximos, incluindo áudio e periféricos compatíveis"],["c","Redes celulares usam infraestrutura e protocolos de operadoras para serviços móveis"],["d","Wi-Fi, Bluetooth e rede celular são o mesmo protocolo com três nomes"],["e","Sem uma rede celular ativa, qualquer aparelho fica impossibilitado de usar Wi-Fi"]],"correct":["a","b","c"],"hint":"Três sistemas de rádio podem coexistir no aparelho, mas seus protocolos e usos não são idênticos.","explain":"Wi-Fi, Bluetooth e tecnologias celulares têm padrões, frequências, topologias e serviços diferentes. Wi-Fi pode funcionar sem dados móveis; Bluetooth frequentemente conecta periféricos. O acesso à internet depende da conexão e da infraestrutura efetivamente disponíveis.","caption":"Três diagramas mostram smartphone, roteador, fone de ouvido e estação rádio-base fictícios.","figureTitle":"Wi-Fi, Bluetooth e celular · Prancha 06"},{"section":"GNSS e localização","figure":"gnss","type":"single","title":"Como um smartphone pode estimar posição utilizando sistemas GNSS?","instruction":"Não confunda sinais de satélites com conexão bidirecional à internet.","options":[["a","O receptor interpreta sinais de tempo e navegação de diversos satélites e calcula uma posição estimada"],["b","O GPS precisa enviar mensagens pessoais para cada satélite"],["c","Somente o Bluetooth permite calcular posições geográficas"],["d","Um único satélite conhecido garante qualquer localização precisa dentro de edifícios"]],"correct":"a","hint":"Satélites transmitem sinais; o receptor compara medições de vários sinais e calcula uma solução.","explain":"Receptores GNSS estimam posição e tempo a partir de sinais de múltiplos satélites; redes, sensores e técnicas assistidas podem melhorar disponibilidade ou velocidade da solução. Precisão é afetada por edifícios, obstruções, multipercurso e outras condições.","caption":"Diagrama com satélites transmitindo sinais a um receptor terrestre; posições e distâncias simbólicas.","figureTitle":"GNSS e localização · Prancha 07"},{"section":"Sensores de contexto","figure":"sensors","type":"multiple","title":"Quais sensores podem ajudar o dispositivo a compreender movimentos e condições ao redor?","instruction":"Selecione associações tecnicamente plausíveis.","options":[["a","Acelerômetro: mede aceleração, incluindo componentes da gravidade observadas pelo sensor"],["b","Giroscópio: mede velocidade angular"],["c","Sensor de luz ambiente: auxilia ajustes automáticos de brilho quando presente"],["d","Sensor de proximidade: substitui todo o sistema de armazenamento flash"],["e","Microfone: mede diretamente a temperatura dos transistores do SoC"]],"correct":["a","b","c"],"hint":"Sensores captam fenômenos físicos; cada um tem princípio e unidade próprios.","explain":"Acelerômetros e giroscópios auxiliam orientação e movimento, enquanto luz ambiente e proximidade podem ajudar a ajustar a interface. O conjunto e o modo de operação variam por modelo; microfone capta som, não temperatura interna do processador.","caption":"Quatro símbolos esquemáticos mostram aceleração, rotação, luz e proximidade.","figureTitle":"Sensores de contexto · Prancha 08"},{"section":"Bateria, potência e autonomia","figure":"battery","type":"single","title":"Uma bateria idealizada armazena 12 Wh de energia utilizável e o aparelho consome 3 W constantes. Qual seria a duração teórica?","instruction":"Ignore perdas, envelhecimento e variação do consumo; use tempo = energia / potência.","options":[["a","4 horas"],["b","9 horas"],["c","36 horas"],["d","0,25 hora"]],"correct":"a","hint":"Divida 12 Wh por 3 W e simplifique as unidades.","explain":"No modelo ideal, 12 Wh ÷ 3 W = 4 h. Em uso real, a potência varia com tela, rádio, processadores, temperatura e aplicativos, e a energia efetivamente disponível depende do estado e do gerenciamento da bateria.","caption":"Bateria genérica com energia em Wh e consumidor com potência média hipotética em W.","figureTitle":"Bateria, potência e autonomia · Prancha 09"},{"section":"Gerenciamento térmico","figure":"thermal","type":"single","title":"Por que um smartphone pode reduzir desempenho durante uma tarefa exigente prolongada?","instruction":"Considere geração de calor, dissipação limitada e políticas do sistema.","options":[["a","Para respeitar limites térmicos, o sistema pode reduzir frequência, tensão ou carga de trabalho"],["b","Porque elevar a temperatura nunca afeta componentes ou bateria"],["c","Porque a RAM se transforma fisicamente em bateria quando aquece"],["d","Porque processadores não produzem calor ao funcionar"]],"correct":"a","hint":"Parte da energia consumida pelos circuitos termina dissipando-se como calor.","explain":"Gerenciamento térmico pode limitar desempenho quando temperaturas se aproximam de restrições operacionais, de superfície ou da bateria. Frequências, consumo e desempenho podem ser ajustados conforme sensores, firmware, sistema e projeto de dissipação, que varia entre modelos.","caption":"Circuito de processamento, caminho de dissipação e indicador simbólico de limitação térmica.","figureTitle":"Gerenciamento térmico · Prancha 10"},{"section":"Permissões e proteção","figure":"security","type":"multiple","title":"Um aplicativo pede microfone, mas sua função principal não o utiliza. Quais decisões são prudentes?","instruction":"Separe prevenção de abuso de uma acusação sem provas.","options":[["a","Verificar por que a permissão é solicitada e se existe função que realmente precise dela"],["b","Negar ou limitar o acesso enquanto a finalidade não estiver clara, quando o sistema permitir"],["c","Revisar permissões e procurar documentação ou reputação confiável do aplicativo"],["d","Concluir automaticamente que todo pedido de microfone é espionagem comprovada"],["e","Conceder acesso permanente a qualquer aplicativo sem examinar a finalidade"]],"correct":["a","b","c"],"hint":"Uma solicitação isolada não comprova má-fé, mas tampouco exige conceder acesso irrestrito.","explain":"O princípio de privilégio mínimo recomenda conceder apenas acessos adequados às funções. Verifique a finalidade, avalie permissões temporárias e reavalie periodicamente. Proteções adicionais podem incluir inicialização verificada, criptografia e isolamento de aplicativos, conforme o sistema.","caption":"Diagrama genérico de autorização de microfone entre aplicativo, sistema e usuário.","figureTitle":"Permissões e proteção · Prancha 11"},{"section":"Ciclo de vida e reparabilidade","figure":"lifecycle","type":"single","title":"Qual prática tende a reduzir impactos associados ao ciclo de vida de um smartphone funcional?","instruction":"Considere extração, fabricação, uso, reparo e destinação adequada.","options":[["a","Usar, atualizar e reparar com segurança quando viável, prolongar vida útil e encaminhar resíduos a canais adequados"],["b","Trocar sempre por um modelo novo, independentemente da condição do aparelho"],["c","Descartar a bateria danificada no lixo comum"],["d","Desmontar células de bateria de lítio sem treinamento para reciclar em casa"]],"correct":"a","hint":"Prolongar uso e tratar resíduos adequadamente pode reduzir demanda por novos recursos.","explain":"Fabricar aparelhos consome materiais, energia e recursos; manter, atualizar, reparar ou reutilizar quando seguro pode reduzir substituições. Baterias de lítio exigem destinação e manuseio apropriados, sem desmontagem caseira. Impactos totais dependem de contexto e processos.","caption":"Fluxograma de produção, uso, reparo, reutilização e coleta especializada, sem indicadores de impacto inventados.","figureTitle":"Ciclo de vida e reparabilidade · Prancha 12"}];
+var answer=Object.create(null),checked=Object.create(null),firstTry=Object.create(null),index=0,reduceMotion=false;
+function svgFrame(t,d,b){return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 590 400" role="img" aria-labelledby="phoneFigTitle phoneFigDesc"><title id="phoneFigTitle">'+t+'</title><desc id="phoneFigDesc">'+d+'</desc><defs><marker id="phoneArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#b9f08a"/></marker></defs><rect x="1" y="1" width="588" height="398" rx="7" fill="#1b2827" stroke="#5a7766" stroke-width="2"/><g stroke="#739786" opacity=".15"><path d="M20 0V400M60 0V400M100 0V400M140 0V400M180 0V400M220 0V400M260 0V400M300 0V400M340 0V400M380 0V400M420 0V400M460 0V400M500 0V400M540 0V400M580 0V400M0 20H590M0 60H590M0 100H590M0 140H590M0 180H590M0 220H590M0 260H590M0 300H590M0 340H590M0 380H590"/></g><text x="24" y="38" fill="#b9f08a" font-family="Consolas,monospace" font-size="12">LABORATÓRIO DE ENGENHARIA · ESQUEMA ORIGINAL</text>'+b+'<text x="22" y="379" fill="#c9d5c8" font-family="Consolas,monospace" font-size="11">MODELO GENÉRICO / NÃO É PROJETO DE FABRICANTE</text></svg>';}
+function txt(x,y,s,z,c){return '<text x="'+x+'" y="'+y+'" font-family="Consolas,monospace" font-size="'+(z||15)+'" fill="'+(c||'#e4f1dd')+'">'+s+'</text>';}
+function panel(x,y,w,h,s,fill){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="8" fill="'+(fill||'#325249')+'" stroke="#92b59c" stroke-width="2"/>'+txt(x+10,y+Math.min(h-10,33),s,15);}
+function arrow(d){return '<path d="'+d+'" fill="none" stroke="#b9f08a" stroke-width="4" marker-end="url(#phoneArrow)" stroke-linecap="round"/>';}
+function phone(x,y,w,h){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="20" fill="#11191a" stroke="#a6c5ae" stroke-width="5"/><rect x="'+(x+9)+'" y="'+(y+14)+'" width="'+(w-18)+'" height="'+(h-28)+'" rx="11" fill="#35554e"/>';}
+function chip(x,y,w,h,s){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="5" fill="#20272d" stroke="#c1dd93" stroke-width="4"/>'+txt(x+Math.max(7,w/2-18),y+h/2+5,s,17,'#d3f6a0');}
+function icon(k){var b='',mint='#b9f08a',lilac='#cdbbea';
+if(k==='same'||k==='different'||k==='person'){b='<rect x="6" y="6" width="68" height="45" rx="4" fill="#325249" stroke="#a4c5ad" stroke-width="2"/>';if(k==='same')b+='<path d="M13 23H65M13 37H65" stroke="'+mint+'" stroke-width="5"/>';if(k==='different')b+='<path d="M12 22H63" stroke="'+lilac+'" stroke-width="5"/><path d="M12 39H63" stroke="'+mint+'" stroke-width="5"/>';if(k==='person')b+='<circle cx="40" cy="23" r="9" fill="'+lilac+'"/><path d="M21 49Q21 31 40 31Q59 31 59 49" fill="'+lilac+'"/>';}
+if(k==='right'||k==='both'||k==='flip'){b='<rect x="6" y="5" width="68" height="47" rx="3" fill="#325249"/><rect x="11" y="11" width="58" height="16" fill="'+(k==='right'?'#b9f08a':k==='both'?'#cdbbea':'#f7b68e')+'"/><rect x="11" y="31" width="58" height="15" fill="'+(k==='flip'?'#b9f08a':'#cdbbea')+'"/>';}
+return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 58" aria-hidden="true" focusable="false">'+b+'</svg>';}
+function art(k){var b='',mint='#b9f08a',lilac='#cdbbea',peach='#f7b68e';
+if(k==='exploded'){
+ b=phone(53,103,120,221)+panel(216,105,133,206,'PLACA / SoC')+panel(383,102,145,217,'BATERIA')+
+ '<path d="M174 218H207M350 218H375" stroke="'+mint+'" stroke-width="3" stroke-dasharray="7 8"/>'+
+ chip(238,163,89,65,'SoC')+'<rect x="412" y="156" width="88" height="112" rx="8" fill="#686177" stroke="#c6addb" stroke-width="3"/>'+
+ txt(75,341,'DISPLAY',15)+txt(230,341,'CIRCUITOS',15)+txt(399,341,'ENERGIA',15);
+}
+if(k==='soc'){b=panel(27,97,538,227,'SISTEMA EM CHIP (SoC)')+panel(43,156,154,123,'CPU')+panel(215,156,153,123,'GPU')+panel(385,156,163,123,'NPU')+
+ '<g fill="#d0ebc0"><circle cx="119" cy="234" r="17"/><circle cx="291" cy="234" r="17"/><circle cx="466" cy="234" r="17"/></g>'+
+ '<path d="M130 308H459" stroke="'+mint+'" stroke-width="5" stroke-dasharray="10 7"/>'+txt(144,332,'INTERCONEXÃO E CONTROLADORES',14);
+}
+if(k==='memory'){b=panel(32,108,250,215,'RAM / VOLÁTIL')+panel(307,108,248,215,'FLASH / NÃO VOLÁTIL')+
+ chip(99,170,113,89,'RAM')+chip(368,170,129,89,'NAND')+
+ '<path d="M158 277V301" stroke="'+lilac+'" stroke-width="6"/><path d="M430 277V301" stroke="'+mint+'" stroke-width="6"/>'+txt(99,313,'TRABALHO',13,lilac)+txt(371,313,'PERSISTE',13,mint);
+}
+if(k==='touch'){b=phone(43,107,155,226)+panel(252,121,133,95,'EVENTO')+panel(427,121,131,95,'APP')+
+ '<rect x="59" y="134" width="123" height="53" rx="4" fill="#b9f08a" opacity=".8"/>'+
+ '<path d="M91 167L113 206L121 184L145 209L151 175L120 153Z" fill="#e8def2" stroke="#756597" stroke-width="3"/>'+
+ arrow('M200 185H241')+arrow('M387 185H416')+txt(251,273,'CONTROLADOR',15)+txt(429,273,'INTERFACE',15);
+}
+if(k==='camera'){
+ var names=['TOQUE','ACESSO','SENSOR','ISP','ARQUIVO','FLASH'];
+ for(var i=0;i<6;i++){var x=25+(i%3)*184,y=107+Math.floor(i/3)*111;b+=panel(x,y,168,87,(i+1)+'. '+names[i],i===3?'#423d5a':'#365248');}
+ b+=arrow('M194 148H204')+arrow('M379 148H386')+arrow('M194 255H204')+arrow('M379 255H386')+txt(90,341,'FLUXO DIDÁTICO · ETAPAS PODEM SE SOBREPÔR',13);
+}
+if(k==='wireless'){b=panel(27,107,162,210,'WI-FI')+panel(206,107,164,210,'BLUETOOTH')+panel(387,107,171,210,'CELULAR')+
+ '<g fill="none" stroke="'+mint+'" stroke-width="5"><path d="M66 234Q108 177 151 234M84 233Q109 203 131 234M108 246v3"/><path d="M259 188L325 256M259 256L325 188M293 177v90"/></g>'+
+ '<rect x="447" y="187" width="47" height="78" fill="#9ccabb"/><path d="M470 174V150M470 185L421 230M470 185L521 230" fill="none" stroke="'+mint+'" stroke-width="5"/>'+
+ txt(52,298,'ROTEADOR',13)+txt(225,298,'ACESSÓRIO',13)+txt(416,298,'REDE MÓVEL',13);
+}
+if(k==='gnss'){b=phone(229,237,109,99)+'<g fill="#a58ed2" stroke="#e0d0f2" stroke-width="3"><path d="M82 109l31-19l30 19l-30 19Z"/><path d="M271 87l29-19l29 19l-29 19Z"/><path d="M443 107l31-19l30 19l-30 19Z"/></g>'+
+ '<g fill="none" stroke="'+mint+'" stroke-width="3" stroke-dasharray="8 7"><path d="M113 135L279 253M300 115L279 253M474 135L279 253"/></g>'+
+ txt(41,162,'SATÉLITE A',13)+txt(263,59,'SATÉLITE B',13)+txt(438,162,'SATÉLITE C',13)+txt(214,356,'RECEPTOR GNSS',14);
+}
+if(k==='sensors'){b=panel(27,111,246,94,'ACELERÔMETRO')+panel(301,111,257,94,'GIROSCÓPIO')+panel(27,225,246,92,'LUZ AMBIENTE')+panel(301,225,257,92,'PROXIMIDADE')+
+ '<path d="M104 174H181M144 139V193" stroke="'+mint+'" stroke-width="6"/><path d="M373 163a38 38 0 1 1 46 34" fill="none" stroke="'+lilac+'" stroke-width="6"/>'+
+ '<circle cx="109" cy="275" r="23" fill="'+peach+'"/><path d="M376 276Q419 241 462 276" fill="none" stroke="'+mint+'" stroke-width="6"/>';
+}
+if(k==='battery'){b=panel(34,112,239,216,'ENERGIA')+panel(305,112,244,216,'CONSUMO')+
+ '<rect x="73" y="177" width="165" height="85" rx="8" fill="#3b6d56" stroke="#b9f08a" stroke-width="5"/>'+
+ '<rect x="236" y="200" width="12" height="35" fill="#b9f08a"/>'+
+ txt(102,229,'12 Wh',28,mint)+txt(357,229,'3 W',32,lilac)+arrow('M273 219H295')+
+ txt(207,295,'t = E / P',18)+txt(203,344,'EXEMPLO IDEALIZADO',14);
+}
+if(k==='thermal'){b=panel(26,99,245,220,'PROCESSAMENTO')+panel(304,99,252,220,'DISSIPAÇÃO')+
+ chip(103,161,95,93,'SoC')+
+ '<g fill="none" stroke="'+peach+'" stroke-width="5"><path d="M87 156Q69 129 88 109M143 154Q125 129 144 109M199 157Q180 127 201 109"/></g>'+
+ '<rect x="335" y="172" width="187" height="27" fill="#a5b5bc"/><path d="M351 212H506M351 226H506M351 240H506" stroke="'+mint+'" stroke-width="7"/>'+
+ arrow('M272 222H296')+txt(343,294,'LIMITAR POTÊNCIA',13,lilac);
+}
+if(k==='security'){b=phone(31,101,158,229)+panel(237,102,154,220,'SISTEMA')+panel(426,102,136,220,'PERMISSÃO')+
+ '<circle cx="110" cy="204" r="38" fill="none" stroke="'+mint+'" stroke-width="6"/><rect x="86" y="202" width="48" height="51" rx="7" fill="'+lilac+'"/>'+
+ '<path d="M131 215H228M393 215H418" fill="none" stroke="'+mint+'" stroke-width="4" stroke-dasharray="7 8"/>'+
+ txt(244,294,'POLÍTICAS',14)+txt(430,294,'DECISÃO',14,lilac);
+}
+if(k==='lifecycle'){var stages=['PRODUZIR','USAR','REPARAR','REUTILIZAR','COLETAR'];for(var j=0;j<5;j++){var xx=29+(j%3)*177,yy=111+Math.floor(j/3)*111;b+=panel(xx,yy,160,89,(j+1)+'. '+stages[j],j===2?'#4c4567':'#395749');}b+=arrow('M199 153H204')+arrow('M376 153H383')+arrow('M199 261H204')+txt(373,303,'DESTINAÇÃO',14,mint);}
+return svgFrame(questions[index].figureTitle,questions[index].caption,b);}
+function chosen(q){
+ if(q.type==='sequence'){return (answer[index]||q.items.map(function(x){return x[0];})).slice();}
+ return q.type==='multiple'?(answer[index]||[]).slice():(answer[index]||'');
+}
+function equal(a,b){
+ if(Array.isArray(a)&&Array.isArray(b)){
+  if(a.length!==b.length)return false;
+  return a.slice().sort().join('|')===b.slice().sort().join('|');
+ }
+ return a===b;
+}
+function correctCount(){return questions.filter(function(q,i){return checked[i]&&checked[i].ok;}).length;}
+function reviewedCount(){return Object.keys(checked).length;}
+function updateProgress(){
+ var done=reviewedCount();
+ $('progressStep').textContent='QUESTÃO '+String(index+1).padStart(2,'0')+' / '+total;
+ $('progressDone').textContent=done+' de '+total+' conferidas';
+ $('progressFill').style.width=(done*100/total)+'%';
+ $('progressBar').setAttribute('aria-valuenow',String(done));
+ $('progressTopic').textContent=questions[index].section;
+}
+function updateSelections(){
+ Array.prototype.forEach.call($('answerMount').querySelectorAll('.option'),function(el){el.classList.toggle('selected',!!el.querySelector('input').checked);});
+}
+function render(focus){
+ var q=questions[index],isSequence=q.type==='sequence';
+ $('summaryScreen').hidden=true;$('questionScreen').hidden=false;
+ $('plateNum').textContent='PRANCHA '+String(index+1).padStart(2,'0');
+ $('plateLabel').textContent=q.section.toUpperCase();
+ $('platePicture').innerHTML=art(q.figure);
+ $('plateCaption').textContent=q.caption;
+ $('questionSection').textContent=String(index+1).padStart(2,'0')+' / '+q.section.toUpperCase();
+ $('questionType').textContent=isSequence?'ORDENAÇÃO':q.type==='multiple'?'MÚLTIPLA SELEÇÃO':'ESCOLHA ÚNICA';
+ $('questionTitle').textContent=q.title;
+ $('questionInstruction').textContent=q.instruction;
+ $('answerHelp').textContent=isSequence?'Use ↑ e ↓ para mover cada etapa.':q.type==='multiple'?'Marque uma ou mais alternativas antes de conferir.':'Escolha uma única alternativa e confira.';
+ var mount=$('answerMount');mount.replaceChildren();
+ if(isSequence){
+  var ul=document.createElement('ol');ul.className='sequence';ul.setAttribute('aria-label','Etapas em ordem editável');
+  var current=chosen(q);
+  current.forEach(function(id,j){
+   var li=document.createElement('li');li.className='sequence-item';
+   var n=document.createElement('span');n.className='num';n.textContent=String(j+1).padStart(2,'0');
+   var lab=document.createElement('span');lab.className='label';lab.textContent=q.items.find(function(it){return it[0]===id;})[1];
+   var group=document.createElement('span');group.className='order-buttons';
+   [-1,1].forEach(function(delta){
+    var b=document.createElement('button');b.type='button';b.textContent=delta<0?'↑':'↓';b.disabled=delta<0?j===0:j===current.length-1;
+    b.dataset.position=String(j);b.dataset.delta=String(delta);
+    b.setAttribute('aria-label',(delta<0?'Subir: ':'Descer: ')+lab.textContent);
+    group.appendChild(b);
+   });
+   li.appendChild(n);li.appendChild(lab);li.appendChild(group);ul.appendChild(li);
+  });mount.appendChild(ul);
+ }else{
+  var field=document.createElement('fieldset');field.className='answers';
+  var legend=document.createElement('legend');legend.textContent=q.type==='multiple'?'Selecione todas as respostas corretas':'Escolha a resposta';field.appendChild(legend);
+  var opts=document.createElement('div');opts.className='options';
+  q.options.forEach(function(opt){
+   var lab=document.createElement('label');lab.className='option';
+   var inp=document.createElement('input');inp.type=q.type==='multiple'?'checkbox':'radio';inp.name='q'+index;inp.value=opt[0];
+   inp.checked=q.type==='multiple'?chosen(q).indexOf(opt[0])!==-1:chosen(q)===opt[0];
+   var label=document.createElement('span');label.className='option-copy';label.textContent=opt[1];
+   lab.appendChild(inp);if(opt[2]){var artwork=document.createElement('span');artwork.className='option-art';artwork.innerHTML=icon(opt[2]);lab.appendChild(artwork);}lab.appendChild(label);opts.appendChild(lab);
+  });field.appendChild(opts);mount.appendChild(field);updateSelections();
+ }
+ var state=checked[index];var fb=$('feedback');
+ fb.hidden=!state;fb.className='feedback'+(state&&state.ok?' correct':'');
+ if(state){
+  fb.replaceChildren();
+  var strong=document.createElement('strong');strong.textContent=state.ok?'Correto: você identificou a relação essencial.':'Ainda não. Examine novamente a prancha.';
+  var detail=document.createElement('p');detail.textContent=state.ok?q.explain:q.hint+' '+q.explain;
+  fb.appendChild(strong);fb.appendChild(detail);
+  var small=document.createElement('p');small.className='feedback-extra';small.textContent=state.ok?'Resposta conferida. Você pode avançar ou voltar para revisar.':'Você pode alterar a resposta e conferir novamente, ou avançar e revisar depois.';
+  fb.appendChild(small);
+ }
+ $('previousButton').disabled=index===0;
+ $('checkButton').textContent=state?'Tentar novamente':'Conferir resposta';
+ $('nextButton').disabled=!state;
+ $('nextButton').textContent=index===total-1?'Ver resultado →':'Próxima questão →';
+ updateProgress();
+ if(focus){$('questionTitle').focus();$('questionScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});}
+}
+function invalidate(){if(checked[index])delete checked[index];$('feedback').hidden=true;$('checkButton').textContent='Conferir resposta';$('nextButton').disabled=true;updateProgress();}
+$('answerMount').addEventListener('change',function(e){
+ var input=e.target;
+ if(!input.matches('input'))return;
+ var q=questions[index];
+ if(q.type==='multiple'){answer[index]=Array.prototype.map.call($('answerMount').querySelectorAll('input:checked'),function(it){return it.value;});}
+ else{answer[index]=input.value;}
+ invalidate();updateSelections();
+});
+$('answerMount').addEventListener('click',function(e){
+ var b=e.target.closest('button[data-position]');if(!b)return;
+ var q=questions[index],current=chosen(q);
+ var pos=Number(b.dataset.position),next=pos+Number(b.dataset.delta);
+ if(next<0||next>=current.length)return;
+ var temp=current[pos];current[pos]=current[next];current[next]=temp;answer[index]=current;
+ invalidate();render(false);
+ var selector='button[data-position="'+next+'"][data-delta="'+b.dataset.delta+'"]';
+ var focusButton=$('answerMount').querySelector(selector);if(focusButton&&!focusButton.disabled)focusButton.focus();
+});
+$('checkButton').addEventListener('click',function(){
+ if(checked[index]){invalidate();$('questionTitle').focus();return;}
+ var q=questions[index],value=chosen(q),missing=q.type==='sequence'?false:q.type==='multiple'?value.length===0:!value;
+ if(missing){$('feedback').hidden=false;$('feedback').className='feedback';$('feedback').textContent='Selecione uma resposta antes de conferir.';return;}
+ var ok=q.type==='sequence'?value.join('|')===q.correct.join('|'):equal(value,q.correct);
+ if(firstTry[index]===undefined)firstTry[index]=ok;
+ checked[index]={ok:ok};
+ render(false);
+});
+$('previousButton').addEventListener('click',function(){if(index>0){index--;render(true);}});
+$('nextButton').addEventListener('click',function(){
+ if(!checked[index])return;
+ if(index===total-1){showSummary();return;}
+ index++;render(true);
+});
+function showSummary(){
+ $('questionScreen').hidden=true;$('summaryScreen').hidden=false;
+ $('progressStep').textContent='REVISÃO CONCLUÍDA';
+ $('progressTopic').textContent='Conclusão / arquitetura e decisões';
+ $('totalReviewed').textContent=String(reviewedCount())+' / '+total;
+ $('totalMastered').textContent=String(correctCount())+' / '+total;
+ $('totalFirst').textContent=String(Object.keys(firstTry).filter(function(k){return firstTry[k]===true;}).length)+' / '+total;
+ var list=$('reviewList');list.replaceChildren();
+ questions.forEach(function(q,i){
+  var li=document.createElement('li');li.className='review-item';
+  var block=document.createElement('div');
+  var strong=document.createElement('strong');strong.textContent=String(i+1).padStart(2,'0')+'. '+q.section;
+  var p=document.createElement('p');p.textContent=checked[i]?(checked[i].ok?'Correta. ':'A revisar. ')+q.explain:'Ainda não conferida. '+q.explain;
+  block.appendChild(strong);block.appendChild(p);
+  var b=document.createElement('button');b.type='button';b.textContent='Rever prancha';b.dataset.review=String(i);
+  li.appendChild(block);li.appendChild(b);list.appendChild(li);
+ });
+ $('summaryTitle').focus();$('summaryScreen').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'});
+}
+$('reviewList').addEventListener('click',function(e){var b=e.target.closest('button[data-review]');if(!b)return;index=Number(b.dataset.review);render(true);});
+$('restartButton').addEventListener('click',function(){answer=Object.create(null);checked=Object.create(null);firstTry=Object.create(null);index=0;render(true);});
+$('reviewFirstButton').addEventListener('click',function(){index=0;render(true);});
+$('motionToggle').addEventListener('click',function(){reduceMotion=!reduceMotion;document.body.classList.toggle('motion-reduce',reduceMotion);this.setAttribute('aria-pressed',String(reduceMotion));this.textContent=reduceMotion?'Restaurar movimentos':'Reduzir movimentos';});
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){reduceMotion=true;document.body.classList.add('motion-reduce');$('motionToggle').setAttribute('aria-pressed','true');$('motionToggle').textContent='Restaurar movimentos';}
+if(questions.length!==total){throw new Error('Total de questões inconsistente');}
+render(false);
+})();
+</script>
+</body>
+</html>
