@@ -63,6 +63,8 @@ final class activity {
      * Build the localized selector displayed on empty and management pages.
      */
     public static function prompt_options(stdClass $mcp, stdClass $cm): array {
+        global $OUTPUT;
+
         $options = [];
         foreach (self::prompt_types() as $type => $configuration) {
             $label = get_string($configuration["label"], "mcp");
@@ -70,7 +72,7 @@ final class activity {
                 "type" => $type,
                 "label" => $label,
                 "description" => get_string($configuration["description"], "mcp"),
-                "imageurl" => (new moodle_url("/mod/mcp/pix/material_types/{$type}.png"))->out(false),
+                "imageurl" => $OUTPUT->image_url("material_types/{$type}", "mod_mcp"),
                 "imagealt" => get_string("promptimagealt", "mcp", $label),
                 "prompt" => self::prompt($mcp, $cm, $type),
             ];
