@@ -1,11 +1,331 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Flashcards de revisão</title><style>
-:root{font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#26334e;background:#f5f2ff;--accent:#7254c9}*{box-sizing:border-box}body{margin:0;padding:42px 35px}main{max-width:850px;margin:auto}.eyebrow{letter-spacing:1.5px;font-size:11px;font-weight:800;color:var(--accent)}h1{font-size:39px;line-height:1.15;letter-spacing:-1px;margin:7px 0 14px}h2{font-size:22px;margin:9px 0 16px}p{color:#65728b;margin:10px 0 17px}header p{max-width:650px;font-size:15px}.panel{margin-top:25px;padding:28px;background:#fff;border:1px solid #e1e3f0;border-radius:18px;box-shadow:0 10px 26px #28324c0c}.label{display:inline-block;color:var(--accent);font-size:11px;font-weight:800;background:#f4f1ff;border-radius:6px;padding:7px 10px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:19px 0}.choice{font:inherit;font-weight:660;text-align:left;border:1px solid #d9dcea;background:#fff;border-radius:12px;padding:17px;min-height:72px;cursor:pointer;color:#364361}.choice:hover,.choice[aria-pressed=true]{border-color:var(--accent);background:#f4f1ff}.btn{border:1px solid var(--accent);background:var(--accent);color:white;font:inherit;font-weight:750;font-size:13px;border-radius:10px;padding:12px 17px;cursor:pointer}.btn.light{color:var(--accent);background:#fff}.callout{background:#f2efff;border-left:4px solid var(--accent);border-radius:0 12px 12px 0;padding:16px;margin:20px 0;color:#435273}.row{padding:15px 0;border-bottom:1px solid #eceef5}.range-title{display:flex;justify-content:space-between;gap:10px;color:#45526c;font-weight:700}.range-title output{color:var(--accent)}input[type=range]{display:block;width:100%;margin:15px 0;accent-color:var(--accent)}.metric{background:#f4f2ff;padding:22px;border-radius:13px;margin-top:22px}.metric strong{display:block;font-size:32px;color:var(--accent)}.meter{height:9px;background:#e3e1f2;border-radius:5px;overflow:hidden;margin:12px 0}.meter span{height:100%;display:block;background:var(--accent)}.branch{display:block;width:100%;text-align:left;margin:9px 0;padding:17px;border:1px solid #e1e3ee;background:#fff;border-radius:12px;cursor:pointer}.branch[aria-expanded=true]{border-color:var(--accent);background:#f4f1ff}.branch strong,.branch span{display:block}.branch span{font-size:13px;color:#68738a;margin-top:7px}.flash{background:var(--accent);border:0;border-radius:17px;min-height:230px;width:100%;color:white;font:inherit;font-size:24px;font-weight:750;padding:30px;cursor:pointer}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.small{font-size:12px;color:#778198}button:focus-visible,input:focus-visible{outline:3px solid #9b8ff2;outline-offset:3px}@media(max-width:630px){body{padding:25px 17px}h1{font-size:30px}.panel{padding:19px}.choices{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}</style></head><body><main><header><span class="eyebrow">EU ESCOLHO · FLASHCARDS</span><h1>Flashcards de revisão</h1><p>Revele definições de conceitos pedagógicos.</p></header><div id="app"></div></main><script>(function customRender(c){
-const r=document.querySelector("#app");let i=0,revealed=false,chosen=-1,open=[];
-const esc=x=>{const n=document.createElement("div");n.textContent=x;return n.innerHTML;};
-function render(){
-if(c.mode==="flash"){const x=c.items[i];r.innerHTML=`<section class="panel"><span class="label">CARTÃO ${i+1} DE ${c.items.length}</span><p>Toque no cartão para revelar a resposta.</p><button class="flash" id="reveal">${esc(revealed?x[1]:x[0])}</button><div class="actions"><button id="prev" class="btn light" ${i===0?"disabled":""}>Anterior</button><button id="next" class="btn">${i===c.items.length-1?"Recomeçar":"Próximo"}</button></div></section>`;r.querySelector("#reveal").onclick=()=>{revealed=!revealed;render();};r.querySelector("#prev").onclick=()=>{i--;revealed=false;render();};r.querySelector("#next").onclick=()=>{i=(i+1)%c.items.length;revealed=false;render();};return;}
-if(c.mode==="map"){r.innerHTML=`<section class="panel"><span class="label">MAPA MENTAL</span><h2>Explore os ramos de ${esc(c.topic)}</h2>${c.items.map((x,n)=>`<button class="branch" data-i="${n}" aria-expanded="${open.includes(n)}"><strong>${esc(x[0])}</strong><span>${open.includes(n)?esc(x[1]):"Clique para expandir"}</span></button>`).join("")}</section>`;r.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const k=+b.dataset.i;open=open.includes(k)?open.filter(n=>n!==k):[...open,k];render();});return;}
-if(chosen>=0&&c.mode==="route"){const x=c.items[chosen];r.innerHTML=`<section class="panel"><span class="label">TRILHA SUGERIDA</span><h2>${esc(x[0])}</h2><p>${esc(x[1])}</p><button class="btn" id="again">Escolher novamente</button></section>`;r.querySelector("#again").onclick=()=>{chosen=-1;render();};return;}
-r.innerHTML=`<section class="panel"><span class="label">${esc(c.mode==="vote"?"ENQUETE LOCAL":c.mode==="compare"?"COMPARADOR":"ESCOLHA SUA TRILHA")}</span><h2>${esc(c.question)}</h2><div class="choices">${c.items.map((x,n)=>`<button class="choice" data-i="${n}" aria-pressed="${chosen===n}">${esc(x[0])}</button>`).join("")}</div>${chosen>=0?`<div class="callout">${esc(c.items[chosen][1])}</div>`:""}<p class="small">Esta interação é demonstrativa e não envia dados ao Moodle.</p></section>`;r.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{chosen=+b.dataset.i;render();});
-}render();
-})({"title":"Flashcards de revisão","subtitle":"Revele definições de conceitos pedagógicos.","kicker":"EU ESCOLHO · FLASHCARDS","color":"#7254c9","bg":"#f5f2ff","mode":"flash","question":"","topic":"","items":[["Objetivo de aprendizagem","Resultado observável que orienta prática e avaliação."],["Feedback formativo","Orientação que ajuda o estudante durante o processo."],["Rubrica","Critérios explícitos para orientar e avaliar uma produção."],["Aprendizagem ativa","Participação do estudante na construção do conhecimento."]]});</script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flashcards de revisão - Aprender e recordar</title>
+<style>
+:root{color-scheme:light;font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;color:#21304f;background:#f4f6fc;--ink:#21304f;--muted:#52617b;--purple:#6046b9;--purple-dark:#49309d;--line:#dce2ef;--mint:#13735d;--rose:#a34359}
+*{box-sizing:border-box}
+body{margin:0;padding:clamp(18px,4vw,48px);background:radial-gradient(circle at 92% 5%,#e9e0ff 0,transparent 38%),#f4f6fc}
+button{font:inherit;cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.45}
+button:focus-visible{outline:3px solid #e19e42;outline-offset:4px}
+.shell{width:min(100%,1040px);margin:0 auto}
+.intro{margin-bottom:26px}
+.kicker{display:inline-flex;gap:8px;align-items:center;color:var(--purple-dark);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.kicker:before{content:"";width:9px;height:9px;border-radius:50%;background:#8c73df}
+h1{font-size:clamp(30px,4.3vw,48px);line-height:1.14;letter-spacing:-.04em;margin:10px 0}
+.intro p{max-width:700px;color:var(--muted);margin:0;font-size:16px}
+.layout{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(260px,1fr);gap:19px;align-items:start}
+.workspace,.sidebar{background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 16px 40px rgba(37,36,77,.06)}
+.workspace{padding:clamp(17px,3vw,30px)}
+.sidebar{padding:25px}
+.session-top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.eyebrow{color:var(--purple-dark);font-weight:800;letter-spacing:.09em;font-size:11px;text-transform:uppercase}
+.counter{font-weight:800;font-size:14px}
+.meter{height:8px;border-radius:20px;background:#ebeef6;overflow:hidden;margin:15px 0 20px}
+.meter-fill{height:100%;width:0;background:linear-gradient(90deg,#7962d1,#43a88e);border-radius:20px;transition:width .25s}
+.flashcard{display:block;width:100%;height:340px;padding:0;border:0;border-radius:21px;color:inherit;background:transparent;text-align:left;perspective:1300px}
+.flashcard__inner{display:block;position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,.75,.25,1)}
+.flashcard.is-flipped .flashcard__inner{transform:rotateY(180deg)}
+.flashcard__face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;overflow:auto;padding:clamp(22px,5vw,43px);border-radius:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flashcard__front{background:linear-gradient(145deg,#5438ac,#8266da);color:#fff}
+.flashcard__back{transform:rotateY(180deg);background:#edf9f4;border:2px solid #a4d9c6;color:#1e4d42}
+.card-ornament{position:absolute;right:-55px;top:-60px;width:235px;height:235px;border-radius:50%;border:35px solid rgba(255,255,255,.10);pointer-events:none}
+.card-icon{width:61px;height:61px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);border-radius:18px;display:grid;place-items:center;margin-bottom:22px}
+.card-icon svg{width:35px;height:35px;fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2}
+.flashcard__face .face-kicker{font-size:12px;font-weight:800;letter-spacing:.12em;opacity:.92;text-transform:uppercase}
+.flashcard__face .face-title{display:block;font-size:clamp(23px,3.2vw,34px);font-weight:800;line-height:1.21;letter-spacing:-.025em;margin:12px 0}
+.flashcard__face .face-subtitle{font-size:14px;opacity:.88}
+.flashcard__back .face-title{font-size:clamp(19px,2.7vw,27px);margin:10px 0}
+.flashcard__back .face-answer{font-size:clamp(16px,2.1vw,20px);line-height:1.48}
+.flashcard__back .face-example{margin-top:15px;padding:12px 15px;background:rgba(255,255,255,.72);border-radius:10px;font-size:14px}
+.card-instruction{display:flex;align-items:center;gap:8px;margin:14px 0 16px;color:var(--muted);font-size:13px}
+.card-instruction svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
+.grading{display:flex;gap:10px}
+.grade-btn{flex:1;min-height:51px;border:1px solid var(--line);background:#fff;border-radius:12px;color:var(--ink);font-weight:750;padding:10px}
+.grade-btn.review{border-color:#f1cad0;color:var(--rose);background:#fff8f8}
+.grade-btn.known{border-color:#a8d6c5;color:var(--mint);background:#f7fffb}
+.grade-btn[aria-pressed=true]{box-shadow:inset 0 0 0 2px currentColor}
+.navigation{display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid #edf0f6;margin-top:21px;padding-top:19px}
+.nav-btn,.action-btn{border:1px solid #d8dbeb;border-radius:11px;background:#fff;color:var(--ink);padding:10px 18px;font-weight:750;min-height:45px}
+.nav-btn.primary,.action-btn.primary{background:var(--purple);border-color:var(--purple);color:#fff}
+.nav-btn:not(:disabled):hover,.action-btn:hover{filter:brightness(.95)}
+.status-note{margin:12px 0 0;font-size:13px;color:var(--muted);min-height:21px}
+.sidebar h2{font-size:20px;line-height:1.3;margin:6px 0 9px}
+.sidebar>p{font-size:14px;color:var(--muted);margin:0 0 20px}
+.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:22px}
+.stat{padding:14px 12px;border-radius:12px;background:#f3f1fc}
+.stat:last-child{background:#eef8f3}
+.stat strong{display:block;color:var(--purple-dark);font-size:27px;font-weight:850;line-height:1.2}
+.stat:last-child strong{color:var(--mint)}
+.stat span{font-size:12px;color:var(--muted)}
+.topic-title{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.topic-list{list-style:none;padding:0;margin:10px 0}
+.topic-list li+li{border-top:1px solid #eef0f6}
+.topic-btn{border:0;background:transparent;padding:12px 0;display:flex;align-items:center;gap:10px;width:100%;text-align:left;color:var(--ink)}
+.topic-btn[aria-current=step]{color:var(--purple-dark);font-weight:800}
+.topic-dot{flex:none;width:12px;height:12px;border:2px solid #b9bfd0;border-radius:50%}
+.topic-btn[data-grade=known] .topic-dot{border-color:#139475;background:#139475}
+.topic-btn[data-grade=review] .topic-dot{border-color:#bc6177;background:#f4bec9}
+.topic-name{flex:1;font-size:13px}
+.topic-grade{font-size:11px;color:var(--muted)}
+.notice{padding:12px 14px;margin-top:18px;border-radius:11px;background:#f6f7fb;color:#5c657d;font-size:12px}
+.summary{padding:18px 4px 4px}
+.summary h2{font-size:clamp(25px,3.5vw,34px);letter-spacing:-.03em;margin:8px 0}
+.summary>p{color:var(--muted)}
+.summary-counters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:25px 0}
+.summary-counters div{background:#f4f5fb;border-radius:14px;padding:17px 12px}
+.summary-counters strong{display:block;font-size:31px;color:var(--purple-dark)}
+.summary-counters span{font-size:12px;color:var(--muted)}
+.summary-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.small-note{font-size:12px;color:var(--muted);margin-top:18px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+[hidden]{display:none!important}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{order:2}.flashcard{height:320px}.flashcard__face{padding:28px}}
+@media(max-width:420px){body{padding:14px}.workspace,.sidebar{border-radius:17px;padding:17px}.flashcard{height:345px}.flashcard__face{padding:22px}.grading{flex-direction:column}.card-icon{width:52px;height:52px;margin-bottom:10px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.flashcard__inner,.flashcard.is-flipped .flashcard__inner{transform:none}.flashcard__back{display:none;transform:none}.flashcard.is-flipped .flashcard__front{display:none}.flashcard.is-flipped .flashcard__back{display:flex}}
+</style>
+</head>
+<body>
+<main class="shell">
+<header class="intro">
+<span class="kicker">Prática de recuperação</span>
+<h1>Flashcards de revisão</h1>
+<p>Antes de virar cada cartão, tente lembrar a resposta. Depois, indique o que já domina e o que precisa estudar novamente.</p>
+</header>
+<div class="layout">
+<section class="workspace" aria-label="Área de estudo">
+<div class="session-top"><span class="eyebrow" id="sessionMode">Sessão de estudo</span><span class="counter" id="counter">Cartão 1 de 4</span></div>
+<div class="meter" role="progressbar" aria-label="Cartões classificados" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0" id="progress"><div class="meter-fill" id="progressFill"></div></div>
+<div id="cardStage">
+<button type="button" class="flashcard" id="flashcard" aria-label="Mostrar a resposta" aria-pressed="false">
+<span class="flashcard__inner">
+<span class="flashcard__face flashcard__front" id="frontFace">
+<span class="card-ornament" aria-hidden="true"></span>
+<span class="card-icon" aria-hidden="true">
+<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="13"></circle><circle cx="20" cy="20" r="7"></circle><path d="M20 2v12M20 20l13-13M26 7h7v7"></path></svg>
+</span>
+<span class="face-kicker">Pense antes de revelar</span>
+<span class="face-title" id="cardTerm"></span>
+<span class="face-subtitle" id="cardQuestion"></span>
+</span>
+<span class="flashcard__face flashcard__back" id="backFace" aria-hidden="true">
+<span class="face-kicker">Resposta e aplicação</span>
+<span class="face-title" id="answerTerm"></span>
+<span class="face-answer" id="cardAnswer"></span>
+<span class="face-example" id="cardExample"></span>
+</span>
+</span>
+</button>
+<p class="card-instruction"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6M4 4v5h5"></path></svg><span id="flipHint">Clique ou use Enter / Espaço para revelar.</span></p>
+<div class="grading" role="group" aria-label="Como foi sua lembrança?">
+<button type="button" class="grade-btn review" id="markReview" aria-pressed="false">Preciso revisar</button>
+<button type="button" class="grade-btn known" id="markKnown" aria-pressed="false">Já domino</button>
+</div>
+<p class="status-note" id="gradeNote">Classifique o cartão quando se sentir pronto.</p>
+<div class="navigation">
+<button type="button" class="nav-btn" id="previous" disabled>Anterior</button>
+<button type="button" class="nav-btn primary" id="next">Próximo cartão</button>
+</div>
+</div>
+<section class="summary" id="summary" hidden aria-labelledby="summaryTitle">
+<span class="eyebrow">Sessão concluída</span>
+<h2 id="summaryTitle" tabindex="-1">Seu resumo de estudo</h2>
+<p>Use o resultado para decidir o que revisar; esta é uma autoavaliação, não uma nota.</p>
+<div class="summary-counters" aria-label="Resultado da autoavaliação">
+<div><strong id="totalKnown">0</strong><span>Já domino</span></div>
+<div><strong id="totalReview">0</strong><span>Revisar</span></div>
+<div><strong id="totalUnseen">0</strong><span>Não classificados</span></div>
+</div>
+<p id="summaryMessage"></p>
+<div class="summary-actions">
+<button type="button" class="action-btn primary" id="reviewAgain">Revisar os difíceis</button>
+<button type="button" class="action-btn" id="startAgain">Recomeçar todos</button>
+</div>
+<p class="small-note">As marcações são temporárias e não são enviadas ao Moodle.</p>
+</section>
+</section>
+<aside class="sidebar" aria-label="Painel de aprendizagem">
+<span class="eyebrow">Seu ritmo</span>
+<h2>Acompanhe a revisão</h2>
+<p>Você decide quando avançar e pode retornar a qualquer conceito.</p>
+<div class="stat-grid">
+<div class="stat"><strong id="knownCount">0</strong><span>Dominados</span></div>
+<div class="stat"><strong id="reviewCount">0</strong><span>Para revisar</span></div>
+</div>
+<div class="topic-title">Conceitos desta sessão</div>
+<ul class="topic-list" id="topicList"></ul>
+<div class="notice">Demonstração independente: as respostas não são armazenadas no Moodle nem usadas para avaliação oficial.</div>
+</aside>
+</div>
+<div class="sr-only" aria-live="polite" aria-atomic="true" id="announcer"></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  const cards = [
+    {"term":"Objetivo de aprendizagem","question":"O que ele precisa deixar claro?","answer":"É o resultado observável que se espera do estudante ao final de uma atividade ou curso.","example":"Exemplo: identificar três causas de falha em um sistema, e não apenas 'entender o sistema'."},
+    {"term":"Feedback formativo","question":"Como o retorno pode ajudar alguém a melhorar?","answer":"É uma orientação específica sobre o desempenho que indica acertos, lacunas e próximos passos durante a aprendizagem.","example":"Exemplo: explicar por que uma resposta falhou e sugerir uma nova tentativa."},
+    {"term":"Rubrica de avaliação","question":"Para que servem critérios explícitos?","answer":"É um conjunto de critérios e níveis de desempenho que orienta a produção do estudante e torna a avaliação mais transparente.","example":"Exemplo: avaliar clareza, precisão e aplicação com descrições para cada nível."},
+    {"term":"Aprendizagem ativa","question":"Qual é o papel do estudante nesse processo?","answer":"O estudante participa da construção do conhecimento ao investigar, aplicar, discutir ou resolver problemas, em vez de apenas receber informações.","example":"Exemplo: analisar um caso e justificar uma decisão a partir de evidências."}
+  ];
+  const byId = id => document.getElementById(id);
+  const grade = Array(cards.length).fill(null);
+  let order = cards.map((_, index) => index);
+  let position = 0;
+  let isReviewSession = false;
+  let revealed = false;
+  const cardButton = byId("flashcard");
+  const front = byId("frontFace");
+  const back = byId("backFace");
+  const topicList = byId("topicList");
+  const itemButtons = cards.map((item, index) => {
+    const li = document.createElement("li");
+    const button = document.createElement("button");
+    const dot = document.createElement("span");
+    const name = document.createElement("span");
+    const state = document.createElement("span");
+    button.type = "button";
+    button.className = "topic-btn";
+    dot.className = "topic-dot";
+    dot.setAttribute("aria-hidden", "true");
+    name.className = "topic-name";
+    name.textContent = item.term;
+    state.className = "topic-grade";
+    button.append(dot, name, state);
+    button.addEventListener("click", () => {
+      order = cards.map((_, i) => i);
+      isReviewSession = false;
+      position = index;
+      render();
+      cardButton.focus();
+    });
+    li.appendChild(button);
+    topicList.appendChild(li);
+    return {button, state};
+  });
+  function announce(message) { byId("announcer").textContent = message; }
+  function counts() {
+    return {
+      known: grade.filter(value => value === "known").length,
+      review: grade.filter(value => value === "review").length,
+      unseen: grade.filter(value => value === null).length
+    };
+  }
+  function paintProgress() {
+    const {known, review} = counts();
+    const complete = known + review;
+    byId("knownCount").textContent = String(known);
+    byId("reviewCount").textContent = String(review);
+    byId("progress").setAttribute("aria-valuenow", String(complete));
+    byId("progressFill").style.width = (100 * complete / cards.length) + "%";
+    topicButtons();
+  }
+  function topicButtons() {
+    const active = byId("cardStage").hidden ? -1 : order[position];
+    itemButtons.forEach(({button, state}, index) => {
+      const value = grade[index];
+      button.dataset.grade = value || "pending";
+      state.textContent = value === "known" ? "Domino" : value === "review" ? "Revisar" : "Pendente";
+      button.setAttribute("aria-label", cards[index].term + ": " + state.textContent);
+      if (index === active) button.setAttribute("aria-current", "step");
+      else button.removeAttribute("aria-current");
+    });
+  }
+  function setRevealed(value) {
+    revealed = value;
+    cardButton.classList.toggle("is-flipped", value);
+    cardButton.setAttribute("aria-pressed", String(value));
+    cardButton.setAttribute("aria-label", value ? "Voltar à pergunta" : "Mostrar a resposta");
+    front.setAttribute("aria-hidden", String(value));
+    back.setAttribute("aria-hidden", String(!value));
+    byId("flipHint").textContent = value ? "Clique novamente para voltar à pergunta." : "Clique ou use Enter / Espaço para revelar.";
+  }
+  function paintGrade() {
+    const value = grade[order[position]];
+    byId("markReview").setAttribute("aria-pressed", String(value === "review"));
+    byId("markKnown").setAttribute("aria-pressed", String(value === "known"));
+    byId("gradeNote").textContent = value === "review" ? "Marcado para revisar depois." : value === "known" ? "Marcado como dominado." : "Classifique o cartão quando se sentir pronto.";
+  }
+  function render() {
+    const index = order[position];
+    const item = cards[index];
+    byId("cardStage").hidden = false;
+    byId("summary").hidden = true;
+    byId("sessionMode").textContent = isReviewSession ? "Revisão dirigida" : "Sessão de estudo";
+    byId("counter").textContent = "Cartão " + (position + 1) + " de " + order.length;
+    byId("cardTerm").textContent = item.term;
+    byId("cardQuestion").textContent = item.question;
+    byId("answerTerm").textContent = item.term;
+    byId("cardAnswer").textContent = item.answer;
+    byId("cardExample").textContent = item.example;
+    byId("previous").disabled = position === 0;
+    byId("next").textContent = position === order.length - 1 ? "Ver meu resumo" : "Próximo cartão";
+    setRevealed(false);
+    paintGrade();
+    paintProgress();
+  }
+  function mark(value) {
+    grade[order[position]] = value;
+    paintGrade();
+    paintProgress();
+    announce(value === "known" ? "Cartão marcado como dominado." : "Cartão marcado para revisão.");
+  }
+  function showSummary() {
+    const {known, review, unseen} = counts();
+    byId("cardStage").hidden = true;
+    byId("summary").hidden = false;
+    byId("sessionMode").textContent = "Resumo";
+    byId("counter").textContent = "Sessão finalizada";
+    byId("totalKnown").textContent = String(known);
+    byId("totalReview").textContent = String(review);
+    byId("totalUnseen").textContent = String(unseen);
+    byId("reviewAgain").disabled = review === 0;
+    byId("summaryMessage").textContent = review > 0
+      ? "Você tem " + review + " conceito(s) para revisar. Refaça esses cartões para consolidar o aprendizado."
+      : unseen > 0
+        ? "Ainda há cartões sem classificação. Você pode voltar à lista lateral ou recomeçar."
+        : "Todos os conceitos foram marcados como dominados. Você pode repetir a prática quando quiser.";
+    paintProgress();
+    byId("summaryTitle").focus();
+    announce("Sessão concluída. " + known + " dominados e " + review + " para revisar.");
+  }
+  cardButton.addEventListener("click", () => {
+    setRevealed(!revealed);
+    announce(revealed ? cards[order[position]].answer : "Pergunta: " + cards[order[position]].question);
+  });
+  byId("markReview").addEventListener("click", () => mark("review"));
+  byId("markKnown").addEventListener("click", () => mark("known"));
+  byId("previous").addEventListener("click", () => {
+    if (position > 0) { position--; render(); byId("previous").focus(); }
+  });
+  byId("next").addEventListener("click", () => {
+    if (position + 1 < order.length) { position++; render(); byId("next").focus(); }
+    else showSummary();
+  });
+  byId("reviewAgain").addEventListener("click", () => {
+    const pending = cards.map((_, index) => index).filter(index => grade[index] === "review");
+    if (!pending.length) return;
+    order = pending;
+    position = 0;
+    isReviewSession = true;
+    render();
+    cardButton.focus();
+    announce("Revisão dirigida iniciada com " + pending.length + " cartões.");
+  });
+  byId("startAgain").addEventListener("click", () => {
+    grade.fill(null);
+    order = cards.map((_, index) => index);
+    position = 0;
+    isReviewSession = false;
+    render();
+    cardButton.focus();
+    announce("Nova sessão iniciada.");
+  });
+  render();
+})();
+</script>
+</body>
+</html>
