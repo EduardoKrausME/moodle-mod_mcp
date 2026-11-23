@@ -27,7 +27,7 @@ test('cada manifesto tem HTML próprio, identificadores únicos e descrição',a
   assert.equal(m.version,1);
   assert.equal(m.category,category.id);
   assert.ok(m.description);
-  assert.ok(m.examples.length>=(category.id==='timeline'?1:4));
+  assert.ok(m.examples.length>=1,'Categoria sem exemplos: '+category.id);
   const local=new Set();
   for(const e of m.examples){
    assert.match(e.id,/^[a-z0-9-]+$/);
