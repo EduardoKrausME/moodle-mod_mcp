@@ -24,7 +24,7 @@
     }
 }}
 <div id="mcp-prompt-selector-{{cmid}}" class="mod-mcp-prompt-selector mb-3">
-    <p class="mb-2 font-weight-bold">{{#str}}promptselecttitle, mcp{{/str}}</p>
+    <p class="mb-2 fw-bold">{{#str}}promptselecttitle, mcp{{/str}}</p>
     <div class="d-flex flex-wrap mb-2" role="group" aria-label="{{#str}}promptselecttitle, mcp{{/str}}">
         {{#promptoptions}}
             <button type="button" class="btn btn-outline-primary m-1" data-prompt-choice="{{type}}"
@@ -42,7 +42,7 @@
             <textarea id="mcp-prompt-{{type}}-text-{{cmid}}" class="form-control mb-2"
                       rows="8" readonly>{{prompt}}</textarea>
             <div class="d-flex flex-wrap align-items-center mb-3">
-                <button type="button" class="btn btn-primary mr-2 mb-2" data-copy-prompt
+                <button type="button" class="btn btn-primary me-2 mb-2" data-copy-prompt
                         data-target="mcp-prompt-{{type}}-text-{{cmid}}">
                     {{#str}}copyprompt, mcp{{/str}}
                 </button>
