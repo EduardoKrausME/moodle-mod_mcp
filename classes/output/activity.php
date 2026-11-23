@@ -132,7 +132,7 @@ final class activity {
         if (strpos($themename, "learnlingo") !== false) {
             $cssvariables = ["--bs-primary", "--bs-accent", "--bs-primary-rgb", "--bs-accent-rgb"];
         } else if (in_array($themename, ["degrade", "eadflix", "eadtraining", "boost_magnific"], true)) {
-            $cssvariables = ["--bs-primary", "--bs-secondary"];
+            $cssvariables = ["--bs-primary", "--bs-secondary", "--bs-primary-rgb", "--bs-secondary-rgb"];
         }
 
         $instructions = [];
