@@ -28,6 +28,7 @@ test("HTML autossuficiente, SVG dinâmico e acessibilidade por teclado e toque",
     /@media\(max-width:750px\)/,/prefers-reduced-motion:reduce/,
     /id="sourceList"/,/id="selectedList"/,/id="counterList"/,
     /id="counterAdvice"/,/id="reviewResult"/,/id="confirmReset"/,
+    /classificações?|classificação retirada/,
     /ArrowUp/,/ArrowDown/,/altKey/,/aria-pressed/,/setAttribute\("aria-label"/
   ]) assert.match(html,re);
   assert.doesNotMatch(script,/innerHTML\s*=|localStorage|sessionStorage|fetch\(|XMLHttpRequest|document\.cookie|document\.write/);
@@ -164,6 +165,26 @@ test("tese, classificação, seleção, reordenação e desvinculação são edi
   include(1);
   assert.equal(selected().length,2);
   assert.equal($("progress").value,3,"connection text preserved after re-adding");
+  // Toggle an active category off: the card becomes unclassified, selection is removed,
+  // and its textual link remains available if it is deliberately classified again.
+  classify(1,0);
+  assert.equal(source(1).dataset.class,"unclassified");
+  assert.equal(selected().length,1);
+  assert.equal($("classificationProgress").textContent.startsWith("4 de 8"),true);
+  assert.equal($("progress").value,1,"Classificações e conexões suficientes deixam de ser dois marcos válidos.");
+  assert.ok(source(1).children[4].children[0].focused);
+  assert.match($("announcer").textContent,/classificação retirada/);
+  classify(1,0);include(1);
+  assert.equal(selected().length,2);
+  assert.equal(selectedInput(1).value,"As visitas no piloto mostram procura, sem comprovar efeito no aprendizado.");
+  assert.equal($("progress").value,3);
+  // A wrong classification of a source not used in the thesis must be visible in review.
+  classify(5,0);
+  $("review").click();
+  assert.ok($("reviewIssues").children.some(li=>li.textContent.includes("Uma afirmação de unanimidade")));
+  classify(5,0);
+  assert.equal(source(5).dataset.class,"unclassified");
+  assert.equal($("reviewResult").hidden,true);
   return {$,source,classify,include,selected,selectedInput,counter,type};
 });
 test("contra-argumento, resposta, revisão crítica e reinício confirmado",async()=>{
@@ -215,9 +236,42 @@ test("contra-argumento, resposta, revisão crítica e reinício confirmado",asyn
   assert.equal($("reviewIssues").children.length,1);
   assert.match($("reviewIssues").children[0].textContent,/não avalia verdade/);
   assert.ok($("reviewTitle").focused);
+  // Replies are bound to each objection: a new one starts empty, not with the previous answer.
+  $("counterList").children[0].click();
+  assert.equal($("counterList").children[0].dataset.selected,"true");
+  assert.equal($("checkCounter").checked,false,"Ao trocar de objeção, a autoavaliação da resposta deve ser refeita.");
+  assert.equal($("counterAnalysis").value,"");
+  assert.equal($("rebuttal").value,"");
+  assert.equal($("progress").value,3);
+  assert.equal($("reviewResult").hidden,true);
+  write("counterAnalysis","Esse custo precisa ser considerado para não retirar recursos de atividades essenciais da biblioteca.");
+  write("rebuttal","Os custos merecem uma análise cuidadosa; um período de teste com orçamento aprovado e equipe suficiente poderia verificar a viabilidade antes de ampliar a proposta.");
+  assert.equal($("progress").value,5);
+  // The old objection recovers its exact own texts, and the other draft also survives.
+  $("counterList").children[1].click();
+  assert.equal($("counterAnalysis").value,"Alguns estudantes dependem de transporte público e podem enfrentar riscos ao voltar para casa mais tarde.");
+  assert.equal($("rebuttal").value,"A objeção é relevante. A ampliação só seria defensável em dias com transporte e equipe disponíveis, e deveria começar com um piloto avaliado de forma transparente.");
+  assert.equal($("progress").value,5);
+  $("counterList").children[0].click();
+  assert.match($("rebuttal").value,/orçamento aprovado e equipe suficiente/);
+  $("counterList").children[0].click();
+  assert.equal($("counterList").children[0].dataset.selected,"false");
+  assert.equal($("counterAnalysis").value,"");
+  assert.equal($("rebuttal").value,"");
+  assert.equal($("progress").value,3);
+  $("counterList").children[1].click();
+  assert.match($("rebuttal").value,/piloto avaliado de forma transparente/);
+  assert.equal($("progress").value,5);
+  $("review").click();
+  assert.equal($("reviewResult").dataset.state,"incomplete","A confirmação anterior não vale após trocar de objeção.");
+  assert.ok($("reviewIssues").children.some(li=>li.textContent.includes("Autoavaliação")));
+  $("checkCounter").checked=true;$("checkCounter").change();
+  $("review").click();
+  assert.equal($("reviewResult").dataset.state,"complete");
   // Revisions cannot leave a stale successful review.
   write("rebuttal","Ainda não sei responder.");
   assert.equal($("progress").value,4);
+  assert.equal($("checkCounter").checked,false,"Editar a resposta invalida a verificação já marcada.");
   assert.equal($("reviewResult").hidden,true);
   $("reset").click();
   assert.equal($("resetConfirmation").hidden,false);
@@ -225,6 +279,11 @@ test("contra-argumento, resposta, revisão crítica e reinício confirmado",asyn
   $("cancelReset").click();
   assert.equal($("resetConfirmation").hidden,true);
   assert.equal($("progress").value,4);
+  write("thesis","Defendo ampliar duas noites por semana, com avaliação mais cuidadosa de custos e deslocamento.");
+  assert.equal($("checkScope").checked,false,"Alterar a tese exige repetir a autoavaliação de delimitação.");
+  src(0).children[4].children[1].click();
+  assert.equal($("checkLimits").checked,false,"Alterar a classificação das fontes exige revisar os limites.");
+  assert.equal($("reviewResult").hidden,true);
   $("reset").click();$("confirmReset").click();
   assert.equal($("progress").value,0);
   assert.equal($("progressPercent").textContent,"0%");
@@ -236,6 +295,11 @@ test("contra-argumento, resposta, revisão crítica e reinício confirmado",asyn
   assert.equal($("counterList").children[1].dataset.selected,"false");
   assert.equal($("checkScope").checked,false);
   assert.ok($("thesis").focused);
+  // Rascunhos de objeções anteriores não podem reaparecer depois de reiniciar.
+  $("counterList").children[1].click();
+  assert.equal($("counterAnalysis").value,"");
+  assert.equal($("rebuttal").value,"");
+  assert.equal($("progress").value,0);
 });
 test("catálogo acrescenta exclusivamente o exemplo 14 com pergunta inicial obrigatória",async()=>{
   const catalog=JSON.parse(await read("custom/examples.json"));
@@ -248,11 +312,12 @@ test("catálogo acrescenta exclusivamente o exemplo 14 com pergunta inicial obri
   ];
   assert.equal(catalog.version,1);
   assert.equal(catalog.category,"custom");
-  assert.equal(catalog.examples.length,14);
+  assert.ok(catalog.examples.length>=14,"O item 15 pode ser adicionado sem invalidar os testes do item 14.");
   assert.deepEqual(catalog.examples.slice(0,13).map(x=>x.id),prior);
   const item=catalog.examples[13];
   assert.equal(item.id,"oficina-de-argumentos-e-evidencias");
   assert.equal(item.path,"custom/oficina-de-argumentos-e-evidencias.html");
+  assert.equal(catalog.examples[13].id,"oficina-de-argumentos-e-evidencias","A posição do item 14 não deve mudar.");
   assert.match(item.prompt,/Na sua PRIMEIRA resposta/);
   assert.match(item.prompt,/Qual tipo de conteúdo você deseja trabalhar/);
   assert.match(item.prompt,/Aguarde a resposta/);

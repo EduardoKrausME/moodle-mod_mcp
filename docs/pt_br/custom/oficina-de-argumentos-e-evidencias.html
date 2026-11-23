@@ -146,7 +146,7 @@ textarea.control{resize:vertical;min-height:95px}
 <section class="panel" aria-labelledby="sourcesHeading">
 <div class="eyebrow">2 · Investigação de fontes</div>
 <h2 id="sourcesHeading">O que realmente sustenta uma afirmação?</h2>
-<p class="lead">Classifique cada cartão como <strong>fonte relevante para analisar o problema</strong> ou <strong>afirmação frágil</strong>. Uma fonte relevante não precisa favorecer sua tese: custos e limitações também importam. Os dados abaixo são inteiramente fictícios.</p>
+<p class="lead">Classifique cada cartão como <strong>fonte relevante para analisar o problema</strong> ou <strong>afirmação frágil</strong>. Uma fonte relevante não precisa favorecer sua tese: custos e limitações também importam. Toque novamente na classificação marcada para retirá-la e refazer sua análise. Os dados abaixo são inteiramente fictícios.</p>
 <p id="classificationProgress" class="class-progress">0 de 8 cartões classificados</p>
 <ul id="sourceList" class="source-list"></ul>
 </section>
@@ -162,7 +162,7 @@ textarea.control{resize:vertical;min-height:95px}
 <section class="panel" aria-labelledby="counterHeading">
 <div class="eyebrow">4 · Análise de contrapontos</div>
 <h2 id="counterHeading">Que objeção merece resposta?</h2>
-<p class="lead">Escolha um contra-argumento que alguém poderia apresentar. Uma boa resposta considera sua força e suas limitações, em vez de simplesmente ignorá-lo.</p>
+<p class="lead">Escolha um contra-argumento que alguém poderia apresentar. Uma boa resposta considera sua força e suas limitações. Ao trocar de objeção, a análise e a resposta ficam guardadas separadamente para cada opção; toque novamente na opção selecionada para desmarcá-la.</p>
 <div id="counterList" class="counter-list" role="group" aria-label="Três contra-argumentos possíveis"></div>
 <p id="counterAdvice" class="feedback-note">Selecione uma objeção para orientar sua análise.</p>
 <div class="field"><label for="counterAnalysis">O que torna esse contraponto importante?</label><textarea id="counterAnalysis" class="control" maxlength="400" aria-describedby="counterAdvice" placeholder="Essa objeção precisa ser considerada porque..."></textarea></div>
@@ -176,7 +176,7 @@ textarea.control{resize:vertical;min-height:95px}
 <section class="panel" aria-labelledby="qualityHeading">
 <div class="eyebrow">Revisão do raciocínio</div>
 <h2 id="qualityHeading">Confira os limites do argumento</h2>
-<p class="lead">Marque as verificações que você realmente realizou. O retorno automático verifica presença, organização e classificação dos registros, mas não interpreta o mérito da sua redação.</p>
+<p class="lead">Marque as verificações que você realmente realizou. O retorno automático verifica presença, organização e classificação das fontes conforme o gabarito deste caso fictício, mas não interpreta o mérito da sua redação.</p>
 <div class="checks">
 <label class="check-item"><input id="checkScope" type="checkbox">Minha tese delimita o que proponho e para quem.</label>
 <label class="check-item"><input id="checkLimits" type="checkbox">Reconheci os limites das fontes e evitei generalizações.</label>
@@ -234,7 +234,7 @@ textarea.control{resize:vertical;min-height:95px}
     {id:"alternatives",title:"Existem alternativas menos custosas",body:"Bibliotecas digitais, empréstimos ampliados ou sessões pontuais podem alcançar objetivos semelhantes com outra estrutura.",
       focus:"Qual valor concreto a abertura adicional oferece que outras opções não garantem?"}
   ];
-  const initial=()=>({thesis:"",classifications:{},selected:[],connections:{},counter:null,counterAnalysis:"",rebuttal:"",
+  const initial=()=>({thesis:"",classifications:{},selected:[],connections:{},counter:null,counterAnalysis:"",rebuttal:"",drafts:{},
     checks:{scope:false,limits:false,counter:false}});
   let state=initial();
   const $=id=>document.getElementById(id);
@@ -250,6 +250,12 @@ textarea.control{resize:vertical;min-height:95px}
   }
   function notify(message){$("announcer").textContent=message;}
   function invalidateReview(){$("reviewResult").hidden=true;}
+  function requireRecheck(key){
+    if(!state.checks[key])return;
+    state.checks[key]=false;
+    const ids={scope:"checkScope",limits:"checkLimits",counter:"checkCounter"};
+    $(ids[key]).checked=false;
+  }
   function classifiedCount(){return Object.keys(state.classifications).length;}
   function qualityLinks(){return state.selected.filter(id=>clean(state.connections[id]).length>=18);}
   function milestones(){
@@ -258,7 +264,7 @@ textarea.control{resize:vertical;min-height:95px}
       classifiedCount()>=5,
       qualityLinks().length>=2,
       !!state.counter&&clean(state.counterAnalysis).length>=20,
-      clean(state.rebuttal).length>=60
+      !!state.counter&&clean(state.counterAnalysis).length>=20&&clean(state.rebuttal).length>=60
     ];
   }
   function overview(){
@@ -302,12 +308,15 @@ textarea.control{resize:vertical;min-height:95px}
     const card=sourceById.get(id);
     if(!card||!["relevant","fragile"].includes(category))return;
     const former=state.classifications[id];
-    if(former===category)return;
-    state.classifications[id]=category;
-    if(category==="fragile")state.selected=state.selected.filter(key=>key!==id);
-    invalidateReview();renderSources();renderSelected();overview();
+    const cleared=former===category;
+    if(cleared)delete state.classifications[id];
+    else state.classifications[id]=category;
+    if(cleared||category==="fragile")state.selected=state.selected.filter(key=>key!==id);
+    requireRecheck("limits");invalidateReview();renderSources();renderSelected();overview();
     sourceButtons.get(id+"-"+category)?.focus();
-    notify(card.title+": classificação registrada. "+(card.category===category?"Você identificou o limite da fonte. ":"Revise o contexto e o tipo de evidência. ")+card.feedback);
+    notify(card.title+(cleared
+      ?": classificação retirada. Você pode analisar a fonte novamente."
+      :": classificação registrada. "+(card.category===category?"Você identificou o limite da fonte. ":"Revise o contexto e o tipo de evidência. ")+card.feedback));
   }
   function toggleSelected(id){
     if(state.classifications[id]!=="relevant"){notify("Primeiro classifique o cartão como fonte relevante.");return;}
@@ -317,7 +326,7 @@ textarea.control{resize:vertical;min-height:95px}
       if(state.selected.length>=4){notify("O limite de quatro fontes selecionadas foi atingido. Remova uma antes.");return;}
       state.selected.push(id);
     }
-    invalidateReview();renderSources();renderSelected();overview();
+    requireRecheck("limits");invalidateReview();renderSources();renderSelected();overview();
     sourceButtons.get(id+"-include")?.focus();
     notify(sourceById.get(id).title+(pos>=0?" removida da justificativa.":" incluída na justificativa. Explique sua relação com a tese."));
   }
@@ -361,7 +370,7 @@ textarea.control{resize:vertical;min-height:95px}
     if(old<0||next<0||next>=state.selected.length)return;
     state.selected.splice(old,1);
     state.selected.splice(next,0,id);
-    invalidateReview();renderSelected();overview();
+    requireRecheck("limits");invalidateReview();renderSelected();overview();
     selectedButtons.get(id)?.focus();
     notify(sourceById.get(id).title+" movida para a posição "+(next+1)+" na argumentação.");
   }
@@ -390,7 +399,7 @@ textarea.control{resize:vertical;min-height:95px}
       input.setAttribute("aria-label","Relação da fonte "+source.title+" com sua tese");
       input.addEventListener("input",()=>{
         state.connections[id]=input.value;
-        invalidateReview();overview();
+        requireRecheck("limits");invalidateReview();overview();
       });
       label.appendChild(input);li.appendChild(label);
       input.addEventListener("keydown",event=>{
@@ -400,6 +409,25 @@ textarea.control{resize:vertical;min-height:95px}
       list.appendChild(li);selectedButtons.set(id,input);
     });
   }
+  function chooseCounter(id){
+    const old=state.counter;
+    const next=old===id?null:id;
+    const oldKey=old||"unassigned";
+    state.drafts[oldKey]={analysis:state.counterAnalysis,rebuttal:state.rebuttal};
+    state.counter=next;
+    const draft=state.drafts[next||"unassigned"]||{analysis:"",rebuttal:""};
+    state.counterAnalysis=draft.analysis;
+    state.rebuttal=draft.rebuttal;
+    requireRecheck("counter");
+    $("counterAnalysis").value=state.counterAnalysis;
+    $("rebuttal").value=state.rebuttal;
+    invalidateReview();renderCounter();overview();
+    objectionButtons.get(id)?.focus();
+    notify(next
+      ?"Contra-argumento selecionado: "+objectionById.get(next).title+". "+objectionById.get(next).focus
+        +" A análise e a resposta deste contraponto foram recuperadas sem reutilizar textos de outra objeção."
+      :"Contra-argumento desmarcado. Os rascunhos foram preservados para uma próxima seleção.");
+  }
   function renderCounter(){
     const root=$("counterList");root.replaceChildren();objectionButtons.clear();
     for(const objection of objections){
@@ -408,12 +436,7 @@ textarea.control{resize:vertical;min-height:95px}
       button.setAttribute("aria-pressed",String(state.counter===objection.id));
       button.setAttribute("aria-label","Selecionar contra-argumento: "+objection.title);
       button.append(elem("strong","",objection.title),elem("span","",objection.body));
-      button.addEventListener("click",()=>{
-        state.counter=objection.id;
-        invalidateReview();renderCounter();overview();
-        objectionButtons.get(objection.id)?.focus();
-        notify("Contra-argumento selecionado: "+objection.title+". "+objection.focus);
-      });
+      button.addEventListener("click",()=>chooseCounter(objection.id));
       root.appendChild(button);objectionButtons.set(objection.id,button);
     }
     $("counterAdvice").textContent=state.counter?objectionById.get(state.counter).focus:"Selecione uma objeção para orientar sua análise.";
@@ -422,6 +445,12 @@ textarea.control{resize:vertical;min-height:95px}
     const issues=[];
     if(clean(state.thesis).length<25)issues.push("Tese: formule uma posição mais específica e contextualizada, com pelo menos 25 caracteres.");
     if(classifiedCount()<5)issues.push("Fontes: examine e classifique pelo menos cinco registros antes de concluir sua investigação.");
+    for(const source of sources){
+      const category=state.classifications[source.id];
+      if(category&&category!==source.category){
+        issues.push("Classificação: reveja '"+source.title+"'. "+source.feedback);
+      }
+    }
     const strong=state.selected.filter(id=>sourceById.get(id).category==="relevant");
     if(state.selected.length<2)issues.push("Seleção: inclua pelo menos duas fontes na justificativa.");
     if(strong.length<2)issues.push("Qualidade das fontes: pelo menos duas evidências selecionadas precisam ter base documental identificável.");
@@ -431,7 +460,7 @@ textarea.control{resize:vertical;min-height:95px}
       if(clean(state.connections[id]).length<18)issues.push("Conexão: explique com mais precisão como '"+src.title+"' se relaciona à tese.");
       if(src.direction!=="support")issues.push("Cuidado: '"+src.title+"' apresenta restrições ou resultados ambíguos; não a trate automaticamente como apoio à tese.");
     }
-    if(!state.counter)issues.push("Contraponto: escolha uma objeção relevante à sua proposta.");
+    if(!state.counter)issues.push("Contraponto: escolha uma objeção relevante à sua proposta. A resposta só pode ser vinculada a um contraponto selecionado.");
     if(clean(state.counterAnalysis).length<20)issues.push("Análise: explique por que o contra-argumento merece consideração.");
     if(clean(state.rebuttal).length<60)issues.push("Resposta: desenvolva uma resposta de pelo menos 60 caracteres com razões e limites.");
     if(!state.checks.scope)issues.push("Autoavaliação: verifique se sua tese está claramente delimitada.");
@@ -443,7 +472,7 @@ textarea.control{resize:vertical;min-height:95px}
     if(issues.length===0&&completed){
       result.dataset.state="complete";
       $("reviewTitle").textContent="Estrutura argumentativa completa para revisão humana";
-      list.appendChild(elem("li","","Você preencheu os componentes e as verificações solicitadas. Releia o conteúdo: esta ferramenta não avalia verdade, coerência semântica ou validade das conclusões."));
+      list.appendChild(elem("li","","Você preencheu os componentes, comparou as fontes com o gabarito deste caso fictício e marcou as verificações solicitadas. Releia o conteúdo: esta ferramenta não avalia verdade, coerência semântica ou validade das conclusões."));
     }else{
       result.dataset.state="incomplete";
       $("reviewTitle").textContent=issues.length+" ponto(s) a revisar";
@@ -462,9 +491,9 @@ textarea.control{resize:vertical;min-height:95px}
     state=initial();renderAll();$("thesis").focus();
     notify("Oficina reiniciada. A tese, as fontes, os argumentos e a revisão foram apagados.");
   }
-  $("thesis").addEventListener("input",()=>{state.thesis=$("thesis").value;invalidateReview();overview();});
-  $("counterAnalysis").addEventListener("input",()=>{state.counterAnalysis=$("counterAnalysis").value;invalidateReview();overview();});
-  $("rebuttal").addEventListener("input",()=>{state.rebuttal=$("rebuttal").value;invalidateReview();overview();});
+  $("thesis").addEventListener("input",()=>{state.thesis=$("thesis").value;requireRecheck("scope");invalidateReview();overview();});
+  $("counterAnalysis").addEventListener("input",()=>{state.counterAnalysis=$("counterAnalysis").value;requireRecheck("counter");invalidateReview();overview();});
+  $("rebuttal").addEventListener("input",()=>{state.rebuttal=$("rebuttal").value;requireRecheck("counter");invalidateReview();overview();});
   [["checkScope","scope"],["checkLimits","limits"],["checkCounter","counter"]].forEach(([id,key])=>{
     $(id).addEventListener("change",()=>{
       state.checks[key]=$(id).checked;invalidateReview();overview();
