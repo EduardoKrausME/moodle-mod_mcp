@@ -198,9 +198,8 @@ rules because no tool discovery or authoring action is available.
 | `mcp_get_material_theme` | Optionally read the effective course or site material theme and authoring context |
 | `mcp_configure_material_theme` | Optionally register a reusable course or site material style after confirmation |
 | `mcp_create_activity` | Create a hidden activity instance; optionally specify `aftercmid` or `beforecmid` in the selected course and section |
-| `mcp_get_activity` | Read the instance, configuration and revisions |
-
-| `mcp_save_content` | Save a new immutable HTML draft |
+| `mcp_get_activity` | Read the instance, configuration, full HTML, plaintext and revision integrity metadata |
+| `mcp_save_content` | Save a new immutable HTML draft; return its byte count and SHA-256 |
 | `mcp_save_information` | Set nullable activity type and JSON information, including quiz keys |
 | `mcp_configure_questions` | Set all/random/shuffle inside the quiz information JSON |
 | `mcp_upload_asset` | Add an authorised activity asset |
