@@ -24,6 +24,8 @@
 
 namespace mod_mcp\mcp\write;
 
+use mod_mcp\mcp\authoring_error;
+use moodle_exception;
 use local_mcp\security\authenticated_identity;
 use mod_mcp\content\service;
 use mod_mcp\mcp\authoring_guidance;
@@ -84,13 +86,18 @@ final class save_content extends activity_tool {
      * @return array Result.
      */
     public function preview(array $arguments, authenticated_identity $identity): array {
-        $activity = $this->activity($arguments);
-        $html = trim(service::normalize_html($arguments["html"]));
-        service::validate_theme_colours((int)$activity->course, $html);
-        return ["cmid" => $arguments["cmid"], "draftrevision" => (int)$activity->draftrevision,
-            "expectedrevision" => (int)$arguments["expectedrevision"],
-            "bytes" => strlen($html), "sha256" => hash("sha256", $html),
-            "students_affected" => false];
+        try {
+            $activity = $this->activity($arguments);
+            $html = trim(service::normalize_html($arguments["html"]));
+            service::validate_theme_colours((int)$activity->course, $html);
+            return ["cmid" => $arguments["cmid"], "draftrevision" => (int)$activity->draftrevision,
+                "expectedrevision" => (int)$arguments["expectedrevision"],
+                "bytes" => strlen($html), "sha256" => hash("sha256", $html),
+                "students_affected" => false];
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
+        }
     }
 
     /**
@@ -101,11 +108,16 @@ final class save_content extends activity_tool {
      * @return array Result.
      */
     public function execute(array $arguments, authenticated_identity $identity): array {
-        $this->resolve_context($arguments);
-        $mcp = $this->activity($arguments);
-        $revision = service::save(
-            (int)$mcp->id, $arguments["html"], $identity->userid, (int)$arguments["expectedrevision"]);
-        return ["cmid" => (int)$arguments["cmid"], "draftrevision" => $revision,
-            "published" => false];
+        try {
+            $this->resolve_context($arguments);
+            $mcp = $this->activity($arguments);
+            $revision = service::save(
+                (int)$mcp->id, $arguments["html"], $identity->userid, (int)$arguments["expectedrevision"]);
+            return ["cmid" => (int)$arguments["cmid"], "draftrevision" => $revision,
+                "published" => false];
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
+        }
     }
 }

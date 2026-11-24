@@ -24,6 +24,8 @@
 
 namespace mod_mcp\mcp\write;
 
+use mod_mcp\mcp\authoring_error;
+use moodle_exception;
 use local_mcp\security\authenticated_identity;
 use mod_mcp\content\service;
 use mod_mcp\mcp\authoring_guidance;
@@ -83,13 +85,18 @@ final class publish extends activity_tool {
      * @return array Result.
      */
     public function preview(array $arguments, authenticated_identity $identity): array {
-        $activity = $this->activity($arguments);
-        return ["cmid" => (int)$arguments["cmid"], "revision" => (int)$arguments["revision"],
-            "currentdraft" => (int)$activity->draftrevision,
-            "questions" => $activity->activitytype === "quiz" && $activity->informationjson ?
-                count(json_decode($activity->informationjson, true)["questions"] ?? []) : 0,
-            "type" => $activity->activitytype,
-            "visible_to_students_after_confirmation" => true];
+        try {
+            $activity = $this->activity($arguments);
+            return ["cmid" => (int)$arguments["cmid"], "revision" => (int)$arguments["revision"],
+                "currentdraft" => (int)$activity->draftrevision,
+                "questions" => $activity->activitytype === "quiz" && $activity->informationjson ?
+                    count(json_decode($activity->informationjson, true)["questions"] ?? []) : 0,
+                "type" => $activity->activitytype,
+                "visible_to_students_after_confirmation" => true];
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
+        }
     }
 
     /**
@@ -100,9 +107,14 @@ final class publish extends activity_tool {
      * @return array Result.
      */
     public function execute(array $arguments, authenticated_identity $identity): array {
-        $this->resolve_context($arguments);
-        $mcp = $this->activity($arguments);
-        service::publish((int)$mcp->id, (int)$arguments["revision"]);
-        return ["cmid" => (int)$arguments["cmid"], "publishedrevision" => (int)$arguments["revision"]];
+        try {
+            $this->resolve_context($arguments);
+            $mcp = $this->activity($arguments);
+            service::publish((int)$mcp->id, (int)$arguments["revision"]);
+            return ["cmid" => (int)$arguments["cmid"], "publishedrevision" => (int)$arguments["revision"]];
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
+        }
     }
 }

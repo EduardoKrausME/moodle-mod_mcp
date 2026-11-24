@@ -24,6 +24,7 @@
 
 namespace mod_mcp\mcp\write;
 
+use mod_mcp\mcp\authoring_error;
 use local_mcp\security\authenticated_identity;
 use mod_mcp\content\metadata;
 use moodle_exception;
@@ -120,9 +121,14 @@ final class configure_questions extends activity_tool {
      * @return array Result.
      */
     public function preview(array $arguments, authenticated_identity $identity): array {
-        $proposed = $this->proposed($arguments);
-        unset($proposed["information"]);
-        return $proposed + ["published" => false];
+        try {
+            $proposed = $this->proposed($arguments);
+            unset($proposed["information"]);
+            return $proposed + ["published" => false];
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
+        }
     }
 
     /**
@@ -133,13 +139,18 @@ final class configure_questions extends activity_tool {
      * @return array Result.
      */
     public function execute(array $arguments, authenticated_identity $identity): array {
-        $this->resolve_context($arguments);
-        $proposed = $this->proposed($arguments);
-        $mcp = $this->activity($arguments);
-        $hash = metadata::save((int)$mcp->id, "quiz",
-            $proposed["information"], $arguments["expectedhash"]);
-        unset($proposed["information"]);
-        $proposed["settingshash"] = $hash;
-        return $proposed + ["published" => false];
+        try {
+            $this->resolve_context($arguments);
+            $proposed = $this->proposed($arguments);
+            $mcp = $this->activity($arguments);
+            $hash = metadata::save((int)$mcp->id, "quiz",
+                $proposed["information"], $arguments["expectedhash"]);
+            unset($proposed["information"]);
+            $proposed["settingshash"] = $hash;
+            return $proposed + ["published" => false];
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
+        }
     }
 }

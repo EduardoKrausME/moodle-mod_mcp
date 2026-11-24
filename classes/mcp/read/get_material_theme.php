@@ -24,6 +24,8 @@
 
 namespace mod_mcp\mcp\read;
 
+use mod_mcp\mcp\authoring_error;
+use moodle_exception;
 use context;
 use context_course;
 use local_mcp\read\tool\base_tool;
@@ -103,14 +105,19 @@ final class get_material_theme extends base_tool {
      * @return array Course theme configuration.
      */
     public function execute(array $arguments, authenticated_identity $identity): array {
-        $courseid = (int)$arguments["courseid"];
-        require_capability("moodle/course:manageactivities",
-            $this->resolve_context($arguments), $identity->userid);
-        return [
-            "courseid" => $courseid,
-            "site_default" => material_theme::site_default(),
-            "course_override" => material_theme::course_override($courseid),
-            "authoring" => authoring_guidance::course_context($courseid),
-        ];
+        try {
+            $courseid = (int)$arguments["courseid"];
+            require_capability("moodle/course:manageactivities",
+                $this->resolve_context($arguments), $identity->userid);
+            return [
+                "courseid" => $courseid,
+                "site_default" => material_theme::site_default(),
+                "course_override" => material_theme::course_override($courseid),
+                "authoring" => authoring_guidance::course_context($courseid),
+            ];
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
+        }
     }
 }

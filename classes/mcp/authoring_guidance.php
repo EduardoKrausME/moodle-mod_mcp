@@ -259,13 +259,11 @@ final class authoring_guidance {
                     $parts[] = self::publication_rules();
                     break;
                 case "theme":
-                    $default = material_theme::site_default();
-                    $parts[] = $default === null ?
-                        "NO SITE-WIDE MATERIAL THEME IS REGISTERED. A course override may exist. "
-                        . "Check mcp_get_material_theme(courseid); configure a course or site "
-                        . "style with mcp_configure_material_theme if neither exists." :
-                        "Site-wide material design default: " . $default["name"] . ". Visual style: "
-                        . $default["style"] . ". A course-specific material theme takes precedence.";
+                    // Discovery must not depend on valid stored material configuration.
+                    $parts[] = "First call mcp_get_material_theme(courseid). A course override takes "
+                        . "precedence over the site-wide default. If not configured or invalid, use "
+                        . "mcp_configure_material_theme after teacher approval. If these tools are "
+                        . "missing, refresh tools/list after checking the installed plugin versions.";
                     $parts[] = "The following UI theme is the Moodle SITE DEFAULT at "
                         . "tool-discovery time; it is NOT a guarantee of the course theme. "
                         . "Use the effective course authoring context returned by "

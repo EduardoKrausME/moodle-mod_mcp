@@ -24,6 +24,8 @@
 
 namespace mod_mcp\mcp\read;
 
+use mod_mcp\mcp\authoring_error;
+use moodle_exception;
 use context;
 use context_module;
 use local_mcp\read\tool\base_tool;
@@ -103,28 +105,33 @@ final class get_activity extends base_tool {
      * @return array Result.
      */
     public function execute(array $arguments, authenticated_identity $identity): array {
-        global $DB;
-        $cm = get_coursemodule_from_id("mcp", (int)$arguments["cmid"], 0, false, MUST_EXIST);
-        $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
-        $revision = service::get($mcp->id, (int)$mcp->draftrevision);
-        $published = service::get($mcp->id, (int)$mcp->publishedrevision);
-        return [
-            "cmid" => (int)$cm->id,
-            "courseid" => (int)$mcp->course,
-            "authoring" => authoring_guidance::course_context((int)$mcp->course),
-            "name" => $mcp->name,
-            "draftrevision" => (int)$mcp->draftrevision,
-            "publishedrevision" => (int)$mcp->publishedrevision,
-            "draftsha256" => $revision ? $revision->sha256 : null,
-            "html" => $revision ? untrusted_content::text($revision->content) : "",
-            "publishedsha256" => $published ? $published->sha256 : null,
-            "questionselection" => json_decode($mcp->informationjson ?? "{}", true)["selection"] ?? "all",
-            "questionsperattempt" => json_decode($mcp->informationjson ?? "{}", true)["count"] ?? 0,
-            "shufflequestions" => json_decode($mcp->informationjson ?? "{}", true)["shuffle"] ?? false,
-            "type" => $mcp->activitytype,
-            "information" => $mcp->informationjson === null ? null :
-                json_decode($mcp->informationjson, true),
-            "settingshash" => metadata::fingerprint($mcp),
-        ];
+        try {
+            global $DB;
+            $cm = get_coursemodule_from_id("mcp", (int)$arguments["cmid"], 0, false, MUST_EXIST);
+            $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
+            $revision = service::get($mcp->id, (int)$mcp->draftrevision);
+            $published = service::get($mcp->id, (int)$mcp->publishedrevision);
+            return [
+                "cmid" => (int)$cm->id,
+                "courseid" => (int)$mcp->course,
+                "authoring" => authoring_guidance::course_context((int)$mcp->course),
+                "name" => $mcp->name,
+                "draftrevision" => (int)$mcp->draftrevision,
+                "publishedrevision" => (int)$mcp->publishedrevision,
+                "draftsha256" => $revision ? $revision->sha256 : null,
+                "html" => $revision ? untrusted_content::text($revision->content) : "",
+                "publishedsha256" => $published ? $published->sha256 : null,
+                "questionselection" => json_decode($mcp->informationjson ?? "{}", true)["selection"] ?? "all",
+                "questionsperattempt" => json_decode($mcp->informationjson ?? "{}", true)["count"] ?? 0,
+                "shufflequestions" => json_decode($mcp->informationjson ?? "{}", true)["shuffle"] ?? false,
+                "type" => $mcp->activitytype,
+                "information" => $mcp->informationjson === null ? null :
+                    json_decode($mcp->informationjson, true),
+                "settingshash" => metadata::fingerprint($mcp),
+            ];
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
+        }
     }
 }

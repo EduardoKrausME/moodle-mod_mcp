@@ -2,6 +2,12 @@
 
 This file documents verified published GitHub releases. The initial release is described from its published tag and tagged source or release notes; there is no earlier published GitHub release to compare.
 
+## Unreleased
+
+- Return actionable structured errors for missing or malformed material themes, revision conflicts and known authoring validation failures while retaining native UI exceptions.
+- Keep tool discovery independent of stored material theme validity and allow authorized, confirmed replacement of malformed theme definitions.
+- Added regression coverage for read-only previews, hidden creation, template precedence, recovery and safe error mapping. Deploy with the updated local_mcp and refresh MCP tool discovery.
+
 ## 1.2.2 - 2026-11-24
 
 - Added reusable site and course material themes, with configuration tools and a management page; content authoring requires an effective material theme.

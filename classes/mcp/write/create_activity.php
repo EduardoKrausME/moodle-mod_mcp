@@ -24,6 +24,8 @@
 
 namespace mod_mcp\mcp\write;
 
+use mod_mcp\mcp\authoring_error;
+use moodle_exception;
 use context;
 use context_course;
 use mod_mcp\authoring\material_theme;
@@ -61,7 +63,9 @@ final class create_activity extends base_tool {
      */
     public function get_description(): string {
         return authoring_guidance::tool_description(
-            "Create an unpublished, hidden mod_mcp activity and return the real cmid.",
+            "Create an unpublished, hidden mod_mcp activity and return the real cmid. "
+            . "First call mcp_get_material_theme; if needed, configure the material theme using "
+            . "mcp_configure_material_theme before requesting creation.",
             ["core", "interview", "learning", "theme"]);
     }
 
@@ -105,16 +109,21 @@ final class create_activity extends base_tool {
      * @return array Safe preview.
      */
     public function preview(array $arguments, authenticated_identity $identity): array {
-        $ctx = $this->resolve_context($arguments);
-        require_capability("mod/mcp:addinstance", $ctx, $identity->userid);
-        $theme = material_theme::require_for_course((int)$arguments["courseid"]);
-        return [
-            "courseid" => (int)$arguments["courseid"],
-            "sectionnum" => (int)$arguments["sectionnum"],
-            "name" => clean_param($arguments["name"], PARAM_TEXT),
-            "materialtheme" => $theme,
-            "will_create_hidden_activity" => true,
-        ];
+        try {
+            $ctx = $this->resolve_context($arguments);
+            require_capability("mod/mcp:addinstance", $ctx, $identity->userid);
+            $theme = material_theme::require_for_course((int)$arguments["courseid"]);
+            return [
+                "courseid" => (int)$arguments["courseid"],
+                "sectionnum" => (int)$arguments["sectionnum"],
+                "name" => clean_param($arguments["name"], PARAM_TEXT),
+                "materialtheme" => $theme,
+                "will_create_hidden_activity" => true,
+            ];
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
+        }
     }
 
     /**
@@ -125,24 +134,29 @@ final class create_activity extends base_tool {
      * @return array Result.
      */
     public function execute(array $arguments, authenticated_identity $identity): array {
-        global $CFG;
-        require_once($CFG->dirroot . "/course/modlib.php");
-        $ctx = $this->resolve_context($arguments);
-        require_capability("mod/mcp:addinstance", $ctx, $identity->userid);
-        material_theme::require_for_course((int)$arguments["courseid"]);
-        $course = get_course((int)$arguments["courseid"]);
-        [$module, $context, $section, $cm, $info] = prepare_new_moduleinfo_data(
-            $course, "mcp", (int)$arguments["sectionnum"]);
-        $info->name = clean_param($arguments["name"], PARAM_TEXT);
-        $info->intro = "";
-        $info->introformat = FORMAT_HTML;
-        $info->grade = 0;
-        $info->visible = 0;
-        $created = add_moduleinfo($info, $course);
-        return ["cmid" => (int)$created->coursemodule, "instanceid" => (int)$created->instance,
-            "courseid" => (int)$course->id,
-            "authoring" => authoring_guidance::course_context((int)$course->id),
-            "url" => (new moodle_url("/mod/mcp/view.php",
-                ["id" => $created->coursemodule]))->out(false)];
+        try {
+            global $CFG;
+            require_once($CFG->dirroot . "/course/modlib.php");
+            $ctx = $this->resolve_context($arguments);
+            require_capability("mod/mcp:addinstance", $ctx, $identity->userid);
+            material_theme::require_for_course((int)$arguments["courseid"]);
+            $course = get_course((int)$arguments["courseid"]);
+            [$module, $context, $section, $cm, $info] = prepare_new_moduleinfo_data(
+                $course, "mcp", (int)$arguments["sectionnum"]);
+            $info->name = clean_param($arguments["name"], PARAM_TEXT);
+            $info->intro = "";
+            $info->introformat = FORMAT_HTML;
+            $info->grade = 0;
+            $info->visible = 0;
+            $created = add_moduleinfo($info, $course);
+            return ["cmid" => (int)$created->coursemodule, "instanceid" => (int)$created->instance,
+                "courseid" => (int)$course->id,
+                "authoring" => authoring_guidance::course_context((int)$course->id),
+                "url" => (new moodle_url("/mod/mcp/view.php",
+                    ["id" => $created->coursemodule]))->out(false)];
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
+        }
     }
 }

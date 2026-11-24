@@ -25,6 +25,10 @@
 namespace mod_mcp;
 
 use advanced_testcase;
+use local_mcp\exception\api_exception;
+use local_mcp\security\authenticated_identity;
+use mod_mcp\mcp\write\create_activity;
+use mod_mcp\mcp\authoring_error;
 use mod_mcp\authoring\material_theme;
 use mod_mcp\content\service;
 use mod_mcp\mcp\authoring_guidance;
@@ -109,5 +113,71 @@ final class material_theme_test extends advanced_testcase {
             (new configure_material_theme())->get_description());
         $this->assertStringContainsString("mcp_configure_material_theme",
             (new get_material_theme())->get_description());
+    }
+    /**
+     * Preview refuses an unconfigured course and never creates a module.
+     */
+    public function test_create_preview_requires_theme_and_is_read_only(): void {
+        global $DB, $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $identity = new authenticated_identity((int)$USER->id, "test", ["mcp:read", "mcp:write"]);
+        $tool = new create_activity();
+        $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Draft"];
+        try {
+            $tool->preview($args, $identity);
+            $this->fail("Missing theme must prevent confirmation");
+        } catch (api_exception $failure) {
+            $this->assertSame("material_theme_required", $failure->machinecode);
+            $this->assertSame(409, $failure->httpstatus);
+            $this->assertSame("mcp_configure_material_theme", $failure->details["required_action"]);
+            $this->assertStringContainsString("Configure", $failure->get_public_message());
+        }
+        $this->assertFalse($DB->record_exists("mcp", ["course" => $course->id]));
+        material_theme::save("site", 0, "Default", "Use cards.");
+        $this->assertSame("site", $tool->preview($args, $identity)["materialtheme"]["scope"]);
+        material_theme::save("course", (int)$course->id, "Course", "Use panels.");
+        $this->assertSame("course", $tool->preview($args, $identity)["materialtheme"]["scope"]);
+        $this->assertTrue($tool->requires_confirmation());
+        $this->assertFalse($DB->record_exists("mcp", ["course" => $course->id]));
+        $created = $tool->execute($args, $identity);
+        $cm = get_coursemodule_from_id("mcp", $created["cmid"], $course->id, false, MUST_EXIST);
+        $this->assertSame(0, (int)$cm->visible);
+    }
+
+    /**
+     * Invalid configuration does not prevent discovery or an approved replacement preview.
+     */
+    public function test_invalid_theme_recovery(): void {
+        global $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $identity = new authenticated_identity((int)$USER->id, "test", ["mcp:read", "mcp:write"]);
+        set_config("materialtheme_default", "{broken", "mod_mcp");
+        $this->assertStringContainsString("mcp_get_material_theme", (new create_activity())->get_description());
+        $tool = new configure_material_theme();
+        $args = ["scope" => "site", "name" => "Default", "style" => "Use panels."];
+        $preview = $tool->preview($args, $identity);
+        $this->assertTrue($preview["previous_invalid"]);
+        $this->assertSame("{broken", get_config("mod_mcp", "materialtheme_default"));
+        $this->assertTrue($tool->requires_confirmation());
+        $tool->execute($args, $identity);
+        $this->assertSame("Default", material_theme::effective((int)$course->id)["name"]);
+    }
+
+    /**
+     * Expected authoring errors are actionable; unrelated native exceptions remain private.
+     */
+    public function test_authoring_error_mapping(): void {
+        $failure = new moodle_exception("revisionconflict", "mcp");
+        $this->assertSame("revision_conflict", authoring_error::translate($failure)->machinecode);
+        $failure = new moodle_exception("fixedbrandcolour", "mcp");
+        $this->assertSame("fixed_brand_colour", authoring_error::translate($failure)->machinecode);
+        $failure = new moodle_exception("materialthemeinvalid", "mcp");
+        $this->assertSame("material_theme_invalid", authoring_error::translate($failure)->machinecode);
+        $failure = new moodle_exception("unexpected", "mcp");
+        $this->assertSame($failure, authoring_error::translate($failure));
     }
 }

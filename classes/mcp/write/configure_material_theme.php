@@ -24,6 +24,7 @@
 
 namespace mod_mcp\mcp\write;
 
+use mod_mcp\mcp\authoring_error;
 use context;
 use context_course;
 use context_system;
@@ -136,18 +137,35 @@ final class configure_material_theme extends base_tool {
      * @return array Preview.
      */
     public function preview(array $arguments, authenticated_identity $identity): array {
-        $this->authorize($arguments, $identity);
-        $scope = $arguments["scope"];
-        $courseid = (int)($arguments["courseid"] ?? 0);
-        $previous = $scope === "site" ? material_theme::site_default() :
-            material_theme::course_override($courseid);
-        return [
-            "scope" => $scope,
-            "courseid" => $scope === "course" ? $courseid : null,
-            "previous" => $previous,
-            "proposed" => material_theme::definition($arguments["name"], $arguments["style"]),
-            "changes_moodle_ui_theme" => false,
-        ];
+        try {
+            $this->authorize($arguments, $identity);
+            $scope = $arguments["scope"];
+            $courseid = (int)($arguments["courseid"] ?? 0);
+            $previousinvalid = false;
+            try {
+                $previous = $scope === "site" ? material_theme::site_default() :
+                    material_theme::course_override($courseid);
+            } catch (moodle_exception $failure) {
+                if ($failure->errorcode !== "materialthemeinvalid" ||
+                        !in_array($failure->module, ["mcp", "mod_mcp"], true)) {
+                    throw $failure;
+                }
+                // A malformed saved definition must be replaceable through an approved preview.
+                $previous = null;
+                $previousinvalid = true;
+            }
+            return [
+                "scope" => $scope,
+                "courseid" => $scope === "course" ? $courseid : null,
+                "previous" => $previous,
+                "previous_invalid" => $previousinvalid,
+                "proposed" => material_theme::definition($arguments["name"], $arguments["style"]),
+                "changes_moodle_ui_theme" => false,
+            ];
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
+        }
     }
 
     /**
@@ -159,15 +177,20 @@ final class configure_material_theme extends base_tool {
      * @return array Saved theme data.
      */
     public function execute(array $arguments, authenticated_identity $identity): array {
-        $this->authorize($arguments, $identity);
-        $courseid = (int)($arguments["courseid"] ?? 0);
-        $saved = material_theme::save($arguments["scope"], $courseid,
-            $arguments["name"], $arguments["style"]);
-        $result = ["saved" => true, "materialtheme" => $saved];
-        if ($arguments["scope"] === "course") {
-            $result["courseid"] = $courseid;
-            $result["authoring"] = authoring_guidance::course_context($courseid);
+        try {
+            $this->authorize($arguments, $identity);
+            $courseid = (int)($arguments["courseid"] ?? 0);
+            $saved = material_theme::save($arguments["scope"], $courseid,
+                $arguments["name"], $arguments["style"]);
+            $result = ["saved" => true, "materialtheme" => $saved];
+            if ($arguments["scope"] === "course") {
+                $result["courseid"] = $courseid;
+                $result["authoring"] = authoring_guidance::course_context($courseid);
+            }
+            return $result;
+        } catch (moodle_exception $failure) {
+            throw authoring_error::translate($failure,
+                (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
         }
-        return $result;
     }
 }
