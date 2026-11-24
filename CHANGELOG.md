@@ -2,6 +2,16 @@
 
 This file documents verified published GitHub releases. The initial release is described from its published tag and tagged source or release notes; there is no earlier published GitHub release to compare.
 
+## 1.2.2 - 2026-11-24
+
+- Added reusable site and course material themes, with configuration tools and a management page; content authoring requires an effective material theme.
+- Enforced theme colour variables for supported theme families, including primary/accent RGB tokens in the sandbox bridge, and rejected hard-coded brand colours when saving content.
+- Scoped authoring guidance to individual MCP operations and expanded localized authoring instructions.
+- Added click-to-select-and-copy prompts and floating copy confirmation, with interaction tests.
+- Expanded and audited the 15 Portuguese interactive custom examples and their regression tests.
+
+**Comparison:** [1.2.1...1.2.2](https://github.com/EduardoKrausME/moodle-mod_mcp/compare/1.2.1...1.2.2)
+
 ## 1.2.1 - 2026-11-23
 
 - Introduced activity type and JSON information fields, JSON-backed quiz question configuration and user assessment state, replacing the previous native question-bank authoring tools.
