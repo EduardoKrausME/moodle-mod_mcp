@@ -34,35 +34,145 @@ use mod_mcp\authoring\material_theme;
  */
 final class authoring_guidance {
     /**
-     * Shared, mandatory authoring rules for all supported activity types.
+     * Rules shared by tool descriptions, independent of the activity format.
      */
     public static function core_rules(): string {
-        return "MANDATORY mod_mcp authoring rules: Before generating any content, call "
-            . "mcp_get_material_theme for the target course. If no course or site material "
-            . "theme is configured, STOP and ask the teacher to register a reusable visual "
-            . "style with mcp_configure_material_theme; never invent a default. "
-            . "First ask the teacher for the activity type, topic, "
-            . "target audience, learning goal, desired interactions, feedback and reference material; "
-            . "wait for answers before generating or writing content. Do not presume the activity is a quiz. "
-            . "Ask for a suitable learning level based on revised Bloom taxonomy: automatic (default), "
-            . "progressive, remember, understand, apply, analyze, evaluate or create; adapt the questions "
-            . "to the learning goal, not only difficulty. Do NOT ask for Bloom levels in pure opinion "
-            . "or satisfaction surveys. Respect the teacher's freely described activity type. "
-            . "Produce self-contained, responsive, keyboard-accessible HTML with inline CSS/JS, "
-            . "readable contrast and light/dark modes; do not depend on parent iframe DOM or CSS inheritance. "
-            . "Use only documented window.MoodleMCP actions: activity.getContext, course.getActivities, "
-            . "course.getNavigation, completion.get/complete, progress.load/save/getStatus/saveStatus, "
-            . "attempt.get/start/finish, questions.get/submit and tracking.record/summary; "
-            . "do not invent APIs, tool parameters, grades, user IDs or course-module IDs. "
-            . "Use versioned SDK progress, not localStorage as the only student progress store; "
-            . "do not confuse progress=100% with Moodle completion. Graded quiz questions and answers "
-            . "belong in private JSON via mcp_save_information and are assessed by the server, "
-            . "never through the Moodle question bank or JavaScript grading inside HTML. "
-            . "Never expose answer keys in learner HTML. Do not add an independent page footer. "
-            . "Read the existing activity with mcp_get_activity before editing; respect returned "
-            . "draft revisions and settings hashes. Keep drafts hidden until explicit teacher approval "
-            . "and use the connector's preview/confirmation/publish workflow. "
-            . "These requirements are included here so reading a separate API.md is not required.";
+        return "MANDATORY mod_mcp authoring rules: Use the connected Moodle's live tool discovery; "
+            . "never invent parameters or actions. Before creating or editing any material, "
+            . "call mcp_get_material_theme for the target course. If no effective material theme "
+            . "is configured, STOP and ask the teacher to configure a reusable visual style "
+            . "with mcp_configure_material_theme; do not invent a default. "
+            . "Ask the teacher what to create and wait for their answers and chosen references "
+            . "before generating questions, HTML, CSS, JavaScript or saving a draft. "
+            . "Do not deduce content from the Moodle activity title or assume it is a quiz. "
+            . "Read existing activities with mcp_get_activity before editing, and respect "
+            . "returned draft revisions and settings hashes. Do not turn these authoring "
+            . "instructions into student-visible content.";
+    }
+
+    /**
+     * Interview the teacher before preparing material, not while writing it.
+     */
+    public static function interview_rules(): string {
+        return "FIRST ask the teacher what kind of activity they want, which topics must be "
+            . "covered and what learners should achieve. Ask whether the teacher has any "
+            . "documents, PDFs, images or other references; request the files if available, "
+            . "inspect them before proceeding and never invent their contents. "
+            . "Wait for answers and files the teacher chooses to provide. "
+            . "Then clarify audience, desired interactions, feedback and other necessary "
+            . "settings; never demand irrelevant details. In the 'Eu escolho' mode, first "
+            . "ask which type of activity the teacher wants, then discuss a learning level "
+            . "only if educationally relevant. Do not generate or save anything until the "
+            . "required decisions are understood.";
+    }
+
+    /**
+     * Present practical educational outcomes, with a sensible default.
+     */
+    public static function learning_level_rules(): string {
+        return "For educational activities, ask: \"Qual nível de aprendizagem você deseja trabalhar?\" "
+            . "Explain: \"Escolha o que espera que seus alunos consigam fazer após a atividade. "
+            . "Isso orienta o conteúdo, os desafios e as interações.\" "
+            . "Offer selectable controls when available, or a numbered list otherwise: "
+            . "Automático (recomendado): Deixe a IA escolher o nível mais adequado ao assunto "
+            . "e ao objetivo da atividade. "
+            . "Aprendizagem progressiva: Comece pelos conceitos básicos e avance gradualmente "
+            . "até atividades mais desafiadoras. "
+            . "1. Lembrar: Ajude o aluno a reconhecer, identificar e recordar informações "
+            . "importantes sobre o assunto. "
+            . "2. Compreender: Faça o aluno entender os conceitos e conseguir explicá-los "
+            . "com suas próprias palavras. "
+            . "3. Aplicar: Proponha atividades em que o aluno utilize o que aprendeu para "
+            . "resolver situações práticas. "
+            . "4. Analisar: Estimule o aluno a investigar problemas, comparar informações "
+            . "e identificar causas e relações. "
+            . "5. Avaliar: Apresente situações em que o aluno precise tomar decisões e "
+            . "justificar suas escolhas. "
+            . "6. Criar: Desafie o aluno a desenvolver ideias, elaborar projetos ou "
+            . "construir suas próprias soluções. "
+            . "Accept a free-text choice. If omitted, use Automático without insisting. "
+            . "For pure opinion or satisfaction surveys, skip learning levels entirely. "
+            . "Internally use revised Bloom taxonomy to align measurable outcomes, practice, "
+            . "feedback and assessment; do not mention the taxonomy to teacher or student. "
+            . "Do not confuse cognitive level with difficulty or force all six levels.";
+    }
+
+    /**
+     * The iframe adds pedagogical content, not another Moodle page shell.
+     */
+    public static function html_rules(): string {
+        return "Produce a complete, self-contained HTML document with its own CSS/JavaScript "
+            . "for a sandboxed iframe on an EXISTING Moodle activity page. "
+            . "The host already displays course and activity titles, navigation and theme UI. "
+            . "Use Moodle URL, course ID and cmid only for MCP tool context; never show them "
+            . "in learner HTML or duplicate the title solely because it is in the prompt. "
+            . "Start directly with the requested pedagogical content. Do not generate "
+            . "institutional headers, hero covers that repeat the title, breadcrumbs, "
+            . "menus, navigation bars, metadata badges or ANY independent footer, "
+            . "including visual footer-like sections, <footer>, credits, author signatures, "
+            . "copyright, support links or bottom navigation. Do not copy reference footers. "
+            . "End at the last teaching section or necessary interactive control. "
+            . "Review and remove duplicated Moodle UI and footers before saving. "
+            . "Use semantic, responsive, keyboard-accessible HTML, labelled controls, "
+            . "visible focus states and adequate contrast. Define light mode as default, "
+            . "support @media (prefers-color-scheme: dark) and explicit "
+            . "[data-bs-theme=\"dark\"]/[data-bs-theme=\"light\"] when present in the "
+            . "iframe; do not depend on styles or attributes inherited from parent Moodle.";
+    }
+
+    /**
+     * Only the documented async bridge can persist student state.
+     */
+    public static function sdk_rules(): string {
+        return "Consult the mod_mcp API catalogue (.chatgpt/API.md) and use only documented "
+            . "async window.MoodleMCP operations as needed: activity.getContext(), "
+            . "course.getActivities()/getNavigation() for authorised course navigation, "
+            . "completion.get()/complete() for native completion, progress.load()/save() "
+            . "for versioned data/userdata, progress.getStatus()/saveStatus() for staged "
+            . "content, attempt.get()/start()/finish(), questions.get()/submit() for "
+            . "server-side JSON quizzes, and tracking.record() for bounded events. "
+            . "For step-based content read progress.getStatus() on opening, show the "
+            . "learner's current position and let them resume; after meaningful changes "
+            . "saveStatus({version, location, percent, currentstep, totalsteps}). "
+            . "Use the last returned version; reload and reconcile after conflicts. "
+            . "Do not store the only copy of progress in localStorage, save on every "
+            . "keystroke, or equate 100% progress with Moodle completion or a grade. "
+            . "Check completion.get() and its permissions before requesting completion. "
+            . "Never put session tokens, user IDs, answer keys or grading logic in HTML; "
+            . "questions are assessed only by the server. Do not call unused SDK functions "
+            . "or reach into the Moodle parent DOM.";
+    }
+
+    /**
+     * JSON authoring and grading instructions only for assessment tools.
+     */
+    public static function quiz_rules(): string {
+        return "For a quiz, BEFORE creating questions ask the teacher how many questions "
+            . "to author, whether to shuffle and how many to draw per attempt; wait for "
+            . "the answers. Store questions directly with mcp_save_information, type=quiz, "
+            . "and an information JSON object containing selection (all or random), count, "
+            . "shuffle and questions. For each question use id, text, type (single, multiple "
+            . "or text), answer and points; for choice questions use options with id and text. "
+            . "For selection=all use count=0; for random use a positive count no larger "
+            . "than the pool. Do not use the Moodle Question Bank, mcp_create_question or "
+            . "mcp_attach_question. Keep answer keys ONLY in private server JSON, never "
+            . "in learner HTML. For attempted quizzes use MoodleMCP.attempt and "
+            . "MoodleMCP.questions; selection, scoring and grades run only on the server. "
+            . "Do not use quiz configuration for non-quiz activities or pretend a survey "
+            . "is an anonymously graded quiz.";
+    }
+
+    /**
+     * Publication is a separate, explicit teacher decision.
+     */
+    public static function publication_rules(): string {
+        return "Before publication, present a clear preview of the exact draft revision "
+            . "and the assessment settings, with Aprovar and Rejeitar controls if the "
+            . "chat supports them (or a clear textual choice otherwise). "
+            . "Wait for explicit teacher approval; no approval is implied by editing "
+            . "or saving a draft. Use the connected tool's preview and confirmation "
+            . "workflow for mcp_publish and publish only the approved revision. "
+            . "Leave rejected or unapproved drafts unpublished.";
     }
 
     /**
@@ -116,26 +226,57 @@ final class authoring_guidance {
     }
 
     /**
-     * Compose the MCP tools/list description. The site theme may differ from a course theme.
+     * Compose a short tool-specific MCP description without repeating unrelated rules.
      *
      * @param string $purpose Short description of the tool's exact action.
+     * @param string[] $rules Required sets: core, interview, learning, html, sdk, quiz, publication, theme.
      */
-    public static function tool_description(string $purpose): string {
+    public static function tool_description(string $purpose, array $rules = ["core", "theme"]): string {
         global $CFG;
 
-        $theme = (string)($CFG->theme ?? "boost");
-        $default = material_theme::site_default();
-        $setup = $default === null ?
-            "NO SITE-WIDE MATERIAL THEME IS REGISTERED. A course override may still exist. " .
-            "Check using mcp_get_material_theme(courseid) before creation; if there is no effective " .
-            "theme, call mcp_configure_material_theme with scope=course or scope=site first. " :
-            "Site-wide material design default: " . $default["name"] . ". Visual style: " .
-            $default["style"] . ". A course-specific material theme takes precedence. ";
-        return $purpose . " " . self::core_rules() . " " . $setup
-            . "The following UI theme is the Moodle SITE DEFAULT at tool-discovery time; "
-            . "it is NOT a guarantee of the course theme. After mcp_get_material_theme, "
-            . "mcp_create_activity or mcp_get_activity returns authoring context, obey its "
-            . "material theme and effective course CSS variables: " . self::theme_rules($theme);
+        $parts = [$purpose];
+        foreach (array_unique($rules) as $rule) {
+            switch ($rule) {
+                case "core":
+                    $parts[] = self::core_rules();
+                    break;
+                case "interview":
+                    $parts[] = self::interview_rules();
+                    break;
+                case "learning":
+                    $parts[] = self::learning_level_rules();
+                    break;
+                case "html":
+                    $parts[] = self::html_rules();
+                    break;
+                case "sdk":
+                    $parts[] = self::sdk_rules();
+                    break;
+                case "quiz":
+                    $parts[] = self::quiz_rules();
+                    break;
+                case "publication":
+                    $parts[] = self::publication_rules();
+                    break;
+                case "theme":
+                    $default = material_theme::site_default();
+                    $parts[] = $default === null ?
+                        "NO SITE-WIDE MATERIAL THEME IS REGISTERED. A course override may exist. "
+                        . "Check mcp_get_material_theme(courseid); configure a course or site "
+                        . "style with mcp_configure_material_theme if neither exists." :
+                        "Site-wide material design default: " . $default["name"] . ". Visual style: "
+                        . $default["style"] . ". A course-specific material theme takes precedence.";
+                    $parts[] = "The following UI theme is the Moodle SITE DEFAULT at "
+                        . "tool-discovery time; it is NOT a guarantee of the course theme. "
+                        . "Use the effective course authoring context returned by "
+                        . "mcp_get_material_theme, mcp_create_activity or mcp_get_activity: "
+                        . self::theme_rules((string)($CFG->theme ?? "boost"));
+                    break;
+                default:
+                    throw new \InvalidArgumentException("Unknown authoring rule: " . $rule);
+            }
+        }
+        return implode(" ", $parts);
     }
 
     /**
@@ -166,7 +307,11 @@ final class authoring_guidance {
             "materialtheme" => $material,
             "theme" => $theme,
             "brandcssvariables" => self::css_variables($theme),
-            "instructions" => self::core_rules() . " " . $visual . self::theme_rules($theme),
+            "instructions" => implode(" ", [
+                self::core_rules(), self::interview_rules(), self::learning_level_rules(),
+                self::html_rules(), self::sdk_rules(), self::quiz_rules(),
+                self::publication_rules(), $visual, self::theme_rules($theme),
+            ]),
         ];
     }
 }
