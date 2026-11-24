@@ -33,22 +33,14 @@ use stdClass;
  */
 final class service {
     /**
-     * Convert typographic quotes and dashes to plain ASCII before storing HTML.
+     * Reject empty or oversized documents without modifying their source bytes.
      *
-     * This replacement applies to the entire document, including inline scripts.
-     *
-     * @param string $html Incoming document.
-     * @return string Normalized document.
+     * @param string $html Authored document.
      */
-    public static function normalize_html(string $html): string {
-        return strtr($html, [
-            "“" => "\"",
-            "”" => "\"",
-            "‘" => "'",
-            "’" => "'",
-            "—" => "-",
-            "–" => "-",
-        ]);
+    public static function validate_html(string $html): void {
+        if (trim($html) === "" || strlen($html) > 2097152) {
+            throw new moodle_exception("invaliddata");
+        }
     }
 
     /**
@@ -58,10 +50,7 @@ final class service {
      */
     public static function save(int $mcpid, string $html, int $author, ?int $expectedrevision = null): int {
         global $DB;
-        $html = trim(self::normalize_html($html));
-        if ($html === "" || strlen($html) > 2097152) {
-            throw new moodle_exception("invaliddata");
-        }
+        self::validate_html($html);
         $transaction = $DB->start_delegated_transaction();
         $activity = $DB->get_record("mcp", ["id" => $mcpid], "*", MUST_EXIST);
         if ($expectedrevision !== null && (int)$activity->draftrevision !== $expectedrevision) {

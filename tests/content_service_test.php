@@ -25,6 +25,11 @@
 namespace mod_mcp;
 
 use advanced_testcase;
+use local_mcp\protocol\write_text_normalizer;
+use local_mcp\security\authenticated_identity;
+use local_mcp\security\untrusted_content;
+use mod_mcp\mcp\read\get_activity;
+use mod_mcp\mcp\write\save_content;
 use mod_mcp\content\service;
 use moodle_exception;
 
@@ -59,30 +64,25 @@ final class content_service_test extends advanced_testcase {
     }
 
     /**
-     * Curly double/single quotes and both dash variants are replaced on ingestion.
+     * All source bytes survive persistence and identical resaves reuse the same revision.
      */
-    public function test_normalizes_typographic_punctuation_before_saving_and_hashing(): void {
+    public function test_preserves_source_before_saving_and_hashing(): void {
         $this->resetAfterTest();
-        set_config("materialtheme_default", json_encode([
-            "name" => "Test theme",
-            "style" => "Use spacious cards and readable typography.",
-        ]), "mod_mcp");
         $course = $this->getDataGenerator()->create_course();
         $module = $this->getDataGenerator()->create_module("mcp", [
-            "course" => $course->id, "name" => "Typography normalization",
+            "course" => $course->id, "name" => "Source integrity",
         ]);
-        $input = "<!doctype html><html><body><p>“Welcome” — it’s ‘ready’ – now.</p></body></html>";
-        $expected = "<!doctype html><html><body><p>\"Welcome\" - it's 'ready' - now.</p></body></html>";
-
-        $this->assertSame($expected, service::normalize_html($input));
-        $this->assertSame($expected, service::normalize_html($expected));
+        $input = "\r\n<!doctype html><html><body><p>“Welcome” — it’s ‘ready’ – now.</p></body></html>\n";
         $revision = service::save((int)$module->id, $input, 2, 0);
         $stored = service::get((int)$module->id, $revision);
-        $this->assertSame($expected, $stored->content);
-        $this->assertSame(hash("sha256", $expected), $stored->sha256);
+        $this->assertSame($input, $stored->content);
+        $this->assertSame(hash("sha256", $input), $stored->sha256);
+        $this->assertSame($revision, service::save((int)$module->id, $input, 2, $revision));
 
-        // The same content with straight punctuation cannot create a duplicate revision.
-        $this->assertSame($revision, service::save((int)$module->id, $expected, 2, $revision));
+        // Different whitespace is different source and must create a distinct immutable revision.
+        $next = service::save((int)$module->id, trim($input), 2, $revision);
+        $this->assertNotSame($revision, $next);
+        $this->assertSame($input, service::get((int)$module->id, $revision)->content);
     }
 
     /**
@@ -100,11 +100,57 @@ final class content_service_test extends advanced_testcase {
     }
 
     /**
-     * Conversion is literal for inline JavaScript and preserves ordinary ASCII.
+     * The WRITE normalizer, preview, storage and manager READ agree on the exact bytes.
+     *
+     * @covers \mod_mcp\mcp\write\save_content
+     * @covers \mod_mcp\mcp\read\get_activity
      */
-    public function test_normalizes_quotes_in_inline_script(): void {
-        $input = "<script>const title = “Lesson”; const index = 2;</script><p>‘Example’ — next.</p>";
-        $expected = "<script>const title = \"Lesson\"; const index = 2;</script><p>'Example' - next.</p>";
-        $this->assertSame($expected, service::normalize_html($input));
+    public function test_mcp_source_round_trip(): void {
+        global $CFG, $DB, $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $CFG->theme = "boost";
+        $course = $this->getDataGenerator()->create_course();
+        $module = $this->getDataGenerator()->create_module("mcp", [
+            "course" => $course->id, "name" => "HTML integrity",
+        ]);
+        $html = "\r\n<!doctype html><html><head>"
+            . '<style>.label::before{content:"—"}</style>'
+            . '</head><body><p>“Olá” — ‘mundo’ –</p>'
+            . '<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2"/></svg>'
+            . '<script>const message = "—";</script></body></html>' . "\n";
+        $identity = new authenticated_identity($USER->id, "test", ["mcp:read", "mcp:write"]);
+        $args = write_text_normalizer::normalize([
+            "cmid" => (int)$module->cmid, "html" => $html, "expectedrevision" => 0,
+        ]);
+        $this->assertSame($html, $args["html"]);
+        $writer = new save_content();
+        $reader = new get_activity();
+        $this->assertTrue($writer->requires_confirmation());
+        $this->assertSame("mod/mcp:manage", $reader->get_required_capability());
+        $preview = $writer->preview($args, $identity);
+        $this->assertSame(strlen($html), $preview["bytes"]);
+        $this->assertSame(hash("sha256", $html), $preview["sha256"]);
+        $this->assertSame(0, $DB->count_records("mcp_revisions", ["mcpid" => $module->id]));
+        $saved = $writer->execute($args, $identity);
+        $this->assertFalse($saved["published"]);
+        $this->assertSame($preview["sha256"], $saved["sha256"]);
+        $this->assertSame($preview["bytes"], $saved["bytes"]);
+        $read = $reader->execute(["cmid" => (int)$module->cmid], $identity);
+        $this->assertSame($html, $read["html"]);
+        $this->assertSame(untrusted_content::text($html), $read["plaintext"]);
+        $this->assertStringNotContainsString("<script>", $read["plaintext"]);
+        $this->assertSame($saved["sha256"], $read["draftsha256"]);
+        $this->assertSame($saved["bytes"], $read["bytes"]);
+        $this->assertSame($saved["draftrevision"], $read["draftrevision"]);
+        $this->assertSame(0, $read["publishedrevision"]);
+    }
+
+    /**
+     * Whitespace-only source is invalid without trimming any valid document.
+     */
+    public function test_rejects_blank_source(): void {
+        $this->expectException(moodle_exception::class);
+        service::validate_html(" \r\n\t");
     }
 }

@@ -61,7 +61,8 @@ final class save_content extends activity_tool {
         return authoring_guidance::tool_description(
             "Save one complete HTML draft with inline CSS/JS, without publishing. First call "
             . "mcp_get_activity and follow its course-specific authoring instructions. The "
-            . "server rejects hard-coded brand colours; fix errors and retry.",
+            . "server rejects hard-coded brand colours; fix errors and retry. "
+            . "HTML is preserved byte for byte; compare the preview and saved bytes and SHA-256.",
             ["core", "html", "sdk", "theme"]);
     }
 
@@ -88,7 +89,8 @@ final class save_content extends activity_tool {
     public function preview(array $arguments, authenticated_identity $identity): array {
         try {
             $activity = $this->activity($arguments);
-            $html = trim(service::normalize_html($arguments["html"]));
+            $html = $arguments["html"];
+            service::validate_html($html);
             service::validate_theme_colours((int)$activity->course, $html);
             return ["cmid" => $arguments["cmid"], "draftrevision" => (int)$activity->draftrevision,
                 "expectedrevision" => (int)$arguments["expectedrevision"],
@@ -113,7 +115,12 @@ final class save_content extends activity_tool {
             $mcp = $this->activity($arguments);
             $revision = service::save(
                 (int)$mcp->id, $arguments["html"], $identity->userid, (int)$arguments["expectedrevision"]);
+            $stored = service::get((int)$mcp->id, $revision);
+            if (!$stored) {
+                throw new moodle_exception("invaliddata");
+            }
             return ["cmid" => (int)$arguments["cmid"], "draftrevision" => $revision,
+                "bytes" => strlen($stored->content), "sha256" => $stored->sha256,
                 "published" => false];
         } catch (moodle_exception $failure) {
             throw authoring_error::translate($failure,
