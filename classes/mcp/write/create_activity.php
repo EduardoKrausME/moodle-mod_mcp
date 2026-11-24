@@ -61,7 +61,8 @@ final class create_activity extends base_tool {
      */
     public function get_description(): string {
         return authoring_guidance::tool_description(
-            "Create an unpublished, hidden mod_mcp activity and return the real cmid.");
+            "Create an unpublished, hidden mod_mcp activity and return the real cmid.",
+            ["core", "interview", "learning", "theme"]);
     }
 
     /**
