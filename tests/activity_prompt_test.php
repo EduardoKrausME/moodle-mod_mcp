@@ -93,7 +93,8 @@ final class activity_prompt_test extends \advanced_testcase {
         $this->assertNotFalse($template);
         foreach (["{{description}}", "{{imageurl}}", "{{imagealt}}",
                   'class="mod-mcp-prompt-intro"', "{{#str}}promptfreedom, mcp{{/str}}",
-                  'aria-describedby="mcp-prompt-{{type}}-desc-{{cmid}} mcp-prompt-{{type}}-freedom-{{cmid}}"',
+                  'id="mcp-prompt-{{type}}-hint-{{cmid}}"',
+                  'aria-describedby="mcp-prompt-{{type}}-desc-{{cmid}} mcp-prompt-{{type}}-freedom-{{cmid}} mcp-prompt-{{type}}-hint-{{cmid}}"',
                  ] as $expected) {
             $this->assertStringContainsString($expected, $template);
         }
