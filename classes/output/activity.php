@@ -108,7 +108,7 @@ final class activity {
             "https://github.com/EduardoKrausME/moodle-mod_mcp/blob/master/.chatgpt/API.md");
         $visual = material_theme::effective((int)$mcp->course);
         $materialinstruction = $visual === null ?
-            get_string("materialthemerequired", "mcp") :
+            "" :
             "Reusable material visual design: " . $visual["name"] . ". Follow its visual "
             . "style for every new material: " . $visual["style"] . ". ";
         return get_string("promptinstructions", "mcp") . " " .

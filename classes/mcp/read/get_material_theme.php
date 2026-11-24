@@ -56,15 +56,15 @@ final class get_material_theme extends base_tool {
     }
 
     /**
-     * Describe prerequisite material-theme lookup.
+     * Describe optional material-theme lookup.
      *
      * @return string Tool description.
      */
     public function get_description(): string {
         return "Check whether a visual material theme is registered for a Moodle course "
-            . "before creating any activity. Course overrides take precedence over "
-            . "the site default. If configured=false, use mcp_configure_material_theme "
-            . "first and do not generate HTML, CSS, JavaScript or questions.";
+            . "for optional visual guidance. Course overrides take precedence over "
+            . "the site default. If configured=false, authoring can continue normally. "
+            . "Use mcp_configure_material_theme only when a reusable style is requested.";
     }
 
     /**

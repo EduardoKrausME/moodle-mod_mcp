@@ -94,21 +94,6 @@ final class material_theme {
     }
 
     /**
-     * Block authoring when no visual style is configured.
-     *
-     * @param int $courseid Course identifier.
-     *
-     * @return array Effective material theme.
-     */
-    public static function require_for_course(int $courseid): array {
-        $theme = self::effective($courseid);
-        if ($theme === null) {
-            throw new moodle_exception("materialthemerequired", "mcp");
-        }
-        return $theme;
-    }
-
-    /**
      * Normalize a reusable visual style before storing it.
      *
      * @param string $name Material theme name.

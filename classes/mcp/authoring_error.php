@@ -45,12 +45,6 @@ final class authoring_error {
         $details = $courseid > 0 ? ["courseid" => $courseid] : [];
         if ($failure->module === "mcp" || $failure->module === "mod_mcp") {
             switch ($failure->errorcode) {
-                case "materialthemerequired":
-                    return new api_exception("material_theme_required", 409, "", $details + [
-                        "configured" => false,
-                        "required_action" => "mcp_configure_material_theme",
-                        "available_scopes" => ["course", "site"],
-                    ], "Configure a reusable material theme before creating or saving activities.");
                 case "materialthemeinvalid":
                     return new api_exception("material_theme_invalid", 409, "", $details + [
                         "required_action" => "mcp_configure_material_theme",

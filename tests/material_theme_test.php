@@ -25,19 +25,20 @@
 namespace mod_mcp;
 
 use advanced_testcase;
-use local_mcp\exception\api_exception;
 use local_mcp\security\authenticated_identity;
 use mod_mcp\mcp\write\create_activity;
 use mod_mcp\mcp\authoring_error;
 use mod_mcp\authoring\material_theme;
 use mod_mcp\content\service;
+use mod_mcp\content\metadata;
+use mod_mcp\mcp\write\save_information;
 use mod_mcp\mcp\authoring_guidance;
 use mod_mcp\mcp\read\get_material_theme;
 use mod_mcp\mcp\write\configure_material_theme;
 use moodle_exception;
 
 /**
- * Test reusable material themes and the first-use configuration requirement.
+ * Test reusable material themes and optional configuration.
  *
  * @covers \mod_mcp\authoring\material_theme
  */
@@ -45,15 +46,12 @@ final class material_theme_test extends advanced_testcase {
     /**
      * A first authoring operation must not invent a default theme.
      */
-    public function test_first_authoring_requires_registered_theme(): void {
+    public function test_first_authoring_without_registered_theme(): void {
         $this->resetAfterTest();
         $course = $this->getDataGenerator()->create_course();
         $this->assertNull(material_theme::effective((int)$course->id));
         $this->assertFalse(authoring_guidance::course_context((int)$course->id)["configured"]);
-        try {
-            material_theme::require_for_course((int)$course->id);
-            $this->fail("A missing visual theme must block material creation");
-        } catch (moodle_exception $e) {
+        $this->assertNull(authoring_guidance::course_context((int)$course->id)["materialtheme"]); catch (moodle_exception $e) {
             $this->assertSame("materialthemerequired", $e->errorcode);
         }
     }
@@ -86,38 +84,35 @@ final class material_theme_test extends advanced_testcase {
     }
 
     /**
-     * Creating a module is distinct from generating its first HTML revision.
+     * Saving and publishing a valid draft does not require a material theme.
      */
-    public function test_html_draft_is_rejected_until_material_theme_is_registered(): void {
+    public function test_html_draft_and_publication_without_material_theme(): void {
         global $DB;
         $this->resetAfterTest();
         $course = $this->getDataGenerator()->create_course();
         $module = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id]);
-        try {
-            service::save((int)$module->id, "<p>Draft</p>", 2, 0);
-            $this->fail("HTML was accepted without a material theme");
-        } catch (moodle_exception $e) {
-            $this->assertSame("materialthemerequired", $e->errorcode);
-        }
-        $this->assertSame(0, $DB->count_records("mcp_revisions", ["mcpid" => $module->id]));
-        material_theme::save("course", (int)$course->id, "Course", "Use readable panels.");
+        $this->setAdminUser();
         $rev = service::save((int)$module->id, "<p>Draft</p>", 2, 0);
         $this->assertGreaterThan(0, $rev);
+        service::publish((int)$module->id, $rev);
+        $this->assertSame($rev, (int)$DB->get_field("mcp", "publishedrevision", ["id" => $module->id]));
+        $cm = get_coursemodule_from_instance("mcp", $module->id, $course->id, false, MUST_EXIST);
+        $this->assertSame(1, (int)$cm->visible);
     }
 
     /**
-     * Discovery advertises the bootstrap tool before content can be created.
+     * Discovery advertises optional visual configuration.
      */
     public function test_discovery_includes_bootstrap_tool_instructions(): void {
-        $this->assertStringContainsString("FIRST-USE SETUP",
+        $this->assertStringContainsString("OPTIONAL SETUP",
             (new configure_material_theme())->get_description());
         $this->assertStringContainsString("mcp_configure_material_theme",
             (new get_material_theme())->get_description());
     }
     /**
-     * Preview refuses an unconfigured course and never creates a module.
+     * Preview permits an unconfigured course and never creates a module.
      */
-    public function test_create_preview_requires_theme_and_is_read_only(): void {
+    public function test_create_preview_without_theme_is_read_only(): void {
         global $DB, $USER;
         $this->resetAfterTest();
         $this->setAdminUser();
@@ -125,10 +120,7 @@ final class material_theme_test extends advanced_testcase {
         $identity = new authenticated_identity((int)$USER->id, "test", ["mcp:read", "mcp:write"]);
         $tool = new create_activity();
         $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Draft"];
-        try {
-            $tool->preview($args, $identity);
-            $this->fail("Missing theme must prevent confirmation");
-        } catch (api_exception $failure) {
+        $this->assertNull($tool->preview($args, $identity)["materialtheme"]); catch (api_exception $failure) {
             $this->assertSame("material_theme_required", $failure->machinecode);
             $this->assertSame(409, $failure->httpstatus);
             $this->assertSame("mcp_configure_material_theme", $failure->details["required_action"]);
@@ -141,9 +133,18 @@ final class material_theme_test extends advanced_testcase {
         $this->assertSame("course", $tool->preview($args, $identity)["materialtheme"]["scope"]);
         $this->assertTrue($tool->requires_confirmation());
         $this->assertFalse($DB->record_exists("mcp", ["course" => $course->id]));
+        unset_config("materialtheme_default", "mod_mcp");
+        unset_config("materialtheme_course_" . $course->id, "mod_mcp");
         $created = $tool->execute($args, $identity);
         $cm = get_coursemodule_from_id("mcp", $created["cmid"], $course->id, false, MUST_EXIST);
         $this->assertSame(0, (int)$cm->visible);
+        $activity = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
+        $information = new save_information();
+        $infoargs = ["cmid" => (int)$cm->id, "type" => "page", "information" => [],
+            "expectedhash" => metadata::fingerprint($activity)];
+        $information->preview($infoargs, $identity);
+        $information->execute($infoargs, $identity);
+        $this->assertSame("page", $DB->get_field("mcp", "activitytype", ["id" => $activity->id]));
     }
 
     /**

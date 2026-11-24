@@ -27,7 +27,6 @@ namespace mod_mcp\mcp\write;
 use mod_mcp\mcp\authoring_error;
 use local_mcp\security\authenticated_identity;
 use mod_mcp\content\metadata;
-use mod_mcp\authoring\material_theme;
 use mod_mcp\mcp\authoring_guidance;
 use moodle_exception;
 
@@ -91,7 +90,6 @@ final class save_information extends activity_tool {
     public function preview(array $arguments, authenticated_identity $identity): array {
         try {
             $mcp = $this->activity($arguments);
-            material_theme::require_for_course((int)$mcp->course);
             $hash = metadata::fingerprint($mcp);
             if (!hash_equals($hash, (string)$arguments["expectedhash"])) {
                 throw new moodle_exception("revisionconflict", "mcp");
@@ -122,7 +120,6 @@ final class save_information extends activity_tool {
         try {
             $this->resolve_context($arguments);
             $mcp = $this->activity($arguments);
-            material_theme::require_for_course((int)$mcp->course);
             $hash = metadata::save((int)$mcp->id, $arguments["type"],
                 $arguments["information"], $arguments["expectedhash"]);
             return ["cmid" => (int)$arguments["cmid"], "type" => $arguments["type"],

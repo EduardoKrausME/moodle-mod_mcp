@@ -189,14 +189,14 @@ interview and learning levels for creation/reading, iframe HTML/SDK/colour rules
 for content drafts, private quiz JSON rules for metadata, and approval rules for
 publication. The complete, course-specific authoring context is returned by
 `mcp_get_material_theme`, `mcp_create_activity` and `mcp_get_activity`, avoiding
-a full manual in every discovered tool description. Without an MCP connection,
+a full manual in every discovered tool description. A reusable material theme is optional and is not required to create, save, or publish an activity. Without an MCP connection,
 the copy-and-paste prompt still needs the applicable standalone HTML/SDK/theme
 rules because no tool discovery or authoring action is available.
 
 | Tool | Use |
 | --- | --- |
-| `mcp_get_material_theme` | Read the effective course or site material theme and authoring context |
-| `mcp_configure_material_theme` | Register a reusable course or site material style after confirmation |
+| `mcp_get_material_theme` | Optionally read the effective course or site material theme and authoring context |
+| `mcp_configure_material_theme` | Optionally register a reusable course or site material style after confirmation |
 | `mcp_create_activity` | Create a hidden activity instance; optionally specify `aftercmid` or `beforecmid` in the selected course and section |
 | `mcp_get_activity` | Read the instance, configuration and revisions |
 | `mcp_save_content` | Save a new immutable HTML draft |

@@ -66,8 +66,6 @@ final class create_activity extends base_tool {
     public function get_description(): string {
         return authoring_guidance::tool_description(
             "Create an unpublished, hidden mod_mcp activity and return the real cmid. "
-            . "First call mcp_get_material_theme; if needed, configure the material theme using "
-            . "mcp_configure_material_theme before requesting creation. "
             . "Optionally specify aftercmid or beforecmid in the selected section.",
             ["core", "interview", "learning", "theme"]);
     }
@@ -107,7 +105,7 @@ final class create_activity extends base_tool {
     }
 
     /**
-     * Reject creation during preview too: first set a course or site material theme.
+     * Preview activity creation without writing to the course.
      *
      * @param array $arguments Input arguments.
      * @param authenticated_identity $identity Authenticated teacher.
@@ -117,7 +115,7 @@ final class create_activity extends base_tool {
         try {
             $ctx = $this->resolve_context($arguments);
             require_capability("mod/mcp:addinstance", $ctx, $identity->userid);
-            $theme = material_theme::require_for_course((int)$arguments["courseid"]);
+            $theme = material_theme::effective((int)$arguments["courseid"]);
             require_capability("moodle/course:manageactivities", $ctx, $identity->userid);
             $position = $this->requested_position($arguments, $identity);
             return [
@@ -167,7 +165,6 @@ final class create_activity extends base_tool {
             require_once($CFG->dirroot . "/course/modlib.php");
             $ctx = $this->resolve_context($arguments);
             require_capability("mod/mcp:addinstance", $ctx, $identity->userid);
-            material_theme::require_for_course((int)$arguments["courseid"]);
             require_capability("moodle/course:manageactivities", $ctx, $identity->userid);
             $position = $this->requested_position($arguments, $identity);
             $course = get_course((int)$arguments["courseid"]);

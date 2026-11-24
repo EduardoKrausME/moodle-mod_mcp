@@ -62,8 +62,8 @@ final class configure_material_theme extends base_tool {
      * @return string Tool description.
      */
     public function get_description(): string {
-        return "FIRST-USE SETUP: Before the first mod_mcp material, ask the teacher to "
-            . "register a reusable visual theme (name and visual style). "
+        return "OPTIONAL SETUP: Register a reusable visual theme (name and visual style) "
+            . "when requested by the teacher. "
             . "scope=course applies to one course; scope=site sets the default for all "
             . "courses (administrator only). Course overrides win. Saves to mod_mcp "
             . "config_plugins without changing the Moodle UI theme. Follow the active "

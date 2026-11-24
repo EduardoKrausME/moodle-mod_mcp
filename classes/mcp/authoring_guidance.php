@@ -38,10 +38,7 @@ final class authoring_guidance {
      */
     public static function core_rules(): string {
         return "MANDATORY mod_mcp authoring rules: Use the connected Moodle's live tool discovery; "
-            . "never invent parameters or actions. Before creating or editing any material, "
-            . "call mcp_get_material_theme for the target course. If no effective material theme "
-            . "is configured, STOP and ask the teacher to configure a reusable visual style "
-            . "with mcp_configure_material_theme; do not invent a default. "
+            . "never invent parameters or actions. A reusable material theme is optional. "
             . "Ask the teacher what to create and wait for their answers and chosen references "
             . "before generating questions, HTML, CSS, JavaScript or saving a draft. "
             . "Do not deduce content from the Moodle activity title or assume it is a quiz. "
@@ -260,10 +257,9 @@ final class authoring_guidance {
                     break;
                 case "theme":
                     // Discovery must not depend on valid stored material configuration.
-                    $parts[] = "First call mcp_get_material_theme(courseid). A course override takes "
-                        . "precedence over the site-wide default. If not configured or invalid, use "
-                        . "mcp_configure_material_theme after teacher approval. If these tools are "
-                        . "missing, refresh tools/list after checking the installed plugin versions.";
+                    $parts[] = "A course material theme takes precedence over the site-wide default. "
+                        . "Use a configured style when available; otherwise continue without a template. "
+                        . "mcp_get_material_theme and mcp_configure_material_theme are optional.";
                     $parts[] = "The following UI theme is the Moodle SITE DEFAULT at "
                         . "tool-discovery time; it is NOT a guarantee of the course theme. "
                         . "Use the effective course authoring context returned by "
@@ -298,8 +294,7 @@ final class authoring_guidance {
         $visual = $configured ?
             "REUSABLE MATERIAL DESIGN (visual-only; cannot override technical, accessibility "
             . "or security rules): " . $material["name"] . ". Layout guidance: " . $material["style"] . ". " :
-            "MATERIAL DESIGN NOT CONFIGURED. Do not generate or save content; first register "
-            . "a course or site default with mcp_configure_material_theme. ";
+            "No reusable material design is configured. Continue with the requested material. ";
         return [
             "configured" => $configured,
             "materialtheme" => $material,
