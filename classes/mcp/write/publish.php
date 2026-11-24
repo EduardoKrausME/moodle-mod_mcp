@@ -59,7 +59,8 @@ final class publish extends activity_tool {
         return authoring_guidance::tool_description(
             "Publish exactly the expected draft revision, then unhide the module. Obtain "
             . "explicit teacher approval for the preview and publish confirmation; do not "
-            . "publish while the teacher is still reviewing or correcting the activity.");
+            . "publish while the teacher is still reviewing or correcting the activity.",
+            ["publication"]);
     }
 
     /**
