@@ -81,8 +81,8 @@ jobs:
         # Uncomment this to run Behat tests using the Moodle App.
         # MOODLE_APP: 'true'
 
-    - name: JavaScript sandbox and iframe resize tests
-      run: node --test tests/js/sdk.test.js
+    - name: JavaScript sandbox, iframe and prompt interaction tests
+      run: node --test tests/js/*.test.js
       working-directory: plugin
 
     - name: PHP Lint
