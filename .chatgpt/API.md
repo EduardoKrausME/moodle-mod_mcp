@@ -197,7 +197,7 @@ rules because no tool discovery or authoring action is available.
 | --- | --- |
 | `mcp_get_material_theme` | Read the effective course or site material theme and authoring context |
 | `mcp_configure_material_theme` | Register a reusable course or site material style after confirmation |
-| `mcp_create_activity` | Create an activity instance |
+| `mcp_create_activity` | Create a hidden activity instance; optionally specify `aftercmid` or `beforecmid` in the selected course and section |
 | `mcp_get_activity` | Read the instance, configuration and revisions |
 | `mcp_save_content` | Save a new immutable HTML draft |
 | `mcp_save_information` | Set nullable activity type and JSON information, including quiz keys |

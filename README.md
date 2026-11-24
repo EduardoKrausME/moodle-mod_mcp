@@ -14,6 +14,8 @@ All HTML revisions are immutable and checked with an expected revision ID. Publi
 
 Custom scripts execute in a sandboxed iframe with allow-scripts but not allow-same-origin; there is no access to the authenticated Moodle DOM, cookies or gradebook from that code. Assets are stored using Moodle File API and fetched with normal permission checks. The upload tool allows safe files up to 8 MiB; use Moodle's normal upload workflow for large videos.
 
+For precise placement at creation, provide either `aftercmid` or `beforecmid` to `mcp_create_activity` together with its existing `courseid`, `sectionnum` and `name` arguments. The anchor must belong to the selected course and section. For example, `{"courseid":219,"sectionnum":0,"name":"Introduction","aftercmid":2097}`. Preview and confirmation cover the requested position. Creation and verified movement run in one delegated database transaction; the module remains hidden and unpublished. Placement is delegated to the shared local_mcp service (build 2026112401 or newer). To move, hide or show existing Moodle modules, use local_mcp's generic tools, not mod_mcp. Refresh connector discovery after upgrading both plugins.
+
 ## Authoring modes
 
 The activity authoring selector offers **Interactive (quiz/exercises)**, **Content page**,

@@ -4,6 +4,9 @@ This file documents verified published GitHub releases. The initial release is d
 
 ## Unreleased
 
+- Added optional aftercmid and beforecmid to mcp_create_activity, using the shared local_mcp position service with prevalidation and transactional creation.
+- Added regression coverage for exact placement, hidden state, invalid anchors and backward-compatible creation; requires local_mcp build 2026112401.
+
 - Return actionable structured errors for missing or malformed material themes, revision conflicts and known authoring validation failures while retaining native UI exceptions.
 - Keep tool discovery independent of stored material theme validity and allow authorized, confirmed replacement of malformed theme definitions.
 - Added regression coverage for read-only previews, hidden creation, template precedence, recovery and safe error mapping. Deploy with the updated local_mcp and refresh MCP tool discovery.

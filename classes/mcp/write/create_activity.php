@@ -28,6 +28,8 @@ use mod_mcp\mcp\authoring_error;
 use moodle_exception;
 use context;
 use context_course;
+use local_mcp\course\activity_position_service;
+use local_mcp\exception\api_exception;
 use mod_mcp\authoring\material_theme;
 use mod_mcp\mcp\authoring_guidance;
 use local_mcp\security\authenticated_identity;
@@ -65,7 +67,8 @@ final class create_activity extends base_tool {
         return authoring_guidance::tool_description(
             "Create an unpublished, hidden mod_mcp activity and return the real cmid. "
             . "First call mcp_get_material_theme; if needed, configure the material theme using "
-            . "mcp_configure_material_theme before requesting creation.",
+            . "mcp_configure_material_theme before requesting creation. "
+            . "Optionally specify aftercmid or beforecmid in the selected section.",
             ["core", "interview", "learning", "theme"]);
     }
 
@@ -87,6 +90,8 @@ final class create_activity extends base_tool {
         return $this->object_schema([
             "courseid" => ["type" => "integer", "minimum" => 1],
             "sectionnum" => ["type" => "integer", "minimum" => 0],
+            "aftercmid" => ["type" => "integer", "minimum" => 1],
+            "beforecmid" => ["type" => "integer", "minimum" => 1],
             "name" => ["type" => "string", "minLength" => 1, "maxLength" => 255],
         ], ["courseid", "sectionnum", "name"]);
     }
@@ -113,17 +118,40 @@ final class create_activity extends base_tool {
             $ctx = $this->resolve_context($arguments);
             require_capability("mod/mcp:addinstance", $ctx, $identity->userid);
             $theme = material_theme::require_for_course((int)$arguments["courseid"]);
+            require_capability("moodle/course:manageactivities", $ctx, $identity->userid);
+            $position = $this->requested_position($arguments, $identity);
             return [
                 "courseid" => (int)$arguments["courseid"],
                 "sectionnum" => (int)$arguments["sectionnum"],
                 "name" => clean_param($arguments["name"], PARAM_TEXT),
                 "materialtheme" => $theme,
                 "will_create_hidden_activity" => true,
+                "position" => $position,
             ];
         } catch (moodle_exception $failure) {
             throw authoring_error::translate($failure,
                 (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
         }
+    }
+
+    /**
+     * Resolve an optional anchor through the shared local plugin service.
+     *
+     * @param array $arguments Input arguments.
+     * @param authenticated_identity $identity Connected user.
+     * @return array|null Validated position or null for ordinary creation.
+     */
+    private function requested_position(array $arguments, authenticated_identity $identity): ?array {
+        if (!isset($arguments["aftercmid"]) && !isset($arguments["beforecmid"])) {
+            return null;
+        }
+        if (!class_exists(activity_position_service::class)) {
+            throw new api_exception("activity_position_unavailable", 409, "", [],
+                "Update local_mcp before creating activities at an explicit position.");
+        }
+        $position = activity_position_service::position((int)$arguments["courseid"], $arguments, $identity);
+        unset($position["sequence"]);
+        return $position;
     }
 
     /**
@@ -135,11 +163,13 @@ final class create_activity extends base_tool {
      */
     public function execute(array $arguments, authenticated_identity $identity): array {
         try {
-            global $CFG;
+            global $CFG, $DB;
             require_once($CFG->dirroot . "/course/modlib.php");
             $ctx = $this->resolve_context($arguments);
             require_capability("mod/mcp:addinstance", $ctx, $identity->userid);
             material_theme::require_for_course((int)$arguments["courseid"]);
+            require_capability("moodle/course:manageactivities", $ctx, $identity->userid);
+            $position = $this->requested_position($arguments, $identity);
             $course = get_course((int)$arguments["courseid"]);
             [$module, $context, $section, $cm, $info] = prepare_new_moduleinfo_data(
                 $course, "mcp", (int)$arguments["sectionnum"]);
@@ -148,9 +178,28 @@ final class create_activity extends base_tool {
             $info->introformat = FORMAT_HTML;
             $info->grade = 0;
             $info->visible = 0;
-            $created = add_moduleinfo($info, $course);
+            $transaction = $DB->start_delegated_transaction();
+            try {
+                $created = add_moduleinfo($info, $course);
+                if ($position !== null) {
+                    $moveargs = ["cmid" => (int)$created->coursemodule,
+                        "sectionnum" => (int)$arguments["sectionnum"]];
+                    foreach (["aftercmid", "beforecmid"] as $key) {
+                        if (isset($arguments[$key])) {
+                            $moveargs[$key] = (int)$arguments[$key];
+                        }
+                    }
+                    $position = activity_position_service::move($moveargs, $identity);
+                    if ($position["visible"]) {
+                        throw new api_exception("activity_creation_not_hidden", 409);
+                    }
+                }
+                $transaction->allow_commit();
+            } catch (\Throwable $e) {
+                $transaction->rollback($e);
+            }
             return ["cmid" => (int)$created->coursemodule, "instanceid" => (int)$created->instance,
-                "courseid" => (int)$course->id,
+                "courseid" => (int)$course->id, "position" => $position,
                 "authoring" => authoring_guidance::course_context((int)$course->id),
                 "url" => (new moodle_url("/mod/mcp/view.php",
                     ["id" => $created->coursemodule]))->out(false)];

@@ -24,12 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version = 2026112400;
+$plugin->version = 2026112401;
 $plugin->release = "1.2.2";
 $plugin->component = "mod_mcp";
 $plugin->requires = 2024100700;
 $plugin->maturity = MATURITY_STABLE;
 
 $plugin->dependencies = [
-    "local_mcp" => 2026112300,
+    "local_mcp" => 2026112401,
 ];
