@@ -23,7 +23,10 @@
         "promptoptions": [{"type": "interactive", "label": "Quiz", "prompt": "Build an interactive activity..."}]
     }
 }}
-<div id="mcp-prompt-selector-{{cmid}}" class="mod-mcp-prompt-selector mb-3">
+<div id="mcp-prompt-selector-{{cmid}}" class="mod-mcp-prompt-selector mb-3"
+     data-copy-success="{{#str}}copypromptsucceeded, mcp{{/str}}"
+     data-copy-error="{{#str}}copypromptfailed, mcp{{/str}}"
+     data-copy-toast="{{#str}}copypromptfloat, mcp{{/str}}">
     <p class="mb-2 fw-bold">{{#str}}promptselecttitle, mcp{{/str}}</p>
     <div class="mod-mcp-prompt-tabs">
         <div class="nav nav-tabs flex-nowrap" role="tablist"
@@ -54,8 +57,12 @@
                 <img class="mod-mcp-prompt-image" src="{{{imageurl}}}" alt="{{imagealt}}"
                      width="580" loading="lazy">
             </div>
-            <textarea id="mcp-prompt-{{type}}-text-{{cmid}}" class="form-control mb-2"
-                      aria-describedby="mcp-prompt-{{type}}-desc-{{cmid}} mcp-prompt-{{type}}-freedom-{{cmid}}"
+            <p id="mcp-prompt-{{type}}-hint-{{cmid}}" class="small text-muted mb-1">
+                {{#str}}promptclicktocopy, mcp{{/str}}
+            </p>
+            <textarea id="mcp-prompt-{{type}}-text-{{cmid}}"
+                      class="form-control mb-2 mcp-prompt-click-copy" data-copy-prompt-field
+                      aria-describedby="mcp-prompt-{{type}}-desc-{{cmid}} mcp-prompt-{{type}}-freedom-{{cmid}} mcp-prompt-{{type}}-hint-{{cmid}}"
                       rows="8" readonly>{{prompt}}</textarea>
             <div class="d-flex flex-wrap align-items-center mb-3">
                 <button type="button" class="btn btn-primary me-2 mb-2" data-copy-prompt
@@ -77,8 +84,18 @@ require([], function() {
 
     var choices = root.querySelectorAll('[data-prompt-choice]');
     var panels = root.querySelectorAll('[data-prompt-panel]');
+    var activeToast = null;
+
+    function removeToast() {
+        if (activeToast) {
+            activeToast.remove();
+            activeToast = null;
+        }
+    }
+
     function activateTab(button, moveFocus) {
         var selected = button.getAttribute('data-prompt-choice');
+        removeToast();
         Array.prototype.forEach.call(choices, function(choice) {
             var active = choice === button;
             choice.setAttribute('aria-selected', active ? 'true' : 'false');
@@ -127,7 +144,42 @@ require([], function() {
         activateTab(choices[0], false);
     }
 
-    // Copy only the selected mode's complete prompt, never the label or other panels.
+    // Show a small, non-interactive confirmation beside the pointer or tap location.
+    function showCopyToast(source, event) {
+        removeToast();
+        var toast = document.createElement('span');
+        toast.className = 'mod-mcp-copy-toast';
+        toast.setAttribute('aria-hidden', 'true');
+        toast.textContent = root.getAttribute('data-copy-toast');
+        document.body.appendChild(toast);
+        activeToast = toast;
+
+        var rect = source.getBoundingClientRect();
+        var pointer = event && event.detail !== 0 && Number.isFinite(event.clientX) &&
+            Number.isFinite(event.clientY) && (event.clientX !== 0 || event.clientY !== 0);
+        var x = pointer ? event.clientX : rect.left + rect.width / 2;
+        var y = pointer ? event.clientY : rect.top + rect.height / 2;
+        var halfWidth = toast.offsetWidth / 2;
+        var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+        var viewportHeight = document.documentElement.clientHeight || window.innerHeight;
+        toast.style.left = Math.max(halfWidth + 12, Math.min(viewportWidth - halfWidth - 12, x)) + 'px';
+        toast.style.top = Math.max(42, Math.min(viewportHeight - 12, y - 8)) + 'px';
+
+        toast.addEventListener('animationend', function() {
+            if (activeToast === toast) {
+                removeToast();
+            } else {
+                toast.remove();
+            }
+        }, {once: true});
+        // Remove the node even if the animation is disabled by the host.
+        window.setTimeout(function() {
+            if (activeToast === toast) {
+                removeToast();
+            }
+        }, 1600);
+    }
+
     function copyFallback(field) {
         field.focus();
         field.select();
@@ -138,45 +190,70 @@ require([], function() {
         }
     }
 
-    var copyButtons = root.querySelectorAll('[data-copy-prompt]');
-    Array.prototype.forEach.call(copyButtons, function(button) {
-        button.addEventListener('click', function() {
-            var panel = button.closest('[data-prompt-panel]');
-            if (!panel || panel.hidden || button.disabled) {
-                return;
-            }
-            var field = panel.querySelector('textarea');
-            var status = panel.querySelector('[data-copy-status]');
-            if (!field || !status) {
-                return;
-            }
+    function copyPrompt(panel, source, event) {
+        if (!panel || panel.hidden || panel.getAttribute('data-copying') === 'true') {
+            return;
+        }
+        var field = panel.querySelector('[data-copy-prompt-field]');
+        var status = panel.querySelector('[data-copy-status]');
+        var button = panel.querySelector('[data-copy-prompt]');
+        if (!field || !status) {
+            return;
+        }
+
+        // Keep the full prompt selected even if clipboard access is denied.
+        field.focus();
+        field.select();
+        status.textContent = '';
+        panel.setAttribute('data-copying', 'true');
+        if (button) {
             button.disabled = true;
-            status.textContent = '';
-            var value = field.value;
-            var result;
-            try {
-                if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-                    result = navigator.clipboard.writeText(value).catch(function() {
-                        return copyFallback(field);
-                    });
-                } else {
-                    result = Promise.resolve(copyFallback(field));
-                }
-            } catch (error) {
-                result = Promise.resolve(copyFallback(field));
+        }
+
+        var result;
+        try {
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                result = navigator.clipboard.writeText(field.value).catch(function() {
+                    return copyFallback(field);
+                });
+            } else {
+                result = copyFallback(field);
             }
-            Promise.resolve(result).then(function(copied) {
-                // Clipboard.writeText resolves with undefined on success.
-                status.textContent = copied === false ?
-                    '{{#str}}copypromptfailed, mcp{{/str}}' :
-                    '{{#str}}copypromptsucceeded, mcp{{/str}}';
-            }).catch(function() {
-                field.focus();
-                field.select();
-                status.textContent = '{{#str}}copypromptfailed, mcp{{/str}}';
-            }).then(function() {
+        } catch (error) {
+            result = copyFallback(field);
+        }
+
+        Promise.resolve(result).then(function(copied) {
+            if (!panel.hidden) {
+                var success = copied !== false;
+                status.textContent = root.getAttribute(success ? 'data-copy-success' : 'data-copy-error');
+                if (success) {
+                    showCopyToast(source, event);
+                }
+            }
+        }).catch(function() {
+            if (!panel.hidden) {
+                status.textContent = root.getAttribute('data-copy-error');
+            }
+        }).then(function() {
+            panel.removeAttribute('data-copying');
+            if (button) {
                 button.disabled = false;
-            });
+            }
+        });
+    }
+
+    // A click or tap on the readonly text selects and copies it directly.
+    Array.prototype.forEach.call(root.querySelectorAll('[data-copy-prompt-field]'), function(field) {
+        field.addEventListener('click', function(event) {
+            copyPrompt(field.closest('[data-prompt-panel]'), field, event);
+        });
+    });
+
+    // Retain the explicit button for keyboard users and accessibility.
+    Array.prototype.forEach.call(root.querySelectorAll('[data-copy-prompt]'), function(button) {
+        button.addEventListener('click', function(event) {
+            copyPrompt(button.closest('[data-prompt-panel]'), button, event);
         });
     });
 });
