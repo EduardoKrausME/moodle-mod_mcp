@@ -117,6 +117,9 @@ function createFixture(options = {}) {
 }
 
 async function settleClipboard() {
+    // Allow clipboard, fallback and final cleanup microtasks to finish.
+    await new Promise((resolve) => setImmediate(resolve));
+    await new Promise((resolve) => setImmediate(resolve));
     await new Promise((resolve) => setImmediate(resolve));
 }
 
