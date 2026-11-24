@@ -57,8 +57,11 @@ final class configure_questions extends activity_tool {
      * @return string Result.
      */
     public function get_description(): string {
-        return "Choose all or a random subset and optionally shuffle question order. " .
-            "Operates on JSON questions, not Moodle Question Bank. Confirmation required.";
+        return "Configure an existing quiz JSON question pool, not the Moodle Question Bank. "
+            . "Before changing the settings, ask the teacher whether to shuffle questions "
+            . "and how many to draw per attempt. Set selection=all with count=0 or "
+            . "selection=random with a count from 1 to the available question total. "
+            . "Read mcp_get_activity for the current settings hash. Confirmation required.";
     }
 
     /**
