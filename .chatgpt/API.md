@@ -184,8 +184,19 @@ ChatGPT or Claude (using the MCP protocol). Tool availability and exact JSON
 schemas must be read from the connected Moodle's live tool discovery. Do not
 invent parameters or invoke writing tools without their required confirmation.
 
+Tool descriptions include only the rules relevant to each operation: pedagogical
+interview and learning levels for creation/reading, iframe HTML/SDK/colour rules
+for content drafts, private quiz JSON rules for metadata, and approval rules for
+publication. The complete, course-specific authoring context is returned by
+`mcp_get_material_theme`, `mcp_create_activity` and `mcp_get_activity`, avoiding
+a full manual in every discovered tool description. Without an MCP connection,
+the copy-and-paste prompt still needs the applicable standalone HTML/SDK/theme
+rules because no tool discovery or authoring action is available.
+
 | Tool | Use |
 | --- | --- |
+| `mcp_get_material_theme` | Read the effective course or site material theme and authoring context |
+| `mcp_configure_material_theme` | Register a reusable course or site material style after confirmation |
 | `mcp_create_activity` | Create an activity instance |
 | `mcp_get_activity` | Read the instance, configuration and revisions |
 | `mcp_save_content` | Save a new immutable HTML draft |
