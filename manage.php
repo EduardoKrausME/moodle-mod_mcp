@@ -25,6 +25,7 @@
 use mod_mcp\content\service;
 use mod_mcp\content\metadata;
 use mod_mcp\output\activity;
+use mod_mcp\output\material_templates;
 
 require_once(__DIR__ . "/../../config.php");
 
@@ -77,7 +78,7 @@ $data = [
     "previewurl" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id, "preview" => 1]))->out(false),
     "actionurl" => (new moodle_url("/mod/mcp/manage.php"))->out(false),
     "canpublish" => !empty($mcp->draftrevision),
-    "themeconfigurl" => (new moodle_url("/mod/mcp/theme.php", ["courseid" => $mcp->course]))->out(false),
+    "themeconfigurl" => material_templates::manager_url((int)$mcp->course),
     "revision" => (int)$mcp->draftrevision,
     "sesskey" => sesskey(),
     "cmid" => (int)$cm->id,

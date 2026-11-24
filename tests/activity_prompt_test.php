@@ -26,6 +26,8 @@ namespace mod_mcp;
 
 use coding_exception;
 use mod_mcp\output\activity;
+use mod_mcp\output\material_templates;
+use mod_mcp\authoring\material_theme;
 
 /**
  * Verify authoring prompt keys, localization and type validation.
@@ -33,6 +35,32 @@ use mod_mcp\output\activity;
  * @covers \mod_mcp\output\activity
  */
 final class activity_prompt_test extends \advanced_testcase {
+    /**
+     * The manager displays both scopes and permits system editing only when authorized.
+     */
+    public function test_material_template_manager(): void {
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        $courseid = (int)$course->id;
+        material_theme::save("site", 0, "System", "Use cards.");
+        material_theme::save("course", $courseid, "Course", "Use panels.");
+        $data = material_templates::page($courseid, false);
+        $this->assertSame(["System", "Course"], array_column($data["templates"], "name"));
+        $this->assertFalse($data["templates"][0]["canedit"]);
+        $this->assertSame("", $data["templates"][0]["editurl"]);
+        $this->assertSame(["course"], array_column($data["prompts"], "scope"));
+        $this->assertTrue($data["prompts"][0]["replace"]);
+        $this->assertStringContainsString("mcp_configure_material_theme", $data["prompts"][0]["prompt"]);
+        $this->assertStringContainsString("scope=course", $data["prompts"][0]["prompt"]);
+        $admin = material_templates::page($courseid, true);
+        $this->assertSame(["site", "course"], array_column($admin["prompts"], "scope"));
+        $this->assertStringContainsString("scope=site", $admin["prompts"][0]["prompt"]);
+        $this->setAdminUser();
+        $this->assertStringContainsString("/mod/mcp/templates.php", material_templates::manager_url($courseid));
+        $this->setUser($this->getDataGenerator()->create_user());
+        $this->assertSame("", material_templates::manager_url($courseid));
+    }
+
     /**
      * All five new choices coexist with the existing page and quiz.
      */

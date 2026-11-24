@@ -40,14 +40,21 @@ if (data_submitted()) {
     require_sesskey();
     material_theme::save($scope, $courseid, required_param("name", PARAM_TEXT),
         required_param("style", PARAM_TEXT));
-    redirect(new moodle_url("/mod/mcp/theme.php", ["courseid" => $courseid, "scope" => $scope]),
+    redirect(new moodle_url("/mod/mcp/templates.php", ["courseid" => $courseid]),
         get_string("materialthemesaved", "mcp"));
 }
 $PAGE->set_url(new moodle_url("/mod/mcp/theme.php", ["courseid" => $courseid, "scope" => $scope]));
 $PAGE->set_title(get_string("materialthemetitle", "mcp"));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
-$current = $scope === "site" ? material_theme::site_default() : material_theme::course_override($courseid);
+try {
+    $current = $scope === "site" ? material_theme::site_default() : material_theme::course_override($courseid);
+} catch (moodle_exception $failure) {
+    if ($failure->errorcode !== "materialthemeinvalid" || !in_array($failure->module, ["mcp", "mod_mcp"], true)) {
+        throw $failure;
+    }
+    $current = null;
+}
 
 echo $OUTPUT->header();
 echo html_writer::tag("h2", get_string("materialthemetitle", "mcp"));
@@ -81,7 +88,7 @@ echo html_writer::end_div();
 echo html_writer::tag("button", get_string("savechanges", "moodle"),
     ["class" => "btn btn-primary", "type" => "submit"]);
 echo " ";
-echo html_writer::link(new moodle_url("/course/view.php", ["id" => $courseid]),
+echo html_writer::link(new moodle_url("/mod/mcp/templates.php", ["courseid" => $courseid]),
     get_string("cancel", "moodle"), ["class" => "btn btn-outline-secondary"]);
 echo html_writer::end_tag("form");
 echo $OUTPUT->footer();

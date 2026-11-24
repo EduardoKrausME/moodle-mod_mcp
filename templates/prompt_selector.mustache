@@ -27,7 +27,15 @@
      data-copy-success="{{#str}}copypromptsucceeded, mcp{{/str}}"
      data-copy-error="{{#str}}copypromptfailed, mcp{{/str}}"
      data-copy-toast="{{#str}}copypromptfloat, mcp{{/str}}">
-    <p class="mb-2 fw-bold">{{#str}}promptselecttitle, mcp{{/str}}</p>
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+        <p class="mb-0 fw-bold">{{#str}}promptselecttitle, mcp{{/str}}</p>
+        {{#themeconfigurl}}
+            <a class="btn btn-outline-secondary" href="{{themeconfigurl}}" target="_blank" rel="noopener noreferrer">
+                {{#str}}materialtemplatesmanage, mcp{{/str}}
+                <span class="visually-hidden sr-only">({{#str}}materialtemplatesnewwindow, mcp{{/str}})</span>
+            </a>
+        {{/themeconfigurl}}
+    </div>
     <div class="mod-mcp-prompt-tabs">
         <div class="nav nav-tabs flex-nowrap" role="tablist"
              aria-label="{{#str}}promptselecttitle, mcp{{/str}}">

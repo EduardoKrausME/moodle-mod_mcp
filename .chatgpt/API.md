@@ -189,7 +189,7 @@ interview and learning levels for creation/reading, iframe HTML/SDK/colour rules
 for content drafts, private quiz JSON rules for metadata, and approval rules for
 publication. The complete, course-specific authoring context is returned by
 `mcp_get_material_theme`, `mcp_create_activity` and `mcp_get_activity`, avoiding
-a full manual in every discovered tool description. A reusable material theme is optional and is not required to create, save, or publish an activity. Without an MCP connection,
+a full manual in every discovered tool description. A reusable material theme is optional and is not required to create, save, or publish an activity. The activity prompt selector links to the template manager in a new window, where teachers can view the site and current course styles and copy a scope-specific template creation prompt. Site editing requires site configuration permission. The existing storage supports one template per scope. Without an MCP connection,
 the copy-and-paste prompt still needs the applicable standalone HTML/SDK/theme
 rules because no tool discovery or authoring action is available.
 
