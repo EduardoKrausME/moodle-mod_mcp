@@ -51,9 +51,7 @@ final class material_theme_test extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $this->assertNull(material_theme::effective((int)$course->id));
         $this->assertFalse(authoring_guidance::course_context((int)$course->id)["configured"]);
-        $this->assertNull(authoring_guidance::course_context((int)$course->id)["materialtheme"]); catch (moodle_exception $e) {
-            $this->assertSame("materialthemerequired", $e->errorcode);
-        }
+        $this->assertNull(authoring_guidance::course_context((int)$course->id)["materialtheme"]);
     }
 
     /**
@@ -120,12 +118,7 @@ final class material_theme_test extends advanced_testcase {
         $identity = new authenticated_identity((int)$USER->id, "test", ["mcp:read", "mcp:write"]);
         $tool = new create_activity();
         $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Draft"];
-        $this->assertNull($tool->preview($args, $identity)["materialtheme"]); catch (api_exception $failure) {
-            $this->assertSame("material_theme_required", $failure->machinecode);
-            $this->assertSame(409, $failure->httpstatus);
-            $this->assertSame("mcp_configure_material_theme", $failure->details["required_action"]);
-            $this->assertStringContainsString("Configure", $failure->get_public_message());
-        }
+        $this->assertNull($tool->preview($args, $identity)["materialtheme"]);
         $this->assertFalse($DB->record_exists("mcp", ["course" => $course->id]));
         material_theme::save("site", 0, "Default", "Use cards.");
         $this->assertSame("site", $tool->preview($args, $identity)["materialtheme"]["scope"]);
