@@ -62,7 +62,8 @@ final class get_activity extends base_tool {
      */
     public function get_description(): string {
         return authoring_guidance::tool_description(
-            "Read an existing mod_mcp activity, its effective course theme, editable JSON, revisions and settings hash.");
+            "Read an existing mod_mcp activity, its effective course theme, editable JSON, revisions and settings hash.",
+            ["core", "interview", "learning", "theme"]);
     }
 
     /**
