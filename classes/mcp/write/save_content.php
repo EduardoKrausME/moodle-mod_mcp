@@ -59,7 +59,8 @@ final class save_content extends activity_tool {
         return authoring_guidance::tool_description(
             "Save one complete HTML draft with inline CSS/JS, without publishing. First call "
             . "mcp_get_activity and follow its course-specific authoring instructions. The "
-            . "server rejects hard-coded brand colours; fix errors and retry.");
+            . "server rejects hard-coded brand colours; fix errors and retry.",
+            ["core", "html", "sdk", "theme"]);
     }
 
     /**
