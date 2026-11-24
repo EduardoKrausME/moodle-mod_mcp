@@ -35,7 +35,9 @@ use mod_mcp\mcp\write\create_activity;
  * @covers \mod_mcp\mcp\write\create_activity
  */
 final class create_activity_position_test extends advanced_testcase {
-    /** Create before and after an existing page without publishing. */
+    /**
+     * Create before and after an existing page without publishing.
+     */
     public function test_exact_position_and_hidden_state(): void {
         global $DB, $USER;
         $this->resetAfterTest();
@@ -64,7 +66,9 @@ final class create_activity_position_test extends advanced_testcase {
         }
     }
 
-    /** Invalid anchor must fail before an activity can be added. */
+    /**
+     * Invalid anchor must fail before an activity can be added.
+     */
     public function test_invalid_anchor_does_not_create_activity(): void {
         global $DB, $USER;
         $this->resetAfterTest();
