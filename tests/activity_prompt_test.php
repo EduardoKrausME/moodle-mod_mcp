@@ -94,7 +94,8 @@ final class activity_prompt_test extends \advanced_testcase {
         foreach (["{{description}}", "{{imageurl}}", "{{imagealt}}",
                   'class="mod-mcp-prompt-intro"', "{{#str}}promptfreedom, mcp{{/str}}",
                   'id="mcp-prompt-{{type}}-hint-{{cmid}}"',
-                  'aria-describedby="mcp-prompt-{{type}}-desc-{{cmid}} mcp-prompt-{{type}}-freedom-{{cmid}} mcp-prompt-{{type}}-hint-{{cmid}}"',
+                  'aria-describedby="mcp-prompt-{{type}}-desc-{{cmid}} ' .
+                      'mcp-prompt-{{type}}-freedom-{{cmid}} mcp-prompt-{{type}}-hint-{{cmid}}"',
                  ] as $expected) {
             $this->assertStringContainsString($expected, $template);
         }
