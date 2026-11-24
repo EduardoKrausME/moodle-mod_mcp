@@ -62,7 +62,8 @@ final class save_information extends activity_tool {
         return authoring_guidance::tool_description(
             "Save nullable activity type and private JSON information, including graded quiz "
             . "questions and answer keys. Use mcp_get_activity to obtain expectedhash first; "
-            . "never embed answer keys in HTML or grade client-side. Confirmation required.");
+            . "never embed answer keys in HTML or grade client-side. Confirmation required.",
+            ["core", "quiz"]);
     }
 
     /**
