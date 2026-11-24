@@ -39,30 +39,56 @@ use mod_mcp\mcp\write\save_information;
  */
 final class mcp_authoring_guidance_test extends advanced_testcase {
     /**
-     * The site default theme is included directly in every relevant description.
+     * Descriptions should contain only the rules needed for their operation.
      */
-    public function test_tool_descriptions_include_rules_and_site_theme(): void {
+    public function test_tool_descriptions_include_relevant_rules_only(): void {
         global $CFG;
 
         $this->resetAfterTest();
         $CFG->theme = "learnlingo";
-        $tools = [
-            new create_activity(), new get_activity(), new save_content(),
-            new save_information(), new publish(),
-        ];
-        foreach ($tools as $tool) {
+
+        foreach ([new create_activity(), new get_activity()] as $tool) {
             $description = $tool->get_description();
             foreach ([
-                "Bloom", "mcp_get_activity", "window.MoodleMCP", "mcp_save_information",
-                "JSON", "server", "approval", "Theme: learnlingo", "--bs-primary",
-                "--bs-accent", "--bs-primary-rgb", "--bs-accent-rgb", "rgba(",
-                "gradient", "Do NOT invent", "SITE DEFAULT",
+                "MANDATORY mod_mcp", "FIRST ask", "documents, PDFs", "Bloom",
+                "Automático (recomendado)", "Aprendizagem progressiva",
+                "1. Lembrar", "6. Criar", "Theme: learnlingo",
+                "--bs-primary-rgb", "--bs-accent-rgb", "SITE DEFAULT",
             ] as $required) {
                 $this->assertStringContainsString($required, $description,
                     $tool->get_name() . ": " . $required);
             }
-            $this->assertStringNotContainsString("Theme: boost.", $description);
+            $this->assertStringNotContainsString("ANY independent footer", $description);
+            $this->assertStringNotContainsString("selection=all", $description);
         }
+
+        $html = (new save_content())->get_description();
+        foreach ([
+            "window.MoodleMCP", "sandboxed iframe", "ANY independent footer",
+            "progress.getStatus()", "saveStatus({version", "completion.get()",
+            "prefers-color-scheme", "Theme: learnlingo", "--bs-primary",
+            "--bs-accent", "rgba(", "gradient", "Do NOT invent",
+        ] as $required) {
+            $this->assertStringContainsString($required, $html);
+        }
+        $this->assertStringNotContainsString("Automático (recomendado)", $html);
+        $this->assertStringNotContainsString("For a quiz, BEFORE", $html);
+
+        $information = (new save_information())->get_description();
+        foreach ([
+            "mcp_save_information", "For a quiz, BEFORE", "selection", "shuffle",
+            "server", "JSON", "Moodle Question Bank", "answer keys",
+        ] as $required) {
+            $this->assertStringContainsString($required, $information);
+        }
+        $this->assertStringNotContainsString("Theme: learnlingo", $information);
+        $this->assertStringNotContainsString("ANY independent footer", $information);
+
+        $publication = (new publish())->get_description();
+        $this->assertStringContainsString("explicit teacher approval", $publication);
+        $this->assertStringContainsString("Aprovar and Rejeitar", $publication);
+        $this->assertStringNotContainsString("Theme: learnlingo", $publication);
+        $this->assertStringNotContainsString("Bloom", $publication);
 
         $CFG->theme = "eadflix";
         $description = (new create_activity())->get_description();
@@ -92,6 +118,9 @@ final class mcp_authoring_guidance_test extends advanced_testcase {
             $context["brandcssvariables"]);
         $this->assertStringContainsString("Bloom", $context["instructions"]);
         $this->assertStringContainsString("Theme: learnlingo.", $context["instructions"]);
+        $this->assertStringContainsString("ANY independent footer", $context["instructions"]);
+        $this->assertStringContainsString("For a quiz, BEFORE", $context["instructions"]);
+        $this->assertStringContainsString("explicit teacher approval", $context["instructions"]);
 
         $CFG->allowcoursethemes = 0;
         $context = authoring_guidance::course_context((int)$course->id);
