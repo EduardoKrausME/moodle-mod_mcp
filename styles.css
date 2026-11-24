@@ -107,3 +107,82 @@
         padding: 1rem;
     }
 }
+
+
+/* Click-to-copy prompt: brief confirmation anchored to the pointer or touch. */
+.mod-mcp-prompt-selector .mcp-prompt-click-copy {
+    cursor: copy;
+}
+
+.mod-mcp-prompt-selector .mcp-prompt-click-copy:focus-visible {
+    border-color: var(--bs-primary, #0d6efd);
+    box-shadow: 0 0 0 .2rem rgba(var(--bs-primary-rgb, 13, 110, 253), .2);
+}
+
+.mod-mcp-copy-toast {
+    position: fixed;
+    z-index: 1100;
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    max-width: calc(100vw - 24px);
+    padding: .55rem .85rem;
+    border: 1px solid var(--bs-primary, #0d6efd);
+    border-radius: 999px;
+    background: var(--bs-body-bg, #fff);
+    color: var(--bs-body-color, #212529);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, .15);
+    font-size: .82rem;
+    font-weight: 600;
+    line-height: 1.25;
+    white-space: nowrap;
+    animation: mod-mcp-copy-float 1.15s ease-out both;
+}
+
+.mod-mcp-copy-toast::before {
+    content: "\2713";
+    display: inline-grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: 0 0 1.25rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--bs-primary, #0d6efd) 15%, transparent);
+    color: var(--bs-primary, #0d6efd);
+}
+
+@keyframes mod-mcp-copy-float {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -92%) scale(.92);
+    }
+    16% {
+        opacity: 1;
+        transform: translate(-50%, -105%) scale(1);
+    }
+    58% {
+        opacity: 1;
+        transform: translate(-50%, -122%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -162%) scale(.74);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mod-mcp-copy-toast {
+        animation: mod-mcp-copy-fade 1.15s linear both;
+    }
+    @keyframes mod-mcp-copy-fade {
+        0%, 100% {
+            opacity: 0;
+            transform: translate(-50%, -110%);
+        }
+        12%, 65% {
+            opacity: 1;
+            transform: translate(-50%, -110%);
+        }
+    }
+}
