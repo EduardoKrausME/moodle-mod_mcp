@@ -43,17 +43,29 @@ final class description {
             throw new api_exception("invalid_initial_completion", 400, "", [],
                 get_string("invalidinitialcompletion", "mcp"));
         }
-        return ["intro" => trim((string)($arguments["intro"] ?? "")), "introformat" => (int)FORMAT_PLAIN,
+        return ["intro" => self::clean_intro((string)($arguments["intro"] ?? "")),
             "showdescription" => !empty($arguments["showdescription"]), "completion" => $mode, "requireview" => $view];
     }
 
     /**
-     * Return the exact native description and concurrency token.
+     * Clean native HTML for display outside the authored content sandbox.
+     *
+     * @param string $intro Requested HTML.
+     * @return string Sanitized HTML.
+     */
+    public static function clean_intro(string $intro): string {
+        return clean_text(trim($intro), FORMAT_HTML);
+    }
+
+    /**
+     * Return native description and concurrency token without exposing its storage format.
      */
     public static function snapshot(\stdClass $cm, \stdClass $mcp): array {
         $data = ["intro" => (string)$mcp->intro, "introformat" => (int)$mcp->introformat,
             "showdescription" => (bool)$cm->showdescription];
         $data["sha256"] = hash("sha256", json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        // Keep the stored format in the fingerprint, including legacy descriptions.
+        unset($data["introformat"]);
         return $data;
     }
 }

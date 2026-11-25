@@ -66,7 +66,7 @@ final class create_activity extends base_tool {
     public function get_description(): string {
         return authoring_guidance::tool_description(
             "Create an unpublished, hidden mod_mcp activity and return the real cmid. "
-            . "Optionally specify aftercmid or beforecmid, native plain-text intro and showdescription, "
+            . "Optionally specify aftercmid or beforecmid, native sanitized HTML intro and showdescription, "
             . "and initial completion (off, manual or automatic view).",
             ["core", "interview", "learning", "theme"]);
     }
@@ -180,7 +180,7 @@ final class create_activity extends base_tool {
             $info->name = clean_param($arguments["name"], PARAM_TEXT);
             $settings = \mod_mcp\mcp\description::creation($arguments, $course);
             $info->intro = $settings["intro"];
-            $info->introformat = $settings["introformat"];
+            $info->introformat = (int)FORMAT_HTML;
             // The prepare_new_moduleinfo_data function supplies an empty introeditor, which
             // add_moduleinfo otherwise uses to overwrite intro and introformat.
             unset($info->introeditor);
@@ -202,7 +202,7 @@ final class create_activity extends base_tool {
                 $instance = $DB->get_record("mcp", ["id" => $created->instance], "*", MUST_EXIST);
                 $saveddescription = \mod_mcp\mcp\description::snapshot($cmrecord, $instance);
                 if ($saveddescription["intro"] !== $settings["intro"] ||
-                        $saveddescription["introformat"] !== $settings["introformat"] ||
+                        (int)$instance->introformat !== (int)FORMAT_HTML ||
                         $saveddescription["showdescription"] !== $settings["showdescription"] ||
                         ($settings["completion"] !== null &&
                             ((int)$cmrecord->completion !== $settings["completion"] ||

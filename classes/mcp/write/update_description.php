@@ -56,7 +56,7 @@ final class update_description extends activity_tool {
      * @return string
      */
     public function get_description(): string {
-        return "Update the plain-text native activity description and optional course-page display. Read description.sha256 first.";
+        return "Update the sanitized HTML native activity description and optional course-page display. Read description.sha256 first.";
     }
 
     /**
@@ -95,7 +95,7 @@ final class update_description extends activity_tool {
             throw new api_exception("description_changed", 409, "", [], get_string("descriptionchanged", "mcp"));
         }
         return ["cmid" => (int)$cm->id, "before" => $before, "after" => [
-            "intro" => trim($arguments["intro"]), "introformat" => (int)FORMAT_PLAIN,
+            "intro" => description::clean_intro($arguments["intro"]),
             "showdescription" => $arguments["showdescription"] ?? $before["showdescription"],
         ]];
     }
@@ -117,13 +117,16 @@ final class update_description extends activity_tool {
                 $cm = get_coursemodule_from_id("mcp", $plan["cmid"], 0, false, MUST_EXIST);
                 $after = $plan["after"];
                 // Preserve files belonging to existing rich-text descriptions:
-                // this plain-text tool does not delete or replace attached files.
+                // This tool does not delete or replace attached files.
                 $DB->update_record("mcp", (object)["id" => $cm->instance, "intro" => $after["intro"],
-                    "introformat" => $after["introformat"], "timemodified" => time()]);
+                    "introformat" => (int)FORMAT_HTML, "timemodified" => time()]);
                 $DB->set_field("course_modules", "showdescription", (int)$after["showdescription"], ["id" => $cm->id]);
+                $instance = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
                 $saved = description::snapshot(
-                    $DB->get_record("course_modules", ["id" => $cm->id], "*", MUST_EXIST),
-                    $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST));
+                    $DB->get_record("course_modules", ["id" => $cm->id], "*", MUST_EXIST), $instance);
+                if ((int)$instance->introformat !== (int)FORMAT_HTML) {
+                    throw new api_exception("description_changed", 409, "", [], get_string("descriptionchanged", "mcp"));
+                }
                 foreach ($after as $key => $value) {
                     if ($saved[$key] !== $value) {
                         throw new api_exception("description_changed", 409, "", [], get_string("descriptionchanged", "mcp"));

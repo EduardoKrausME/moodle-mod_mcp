@@ -51,7 +51,7 @@ final class native_description_test extends advanced_testcase {
         $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Material",
             "intro" => "Initial description", "showdescription" => true, "completion" => 2, "requireview" => true];
         $preview = $tool->preview($args, $identity);
-        $this->assertSame((int)FORMAT_PLAIN, $preview["description"]["introformat"]);
+        $this->assertArrayNotHasKey("introformat", $preview["description"]);
         $created = $tool->execute($args, $identity);
         $cm = get_coursemodule_from_id("mcp", $created["cmid"], 0, false, MUST_EXIST);
         $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
@@ -59,24 +59,26 @@ final class native_description_test extends advanced_testcase {
         $this->assertSame(1, (int)$cm->completionview);
         $this->assertSame(0, (int)$cm->visible);
         $this->assertSame("Initial description", $mcp->intro);
-        $this->assertSame((int)FORMAT_PLAIN, (int)$mcp->introformat);
+        $this->assertSame((int)FORMAT_HTML, (int)$mcp->introformat);
         $this->assertSame(1, (int)$cm->showdescription);
         $this->assertNull($cm->completiongradeitemnumber);
         $this->assertSame(description::snapshot($cm, $mcp), $created["description"]);
+        $this->assertArrayNotHasKey("introformat", $created["description"]);
         $this->assertStringContainsString("Initial description", get_fast_modinfo($course)->get_cm($cm->id)->content);
         $edit = new update_description();
         $input = ["cmid" => (int)$cm->id, "intro" => "New description",
             "expected_description_sha256" => description::snapshot($cm, $mcp)["sha256"]];
         $this->assertTrue($edit->requires_confirmation());
         $editpreview = $edit->preview($input, $identity);
-        $this->assertSame((int)FORMAT_PLAIN, $editpreview["after"]["introformat"]);
+        $this->assertArrayNotHasKey("introformat", $editpreview["after"]);
         $result = $edit->execute($input, $identity);
-        $this->assertSame((int)FORMAT_PLAIN, $result["description"]["introformat"]);
+        $this->assertArrayNotHasKey("introformat", $result["description"]);
         $this->assertSame("New description", $result["description"]["intro"]);
         $this->assertTrue($result["description"]["showdescription"]);
         $this->assertStringContainsString("New description", get_fast_modinfo($course)->get_cm($cm->id)->content);
         $updated = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
         $this->assertSame("New description", $updated->intro);
+        $this->assertSame((int)FORMAT_HTML, (int)$updated->introformat);
         $this->assertSame($mcp->draftrevision, $updated->draftrevision);
         $this->assertSame($mcp->publishedrevision, $updated->publishedrevision);
         $aftercm = get_coursemodule_from_id("mcp", $cm->id, 0, false, MUST_EXIST);
@@ -126,7 +128,7 @@ final class native_description_test extends advanced_testcase {
                     "name" => "Material " . $index] + $options;
                 $before = $DB->count_records("mcp", ["course" => $course->id]);
                 $preview = $tool->preview($args, $identity);
-                $this->assertSame((int)FORMAT_PLAIN, $preview["description"]["introformat"]);
+                $this->assertArrayNotHasKey("introformat", $preview["description"]);
                 $this->assertSame($options["completion"] ?? null, $preview["description"]["completion"]);
                 $this->assertSame($before, $DB->count_records("mcp", ["course" => $course->id]));
                 $created = $tool->execute($args, $identity);
@@ -135,7 +137,7 @@ final class native_description_test extends advanced_testcase {
                 $this->assertSame($before + 1, $DB->count_records("mcp", ["course" => $course->id]));
                 $this->assertSame(0, (int)$cm->visible);
                 $this->assertSame("", $mcp->intro);
-                $this->assertSame((int)FORMAT_PLAIN, (int)$mcp->introformat);
+                $this->assertSame((int)FORMAT_HTML, (int)$mcp->introformat);
                 $this->assertFalse((bool)$cm->showdescription);
                 $this->assertSame(description::snapshot($cm, $mcp), $created["description"]);
                 $this->assertSame(0, (int)$mcp->draftrevision);
@@ -176,5 +178,53 @@ final class native_description_test extends advanced_testcase {
                     ["course" => $course->id, "section" => 0]));
             }
         }
+    }
+
+    /**
+     * Native descriptions accept safe HTML, hide the storage format and retain concurrency protection.
+     */
+    public function test_html_description_contract(): void {
+        global $DB, $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $identity = new authenticated_identity($USER->id, "test", ["mcp:write"]);
+        $create = new create_activity();
+        $edit = new update_description();
+        foreach ([$create, $edit] as $tool) {
+            $this->assertArrayNotHasKey("introformat", $tool->get_input_schema()["properties"]);
+        }
+        $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "HTML",
+            "intro" => '<p onclick="alert(1)">Safe <strong>description</strong></p>', "showdescription" => true];
+        $preview = $create->preview($args, $identity);
+        $this->assertArrayNotHasKey("introformat", $preview["description"]);
+        $this->assertStringContainsString("<strong>description</strong>", $preview["description"]["intro"]);
+        $this->assertStringNotContainsString("onclick", $preview["description"]["intro"]);
+        $created = $create->execute($args, $identity);
+        $cm = get_coursemodule_from_id("mcp", $created["cmid"], 0, false, MUST_EXIST);
+        $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
+        $this->assertSame((int)FORMAT_HTML, (int)$mcp->introformat);
+        $this->assertSame($preview["description"]["intro"], $mcp->intro);
+        $this->assertArrayNotHasKey("introformat", $created["description"]);
+        $read = new \mod_mcp\mcp\read\get_activity();
+        $current = $read->execute(["cmid" => (int)$cm->id], $identity)["description"];
+        $this->assertSame($created["description"], $current);
+        // A legacy format change must invalidate an earlier hash even though the format is private.
+        $DB->set_field("mcp", "introformat", FORMAT_PLAIN, ["id" => $mcp->id]);
+        $legacy = $read->execute(["cmid" => (int)$cm->id], $identity)["description"];
+        $this->assertArrayNotHasKey("introformat", $legacy);
+        $this->assertNotSame($current["sha256"], $legacy["sha256"]);
+        $input = ["cmid" => (int)$cm->id, "intro" => '<p onmouseover="alert(1)"><em>Updated</em></p>',
+            "expected_description_sha256" => $legacy["sha256"]];
+        $plan = $edit->preview($input, $identity);
+        $this->assertArrayNotHasKey("introformat", $plan["before"]);
+        $this->assertArrayNotHasKey("introformat", $plan["after"]);
+        $this->assertStringContainsString("<em>Updated</em>", $plan["after"]["intro"]);
+        $this->assertStringNotContainsString("onmouseover", $plan["after"]["intro"]);
+        $result = $edit->execute($input, $identity);
+        $updated = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
+        $this->assertSame((int)FORMAT_HTML, (int)$updated->introformat);
+        $this->assertSame($plan["after"]["intro"], $updated->intro);
+        $this->assertArrayNotHasKey("introformat", $result["description"]);
     }
 }
