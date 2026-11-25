@@ -220,7 +220,7 @@ final class activity {
             "prompt" => self::prompt($mcp, $cm),
             "promptpage" => self::prompt($mcp, $cm, "page"),
             "promptoptions" => self::prompt_options($mcp, $cm),
-            "themeconfigurl" => $canmanage ? material_templates::manager_url((int)$mcp->course) : "",
+            "themeconfigurl" => $canmanage ? s(material_templates::manager_url((int)$mcp->course)) : "",
             "cmid" => (int)$cm->id,
             "hasconnection" => $hasconnection,
             "connectionurl" => (new moodle_url("/local/mcp/new_connection.php"))->out(false),

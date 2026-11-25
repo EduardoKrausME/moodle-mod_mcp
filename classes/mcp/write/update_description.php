@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Create a hidden MCP activity in a Moodle course.
+ * Native activity description metadata.
  *
  * @package   mod_mcp
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
@@ -92,17 +92,26 @@ final class update_description extends activity_tool {
                 $plan = $this->preview($arguments, $identity);
                 $cm = get_coursemodule_from_id("mcp", $plan["cmid"], 0, false, MUST_EXIST);
                 $after = $plan["after"];
+                // Preserve files belonging to existing rich-text descriptions:
+                // this plain-text tool does not delete or replace attached files.
                 $DB->update_record("mcp", (object)["id" => $cm->instance, "intro" => $after["intro"],
                     "introformat" => $after["introformat"], "timemodified" => time()]);
                 $DB->set_field("course_modules", "showdescription", (int)$after["showdescription"], ["id" => $cm->id]);
+                $saved = description::snapshot(
+                    $DB->get_record("course_modules", ["id" => $cm->id], "*", MUST_EXIST),
+                    $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST));
+                foreach ($after as $key => $value) {
+                    if ($saved[$key] !== $value) {
+                        throw new api_exception("description_changed", 409, "", [], get_string("descriptionchanged", "mcp"));
+                    }
+                }
                 rebuild_course_cache($cm->course, true);
                 \core\event\course_module_updated::create_from_cm($cm, \context_module::instance($cm->id))->trigger();
                 $transaction->allow_commit();
             } catch (\Throwable $e) {
                 $transaction->rollback($e);
             }
-            $cm = get_coursemodule_from_id("mcp", $plan["cmid"], 0, false, MUST_EXIST);
-            return ["cmid" => $plan["cmid"], "description" => description::snapshot($cm, $this->activity($arguments))];
+            return ["cmid" => $plan["cmid"], "description" => $saved];
         } finally {
             $lock->release();
         }

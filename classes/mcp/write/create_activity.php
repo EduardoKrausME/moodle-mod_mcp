@@ -66,7 +66,8 @@ final class create_activity extends base_tool {
     public function get_description(): string {
         return authoring_guidance::tool_description(
             "Create an unpublished, hidden mod_mcp activity and return the real cmid. "
-            . "Optionally specify aftercmid or beforecmid in the selected section.",
+            . "Optionally specify aftercmid or beforecmid, native plain-text intro and showdescription, "
+            . "and initial completion (off, manual or automatic view).",
             ["core", "interview", "learning", "theme"]);
     }
 
@@ -180,11 +181,16 @@ final class create_activity extends base_tool {
             $settings = \mod_mcp\mcp\description::creation($arguments, $course);
             $info->intro = $settings["intro"];
             $info->introformat = FORMAT_PLAIN;
+            // prepare_new_moduleinfo_data supplies an empty introeditor, which
+            // add_moduleinfo otherwise uses to overwrite intro and introformat.
+            unset($info->introeditor);
             $info->showdescription = (int)$settings["showdescription"];
             if (isset($arguments["completion"])) {
                 $info->completion = $settings["completion"];
                 $info->completionview = (int)$settings["requireview"];
                 $info->completiongradeitemnumber = null;
+                $info->completionusegrade = 0;
+                $info->completionpassgrade = 0;
                 $info->completioninteractive = 0;
             }
             $info->grade = 0;
@@ -192,6 +198,18 @@ final class create_activity extends base_tool {
             $transaction = $DB->start_delegated_transaction();
             try {
                 $created = add_moduleinfo($info, $course);
+                $cmrecord = $DB->get_record("course_modules", ["id" => $created->coursemodule], "*", MUST_EXIST);
+                $instance = $DB->get_record("mcp", ["id" => $created->instance], "*", MUST_EXIST);
+                $saveddescription = \mod_mcp\mcp\description::snapshot($cmrecord, $instance);
+                if ($saveddescription["intro"] !== $settings["intro"] ||
+                        $saveddescription["introformat"] !== FORMAT_PLAIN ||
+                        $saveddescription["showdescription"] !== $settings["showdescription"] ||
+                        ($settings["completion"] !== null &&
+                            ((int)$cmrecord->completion !== $settings["completion"] ||
+                                (bool)$cmrecord->completionview !== $settings["requireview"] ||
+                                $cmrecord->completiongradeitemnumber !== null || !empty($instance->completioninteractive)))) {
+                    throw new api_exception("activity_creation_settings_mismatch", 409);
+                }
                 if ($position !== null) {
                     $moveargs = ["cmid" => (int)$created->coursemodule,
                         "sectionnum" => (int)$arguments["sectionnum"]];
@@ -210,7 +228,7 @@ final class create_activity extends base_tool {
                 $transaction->rollback($e);
             }
             return ["cmid" => (int)$created->coursemodule, "instanceid" => (int)$created->instance,
-                "courseid" => (int)$course->id, "position" => $position, "description" => $settings,
+                "courseid" => (int)$course->id, "position" => $position, "description" => $saveddescription,
                 "authoring" => authoring_guidance::course_context((int)$course->id),
                 "url" => (new moodle_url("/mod/mcp/view.php",
                     ["id" => $created->coursemodule]))->out(false)];

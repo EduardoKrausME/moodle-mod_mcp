@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Create a hidden MCP activity in a Moodle course.
+ * Native description and completion regression tests.
  *
  * @package   mod_mcp
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
@@ -30,7 +30,12 @@ use mod_mcp\mcp\write\create_activity;
 use mod_mcp\mcp\write\update_description;
 use mod_mcp\mcp\description;
 
-/** Regression coverage for native metadata without authored revision changes. */
+/**
+ * Regression coverage for native metadata without authored revision changes.
+ * @covers \mod_mcp\mcp\description
+ * @covers \mod_mcp\mcp\write\create_activity
+ * @covers \mod_mcp\mcp\write\update_description
+ */
 final class native_description_test extends advanced_testcase {
     /** Create with description and automatic view completion; then edit only the description. */
     public function test_description_and_initial_completion(): void {
@@ -51,11 +56,19 @@ final class native_description_test extends advanced_testcase {
         $this->assertSame(1, (int)$cm->completionview);
         $this->assertSame(0, (int)$cm->visible);
         $this->assertSame("Initial description", $mcp->intro);
+        $this->assertSame(FORMAT_PLAIN, (int)$mcp->introformat);
+        $this->assertSame(1, (int)$cm->showdescription);
+        $this->assertNull($cm->completiongradeitemnumber);
+        $this->assertSame(description::snapshot($cm, $mcp), $created["description"]);
+        $this->assertStringContainsString("Initial description", get_fast_modinfo($course)->get_cm($cm->id)->content);
         $edit = new update_description();
         $input = ["cmid" => (int)$cm->id, "intro" => "New description",
             "expected_description_sha256" => description::snapshot($cm, $mcp)["sha256"]];
         $this->assertTrue($edit->requires_confirmation());
-        $edit->execute($input, $identity);
+        $result = $edit->execute($input, $identity);
+        $this->assertSame("New description", $result["description"]["intro"]);
+        $this->assertTrue($result["description"]["showdescription"]);
+        $this->assertStringContainsString("New description", get_fast_modinfo($course)->get_cm($cm->id)->content);
         $updated = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
         $this->assertSame("New description", $updated->intro);
         $this->assertSame($mcp->draftrevision, $updated->draftrevision);

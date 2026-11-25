@@ -99,7 +99,7 @@ final class material_templates {
                 "canedit" => $canedit,
                 "editurl" => $canedit ? (new moodle_url("/mod/mcp/theme.php", [
                     "courseid" => $courseid, "scope" => $scope,
-                ]))->out(false) : "",
+                ]))->out(true) : "",
                 "replace" => $current !== null || $invalid,
                 "prompt" => $canedit ? self::prompt($courseid, $scope) : "",
             ];

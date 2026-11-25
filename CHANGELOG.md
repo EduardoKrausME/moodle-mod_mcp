@@ -4,6 +4,8 @@ This file documents verified published GitHub releases. The initial release is d
 
 ## Unreleased
 
+- Fix native description creation being overwritten by the core intro editor; verify persisted initial completion and description before commit. Correct trusted Mustache URL output and extend course-page description tests.
+
 - Add native plain-text descriptions and optional view/manual completion on creation; update descriptions independently with optimistic concurrency. Display descriptions on the course page and preserve authored revisions and academic data.
 
 - Preserve authored HTML, CSS, JavaScript, Unicode and whitespace byte for byte in immutable revisions. Preview and save return the exact size and SHA-256; manager reads return full HTML and a separate plaintext extract. Requires local_mcp build 2026112405. Added end-to-end source integrity regression coverage.
