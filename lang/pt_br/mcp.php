@@ -157,4 +157,3 @@ $string['studentview'] = 'Visualização do estudante';
 $string['submissionsclosed'] = 'Esta tentativa já foi finalizada.';
 $string['trackinglimit'] = 'O limite de eventos de interação desta atividade foi atingido.';
 $string['yourgrade'] = 'Sua nota: {$a}';
-

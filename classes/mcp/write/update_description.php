@@ -95,7 +95,7 @@ final class update_description extends activity_tool {
             throw new api_exception("description_changed", 409, "", [], get_string("descriptionchanged", "mcp"));
         }
         return ["cmid" => (int)$cm->id, "before" => $before, "after" => [
-            "intro" => trim($arguments["intro"]), "introformat" => FORMAT_PLAIN,
+            "intro" => trim($arguments["intro"]), "introformat" => (int)FORMAT_PLAIN,
             "showdescription" => $arguments["showdescription"] ?? $before["showdescription"],
         ]];
     }

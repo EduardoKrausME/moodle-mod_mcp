@@ -157,4 +157,3 @@ $string['studentview'] = 'Student view';
 $string['submissionsclosed'] = 'This attempt is already finished.';
 $string['trackinglimit'] = 'The maximum number of interaction events for this activity has been reached.';
 $string['yourgrade'] = 'Your grade: {$a}';
-

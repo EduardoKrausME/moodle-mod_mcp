@@ -4,6 +4,8 @@ This file documents verified published GitHub releases. The initial release is d
 
 ## Unreleased
 
+- Normalize native description format to integer for creation and updates, retaining strict persisted-settings verification and rollback. Cover legacy and explicit completion settings in enabled and disabled courses; fix Code Checker findings.
+
 - Cover legacy creation defaults, initial completion validation and preservation of academic fields during native description edits.
 
 - Fix native description creation being overwritten by the core intro editor; verify persisted initial completion and description before commit. Correct trusted Mustache URL output and extend course-page description tests.

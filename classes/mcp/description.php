@@ -43,7 +43,7 @@ final class description {
             throw new api_exception("invalid_initial_completion", 400, "", [],
                 get_string("invalidinitialcompletion", "mcp"));
         }
-        return ["intro" => trim((string)($arguments["intro"] ?? "")), "introformat" => FORMAT_PLAIN,
+        return ["intro" => trim((string)($arguments["intro"] ?? "")), "introformat" => (int)FORMAT_PLAIN,
             "showdescription" => !empty($arguments["showdescription"]), "completion" => $mode, "requireview" => $view];
     }
 

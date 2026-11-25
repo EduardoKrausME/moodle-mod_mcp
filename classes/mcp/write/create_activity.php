@@ -180,8 +180,8 @@ final class create_activity extends base_tool {
             $info->name = clean_param($arguments["name"], PARAM_TEXT);
             $settings = \mod_mcp\mcp\description::creation($arguments, $course);
             $info->intro = $settings["intro"];
-            $info->introformat = FORMAT_PLAIN;
-            // prepare_new_moduleinfo_data supplies an empty introeditor, which
+            $info->introformat = $settings["introformat"];
+            // The prepare_new_moduleinfo_data function supplies an empty introeditor, which
             // add_moduleinfo otherwise uses to overwrite intro and introformat.
             unset($info->introeditor);
             $info->showdescription = (int)$settings["showdescription"];
@@ -202,7 +202,7 @@ final class create_activity extends base_tool {
                 $instance = $DB->get_record("mcp", ["id" => $created->instance], "*", MUST_EXIST);
                 $saveddescription = \mod_mcp\mcp\description::snapshot($cmrecord, $instance);
                 if ($saveddescription["intro"] !== $settings["intro"] ||
-                        $saveddescription["introformat"] !== FORMAT_PLAIN ||
+                        $saveddescription["introformat"] !== $settings["introformat"] ||
                         $saveddescription["showdescription"] !== $settings["showdescription"] ||
                         ($settings["completion"] !== null &&
                             ((int)$cmrecord->completion !== $settings["completion"] ||

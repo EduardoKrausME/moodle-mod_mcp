@@ -50,7 +50,8 @@ final class native_description_test extends advanced_testcase {
         $tool = new create_activity();
         $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Material",
             "intro" => "Initial description", "showdescription" => true, "completion" => 2, "requireview" => true];
-        $tool->preview($args, $identity);
+        $preview = $tool->preview($args, $identity);
+        $this->assertSame((int)FORMAT_PLAIN, $preview["description"]["introformat"]);
         $created = $tool->execute($args, $identity);
         $cm = get_coursemodule_from_id("mcp", $created["cmid"], 0, false, MUST_EXIST);
         $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
@@ -58,7 +59,7 @@ final class native_description_test extends advanced_testcase {
         $this->assertSame(1, (int)$cm->completionview);
         $this->assertSame(0, (int)$cm->visible);
         $this->assertSame("Initial description", $mcp->intro);
-        $this->assertSame(FORMAT_PLAIN, (int)$mcp->introformat);
+        $this->assertSame((int)FORMAT_PLAIN, (int)$mcp->introformat);
         $this->assertSame(1, (int)$cm->showdescription);
         $this->assertNull($cm->completiongradeitemnumber);
         $this->assertSame(description::snapshot($cm, $mcp), $created["description"]);
@@ -67,7 +68,10 @@ final class native_description_test extends advanced_testcase {
         $input = ["cmid" => (int)$cm->id, "intro" => "New description",
             "expected_description_sha256" => description::snapshot($cm, $mcp)["sha256"]];
         $this->assertTrue($edit->requires_confirmation());
+        $editpreview = $edit->preview($input, $identity);
+        $this->assertSame((int)FORMAT_PLAIN, $editpreview["after"]["introformat"]);
         $result = $edit->execute($input, $identity);
+        $this->assertSame((int)FORMAT_PLAIN, $result["description"]["introformat"]);
         $this->assertSame("New description", $result["description"]["intro"]);
         $this->assertTrue($result["description"]["showdescription"]);
         $this->assertStringContainsString("New description", get_fast_modinfo($course)->get_cm($cm->id)->content);
@@ -98,5 +102,79 @@ final class native_description_test extends advanced_testcase {
         $this->assertFalse(description::creation(["completion" => 0], $course)["requireview"]);
         $this->expectException(\local_mcp\exception\api_exception::class);
         description::creation(["completion" => 2], $course);
+    }
+
+    /**
+     * Legacy and explicit completion settings must create hidden activities in either course mode.
+     */
+    public function test_creation_with_completion_enabled_and_disabled(): void {
+        global $CFG, $DB, $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $CFG->enablecompletion = 1;
+        $identity = new authenticated_identity($USER->id, "test", ["mcp:write"]);
+        $tool = new create_activity();
+        foreach ([0, 1] as $enabled) {
+            $course = $this->getDataGenerator()->create_course(["enablecompletion" => $enabled]);
+            $cases = [[], ["completion" => 0]];
+            if ($enabled) {
+                $cases[] = ["completion" => 1];
+                $cases[] = ["completion" => 2, "requireview" => true];
+            }
+            foreach ($cases as $index => $options) {
+                $args = ["courseid" => (int)$course->id, "sectionnum" => 0,
+                    "name" => "Material " . $index] + $options;
+                $before = $DB->count_records("mcp", ["course" => $course->id]);
+                $preview = $tool->preview($args, $identity);
+                $this->assertSame((int)FORMAT_PLAIN, $preview["description"]["introformat"]);
+                $this->assertSame($options["completion"] ?? null, $preview["description"]["completion"]);
+                $this->assertSame($before, $DB->count_records("mcp", ["course" => $course->id]));
+                $created = $tool->execute($args, $identity);
+                $cm = get_coursemodule_from_id("mcp", $created["cmid"], 0, false, MUST_EXIST);
+                $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
+                $this->assertSame($before + 1, $DB->count_records("mcp", ["course" => $course->id]));
+                $this->assertSame(0, (int)$cm->visible);
+                $this->assertSame("", $mcp->intro);
+                $this->assertSame((int)FORMAT_PLAIN, (int)$mcp->introformat);
+                $this->assertFalse((bool)$cm->showdescription);
+                $this->assertSame(description::snapshot($cm, $mcp), $created["description"]);
+                $this->assertSame(0, (int)$mcp->draftrevision);
+                $this->assertSame(0, (int)$mcp->publishedrevision);
+                if (isset($options["completion"]) || !$enabled) {
+                    $this->assertSame($options["completion"] ?? 0, (int)$cm->completion);
+                    $this->assertSame($options["requireview"] ?? false, (bool)$cm->completionview);
+                    $this->assertNull($cm->completiongradeitemnumber);
+                    $this->assertFalse((bool)$mcp->completioninteractive);
+                }
+            }
+        }
+    }
+
+    /**
+     * Invalid completion must be rejected before writing any activity.
+     */
+    public function test_disabled_completion_rejects_initial_tracking(): void {
+        global $CFG, $DB, $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $CFG->enablecompletion = 1;
+        $course = $this->getDataGenerator()->create_course(["enablecompletion" => 0]);
+        $identity = new authenticated_identity($USER->id, "test", ["mcp:write"]);
+        $tool = new create_activity();
+        $sequence = $DB->get_field("course_sections", "sequence", ["course" => $course->id, "section" => 0]);
+        foreach ([["completion" => 1], ["completion" => 2, "requireview" => true]] as $options) {
+            $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Invalid"] + $options;
+            foreach (["preview", "execute"] as $method) {
+                try {
+                    $tool->$method($args, $identity);
+                    $this->fail("Disabled completion accepted");
+                } catch (\local_mcp\exception\api_exception $e) {
+                    $this->assertSame("invalid_initial_completion", $e->machinecode);
+                }
+                $this->assertSame(0, $DB->count_records("mcp", ["course" => $course->id]));
+                $this->assertSame($sequence, $DB->get_field("course_sections", "sequence",
+                    ["course" => $course->id, "section" => 0]));
+            }
+        }
     }
 }
