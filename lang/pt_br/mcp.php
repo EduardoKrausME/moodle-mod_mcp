@@ -155,3 +155,6 @@ $string['studentview'] = 'Visualização do estudante';
 $string['submissionsclosed'] = 'Esta tentativa já foi finalizada.';
 $string['trackinglimit'] = 'O limite de eventos de interação desta atividade foi atingido.';
 $string['yourgrade'] = 'Sua nota: {$a}';
+
+$string['descriptionchanged'] = 'A descrição da atividade foi alterada. Consulte novamente antes de atualizar.';
+$string['invalidinitialcompletion'] = 'A conclusão inicial permite somente desativada, manual ou automática por visualização, quando a conclusão do curso está habilitada.';

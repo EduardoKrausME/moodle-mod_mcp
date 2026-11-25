@@ -155,3 +155,6 @@ $string['studentview'] = 'Student view';
 $string['submissionsclosed'] = 'This attempt is already finished.';
 $string['trackinglimit'] = 'The maximum number of interaction events for this activity has been reached.';
 $string['yourgrade'] = 'Your grade: {$a}';
+
+$string['descriptionchanged'] = 'The activity description has changed. Reload it before updating.';
+$string['invalidinitialcompletion'] = 'Initial completion supports off, manual or automatic viewing only, when course completion is enabled.';

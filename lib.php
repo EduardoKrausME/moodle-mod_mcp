@@ -267,6 +267,9 @@ function mcp_get_coursemodule_info($coursemodule) {
     }
     $info = new cached_cm_info();
     $info->name = $record->name;
+    if ($coursemodule->showdescription) {
+        $info->content = format_module_intro("mcp", $record, $coursemodule->id, false);
+    }
     $info->customdata = [
         "customcompletionrules" => [
             "completioninteractive" => (int)$record->completioninteractive,

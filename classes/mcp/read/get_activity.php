@@ -118,6 +118,7 @@ final class get_activity extends base_tool {
                 "courseid" => (int)$mcp->course,
                 "authoring" => authoring_guidance::course_context((int)$mcp->course),
                 "name" => $mcp->name,
+                "description" => \mod_mcp\mcp\description::snapshot($cm, $mcp),
                 "draftrevision" => (int)$mcp->draftrevision,
                 "publishedrevision" => (int)$mcp->publishedrevision,
                 "draftsha256" => $revision ? $revision->sha256 : null,

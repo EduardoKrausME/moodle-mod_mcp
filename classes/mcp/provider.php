@@ -49,6 +49,7 @@ final class provider implements read_provider_interface, write_provider_interfac
         return [
             new write\configure_material_theme(),
             new write\create_activity(),
+            new write\update_description(),
             new write\save_content(),
             new write\save_information(),
             new write\configure_questions(),

@@ -181,3 +181,7 @@ Conheça a [galeria de exemplos do Mod MCP](docs/pt_br/), com sete modos de auto
 Para publicar como site, habilite GitHub Pages com origem na branch `master`, diretório `/docs`. Localmente, use `python3 -m http.server 8000 -d docs` e abra `http://localhost:8000/pt_br/`.
 
 Os resultados dos exemplos na galeria são simulações locais; notas reais, respostas dos estudantes, conclusão e publicação são responsabilidade dos serviços e fluxos oficiais do Mod MCP. Veja [API.md](.chatgpt/API.md) e as [especificações de jogos](.chatgpt/games/README.md).
+
+### Native descriptions and initial completion
+
+`mcp_create_activity` accepts optional plain-text `intro` (up to 4000 characters), `showdescription`, `completion` (0 off, 1 manual, 2 automatic) and `requireview` (required for mode 2). Grade and interactive completion are not configured by this creation option. `mcp_get_activity` returns `description` with its SHA-256. `mcp_update_description` accepts `cmid`, `intro`, optional `showdescription` and `expected_description_sha256`; preview and confirmation are mandatory. Existing HTML revisions, attempts and grades are not changed. Refresh discovery after updating local_mcp first.

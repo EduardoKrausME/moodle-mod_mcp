@@ -91,6 +91,10 @@ final class create_activity extends base_tool {
             "aftercmid" => ["type" => "integer", "minimum" => 1],
             "beforecmid" => ["type" => "integer", "minimum" => 1],
             "name" => ["type" => "string", "minLength" => 1, "maxLength" => 255],
+            "intro" => ["type" => "string", "maxLength" => 4000],
+            "showdescription" => ["type" => "boolean"],
+            "completion" => ["type" => "integer", "minimum" => 0, "maximum" => 2],
+            "requireview" => ["type" => "boolean"],
         ], ["courseid", "sectionnum", "name"]);
     }
 
@@ -118,7 +122,9 @@ final class create_activity extends base_tool {
             $theme = material_theme::effective((int)$arguments["courseid"]);
             require_capability("moodle/course:manageactivities", $ctx, $identity->userid);
             $position = $this->requested_position($arguments, $identity);
+            $settings = \mod_mcp\mcp\description::creation($arguments, get_course((int)$arguments["courseid"]));
             return [
+                "description" => $settings,
                 "courseid" => (int)$arguments["courseid"],
                 "sectionnum" => (int)$arguments["sectionnum"],
                 "name" => clean_param($arguments["name"], PARAM_TEXT),
@@ -171,8 +177,16 @@ final class create_activity extends base_tool {
             [$module, $context, $section, $cm, $info] = prepare_new_moduleinfo_data(
                 $course, "mcp", (int)$arguments["sectionnum"]);
             $info->name = clean_param($arguments["name"], PARAM_TEXT);
-            $info->intro = "";
-            $info->introformat = FORMAT_HTML;
+            $settings = \mod_mcp\mcp\description::creation($arguments, $course);
+            $info->intro = $settings["intro"];
+            $info->introformat = FORMAT_PLAIN;
+            $info->showdescription = (int)$settings["showdescription"];
+            if (isset($arguments["completion"])) {
+                $info->completion = $settings["completion"];
+                $info->completionview = (int)$settings["requireview"];
+                $info->completiongradeitemnumber = null;
+                $info->completioninteractive = 0;
+            }
             $info->grade = 0;
             $info->visible = 0;
             $transaction = $DB->start_delegated_transaction();
@@ -196,7 +210,7 @@ final class create_activity extends base_tool {
                 $transaction->rollback($e);
             }
             return ["cmid" => (int)$created->coursemodule, "instanceid" => (int)$created->instance,
-                "courseid" => (int)$course->id, "position" => $position,
+                "courseid" => (int)$course->id, "position" => $position, "description" => $settings,
                 "authoring" => authoring_guidance::course_context((int)$course->id),
                 "url" => (new moodle_url("/mod/mcp/view.php",
                     ["id" => $created->coursemodule]))->out(false)];
