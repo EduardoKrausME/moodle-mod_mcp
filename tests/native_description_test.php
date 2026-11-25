@@ -75,7 +75,28 @@ final class native_description_test extends advanced_testcase {
         $this->assertSame("New description", $updated->intro);
         $this->assertSame($mcp->draftrevision, $updated->draftrevision);
         $this->assertSame($mcp->publishedrevision, $updated->publishedrevision);
+        $aftercm = get_coursemodule_from_id("mcp", $cm->id, 0, false, MUST_EXIST);
+        $this->assertSame((int)$cm->completion, (int)$aftercm->completion);
+        $this->assertSame((int)$cm->completionview, (int)$aftercm->completionview);
+        $this->assertSame($mcp->grade, $updated->grade);
         $this->expectException(\local_mcp\exception\api_exception::class);
         $edit->execute($input, $identity);
+    }
+
+    /**
+     * Reject unsupported initial completion and preserve legacy calls.
+     *
+     * @return void
+     */
+    public function test_initial_completion_validation(): void {
+        global $CFG;
+        $this->resetAfterTest();
+        $CFG->enablecompletion = 1;
+        $course = $this->getDataGenerator()->create_course(["enablecompletion" => 1]);
+        $this->assertNull(description::creation([], $course)["completion"]);
+        $this->assertSame(1, description::creation(["completion" => 1], $course)["completion"]);
+        $this->assertFalse(description::creation(["completion" => 0], $course)["requireview"]);
+        $this->expectException(\local_mcp\exception\api_exception::class);
+        description::creation(["completion" => 2], $course);
     }
 }

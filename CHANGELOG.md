@@ -4,6 +4,8 @@ This file documents verified published GitHub releases. The initial release is d
 
 ## Unreleased
 
+- Cover legacy creation defaults, initial completion validation and preservation of academic fields during native description edits.
+
 - Fix native description creation being overwritten by the core intro editor; verify persisted initial completion and description before commit. Correct trusted Mustache URL output and extend course-page description tests.
 
 - Add native plain-text descriptions and optional view/manual completion on creation; update descriptions independently with optimistic concurrency. Display descriptions on the course page and preserve authored revisions and academic data.
