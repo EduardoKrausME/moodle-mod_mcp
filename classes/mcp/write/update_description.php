@@ -32,22 +32,38 @@ use mod_mcp\mcp\description;
  * Update only native description fields, leaving revisions and academic settings untouched.
  */
 final class update_description extends activity_tool {
-    /** @return string Tool name. */
+    /**
+     * Tool name.
+     *
+     * @return string
+     */
     public function get_name(): string {
         return "mcp_update_description";
     }
 
-    /** @return string Tool title. */
+    /**
+     * Tool title.
+     *
+     * @return string
+     */
     public function get_title(): string {
         return "Update native activity description";
     }
 
-    /** @return string Tool description. */
+    /**
+     * Tool description.
+     *
+     * @return string
+     */
     public function get_description(): string {
         return "Update the plain-text native activity description and optional course-page display. Read description.sha256 first.";
     }
 
-    /** @return array Schema. */
+    /**
+     * Schema.
+     *
+     * @return array
+     */
     public function get_input_schema(): array {
         return $this->object_schema([
             "cmid" => ["type" => "integer", "minimum" => 1],
@@ -57,12 +73,18 @@ final class update_description extends activity_tool {
         ], ["cmid", "intro", "expected_description_sha256"]);
     }
 
-    /** @return bool Supports preview. */
+    /**
+     * Supports preview.
+     *
+     * @return bool
+     */
     public function supports_dry_run(): bool {
         return true;
     }
 
-    /** Preview only, checking native and plugin permissions. */
+    /**
+     * Preview only, checking native and plugin permissions.
+     */
     public function preview(array $arguments, authenticated_identity $identity): array {
         $ctx = $this->resolve_context($arguments);
         require_capability("mod/mcp:manage", $ctx, $identity->userid);
@@ -78,7 +100,9 @@ final class update_description extends activity_tool {
         ]];
     }
 
-    /** Apply the narrow, confirmed change with cache invalidation. */
+    /**
+     * Apply the narrow, confirmed change with cache invalidation.
+     */
     public function execute(array $arguments, authenticated_identity $identity): array {
         global $DB;
         $factory = \core\lock\lock_config::get_lock_factory("mod_mcp");

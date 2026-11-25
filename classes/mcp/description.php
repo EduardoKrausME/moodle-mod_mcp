@@ -30,7 +30,9 @@ use local_mcp\exception\api_exception;
  * Native description and initial completion metadata, independent of authored revisions.
  */
 final class description {
-    /** Normalize optional initial native settings. */
+    /**
+     * Normalize optional initial native settings.
+     */
     public static function creation(array $arguments, \stdClass $course): array {
         global $CFG;
         $mode = $arguments["completion"] ?? null;
@@ -45,7 +47,9 @@ final class description {
             "showdescription" => !empty($arguments["showdescription"]), "completion" => $mode, "requireview" => $view];
     }
 
-    /** Return the exact native description and concurrency token. */
+    /**
+     * Return the exact native description and concurrency token.
+     */
     public static function snapshot(\stdClass $cm, \stdClass $mcp): array {
         $data = ["intro" => (string)$mcp->intro, "introformat" => (int)$mcp->introformat,
             "showdescription" => (bool)$cm->showdescription];

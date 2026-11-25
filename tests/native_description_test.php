@@ -37,7 +37,9 @@ use mod_mcp\mcp\description;
  * @covers \mod_mcp\mcp\write\update_description
  */
 final class native_description_test extends advanced_testcase {
-    /** Create with description and automatic view completion; then edit only the description. */
+    /**
+     * Create with description and automatic view completion; then edit only the description.
+     */
     public function test_description_and_initial_completion(): void {
         global $CFG, $DB, $USER;
         $this->resetAfterTest();
