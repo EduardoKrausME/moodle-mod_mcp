@@ -43,10 +43,10 @@ final class activity {
      */
     public static function prompt_types(): array {
         return [
-            "interactive" => ["label" => "promptselectinteractive", "prompt" => "promptquiz",
-                "description" => "promptdescriptioninteractive"],
             "page" => ["label" => "promptselectpage", "prompt" => "promptpage",
                 "description" => "promptdescriptionpage"],
+            "interactive" => ["label" => "promptselectinteractive", "prompt" => "promptquiz",
+                "description" => "promptdescriptioninteractive"],
             "survey" => ["label" => "promptselectsurvey", "prompt" => "promptsurvey",
                 "description" => "promptdescriptionsurvey"],
             "timeline" => ["label" => "promptselecttimeline", "prompt" => "prompttimeline",
