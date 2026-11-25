@@ -66,7 +66,7 @@ final class activity_prompt_test extends \advanced_testcase {
      */
     public function test_all_seven_authoring_types_are_registered(): void {
         $this->assertSame([
-            "interactive", "page", "survey", "timeline", "case", "simulation", "custom",
+            "page", "interactive", "survey", "timeline", "case", "simulation", "custom",
         ], array_keys(activity::prompt_types()));
     }
 
