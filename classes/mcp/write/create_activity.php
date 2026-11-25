@@ -66,7 +66,7 @@ final class create_activity extends base_tool {
     public function get_description(): string {
         return authoring_guidance::tool_description(
             "Create an unpublished, hidden mod_mcp activity and return the real cmid. "
-            . "Optionally specify aftercmid or beforecmid, native sanitized HTML intro and showdescription, "
+            . "Optionally specify aftercmid or beforecmid, native sanitized HTML intro and showdescription (enabled by default), "
             . "and initial completion (off, manual or automatic view).",
             ["core", "interview", "learning", "theme"]);
     }
@@ -93,7 +93,8 @@ final class create_activity extends base_tool {
             "beforecmid" => ["type" => "integer", "minimum" => 1],
             "name" => ["type" => "string", "minLength" => 1, "maxLength" => 255],
             "intro" => ["type" => "string", "maxLength" => 4000],
-            "showdescription" => ["type" => "boolean"],
+            "showdescription" => ["type" => "boolean", "default" => true,
+                "description" => "Display the native description on the course page."],
             "completion" => ["type" => "integer", "minimum" => 0, "maximum" => 2],
             "requireview" => ["type" => "boolean"],
         ], ["courseid", "sectionnum", "name"]);

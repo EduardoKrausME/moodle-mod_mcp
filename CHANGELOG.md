@@ -4,6 +4,8 @@ This file documents verified published GitHub releases. The initial release is d
 
 ## Unreleased
 
+- Enable native course-page description display by default for MCP-created activities; preserve explicit opt-out.
+
 - Fix native MCP descriptions to sanitized HTML and keep the storage format internal to the server. Preserve the concurrency fingerprint for legacy formats and verify HTML persistence before committing writes.
 
 - Normalize native description format to integer for creation and updates, retaining strict persisted-settings verification and rollback. Cover legacy and explicit completion settings in enabled and disabled courses; fix Code Checker findings.

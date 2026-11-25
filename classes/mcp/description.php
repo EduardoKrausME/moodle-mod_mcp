@@ -44,7 +44,7 @@ final class description {
                 get_string("invalidinitialcompletion", "mcp"));
         }
         return ["intro" => self::clean_intro((string)($arguments["intro"] ?? "")),
-            "showdescription" => !empty($arguments["showdescription"]), "completion" => $mode, "requireview" => $view];
+            "showdescription" => $arguments["showdescription"] ?? true, "completion" => $mode, "requireview" => $view];
     }
 
     /**

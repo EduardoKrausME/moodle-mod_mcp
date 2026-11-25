@@ -118,7 +118,7 @@ final class native_description_test extends advanced_testcase {
         $tool = new create_activity();
         foreach ([0, 1] as $enabled) {
             $course = $this->getDataGenerator()->create_course(["enablecompletion" => $enabled]);
-            $cases = [[], ["completion" => 0]];
+            $cases = [[], ["completion" => 0], ["showdescription" => false]];
             if ($enabled) {
                 $cases[] = ["completion" => 1];
                 $cases[] = ["completion" => 2, "requireview" => true];
@@ -130,6 +130,7 @@ final class native_description_test extends advanced_testcase {
                 $preview = $tool->preview($args, $identity);
                 $this->assertArrayNotHasKey("introformat", $preview["description"]);
                 $this->assertSame($options["completion"] ?? null, $preview["description"]["completion"]);
+                $this->assertSame($options["showdescription"] ?? true, $preview["description"]["showdescription"]);
                 $this->assertSame($before, $DB->count_records("mcp", ["course" => $course->id]));
                 $created = $tool->execute($args, $identity);
                 $cm = get_coursemodule_from_id("mcp", $created["cmid"], 0, false, MUST_EXIST);
@@ -138,7 +139,7 @@ final class native_description_test extends advanced_testcase {
                 $this->assertSame(0, (int)$cm->visible);
                 $this->assertSame("", $mcp->intro);
                 $this->assertSame((int)FORMAT_HTML, (int)$mcp->introformat);
-                $this->assertFalse((bool)$cm->showdescription);
+                $this->assertSame($options["showdescription"] ?? true, (bool)$cm->showdescription);
                 $this->assertSame(description::snapshot($cm, $mcp), $created["description"]);
                 $this->assertSame(0, (int)$mcp->draftrevision);
                 $this->assertSame(0, (int)$mcp->publishedrevision);
