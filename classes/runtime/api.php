@@ -39,7 +39,7 @@ final class api {
      * Visible course-module order is calculated by the Moodle course cache.
      */
     public static function activities(stdClass $cm): array {
-        global $DB, $USER;
+        global $USER;
         $modinfo = get_fast_modinfo((int)$cm->course, (int)$USER->id);
         $items = [];
         foreach ($modinfo->get_sections() as $sectionnum => $moduleids) {
@@ -50,10 +50,6 @@ final class api {
             foreach ($moduleids as $id) {
                 $item = $modinfo->get_cm($id);
                 if (!$item->uservisible || !$item->url || $item->is_stealth()) {
-                    continue;
-                }
-                if ($item->modname === "mcp" &&
-                        !$DB->get_field("mcp", "publishedrevision", ["id" => $item->instance])) {
                     continue;
                 }
                 $items[] = [

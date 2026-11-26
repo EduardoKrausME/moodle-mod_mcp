@@ -45,9 +45,15 @@ final class service {
     /**
      * Save a new immutable revision with optimistic concurrency control.
      *
+     * @param int $mcpid Activity instance ID.
+     * @param string $html Complete HTML source.
+     * @param int $author Author ID.
+     * @param int|null $expectedrevision Current revision, if supplied.
+     * @param array|null $settings Optional private metadata and expected settings hash.
      * @return int Revision ID.
      */
-    public static function save(int $mcpid, string $html, int $author, ?int $expectedrevision = null): int {
+    public static function save(int $mcpid, string $html, int $author, ?int $expectedrevision = null,
+            ?array $settings = null): int {
         global $DB;
         self::validate_html($html);
         $lock = \core\lock\lock_config::get_lock_factory("mod_mcp")->get_lock("content_" . $mcpid, 10);
@@ -64,7 +70,14 @@ final class service {
                     throw new moodle_exception("revisionconflict", "mcp");
                 }
                 self::validate_theme_colours((int)$activity->course, $html);
-                metadata::validate($activity->activitytype, $activity->informationjson);
+                if ($settings !== null) {
+                    if (!hash_equals(metadata::fingerprint($activity), $settings["expectedhash"])) {
+                        throw new moodle_exception("revisionconflict", "mcp");
+                    }
+                    $information = metadata::validate($settings["type"], $settings["information"]);
+                } else {
+                    metadata::validate($activity->activitytype, $activity->informationjson);
+                }
                 $current = self::get($mcpid, $active);
                 $hash = hash("sha256", $html);
                 if ($current && hash_equals($current->sha256, $hash)) {
@@ -78,10 +91,15 @@ final class service {
                         "timecreated" => time(),
                     ]);
                 }
-                $DB->update_record("mcp", (object)[
+                $update = (object)[
                     "id" => $mcpid, "draftrevision" => $revisionid,
                     "publishedrevision" => $revisionid, "timemodified" => time(),
-                ]);
+                ];
+                if ($settings !== null) {
+                    $update->activitytype = $settings["type"] === "" ? null : $settings["type"];
+                    $update->informationjson = $information;
+                }
+                $DB->update_record("mcp", $update);
                 $transaction->allow_commit();
                 return $revisionid;
             } catch (\Throwable $e) {

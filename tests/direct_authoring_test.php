@@ -27,6 +27,7 @@ namespace mod_mcp;
 use advanced_testcase;
 use local_mcp\security\authenticated_identity;
 use mod_mcp\content\service;
+use mod_mcp\content\metadata;
 use mod_mcp\mcp\provider;
 use mod_mcp\mcp\write\create_activity;
 use mod_mcp\mcp\write\save_content;
@@ -66,6 +67,37 @@ final class direct_authoring_test extends advanced_testcase {
         $this->assertSame($updated["revision"],
             (int)$DB->get_field("mcp", "publishedrevision", ["id" => $created["instanceid"]]));
         $this->assertSame($html, service::get($created["instanceid"], $created["revision"])->content);
+    }
+
+    /**
+     * Quiz HTML and private questions can be created and updated in one guarded write.
+     */
+    public function test_create_and_update_quiz_information(): void {
+        global $DB, $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $identity = new authenticated_identity($USER->id, "test", ["mcp:write"]);
+        $information = ["questions" => [
+            ["id" => "q1", "text" => "Two plus two?", "type" => "text", "answer" => "4"],
+        ]];
+        $created = (new create_activity())->execute([
+            "courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Quiz",
+            "html" => "<p>Quiz</p>", "type" => "quiz", "information" => $information,
+        ], $identity);
+        $activity = $DB->get_record("mcp", ["id" => $created["instanceid"]], "*", MUST_EXIST);
+        $this->assertSame($information, metadata::information($activity));
+        $this->assertArrayNotHasKey("answer", metadata::public_information($activity)["questions"][0]);
+        $information["questions"][0]["text"] = "Three plus one?";
+        $updated = (new save_content())->execute([
+            "cmid" => $created["cmid"], "html" => "<p>Updated quiz</p>",
+            "expectedrevision" => $created["revision"], "expectedhash" => metadata::fingerprint($activity),
+            "type" => "quiz", "information" => $information,
+        ], $identity);
+        $activity = $DB->get_record("mcp", ["id" => $created["instanceid"]], "*", MUST_EXIST);
+        $this->assertSame($updated["revision"], (int)$activity->publishedrevision);
+        $this->assertSame($information, metadata::information($activity));
+        $this->assertSame("<p>Quiz</p>", service::get($created["instanceid"], $created["revision"])->content);
     }
 
     /**

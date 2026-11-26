@@ -44,7 +44,7 @@ final class dispatch extends external_api {
             "cmid" => new external_value(PARAM_INT, "Current course-module ID"),
             "action" => new external_value(PARAM_TEXT, "Allowlisted API action"),
             "payload" => new external_value(PARAM_RAW, "Bounded JSON argument object"),
-            "preview" => new external_value(PARAM_BOOL, "Draft preview", VALUE_DEFAULT, false),
+            "preview" => new external_value(PARAM_BOOL, "Read-only content preview", VALUE_DEFAULT, false),
         ]);
     }
 
@@ -68,9 +68,6 @@ final class dispatch extends external_api {
         require_capability("mod/mcp:view", $context);
         $mcp = $DB->get_record("mcp", ["id" => (int)$cm->instance], "*", MUST_EXIST);
         $canmanage = has_capability("mod/mcp:manage", $context);
-        if (!$mcp->publishedrevision && !$canmanage) {
-            throw new moodle_exception("activitynotpublished", "mcp");
-        }
         if ($preview && !$canmanage) {
             throw new moodle_exception("nopermissions");
         }
@@ -86,7 +83,7 @@ final class dispatch extends external_api {
                 throw new moodle_exception("nopermissions");
             }
         } else if (!$mcp->publishedrevision) {
-            throw new moodle_exception("activitynotpublished", "mcp");
+            throw new moodle_exception("missingcontent", "mcp");
         }
         $result = api::run($mcp, $cm, $action, $args);
         return ["json" => json_encode($result, JSON_INVALID_UTF8_SUBSTITUTE)];

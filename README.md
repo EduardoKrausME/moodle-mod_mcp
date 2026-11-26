@@ -6,7 +6,7 @@ Compatible with Moodle 4.5 LTS and 5.x. Install this repository at mod/mcp on a 
 
 ## Activity lifecycle
 
-Create an Interactive Experience in Moodle with `mcp_create_activity`, supplying the complete HTML and any private assessment information in one confirmed call. New activities follow native Moodle visibility. Use `mcp_save_content` to replace active HTML without changing visibility. The management page also saves content directly.
+Create an Interactive Experience in Moodle with `mcp_create_activity`, supplying the complete HTML and any private assessment information in one confirmed call. New activities follow native Moodle visibility. Use `mcp_save_content` to replace active HTML and optionally private assessment settings in one call without changing visibility. The management page also saves content directly.
 
 For a content page, the generated prompt asks the teacher to select a page format and supply a free-text description of the topic and objectives before authoring begins. It requests selection and text-entry controls when the chat interface supports them, with numbered options and an open-ended reply as fallback. Chat interface controls are provided by ChatGPT or Claude, not by the Moodle activity itself.
 

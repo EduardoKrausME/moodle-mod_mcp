@@ -217,7 +217,7 @@ final class runtime_api_test extends advanced_testcase {
      * Build navigation only from the user's accessible activity order.
      */
     public function test_navigation_uses_accessible_course_modules(): void {
-        global $CFG, $DB;
+        global $CFG;
         require_once($CFG->dirroot . "/course/lib.php");
         $this->resetAfterTest();
         $course = $this->getDataGenerator()->create_course();
@@ -230,7 +230,6 @@ final class runtime_api_test extends advanced_testcase {
         $pagecm = get_coursemodule_from_instance("page", $page->id);
         $student = $this->getDataGenerator()->create_user();
         $this->getDataGenerator()->enrol_user((int)$student->id, (int)$course->id, "student");
-        $DB->set_field("mcp", "publishedrevision", 1, ["id" => $mcp->id]);
         set_coursemodule_visible((int)$cm->id, 1);
         rebuild_course_cache((int)$course->id, true);
         $this->setUser($student);

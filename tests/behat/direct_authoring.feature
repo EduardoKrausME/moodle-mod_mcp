@@ -4,6 +4,12 @@ Feature: Save active MCP content directly
     Given the following "courses" exist:
       | fullname       | shortname | category |
       | Direct content | C1        | 0        |
+    And the following "users" exist:
+      | username | firstname | lastname | email               |
+      | learner1 | Learner   | One      | learner@example.com |
+    And the following "course enrolments" exist:
+      | user     | course | role    |
+      | learner1 | C1     | student |
     And the following "activity" exists:
       | activity | mcp             |
       | course   | C1              |
@@ -13,9 +19,12 @@ Feature: Save active MCP content directly
 
   Scenario: Save HTML without a separate publication step
     Given I am on the "Direct material" "mcp activity" page logged in as admin
-    And I follow "Manage activity"
+    And I follow "Manage interactive experience"
     And I set the field "mod-mcp-html-content" to "<html><body><p>Direct content</p></body></html>"
     When I press "Save changes"
     Then I should see "Changes saved"
     And the field "mod-mcp-html-content" matches value "<html><body><p>Direct content</p></body></html>"
     And "input[name='action'][value='publish']" "css_element" should not exist
+    And I log out
+    When I am on the "Direct material" "mcp activity" page logged in as "learner1"
+    Then "iframe.mod-mcp-document" "css_element" should exist

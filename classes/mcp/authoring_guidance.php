@@ -146,7 +146,8 @@ final class authoring_guidance {
     public static function quiz_rules(): string {
         return "For a quiz, BEFORE creating questions ask the teacher how many questions "
             . "to author, whether to shuffle and how many to draw per attempt; wait for "
-            . "the answers. Include questions in mcp_create_activity, or use mcp_save_information for existing activities, type=quiz, "
+            . "the answers. Include questions in mcp_create_activity, or update them together with HTML using "
+            . "mcp_save_content (mcp_save_information is for metadata-only edits), type=quiz, "
             . "and an information JSON object containing selection (all or random), count, "
             . "shuffle and questions. For each question use id, text, type (single, multiple "
             . "or text), answer and points; for choice questions use options with id and text. "
@@ -165,7 +166,7 @@ final class authoring_guidance {
     public static function approval_rules(): string {
         return "Present one consolidated pedagogical and visual preview of the final content and target. "
             . "Obtain explicit teacher approval through the tool confirmation before creating or updating. "
-            . "Send the full HTML and required quiz information in one creation call. "
+            . "Send the full HTML and required quiz information in one creation or update call. "
             . "Do not create empty activities, use sequential workflows for a single activity, or request "
             . "separate approval for file checks, storage or publication. Native Moodle visibility applies immediately.";
     }

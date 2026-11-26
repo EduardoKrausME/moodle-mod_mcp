@@ -28,6 +28,7 @@ use mod_mcp\mcp\authoring_error;
 use moodle_exception;
 use local_mcp\security\authenticated_identity;
 use mod_mcp\content\service;
+use mod_mcp\content\metadata;
 use mod_mcp\mcp\authoring_guidance;
 
 /**
@@ -62,7 +63,8 @@ final class save_content extends activity_tool {
             "Replace the active HTML with one complete document with inline CSS/JS. First call "
             . "mcp_get_activity and follow its course-specific authoring instructions. The "
             . "server rejects hard-coded brand colours; fix errors and retry. "
-            . "Use the current revision for concurrency protection. Preserve native visibility.",
+            . "Use the current revision for concurrency protection. Preserve native visibility. Include type, information "
+            . "and expectedhash in this call if private assessment information must also change.",
             ["core", "html", "sdk", "approval", "theme"]);
     }
 
@@ -76,7 +78,29 @@ final class save_content extends activity_tool {
             "cmid" => ["type" => "integer", "minimum" => 1],
             "html" => ["type" => "string", "minLength" => 1],
             "expectedrevision" => ["type" => "integer", "minimum" => 0],
+            "type" => ["type" => ["string", "null"], "maxLength" => 40],
+            "information" => ["type" => ["object", "null"]],
+            "expectedhash" => ["type" => "string", "pattern" => "^[a-f0-9]{64}$"],
         ], ["cmid", "html", "expectedrevision"]);
+    }
+
+    /**
+     * Optional private information must be supplied as one complete, guarded change.
+     *
+     * @param array $arguments Input arguments.
+     * @return array|null
+     */
+    private function settings(array $arguments): ?array {
+        $keys = ["type", "information", "expectedhash"];
+        $settings = array_intersect_key($arguments, array_flip($keys));
+        if (!$settings) {
+            return null;
+        }
+        if (count($settings) !== count($keys)) {
+            throw new moodle_exception("invaliddata");
+        }
+        metadata::validate($settings["type"], $settings["information"]);
+        return $settings;
     }
 
     /**
@@ -88,7 +112,12 @@ final class save_content extends activity_tool {
      */
     public function preview(array $arguments, authenticated_identity $identity): array {
         try {
+            require_capability("mod/mcp:manage", $this->resolve_context($arguments), $identity->userid);
             $activity = $this->activity($arguments);
+            $settings = $this->settings($arguments);
+            if ($settings !== null && !hash_equals(metadata::fingerprint($activity), $settings["expectedhash"])) {
+                throw new moodle_exception("revisionconflict", "mcp");
+            }
             $html = $arguments["html"];
             service::validate_html($html);
             service::validate_theme_colours((int)$activity->course, $html);
@@ -97,7 +126,7 @@ final class save_content extends activity_tool {
             }
             return ["cmid" => $arguments["cmid"], "revision" => (int)$activity->publishedrevision,
                 "expectedrevision" => (int)$arguments["expectedrevision"], "updates_active_content" => true,
-                "preserves_visibility" => true];
+                "preserves_visibility" => true, "updates_information" => $settings !== null];
         } catch (moodle_exception $failure) {
             throw authoring_error::translate($failure,
                 (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
@@ -116,7 +145,8 @@ final class save_content extends activity_tool {
             require_capability("mod/mcp:manage", $this->resolve_context($arguments), $identity->userid);
             $mcp = $this->activity($arguments);
             $revision = service::save(
-                (int)$mcp->id, $arguments["html"], $identity->userid, (int)$arguments["expectedrevision"]);
+                (int)$mcp->id, $arguments["html"], $identity->userid, (int)$arguments["expectedrevision"],
+                $this->settings($arguments));
             $stored = service::get((int)$mcp->id, $revision);
             if (!$stored) {
                 throw new moodle_exception("invaliddata");

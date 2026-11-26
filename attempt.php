@@ -36,7 +36,7 @@ $context = context_module::instance($cm->id);
 require_capability("mod/mcp:view", $context);
 require_capability("mod/mcp:submit", $context);
 if (empty($mcp->publishedrevision)) {
-    throw new moodle_exception("activitynotpublished", "mcp");
+    throw new moodle_exception("missingcontent", "mcp");
 }
 if (($_SERVER["REQUEST_METHOD"] ?? "") !== "POST") {
     throw new moodle_exception("invalidrequest");

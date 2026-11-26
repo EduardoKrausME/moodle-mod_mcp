@@ -42,7 +42,7 @@ use moodle_url;
  */
 final class mobile_content extends external_api {
     /**
-     * Defines the required parameters for retrieving published mobile content.
+     * Defines the required parameters for retrieving active mobile content.
      *
      * @return external_function_parameters Parameter definition.
      */
@@ -53,7 +53,7 @@ final class mobile_content extends external_api {
     }
 
     /**
-     * Retrieves the published activity revision for the mobile app.
+     * Retrieves the active activity revision for the mobile app.
      *
      * @param int $cmid Course module ID.
      * @return array Published revision content and asset URLs.
@@ -71,11 +71,11 @@ final class mobile_content extends external_api {
 
         $mcp = $DB->get_record("mcp", ["id" => (int)$cm->instance], "*", MUST_EXIST);
         if (empty($mcp->publishedrevision)) {
-            throw new moodle_exception("activitynotpublished", "mcp");
+            throw new moodle_exception("missingcontent", "mcp");
         }
         $revision = service::get((int)$mcp->id, (int)$mcp->publishedrevision);
         if (!$revision) {
-            throw new moodle_exception("activitynotpublished", "mcp");
+            throw new moodle_exception("missingcontent", "mcp");
         }
 
         $assets = [];
@@ -105,15 +105,15 @@ final class mobile_content extends external_api {
     }
 
     /**
-     * Defines the published mobile content response structure.
+     * Defines the active mobile content response structure.
      *
      * @return external_single_structure Response definition.
      */
     public static function get_returns(): external_single_structure {
         return new external_single_structure([
             "cmid" => new external_value(PARAM_INT, "Course module ID"),
-            "revision" => new external_value(PARAM_INT, "Published immutable revision ID"),
-            "sha256" => new external_value(PARAM_ALPHANUMEXT, "Published content SHA-256"),
+            "revision" => new external_value(PARAM_INT, "Active immutable revision ID"),
+            "sha256" => new external_value(PARAM_ALPHANUMEXT, "Content SHA-256"),
             "html" => new external_value(PARAM_RAW, "Sandboxed HTML with the injected SDK"),
             "type" => new external_value(PARAM_TEXT, "Activity type, blank when unset"),
             "information" => new external_value(PARAM_RAW, "JSON without private quiz answers"),

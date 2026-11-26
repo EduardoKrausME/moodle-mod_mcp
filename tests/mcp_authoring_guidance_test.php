@@ -90,7 +90,7 @@ final class mcp_authoring_guidance_test extends advanced_testcase {
 
         $approval = (new create_activity())->get_description();
         $this->assertStringContainsString("explicit teacher approval", $approval);
-        $this->assertStringContainsString("one creation call", $approval);
+        $this->assertStringContainsString("one creation or update call", $approval);
 
         $CFG->theme = "eadflix";
         $description = (new create_activity())->get_description();

@@ -205,15 +205,23 @@ final class metadata {
      */
     public static function save(int $mcpid, ?string $type, $information, ?string $expectedhash = null): string {
         global $DB;
-        $mcp = $DB->get_record("mcp", ["id" => $mcpid], "*", MUST_EXIST);
-        if ($expectedhash !== null && !hash_equals(self::fingerprint($mcp), $expectedhash)) {
+        $lock = \core\lock\lock_config::get_lock_factory("mod_mcp")->get_lock("content_" . $mcpid, 10);
+        if (!$lock) {
             throw new moodle_exception("revisionconflict", "mcp");
         }
-        $json = self::validate($type, $information);
-        $DB->update_record("mcp", (object)[
-            "id" => $mcpid, "activitytype" => $type === "" ? null : $type,
-            "informationjson" => $json, "timemodified" => time(),
-        ]);
-        return self::fingerprint($DB->get_record("mcp", ["id" => $mcpid], "*", MUST_EXIST));
+        try {
+            $mcp = $DB->get_record("mcp", ["id" => $mcpid], "*", MUST_EXIST);
+            if ($expectedhash !== null && !hash_equals(self::fingerprint($mcp), $expectedhash)) {
+                throw new moodle_exception("revisionconflict", "mcp");
+            }
+            $json = self::validate($type, $information);
+            $DB->update_record("mcp", (object)[
+                "id" => $mcpid, "activitytype" => $type === "" ? null : $type,
+                "informationjson" => $json, "timemodified" => time(),
+            ]);
+            return self::fingerprint($DB->get_record("mcp", ["id" => $mcpid], "*", MUST_EXIST));
+        } finally {
+            $lock->release();
+        }
     }
 }
