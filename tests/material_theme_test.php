@@ -32,6 +32,7 @@ use mod_mcp\authoring\material_theme;
 use mod_mcp\content\service;
 use mod_mcp\content\metadata;
 use mod_mcp\mcp\write\save_information;
+use mod_mcp\mcp\write\save_content;
 use mod_mcp\mcp\authoring_guidance;
 use mod_mcp\mcp\read\get_material_theme;
 use mod_mcp\mcp\write\configure_material_theme;
@@ -137,6 +138,39 @@ final class material_theme_test extends advanced_testcase {
         $information->preview($infoargs, $identity);
         $information->execute($infoargs, $identity);
         $this->assertSame("page", $DB->get_field("mcp", "activitytype", ["id" => $activity->id]));
+    }
+
+    /**
+     * Creation and editing advertise the saved visual guidance and return the effective scope.
+     */
+    public function test_write_tools_include_saved_material_instructions(): void {
+        global $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $other = $this->getDataGenerator()->create_course();
+        $identity = new authenticated_identity((int)$USER->id, "test", ["mcp:read", "mcp:write"]);
+        $create = new create_activity();
+        $save = new save_content();
+        $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Material", "html" => "<p>Content</p>"];
+        $this->assertNull($create->preview($args, $identity)["authoring"]["materialtheme"]);
+        material_theme::save("site", 0, "Site template", "Use spacious cards.");
+        material_theme::save("course", (int)$course->id, "Course template", "Use illustrated panels.");
+        foreach ([$create, $save] as $tool) {
+            $this->assertStringContainsString("Use spacious cards.", $tool->get_description());
+            $this->assertStringNotContainsString("Use illustrated panels.", $tool->get_description());
+        }
+        $preview = $create->preview($args, $identity)["authoring"];
+        $this->assertSame("course", $preview["materialtheme"]["scope"]);
+        $this->assertStringContainsString("Use illustrated panels.", $preview["instructions"]);
+        $this->assertStringNotContainsString("Use spacious cards.", $preview["instructions"]);
+        $fallback = $create->preview(array_replace($args, ["courseid" => (int)$other->id]), $identity)["authoring"];
+        $this->assertSame("site", $fallback["materialtheme"]["scope"]);
+        $created = $create->execute($args, $identity);
+        $this->assertSame($preview["materialtheme"], $created["authoring"]["materialtheme"]);
+        $edit = ["cmid" => $created["cmid"], "html" => "<p>Updated</p>", "expectedrevision" => $created["revision"]];
+        $this->assertSame($preview["materialtheme"], $save->preview($edit, $identity)["authoring"]["materialtheme"]);
+        $this->assertSame($preview["materialtheme"], $save->execute($edit, $identity)["authoring"]["materialtheme"]);
     }
 
     /**

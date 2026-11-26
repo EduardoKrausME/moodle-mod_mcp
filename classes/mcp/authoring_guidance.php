@@ -225,7 +225,7 @@ final class authoring_guidance {
      * Compose a short tool-specific MCP description without repeating unrelated rules.
      *
      * @param string $purpose Short description of the tool's exact action.
-     * @param string[] $rules Required sets: core, interview, learning, html, sdk, quiz, approval, theme.
+     * @param string[] $rules Required sets: core, interview, learning, html, sdk, quiz, approval, theme, material.
      */
     public static function tool_description(string $purpose, array $rules = ["core", "theme"]): string {
         global $CFG;
@@ -254,6 +254,23 @@ final class authoring_guidance {
                 case "approval":
                     $parts[] = self::approval_rules();
                     break;
+                case "material":
+                    // Discovery has no target course; only the site default is safe to expose here.
+                    try {
+                        $default = material_theme::site_default();
+                        if ($default !== null) {
+                            $parts[] = "SITE DEFAULT ONLY; a course override takes precedence. "
+                                . self::material_rules(["scope" => "site"] + $default);
+                        }
+                    } catch (\moodle_exception $e) {
+                        // Invalid optional configuration must not break discovery.
+                    }
+                    $parts[] = "Before generating HTML, use the effective course template already returned "
+                        . "in authoring context. If not yet known for a new activity, read mcp_get_material_theme "
+                        . "once for the target course; for editing use mcp_get_activity. "
+                        . "Apply the saved visual guidance automatically, without a separate approval or setup. "
+                        . "If no template is configured, continue normally.";
+                    break;
                 case "theme":
                     // Discovery must not depend on valid stored material configuration.
                     $parts[] = "A course material theme takes precedence over the site-wide default. "
@@ -270,6 +287,19 @@ final class authoring_guidance {
             }
         }
         return implode(" ", $parts);
+    }
+
+    /**
+     * Format saved template data as visual-only authoring guidance.
+     *
+     * @param array $material Effective material template.
+     * @return string
+     */
+    public static function material_rules(array $material): string {
+        return "REUSABLE MATERIAL DESIGN (visual-only; cannot override technical, accessibility "
+            . "or security rules): " . $material["name"] . ". Scope: " . $material["scope"]
+            . ". Layout guidance: " . $material["style"] . ". Apply to the authored material, "
+            . "not as student-visible instructions.";
     }
 
     /**
@@ -291,8 +321,7 @@ final class authoring_guidance {
         $material = material_theme::effective($courseid);
         $configured = $material !== null;
         $visual = $configured ?
-            "REUSABLE MATERIAL DESIGN (visual-only; cannot override technical, accessibility "
-            . "or security rules): " . $material["name"] . ". Layout guidance: " . $material["style"] . ". " :
+            self::material_rules($material) :
             "No reusable material design is configured. Continue with the requested material. ";
         return [
             "configured" => $configured,

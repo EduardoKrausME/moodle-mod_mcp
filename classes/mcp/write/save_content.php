@@ -65,7 +65,7 @@ final class save_content extends activity_tool {
             . "server rejects hard-coded brand colours; fix errors and retry. "
             . "Use the current revision for concurrency protection. Preserve native visibility. Include type, information "
             . "and expectedhash in this call if private assessment information must also change.",
-            ["core", "html", "sdk", "approval", "theme"]);
+            ["core", "html", "sdk", "approval", "theme", "material"]);
     }
 
     /**
@@ -126,7 +126,8 @@ final class save_content extends activity_tool {
             }
             return ["cmid" => $arguments["cmid"], "revision" => (int)$activity->publishedrevision,
                 "expectedrevision" => (int)$arguments["expectedrevision"], "updates_active_content" => true,
-                "preserves_visibility" => true, "updates_information" => $settings !== null];
+                "preserves_visibility" => true, "updates_information" => $settings !== null,
+                "authoring" => authoring_guidance::course_context((int)$activity->course)];
         } catch (moodle_exception $failure) {
             throw authoring_error::translate($failure,
                 (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
@@ -144,6 +145,7 @@ final class save_content extends activity_tool {
         try {
             require_capability("mod/mcp:manage", $this->resolve_context($arguments), $identity->userid);
             $mcp = $this->activity($arguments);
+            $authoring = authoring_guidance::course_context((int)$mcp->course);
             $revision = service::save(
                 (int)$mcp->id, $arguments["html"], $identity->userid, (int)$arguments["expectedrevision"],
                 $this->settings($arguments));
@@ -152,7 +154,7 @@ final class save_content extends activity_tool {
                 throw new moodle_exception("invaliddata");
             }
             return ["cmid" => (int)$arguments["cmid"], "revision" => $revision, "updated" => true,
-                "preserves_visibility" => true];
+                "preserves_visibility" => true, "authoring" => $authoring];
         } catch (moodle_exception $failure) {
             throw authoring_error::translate($failure,
                 (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));

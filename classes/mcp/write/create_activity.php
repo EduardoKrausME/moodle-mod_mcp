@@ -32,7 +32,6 @@ use context;
 use context_course;
 use local_mcp\course\activity_position_service;
 use local_mcp\exception\api_exception;
-use mod_mcp\authoring\material_theme;
 use mod_mcp\mcp\authoring_guidance;
 use local_mcp\security\authenticated_identity;
 use local_mcp\write\tool\base_tool;
@@ -70,7 +69,7 @@ final class create_activity extends base_tool {
             "Create a complete mod_mcp activity with its final HTML and return the real cmid. "
             . "Optionally specify aftercmid or beforecmid, native sanitized HTML intro and showdescription (enabled by default), "
             . "and initial completion (off, manual or automatic view). Include private quiz information in this same call.",
-            ["core", "interview", "learning", "html", "sdk", "quiz", "approval", "theme"]);
+            ["core", "interview", "learning", "html", "sdk", "quiz", "approval", "theme", "material"]);
     }
 
     /**
@@ -126,7 +125,7 @@ final class create_activity extends base_tool {
         try {
             $ctx = $this->resolve_context($arguments);
             require_capability("mod/mcp:addinstance", $ctx, $identity->userid);
-            $theme = material_theme::effective((int)$arguments["courseid"]);
+            $authoring = authoring_guidance::course_context((int)$arguments["courseid"]);
             require_capability("moodle/course:manageactivities", $ctx, $identity->userid);
             $position = $this->requested_position($arguments, $identity);
             $settings = \mod_mcp\mcp\description::creation($arguments, get_course((int)$arguments["courseid"]));
@@ -136,7 +135,8 @@ final class create_activity extends base_tool {
                 "courseid" => (int)$arguments["courseid"],
                 "sectionnum" => (int)$arguments["sectionnum"],
                 "name" => clean_param($arguments["name"], PARAM_TEXT),
-                "materialtheme" => $theme,
+                "materialtheme" => $authoring["materialtheme"],
+                "authoring" => $authoring,
                 "visible_by_default" => true,
                 "type" => $arguments["type"] ?? null,
                 "questioncount" => count($arguments["information"]["questions"] ?? []),
@@ -216,6 +216,7 @@ final class create_activity extends base_tool {
             }
             $info->grade = 0;
             $this->validate_content($arguments);
+            $authoring = authoring_guidance::course_context((int)$course->id);
             $info->visible = 1;
             $transaction = $DB->start_delegated_transaction();
             try {
@@ -252,7 +253,7 @@ final class create_activity extends base_tool {
                 "courseid" => (int)$course->id, "position" => $position, "description" => $saveddescription,
                 "revision" => $revision, "visible" => (bool)$DB->get_field("course_modules", "visible",
                     ["id" => $created->coursemodule], MUST_EXIST),
-                "authoring" => authoring_guidance::course_context((int)$course->id),
+                "authoring" => $authoring,
                 "url" => (new moodle_url("/mod/mcp/view.php",
                     ["id" => $created->coursemodule]))->out(false)];
         } catch (moodle_exception $failure) {

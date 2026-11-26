@@ -208,6 +208,16 @@ These are *authoring* tools and not methods on `window.MoodleMCP`.
 Question selection, grading, JSON attempt state, native visibility remain
 under Moodle server control.
 
+### Saved visual templates in authoring prompts
+
+The discovery descriptions of `mcp_create_activity` and `mcp_save_content` include the saved site
+template when configured, as a fallback only. Their previews and results include the effective
+course template (name, scope, style and instructions) under `authoring`. Use an already available
+course authoring context before generating HTML. If none is available, read `mcp_get_material_theme`
+for a new activity or `mcp_get_activity` when editing. A course override takes precedence and
+must not be exposed in global tool discovery. Apply visual guidance automatically without a separate
+approval or template setup; continue normally if no template is configured.
+
 ### Authoring source integrity
 
 `mcp_create_activity` accepts required `courseid`, `sectionnum`, `name`, and `html`, with optional `type` and `information` for private quiz configuration. The server validates the complete content and creates it in a single confirmed write. `mcp_save_content` updates the active immutable revision directly; optionally provide `type`, `information` and `expectedhash` together to update private assessment settings in the same confirmed operation. `mcp_get_activity` returns `revision`, `html`, and `plaintext`; use `revision` as `expectedrevision`. Native visibility is never changed by content edits. Legacy unpublished source is retained in history without automatic activation. No manual file integrity or publication step is required. Use local_mcp build 2026112405 or newer.
