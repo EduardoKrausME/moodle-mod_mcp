@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Published activity content for the Moodle mobile app.
+ * Active activity content for the Moodle mobile app.
  *
  * @package mod_mcp
  * @copyright 2026 Eduardo Kraus
@@ -37,8 +37,8 @@ use moodle_exception;
 use moodle_url;
 
 /**
- * Read-only mobile export of the published revision.
- * Never export a draft, question answers, session cookies or access tokens.
+ * Read-only mobile export of the active revision.
+ * Never export historical source, question answers, session cookies or access tokens.
  */
 final class mobile_content extends external_api {
     /**

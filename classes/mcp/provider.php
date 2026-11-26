@@ -54,7 +54,6 @@ final class provider implements read_provider_interface, write_provider_interfac
             new write\save_information(),
             new write\configure_questions(),
             new write\upload_asset(),
-            new write\publish(),
         ];
     }
 }

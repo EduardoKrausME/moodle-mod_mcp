@@ -40,7 +40,7 @@ use moodle_exception;
  */
 final class content_service_test extends advanced_testcase {
     /**
-     * Saving a newer draft must not change the published HTML.
+     * Saving a revision replaces active HTML without deleting history.
      */
     public function test_immutable_revisions_and_optimistic_locking(): void {
         global $DB;
@@ -58,7 +58,7 @@ final class content_service_test extends advanced_testcase {
         $this->assertNotSame($first, $second);
         $this->assertSame("<h1>First</h1>", service::get((int)$module->id, $first)->content);
         $this->assertSame("<h1>Second</h1>", service::get((int)$module->id, $second)->content);
-        $this->assertSame(0, (int)$DB->get_field("mcp", "publishedrevision", ["id" => $module->id]));
+        $this->assertSame($second, (int)$DB->get_field("mcp", "publishedrevision", ["id" => $module->id]));
         $this->expectException(moodle_exception::class);
         service::save((int)$module->id, "<p>Conflict</p>", 2, $first);
     }
@@ -86,15 +86,15 @@ final class content_service_test extends advanced_testcase {
     }
 
     /**
-     * Drafts require management rights and historical revisions are never served.
+     * Only active content is served; legacy drafts remain stored.
      */
-    public function test_revision_access_restricts_drafts_and_old_versions(): void {
+    public function test_revision_access_restricts_old_versions(): void {
         $activity = (object)["publishedrevision" => 15, "draftrevision" => 18];
 
         $this->assertTrue(service::can_access_revision($activity, 15, false));
         $this->assertTrue(service::can_access_revision($activity, 15, true));
         $this->assertFalse(service::can_access_revision($activity, 18, false));
-        $this->assertTrue(service::can_access_revision($activity, 18, true));
+        $this->assertFalse(service::can_access_revision($activity, 18, true));
         $this->assertFalse(service::can_access_revision($activity, 14, true));
         $this->assertFalse(service::can_access_revision($activity, 0, true));
     }
@@ -129,21 +129,17 @@ final class content_service_test extends advanced_testcase {
         $this->assertTrue($writer->requires_confirmation());
         $this->assertSame("mod/mcp:manage", $reader->get_required_capability());
         $preview = $writer->preview($args, $identity);
-        $this->assertSame(strlen($html), $preview["bytes"]);
-        $this->assertSame(hash("sha256", $html), $preview["sha256"]);
+        $this->assertTrue($preview["updates_active_content"]);
         $this->assertSame(0, $DB->count_records("mcp_revisions", ["mcpid" => $module->id]));
         $saved = $writer->execute($args, $identity);
-        $this->assertFalse($saved["published"]);
-        $this->assertSame($preview["sha256"], $saved["sha256"]);
-        $this->assertSame($preview["bytes"], $saved["bytes"]);
+        $this->assertTrue($saved["updated"]);
+        $this->assertTrue($saved["preserves_visibility"]);
+        $this->assertSame(hash("sha256", $html), service::get((int)$module->id, $saved["revision"])->sha256);
         $read = $reader->execute(["cmid" => (int)$module->cmid], $identity);
         $this->assertSame($html, $read["html"]);
         $this->assertSame(untrusted_content::text($html), $read["plaintext"]);
         $this->assertStringNotContainsString("<script>", $read["plaintext"]);
-        $this->assertSame($saved["sha256"], $read["draftsha256"]);
-        $this->assertSame($saved["bytes"], $read["bytes"]);
-        $this->assertSame($saved["draftrevision"], $read["draftrevision"]);
-        $this->assertSame(0, $read["publishedrevision"]);
+        $this->assertSame($saved["revision"], $read["revision"]);
     }
 
     /**

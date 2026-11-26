@@ -82,9 +82,9 @@ final class material_theme_test extends advanced_testcase {
     }
 
     /**
-     * Saving and publishing a valid draft does not require a material theme.
+     * Saving active content does not require a material theme.
      */
-    public function test_html_draft_and_publication_without_material_theme(): void {
+    public function test_html_save_without_material_theme(): void {
         global $DB;
         $this->resetAfterTest();
         $course = $this->getDataGenerator()->create_course();
@@ -92,7 +92,6 @@ final class material_theme_test extends advanced_testcase {
         $this->setAdminUser();
         $rev = service::save((int)$module->id, "<p>Draft</p>", 2, 0);
         $this->assertGreaterThan(0, $rev);
-        service::publish((int)$module->id, $rev);
         $this->assertSame($rev, (int)$DB->get_field("mcp", "publishedrevision", ["id" => $module->id]));
         $cm = get_coursemodule_from_instance("mcp", $module->id, $course->id, false, MUST_EXIST);
         $this->assertSame(1, (int)$cm->visible);
@@ -117,7 +116,7 @@ final class material_theme_test extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $identity = new authenticated_identity((int)$USER->id, "test", ["mcp:read", "mcp:write"]);
         $tool = new create_activity();
-        $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Draft"];
+        $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Material", "html" => "<p>Content</p>"];
         $this->assertNull($tool->preview($args, $identity)["materialtheme"]);
         $this->assertFalse($DB->record_exists("mcp", ["course" => $course->id]));
         material_theme::save("site", 0, "Default", "Use cards.");
@@ -130,7 +129,7 @@ final class material_theme_test extends advanced_testcase {
         unset_config("materialtheme_course_" . $course->id, "mod_mcp");
         $created = $tool->execute($args, $identity);
         $cm = get_coursemodule_from_id("mcp", $created["cmid"], $course->id, false, MUST_EXIST);
-        $this->assertSame(0, (int)$cm->visible);
+        $this->assertSame(1, (int)$cm->visible);
         $activity = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
         $information = new save_information();
         $infoargs = ["cmid" => (int)$cm->id, "type" => "page", "information" => [],

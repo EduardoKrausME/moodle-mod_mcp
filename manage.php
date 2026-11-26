@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Authenticated publishing interface.
+ * Authenticated content editing interface.
  *
  * @package   mod_mcp
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
@@ -43,7 +43,7 @@ if (data_submitted() && $action === "save") {
     $content = required_param("content", PARAM_RAW);
     service::save((int)$mcp->id, $content, (int)$USER->id, $expectedrevision);
     redirect(new moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]),
-        get_string("draftsaved", "mcp"));
+        get_string("changessaved"));
 } else if (data_submitted() && $action === "saveinfo") {
     require_sesskey();
     $type = trim(optional_param("type", "", PARAM_TEXT));
@@ -51,22 +51,16 @@ if (data_submitted() && $action === "save") {
     metadata::save((int)$mcp->id, $type ?: null,
         $information === "" ? null : $information, required_param("settingshash", PARAM_ALPHANUMEXT));
     redirect(new moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]),
-        get_string("draftsaved", "mcp"));
-} else if (data_submitted() && $action === "publish") {
-    require_sesskey();
-    $revision = required_param("revision", PARAM_INT);
-    service::publish((int)$mcp->id, $revision);
-    redirect(new moodle_url("/mod/mcp/view.php", ["id" => $cm->id]),
-        get_string("published", "mcp"));
+        get_string("changessaved"));
 }
 $PAGE->set_url(new moodle_url("/mod/mcp/manage.php", ["id" => $cm->id]));
 $PAGE->set_title(get_string("manageactivity", "mcp"));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 $PAGE->set_cm($cm, $course);
-$draft = service::get((int)$mcp->id, (int)$mcp->draftrevision);
+$revision = service::get((int)$mcp->id, (int)$mcp->publishedrevision);
 $data = [
-    "draftcontent" => $draft ? $draft->content : "",
+    "currentcontent" => $revision ? $revision->content : "",
     "activitytype" => $mcp->activitytype ?? "",
     "informationjson" => $mcp->informationjson === null ? "" :
         json_encode(json_decode($mcp->informationjson, true),
@@ -77,9 +71,8 @@ $data = [
     "promptoptions" => activity::prompt_options($mcp, $cm),
     "previewurl" => (new moodle_url("/mod/mcp/view.php", ["id" => $cm->id, "preview" => 1]))->out(false),
     "actionurl" => (new moodle_url("/mod/mcp/manage.php"))->out(false),
-    "canpublish" => !empty($mcp->draftrevision),
     "themeconfigurl" => material_templates::manager_url((int)$mcp->course),
-    "revision" => (int)$mcp->draftrevision,
+    "revision" => (int)$mcp->publishedrevision,
     "sesskey" => sesskey(),
     "cmid" => (int)$cm->id,
 ];

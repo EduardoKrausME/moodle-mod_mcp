@@ -37,7 +37,7 @@ use stdClass;
 final class activity {
     /**
      * Supported ChatGPT/Claude authoring modes. These modes guide content generation;
-     * all modes share the same HTML revision, sandbox and publication lifecycle.
+     * all modes share the same HTML revision, sandbox and content lifecycle.
      *
      * @return array<string, array{label: string, prompt: string, description: string}>
      */
@@ -101,9 +101,6 @@ final class activity {
             "blum" => get_string("promptblum", "mcp"),
         ];
         $prompt = get_string($types[$type]["prompt"], "mcp", $args);
-        if (!in_array($type, ["interactive", "page"], true)) {
-            $prompt .= " " . get_string("promptpublishinstructions", "mcp");
-        }
         $apireference = get_string("promptapireference", "mcp",
             "https://github.com/EduardoKrausME/moodle-mod_mcp/blob/master/.chatgpt/API.md");
         $visual = material_theme::effective((int)$mcp->course);
@@ -204,7 +201,7 @@ final class activity {
      */
     public static function page(stdClass $mcp, stdClass $cm, bool $canmanage, bool $preview): array {
         global $USER;
-        $revisionid = $preview && $canmanage ? (int)$mcp->draftrevision : (int)$mcp->publishedrevision;
+        $revisionid = (int)$mcp->publishedrevision;
         $revision = service::get((int)$mcp->id, $revisionid);
         // The HTML is served only through the authorized, sandboxed pluginfile endpoint.
         $urlcontent = $revision ? moodle_url::make_pluginfile_url(

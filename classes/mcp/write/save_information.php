@@ -101,7 +101,7 @@ final class save_information extends activity_tool {
                     count($arguments["information"]["questions"] ?? []) : 0,
                 "information_sha256" => hash("sha256", (string)$json),
                 "bytes" => strlen((string)$json), "expectedhash" => $hash,
-                "published_content_affected" => !empty($mcp->publishedrevision),
+                "active_content_affected" => !empty($mcp->publishedrevision),
             ];
         } catch (moodle_exception $failure) {
             throw authoring_error::translate($failure,

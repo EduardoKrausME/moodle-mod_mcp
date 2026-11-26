@@ -92,7 +92,6 @@ final class activity_prompt_test extends \advanced_testcase {
             $this->assertSame(1, substr_count($prompt, $args->blum));
             $this->assertStringNotContainsString('{$a->blum}', $prompt);
         }
-        $this->assertNotEmpty(get_string("promptpublishinstructions", "mcp"));
         foreach (["copyprompt", "copypromptsucceeded", "copypromptfailed"] as $key) {
             $this->assertNotEmpty(get_string($key, "mcp"));
         }
@@ -219,7 +218,6 @@ final class activity_prompt_test extends \advanced_testcase {
             "promptcolours",
             "promptfreedom",
             "promptimagealt",
-            "promptpublishinstructions",
             "promptselectcase",
             "promptselectcustom",
             "promptselectsimulation",

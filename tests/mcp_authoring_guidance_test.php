@@ -28,7 +28,6 @@ use advanced_testcase;
 use mod_mcp\mcp\authoring_guidance;
 use mod_mcp\mcp\read\get_activity;
 use mod_mcp\mcp\write\create_activity;
-use mod_mcp\mcp\write\publish;
 use mod_mcp\mcp\write\save_content;
 use mod_mcp\mcp\write\save_information;
 
@@ -58,8 +57,13 @@ final class mcp_authoring_guidance_test extends advanced_testcase {
                 $this->assertStringContainsString($required, $description,
                     $tool->get_name() . ": " . $required);
             }
-            $this->assertStringNotContainsString("ANY independent footer", $description);
-            $this->assertStringNotContainsString("selection=all", $description);
+            if ($tool instanceof create_activity) {
+                $this->assertStringContainsString("ANY independent footer", $description);
+                $this->assertStringContainsString("selection=all", $description);
+            } else {
+                $this->assertStringNotContainsString("ANY independent footer", $description);
+                $this->assertStringNotContainsString("selection=all", $description);
+            }
         }
 
         $html = (new save_content())->get_description();
@@ -84,11 +88,9 @@ final class mcp_authoring_guidance_test extends advanced_testcase {
         $this->assertStringNotContainsString("Theme: learnlingo", $information);
         $this->assertStringNotContainsString("ANY independent footer", $information);
 
-        $publication = (new publish())->get_description();
-        $this->assertStringContainsString("explicit teacher approval", $publication);
-        $this->assertStringContainsString("Aprovar and Rejeitar", $publication);
-        $this->assertStringNotContainsString("Theme: learnlingo", $publication);
-        $this->assertStringNotContainsString("Bloom", $publication);
+        $approval = (new create_activity())->get_description();
+        $this->assertStringContainsString("explicit teacher approval", $approval);
+        $this->assertStringContainsString("one creation call", $approval);
 
         $CFG->theme = "eadflix";
         $description = (new create_activity())->get_description();

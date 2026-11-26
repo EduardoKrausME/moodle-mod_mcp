@@ -65,7 +65,6 @@ final class assessment_test extends advanced_testcase {
             ]];
         metadata::save((int)$mcp->id, "quiz", $json);
         $revision = content_service::save((int)$mcp->id, "<p>Quiz</p>", (int)$USER->id, 0);
-        content_service::publish((int)$mcp->id, $revision);
         $activity = $DB->get_record("mcp", ["id" => $mcp->id], "*", MUST_EXIST);
         $this->assertArrayNotHasKey("answer", metadata::public_information($activity)["questions"][0]);
         $this->setUser($student);

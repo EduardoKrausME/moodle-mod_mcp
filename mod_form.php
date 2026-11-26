@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->dirroot . "/course/moodleform_mod.php");
 
 /**
- * Edit module settings; HTML drafts are managed on the dedicated page.
+ * Edit module settings; HTML content is managed on the dedicated page.
  */
 class mod_mcp_mod_form extends moodleform_mod {
     /**

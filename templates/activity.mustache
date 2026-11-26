@@ -32,3 +32,7 @@
             sandbox="allow-scripts" data-cmid="{{cmid}}" referrerpolicy="no-referrer" loading="eager"
             src="about:blank" data-src="{{{url_content}}}"></iframe>
 {{/hascontent}}
+
+{{^hascontent}}
+    <p class="alert alert-info">{{#str}}missingcontent, mcp{{/str}}</p>
+{{/hascontent}}

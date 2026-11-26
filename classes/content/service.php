@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Immutable HTML drafts and controlled publication.
+ * Immutable HTML revisions and direct content updates.
  *
  * @package   mod_mcp
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
@@ -24,12 +24,11 @@
 
 namespace mod_mcp\content;
 
-use context_module;
 use moodle_exception;
 use stdClass;
 
 /**
- * Isolates untrusted HTML authoring from published Moodle course content.
+ * Stores immutable source revisions without changing native module visibility.
  */
 final class service {
     /**
@@ -51,31 +50,46 @@ final class service {
     public static function save(int $mcpid, string $html, int $author, ?int $expectedrevision = null): int {
         global $DB;
         self::validate_html($html);
-        $transaction = $DB->start_delegated_transaction();
-        $activity = $DB->get_record("mcp", ["id" => $mcpid], "*", MUST_EXIST);
-        if ($expectedrevision !== null && (int)$activity->draftrevision !== $expectedrevision) {
+        $lock = \core\lock\lock_config::get_lock_factory("mod_mcp")->get_lock("content_" . $mcpid, 10);
+        if (!$lock) {
             throw new moodle_exception("revisionconflict", "mcp");
         }
-        self::validate_theme_colours((int)$activity->course, $html);
-        $current = $activity->draftrevision ?
-            $DB->get_record("mcp_revisions", ["id" => $activity->draftrevision], "*", MUST_EXIST) : null;
-        $hash = hash("sha256", $html);
-        if ($current && hash_equals($current->sha256, $hash)) {
-            $transaction->allow_commit();
-            return (int)$current->id;
+        try {
+            $transaction = $DB->start_delegated_transaction();
+            try {
+                $activity = $DB->get_record("mcp", ["id" => $mcpid], "*", MUST_EXIST);
+                // Keep the legacy columns until a versioned schema migration can be shipped.
+                $active = (int)$activity->publishedrevision;
+                if ($expectedrevision !== null && $active !== $expectedrevision) {
+                    throw new moodle_exception("revisionconflict", "mcp");
+                }
+                self::validate_theme_colours((int)$activity->course, $html);
+                metadata::validate($activity->activitytype, $activity->informationjson);
+                $current = self::get($mcpid, $active);
+                $hash = hash("sha256", $html);
+                if ($current && hash_equals($current->sha256, $hash)) {
+                    $revisionid = (int)$current->id;
+                } else {
+                    $revisionid = $DB->insert_record("mcp_revisions", (object)[
+                        "mcpid" => $mcpid,
+                        "content" => $html,
+                        "sha256" => $hash,
+                        "createdby" => $author,
+                        "timecreated" => time(),
+                    ]);
+                }
+                $DB->update_record("mcp", (object)[
+                    "id" => $mcpid, "draftrevision" => $revisionid,
+                    "publishedrevision" => $revisionid, "timemodified" => time(),
+                ]);
+                $transaction->allow_commit();
+                return $revisionid;
+            } catch (\Throwable $e) {
+                $transaction->rollback($e);
+            }
+        } finally {
+            $lock->release();
         }
-        $revisionid = $DB->insert_record("mcp_revisions", (object)[
-            "mcpid" => $mcpid,
-            "content" => $html,
-            "sha256" => $hash,
-            "createdby" => $author,
-            "timecreated" => time(),
-        ]);
-        $DB->update_record("mcp", (object)[
-            "id" => $mcpid, "draftrevision" => $revisionid, "timemodified" => time(),
-        ]);
-        $transaction->allow_commit();
-        return $revisionid;
     }
 
     /**
@@ -108,42 +122,9 @@ final class service {
     }
 
     /**
-     * Allow only the current published revision or a manager's current draft.
-     *
-     * An arbitrary historical revision must never become visible by guessing its URL.
+     * Only the active revision may be served; historical source remains stored.
      */
     public static function can_access_revision(stdClass $activity, int $revisionid, bool $canmanage): bool {
-        if ($revisionid <= 0) {
-            return false;
-        }
-        return $revisionid === (int)$activity->publishedrevision ||
-            ($canmanage && $revisionid === (int)$activity->draftrevision);
-    }
-
-    /**
-     * Publish the draft only after its content and attached questions are valid.
-     */
-    public static function publish(int $mcpid, int $expectedrevision): void {
-        global $CFG, $DB;
-        require_once($CFG->dirroot . "/course/lib.php");
-        $activity = $DB->get_record("mcp", ["id" => $mcpid], "*", MUST_EXIST);
-        $cm = get_coursemodule_from_instance("mcp", $mcpid, $activity->course, false, MUST_EXIST);
-        require_capability("mod/mcp:manage", context_module::instance($cm->id));
-        if (!$expectedrevision || $expectedrevision !== (int)$activity->draftrevision) {
-            throw new moodle_exception("revisionconflict", "mcp");
-        }
-        $draft = self::get($mcpid, $expectedrevision);
-        if (!$draft || trim($draft->content) === "") {
-            throw new moodle_exception("invaliddata");
-        }
-        self::validate_theme_colours((int)$activity->course, (string)$draft->content);
-        // A published quiz must have a complete self-contained JSON pool.
-        metadata::validate((string)($activity->activitytype ?? ""),
-            $activity->informationjson);
-        $DB->update_record("mcp", (object)[
-            "id" => $mcpid, "publishedrevision" => $expectedrevision, "timemodified" => time(),
-        ]);
-        set_coursemodule_visible($cm->id, 1);
-        rebuild_course_cache($activity->course, true);
+        return $revisionid > 0 && $revisionid === (int)$activity->publishedrevision;
     }
 }

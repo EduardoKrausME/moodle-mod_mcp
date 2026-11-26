@@ -36,9 +36,6 @@ $course = get_course($cm->course);
 require_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 $canmanage = has_capability("mod/mcp:manage", $context);
-if (!$mcp->publishedrevision && !$canmanage) {
-    throw new moodle_exception("activitynotpublished", "mcp");
-}
 require_capability("mod/mcp:view", $context);
 if ($preview && !$canmanage) {
     throw new required_capability_exception($context, "mod/mcp:manage", "nopermissions", "");

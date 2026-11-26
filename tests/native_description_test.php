@@ -48,7 +48,7 @@ final class native_description_test extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course(["enablecompletion" => 1]);
         $identity = new authenticated_identity($USER->id, "test", ["mcp:write"]);
         $tool = new create_activity();
-        $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Material",
+        $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "html" => "<p>Content</p>", "name" => "Material",
             "intro" => "Initial description", "showdescription" => true, "completion" => 2, "requireview" => true];
         $preview = $tool->preview($args, $identity);
         $this->assertArrayNotHasKey("introformat", $preview["description"]);
@@ -57,7 +57,7 @@ final class native_description_test extends advanced_testcase {
         $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
         $this->assertSame(2, (int)$cm->completion);
         $this->assertSame(1, (int)$cm->completionview);
-        $this->assertSame(0, (int)$cm->visible);
+        $this->assertSame(1, (int)$cm->visible);
         $this->assertSame("Initial description", $mcp->intro);
         $this->assertSame((int)FORMAT_HTML, (int)$mcp->introformat);
         $this->assertSame(1, (int)$cm->showdescription);
@@ -107,7 +107,7 @@ final class native_description_test extends advanced_testcase {
     }
 
     /**
-     * Legacy and explicit completion settings must create hidden activities in either course mode.
+     * Legacy and explicit completion settings must create visible activities in either course mode.
      */
     public function test_creation_with_completion_enabled_and_disabled(): void {
         global $CFG, $DB, $USER;
@@ -124,7 +124,7 @@ final class native_description_test extends advanced_testcase {
                 $cases[] = ["completion" => 2, "requireview" => true];
             }
             foreach ($cases as $index => $options) {
-                $args = ["courseid" => (int)$course->id, "sectionnum" => 0,
+                $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "html" => "<p>Content</p>",
                     "name" => "Material " . $index] + $options;
                 $before = $DB->count_records("mcp", ["course" => $course->id]);
                 $preview = $tool->preview($args, $identity);
@@ -136,13 +136,13 @@ final class native_description_test extends advanced_testcase {
                 $cm = get_coursemodule_from_id("mcp", $created["cmid"], 0, false, MUST_EXIST);
                 $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "*", MUST_EXIST);
                 $this->assertSame($before + 1, $DB->count_records("mcp", ["course" => $course->id]));
-                $this->assertSame(0, (int)$cm->visible);
+                $this->assertSame(1, (int)$cm->visible);
                 $this->assertSame("", $mcp->intro);
                 $this->assertSame((int)FORMAT_HTML, (int)$mcp->introformat);
                 $this->assertSame($options["showdescription"] ?? true, (bool)$cm->showdescription);
                 $this->assertSame(description::snapshot($cm, $mcp), $created["description"]);
-                $this->assertSame(0, (int)$mcp->draftrevision);
-                $this->assertSame(0, (int)$mcp->publishedrevision);
+                $this->assertGreaterThan(0, (int)$mcp->publishedrevision);
+                $this->assertSame((int)$mcp->publishedrevision, (int)$mcp->draftrevision);
                 if (isset($options["completion"]) || !$enabled) {
                     $this->assertSame($options["completion"] ?? 0, (int)$cm->completion);
                     $this->assertSame($options["requireview"] ?? false, (bool)$cm->completionview);
@@ -166,7 +166,7 @@ final class native_description_test extends advanced_testcase {
         $tool = new create_activity();
         $sequence = $DB->get_field("course_sections", "sequence", ["course" => $course->id, "section" => 0]);
         foreach ([["completion" => 1], ["completion" => 2, "requireview" => true]] as $options) {
-            $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Invalid"] + $options;
+            $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "html" => "<p>Content</p>", "name" => "Invalid"] + $options;
             foreach (["preview", "execute"] as $method) {
                 try {
                     $tool->$method($args, $identity);
@@ -195,7 +195,7 @@ final class native_description_test extends advanced_testcase {
         foreach ([$create, $edit] as $tool) {
             $this->assertArrayNotHasKey("introformat", $tool->get_input_schema()["properties"]);
         }
-        $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "HTML",
+        $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "html" => "<p>Content</p>", "name" => "HTML",
             "intro" => '<p onclick="alert(1)">Safe <strong>description</strong></p>', "showdescription" => true];
         $preview = $create->preview($args, $identity);
         $this->assertArrayNotHasKey("introformat", $preview["description"]);

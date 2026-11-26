@@ -36,9 +36,9 @@ use mod_mcp\mcp\write\create_activity;
  */
 final class create_activity_position_test extends advanced_testcase {
     /**
-     * Create before and after an existing page without publishing.
+     * Create before and after an existing page with complete content.
      */
-    public function test_exact_position_and_hidden_state(): void {
+    public function test_exact_position_and_visible_content(): void {
         global $DB, $USER;
         $this->resetAfterTest();
         $this->setAdminUser();
@@ -49,20 +49,20 @@ final class create_activity_position_test extends advanced_testcase {
         $identity = new authenticated_identity($USER->id, "test", ["mcp:write"]);
         $tool = new create_activity();
         $this->assertTrue($tool->requires_confirmation());
-        $args = ["courseid" => $course->id, "sectionnum" => 0, "name" => "After", "aftercmid" => $a->cmid];
+        $args = ["courseid" => $course->id, "sectionnum" => 0, "html" => "<p>Content</p>", "name" => "After", "aftercmid" => $a->cmid];
         $preview = $tool->preview($args, $identity);
         $this->assertSame((int)$b->cmid, $preview["position"]["beforecmid"]);
         $this->assertSame(0, $DB->count_records("mcp", ["course" => $course->id]));
         $after = $tool->execute($args, $identity);
-        $before = $tool->execute(["courseid" => $course->id, "sectionnum" => 0,
+        $before = $tool->execute(["courseid" => $course->id, "sectionnum" => 0, "html" => "<p>Content</p>",
             "name" => "Before", "beforecmid" => $a->cmid], $identity);
-        $last = $tool->execute(["courseid" => $course->id, "sectionnum" => 0, "name" => "Last"], $identity);
+        $last = $tool->execute(["courseid" => $course->id, "sectionnum" => 0, "html" => "<p>Content</p>", "name" => "Last"], $identity);
         $expected = implode(",", [$before["cmid"], $a->cmid, $after["cmid"], $b->cmid, $last["cmid"]]);
         $this->assertSame($expected, $DB->get_field("course_sections", "sequence",
             ["course" => $course->id, "section" => 0]));
         foreach ([$after, $before, $last] as $created) {
-            $this->assertFalse((bool)$DB->get_field("course_modules", "visible", ["id" => $created["cmid"]]));
-            $this->assertSame(0, $DB->count_records("mcp_revisions", ["mcpid" => $created["instanceid"]]));
+            $this->assertTrue((bool)$DB->get_field("course_modules", "visible", ["id" => $created["cmid"]]));
+            $this->assertSame(1, $DB->count_records("mcp_revisions", ["mcpid" => $created["instanceid"]]));
         }
     }
 
@@ -80,7 +80,7 @@ final class create_activity_position_test extends advanced_testcase {
         $identity = new authenticated_identity($USER->id, "test", ["mcp:write"]);
         $tool = new create_activity();
         try {
-            $tool->execute(["courseid" => $course->id, "sectionnum" => 0,
+            $tool->execute(["courseid" => $course->id, "sectionnum" => 0, "html" => "<p>Content</p>",
                 "name" => "Invalid", "aftercmid" => $page->cmid], $identity);
             $this->fail("Cross-course anchor accepted");
         } catch (api_exception $e) {

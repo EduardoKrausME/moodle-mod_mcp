@@ -56,7 +56,8 @@ final class update_description extends activity_tool {
      * @return string
      */
     public function get_description(): string {
-        return "Update the sanitized HTML native activity description and optional course-page display. Read description.sha256 first.";
+        return "Update the sanitized HTML native activity description and optional course-page display. "
+            . "Read description.sha256 first.";
     }
 
     /**

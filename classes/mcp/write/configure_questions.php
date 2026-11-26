@@ -124,7 +124,7 @@ final class configure_questions extends activity_tool {
         try {
             $proposed = $this->proposed($arguments);
             unset($proposed["information"]);
-            return $proposed + ["published" => false];
+            return $proposed + ["preserves_visibility" => true];
         } catch (moodle_exception $failure) {
             throw authoring_error::translate($failure,
                 (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
@@ -147,7 +147,7 @@ final class configure_questions extends activity_tool {
                 $proposed["information"], $arguments["expectedhash"]);
             unset($proposed["information"]);
             $proposed["settingshash"] = $hash;
-            return $proposed + ["published" => false];
+            return $proposed + ["preserves_visibility" => true];
         } catch (moodle_exception $failure) {
             throw authoring_error::translate($failure,
                 (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));

@@ -40,10 +40,10 @@ final class authoring_guidance {
         return "MANDATORY mod_mcp authoring rules: Use the connected Moodle's live tool discovery; "
             . "never invent parameters or actions. A reusable material theme is optional. "
             . "Ask the teacher what to create and wait for their answers and chosen references "
-            . "before generating questions, HTML, CSS, JavaScript or saving a draft. "
+            . "before generating questions, HTML, CSS or JavaScript, unless already supplied. "
             . "Do not deduce content from the Moodle activity title or assume it is a quiz. "
             . "Read existing activities with mcp_get_activity before editing, and respect "
-            . "returned draft revisions and settings hashes. Do not turn these authoring "
+            . "returned current revisions and settings hashes. Do not turn these authoring "
             . "instructions into student-visible content.";
     }
 
@@ -146,7 +146,7 @@ final class authoring_guidance {
     public static function quiz_rules(): string {
         return "For a quiz, BEFORE creating questions ask the teacher how many questions "
             . "to author, whether to shuffle and how many to draw per attempt; wait for "
-            . "the answers. Store questions directly with mcp_save_information, type=quiz, "
+            . "the answers. Include questions in mcp_create_activity, or use mcp_save_information for existing activities, type=quiz, "
             . "and an information JSON object containing selection (all or random), count, "
             . "shuffle and questions. For each question use id, text, type (single, multiple "
             . "or text), answer and points; for choice questions use options with id and text. "
@@ -160,16 +160,14 @@ final class authoring_guidance {
     }
 
     /**
-     * Publication is a separate, explicit teacher decision.
+     * One approval covers the complete content operation.
      */
-    public static function publication_rules(): string {
-        return "Before publication, present a clear preview of the exact draft revision "
-            . "and the assessment settings, with Aprovar and Rejeitar controls if the "
-            . "chat supports them (or a clear textual choice otherwise). "
-            . "Wait for explicit teacher approval; no approval is implied by editing "
-            . "or saving a draft. Use the connected tool's preview and confirmation "
-            . "workflow for mcp_publish and publish only the approved revision. "
-            . "Leave rejected or unapproved drafts unpublished.";
+    public static function approval_rules(): string {
+        return "Present one consolidated pedagogical and visual preview of the final content and target. "
+            . "Obtain explicit teacher approval through the tool confirmation before creating or updating. "
+            . "Send the full HTML and required quiz information in one creation call. "
+            . "Do not create empty activities, use sequential workflows for a single activity, or request "
+            . "separate approval for file checks, storage or publication. Native Moodle visibility applies immediately.";
     }
 
     /**
@@ -226,7 +224,7 @@ final class authoring_guidance {
      * Compose a short tool-specific MCP description without repeating unrelated rules.
      *
      * @param string $purpose Short description of the tool's exact action.
-     * @param string[] $rules Required sets: core, interview, learning, html, sdk, quiz, publication, theme.
+     * @param string[] $rules Required sets: core, interview, learning, html, sdk, quiz, approval, theme.
      */
     public static function tool_description(string $purpose, array $rules = ["core", "theme"]): string {
         global $CFG;
@@ -252,8 +250,8 @@ final class authoring_guidance {
                 case "quiz":
                     $parts[] = self::quiz_rules();
                     break;
-                case "publication":
-                    $parts[] = self::publication_rules();
+                case "approval":
+                    $parts[] = self::approval_rules();
                     break;
                 case "theme":
                     // Discovery must not depend on valid stored material configuration.
@@ -303,7 +301,7 @@ final class authoring_guidance {
             "instructions" => implode(" ", [
                 self::core_rules(), self::interview_rules(), self::learning_level_rules(),
                 self::html_rules(), self::sdk_rules(), self::quiz_rules(),
-                self::publication_rules(), $visual, self::theme_rules($theme),
+                self::approval_rules(), $visual, self::theme_rules($theme),
             ]),
         ];
     }

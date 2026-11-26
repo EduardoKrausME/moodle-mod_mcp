@@ -38,6 +38,21 @@ jobs:
             postgres: '17'
             mariadb: '11.4'
 
+          - php: '8.2'
+            moodle: 'MOODLE_500_STABLE'
+            postgres: '17'
+            mariadb: '11.4'
+
+          - php: '8.2'
+            moodle: 'MOODLE_501_STABLE'
+            postgres: '17'
+            mariadb: '11.4'
+
+          - php: '8.3'
+            moodle: 'MOODLE_502_STABLE'
+            postgres: '17'
+            mariadb: '11.4'
+
           - php: '8.3'
             moodle: 'MOODLE_503_STABLE'
             postgres: '17'

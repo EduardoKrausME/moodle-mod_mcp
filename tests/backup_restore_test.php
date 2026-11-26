@@ -77,6 +77,8 @@ final class backup_restore_test extends advanced_testcase {
         $DB->set_field('mcp', 'publishedrevision', $publishedrevision, ['id' => $module->id]);
         $drafthtml = '<h2>Unpublished draft for backup</h2>';
         $draftrevision = service::save((int)$module->id, $drafthtml, (int)$USER->id, $publishedrevision);
+        // Simulate an installation that still contains a legacy unpublished revision.
+        $DB->set_field('mcp', 'publishedrevision', $publishedrevision, ['id' => $module->id]);
 
         $bytes = 'MCP file area regression test';
         $fs = get_file_storage();

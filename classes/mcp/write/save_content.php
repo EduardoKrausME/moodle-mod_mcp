@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Save an immutable HTML draft through the existing MCP confirmation flow.
+ * Save an immutable HTML revision through the existing MCP confirmation flow.
  *
  * @package   mod_mcp
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
@@ -31,7 +31,7 @@ use mod_mcp\content\service;
 use mod_mcp\mcp\authoring_guidance;
 
 /**
- * Save a new revision without making it visible to students.
+ * Replace active content without changing module visibility.
  */
 final class save_content extends activity_tool {
     /**
@@ -49,7 +49,7 @@ final class save_content extends activity_tool {
      * @return string Result.
      */
     public function get_title(): string {
-        return "MCP activity: save HTML draft";
+        return "MCP activity: update HTML content";
     }
 
     /**
@@ -59,11 +59,11 @@ final class save_content extends activity_tool {
      */
     public function get_description(): string {
         return authoring_guidance::tool_description(
-            "Save one complete HTML draft with inline CSS/JS, without publishing. First call "
+            "Replace the active HTML with one complete document with inline CSS/JS. First call "
             . "mcp_get_activity and follow its course-specific authoring instructions. The "
             . "server rejects hard-coded brand colours; fix errors and retry. "
-            . "HTML is preserved byte for byte; compare the preview and saved bytes and SHA-256.",
-            ["core", "html", "sdk", "theme"]);
+            . "Use the current revision for concurrency protection. Preserve native visibility.",
+            ["core", "html", "sdk", "approval", "theme"]);
     }
 
     /**
@@ -92,10 +92,12 @@ final class save_content extends activity_tool {
             $html = $arguments["html"];
             service::validate_html($html);
             service::validate_theme_colours((int)$activity->course, $html);
-            return ["cmid" => $arguments["cmid"], "draftrevision" => (int)$activity->draftrevision,
-                "expectedrevision" => (int)$arguments["expectedrevision"],
-                "bytes" => strlen($html), "sha256" => hash("sha256", $html),
-                "students_affected" => false];
+            if ((int)$activity->publishedrevision !== (int)$arguments["expectedrevision"]) {
+                throw new moodle_exception("revisionconflict", "mcp");
+            }
+            return ["cmid" => $arguments["cmid"], "revision" => (int)$activity->publishedrevision,
+                "expectedrevision" => (int)$arguments["expectedrevision"], "updates_active_content" => true,
+                "preserves_visibility" => true];
         } catch (moodle_exception $failure) {
             throw authoring_error::translate($failure,
                 (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
@@ -111,7 +113,7 @@ final class save_content extends activity_tool {
      */
     public function execute(array $arguments, authenticated_identity $identity): array {
         try {
-            $this->resolve_context($arguments);
+            require_capability("mod/mcp:manage", $this->resolve_context($arguments), $identity->userid);
             $mcp = $this->activity($arguments);
             $revision = service::save(
                 (int)$mcp->id, $arguments["html"], $identity->userid, (int)$arguments["expectedrevision"]);
@@ -119,9 +121,8 @@ final class save_content extends activity_tool {
             if (!$stored) {
                 throw new moodle_exception("invaliddata");
             }
-            return ["cmid" => (int)$arguments["cmid"], "draftrevision" => $revision,
-                "bytes" => strlen($stored->content), "sha256" => $stored->sha256,
-                "published" => false];
+            return ["cmid" => (int)$arguments["cmid"], "revision" => $revision, "updated" => true,
+                "preserves_visibility" => true];
         } catch (moodle_exception $failure) {
             throw authoring_error::translate($failure,
                 (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));

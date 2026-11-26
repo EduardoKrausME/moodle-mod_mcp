@@ -1,7 +1,7 @@
 @mod @mod_mcp @javascript
 Feature: Configure native completion for an MCP activity
   As a teacher
-  I can save native completion conditions without changing published content.
+  I can save native completion conditions without changing active content.
 
   Background:
     Given the following config values are set as admin:
@@ -19,7 +19,7 @@ Feature: Configure native completion for an MCP activity
       | completion            | 0             |
       | completioninteractive | 0            |
 
-  Scenario: Save automatic view completion on an unpublished activity
+  Scenario: Save automatic view completion on an activity without content
     Given I am on the "Test material" "mcp activity editing" page logged in as admin
     And I expand all fieldsets
     And I set the field "Add requirements" to "1"

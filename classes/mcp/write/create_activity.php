@@ -25,6 +25,8 @@
 namespace mod_mcp\mcp\write;
 
 use mod_mcp\mcp\authoring_error;
+use mod_mcp\content\service;
+use mod_mcp\content\metadata;
 use moodle_exception;
 use context;
 use context_course;
@@ -65,10 +67,10 @@ final class create_activity extends base_tool {
      */
     public function get_description(): string {
         return authoring_guidance::tool_description(
-            "Create an unpublished, hidden mod_mcp activity and return the real cmid. "
+            "Create a complete mod_mcp activity with its final HTML and return the real cmid. "
             . "Optionally specify aftercmid or beforecmid, native sanitized HTML intro and showdescription (enabled by default), "
-            . "and initial completion (off, manual or automatic view).",
-            ["core", "interview", "learning", "theme"]);
+            . "and initial completion (off, manual or automatic view). Include private quiz information in this same call.",
+            ["core", "interview", "learning", "html", "sdk", "quiz", "approval", "theme"]);
     }
 
     /**
@@ -97,7 +99,10 @@ final class create_activity extends base_tool {
                 "description" => "Display the native description on the course page."],
             "completion" => ["type" => "integer", "minimum" => 0, "maximum" => 2],
             "requireview" => ["type" => "boolean"],
-        ], ["courseid", "sectionnum", "name"]);
+            "html" => ["type" => "string", "minLength" => 1],
+            "type" => ["type" => ["string", "null"]],
+            "information" => ["type" => ["object", "null"]],
+        ], ["courseid", "sectionnum", "name", "html"]);
     }
 
     /**
@@ -125,19 +130,34 @@ final class create_activity extends base_tool {
             require_capability("moodle/course:manageactivities", $ctx, $identity->userid);
             $position = $this->requested_position($arguments, $identity);
             $settings = \mod_mcp\mcp\description::creation($arguments, get_course((int)$arguments["courseid"]));
+            $this->validate_content($arguments);
             return [
                 "description" => $settings,
                 "courseid" => (int)$arguments["courseid"],
                 "sectionnum" => (int)$arguments["sectionnum"],
                 "name" => clean_param($arguments["name"], PARAM_TEXT),
                 "materialtheme" => $theme,
-                "will_create_hidden_activity" => true,
+                "visible_by_default" => true,
+                "type" => $arguments["type"] ?? null,
+                "questioncount" => count($arguments["information"]["questions"] ?? []),
                 "position" => $position,
             ];
         } catch (moodle_exception $failure) {
             throw authoring_error::translate($failure,
                 (int)($arguments["courseid"] ?? $mcp->course ?? $activity->course ?? 0));
         }
+    }
+
+    /**
+     * Validate the complete source and private assessment configuration before writing.
+     *
+     * @param array $arguments Tool arguments.
+     */
+    private function validate_content(array $arguments): void {
+        $html = $arguments["html"] ?? "";
+        service::validate_html($html);
+        service::validate_theme_colours((int)$arguments["courseid"], $html);
+        metadata::validate($arguments["type"] ?? null, $arguments["information"] ?? null);
     }
 
     /**
@@ -195,11 +215,14 @@ final class create_activity extends base_tool {
                 $info->completioninteractive = 0;
             }
             $info->grade = 0;
-            $info->visible = 0;
+            $this->validate_content($arguments);
+            $info->visible = 1;
             $transaction = $DB->start_delegated_transaction();
             try {
                 $created = add_moduleinfo($info, $course);
                 $cmrecord = $DB->get_record("course_modules", ["id" => $created->coursemodule], "*", MUST_EXIST);
+                metadata::save((int)$created->instance, $arguments["type"] ?? null, $arguments["information"] ?? null);
+                $revision = service::save((int)$created->instance, $arguments["html"], $identity->userid, 0);
                 $instance = $DB->get_record("mcp", ["id" => $created->instance], "*", MUST_EXIST);
                 $saveddescription = \mod_mcp\mcp\description::snapshot($cmrecord, $instance);
                 if ($saveddescription["intro"] !== $settings["intro"] ||
@@ -220,9 +243,6 @@ final class create_activity extends base_tool {
                         }
                     }
                     $position = activity_position_service::move($moveargs, $identity);
-                    if ($position["visible"]) {
-                        throw new api_exception("activity_creation_not_hidden", 409);
-                    }
                 }
                 $transaction->allow_commit();
             } catch (\Throwable $e) {
@@ -230,6 +250,8 @@ final class create_activity extends base_tool {
             }
             return ["cmid" => (int)$created->coursemodule, "instanceid" => (int)$created->instance,
                 "courseid" => (int)$course->id, "position" => $position, "description" => $saveddescription,
+                "revision" => $revision, "visible" => (bool)$DB->get_field("course_modules", "visible",
+                    ["id" => $created->coursemodule], MUST_EXIST),
                 "authoring" => authoring_guidance::course_context((int)$course->id),
                 "url" => (new moodle_url("/mod/mcp/view.php",
                     ["id" => $created->coursemodule]))->out(false)];

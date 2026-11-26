@@ -75,18 +75,18 @@ final class manage_content_test extends advanced_testcase {
         $this->setAdminUser();
         $document = '<html><body><textarea>Example</textarea><script>let value = 1;</script></body></html>';
         $rendered = $OUTPUT->render_from_template('mod_mcp/manage', [
-            'draftcontent' => $document,
+            'currentcontent' => $document,
             'actionurl' => (new moodle_url('/mod/mcp/manage.php'))->out(false),
             'previewurl' => (new moodle_url('/mod/mcp/view.php', ['id' => 42, 'preview' => 1]))->out(false),
             'cmid' => 42,
             'revision' => 23,
             'sesskey' => sesskey(),
-            'canpublish' => true,
             'prompt' => 'Build activity',
             'promptpage' => 'Build page',
         ]);
 
         $this->assertStringContainsString('name="action" value="save"', $rendered);
+        $this->assertStringNotContainsString('name="action" value="publish"', $rendered);
         $this->assertStringContainsString('name="revision" value="23"', $rendered);
         $this->assertStringContainsString('name="content"', $rendered);
         $this->assertStringContainsString('&lt;/textarea&gt;', $rendered);

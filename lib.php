@@ -64,11 +64,10 @@ function mcp_supports($feature) {
 function mcp_view($mcp, $course, $cm, $context) {
     require_login($course, true, $cm);
     require_capability("mod/mcp:view", $context);
-    if (empty($mcp->publishedrevision)) {
-        throw new moodle_exception("activitynotpublished", "mcp");
+    if (!empty($mcp->publishedrevision)) {
+        $completion = new completion_info($course);
+        $completion->set_module_viewed($cm);
     }
-    $completion = new completion_info($course);
-    $completion->set_module_viewed($cm);
 }
 
 /**
@@ -104,7 +103,7 @@ function mcp_add_instance($data, $mform = null) {
 }
 
 /**
- * Update activity metadata and draft without publishing.
+ * Update activity metadata and active content.
  * @param $data
  * @param null $mform
  * @return true
