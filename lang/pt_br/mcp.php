@@ -45,6 +45,7 @@ $string['copypromptsucceeded'] = 'Comando copiado!';
 $string['descriptionchanged'] = 'A descrição da atividade foi alterada. Consulte novamente antes de atualizar.';
 $string['duplicatequestion'] = 'A mesma questão do banco não pode ser vinculada duas vezes à mesma avaliação.';
 $string['editcontent'] = 'Editar conteúdo da atividade';
+$string['empty_data'] = 'O conteúdo HTML não pode estar vazio.';
 $string['finishattempt'] = 'Enviar respostas e concluir';
 $string['grade'] = 'Nota máxima';
 $string['gradescalenotsupported'] = 'Experiências interativas aceitam notas em pontos ou ausência de nota, mas não escalas de avaliação.';
