@@ -122,7 +122,10 @@ function mcp_update_instance($data, $mform = null) {
         throw new moodle_exception("invaliddata");
     }
     $mcp->grade = max(0, (float)($data->grade ?? $mcp->grade));
-    $mcp->completioninteractive = empty($data->completioninteractive) ? 0 : 1;
+    // Match the core completion lock and preserve the rule when omitted in a partial update.
+    if (!empty($data->completionunlocked) && isset($data->completioninteractive)) {
+        $mcp->completioninteractive = empty($data->completioninteractive) ? 0 : 1;
+    }
     $mcp->timemodified = time();
     $DB->update_record("mcp", $mcp);
     if (isset($data->content) && trim((string)$data->content) !== "") {
@@ -270,11 +273,13 @@ function mcp_get_coursemodule_info($coursemodule) {
     if ($coursemodule->showdescription) {
         $info->content = format_module_intro("mcp", $record, $coursemodule->id, false);
     }
-    $info->customdata = [
-        "customcompletionrules" => [
-            "completioninteractive" => (int)$record->completioninteractive,
-        ],
-    ];
+    if ((int)$coursemodule->completion === COMPLETION_TRACKING_AUTOMATIC) {
+        $info->customdata = [
+            "customcompletionrules" => [
+                "completioninteractive" => (int)$record->completioninteractive,
+            ],
+        ];
+    }
     return $info;
 }
 
