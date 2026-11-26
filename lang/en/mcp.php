@@ -45,6 +45,7 @@ $string['copypromptsucceeded'] = 'Command copied!';
 $string['descriptionchanged'] = 'The activity description has changed. Reload it before updating.';
 $string['duplicatequestion'] = 'The same bank question cannot be attached twice to one assessment.';
 $string['editcontent'] = 'Edit activity content';
+$string['empty_data'] = 'The HTML content cannot be empty.';
 $string['finishattempt'] = 'Submit answers and finish';
 $string['grade'] = 'Maximum grade';
 $string['gradescalenotsupported'] = 'Interactive experiences support points or no grade, not grading scales.';
