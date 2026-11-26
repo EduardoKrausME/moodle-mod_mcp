@@ -31,4 +31,3 @@ $string['manageactivity'] = 'Administrar experiencia interactiva';
 $string['missingcontent'] = 'Creá la actividad';
 $string['promptselecthelp'] = 'Elegí el tipo de actividad para generar las instrucciones adecuadas para ChatGPT o Claude.';
 $string['promptselecttitle'] = '¿Qué querés crear?';
-$string['savedraft'] = 'Guardar borrador';

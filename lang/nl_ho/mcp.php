@@ -27,5 +27,4 @@ defined('MOODLE_INTERNAL') || die;
 // Only strings differing from the parent language are defined here.
 $string['copyinstructions'] = 'Kopieer deze instructies naar ChatGPT of Claude om de activiteit aan te maken:';
 $string['manageactivity'] = 'Interactieve ervaring beheren';
-$string['published'] = 'De activiteit werd gepubliceerd.';
 $string['studentview'] = 'Studentenweergave';

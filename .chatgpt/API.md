@@ -60,7 +60,7 @@ tab's changes. Generic and structured saves share the **same** version.
 percentage reaches 100). It refers only to the **reading/interaction journey**;
 `moodlecompleted` and `completion.get()` report actual Moodle completion.
 Saving 100% **never** changes grade, finalizes a question attempt, or bypasses
-native completion rules. A newly published content revision resets the reading
+native completion rules. A new active content revision resets the reading
 position for that revision; activity-wide academic completion is tracked
 separately. Changes are scoped to the currently authenticated student.
 
@@ -169,7 +169,7 @@ sizes. It never accepts client-controlled user identity. Preview mode (activity
 managers only) permits the read actions
 `activity.getContext`, `course.getActivities`, `course.getNavigation`,
 `completion.get`, `progress.load`, `progress.getStatus`, `attempt.get`;
-writes are denied. Published activity access is required otherwise.
+writes are denied. Access to the activity's active content is required otherwise.
 
 Mobile clients must provide their own trusted bridge for an injected sandbox
 SDK (or call the declared web service with their authenticated context).
@@ -187,7 +187,7 @@ invent parameters or invoke writing tools without their required confirmation.
 Tool descriptions include only the rules relevant to each operation: pedagogical
 interview and learning levels for creation/reading, iframe HTML/SDK/colour rules
 for complete HTML, private quiz JSON rules for metadata, and approval rules for
-publication. The complete, course-specific authoring context is returned by
+complete creation and content updates. The complete, course-specific authoring context is returned by
 `mcp_get_material_theme`, `mcp_create_activity` and `mcp_get_activity`, avoiding
 a full manual in every discovered tool description. A reusable material theme is optional and is not required to create or update an activity. The activity prompt selector links to the template manager in a new window, where teachers can view the site and current course styles and copy a scope-specific template creation prompt. Site editing requires site configuration permission. The existing storage supports one template per scope. Without an MCP connection,
 the copy-and-paste prompt still needs the applicable standalone HTML/SDK/theme
@@ -205,7 +205,7 @@ rules because no tool discovery or authoring action is available.
 | `mcp_upload_asset` | Add an authorised activity asset |
 
 These are *authoring* tools and not methods on `window.MoodleMCP`.
-Question selection, grading, JSON attempt state, visibility and publication remain
+Question selection, grading, JSON attempt state, native visibility remain
 under Moodle server control.
 
 ### Authoring source integrity

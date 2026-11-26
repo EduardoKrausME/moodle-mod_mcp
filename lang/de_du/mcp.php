@@ -28,7 +28,6 @@ defined('MOODLE_INTERNAL') || die;
 $string['connectionnew'] = 'MCP-Verbindung einrichten';
 $string['connectionrequired'] = 'Dein Moodle-Konto hat noch keine aktive MCP-Verbindung. Verbinde ChatGPT oder Claude mit dieser Moodle-Website, autorisiere den Zugriff mit deinem Konto und kehre danach hierher zurück.';
 $string['copyinstructions'] = 'Kopiere diese Anweisungen in ChatGPT oder Claude, um die Aktivität zu erstellen:';
-$string['draftsaved'] = 'Entwurf gespeichert; andere sehen weiterhin die veröffentlichte Version.';
 $string['progressconflict'] = 'Dein Fortschritt wurde in einem anderen Fenster geändert. Lade ihn vor dem Speichern neu.';
 $string['studentview'] = 'Lernendenansicht';
 $string['yourgrade'] = 'Deine Bewertung: {$a}';

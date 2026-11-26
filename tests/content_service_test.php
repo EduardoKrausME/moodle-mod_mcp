@@ -143,6 +143,31 @@ final class content_service_test extends advanced_testcase {
     }
 
     /**
+     * Legacy drafts are never activated implicitly, and remain in immutable history.
+     */
+    public function test_legacy_draft_is_not_activated(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        $module = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id]);
+        $id = (int)$module->id;
+        $active = service::save($id, "<p>Active</p>", 2, 0);
+        $legacy = $DB->insert_record("mcp_revisions", (object)[
+            "mcpid" => $id, "content" => "<p>Legacy draft</p>",
+            "sha256" => hash("sha256", "<p>Legacy draft</p>"), "createdby" => 2, "timecreated" => time(),
+        ]);
+        $DB->set_field("mcp", "draftrevision", $legacy, ["id" => $id]);
+        $record = $DB->get_record("mcp", ["id" => $id], "*", MUST_EXIST);
+        $this->assertTrue(service::can_access_revision($record, $active, false));
+        $this->assertFalse(service::can_access_revision($record, $legacy, true));
+        $next = service::save($id, "<p>New content</p>", 2, $active);
+        $record = $DB->get_record("mcp", ["id" => $id], "*", MUST_EXIST);
+        $this->assertSame($next, (int)$record->publishedrevision);
+        $this->assertSame("<p>Legacy draft</p>", service::get($id, $legacy)->content);
+        $this->assertFalse(service::can_access_revision($record, $legacy, false));
+    }
+
+    /**
      * Whitespace-only source is invalid without trimming any valid document.
      */
     public function test_rejects_blank_source(): void {

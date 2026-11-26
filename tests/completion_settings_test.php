@@ -28,8 +28,6 @@ use advanced_testcase;
 
 defined("MOODLE_INTERNAL") || die();
 
-defined("MOODLE_INTERNAL") || die();
-
 global $CFG;
 require_once($CFG->dirroot . "/mod/mcp/lib.php");
 
