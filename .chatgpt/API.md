@@ -15,8 +15,11 @@ and `--bs-accent-rgb` when present, followed by other inherited theme variables.
 For themes without these tokens, the bridge also transmits `--bs-secondary`
 and other computed custom properties. The values follow the active theme and its explicit
 light/dark mode; this transfer does not grant DOM access to the parent.
-Use `var(--bs-primary, #0d6efd)` in authored CSS. Standalone previews and
-mobile hosts without this bridge still need those fallbacks.
+Use `var(--bs-primary, <configured hex>)` in authored CSS, replacing the placeholder
+with the actual administrator-configured colour returned in `authoring.brandcssfallbacks`.
+Use the corresponding RGB channel fallback inside `rgba(var(--bs-primary-rgb, ...), .2)`.
+Always use the effective course palette rather than the site discovery palette when available.
+Standalone previews and mobile hosts without this bridge still need those fallbacks.
 Every operation returns a **Promise**. The document is rendered in a sandboxed
 iframe: it has no Moodle cookies, session key, native gradebook access or direct
 cross-origin access. The parent bridge accepts only allowlisted requests from
