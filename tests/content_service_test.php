@@ -172,6 +172,21 @@ final class content_service_test extends advanced_testcase {
      */
     public function test_rejects_blank_source(): void {
         $this->expectException(moodle_exception::class);
+        $this->expectExceptionMessage(get_string("empty_data", "mod_mcp"));
         service::validate_html(" \r\n\t");
+    }
+
+    /**
+     * Documents larger than the former 2 MiB limit retain their exact source.
+     */
+    public function test_accepts_large_source(): void {
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        $module = $this->getDataGenerator()->create_module("mcp", ["course" => $course->id]);
+        $html = "<!doctype html><html><body><p>" . str_repeat("a", 2097152) . "</p></body></html>";
+        $revision = service::save((int)$module->id, $html, 2, 0);
+        $stored = service::get((int)$module->id, $revision);
+        $this->assertSame($html, $stored->content);
+        $this->assertSame(hash("sha256", $html), $stored->sha256);
     }
 }
