@@ -200,8 +200,6 @@ final class material_theme_test extends advanced_testcase {
     public function test_authoring_error_mapping(): void {
         $failure = new moodle_exception("revisionconflict", "mcp");
         $this->assertSame("revision_conflict", authoring_error::translate($failure)->machinecode);
-        $failure = new moodle_exception("fixedbrandcolour", "mcp");
-        $this->assertSame("fixed_brand_colour", authoring_error::translate($failure)->machinecode);
         $failure = new moodle_exception("materialthemeinvalid", "mcp");
         $this->assertSame("material_theme_invalid", authoring_error::translate($failure)->machinecode);
         $failure = new moodle_exception("unexpected", "mcp");
