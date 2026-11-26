@@ -45,6 +45,9 @@ final class authoring_error {
         $details = $courseid > 0 ? ["courseid" => $courseid] : [];
         if ($failure->module === "mcp" || $failure->module === "mod_mcp") {
             switch ($failure->errorcode) {
+                case "empty_data":
+                    return new api_exception("empty_data", 422, "", $details,
+                        "The HTML content cannot be empty.");
                 case "materialthemeinvalid":
                     return new api_exception("material_theme_invalid", 409, "", $details + [
                         "required_action" => "mcp_configure_material_theme",
