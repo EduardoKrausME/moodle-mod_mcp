@@ -192,15 +192,49 @@ final class output_activity_test extends advanced_testcase {
      * Theme brand colours must also control gradients and hover states, not just plain backgrounds.
      */
     public function test_css_guidance_forbids_invented_brand_gradients(): void {
+        $this->resetAfterTest();
+        set_config("brandcolor", "#f0f", "theme_learnlingo");
+        set_config("accentcolor", "#123456", "theme_learnlingo");
+        set_config("brandcolor", "#123abc", "theme_boost");
         foreach (["learnlingo" => "--bs-accent", "eadflix" => "--bs-secondary"] as $theme => $accent) {
             $guidance = activity::css_instructions($theme);
-            $expected = "background: linear-gradient(123deg, var(--bs-primary, #0d6efd), " .
-                "var({$accent}, var(--bs-primary, #0d6efd)));";
+            $primary = $theme === "learnlingo" ? "#f0f" : "#123abc";
+            $secondary = $theme === "learnlingo" ? "#123456" : "#ced4da";
+            $expected = "background: linear-gradient(123deg, var(--bs-primary, {$primary}), " .
+                "var({$accent}, {$secondary}));";
             $this->assertStringContainsString($expected, $guidance);
             $this->assertStringContainsString("color-mix()", $guidance);
             $this->assertSame(1, preg_match("/(NÃO invente|Do not invent)/i", $guidance));
             $this->assertSame(1, preg_match("/(revise TODO o CSS|audit the entire CSS)/i", $guidance));
         }
+    }
+
+    /**
+     * MCP and copied prompts use the configured colours and matching RGB channels.
+     */
+    public function test_configured_css_fallbacks(): void {
+        $this->resetAfterTest();
+        set_config("brandcolor", "#f0f", "theme_learnlingo");
+        set_config("accentcolor", "#123456", "theme_learnlingo");
+        $guidance = \mod_mcp\mcp\authoring_guidance::theme_rules("learnlingo");
+        foreach (["--bs-primary" => "#f0f", "--bs-accent" => "#123456",
+                "--bs-primary-rgb" => "255, 0, 255", "--bs-accent-rgb" => "18, 52, 86"] as $name => $value) {
+            $this->assertStringContainsString("var({$name}, {$value})", $guidance);
+            $this->assertStringContainsString("var({$name}, {$value})", activity::css_instructions("learnlingo"));
+        }
+
+        set_config("brandcolor", "#112233", "theme_boost");
+        set_config("secondary", "#abcdef", "theme_boost");
+        set_config("override_course_primarycolor_42", "#abc", "theme_degrade");
+        set_config("override_course_secondarycolor_42", "#456", "theme_degrade");
+        $fallbacks = \mod_mcp\mcp\authoring_guidance::css_fallbacks("degrade", 42);
+        $this->assertSame("#abc", $fallbacks["--bs-primary"]);
+        $this->assertSame("#456", $fallbacks["--bs-secondary"]);
+        $this->assertSame("170, 187, 204", $fallbacks["--bs-primary-rgb"]);
+        $this->assertSame("68, 85, 102", $fallbacks["--bs-secondary-rgb"]);
+        $this->assertSame("#112233", \mod_mcp\mcp\authoring_guidance::css_fallbacks("degrade")["--bs-primary"]);
+        set_config("override_course_primarycolor_42", "invalid", "theme_degrade");
+        $this->assertSame("#112233", \mod_mcp\mcp\authoring_guidance::css_fallbacks("degrade", 42)["--bs-primary"]);
     }
 
     /**
