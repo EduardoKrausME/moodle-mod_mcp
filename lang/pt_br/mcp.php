@@ -46,7 +46,6 @@ $string['descriptionchanged'] = 'A descrição da atividade foi alterada. Consul
 $string['duplicatequestion'] = 'A mesma questão do banco não pode ser vinculada duas vezes à mesma avaliação.';
 $string['editcontent'] = 'Editar conteúdo da atividade';
 $string['finishattempt'] = 'Enviar respostas e concluir';
-$string['fixedbrandcolour'] = 'A cor fixa "{$a->colour}" não é permitida na propriedade CSS "{$a->property}". Use var({$a->primary}, #0d6efd), var({$a->accent}, var({$a->primary}, #0d6efd)) ou uma variável semântica do tema. Cores neutras e valores de fallback dentro de var() são permitidos.';
 $string['grade'] = 'Nota máxima';
 $string['gradescalenotsupported'] = 'Experiências interativas aceitam notas em pontos ou ausência de nota, mas não escalas de avaliação.';
 $string['informationhelp'] = 'Para quiz, informe selection, count, shuffle e questions com id, text, options, answer e points. Para outros tipos, o JSON é livre. O campo pode ficar vazio.';

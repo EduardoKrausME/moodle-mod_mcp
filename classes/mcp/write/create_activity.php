@@ -156,7 +156,6 @@ final class create_activity extends base_tool {
     private function validate_content(array $arguments): void {
         $html = $arguments["html"] ?? "";
         service::validate_html($html);
-        service::validate_theme_colours((int)$arguments["courseid"], $html);
         metadata::validate($arguments["type"] ?? null, $arguments["information"] ?? null);
     }
 

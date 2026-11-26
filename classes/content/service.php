@@ -69,7 +69,6 @@ final class service {
                 if ($expectedrevision !== null && $active !== $expectedrevision) {
                     throw new moodle_exception("revisionconflict", "mcp");
                 }
-                self::validate_theme_colours((int)$activity->course, $html);
                 if ($settings !== null) {
                     if (!hash_equals(metadata::fingerprint($activity), $settings["expectedhash"])) {
                         throw new moodle_exception("revisionconflict", "mcp");
@@ -108,24 +107,6 @@ final class service {
         } finally {
             $lock->release();
         }
-    }
-
-    /**
-     * Enforce the effective course or site theme in all HTML authoring entry points.
-     *
-     * @param int $courseid Activity course ID.
-     * @param string $html Authored HTML.
-     */
-    public static function validate_theme_colours(int $courseid, string $html): void {
-        global $CFG, $DB;
-        $theme = (string)($CFG->theme ?? "");
-        if (!empty($CFG->allowcoursethemes)) {
-            $coursetheme = $DB->get_field("course", "theme", ["id" => $courseid]);
-            if (is_string($coursetheme) && $coursetheme !== "") {
-                $theme = $coursetheme;
-            }
-        }
-        colour_validator::validate($html, $theme);
     }
 
     /**

@@ -70,6 +70,34 @@ final class direct_authoring_test extends advanced_testcase {
     }
 
     /**
+     * Fixed pedagogical colours and theme variables coexist without restricting authored HTML.
+     */
+    public function test_authoring_accepts_fixed_and_theme_colours(): void {
+        global $CFG, $DB, $USER;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $CFG->theme = "learnlingo";
+        $identity = new authenticated_identity($USER->id, "test", ["mcp:write"]);
+        $html = '<style>:root{--surface:#f5f6f8;--ink:#20252b;--brand:var(--bs-primary,#0d6efd)}'
+            . '@media(prefers-color-scheme:dark){:root{--surface:#181b20}}'
+            . '.alert{color:#dc2626;background:var(--surface)}</style><p>Safety</p>';
+        $create = new create_activity();
+        $args = ["courseid" => (int)$course->id, "sectionnum" => 0, "name" => "Colours", "html" => $html];
+        $this->assertTrue($create->preview($args, $identity)["visible_by_default"]);
+        $this->assertFalse($DB->record_exists("mcp", ["course" => $course->id]));
+        $created = $create->execute($args, $identity);
+        $this->assertSame($html, service::get($created["instanceid"], $created["revision"])->content);
+        $updatedhtml = '<p style="color:rgb(20,94,85);background:#f2f4f7">Updated</p>';
+        $writer = new save_content();
+        $update = ["cmid" => $created["cmid"], "html" => $updatedhtml, "expectedrevision" => $created["revision"]];
+        $this->assertTrue($writer->preview($update, $identity)["updates_active_content"]);
+        $saved = $writer->execute($update, $identity);
+        $this->assertSame($updatedhtml, service::get($created["instanceid"], $saved["revision"])->content);
+        $this->assertSame($html, service::get($created["instanceid"], $created["revision"])->content);
+    }
+
+    /**
      * Quiz HTML and private questions can be created and updated in one guarded write.
      */
     public function test_create_and_update_quiz_information(): void {

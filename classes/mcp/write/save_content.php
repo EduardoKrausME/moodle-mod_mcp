@@ -61,8 +61,7 @@ final class save_content extends activity_tool {
     public function get_description(): string {
         return authoring_guidance::tool_description(
             "Replace the active HTML with one complete document with inline CSS/JS. First call "
-            . "mcp_get_activity and follow its course-specific authoring instructions. The "
-            . "server rejects hard-coded brand colours; fix errors and retry. "
+            . "mcp_get_activity and follow its course-specific authoring instructions. "
             . "Use the current revision for concurrency protection. Preserve native visibility. Include type, information "
             . "and expectedhash in this call if private assessment information must also change.",
             ["core", "html", "sdk", "approval", "theme", "material"]);
@@ -120,7 +119,6 @@ final class save_content extends activity_tool {
             }
             $html = $arguments["html"];
             service::validate_html($html);
-            service::validate_theme_colours((int)$activity->course, $html);
             if ((int)$activity->publishedrevision !== (int)$arguments["expectedrevision"]) {
                 throw new moodle_exception("revisionconflict", "mcp");
             }

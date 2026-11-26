@@ -46,7 +46,6 @@ $string['descriptionchanged'] = 'The activity description has changed. Reload it
 $string['duplicatequestion'] = 'The same bank question cannot be attached twice to one assessment.';
 $string['editcontent'] = 'Edit activity content';
 $string['finishattempt'] = 'Submit answers and finish';
-$string['fixedbrandcolour'] = 'A fixed colour "{$a->colour}" is not permitted in the CSS property "{$a->property}". Use var({$a->primary}, #0d6efd), var({$a->accent}, var({$a->primary}, #0d6efd)), or a semantic theme variable. Neutral colours and fallback values inside var() are allowed.';
 $string['grade'] = 'Maximum grade';
 $string['gradescalenotsupported'] = 'Interactive experiences support points or no grade, not grading scales.';
 $string['informationhelp'] = 'For a quiz, use selection, count, shuffle and questions with id, text, options, answer and points. Other types accept generic JSON. Leave blank when unused.';

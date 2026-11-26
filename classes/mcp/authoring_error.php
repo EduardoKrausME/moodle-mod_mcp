@@ -53,9 +53,6 @@ final class authoring_error {
                     return new api_exception("revision_conflict", 409, "", $details + [
                         "required_action" => "mcp_get_activity",
                     ], "The activity has changed. Read its current revision and request a new confirmation.");
-                case "fixedbrandcolour":
-                    return new api_exception("fixed_brand_colour", 422, "", $details,
-                        "Use the Moodle theme CSS variables instead of fixed brand colours.");
                 case "questionnotconfigured":
                     return new api_exception("questions_not_configured", 409, "", $details,
                         "Configure the quiz question pool before changing question selection.");
