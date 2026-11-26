@@ -32,13 +32,13 @@ use stdClass;
  */
 final class service {
     /**
-     * Reject empty or oversized documents without modifying their source bytes.
+     * Reject empty documents without modifying their source bytes.
      *
      * @param string $html Authored document.
      */
     public static function validate_html(string $html): void {
-        if (trim($html) === "" || strlen($html) > 2097152) {
-            throw new moodle_exception("invaliddata");
+        if (trim($html) === "") {
+            throw new moodle_exception("empty_data", "mod_mcp");
         }
     }
 
