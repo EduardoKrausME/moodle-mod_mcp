@@ -111,6 +111,8 @@ final class mcp_authoring_guidance_test extends advanced_testcase {
         $this->resetAfterTest();
         $CFG->theme = "boost";
         $CFG->allowcoursethemes = 1;
+        set_config("brandcolor", "#abc", "theme_learnlingo");
+        set_config("accentcolor", "#123456", "theme_learnlingo");
         $course = $this->getDataGenerator()->create_course();
         $DB->set_field("course", "theme", "learnlingo", ["id" => $course->id]);
 
@@ -118,6 +120,12 @@ final class mcp_authoring_guidance_test extends advanced_testcase {
         $this->assertSame("learnlingo", $context["theme"]);
         $this->assertSame(["--bs-primary", "--bs-accent", "--bs-primary-rgb", "--bs-accent-rgb"],
             $context["brandcssvariables"]);
+        $this->assertSame([
+            "--bs-primary" => "#abc", "--bs-accent" => "#123456",
+            "--bs-primary-rgb" => "170, 187, 204", "--bs-accent-rgb" => "18, 52, 86",
+        ], $context["brandcssfallbacks"]);
+        $this->assertStringContainsString("var(--bs-primary, #abc)", $context["instructions"]);
+        $this->assertStringContainsString("var(--bs-accent-rgb, 18, 52, 86)", $context["instructions"]);
         $this->assertStringContainsString("Bloom", $context["instructions"]);
         $this->assertStringContainsString("Theme: learnlingo.", $context["instructions"]);
         $this->assertStringContainsString("ANY independent footer", $context["instructions"]);
@@ -139,6 +147,12 @@ final class mcp_authoring_guidance_test extends advanced_testcase {
 
         $this->resetAfterTest();
         $CFG->theme = "theme_learnlingo";
+        set_config("brandcolor", "#123abc", "theme_learnlingo");
+        $this->assertStringContainsString("var(--bs-primary, #123abc)",
+            authoring_guidance::tool_description("Create activity."));
+        set_config("brandcolor", "#f0f", "theme_learnlingo");
+        $this->assertStringContainsString("var(--bs-primary, #f0f)",
+            authoring_guidance::tool_description("Create activity."));
         $this->assertSame(["--bs-primary", "--bs-accent", "--bs-primary-rgb", "--bs-accent-rgb"],
             authoring_guidance::css_variables($CFG->theme));
         $this->assertStringContainsString("var(--bs-accent",
