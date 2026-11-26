@@ -28,6 +28,7 @@ use context_module;
 use coding_exception;
 use mod_mcp\content\service;
 use mod_mcp\authoring\material_theme;
+use mod_mcp\mcp\authoring_guidance;
 use moodle_url;
 use stdClass;
 
@@ -109,7 +110,7 @@ final class activity {
             "Reusable material visual design: " . $visual["name"] . ". Follow its visual "
             . "style for every new material: " . $visual["style"] . ". ";
         return get_string("promptinstructions", "mcp") . " " .
-            $apireference . " " . $prompt . " " . self::css_instructions($PAGE->theme->name)
+            $apireference . " " . $prompt . " " . self::css_instructions($PAGE->theme->name, (int)$mcp->course)
             . " " . $materialinstruction;
     }
 
@@ -117,9 +118,10 @@ final class activity {
      * Generate CSS guidance for the active Moodle theme.
      *
      * @param string $themename Effective theme name, optionally prefixed with theme_.
+     * @param int $courseid Target course, or zero for site defaults.
      * @return string CSS variable and dark mode instructions.
      */
-    public static function css_instructions(string $themename): string {
+    public static function css_instructions(string $themename, int $courseid = 0): string {
         $themename = strtolower($themename);
         if (strpos($themename, "theme_") === 0) {
             $themename = substr($themename, 6);
@@ -134,15 +136,26 @@ final class activity {
 
         $instructions = [];
         if ($cssvariables) {
+            $fallbacks = authoring_guidance::css_fallbacks($themename, $courseid);
+            $references = [];
+            foreach ($cssvariables as $variable) {
+                $references[$variable] = "var({$variable}, {$fallbacks[$variable]})";
+            }
             $args = (object)[
                 "theme" => $themename,
-                "variables" => implode(", ", $cssvariables),
+                "variables" => implode(", ", $references),
                 "primary" => $cssvariables[0],
                 "complementary" => $cssvariables[1],
                 "primaryrgb" => $cssvariables[2],
                 "complementaryrgb" => $cssvariables[3],
             ];
-            $instructions[] = get_string("promptcolours", "mcp", $args);
+            // Replace legacy examples in all installed language packs with the actual palette.
+            $instructions[] = strtr(get_string("promptcolours", "mcp", $args), [
+                "var({$args->complementary}, var({$args->primary}, #0d6efd))" => $references[$args->complementary],
+                "var({$args->primary}, #0d6efd)" => $references[$args->primary],
+                "var({$args->primaryrgb})" => $references[$args->primaryrgb],
+                "var({$args->complementaryrgb})" => $references[$args->complementaryrgb],
+            ]);
         }
         $instructions[] = get_string("promptdarkmode", "mcp");
 
