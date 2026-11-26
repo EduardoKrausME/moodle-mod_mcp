@@ -264,6 +264,7 @@ final class authoring_guidance {
                         }
                     } catch (\moodle_exception $e) {
                         // Invalid optional configuration must not break discovery.
+                        $parts[] = "The site material template is invalid; resolve the target course context before authoring.";
                     }
                     $parts[] = "Before generating HTML, use the effective course template already returned "
                         . "in authoring context. If not yet known for a new activity, read mcp_get_material_theme "

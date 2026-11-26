@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * MCP course module visibility observer declarations.
+ * MCP event observer declarations.
  *
  * @package   mod_mcp
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
@@ -24,9 +24,4 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$observers = [
-    [
-        "eventname" => "\\core\\event\\course_module_created",
-        "callback" => "\\mod_mcp\\observer::created",
-    ],
-];
+$observers = [];

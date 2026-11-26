@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Hide newly created MCP modules before first publication.
+ * Compatibility callback for cached legacy event declarations.
  *
  * @package   mod_mcp
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
@@ -27,25 +27,16 @@ namespace mod_mcp;
 use core\event\course_module_created;
 
 /**
- * Enforces a hidden-first workflow even when course editing creates a visible module.
+ * Retained for installations with cached legacy observer declarations.
  */
 final class observer {
     /**
-     * Hide an empty MCP module after core has completed module creation.
+     * Preserve Moodle's native visibility even when old event registrations are cached.
+     *
+     * @param course_module_created $event Legacy creation event.
      */
     public static function created(course_module_created $event): void {
-        global $CFG, $DB;
-        $cmid = (int)$event->contextinstanceid;
-        $cm = get_coursemodule_from_id("mcp", $cmid, 0, false, IGNORE_MISSING);
-        if (!$cm) {
-            return;
-        }
-        $mcp = $DB->get_record("mcp", ["id" => $cm->instance], "id, publishedrevision");
-        if (!$mcp || (int)$mcp->publishedrevision !== 0) {
-            return;
-        }
-        require_once($CFG->dirroot . "/course/lib.php");
-        set_coursemodule_visible($cmid, 0);
-        rebuild_course_cache($cm->course, true);
+        // Intentionally do not modify the course module or its visibility.
+        return;
     }
 }

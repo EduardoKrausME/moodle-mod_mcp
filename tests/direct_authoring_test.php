@@ -101,6 +101,24 @@ final class direct_authoring_test extends advanced_testcase {
     }
 
     /**
+     * Native creation honors visible and hidden settings even before any HTML exists.
+     */
+    public function test_native_creation_preserves_visibility(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        foreach ([1, 0] as $visible) {
+            $module = $this->getDataGenerator()->create_module("mcp", [
+                "course" => $course->id, "visible" => $visible,
+            ]);
+            $this->assertSame($visible, (int)$DB->get_field("course_modules", "visible", ["id" => $module->cmid]));
+            service::save((int)$module->id, "<p>Content</p>", 2, 0);
+            $this->assertSame($visible, (int)$DB->get_field("course_modules", "visible", ["id" => $module->cmid]));
+        }
+    }
+
+    /**
      * Invalid content or missing quiz information leaves no empty module behind.
      */
     public function test_invalid_creation_has_no_side_effects(): void {

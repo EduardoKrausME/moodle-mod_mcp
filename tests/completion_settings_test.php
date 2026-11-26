@@ -26,11 +26,6 @@ namespace mod_mcp;
 
 use advanced_testcase;
 
-defined("MOODLE_INTERNAL") || die();
-
-global $CFG;
-require_once($CFG->dirroot . "/mod/mcp/lib.php");
-
 /**
  * Verify that activity callbacks respect native completion settings.
  *
@@ -38,6 +33,15 @@ require_once($CFG->dirroot . "/mod/mcp/lib.php");
  * @covers ::mcp_get_coursemodule_info
  */
 final class completion_settings_test extends advanced_testcase {
+    /**
+     * Load the module callbacks inside the test lifecycle.
+     */
+    protected function setUp(): void {
+        global $CFG;
+        parent::setUp();
+        require_once($CFG->dirroot . "/mod/mcp/lib.php");
+    }
+
     /**
      * Omitted or locked custom rules must survive metadata updates.
      */
