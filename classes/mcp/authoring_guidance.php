@@ -186,26 +186,94 @@ final class authoring_guidance {
     }
 
     /**
+     * Resolve a configured hexadecimal colour, rejecting non-colour input.
+     *
+     * @param mixed $value Configured colour.
+     * @param string $default Theme default colour.
+     * @return string
+     */
+    private static function hex_colour($value, string $default): string {
+        return is_string($value) && preg_match('/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/iD', $value) ?
+            $value : $default;
+    }
+
+    /**
+     * Resolve the configured palette used by the theme, including course overrides.
+     *
+     * @param string $theme Moodle theme shortname.
+     * @param int $courseid Target course, or zero for site discovery.
+     * @return array<string, string> CSS variable names and their fallback values.
+     */
+    public static function css_fallbacks(string $theme, int $courseid = 0): array {
+        $theme = strtolower(preg_replace('/^theme_/i', '', $theme));
+        $variables = self::css_variables($theme);
+        if (strpos($theme, "learnlingo") !== false) {
+            $primary = self::hex_colour(get_config("theme_learnlingo", "brandcolor"), "#58cc02");
+            $accent = self::hex_colour(get_config("theme_learnlingo", "accentcolor"), "#8be24a");
+            if ($theme !== "learnlingo") {
+                $primary = self::hex_colour(get_config("theme_" . $theme, "brandcolor"), $primary);
+                $accent = self::hex_colour(get_config("theme_" . $theme, "accentcolor"), $accent);
+            }
+        } else {
+            $family = in_array($theme, ["degrade", "eadtraining", "boost_magnific"], true);
+            $primary = self::hex_colour(get_config("theme_boost", "brandcolor"), $family ? "#314755" : "#0f6cbf");
+            $accent = "#ced4da";
+            if ($family) {
+                $accent = self::hex_colour(get_config("theme_boost", "secondary"), $accent);
+                if ($courseid > 0) {
+                    $primary = self::hex_colour(
+                        get_config("theme_" . $theme, "override_course_primarycolor_{$courseid}"), $primary);
+                    $accent = self::hex_colour(
+                        get_config("theme_" . $theme, "override_course_secondarycolor_{$courseid}"), $accent);
+                }
+            } else if ($theme === "eadflix" && $courseid > 0) {
+                $primary = self::hex_colour(get_config("theme_eadflix", "override_course_color_{$courseid}"), $primary);
+            }
+        }
+        return array_combine($variables, [$primary, $accent, self::rgb_channels($primary), self::rgb_channels($accent)]);
+    }
+
+    /**
+     * Convert validated hexadecimal colours to the comma-separated Bootstrap RGB channels.
+     *
+     * @param string $hex Hexadecimal colour.
+     * @return string
+     */
+    private static function rgb_channels(string $hex): string {
+        $hex = substr($hex, 1);
+        if (strlen($hex) === 3) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+        return implode(", ", array_map("hexdec", str_split($hex, 2)));
+    }
+
+    /**
      * Build palette guidance using the actual theme name (not hard-coded LearnLingo rules).
      *
      * @param string $theme Moodle theme shortname.
+     * @param int $courseid Target course, or zero for site discovery.
      */
-    public static function theme_rules(string $theme): string {
+    public static function theme_rules(string $theme, int $courseid = 0): string {
         $theme = strtolower(preg_replace('/^theme_/', '', $theme));
         $variables = self::css_variables($theme);
         $primary = $variables[0];
         $accent = $variables[1];
         $primaryrgb = $variables[2];
         $accentrgb = $variables[3];
+        $fallbacks = self::css_fallbacks($theme, $courseid);
+        $primarycss = "var({$primary}, {$fallbacks[$primary]})";
+        $accentcss = "var({$accent}, {$fallbacks[$accent]})";
+        $primaryrgbcss = "var({$primaryrgb}, {$fallbacks[$primaryrgb]})";
+        $accentrgbcss = "var({$accentrgb}, {$fallbacks[$accentrgb]})";
 
-        $rules = "Theme: {$theme}. Brand colour variables: {$primary}, {$accent}, "
-            . "{$primaryrgb} and {$accentrgb}. "
-            . "Use var({$primary}, #0d6efd) and var({$accent}, var({$primary}, #0d6efd)) "
+        $rules = "Theme: {$theme}. Brand colour variables with configured fallbacks: {$primarycss}, {$accentcss}, "
+            . "{$primaryrgbcss} and {$accentrgbcss}. "
+            . "Use {$primarycss} and {$accentcss} "
             . "for ALL brand colours, including hero backgrounds, every gradient stop, "
             . "buttons, links, borders, icons, cards, hover/focus states and pseudo-elements. "
             . "For transparency, use the RGB channel tokens inside rgba(): "
-            . "rgba(var({$primaryrgb}, 13, 110, 253), 0.2) or "
-            . "rgba(var({$accentrgb}, var({$primaryrgb}, 13, 110, 253)), 0.2). "
+            . "rgba({$primaryrgbcss}, 0.2) or "
+            . "rgba({$accentrgbcss}, 0.2). "
             . "RGB tokens are channels, not complete CSS colours. Never use "
             . "var({$primaryrgb}) alone as a background, or var({$primary}) "
             . "inside rgba(). "
@@ -213,7 +281,7 @@ final class authoring_guidance {
             . "Only neutral and semantic accessibility colours, and literal fallbacks inside "
             . "var(), are permitted. Derive intermediate shades with color-mix() of these "
             . "variables. Example: background: linear-gradient(123deg, "
-            . "var({$primary}, #0d6efd), var({$accent}, var({$primary}, #0d6efd))); "
+            . "{$primarycss}, {$accentcss}); "
             . "The iframe is isolated; the Moodle bridge supplies the current CSS variables, "
             . "and the fallbacks support standalone or mobile previews. "
             . "Implement accessible light/dark styles, including explicit data-bs-theme and "
@@ -329,10 +397,11 @@ final class authoring_guidance {
             "materialtheme" => $material,
             "theme" => $theme,
             "brandcssvariables" => self::css_variables($theme),
+            "brandcssfallbacks" => self::css_fallbacks($theme, $courseid),
             "instructions" => implode(" ", [
                 self::core_rules(), self::interview_rules(), self::learning_level_rules(),
                 self::html_rules(), self::sdk_rules(), self::quiz_rules(),
-                self::approval_rules(), $visual, self::theme_rules($theme),
+                self::approval_rules(), $visual, self::theme_rules($theme, $courseid),
             ]),
         ];
     }
